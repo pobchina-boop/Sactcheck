@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="SACTCheck">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>SACTCheck v0.12 — Expanded Lung Library</title>
+  <title>SACTCheck v0.14 — Generic JSON Assessment Engine</title>
   <style>
     :root {
       --navy:#12314a; --blue:#176b9b; --blue2:#0f567f; --light:#f3f6f8;
@@ -170,6 +170,18 @@
     .explanation-item h3{margin:0 0 8px;color:var(--navy)}
     .explanation-grid{display:grid;grid-template-columns:1fr;gap:8px}
     @media(min-width:680px){.explanation-grid{grid-template-columns:1fr 1fr}}
+
+    @media print{
+      body.json-assessment-open .screen{display:none!important}
+      body.json-assessment-open #jsonAssessmentScreen{display:block!important}
+      body.json-assessment-open #jsonAssessmentForm,
+      body.json-assessment-open header,
+      body.json-assessment-open .notice,
+      body.json-assessment-open #jsonAssessmentScreen>.toolbar,
+      body.json-assessment-open #jsonAssessmentScreen>details,
+      body.json-assessment-open .result-actions{display:none!important}
+      body.json-assessment-open #jsonResult{display:block!important}
+    }
 </style>
 </head>
 <body>
@@ -1793,6 +1805,9 @@ function assessPldc(){const f=[],anc=lungNum('pldc','Anc'),pl=lungNum('pldc','Pl
 document.getElementById('cpgForm').addEventListener('submit',e=>{e.preventDefault();renderLung('cpg',assessCpg(),'Carboplatin and paclitaxel — gynaecology','NCCP 00303 v6')});
 document.getElementById('pldcForm').addEventListener('submit',e=>{e.preventDefault();renderLung('pldc',assessPldc(),'Carboplatin + pegylated liposomal doxorubicin','NCCP 00624 v3')});
 </script>
+<script src="js/rule-engine.js"></script>
+<script src="js/assessment-engine.js"></script>
+<script src="js/generic-assessment-ui.js"></script>
 <script src="js/protocol-loader.js"></script>
 </body>
 </html>
