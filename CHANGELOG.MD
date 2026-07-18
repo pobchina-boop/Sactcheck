@@ -1,3 +1,22 @@
+# SACTCheck v0.22
+
+## XELOX / CAPOX live JSON integration
+
+- Promoted NCCP 00321 Version 9 Capecitabine and Oxaliplatin Therapy (XELOX / CAPOX) to the live generic JSON assessment pathway.
+- Reused the existing XELOX catalogue card through the protocol-agnostic launcher.
+- Added 32 encoded rules covering exclusions, DPD status, haematology, renal function, hepatotoxicity, diarrhoea, stomatitis, hand-foot syndrome, neuropathy and laryngopharyngeal dysaesthesia.
+- Added direct access to the official NCCP PDF from the protocol card.
+- Added dedicated XELOX / CAPOX regression tests.
+- Updated the application version and protocol-loader cache key to v0.22.
+
+# SACTCheck v0.21
+
+- Promoted NCCP 00209 Version 10a Modified FOLFOX-6 to the live generic JSON assessment pathway.
+- Preserved the existing catalogue card while replacing its legacy launch action with the protocol-agnostic launcher.
+- Added a prominent **Official NCCP PDF** action to JSON-backed protocol cards using `metadata.source_url`.
+- Added live FOLFOX regression tests while retaining legacy-versus-JSON shadow comparison tests.
+- Updated application version and protocol-loader cache key to v0.21.
+
 # v0.20.0
 
 - Replaced protocol-specific catalogue launch wiring with a single protocol-agnostic launcher.

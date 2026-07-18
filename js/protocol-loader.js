@@ -91,6 +91,19 @@
     window.SACTCheckGenericAssessment.open(protocol);
   }
 
+  function createOfficialPdfLink(protocol) {
+    const sourceUrl = protocol?.metadata?.source_url;
+    if (!sourceUrl) return null;
+    const link = document.createElement("a");
+    link.className = "btn secondary official-pdf-link";
+    link.href = sourceUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.setAttribute("aria-label", "Open the official NCCP protocol PDF in a new tab");
+    link.innerHTML = '<span aria-hidden="true">📄</span> Official NCCP PDF';
+    return link;
+  }
+
   function bindProtocolLaunch(button, protocolId, assessmentReady) {
     button.dataset.protocolId = protocolId;
     button.dataset.protocolEngine = "json";
@@ -127,6 +140,11 @@
     replacement.disabled = !assessmentReady;
     bindProtocolLaunch(replacement, protocolId, assessmentReady);
     launch.replaceWith(replacement);
+
+    const actions = replacement.closest(".card-actions");
+    actions?.querySelector(".official-pdf-link")?.remove();
+    const officialPdfLink = createOfficialPdfLink(protocol);
+    if (officialPdfLink) actions?.appendChild(officialPdfLink);
 
     card.dataset.jsonProtocolId = protocolId;
     card.dataset.status = assessmentReady ? "active" : "planned";
@@ -214,6 +232,7 @@
           <button class="btn json-assessment-launch" type="button" ${assessmentReady ? "" : "disabled"}>
             ${assessmentReady ? "Open protocol assessment" : "Assessment unavailable"}
           </button>
+          ${metadata.source_url ? `<a class="btn secondary official-pdf-link" href="${escapeHtml(metadata.source_url)}" target="_blank" rel="noopener noreferrer" aria-label="Open the official NCCP protocol PDF in a new tab"><span aria-hidden="true">📄</span> Official NCCP PDF</a>` : ""}
         </div>`;
 
       const button = card.querySelector(".json-assessment-launch");
