@@ -1,3 +1,7 @@
+## v0.23.0
+- Added live NCCP 00329 Version 9 FOLFIRINOX assessment with 42 encoded rules and official PDF access.
+- Added FOLFIRINOX regression tests.
+
 # SACTCheck v0.22
 
 ## XELOX / CAPOX live JSON integration
