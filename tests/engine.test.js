@@ -109,7 +109,25 @@ for (const [name, result, expected] of cases) {
 const incomplete = Engine.assess(olaparib, { anc_x10e9_l: 2 }, { profileId: 'default' });
 assert.equal(incomplete.actionType, 'incomplete');
 assert.equal(incomplete.complete, false);
-assert.ok(incomplete.missing.length > 0);
-console.log('✓ missing inputs return incomplete');
+assert.equal(incomplete.missing.length, 0);
+assert.ok(incomplete.unassessed.length > 0);
+console.log('✓ missing inputs return partial assessment with explicit coverage gaps');
 
-console.log(`\n${cases.length + 1} engine tests passed.`);
+
+const olaparibAncOnly = Engine.assess(olaparib, { anc_x10e9_l: 0.7 }, { profileId: 'default' });
+assert.equal(olaparibAncOnly.actionType, 'delay_then_dose_reduce');
+assert.equal(olaparibAncOnly.complete, false);
+assert.ok(olaparibAncOnly.unassessed.length > 0);
+console.log('✓ olaparib ANC alone produces an actionable partial hold/reduction assessment');
+
+const olaparibRenalOnly = Engine.assess(olaparib, { crcl_ml_min: 40 }, { profileId: 'default' });
+assert.equal(olaparibRenalOnly.actionType, 'dose_reduce');
+assert.equal(olaparibRenalOnly.complete, false);
+console.log('✓ olaparib CrCl alone produces an actionable renal dose assessment');
+
+const olaparibNormalAncOnly = Engine.assess(olaparib, { anc_x10e9_l: 2 }, { profileId: 'default' });
+assert.equal(olaparibNormalAncOnly.actionType, 'incomplete');
+assert.equal(olaparibNormalAncOnly.complete, false);
+console.log('✓ a normal ANC alone does not clear the olaparib regimen');
+
+console.log(`\n${cases.length + 4} engine tests passed.`);

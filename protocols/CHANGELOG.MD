@@ -1,28 +1,3 @@
-# v0.20.0
-
-- Replaced protocol-specific catalogue launch wiring with a single protocol-agnostic launcher.
-- Both generated cards and migrated legacy cards now launch assessments by `data-protocol-id`.
-- Published JSON protocols automatically receive the same assessment workflow, badges and launch behaviour.
-- Shadow-validation entries remain excluded from normal catalogue launch.
-- Added regression tests preventing paclitaxel- or olaparib-specific branches from reappearing in the loader.
-
-# v0.19
-
-- Promoted olaparib (NCCP 00588 v5b) to a first-class live JSON protocol in the main catalogue.
-- Live JSON protocols without legacy cards now receive the same live status and launch wording as migrated legacy cards.
-- Added regression coverage for olaparib main-app integration.
-- Added the main-app integration test to the default test suite.
-
-# v0.18.0 — Main catalogue JSON integration
-
-- Weekly paclitaxel now launches the generic JSON assessment directly from its normal catalogue card.
-- Removed the separate weekly paclitaxel shadow-assessment launcher from the live page.
-- Added reusable `live_json` migration support so an existing catalogue card can be bound to a JSON protocol without creating a duplicate card.
-- Existing catalogue metadata, search and tumour filtering are preserved.
-- The catalogue badge now identifies the live JSON assessment pathway.
-- Olaparib remains available through the same generic JSON assessment interface.
-- Added main-app integration regression tests.
-
 # v0.17.1
 
 - Enabled partial, single-value JSON assessments across the generic assessment screen.

@@ -1,0 +1,499 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sactcheck.local/schemas/protocol-schema-v2.json",
+  "title": "SACTCheck protocol JSON",
+  "description": "Machine-readable protocol contract for SACTCheck one-file protocol publishing, including conditional visibility and requirement rules.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "protocol_id",
+    "status",
+    "metadata",
+    "input_definitions",
+    "rule_engine"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^2\\."
+    },
+    "protocol_id": {
+      "type": "string",
+      "minLength": 3
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "nccp_regimen_code",
+        "nccp_version",
+        "title"
+      ],
+      "properties": {
+        "nccp_regimen_code": {
+          "type": "string"
+        },
+        "nccp_version": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "short_title": {
+          "type": "string"
+        },
+        "tumour_group": {
+          "type": "string"
+        },
+        "tumour_groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "indication": {
+          "type": "string"
+        },
+        "source_url": {
+          "type": "string"
+        },
+        "published_date": {
+          "type": "string"
+        },
+        "review_date": {
+          "type": "string"
+        },
+        "catalog": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": true
+        },
+        "migration": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string"
+            },
+            "legacy_card_id": {
+              "type": "string"
+            },
+            "switch_to_generic_assessment": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "tumour_group"
+          ]
+        },
+        {
+          "required": [
+            "tumour_groups"
+          ]
+        }
+      ],
+      "additionalProperties": true
+    },
+    "input_definitions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/inputDefinition"
+      }
+    },
+    "required_inputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "required_inputs_by_phase": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      }
+    },
+    "assessment_profiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "required_inputs"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "required_inputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "context": {
+            "type": "object"
+          },
+          "input_overrides": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/$defs/inputOverride"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "rule_engine": {
+      "type": "object",
+      "required": [
+        "rules"
+      ],
+      "properties": {
+        "conflict_policy": {
+          "type": "string"
+        },
+        "missing_data_policy": {
+          "type": "string"
+        },
+        "actions_ranked_most_to_least_restrictive": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "output_templates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "option": {
+      "type": "object",
+      "required": [
+        "value",
+        "label"
+      ],
+      "properties": {
+        "value": {},
+        "label": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "inputDefinition": {
+      "type": "object",
+      "required": [
+        "label",
+        "type"
+      ],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "number",
+            "boolean",
+            "select",
+            "text"
+          ]
+        },
+        "unit": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "step": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/option"
+          }
+        },
+        "help": {
+          "type": "string"
+        },
+        "demo_value": {},
+        "visible_when": {
+          "$ref": "#/$defs/condition"
+        },
+        "required_when": {
+          "$ref": "#/$defs/condition"
+        },
+        "section": {
+          "type": "string"
+        },
+        "order": {
+          "type": "number"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "select"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "options"
+            ],
+            "properties": {
+              "options": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "inputOverride": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "step": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/option"
+          }
+        },
+        "help": {
+          "type": "string"
+        },
+        "demo_value": {},
+        "visible_when": {
+          "$ref": "#/$defs/condition"
+        },
+        "required_when": {
+          "$ref": "#/$defs/condition"
+        },
+        "section": {
+          "type": "string"
+        },
+        "order": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": true
+    },
+    "condition": {
+      "type": "object",
+      "properties": {
+        "all": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        },
+        "any": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        },
+        "none": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        },
+        "not": {
+          "$ref": "#/$defs/condition"
+        },
+        "field": {
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "==",
+            "===",
+            "!=",
+            "!==",
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "between",
+            "between_inclusive",
+            "outside",
+            "in",
+            "not_in",
+            "exists",
+            "missing",
+            "contains"
+          ]
+        },
+        "value": {}
+      },
+      "additionalProperties": true
+    },
+    "action": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "permanently_discontinue",
+            "contraindicated",
+            "discontinue",
+            "cease",
+            "omit",
+            "withhold_then_reduce",
+            "withhold",
+            "delay_then_dose_reduce",
+            "delay",
+            "consultant_review",
+            "dose_reduce_two_levels",
+            "dose_reduce_one_level",
+            "dose_reduce",
+            "proceed_with_caution",
+            "proceed"
+          ]
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "rule_id",
+        "action",
+        "source",
+        "explanation"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string"
+        },
+        "when": {
+          "$ref": "#/$defs/condition"
+        },
+        "condition": {
+          "$ref": "#/$defs/condition"
+        },
+        "all": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        },
+        "any": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        },
+        "not": {
+          "$ref": "#/$defs/condition"
+        },
+        "field": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string"
+        },
+        "value": {},
+        "action": {
+          "$ref": "#/$defs/action"
+        },
+        "source": {
+          "type": [
+            "object",
+            "string"
+          ]
+        },
+        "explanation": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

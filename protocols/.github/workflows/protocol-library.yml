@@ -1,0 +1,59 @@
+name: Validate protocol library
+
+"on":
+  push:
+    branches: [develop, main]
+    paths:
+      - "protocols/**"
+      - "js/**"
+      - "tests/**"
+      - "tools/**"
+      - "package.json"
+      - ".github/workflows/protocol-library.yml"
+  pull_request:
+    paths:
+      - "protocols/**"
+      - "js/**"
+      - "tests/**"
+      - "tools/**"
+      - "package.json"
+      - ".github/workflows/protocol-library.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Rebuild protocol catalogue
+        run: npm run protocols:build
+
+      - name: Run regression tests
+        run: npm test
+
+      - name: Publish regenerated catalogue
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          if git diff --quiet -- protocols/index.json; then
+            echo "protocols/index.json is already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add protocols/index.json
+          git commit -m "Rebuild protocol catalogue [skip ci]"
+          git push

@@ -1,0 +1,186 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00000-v1",
+  "file_name": "00000-example-regimen.json",
+  "status": "draft_not_for_clinical_use",
+  "metadata": {
+    "nccp_regimen_code": "00000",
+    "nccp_version": "1",
+    "tumour_group": "Example",
+    "title": "Example regimen",
+    "short_title": "Example regimen",
+    "indication": "Replace this text with the exact approved indication.",
+    "published_date": "2026-01-01",
+    "review_date": "2027-01-01",
+    "source_url": "https://example.invalid/current-protocol.pdf",
+    "catalog": {
+      "enabled": true
+    },
+    "validation": {
+      "source_document_checked": false,
+      "software_tests_completed": false,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "disclaimer": "Template only. Do not use clinically."
+  },
+  "input_definitions": {
+    "anc_x10e9_l": {
+      "label": "ANC",
+      "type": "number",
+      "unit": "\u00d710\u2079/L",
+      "required": true,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "unit": "\u00d710\u2079/L",
+      "required": true,
+      "min": 0,
+      "step": 1,
+      "demo_value": 200
+    },
+    "febrile_neutropenia": {
+      "label": "Febrile neutropenia",
+      "type": "boolean",
+      "required": true,
+      "demo_value": false,
+      "help": "Example trigger for a conditionally required follow-on field."
+    },
+    "febrile_neutropenia_grade": {
+      "label": "Febrile neutropenia grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0,
+      "visible_when": {
+        "field": "febrile_neutropenia",
+        "operator": "==",
+        "value": true
+      },
+      "required_when": {
+        "field": "febrile_neutropenia",
+        "operator": "==",
+        "value": true
+      },
+      "help": "Shown and required only when febrile neutropenia is present."
+    }
+  },
+  "required_inputs": [
+    "anc_x10e9_l",
+    "platelets_x10e9_l",
+    "febrile_neutropenia"
+  ],
+  "assessment_profiles": [
+    {
+      "id": "default",
+      "label": "Standard assessment",
+      "required_inputs": [
+        "anc_x10e9_l",
+        "platelets_x10e9_l",
+        "febrile_neutropenia"
+      ],
+      "context": {}
+    }
+  ],
+  "output_templates": {
+    "withhold": "Hold treatment and follow the approved protocol reassessment pathway.",
+    "proceed": "No encoded hold criterion was triggered by the entered values."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive applicable action.",
+    "missing_data_policy": "Do not infer missing values.",
+    "actions_ranked_most_to_least_restrictive": [
+      "withhold",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "FEBRILE_NEUTROPENIA_REVIEW",
+        "all": [
+          {
+            "field": "febrile_neutropenia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "febrile_neutropenia_grade",
+            "operator": ">=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 1,
+          "table": "Example"
+        },
+        "explanation": "Example conditional rule. Replace with the exact approved pathway and source."
+      },
+      {
+        "rule_id": "COUNTS_HOLD",
+        "any": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 75
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 1,
+          "table": "Example"
+        },
+        "explanation": "Example hold rule. Replace with the exact approved threshold and source."
+      },
+      {
+        "rule_id": "COUNTS_PROCEED",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 1,
+          "table": "Example"
+        },
+        "explanation": "Example proceed rule. Replace with the exact approved threshold and source."
+      }
+    ]
+  }
+}

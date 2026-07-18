@@ -1,0 +1,1259 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00226-v9",
+  "file_name": "00226-paclitaxel-monotherapy-weekly.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00226",
+    "nccp_version": "9",
+    "tumour_groups": [
+      "Breast",
+      "Genitourinary",
+      "Gynaecology",
+      "Lung"
+    ],
+    "title": "PACLitaxel Monotherapy 80mg/m² Day 1, 8, 15 and 22 – 28 Day",
+    "short_title": "Weekly paclitaxel",
+    "indication": "Metastatic breast carcinoma; second-line metastatic ovarian cancer; relapsed or refractory small-cell lung cancer; or second-line metastatic bladder cancer, according to the selected NCCP indication.",
+    "published_date": "2015-04-29",
+    "review_date": "2030-04-14",
+    "source_url": "https://healthservice.hse.ie/documents/6562/226_V9_Paclitaxel_80.pdf",
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "shadow_validation",
+      "legacy_engine": "PaclitaxelEngine",
+      "legacy_card_id": "openPaclitaxel",
+      "switch_to_generic_assessment": false
+    },
+    "validation": {
+      "source_document_checked": true,
+      "source_checked_date": "2026-07-18",
+      "software_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    },
+    "sactcheck_encoding_version": "0.17.1",
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Independent weekly paclitaxel rules may be assessed from a single supplied value; dose and duration inputs refine but do not suppress immediate hold findings."
+  },
+  "clinical_governance": {
+    "disclaimer": "Prototype decision support only. Confirm the current NCCP regimen and use independent clinical judgement. Not authorised for clinical use."
+  },
+  "treatment": {
+    "drug": "paclitaxel",
+    "starting_dose_mg_m2": 80,
+    "route": "IV infusion",
+    "days": [
+      1,
+      8,
+      15,
+      22
+    ],
+    "cycle_days": 28
+  },
+  "indications": [
+    {
+      "indication_id": "00226a_metastatic_breast",
+      "description": "Treatment of metastatic breast carcinoma in patients who have failed or are not candidates for standard anthracycline-containing therapy."
+    },
+    {
+      "indication_id": "00226b_metastatic_ovarian",
+      "description": "Second-line chemotherapy for metastatic ovarian cancer after failure of standard platinum-containing therapy."
+    },
+    {
+      "indication_id": "00226d_small_cell_lung",
+      "description": "Relapsed or refractory small-cell lung cancer."
+    },
+    {
+      "indication_id": "00226e_metastatic_bladder",
+      "description": "Second-line chemotherapy for metastatic bladder cancer."
+    }
+  ],
+  "dose_levels": [
+    {
+      "dose_level": "starting",
+      "dose_mg_m2": 80
+    },
+    {
+      "dose_level": -1,
+      "dose_mg_m2": 65
+    },
+    {
+      "dose_level": -2,
+      "dose_mg_m2": 50
+    }
+  ],
+  "input_definitions": {
+    "indication_id": {
+      "label": "Indication",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "00226a_metastatic_breast",
+          "label": "00226a · Metastatic breast carcinoma"
+        },
+        {
+          "value": "00226b_metastatic_ovarian",
+          "label": "00226b · Second-line metastatic ovarian cancer"
+        },
+        {
+          "value": "00226d_small_cell_lung",
+          "label": "00226d · Relapsed/refractory small-cell lung cancer"
+        },
+        {
+          "value": "00226e_metastatic_bladder",
+          "label": "00226e · Second-line metastatic bladder cancer"
+        }
+      ],
+      "demo_value": "00226a_metastatic_breast"
+    },
+    "assessment_type": {
+      "label": "Assessment type",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "baseline",
+          "label": "First treatment / baseline eligibility"
+        },
+        {
+          "value": "routine",
+          "label": "Routine weekly treatment"
+        },
+        {
+          "value": "repeat",
+          "label": "Repeat assessment after delay"
+        }
+      ],
+      "demo_value": "routine"
+    },
+    "treatment_day": {
+      "label": "Treatment day",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "1",
+          "label": "Day 1"
+        },
+        {
+          "value": "8",
+          "label": "Day 8"
+        },
+        {
+          "value": "15",
+          "label": "Day 15"
+        },
+        {
+          "value": "22",
+          "label": "Day 22"
+        }
+      ],
+      "demo_value": "1"
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "step": 1,
+      "demo_value": 1
+    },
+    "original_dose_mg_m2": {
+      "label": "Original prescribed paclitaxel dose",
+      "type": "number",
+      "unit": "mg/m²",
+      "required": true,
+      "min": 1,
+      "step": 0.1,
+      "demo_value": 80,
+      "help": "Used for percentage-based hepatic dose modification."
+    },
+    "current_dose_mg_m2": {
+      "label": "Current planned paclitaxel dose",
+      "type": "number",
+      "unit": "mg/m²",
+      "required": true,
+      "min": 1,
+      "step": 0.1,
+      "demo_value": 80,
+      "help": "Dose planned before today’s assessment."
+    },
+    "known_hypersensitivity": {
+      "label": "Known hypersensitivity to paclitaxel or an excipient",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "help": "Protocol exclusion review."
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "help": "Protocol exclusion review."
+    },
+    "severe_hepatic_impairment": {
+      "label": "Known severe hepatic impairment / clinical exclusion",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "help": "Protocol exclusion review separate from the laboratory dose table."
+    },
+    "anc_x10e9_l": {
+      "label": "ANC",
+      "type": "number",
+      "unit": "×10⁹/L",
+      "required": true,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "unit": "×10⁹/L",
+      "required": true,
+      "min": 0,
+      "step": 1,
+      "demo_value": 200
+    },
+    "febrile_neutropenia": {
+      "label": "Febrile neutropenia since the previous dose",
+      "type": "boolean",
+      "required": true,
+      "demo_value": false
+    },
+    "anc_below_0_5_duration_days": {
+      "label": "Duration ANC has remained below 0.5",
+      "type": "number",
+      "unit": "days",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "visible_when": {
+        "field": "anc_x10e9_l",
+        "operator": "<",
+        "value": 0.5
+      },
+      "required_when": {
+        "field": "anc_x10e9_l",
+        "operator": "<",
+        "value": 0.5
+      },
+      "help": "Required only when ANC is below 0.5 ×10⁹/L."
+    },
+    "alt_ratio_uln": {
+      "label": "Highest ALT/AST ratio",
+      "type": "number",
+      "unit": "×ULN",
+      "required": true,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "help": "Use the higher of ALT and AST relative to the current local upper reference limit."
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin ratio",
+      "type": "number",
+      "unit": "×ULN",
+      "required": true,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "neuropathy_grade": {
+      "label": "Current motor or sensory neuropathy grade",
+      "type": "number",
+      "required": true,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "other_nonhaematological_highest_grade": {
+      "label": "Highest other non-haematological toxicity grade since the previous dose",
+      "type": "number",
+      "required": true,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "other_nonhaematological_current_grade": {
+      "label": "Current grade of that other toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0,
+      "visible_when": {
+        "field": "other_nonhaematological_highest_grade",
+        "operator": "==",
+        "value": 2
+      },
+      "required_when": {
+        "field": "other_nonhaematological_highest_grade",
+        "operator": "==",
+        "value": 2
+      },
+      "help": "Required only when the highest other toxicity was grade 2."
+    },
+    "previous_dose_reductions": {
+      "label": "Previous paclitaxel dose reductions",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2,
+      "step": 1,
+      "demo_value": 0,
+      "visible_when": {
+        "any": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "other_nonhaematological_highest_grade",
+            "operator": "==",
+            "value": 2
+          }
+        ]
+      },
+      "required_when": {
+        "any": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "other_nonhaematological_highest_grade",
+            "operator": "==",
+            "value": 2
+          }
+        ]
+      },
+      "help": "Two prior reductions trigger consultant review rather than an unlisted further automatic reduction."
+    }
+  },
+  "required_inputs": [
+    "indication_id",
+    "assessment_type",
+    "treatment_day",
+    "cycle_number",
+    "original_dose_mg_m2",
+    "current_dose_mg_m2",
+    "anc_x10e9_l",
+    "platelets_x10e9_l",
+    "febrile_neutropenia",
+    "alt_ratio_uln",
+    "bilirubin_ratio_uln",
+    "neuropathy_grade",
+    "other_nonhaematological_highest_grade"
+  ],
+  "assessment_profiles": [
+    {
+      "id": "default",
+      "label": "Weekly paclitaxel assessment",
+      "required_inputs": [
+        "indication_id",
+        "assessment_type",
+        "treatment_day",
+        "cycle_number",
+        "original_dose_mg_m2",
+        "current_dose_mg_m2",
+        "anc_x10e9_l",
+        "platelets_x10e9_l",
+        "febrile_neutropenia",
+        "alt_ratio_uln",
+        "bilirubin_ratio_uln",
+        "neuropathy_grade",
+        "other_nonhaematological_highest_grade"
+      ],
+      "context": {
+        "activeComponents": [
+          "paclitaxel"
+        ]
+      }
+    }
+  ],
+  "output_templates": {
+    "contraindicated": "Do not administer paclitaxel under this protocol.",
+    "discontinue": "Discontinue paclitaxel and obtain treating-clinician review.",
+    "delay_then_dose_reduce": "Delay treatment and apply the encoded dose reduction after recovery.",
+    "delay": "Delay treatment until the protocol recovery criterion is met.",
+    "withhold_then_reduce": "Withhold treatment until recovery, then apply the encoded dose reduction.",
+    "dose_reduce": "A paclitaxel dose reduction is indicated.",
+    "consultant_review": "Consultant review is required before treatment.",
+    "proceed_with_caution": "Core criteria were assessed, but optional domains remain unassessed.",
+    "proceed": "No encoded hold or dose-modification criterion was triggered."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive applicable action.",
+    "missing_data_policy": "Core and conditionally required data block completion. Optional missing data are reported as coverage gaps and are never inferred as normal.",
+    "actions_ranked_most_to_least_restrictive": [
+      "contraindicated",
+      "discontinue",
+      "withhold_then_reduce",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "all": [
+          {
+            "field": "known_hypersensitivity",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Known hypersensitivity is an exclusion. Do not administer paclitaxel under this protocol."
+      },
+      {
+        "rule_id": "EXCLUSION_BREASTFEEDING",
+        "all": [
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Breastfeeding is an exclusion. Do not administer paclitaxel under this protocol."
+      },
+      {
+        "rule_id": "EXCLUSION_SEVERE_HEPATIC_IMPAIRMENT",
+        "all": [
+          {
+            "field": "severe_hepatic_impairment",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Severe hepatic impairment is an exclusion. Consultant review is required."
+      },
+      {
+        "rule_id": "BASELINE_ANC_EXCLUSION",
+        "all": [
+          {
+            "field": "assessment_type",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1.5
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Baseline ANC is below the protocol eligibility threshold of 1.5 ×10⁹/L."
+      },
+      {
+        "rule_id": "FN_REDUCE_TO_65",
+        "all": [
+          {
+            "field": "febrile_neutropenia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": ">",
+            "value": 65
+          }
+        ],
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_mg_m2": 65,
+          "until": "clinical and haematological recovery",
+          "consider_gcsf": true
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "Delay treatment. After recovery, reduce paclitaxel by one dose level to 65 mg/m² and consider G-CSF."
+      },
+      {
+        "rule_id": "FN_REDUCE_TO_50",
+        "all": [
+          {
+            "field": "febrile_neutropenia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": ">",
+            "value": 50
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": "<=",
+            "value": 65
+          }
+        ],
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_mg_m2": 50,
+          "until": "clinical and haematological recovery",
+          "consider_gcsf": true
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "Delay treatment. After recovery, reduce paclitaxel by one dose level to 50 mg/m² and consider G-CSF."
+      },
+      {
+        "rule_id": "FN_AT_LOWEST_LEVEL_REVIEW",
+        "all": [
+          {
+            "field": "febrile_neutropenia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": "<=",
+            "value": 50
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "until": "clinical and haematological recovery",
+          "consider_gcsf": true,
+          "consultant_review_required": true
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "Delay treatment and obtain consultant review because a further standard dose level is not defined; consider G-CSF."
+      },
+      {
+        "rule_id": "ANC_LT_0_5_IMMEDIATE_HOLD",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 0.5
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "until": "haematological recovery"
+        },
+        "explanation": "ANC below 0.5 ×10⁹/L independently requires treatment delay. Duration and current dose refine whether a dose reduction is also required.",
+        "source": {
+          "pages": [
+            4
+          ],
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "PLATELETS_LT_70_IMMEDIATE_HOLD",
+        "all": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 70
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "until": "haematological recovery"
+        },
+        "explanation": "Platelets below 70 ×10⁹/L independently require treatment delay. Current dose is needed only to determine the exact subsequent dose level.",
+        "source": {
+          "pages": [
+            4
+          ],
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "ANC_PROLONGED_REDUCE_TO_65",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 0.5
+          },
+          {
+            "field": "anc_below_0_5_duration_days",
+            "operator": ">=",
+            "value": 7
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": ">",
+            "value": 65
+          }
+        ],
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_mg_m2": 65,
+          "until": "haematological recovery",
+          "consider_gcsf": true
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "Delay treatment. After recovery, reduce paclitaxel by one dose level to 65 mg/m² and consider G-CSF."
+      },
+      {
+        "rule_id": "ANC_PROLONGED_REDUCE_TO_50",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 0.5
+          },
+          {
+            "field": "anc_below_0_5_duration_days",
+            "operator": ">=",
+            "value": 7
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": ">",
+            "value": 50
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": "<=",
+            "value": 65
+          }
+        ],
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_mg_m2": 50,
+          "until": "haematological recovery",
+          "consider_gcsf": true
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "Delay treatment. After recovery, reduce paclitaxel by one dose level to 50 mg/m² and consider G-CSF."
+      },
+      {
+        "rule_id": "ANC_PROLONGED_LOWEST_LEVEL_REVIEW",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 0.5
+          },
+          {
+            "field": "anc_below_0_5_duration_days",
+            "operator": ">=",
+            "value": 7
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": "<=",
+            "value": 50
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "until": "haematological recovery",
+          "consider_gcsf": true,
+          "consultant_review_required": true
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "Delay treatment and obtain consultant review because a further standard dose level is not defined; consider G-CSF."
+      },
+      {
+        "rule_id": "ANC_LT_0_5_SHORT_DURATION_DELAY",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 0.5
+          },
+          {
+            "field": "anc_below_0_5_duration_days",
+            "operator": "<",
+            "value": 7
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "until": "haematological recovery"
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "ANC is below 0.5 ×10⁹/L but has not remained below this threshold for 7 days. Delay treatment; the mandatory one-level reduction criterion is not yet met."
+      },
+      {
+        "rule_id": "PLATELETS_REDUCE_TO_65",
+        "all": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 70
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": ">",
+            "value": 65
+          }
+        ],
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_mg_m2": 65,
+          "until": "haematological recovery"
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "Delay treatment. After recovery, reduce paclitaxel by one dose level to 65 mg/m²."
+      },
+      {
+        "rule_id": "PLATELETS_REDUCE_TO_50",
+        "all": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 70
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": ">",
+            "value": 50
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": "<=",
+            "value": 65
+          }
+        ],
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_mg_m2": 50,
+          "until": "haematological recovery"
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "Delay treatment. After recovery, reduce paclitaxel by one dose level to 50 mg/m²."
+      },
+      {
+        "rule_id": "PLATELETS_LOWEST_LEVEL_REVIEW",
+        "all": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 70
+          },
+          {
+            "field": "current_dose_mg_m2",
+            "operator": "<=",
+            "value": 50
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "until": "haematological recovery",
+          "consultant_review_required": true
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "Delay treatment and obtain consultant review because a further standard dose level is not defined."
+      },
+      {
+        "rule_id": "COUNTS_INTERMEDIATE_DELAY",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": ">=",
+                "value": 0.5
+              },
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "platelets_x10e9_l",
+                "operator": ">=",
+                "value": 70
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 90
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "until": "haematological recovery"
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "ANC 0.5–0.99 ×10⁹/L and/or platelets 70 to below 90 ×10⁹/L: delay treatment and consider dose reduction at a subsequent cycle."
+      },
+      {
+        "rule_id": "COUNTS_PROCEED",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 90
+          },
+          {
+            "field": "febrile_neutropenia",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_percent": 100
+        },
+        "source": {
+          "page": 2,
+          "table": 2
+        },
+        "explanation": "ANC and platelet thresholds meet the protocol row for 100% dosing."
+      },
+      {
+        "rule_id": "HEPATIC_CONTRAINDICATED",
+        "any": [
+          {
+            "field": "alt_ratio_uln",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": ">",
+            "value": 5
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "page": 3,
+          "table": 3
+        },
+        "explanation": "Transaminases are at least 10 ×ULN and/or bilirubin is above 5 ×ULN. Paclitaxel is contraindicated by the hepatic table."
+      },
+      {
+        "rule_id": "HEPATIC_50_PERCENT",
+        "all": [
+          {
+            "field": "alt_ratio_uln",
+            "operator": "<",
+            "value": 10
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": ">",
+            "value": 2
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": "<=",
+            "value": 5
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_percent": 50,
+          "dose_basis_field": "original_dose_mg_m2"
+        },
+        "source": {
+          "page": 3,
+          "table": 3
+        },
+        "explanation": "Use 50% of the original paclitaxel dose for bilirubin 2.01–5 ×ULN when transaminases are below 10 ×ULN."
+      },
+      {
+        "rule_id": "HEPATIC_75_PERCENT",
+        "all": [
+          {
+            "field": "alt_ratio_uln",
+            "operator": "<",
+            "value": 10
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": ">",
+            "value": 1.25
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": "<=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_percent": 75,
+          "dose_basis_field": "original_dose_mg_m2"
+        },
+        "source": {
+          "page": 3,
+          "table": 3
+        },
+        "explanation": "Use 75% of the original paclitaxel dose for bilirubin 1.26–2 ×ULN when transaminases are below 10 ×ULN."
+      },
+      {
+        "rule_id": "HEPATIC_NO_REDUCTION",
+        "all": [
+          {
+            "field": "alt_ratio_uln",
+            "operator": "<",
+            "value": 10
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": "<=",
+            "value": 1.25
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_percent": 100
+        },
+        "source": {
+          "page": 3,
+          "table": 3
+        },
+        "explanation": "No hepatic dose reduction is triggered when transaminases are below 10 ×ULN and bilirubin is at or below 1.25 ×ULN."
+      },
+      {
+        "rule_id": "TOXICITY_GRADE_3_OR_HIGHER",
+        "any": [
+          {
+            "field": "neuropathy_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "other_nonhaematological_highest_grade",
+            "operator": ">=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "page": 3,
+          "table": 4
+        },
+        "explanation": "Grade 3 or higher neuropathy or other non-haematological toxicity requires discontinuation under Table 4."
+      },
+      {
+        "rule_id": "NEUROPATHY_GRADE_2_REDUCE",
+        "all": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "previous_dose_reductions",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_change_mg_m2": -10,
+          "dose_input_field": "current_dose_mg_m2"
+        },
+        "source": {
+          "page": 3,
+          "table": 4
+        },
+        "explanation": "Grade 2 motor or sensory neuropathy: decrease paclitaxel by 10 mg/m²."
+      },
+      {
+        "rule_id": "NEUROPATHY_AFTER_TWO_REDUCTIONS_REVIEW",
+        "all": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "previous_dose_reductions",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "page": 3,
+          "table": 4
+        },
+        "explanation": "Grade 2 neuropathy is present after two prior dose reductions. Discuss continuation with the treating clinician."
+      },
+      {
+        "rule_id": "OTHER_GRADE_2_UNRESOLVED_HOLD_REDUCE",
+        "all": [
+          {
+            "field": "other_nonhaematological_highest_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "other_nonhaematological_current_grade",
+            "operator": ">",
+            "value": 1
+          },
+          {
+            "field": "previous_dose_reductions",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_change_mg_m2": -10,
+          "dose_input_field": "current_dose_mg_m2",
+          "until": "toxicity resolves to grade 1 or lower"
+        },
+        "source": {
+          "page": 3,
+          "table": 4
+        },
+        "explanation": "Hold treatment until the grade 2 non-haematological toxicity resolves to grade 1 or lower, then decrease subsequent doses by 10 mg/m²."
+      },
+      {
+        "rule_id": "OTHER_GRADE_2_RESOLVED_REDUCE",
+        "all": [
+          {
+            "field": "other_nonhaematological_highest_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "other_nonhaematological_current_grade",
+            "operator": "<=",
+            "value": 1
+          },
+          {
+            "field": "previous_dose_reductions",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "dose_change_mg_m2": -10,
+          "dose_input_field": "current_dose_mg_m2"
+        },
+        "source": {
+          "page": 3,
+          "table": 4
+        },
+        "explanation": "The grade 2 non-haematological toxicity has resolved to grade 1 or lower. Decrease subsequent paclitaxel doses by 10 mg/m²."
+      },
+      {
+        "rule_id": "OTHER_GRADE_2_AFTER_TWO_REDUCTIONS_REVIEW",
+        "all": [
+          {
+            "field": "other_nonhaematological_highest_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "previous_dose_reductions",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "page": 3,
+          "table": 4
+        },
+        "explanation": "A grade 2 non-haematological toxicity occurred after two prior dose reductions. Discuss continuation with the treating clinician."
+      },
+      {
+        "rule_id": "TOXICITY_PROCEED",
+        "all": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "<=",
+            "value": 1
+          },
+          {
+            "field": "other_nonhaematological_highest_grade",
+            "operator": "<=",
+            "value": 1
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "page": 3,
+          "table": 4
+        },
+        "explanation": "No adverse-event dose modification is triggered by the entered neuropathy and other-toxicity grades."
+      }
+    ]
+  }
+}
