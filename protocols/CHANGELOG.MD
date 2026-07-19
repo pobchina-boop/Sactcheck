@@ -1,3 +1,15 @@
+## v0.25.0 — Gastrointestinal five-protocol batch
+
+- Added Capecitabine Monotherapy (NCCP 00216 v8) as a live JSON assessment with Official NCCP PDF access.
+- Added 5-Fluorouracil and Folinic Acid, 14-day (NCCP 00660 v2b).
+- Added FOLFOXIRI (NCCP 00555 v6b).
+- Added Regorafenib Monotherapy (NCCP 00244 v5).
+- Added Trifluridine/Tipiracil (Lonsurf®) (NCCP 00382 v3).
+- Added dedicated batch regression tests and protocol-index checks.
+- Updated the protocol index to 13 live protocols and refreshed the generic launcher cache version.
+- Corrected the protocol-index build utility so embedded standalone library files are not re-indexed.
+- All automated tests pass; formal consultant and oncology-pharmacy validation remains pending.
+
 ## v0.24.1 — FOLFIRI/FOLFIRINOX catalogue integration hotfix
 
 - Connected the existing FOLFIRI catalogue card to the live JSON assessment.

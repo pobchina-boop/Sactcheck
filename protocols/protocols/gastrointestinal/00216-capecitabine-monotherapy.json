@@ -1,0 +1,632 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00216-v8",
+  "file_name": "00216-capecitabine-monotherapy.json",
+  "status": "live_json_assessment_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00216",
+    "nccp_version": "8",
+    "tumour_group": [
+      "Breast",
+      "Gastrointestinal"
+    ],
+    "title": "Capecitabine Monotherapy",
+    "short_title": "Capecitabine",
+    "indication": "Breast and colorectal cancer indications; 1250 mg/m\u00b2 twice daily on days 1\u201314 every 21 days.",
+    "published_date": "2015-01-10",
+    "review_date": "2030-01-27",
+    "source_document_pages": 8,
+    "source_url": "https://healthservice.hse.ie/documents/6558/216_v8_Capecitabine.pdf",
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "validation": {
+      "source_document_checked": true,
+      "automated_shadow_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "JSON assessment encoding derived from NCCP 00216 Version 8. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+  },
+  "indications": [
+    {
+      "indication_id": "00216a",
+      "description": "Locally advanced or metastatic breast cancer."
+    },
+    {
+      "indication_id": "00216b",
+      "description": "Metastatic colorectal cancer."
+    },
+    {
+      "indication_id": "00216c",
+      "description": "Adjuvant stage III colon cancer."
+    },
+    {
+      "indication_id": "00216d",
+      "description": "Adjuvant stage II colon cancer."
+    },
+    {
+      "indication_id": "00216e",
+      "description": "Adjuvant metastatic colorectal cancer following complete resection."
+    },
+    {
+      "indication_id": "00216f",
+      "description": "Adjuvant residual triple-negative breast cancer after neoadjuvant chemotherapy."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "main_cycle",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "day": "1-14",
+          "drug": "capecitabine",
+          "dose": {
+            "value": 1250,
+            "unit": "mg/m2 twice daily PO"
+          }
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "capecitabine": {
+      "0": 1250,
+      "-1": "75% of starting dose",
+      "-2": "50% of starting dose",
+      "-3": "discontinue"
+    }
+  },
+  "required_inputs": [
+    "assessment_type",
+    "cycle_number",
+    "hypersensitivity",
+    "pregnancy",
+    "breastfeeding",
+    "recent_or_concomitant_brivudine",
+    "history_severe_unexpected_fluoropyrimidine_reaction",
+    "dpd_status",
+    "anc_x10e9_l",
+    "platelets_x10e9_l",
+    "haematology_occurrence",
+    "crcl_ml_min",
+    "haemodialysis",
+    "diarrhoea_current_grade",
+    "diarrhoea_occurrence",
+    "hand_foot_grade",
+    "toxicity_occurrence",
+    "bilirubin_ratio_uln",
+    "alt_ast_ratio_uln"
+  ],
+  "output_templates": {
+    "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
+    "discontinue": "The entered data trigger protocol discontinuation.",
+    "withhold": "Hold treatment and follow the protocol reassessment pathway.",
+    "consultant_review": "Consultant review is required before treatment proceeds.",
+    "dose_reduce": "Treatment may proceed only after the encoded component modifications are reviewed and prescribed.",
+    "proceed": "No encoded dose-modification criterion was triggered by the entered data."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
+    "missing_data_policy": "Do not infer missing clinical values.",
+    "actions_ranked_most_to_least_restrictive": [
+      "contraindicated",
+      "discontinue",
+      "withhold",
+      "consultant_review",
+      "dose_reduce",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Do not administer capecitabine."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_PREGNANCY_LACTATION",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Do not administer capecitabine."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy or lactation is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_BRIVUDINE",
+        "field": "recent_or_concomitant_brivudine",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Do not administer with recent or concomitant brivudine."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Brivudine is an exclusion."
+      },
+      {
+        "rule_id": "DPD_COMPLETE",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "complete",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine",
+            "whole_regimen"
+          ],
+          "recommendation": "Discontinue / do not start capecitabine."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Complete DPD deficiency contraindicates capecitabine."
+      },
+      {
+        "rule_id": "DPD_PARTIAL",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "partial",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Use an individualised reduced starting dose."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Partial DPD deficiency requires dose individualisation."
+      },
+      {
+        "rule_id": "ANC_LOW",
+        "field": "anc_x10e9_l",
+        "operator": "<",
+        "value": 1.5,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay until ANC \u22651.5 \u00d710\u2079/L, then apply occurrence-based dose adjustment."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Low ANC requires delay."
+      },
+      {
+        "rule_id": "PLT_LOW",
+        "field": "platelets_x10e9_l",
+        "operator": "<",
+        "value": 75,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay until platelets \u226575 \u00d710\u2079/L, then apply occurrence-based dose adjustment."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Low platelets require delay."
+      },
+      {
+        "rule_id": "CRCL_30_50",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<=",
+            "value": 50
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Use 75% of the original capecitabine dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "CrCl 30\u201350 mL/min requires 75% dose."
+      },
+      {
+        "rule_id": "CRCL_LT30",
+        "field": "crcl_ml_min",
+        "operator": "<",
+        "value": 30,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Capecitabine is not recommended."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "CrCl below 30 mL/min is not recommended."
+      },
+      {
+        "rule_id": "DIALYSIS",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Capecitabine is not recommended on haemodialysis."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Haemodialysis is not recommended."
+      },
+      {
+        "rule_id": "DIARRHOEA_G2PLUS",
+        "field": "diarrhoea_current_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Interrupt until resolved to grade 0\u20131; subsequent dose depends on grade and occurrence."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade \u22652 diarrhoea requires interruption."
+      },
+      {
+        "rule_id": "HFS_G2PLUS",
+        "field": "hand_foot_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Withhold until grade 1 or better; reduce subsequent dose where indicated."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade \u22652 hand-foot syndrome requires withholding."
+      },
+      {
+        "rule_id": "HEPATOTOXICITY",
+        "any": [
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": ">",
+            "value": 3
+          },
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": ">",
+            "value": 2.5
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Withhold until bilirubin \u22643\u00d7ULN and ALT/AST \u22642.5\u00d7ULN."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Treatment-related hepatotoxicity threshold exceeded."
+      },
+      {
+        "rule_id": "PROCEED",
+        "all": [
+          {
+            "field": "hypersensitivity",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "recent_or_concomitant_brivudine",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "dpd_status",
+            "operator": "==",
+            "value": "documented_normal"
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": ">",
+            "value": 50
+          },
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "hand_foot_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": "<=",
+            "value": 3
+          },
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": "<=",
+            "value": 2.5
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "No encoded modification triggered."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Entered values meet encoded parameters."
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_type": {
+      "label": "Assessment type",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "current",
+          "label": "Current pre-treatment assessment"
+        },
+        {
+          "value": "baseline",
+          "label": "Baseline / cycle 1 assessment"
+        }
+      ],
+      "demo_value": "current"
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 999,
+      "step": 1,
+      "demo_value": 2
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnancy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "recent_or_concomitant_brivudine": {
+      "label": "Recent Or Concomitant Brivudine",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "history_severe_unexpected_fluoropyrimidine_reaction": {
+      "label": "History Severe Unexpected Fluoropyrimidine Reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "documented_normal",
+          "label": "Normal / no deficiency identified"
+        },
+        {
+          "value": "partial",
+          "label": "Partial deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Not documented"
+        }
+      ],
+      "demo_value": "documented_normal"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 2
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180
+    },
+    "haematology_occurrence": {
+      "label": "Previous occurrence number for current low count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "demo_value": 75
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "diarrhoea_current_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "diarrhoea_occurrence": {
+      "label": "Diarrhoea occurrence number",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "hand_foot_grade": {
+      "label": "Hand-foot syndrome grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "demo_value": 0
+    },
+    "toxicity_occurrence": {
+      "label": "General toxicity occurrence number",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin (\u00d7ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.1,
+      "demo_value": 0.7
+    },
+    "alt_ast_ratio_uln": {
+      "label": "ALT or AST (highest \u00d7ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 1
+    }
+  }
+}

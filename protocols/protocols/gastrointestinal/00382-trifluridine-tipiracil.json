@@ -1,0 +1,556 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00382-v3",
+  "file_name": "00382-trifluridine-tipiracil.json",
+  "status": "live_json_assessment_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00382",
+    "nccp_version": "3",
+    "tumour_group": "Gastrointestinal",
+    "title": "Trifluridine and Tipiracil (Lonsurf\u00ae) Therapy",
+    "short_title": "Lonsurf",
+    "indication": "Previously treated metastatic colorectal cancer; 35 mg/m\u00b2 twice daily on days 1\u20135 and 8\u201312 every 28 days.",
+    "published_date": "2017-02-01",
+    "review_date": "2026-01-06",
+    "source_document_pages": 6,
+    "source_url": "https://healthservice.hse.ie/documents/6348/382_v3_trifluridine_and_tipiracil_Lonsurf_therapy.pdf",
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "validation": {
+      "source_document_checked": true,
+      "automated_shadow_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "JSON assessment encoding derived from NCCP 00382 Version 3. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+  },
+  "indications": [
+    {
+      "indication_id": "00382a",
+      "description": "Previously treated metastatic colorectal cancer."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "main_cycle",
+      "cycle_length_days": 28,
+      "administration": [
+        {
+          "day": "1-5 and 8-12",
+          "drug": "trifluridine_tipiracil",
+          "dose": {
+            "value": 35,
+            "unit": "mg/m2 twice daily PO; maximum 80 mg/dose"
+          }
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "trifluridine_tipiracil": {
+      "0": 35,
+      "-1": 30,
+      "-2": 25,
+      "-3": 20,
+      "severe_renal_minimum": 15
+    }
+  },
+  "required_inputs": [
+    "cycle_number",
+    "hypersensitivity",
+    "pregnancy",
+    "breastfeeding",
+    "dialysis",
+    "anc_x10e9_l",
+    "platelets_x10e9_l",
+    "febrile_neutropenia",
+    "grade4_neutropenia",
+    "grade4_thrombocytopenia",
+    "toxicity_requiring_interruption",
+    "crcl_ml_min",
+    "bilirubin_ratio_uln",
+    "hepatic_impairment",
+    "current_dose_mg_m2_bd"
+  ],
+  "output_templates": {
+    "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
+    "discontinue": "The entered data trigger protocol discontinuation.",
+    "withhold": "Hold treatment and follow the protocol reassessment pathway.",
+    "consultant_review": "Consultant review is required before treatment proceeds.",
+    "dose_reduce": "Treatment may proceed only after the encoded component modifications are reviewed and prescribed.",
+    "proceed": "No encoded dose-modification criterion was triggered by the entered data."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
+    "missing_data_policy": "Do not infer missing clinical values.",
+    "actions_ranked_most_to_least_restrictive": [
+      "contraindicated",
+      "discontinue",
+      "withhold",
+      "consultant_review",
+      "dose_reduce",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "Do not administer."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "PREG_LACT",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "Do not administer."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy or lactation is an exclusion."
+      },
+      {
+        "rule_id": "ANC_INTERRUPT",
+        "field": "anc_x10e9_l",
+        "operator": "<",
+        "value": 0.5,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "Interrupt until ANC \u22651.5 \u00d710\u2079/L."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "ANC interruption threshold."
+      },
+      {
+        "rule_id": "PLT_INTERRUPT",
+        "field": "platelets_x10e9_l",
+        "operator": "<",
+        "value": 50,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "Interrupt until platelets \u226575 \u00d710\u2079/L."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Platelet interruption threshold."
+      },
+      {
+        "rule_id": "ANC_NEXT_CYCLE",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1.5
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "Do not start the next cycle until ANC \u22651.5 \u00d710\u2079/L."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Next-cycle ANC resumption criterion."
+      },
+      {
+        "rule_id": "PLT_NEXT_CYCLE",
+        "all": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 50
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 75
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "Do not start the next cycle until platelets \u226575 \u00d710\u2079/L."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Next-cycle platelet resumption criterion."
+      },
+      {
+        "rule_id": "SEVERE_TOX_REDUCE",
+        "any": [
+          {
+            "field": "febrile_neutropenia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "grade4_neutropenia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "grade4_thrombocytopenia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "toxicity_requiring_interruption",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "After recovery, reduce by 5 mg/m\u00b2 per dose; maximum three reductions, minimum 20 mg/m\u00b2 BD (or 15 mg/m\u00b2 in severe renal impairment)."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Severe toxicity triggers interruption and dose reduction."
+      },
+      {
+        "rule_id": "RENAL_15_29",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 15
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 30
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "Use a starting dose of 20 mg/m\u00b2 twice daily; one reduction to 15 mg/m\u00b2 is permitted."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Severe renal impairment dosing."
+      },
+      {
+        "rule_id": "RENAL_LT15",
+        "any": [
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 15
+          },
+          {
+            "field": "dialysis",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "Administration is not recommended."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "End-stage renal disease/dialysis is not recommended."
+      },
+      {
+        "rule_id": "HEPATIC_MOD_SEV",
+        "any": [
+          {
+            "field": "hepatic_impairment",
+            "operator": "in",
+            "value": [
+              "moderate",
+              "severe"
+            ]
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": ">",
+            "value": 1.5
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lonsurf"
+          ],
+          "recommendation": "Administration is not recommended at baseline."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Moderate/severe hepatic impairment is not recommended."
+      },
+      {
+        "rule_id": "PROCEED",
+        "all": [
+          {
+            "field": "hypersensitivity",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": "<=",
+            "value": 1.5
+          },
+          {
+            "field": "hepatic_impairment",
+            "operator": "in",
+            "value": [
+              "none",
+              "mild"
+            ]
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "No encoded modification triggered."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Entered values meet encoded next-cycle criteria."
+      }
+    ]
+  },
+  "input_definitions": {
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 999,
+      "step": 1,
+      "demo_value": 2
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnancy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "dialysis": {
+      "label": "Dialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "anc_x10e9_l": {
+      "label": "ANC (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 2
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180
+    },
+    "febrile_neutropenia": {
+      "label": "Febrile neutropenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "grade4_neutropenia": {
+      "label": "Grade 4 neutropenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "grade4_thrombocytopenia": {
+      "label": "Grade 4 thrombocytopenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "toxicity_requiring_interruption": {
+      "label": "Grade 3\u20134 non-haematological toxicity requiring interruption",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "demo_value": 75
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Baseline bilirubin (\u00d7ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.1,
+      "demo_value": 0.7
+    },
+    "hepatic_impairment": {
+      "label": "Hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "current_dose_mg_m2_bd": {
+      "label": "Current dose level",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "35",
+          "label": "35 mg/m\u00b2 twice daily"
+        },
+        {
+          "value": "30",
+          "label": "30 mg/m\u00b2 twice daily"
+        },
+        {
+          "value": "25",
+          "label": "25 mg/m\u00b2 twice daily"
+        },
+        {
+          "value": "20",
+          "label": "20 mg/m\u00b2 twice daily"
+        },
+        {
+          "value": "15",
+          "label": "15 mg/m\u00b2 twice daily (severe renal impairment minimum)"
+        }
+      ],
+      "demo_value": "35"
+    }
+  }
+}

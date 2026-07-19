@@ -1,0 +1,576 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00244-v5",
+  "file_name": "00244-regorafenib.json",
+  "status": "live_json_assessment_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00244",
+    "nccp_version": "5",
+    "tumour_group": "Gastrointestinal",
+    "title": "Regorafenib Monotherapy",
+    "short_title": "Regorafenib",
+    "indication": "Previously treated metastatic colorectal cancer or unresectable/metastatic GIST; 160 mg daily days 1\u201321 every 28 days.",
+    "published_date": "2015-10-01",
+    "review_date": "2030-03-25",
+    "source_document_pages": 7,
+    "source_url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "validation": {
+      "source_document_checked": true,
+      "automated_shadow_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "JSON assessment encoding derived from NCCP 00244 Version 5. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+  },
+  "indications": [
+    {
+      "indication_id": "00244a",
+      "description": "Previously treated metastatic colorectal cancer."
+    },
+    {
+      "indication_id": "00244b",
+      "description": "Unresectable or metastatic GIST after imatinib and sunitinib."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "main_cycle",
+      "cycle_length_days": 28,
+      "administration": [
+        {
+          "day": "1-21",
+          "drug": "regorafenib",
+          "dose": {
+            "value": 160,
+            "unit": "mg PO once daily"
+          }
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "regorafenib": {
+      "0": 160,
+      "-1": 120,
+      "-2": 80,
+      "minimum": 80
+    }
+  },
+  "required_inputs": [
+    "cycle_number",
+    "hypersensitivity_same_class",
+    "child_pugh",
+    "hfsr_grade",
+    "hfsr_occurrence",
+    "hfsr_no_improvement_7_days",
+    "alt_ast_ratio_uln",
+    "bilirubin_ratio_uln",
+    "liver_event_recurrence",
+    "hypertension_grade",
+    "hypertension_symptomatic",
+    "diastolic_bp_mmhg",
+    "other_toxicity_grade"
+  ],
+  "output_templates": {
+    "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
+    "discontinue": "The entered data trigger protocol discontinuation.",
+    "withhold": "Hold treatment and follow the protocol reassessment pathway.",
+    "consultant_review": "Consultant review is required before treatment proceeds.",
+    "dose_reduce": "Treatment may proceed only after the encoded component modifications are reviewed and prescribed.",
+    "proceed": "No encoded dose-modification criterion was triggered by the entered data."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
+    "missing_data_policy": "Do not infer missing clinical values.",
+    "actions_ranked_most_to_least_restrictive": [
+      "contraindicated",
+      "discontinue",
+      "withhold",
+      "consultant_review",
+      "dose_reduce",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "CHILD_PUGH_C",
+        "field": "child_pugh",
+        "operator": "==",
+        "value": "C",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Regorafenib is not recommended."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Severe hepatic impairment is not recommended."
+      },
+      {
+        "rule_id": "HFSR_G2_FIRST",
+        "all": [
+          {
+            "field": "hfsr_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "hfsr_occurrence",
+            "operator": "<=",
+            "value": 1
+          },
+          {
+            "field": "hfsr_no_improvement_7_days",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Decrease dose by 40 mg and institute supportive measures."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "First grade 2 HFSR requires a 40 mg reduction."
+      },
+      {
+        "rule_id": "HFSR_G2_PERSIST",
+        "all": [
+          {
+            "field": "hfsr_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "any": [
+              {
+                "field": "hfsr_no_improvement_7_days",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "field": "hfsr_occurrence",
+                "operator": ">=",
+                "value": 2
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Interrupt until grade 0\u20131, then restart 40 mg lower."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Persistent/recurrent grade 2 HFSR."
+      },
+      {
+        "rule_id": "HFSR_G2_FOURTH",
+        "all": [
+          {
+            "field": "hfsr_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "hfsr_occurrence",
+            "operator": ">=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Discontinue permanently."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Fourth grade 2 HFSR occurrence."
+      },
+      {
+        "rule_id": "HFSR_G3",
+        "all": [
+          {
+            "field": "hfsr_grade",
+            "operator": "==",
+            "value": 3
+          },
+          {
+            "field": "hfsr_occurrence",
+            "operator": "<",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Interrupt at least 7 days until grade 0\u20131, then restart 40 mg lower."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Grade 3 HFSR requires interruption and reduction."
+      },
+      {
+        "rule_id": "HFSR_G3_THIRD",
+        "all": [
+          {
+            "field": "hfsr_grade",
+            "operator": "==",
+            "value": 3
+          },
+          {
+            "field": "hfsr_occurrence",
+            "operator": ">=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Discontinue permanently."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Third grade 3 HFSR occurrence."
+      },
+      {
+        "rule_id": "LIVER_G3_FIRST",
+        "all": [
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": ">",
+            "value": 5
+          },
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": "<=",
+            "value": 20
+          },
+          {
+            "field": "liver_event_recurrence",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Interrupt; if benefit outweighs risk, restart 40 mg lower with weekly monitoring."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "First grade 3 transaminase elevation."
+      },
+      {
+        "rule_id": "LIVER_G3_RECUR",
+        "all": [
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": ">",
+            "value": 5
+          },
+          {
+            "field": "liver_event_recurrence",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Discontinue permanently."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Recurrent grade 3 transaminase elevation."
+      },
+      {
+        "rule_id": "LIVER_G4",
+        "field": "alt_ast_ratio_uln",
+        "operator": ">",
+        "value": 20,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Discontinue permanently."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 4 transaminase elevation."
+      },
+      {
+        "rule_id": "LIVER_HY",
+        "all": [
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": ">",
+            "value": 3
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": ">",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Discontinue permanently and monitor weekly."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Transaminases >3\u00d7ULN with bilirubin >2\u00d7ULN."
+      },
+      {
+        "rule_id": "HTN_G2_SYMPTOMATIC",
+        "all": [
+          {
+            "field": "hypertension_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "hypertension_symptomatic",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Hold until symptoms resolve and diastolic BP \u2264100 mmHg; treat hypertension."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Symptomatic hypertension requires hold."
+      },
+      {
+        "rule_id": "HTN_G3",
+        "field": "hypertension_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Hold and intensify antihypertensive treatment; dose reduction may be required."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 3 hypertension requires hold."
+      },
+      {
+        "rule_id": "PROCEED",
+        "all": [
+          {
+            "field": "child_pugh",
+            "operator": "in",
+            "value": [
+              "none",
+              "A",
+              "B"
+            ]
+          },
+          {
+            "field": "hfsr_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": "<=",
+            "value": 5
+          },
+          {
+            "field": "hypertension_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "other_toxicity_grade",
+            "operator": "<",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "No encoded modification triggered."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Entered values do not trigger an encoded modification."
+      }
+    ]
+  },
+  "input_definitions": {
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 999,
+      "step": 1,
+      "demo_value": 2
+    },
+    "hypersensitivity_same_class": {
+      "label": "Hypersensitivity to same drug class",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "child_pugh": {
+      "label": "Child-Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No hepatic impairment"
+        },
+        {
+          "value": "A",
+          "label": "Child-Pugh A"
+        },
+        {
+          "value": "B",
+          "label": "Child-Pugh B"
+        },
+        {
+          "value": "C",
+          "label": "Child-Pugh C"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "hfsr_grade": {
+      "label": "Hand-foot skin reaction grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "demo_value": 0
+    },
+    "hfsr_occurrence": {
+      "label": "HFSR occurrence number",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "hfsr_no_improvement_7_days": {
+      "label": "Grade 2 HFSR not improved within 7 days",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "alt_ast_ratio_uln": {
+      "label": "ALT or AST (highest \u00d7ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "demo_value": 1
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin (\u00d7ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 0.7
+    },
+    "liver_event_recurrence": {
+      "label": "Recurrent liver enzyme event",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "hypertension_grade": {
+      "label": "Treatment-emergent hypertension grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "hypertension_symptomatic": {
+      "label": "Hypertension symptomatic",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "diastolic_bp_mmhg": {
+      "label": "Diastolic BP (mmHg)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 250,
+      "step": 1,
+      "demo_value": 80
+    },
+    "other_toxicity_grade": {
+      "label": "Other treatment-related toxicity grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    }
+  }
+}

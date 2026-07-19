@@ -8,14 +8,14 @@ const Validator = require("../js/protocol-validator.js");
 const ROOT = path.resolve(__dirname, "..");
 const PROTOCOLS_DIR = path.join(ROOT, "protocols");
 const INDEX_FILE = path.join(PROTOCOLS_DIR, "index.json");
-const EXCLUDED_NAMES = new Set(["index.json", "protocol-schema.json"]);
+const EXCLUDED_NAMES = new Set(["index.json", "protocol-schema.json", "package.json"]);
 
 function walk(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
     const absolute = path.join(directory, entry.name);
     const relative = path.relative(PROTOCOLS_DIR, absolute).replace(/\\/g, "/");
     if (entry.isDirectory()) {
-      if (entry.name.startsWith("_") || entry.name.startsWith(".")) return [];
+      if (entry.name.startsWith("_") || entry.name.startsWith(".") || entry.name === "protocols") return [];
       return walk(absolute);
     }
     if (!entry.isFile() || path.extname(entry.name).toLowerCase() !== ".json") return [];

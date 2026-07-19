@@ -1,0 +1,717 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00555-v6b",
+  "file_name": "00555-folfoxiri.json",
+  "status": "live_json_assessment_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00555",
+    "nccp_version": "6b",
+    "tumour_group": "Gastrointestinal",
+    "title": "FOLFOXIRI Therapy",
+    "short_title": "FOLFOXIRI",
+    "indication": "Metastatic colorectal cancer; every 14 days until progression or unacceptable toxicity.",
+    "published_date": "2019-03-22",
+    "review_date": "2026-03-10",
+    "source_document_pages": 8,
+    "source_url": "https://healthservice.hse.ie/documents/6386/555_v6b_FOLFOXIRI_therapy.pdf",
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "validation": {
+      "source_document_checked": true,
+      "automated_shadow_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "JSON assessment encoding derived from NCCP 00555 Version 6b. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+  },
+  "indications": [
+    {
+      "indication_id": "00555a",
+      "description": "Metastatic colorectal cancer."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "main_cycle",
+      "cycle_length_days": 14,
+      "administration": [
+        {
+          "day": 1,
+          "drug": "irinotecan",
+          "dose": {
+            "value": 165,
+            "unit": "mg/m2 IV"
+          }
+        },
+        {
+          "day": 1,
+          "drug": "oxaliplatin",
+          "dose": {
+            "value": 85,
+            "unit": "mg/m2 IV"
+          }
+        },
+        {
+          "day": 1,
+          "drug": "folinic_acid",
+          "dose": {
+            "value": 200,
+            "unit": "mg/m2 IV"
+          }
+        },
+        {
+          "day": 1,
+          "drug": "fluorouracil_infusion",
+          "dose": {
+            "value": 3200,
+            "unit": "mg/m2 continuous IV over 48 hours"
+          }
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "irinotecan": {
+      "0": 165,
+      "-1": 150,
+      "-2": "discontinue"
+    },
+    "oxaliplatin": {
+      "0": 85,
+      "-1": 60,
+      "-2": "discontinue"
+    },
+    "fluorouracil_infusion": {
+      "0": 3200,
+      "-1": "75%",
+      "-2": "50%",
+      "-3": "discontinue"
+    }
+  },
+  "required_inputs": [
+    "assessment_type",
+    "cycle_number",
+    "hypersensitivity",
+    "pregnancy",
+    "breastfeeding",
+    "recent_or_concomitant_brivudine",
+    "dpd_status",
+    "anc_x10e9_l",
+    "platelets_x10e9_l",
+    "toxicity_delay_weeks",
+    "lowest_anc_during_delay_x10e9_l",
+    "lowest_platelets_during_delay_x10e9_l",
+    "grade4_neutropenia_with_grade2_fever",
+    "crcl_ml_min",
+    "hepatic_impairment_severity",
+    "bilirubin_umol_l",
+    "ast_u_l",
+    "diarrhoea_current_grade",
+    "diarrhoea_highest_grade",
+    "stomatitis_current_grade",
+    "stomatitis_highest_grade",
+    "baseline_neutrophils_x10e9_l",
+    "baseline_platelets_x10e9_l",
+    "bilirubin_ratio_uln",
+    "neuropathy_grade",
+    "laryngopharyngeal_dysaesthesia",
+    "acute_cholinergic_syndrome",
+    "bowel_obstruction_or_chronic_bowel_disease"
+  ],
+  "output_templates": {
+    "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
+    "discontinue": "The entered data trigger protocol discontinuation.",
+    "withhold": "Hold treatment and follow the protocol reassessment pathway.",
+    "consultant_review": "Consultant review is required before treatment proceeds.",
+    "dose_reduce": "Treatment may proceed only after the encoded component modifications are reviewed and prescribed.",
+    "proceed": "No encoded dose-modification criterion was triggered by the entered data."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
+    "missing_data_policy": "Do not infer missing clinical values.",
+    "actions_ranked_most_to_least_restrictive": [
+      "contraindicated",
+      "discontinue",
+      "withhold",
+      "consultant_review",
+      "dose_reduce",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "BASELINE_NEUTROPHILS",
+        "field": "baseline_neutrophils_x10e9_l",
+        "operator": "<",
+        "value": 2,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Do not initiate FOLFOXIRI."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Baseline neutrophils <2 are an exclusion."
+      },
+      {
+        "rule_id": "BASELINE_PLATELETS",
+        "field": "baseline_platelets_x10e9_l",
+        "operator": "<",
+        "value": 100,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Do not initiate FOLFOXIRI."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Baseline platelets <100 are an exclusion."
+      },
+      {
+        "rule_id": "CRCL_LT30",
+        "field": "crcl_ml_min",
+        "operator": "<",
+        "value": 30,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "oxaliplatin",
+            "whole_regimen"
+          ],
+          "recommendation": "Severe renal impairment is an exclusion."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "CrCl <30 is excluded."
+      },
+      {
+        "rule_id": "BILI_GT3",
+        "field": "bilirubin_ratio_uln",
+        "operator": ">",
+        "value": 3,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "irinotecan",
+            "whole_regimen"
+          ],
+          "recommendation": "Do not administer irinotecan/FOLFOXIRI."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Bilirubin >3\u00d7ULN is an exclusion."
+      },
+      {
+        "rule_id": "DPD_COMPLETE",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "complete",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil",
+            "whole_regimen"
+          ],
+          "recommendation": "Do not administer fluorouracil."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Complete DPD deficiency."
+      },
+      {
+        "rule_id": "ANC_DAY1",
+        "field": "anc_x10e9_l",
+        "operator": "<",
+        "value": 1.5,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Delay 1\u20132 weeks; occurrence-based component reductions apply after recovery."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "ANC below 1.5 requires delay."
+      },
+      {
+        "rule_id": "PLT_DAY1",
+        "field": "platelets_x10e9_l",
+        "operator": "<",
+        "value": 75,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Delay 1\u20132 weeks; occurrence-based component reductions apply after recovery."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Platelets below 75 require delay."
+      },
+      {
+        "rule_id": "DELAY_2W",
+        "all": [
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.5
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 75
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Consider discontinuation if counts have not recovered within 2 weeks."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "No recovery after 2 weeks requires discontinuation consideration."
+      },
+      {
+        "rule_id": "DIARRHOEA_G3PLUS",
+        "field": "diarrhoea_highest_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan",
+            "fluorouracil"
+          ],
+          "recommendation": "Reduce irinotecan and fluorouracil according to occurrence table."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 3\u20134 diarrhoea triggers reductions."
+      },
+      {
+        "rule_id": "MUCOSITIS_G3PLUS",
+        "field": "stomatitis_highest_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Reduce fluorouracil to 75% for grade 3\u20134 mucositis/HFS."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Severe mucositis requires fluorouracil reduction."
+      },
+      {
+        "rule_id": "NEUROPATHY_G2_PERSIST",
+        "field": "neuropathy_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "For persistent grade 2 or transient grade 3 symptoms, reduce oxaliplatin; discontinue for persistent grade 3/grade 4."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Neuropathy requires oxaliplatin modification."
+      },
+      {
+        "rule_id": "LPD",
+        "field": "laryngopharyngeal_dysaesthesia",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Increase oxaliplatin infusion time from 2 to 6 hours."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Laryngopharyngeal dysaesthesia requires prolonged infusion."
+      },
+      {
+        "rule_id": "CHOLINERGIC",
+        "field": "acute_cholinergic_syndrome",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Administer atropine 250 micrograms SC unless contraindicated; consider prophylaxis subsequently."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Acute cholinergic syndrome management."
+      },
+      {
+        "rule_id": "PROCEED",
+        "all": [
+          {
+            "field": "baseline_neutrophils_x10e9_l",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "baseline_platelets_x10e9_l",
+            "operator": ">=",
+            "value": 100
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": "<=",
+            "value": 3
+          },
+          {
+            "field": "dpd_status",
+            "operator": "==",
+            "value": "documented_normal"
+          },
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "neuropathy_grade",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "No encoded modification triggered."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Entered values meet encoded parameters."
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_type": {
+      "label": "Assessment type",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "current",
+          "label": "Current pre-treatment assessment"
+        },
+        {
+          "value": "baseline",
+          "label": "Baseline / cycle 1 assessment"
+        }
+      ],
+      "demo_value": "current"
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 999,
+      "step": 1,
+      "demo_value": 2
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnancy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "recent_or_concomitant_brivudine": {
+      "label": "Recent Or Concomitant Brivudine",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "documented_normal",
+          "label": "Normal / no deficiency identified"
+        },
+        {
+          "value": "partial",
+          "label": "Partial deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Not documented"
+        }
+      ],
+      "demo_value": "documented_normal"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 2
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180
+    },
+    "toxicity_delay_weeks": {
+      "label": "Current delay (weeks)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "lowest_anc_during_delay_x10e9_l": {
+      "label": "Lowest ANC during delayed weeks",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 2
+    },
+    "lowest_platelets_during_delay_x10e9_l": {
+      "label": "Lowest platelets during delayed weeks",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180
+    },
+    "grade4_neutropenia_with_grade2_fever": {
+      "label": "Grade 4 neutropenia with \u2265grade 2 fever",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "demo_value": 75
+    },
+    "hepatic_impairment_severity": {
+      "label": "Hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin (\u00b5mol/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "demo_value": 12
+    },
+    "ast_u_l": {
+      "label": "AST (U/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 5000,
+      "step": 1,
+      "demo_value": 25
+    },
+    "diarrhoea_current_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "diarrhoea_highest_grade": {
+      "label": "Highest diarrhoea grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "stomatitis_current_grade": {
+      "label": "Current stomatitis grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "stomatitis_highest_grade": {
+      "label": "Highest stomatitis grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "baseline_neutrophils_x10e9_l": {
+      "label": "Baseline neutrophils (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 2.2
+    },
+    "baseline_platelets_x10e9_l": {
+      "label": "Baseline platelets (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin (\u00d7ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.1,
+      "demo_value": 0.7
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "laryngopharyngeal_dysaesthesia": {
+      "label": "Laryngopharyngeal dysaesthesia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "acute_cholinergic_syndrome": {
+      "label": "Acute cholinergic syndrome",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "bowel_obstruction_or_chronic_bowel_disease": {
+      "label": "Bowel obstruction or chronic bowel disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    }
+  }
+}

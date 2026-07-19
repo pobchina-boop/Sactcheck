@@ -1,0 +1,651 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00660-v2b",
+  "file_name": "00660-5fu-folinic-acid.json",
+  "status": "live_json_assessment_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00660",
+    "nccp_version": "2b",
+    "tumour_group": "Gastrointestinal",
+    "title": "5-Fluorouracil and Folinic Acid Therapy - 14 day",
+    "short_title": "5-FU + Folinic Acid",
+    "indication": "Adjuvant or advanced colorectal adenocarcinoma; every 14 days.",
+    "published_date": "2021-06-21",
+    "review_date": "2028-08-08",
+    "source_document_pages": 7,
+    "source_url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf",
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "validation": {
+      "source_document_checked": true,
+      "automated_shadow_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "JSON assessment encoding derived from NCCP 00660 Version 2b. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+  },
+  "indications": [
+    {
+      "indication_id": "00660a",
+      "description": "Adjuvant colorectal carcinoma."
+    },
+    {
+      "indication_id": "00660b",
+      "description": "Locally advanced, recurrent or metastatic colorectal adenocarcinoma not curable with surgery or radiation."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "main_cycle",
+      "cycle_length_days": 14,
+      "administration": [
+        {
+          "day": 1,
+          "drug": "folinic_acid",
+          "dose": {
+            "value": 400,
+            "unit": "mg/m2 IV"
+          }
+        },
+        {
+          "day": 1,
+          "drug": "fluorouracil_bolus",
+          "dose": {
+            "value": 400,
+            "unit": "mg/m2 IV bolus"
+          }
+        },
+        {
+          "day": 1,
+          "drug": "fluorouracil_infusion",
+          "dose": {
+            "value": 2400,
+            "unit": "mg/m2 continuous IV over 46 hours"
+          }
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "fluorouracil_bolus": {
+      "0": 400,
+      "-1": 320,
+      "-2": 240,
+      "-3": "discontinue"
+    },
+    "fluorouracil_infusion": {
+      "0": 2400,
+      "-1": 2000,
+      "-2": 1600,
+      "-3": "discontinue"
+    }
+  },
+  "required_inputs": [
+    "assessment_type",
+    "cycle_number",
+    "hypersensitivity",
+    "pregnancy",
+    "breastfeeding",
+    "recent_or_concomitant_brivudine",
+    "dpd_status",
+    "anc_x10e9_l",
+    "platelets_x10e9_l",
+    "toxicity_delay_weeks",
+    "lowest_anc_during_delay_x10e9_l",
+    "lowest_platelets_during_delay_x10e9_l",
+    "grade4_neutropenia_with_grade2_fever",
+    "crcl_ml_min",
+    "hepatic_impairment_severity",
+    "bilirubin_umol_l",
+    "ast_u_l",
+    "diarrhoea_current_grade",
+    "diarrhoea_highest_grade",
+    "stomatitis_current_grade",
+    "stomatitis_highest_grade"
+  ],
+  "output_templates": {
+    "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
+    "discontinue": "The entered data trigger protocol discontinuation.",
+    "withhold": "Hold treatment and follow the protocol reassessment pathway.",
+    "consultant_review": "Consultant review is required before treatment proceeds.",
+    "dose_reduce": "Treatment may proceed only after the encoded component modifications are reviewed and prescribed.",
+    "proceed": "No encoded dose-modification criterion was triggered by the entered data."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
+    "missing_data_policy": "Do not infer missing clinical values.",
+    "actions_ranked_most_to_least_restrictive": [
+      "contraindicated",
+      "discontinue",
+      "withhold",
+      "consultant_review",
+      "dose_reduce",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "DPD_COMPLETE",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "complete",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil",
+            "whole_regimen"
+          ],
+          "recommendation": "Do not administer fluorouracil."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Complete DPD deficiency contraindicates fluorouracil."
+      },
+      {
+        "rule_id": "DPD_PARTIAL",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "partial",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Use an individualised reduced starting dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Partial DPD deficiency requires dose individualisation."
+      },
+      {
+        "rule_id": "ANC_DAY1_HOLD",
+        "field": "anc_x10e9_l",
+        "operator": "<",
+        "value": 1,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Hold and repeat FBC weekly for up to 2 weeks."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "ANC <1.0 requires hold."
+      },
+      {
+        "rule_id": "ANC_PERSISTENT",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Discontinue treatment."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "ANC remains <1.0 after 2 weeks."
+      },
+      {
+        "rule_id": "PLT_DAY1_HOLD",
+        "field": "platelets_x10e9_l",
+        "operator": "<",
+        "value": 75,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Hold and repeat FBC weekly for up to 2 weeks."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Platelets <75 require hold."
+      },
+      {
+        "rule_id": "PLT_PERSISTENT",
+        "all": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 75
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Discontinue treatment."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Platelets remain <75 after 2 weeks."
+      },
+      {
+        "rule_id": "LOW_NADIR_ANC",
+        "field": "lowest_anc_during_delay_x10e9_l",
+        "operator": "<",
+        "value": 1,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce fluorouracil by one dose level after recovery."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Low delayed-week ANC triggers one-level reduction."
+      },
+      {
+        "rule_id": "LOW_NADIR_PLT",
+        "field": "lowest_platelets_during_delay_x10e9_l",
+        "operator": "<",
+        "value": 50,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce fluorouracil by one dose level after recovery."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Low platelet nadir triggers reduction."
+      },
+      {
+        "rule_id": "DIARRHOEA_HOLD",
+        "field": "diarrhoea_current_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Hold until diarrhoea is below grade 2."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Current grade \u22652 diarrhoea requires hold."
+      },
+      {
+        "rule_id": "DIARRHOEA_G3_4",
+        "field": "diarrhoea_highest_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce fluorouracil by one dose level."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 3\u20134 diarrhoea triggers reduction."
+      },
+      {
+        "rule_id": "STOMATITIS_HOLD",
+        "field": "stomatitis_current_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Hold until stomatitis is below grade 2."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Current grade \u22652 stomatitis requires hold."
+      },
+      {
+        "rule_id": "STOMATITIS_G3_4",
+        "field": "stomatitis_highest_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce fluorouracil by one dose level."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 3\u20134 stomatitis triggers reduction."
+      },
+      {
+        "rule_id": "HEPATIC_MODERATE",
+        "field": "hepatic_impairment_severity",
+        "operator": "==",
+        "value": "moderate",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Reduce initial fluorouracil dose by one third."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Moderate hepatic impairment."
+      },
+      {
+        "rule_id": "HEPATIC_SEVERE",
+        "field": "hepatic_impairment_severity",
+        "operator": "==",
+        "value": "severe",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Reduce initial fluorouracil dose by one half."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Severe hepatic impairment."
+      },
+      {
+        "rule_id": "PROCEED",
+        "all": [
+          {
+            "field": "dpd_status",
+            "operator": "==",
+            "value": "documented_normal"
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "stomatitis_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "hepatic_impairment_severity",
+            "operator": "==",
+            "value": "none"
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "No encoded modification triggered."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Entered values meet encoded parameters."
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_type": {
+      "label": "Assessment type",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "current",
+          "label": "Current pre-treatment assessment"
+        },
+        {
+          "value": "baseline",
+          "label": "Baseline / cycle 1 assessment"
+        }
+      ],
+      "demo_value": "current"
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 999,
+      "step": 1,
+      "demo_value": 2
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnancy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "recent_or_concomitant_brivudine": {
+      "label": "Recent Or Concomitant Brivudine",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "documented_normal",
+          "label": "Normal / no deficiency identified"
+        },
+        {
+          "value": "partial",
+          "label": "Partial deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Not documented"
+        }
+      ],
+      "demo_value": "documented_normal"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 2
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets (\u00d710\u2079/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180
+    },
+    "toxicity_delay_weeks": {
+      "label": "Current delay (weeks)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "lowest_anc_during_delay_x10e9_l": {
+      "label": "Lowest ANC during delayed weeks",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 2
+    },
+    "lowest_platelets_during_delay_x10e9_l": {
+      "label": "Lowest platelets during delayed weeks",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180
+    },
+    "grade4_neutropenia_with_grade2_fever": {
+      "label": "Grade 4 neutropenia with \u2265grade 2 fever",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "demo_value": 75
+    },
+    "hepatic_impairment_severity": {
+      "label": "Hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin (\u00b5mol/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "demo_value": 12
+    },
+    "ast_u_l": {
+      "label": "AST (U/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 5000,
+      "step": 1,
+      "demo_value": 25
+    },
+    "diarrhoea_current_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "diarrhoea_highest_grade": {
+      "label": "Highest diarrhoea grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "stomatitis_current_grade": {
+      "label": "Current stomatitis grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "stomatitis_highest_grade": {
+      "label": "Highest stomatitis grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    }
+  }
+}
