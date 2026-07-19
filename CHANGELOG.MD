@@ -1,3 +1,10 @@
+## v0.24.1 — FOLFIRI/FOLFIRINOX catalogue integration hotfix
+
+- Connected the existing FOLFIRI catalogue card to the live JSON assessment.
+- Added a distinct NCCP 00329 Version 9 FOLFIRINOX catalogue card and connected it to the live JSON assessment.
+- Added the automatic “JSON assessment live” status and Official NCCP PDF control to both cards through the generic protocol loader.
+- Retained the separate legacy Modified FOLFIRINOX NCCP 00515 card.
+
 ## v0.24.0
 - Added live NCCP 00227 Version 9 FOLFIRI assessment with 33 encoded rules and direct access to the official NCCP PDF.
 - Added haematology recovery/nadir, renal, hepatic, DPD, diarrhoea, stomatitis, UGT1A1 and irinotecan cholinergic-syndrome pathways.
