@@ -72,6 +72,51 @@
     return engine.validateProtocol(protocol);
   }
 
+  function isClinicallyValidated(protocol) {
+    const validation = protocol?.metadata?.validation || {};
+    return Boolean(validation.consultant_reviewed && validation.oncology_pharmacy_reviewed && validation.software_tests_completed && validation.clinical_use_authorised);
+  }
+
+  function statusBadges({ engine = "JSON", clinicalValidated = false, sourceUrl = null, shadow = false, localPreview = false, ready = true }) {
+    const badges = [
+      `<span class="badge ${engine === "JSON" ? "engine-json" : "engine-legacy"}">Engine · ${escapeHtml(engine)}</span>`,
+      `<span class="badge ${clinicalValidated ? "clinical-validated" : "clinical-pending"}">Clinical · ${clinicalValidated ? "Validated" : "Pending validation"}</span>`,
+      `<span class="badge ${sourceUrl ? "source-current" : "source-missing"}">Source · ${sourceUrl ? "Official NCCP" : "Not linked"}</span>`
+    ];
+    if (!ready) badges.push('<span class="badge source-missing">Engine validation required</span>');
+    if (shadow) badges.push('<span class="badge development">Development · Shadow validation</span>');
+    if (localPreview) badges.push('<span class="badge development">Local preview</span>');
+    return badges.join("");
+  }
+
+  function replaceRuleControl(card, jsonEngine) {
+    const ruleButton = card.querySelector(".rule-explorer-btn, .card-actions button[onclick*='openRuleExplorer']");
+    if (!ruleButton) return;
+    if (jsonEngine) {
+      const explainer = document.createElement("div");
+      explainer.className = "assessment-explainer";
+      explainer.textContent = "Triggered rules shown in assessment";
+      ruleButton.replaceWith(explainer);
+    } else {
+      ruleButton.textContent = "Explore protocol rules";
+    }
+  }
+
+  function normaliseRemainingLegacyCards(grid) {
+    grid.querySelectorAll(".regimen-card:not([data-json-protocol-id])").forEach(card => {
+      const planned = card.dataset.status === "planned" || card.classList.contains("planned");
+      const source = card.querySelector(".official-pdf-link, a[href*='healthservice.hse.ie/documents/']")?.href || null;
+      const row = card.querySelector(".validation-row");
+      if (row) {
+        row.innerHTML = planned
+          ? '<span class="badge engine-legacy">Engine · Catalogue only</span><span class="badge source-missing">Source · Required</span>'
+          : statusBadges({ engine: "Legacy", clinicalValidated: false, sourceUrl: source });
+      }
+      const description = [...card.querySelectorAll(":scope > p")].find(p => !p.querySelector("strong"));
+      description?.classList.add("regimen-description");
+      replaceRuleControl(card, false);
+    });
+  }
 
   function getProtocolId(entry, protocol) {
     return protocol?.protocol_id || entry?.id || getProtocolCode(protocol);
@@ -153,20 +198,16 @@
 
     const validationRow = card.querySelector(".validation-row");
     if (validationRow) {
-      validationRow.innerHTML = `
-        <span class="badge ${assessmentReady ? "review" : "pending"}">
-          ${assessmentReady ? "JSON assessment live" : "Engine validation required"}
-        </span>
-        <span class="badge pending">Clinical validation pending</span>`;
+      validationRow.innerHTML = statusBadges({
+        engine: "JSON",
+        clinicalValidated: isClinicallyValidated(protocol),
+        sourceUrl: protocol?.metadata?.source_url,
+        shadow: entry.mode === "shadow_validation",
+        ready: assessmentReady
+      });
     }
 
-    const ruleButton = card.querySelector(".rule-explorer-btn");
-    if (ruleButton) {
-      ruleButton.textContent = "Assessment explains triggered rules";
-      ruleButton.disabled = true;
-      ruleButton.removeAttribute("onclick");
-      ruleButton.title = "Run an assessment to see the exact encoded rules evaluated and triggered.";
-    }
+    replaceRuleControl(card, true);
 
     return true;
   }
@@ -210,14 +251,15 @@
         <span class="category-chip">${escapeHtml(tumourDisplay)}</span>
         <h2>${escapeHtml(title)}</h2>
         <p><strong>NCCP ${escapeHtml(code)}${version ? ` · Version ${escapeHtml(version)}` : ""}</strong></p>
-        <p>${escapeHtml(shorten(indication))}</p>
-        <div class="validation-row">
-          <span class="badge catalog">${localPreview ? "Local JSON preview" : "Protocol JSON"}</span>
-          <span class="badge ${assessmentReady ? "review" : "pending"}">
-            ${assessmentReady ? "JSON assessment live" : "Engine validation required"}
-          </span>
-          <span class="badge pending">Clinical validation pending</span>
-        </div>
+        <p class="regimen-description">${escapeHtml(shorten(indication))}</p>
+        <div class="validation-row">${statusBadges({
+          engine: "JSON",
+          clinicalValidated: isClinicallyValidated(protocol),
+          sourceUrl: metadata.source_url,
+          shadow: migrationMode === "shadow_validation",
+          localPreview,
+          ready: assessmentReady
+        })}</div>
         <details>
           <summary>View encoded protocol summary</summary>
           <div class="details-body">
@@ -240,6 +282,8 @@
 
       grid.appendChild(card);
     });
+
+    normaliseRemainingLegacyCards(grid);
 
     if (typeof window.filterRegimens === "function") {
       window.filterRegimens();

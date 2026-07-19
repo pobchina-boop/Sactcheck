@@ -1,0 +1,74 @@
+SACTCheck v0.27.0 validation report
+===================================
+Release: ICI safety, treatment context and catalogue correction
+Date: 19 July 2026
+Branch baseline supplied by user: develop / v0.26.0
+
+Scope
+-----
+- Removed inherited cytotoxic ANC and platelet hold rules from single-agent durvalumab and atezolizumab.
+- Added a reusable single-agent ICI authoring profile.
+- Added immune-toxicity and relevant organ/endocrine monitoring inputs.
+- Added clear protocol and treatment context controls.
+- Standardised catalogue engine, clinical-validation and source-status labels.
+- Added direct official NCCP PDF access, including olaparib.
+
+Official protocol sources used
+------------------------------
+- NCCP 00593 v10a Atezolizumab 1680 mg Monotherapy:
+  https://healthservice.hse.ie/documents/6399/593_v10a_Atezolizumab_1680mg_Monotherapy.pdf
+- NCCP 00655 v3a Durvalumab 1500 mg Monotherapy:
+  https://healthservice.hse.ie/documents/6883/655_V3a_Durvalumab_1500mg.pdf
+- NCCP 00271 Carboplatin and Etoposide:
+  official source already linked in the protocol JSON/catalogue.
+- NCCP 00588 Olaparib tablet monotherapy:
+  official source linked directly in the protocol JSON/catalogue.
+
+Automated validation
+--------------------
+- Protocol index rebuilt successfully: 23 protocols.
+- JavaScript syntax checks passed.
+- JSON parsing and protocol-schema validation passed.
+- All 16 automated test scripts in `npm test` passed, including:
+  * protocol publication and schema validation
+  * assessment engine regression tests
+  * conditional-input safety tests
+  * weekly paclitaxel tests
+  * FOLFOX shadow comparison
+  * live GI protocol tests
+  * main-app protocol launcher tests
+  * v0.26 multi-tumour regression tests
+  * v0.27 single-agent ICI safety tests
+  * v0.27 treatment-context tests
+  * v0.27 catalogue UI tests
+
+Safety regression checks encoded
+--------------------------------
+- Low ANC alone does not trigger an automatic protocol hold for single-agent durvalumab.
+- Low platelets alone do not trigger an automatic protocol hold for single-agent atezolizumab.
+- FBC abnormalities can be flagged for clinical review without inventing an NCCP numerical threshold.
+- Pneumonitis, hepatitis, colitis, nephritis, endocrine toxicity, severe rash/SCAR,
+  myocarditis, myositis, serious neurological toxicity and infusion reactions retain
+  protocol-specific withhold or permanent-discontinuation pathways.
+- Cytotoxic count rules remain available for chemotherapy-containing regimens.
+- Selected indication is included in the generated assessment context and copyable summary.
+
+Required manual smoke test
+--------------------------
+1. Restart Live Server and refresh with Ctrl+F5.
+2. Open durvalumab monotherapy and confirm ANC/platelet numerical hold fields are absent.
+3. Trigger an FBC clinical-review flag and confirm it does not claim an NCCP count threshold.
+4. Trigger grade 2 pneumonitis and confirm a withhold result.
+5. Open atezolizumab monotherapy and confirm the six current indications are selectable.
+6. Open carboplatin + etoposide and confirm indication, assessment stage,
+   etoposide schedule and cycle are displayed in Protocol and treatment context.
+7. Confirm catalogue badges show Engine, Clinical and Source separately.
+8. Confirm the official NCCP PDF opens from olaparib and both ICI assessments.
+
+Limitations and governance
+--------------------------
+- This remains an encoded demonstration prototype.
+- Consultant and oncology-pharmacy validation are still required before clinical deployment.
+- The update corrects identified systematic ICI template contamination but does not constitute
+  a completed clinical audit of every protocol in the library.
+- Missing optional values are not assumed normal; unassessed relevant domains remain visible.

@@ -232,7 +232,11 @@
       RuleEngine.collectConditionFields(RuleEngine.conditionFromRule(rule))
     ));
     const explicitDefinitions = explicitInputDefinitions(protocol);
-    const fields = unique([...profile.requiredInputs, ...conditionFields]);
+    const explicitAlwaysVisibleFields = [...explicitDefinitions.values()]
+      .filter(definition => definition.always_show === true || definition.ui_section === "treatment_context")
+      .map(definition => definition.id);
+    const indicationField = asArray(protocol.indications).length ? ["indication_id"] : [];
+    const fields = unique([...profile.requiredInputs, ...conditionFields, ...explicitAlwaysVisibleFields, ...indicationField]);
 
     // Conditional visibility/requirement clauses may depend on fields that are
     // not themselves used by a decision rule. Include those dependencies in
@@ -355,9 +359,12 @@
     if (field === "indication_id") {
       definition.type = "select";
       definition.options = asArray(protocol.indications).map(item => ({
-        value: item.indication_id,
+        value: item.indication_id || item.code,
         label: item.description
       }));
+      definition.demo_value = definition.options[0]?.value ?? "";
+      definition.ui_section = "treatment_context";
+      definition.always_show = true;
       return definition;
     }
 
@@ -472,12 +479,19 @@
           .map(item => item.drug))
       : profile.context.activeComponents;
 
+    const indicationId = inputs.indication_id || null;
+    const selectedIndication = asArray(protocol.indications).find(item =>
+      String(item.indication_id || item.code || "") === String(indicationId || "")
+    );
+
     return {
       ...profile.context,
       activeComponents,
       cycle: inputs.cycle_number,
       day: selectedDay,
-      schedule: inputs.schedule_q3w_or_q6w,
+      schedule: inputs.schedule_q3w_or_q6w || inputs.etoposide_schedule,
+      indicationId,
+      indicationLabel: selectedIndication?.description || protocol?.metadata?.indication || null,
       protocolId: protocol.protocol_id,
       protocolTitle: getProtocolTitle(protocol),
       assessedAt: new Date().toISOString()
@@ -671,6 +685,7 @@
       `Protocol: ${result.protocol.title}`,
       `NCCP code/version: ${result.protocol.code}${result.protocol.version ? ` / ${result.protocol.version}` : ""}`,
       `Assessment profile: ${result.profile.label}`,
+      ...(result.context.indicationLabel ? [`Indication: ${result.context.indicationLabel}`] : []),
       `Assessment time: ${result.context.assessedAt}`,
       "",
       `Overall encoded action: ${result.status}`,
@@ -742,7 +757,7 @@
   }
 
   return Object.freeze({
-    version: "0.17.1",
+    version: "0.27.0",
     getProfiles,
     getInputDefinitions,
     explicitInputDefinitions,

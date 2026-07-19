@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="SACTCheck">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>SACTCheck v0.18 — Main App JSON Integration</title>
+  <title>SACTCheck v0.27 — ICI Safety and Catalogue Correction</title>
   <style>
     :root {
       --navy:#12314a; --blue:#176b9b; --blue2:#0f567f; --light:#f3f6f8;
@@ -41,6 +41,23 @@
     .regimen-card p{line-height:1.42;color:var(--muted);margin:5px 0}
     .regimen-card .card-actions{margin-top:auto;padding-top:16px;display:flex;gap:8px;flex-wrap:wrap}
     .official-pdf-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
+
+    .validation-row{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start;min-height:62px;margin-top:8px}
+    .validation-row .badge{margin-bottom:0}
+    .badge.engine-json{background:#e4f1fb;color:#0f567f}
+    .badge.engine-legacy{background:#ece8f6;color:#5b3e82}
+    .badge.clinical-pending{background:#edf0f2;color:#5f6b74}
+    .badge.clinical-validated{background:#e4f4e8;color:#176536}
+    .badge.source-current{background:#eaf8ef;color:#176536}
+    .badge.source-missing{background:#fff0df;color:#8a5200}
+    .badge.development{background:#f3eafa;color:#70449a}
+    .regimen-description{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;min-height:5.7em}
+    .category-chip{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-height:2.5em}
+    .assessment-explainer{width:100%;border:1px solid var(--line);background:#f6f8fa;color:var(--muted);border-radius:7px;padding:10px 12px;font-size:13px;font-weight:700;text-align:center}
+    .regimen-card details{margin-top:8px}
+    .regimen-card .card-actions{align-items:stretch}
+    .regimen-card .card-actions .btn{flex:1 1 180px}
+
     .btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:7px;padding:10px 14px;background:var(--blue);color:#fff;font-weight:700;text-decoration:none;min-height:40px}
     .btn:hover{background:var(--blue2)}
     .btn.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}
@@ -197,7 +214,7 @@
 
   <div id="libraryScreen" class="screen active">
     <section class="library-only">
-      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Search or browse available NCCP protocols. Select a protocol to begin a structured day-ward assessment.</p></div><div class="toolbar protocol-publisher-actions" style="margin:0"><span class="badge">Version 0.17 · Conditional JSON assessments</span><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
+      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Search or browse available NCCP protocols. Select a protocol to begin a structured day-ward assessment.</p></div><div class="toolbar protocol-publisher-actions" style="margin:0"><span class="badge">Version 0.27 · ICI safety and treatment context</span><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
       <div class="health-dashboard" id="protocolHealthDashboard" aria-label="Protocol health dashboard" style="display:none">
         <div class="health-head">
           <div><h3>Protocol Health Dashboard</h3><p class="subtle">Live summary of library coverage, rule-pack maturity and validation status.</p></div>
@@ -207,7 +224,7 @@
           <div class="health-metric"><span>Total protocols</span><strong id="healthTotal">—</strong><small>Active and catalog</small></div>
           <div class="health-metric"><span>Active rule packs</span><strong id="healthActive">—</strong><small>Assessment enabled</small></div>
           <div class="health-metric"><span>Rules encoded</span><strong id="healthRules">—</strong><small>Rule Explorer entries</small></div>
-          <div class="health-metric"><span>Automated tests</span><strong id="healthTests">96</strong><small>Focused engine tests passed</small></div>
+          <div class="health-metric"><span>Automated tests</span><strong id="healthTests">Pending run</strong><small>Focused engine tests passed</small></div>
           <div class="health-metric"><span>Clinically validated</span><strong id="healthValidated">0</strong><small>Consultant + pharmacy</small></div>
         </div>
         <div class="health-bars">
@@ -216,7 +233,7 @@
             <div class="progress-row"><span>Consultant reviewed</span><div class="progress-track"><div class="progress-fill" id="healthConsultBar" style="width:0%"></div></div><strong id="healthConsultPct">0%</strong></div>
             <div class="progress-row"><span>Pharmacy reviewed</span><div class="progress-track"><div class="progress-fill" id="healthPharmBar" style="width:0%"></div></div><strong id="healthPharmPct">0%</strong></div>
           </div>
-          <div class="health-panel"><h4>Tumour-site coverage</h4><div class="health-list" id="healthTumourSites"></div><p class="subtle" style="margin:10px 0 0">Last platform update: <strong>15 July 2026</strong></p></div>
+          <div class="health-panel"><h4>Tumour-site coverage</h4><div class="health-list" id="healthTumourSites"></div><p class="subtle" style="margin:10px 0 0">Last platform update: <strong>19 July 2026</strong></p></div>
         </div>
       </div>
 
@@ -712,7 +729,7 @@
   <div id="protocolImporterScreen" class="screen">
     <div class="toolbar spread">
       <button class="btn secondary" type="button" id="importerBack" onclick="showScreen('libraryScreen')">← Regimen library</button>
-      <span class="badge review">Protocol publisher v0.17.1</span>
+      <span class="badge review">Protocol publisher v0.27</span>
     </div>
 
     <section>
@@ -1897,14 +1914,14 @@ function openProtocolPreview(event){
   }
 }
 </script>
-<script src="js/rule-engine.js?v=0.17.1"></script>
-<script src="js/protocol-validator.js?v=0.17.1"></script>
-<script src="js/assessment-engine.js?v=0.17.1"></script>
-<script src="js/generic-assessment-ui.js?v=0.18"></script>
+<script src="js/rule-engine.js?v=0.27.0"></script>
+<script src="js/protocol-validator.js?v=0.27.0"></script>
+<script src="js/assessment-engine.js?v=0.27.0"></script>
+<script src="js/generic-assessment-ui.js?v=0.27.0"></script>
 <script src="js/folfox-shadow-core.js"></script>
 <script src="js/folfox-shadow-ui.js"></script>
 
-<script src="js/protocol-loader.js?v=0.26.0"></script>
-<script src="js/protocol-importer-ui.js?v=0.17.1"></script>
+<script src="js/protocol-loader.js?v=0.27.0"></script>
+<script src="js/protocol-importer-ui.js?v=0.27.0"></script>
 </body>
 </html>

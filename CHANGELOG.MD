@@ -1,3 +1,17 @@
+# Changelog
+
+## v0.27.0 — ICI safety, treatment context and catalogue correction — 19 July 2026
+
+- Removed inherited cytotoxic ANC and platelet hold rules from single-agent durvalumab and atezolizumab.
+- Updated atezolizumab to current NCCP 00593 version 10a and encoded current immune-toxicity pathways.
+- Added a reusable `single_agent_ici` authoring profile and explicit FBC clinical-review handling without false NCCP count thresholds.
+- Added ICI-specific endocrine, pulmonary, gastrointestinal, hepatic, renal, cutaneous, cardiac, neurological, muscular and infusion-reaction inputs.
+- Added prominent protocol and treatment context controls, including indication and etoposide schedule.
+- Added the official olaparib NCCP PDF link.
+- Standardised catalogue engine, clinical-validation and source-status badges.
+- Corrected displayed application and cache versions to v0.27.0.
+- Added focused safety and interface regression tests.
+
 ## v0.26.0 — Ten-protocol breast, lung and gynaecology expansion
 
 - Added live JSON assessments for NCCP 00250 TC, 00252 AC, 00512 weekly paclitaxel/trastuzumab and 00858 pembrolizumab with weekly carboplatin/paclitaxel followed by AC.

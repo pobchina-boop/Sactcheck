@@ -33,8 +33,11 @@
     screen.className = "screen";
     screen.innerHTML = `
       <div class="toolbar spread">
-        <a href="#libraryScreen" class="btn secondary" id="jsonBackLibrary" role="button">← Regimen library</a>
-        <span class="badge review">JSON engine v${escapeHtml(Engine.version)}</span>
+        <div class="toolbar" style="margin:0">
+          <a href="#libraryScreen" class="btn secondary" id="jsonBackLibrary" role="button">← Regimen library</a>
+          <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
+        </div>
+        <span class="badge engine-json">JSON engine v${escapeHtml(Engine.version)}</span>
       </div>
 
       <details open>
@@ -68,6 +71,11 @@
               <span class="hint">Select the treatment phase or assessment context.</span>
             </div>
           </div>
+        </section>
+
+        <section id="jsonTreatmentContextSection">
+          <div class="section-heading"><h2>Protocol and treatment context</h2><span class="step" id="jsonContextCount">—</span></div>
+          <div id="jsonTreatmentContextGrid" class="grid three"></div>
         </section>
 
         <section>
@@ -139,9 +147,12 @@
       runAssessment();
     });
 
-    const inputGrid = document.getElementById("jsonInputGrid");
-    inputGrid.addEventListener("change", updateConditionalInputs);
-    inputGrid.addEventListener("input", updateConditionalInputs);
+    [document.getElementById("jsonTreatmentContextGrid"), document.getElementById("jsonInputGrid")]
+      .filter(Boolean)
+      .forEach(grid => {
+        grid.addEventListener("change", updateConditionalInputs);
+        grid.addEventListener("input", updateConditionalInputs);
+      });
 
     document.getElementById("jsonDemo").addEventListener("click", loadDemonstrationValues);
 
@@ -211,28 +222,51 @@
       : String(deterministicRules);
     document.getElementById("jsonProtocolValidation").textContent = validationComplete ? "Validated" : "Pending formal validation";
     document.getElementById("jsonProtocolIndication").textContent = metadata.indication || indicationSummary(protocol);
+    const officialPdf = document.getElementById("jsonOfficialPdf");
+    if (metadata.source_url) {
+      officialPdf.href = metadata.source_url;
+      officialPdf.classList.remove("hidden");
+    } else {
+      officialPdf.removeAttribute("href");
+      officialPdf.classList.add("hidden");
+    }
+  }
+
+  const TREATMENT_CONTEXT_FIELDS = new Set([
+    "indication_id", "assessment_type", "cycle_number", "day_number",
+    "schedule_q3w_or_q6w", "etoposide_schedule", "weight_kg",
+    "days_since_chemoradiotherapy", "disease_progressed_after_crt"
+  ]);
+
+  function isTreatmentContext(definition) {
+    return definition.ui_section === "treatment_context" || TREATMENT_CONTEXT_FIELDS.has(definition.id);
   }
 
   function renderInputs(rawInputs = {}) {
     if (!activeProtocol) return;
     const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, rawInputs);
-    const grid = document.getElementById("jsonInputGrid");
-    grid.innerHTML = definitions.map(renderInput).join("");
-    updateInputCount(definitions);
+    const contextDefinitions = definitions.filter(isTreatmentContext);
+    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition));
+    document.getElementById("jsonTreatmentContextGrid").innerHTML = contextDefinitions.map(renderInput).join("");
+    document.getElementById("jsonInputGrid").innerHTML = clinicalDefinitions.map(renderInput).join("");
+    document.getElementById("jsonTreatmentContextSection").classList.toggle("hidden", contextDefinitions.length === 0);
+    document.getElementById("jsonContextCount").textContent = `${contextDefinitions.filter(definition => definition.visible !== false).length} context field${contextDefinitions.length === 1 ? "" : "s"}`;
+    updateInputCount(clinicalDefinitions);
   }
 
   function updateInputCount(definitions) {
     const visible = definitions.filter(definition => definition.visible !== false);
     const conditional = visible.filter(definition => definition.conditionalRequired).length;
-    const parts = [`${visible.length} available`];
+    const parts = [`${visible.length} clinical field${visible.length === 1 ? "" : "s"}`];
     if (conditional) parts.push(`${conditional} pathway-specific`);
     parts.push("partial assessment enabled");
     document.getElementById("jsonInputCount").textContent = parts.join(" · ");
   }
 
   function renderInput(definition) {
-    const requiredMark = "";
-    const requiredAttribute = "";
+    const contextRequired = isTreatmentContext(definition) && definition.required === true;
+    const requiredMark = contextRequired ? " *" : "";
+    const requiredAttribute = contextRequired ? " required" : "";
     const disabledAttribute = definition.visible === false ? " disabled" : "";
     const wrapperClass = definition.visible === false ? "hidden" : "";
     let control = "";
@@ -247,8 +281,8 @@
     } else if (definition.type === "select") {
       control = `
         <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="select"${requiredAttribute}${disabledAttribute}>
-          <option value="">Select…</option>
-          ${(definition.options || []).map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`).join("")}
+          ${(definition.options || []).length === 1 ? "" : '<option value="">Select…</option>'}
+          ${(definition.options || []).map((option, index, all) => `<option value="${escapeHtml(option.value)}"${all.length === 1 ? " selected" : ""}>${escapeHtml(option.label)}</option>`).join("")}
         </select>`;
     } else if (definition.type === "text") {
       control = `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="text" type="text"${requiredAttribute}${disabledAttribute}>`;
@@ -285,7 +319,7 @@
       const visible = definition.visible !== false;
       wrapper.classList.toggle("hidden", !visible);
       control.disabled = !visible;
-      control.required = false;
+      control.required = visible && isTreatmentContext(definition) && definition.required === true;
       if (!visible && control.value !== "") control.value = "";
 
       const marker = wrapper.querySelector("[data-required-marker]");
@@ -326,7 +360,7 @@
     for (let pass = 0; pass < 3; pass += 1) {
       const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, collectRawInputs(true));
       const byId = new Map(definitions.map(definition => [definition.id, definition]));
-      document.querySelectorAll("#jsonInputGrid [data-field]").forEach(element => {
+      document.querySelectorAll("#jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
         const definition = byId.get(element.dataset.field);
         if (!definition || definition.visible === false) return;
         const value = fallbackDemoValue(definition);
@@ -339,7 +373,7 @@
 
   function collectRawInputs(includeDisabled = false) {
     const inputs = {};
-    document.querySelectorAll("#jsonInputGrid [data-field]").forEach(element => {
+    document.querySelectorAll("#jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
       if (!includeDisabled && element.disabled) return;
       inputs[element.dataset.field] = element.value;
     });
@@ -361,7 +395,7 @@
     statusBox.className = `status ${result.statusClass}`;
     document.getElementById("jsonStatusTitle").textContent = result.status;
     document.getElementById("jsonStatusAction").textContent = result.recommendation;
-    document.getElementById("jsonProfileMetric").textContent = result.profile.label;
+    document.getElementById("jsonProfileMetric").textContent = result.context.indicationLabel || result.profile.label;
     document.getElementById("jsonApplicableMetric").textContent = String(result.applicableRuleCount);
     document.getElementById("jsonEvaluatedMetric").textContent = String(result.assessedRuleCount);
     document.getElementById("jsonCompleteMetric").textContent = !result.complete
@@ -464,7 +498,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.17.1",
+    version: "0.27.0",
     open,
     ensureScreen
   });

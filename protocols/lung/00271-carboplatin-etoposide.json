@@ -7,7 +7,7 @@
     "nccp_regimen_code": "00271",
     "nccp_version": 7,
     "tumour_group": "Lung",
-    "title": "CARBOplatin AUC 5 and Etoposide 100 mg/m\u00b2 Therapy \u2013 21 day",
+    "title": "CARBOplatin AUC 5 and Etoposide 100 mg/m² Therapy – 21 day",
     "short_title": "Carboplatin + Etoposide",
     "indication": "Treatment of extensive-stage small-cell lung cancer.",
     "regimen_reimbursement_code": "00271a",
@@ -20,7 +20,8 @@
     },
     "migration": {
       "mode": "live_json"
-    }
+    },
+    "sactcheck_encoding_version": "0.27.0"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -75,8 +76,23 @@
     }
   ],
   "input_definitions": {
+    "indication_id": {
+      "label": "Indication",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "00271a",
+          "label": "Treatment of extensive-stage small-cell lung cancer."
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "00271a",
+      "help": "Select the clinical indication being assessed.",
+      "always_show": true
+    },
     "assessment_type": {
-      "label": "Assessment type",
+      "label": "Assessment stage",
       "type": "select",
       "required": true,
       "options": [
@@ -85,7 +101,28 @@
           "label": "Pre-treatment assessment"
         }
       ],
-      "demo_value": "pre_treatment"
+      "demo_value": "pre_treatment",
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "etoposide_schedule": {
+      "label": "Etoposide schedule",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "iv_days_1_to_3",
+          "label": "IV etoposide on days 1–3"
+        },
+        {
+          "value": "iv_day_1_oral_days_2_3",
+          "label": "IV day 1, oral etoposide days 2–3"
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "iv_days_1_to_3",
+      "help": "Select the treatment schedule documented in the NCCP regimen.",
+      "always_show": true
     },
     "cycle_number": {
       "label": "Cycle number",
@@ -94,26 +131,28 @@
       "min": 1,
       "max": 100,
       "step": 1,
-      "demo_value": 1
+      "demo_value": 1,
+      "ui_section": "treatment_context",
+      "always_show": true
     },
     "anc": {
-      "label": "ANC (\u00d710\u2079/L)",
+      "label": "ANC (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
       "max": 50,
       "step": 0.01,
-      "unit": "\u00d710\u2079/L",
+      "unit": "×10⁹/L",
       "demo_value": 2.0
     },
     "platelets": {
-      "label": "Platelets (\u00d710\u2079/L)",
+      "label": "Platelets (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
       "max": 2000,
       "step": 1,
-      "unit": "\u00d710\u2079/L",
+      "unit": "×10⁹/L",
       "demo_value": 200
     },
     "egfr": {
@@ -127,23 +166,23 @@
       "demo_value": 90
     },
     "bilirubin_uln_multiple": {
-      "label": "Bilirubin (\u00d7 ULN)",
+      "label": "Bilirubin (× ULN)",
       "type": "number",
       "required": false,
       "min": 0,
       "max": 20,
       "step": 0.01,
-      "unit": "\u00d7 ULN",
+      "unit": "× ULN",
       "demo_value": 1.0
     },
     "alt_uln_multiple": {
-      "label": "ALT (\u00d7 ULN)",
+      "label": "ALT (× ULN)",
       "type": "number",
       "required": false,
       "min": 0,
       "max": 50,
       "step": 0.01,
-      "unit": "\u00d7 ULN",
+      "unit": "× ULN",
       "demo_value": 1.0
     },
     "neuropathy_grade": {
@@ -256,7 +295,9 @@
     }
   },
   "required_inputs": [
+    "indication_id",
     "assessment_type",
+    "etoposide_schedule",
     "cycle_number"
   ],
   "rule_engine": {

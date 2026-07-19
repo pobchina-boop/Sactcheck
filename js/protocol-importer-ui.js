@@ -48,7 +48,7 @@
     return `
       <div class="toolbar spread">
         <button class="btn secondary" type="button" id="importerBack">← Regimen library</button>
-        <span class="badge review">Protocol publisher v0.16.2</span>
+        <span class="badge review">Protocol publisher v0.27</span>
       </div>
       <section>
         <div class="section-heading"><div><h2>Validate and preview a protocol JSON file</h2><p class="subtle">This validates the file locally in this browser. It does not upload patient information or permanently publish a protocol.</p></div></div>
@@ -187,7 +187,7 @@
     ];
     document.getElementById("importerIssues").innerHTML = issueRows.length
       ? issueRows.join("")
-      : '<div class="finding info"><h3>No structural issues detected</h3><p>The file satisfies the v0.16 protocol contract.</p></div>';
+      : '<div class="finding info"><h3>No structural issues detected</h3><p>The file satisfies the current schema 2.x protocol contract.</p></div>';
 
     document.getElementById("importerOpenAssessment").disabled = !validation.valid;
     document.getElementById("importerAddSession").disabled = !validation.valid;
@@ -233,7 +233,7 @@
     URL.revokeObjectURL(anchor.href);
   }
 
-  root.SACTCheckProtocolImporter = Object.freeze({ version: "0.16.2", open, ensureScreen });
+  root.SACTCheckProtocolImporter = Object.freeze({ version: "0.27.0", open, ensureScreen });
 
   function initialise() {
     ensureScreen();
