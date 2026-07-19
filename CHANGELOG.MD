@@ -1,13 +1,22 @@
 # SACTCheck Changelog
 
+## v0.28.0 — Batch 4 protocol expansion — 19 July 2026
+
+- Added five live schema-2 JSON assessments: NCCP 00722 TCHP, 00726 pertuzumab/trastuzumab maintenance, 00831 atezolizumab/bevacizumab for HCC, 00897 durvalumab/gemcitabine/cisplatin for biliary tract cancer, and 00558 pembrolizumab 400 mg monotherapy.
+- Added official HSE/NCCP PDF access, visible indication/treatment context, component-specific actions and source-page explanations for all five protocols.
+- Preserved the single-agent ICI safety model: pembrolizumab monotherapy has no invented numerical ANC or platelet hold threshold.
+- Added phase-specific handling to NCCP 00897 so chemotherapy count/renal fields are hidden during durvalumab-only maintenance while immune-toxicity rules remain active.
+- Added explicit TCHP dose-reduction and G-CSF febrile-neutropenia pathways, cardiac, renal, hepatic, neuropathy and stomatitis rules.
+- Rebuilt the catalogue to 28 JSON protocols and retained the one-card durvalumab integration after automatic index generation.
+- Added v0.28 batch regression tests; all 19 automated test scripts pass.
+- All new encodings remain pending formal consultant and oncology-pharmacy validation.
+
 ## v0.27.2 — Duplicate durvalumab card hotfix — 19 July 2026
 
 - Merged the older hard-coded **Durvalumab maintenance** catalogue card with the current NCCP 00655 JSON **Durvalumab monotherapy** protocol.
 - The library now displays one durvalumab card and launches the current JSON assessment.
 - The legacy durvalumab screen remains in the codebase only as a fallback.
 - Added a regression test preventing duplicate NCCP 00655 cards.
-
-# Changelog
 
 ## v0.27.1 — Duplicate carboplatin–etoposide card hotfix — 19 July 2026
 

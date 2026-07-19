@@ -18,7 +18,7 @@ const expected = [
   ["gynaecology/00766-bevacizumab-carboplatin-paclitaxel.json", "00766"]
 ];
 const index = JSON.parse(fs.readFileSync(path.join(ROOT, "protocols/index.json"), "utf8"));
-assert.strictEqual(index.protocol_count, 23, "v0.26 index should contain 23 protocols");
+assert.ok(index.protocol_count >= 23, "The catalogue must retain at least the 23 protocols delivered in v0.26");
 for (const [relative, code] of expected) {
   const full = path.join(ROOT, "protocols", relative);
   assert.ok(fs.existsSync(full), `${relative} should exist`);

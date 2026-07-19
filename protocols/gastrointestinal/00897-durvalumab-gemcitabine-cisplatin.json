@@ -1,32 +1,28 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00655-v3a",
-  "file_name": "00655-durvalumab-maintenance.json",
+  "protocol_id": "nccp-00897-v3",
+  "file_name": "00897-durvalumab-gemcitabine-cisplatin.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
-    "nccp_regimen_code": "00655",
-    "nccp_version": "3a",
-    "tumour_group": "Lung",
-    "title": "Durvalumab 1500 mg Monotherapy – 28 day",
-    "short_title": "Durvalumab monotherapy",
-    "indication": "Locally advanced, unresectable stage III NSCLC with PD-L1 expression ≥1% whose disease has not progressed following definitive platinum-based concurrent chemoradiotherapy.",
-    "regimen_reimbursement_code": "00655a",
-    "published_date": "2021-02-01",
-    "review_date": "2028-09-04",
-    "source_url": "https://healthservice.hse.ie/documents/6883/655_V3a_Durvalumab_1500mg.pdf",
-    "source_document_pages": 9,
+    "nccp_regimen_code": "00897",
+    "nccp_version": "3",
+    "tumour_group": "Gastrointestinal",
+    "title": "Durvalumab 1500 mg, Gemcitabine 1000 mg/m² and CISplatin 25 mg/m² Therapy",
+    "short_title": "Durvalumab + Gemcitabine + Cisplatin",
+    "indication": "First-line treatment of adults with unresectable or metastatic biliary tract cancer.",
+    "regimen_reimbursement_code": "00897",
+    "published_date": "2025-02-20",
+    "review_date": "2026-02-20",
+    "source_url": "https://healthservice.hse.ie/documents/6652/897_v3_Durvalumab_Gem_Cis.pdf",
+    "source_document_pages": 11,
     "catalog": {
       "enabled": true
     },
     "migration": {
-      "mode": "live_json",
-      "legacy_card_id": "openDurvalumab",
-      "switch_to_generic_assessment": true
+      "mode": "live_json"
     },
-    "assessment_model": "single_agent_ici",
-    "sactcheck_encoding_version": "0.27.0",
-    "partial_assessment_supported": true,
-    "safety_correction": "Cytotoxic ANC and platelet hold thresholds removed; ICI-specific adverse-event rules encoded."
+    "assessment_model": "ici_plus_cytotoxic",
+    "sactcheck_encoding_version": "0.28.0"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -36,14 +32,14 @@
   },
   "indications": [
     {
-      "code": "00655a",
-      "description": "Locally advanced, unresectable stage III NSCLC with PD-L1 expression ≥1% whose disease has not progressed following definitive platinum-based concurrent chemoradiotherapy."
+      "code": "00897",
+      "description": "First-line treatment of adults with unresectable or metastatic biliary tract cancer."
     }
   ],
   "treatment_phases": [
     {
-      "phase_id": "durvalumab",
-      "cycle_length_days": 28,
+      "phase_id": "induction",
+      "cycle_length_days": 21,
       "cycles": [
         1,
         2,
@@ -52,12 +48,7 @@
         5,
         6,
         7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13
+        8
       ],
       "administration": [
         {
@@ -68,8 +59,50 @@
             "value": 1500,
             "unit": "mg"
           },
-          "route": "IV infusion",
-          "duration_minutes": 60
+          "route": "IV infusion"
+        },
+        {
+          "day": [
+            1,
+            8
+          ],
+          "order": 2,
+          "drug": "gemcitabine",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m2"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": [
+            1,
+            8
+          ],
+          "order": 3,
+          "drug": "cisplatin",
+          "dose": {
+            "value": 25,
+            "unit": "mg/m2"
+          },
+          "route": "IV infusion"
+        }
+      ]
+    },
+    {
+      "phase_id": "maintenance",
+      "cycle_length_days": 28,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "durvalumab",
+          "dose": {
+            "value": 1500,
+            "unit": "mg"
+          },
+          "route": "IV infusion"
         }
       ]
     }
@@ -81,13 +114,12 @@
       "required": true,
       "options": [
         {
-          "value": "00655a",
-          "label": "Locally advanced, unresectable stage III NSCLC with PD-L1 expression ≥1% whose disease has not progressed following definitive platinum-based concurrent chemoradiotherapy."
+          "value": "00897",
+          "label": "First-line treatment of adults with unresectable or metastatic biliary tract cancer."
         }
       ],
+      "demo_value": "00897",
       "ui_section": "treatment_context",
-      "demo_value": "00655a",
-      "help": "Select the NCCP indication being assessed.",
       "always_show": true
     },
     "assessment_type": {
@@ -100,9 +132,8 @@
           "label": "Pre-treatment assessment"
         }
       ],
-      "ui_section": "treatment_context",
       "demo_value": "pre_treatment",
-      "help": "Protocol-driven assessment stage.",
+      "ui_section": "treatment_context",
       "always_show": true
     },
     "cycle_number": {
@@ -110,11 +141,171 @@
       "type": "number",
       "required": true,
       "min": 1,
-      "max": 13,
+      "max": 200,
       "step": 1,
       "demo_value": 1,
       "ui_section": "treatment_context",
       "always_show": true
+    },
+    "treatment_phase": {
+      "label": "Treatment phase/day",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "induction_day1",
+          "label": "Cycles 1–8: Day 1"
+        },
+        {
+          "value": "induction_day8",
+          "label": "Cycles 1–8: Day 8"
+        },
+        {
+          "value": "maintenance",
+          "label": "Cycle 9 onwards: durvalumab maintenance"
+        }
+      ],
+      "demo_value": "induction_day1",
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 2,
+      "ui_section": "labs",
+      "unit": "×10⁹/L",
+      "visible_when": {
+        "field": "treatment_phase",
+        "operator": "in",
+        "value": [
+          "induction_day1",
+          "induction_day8"
+        ]
+      }
+    },
+    "platelets": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 200,
+      "ui_section": "labs",
+      "unit": "×10⁹/L",
+      "visible_when": {
+        "field": "treatment_phase",
+        "operator": "in",
+        "value": [
+          "induction_day1",
+          "induction_day8"
+        ]
+      }
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 250,
+      "step": 1,
+      "demo_value": 90,
+      "ui_section": "labs",
+      "unit": "mL/min",
+      "visible_when": {
+        "field": "treatment_phase",
+        "operator": "in",
+        "value": [
+          "induction_day1",
+          "induction_day8"
+        ]
+      }
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "visible_when": {
+        "field": "treatment_phase",
+        "operator": "in",
+        "value": [
+          "induction_day1",
+          "induction_day8"
+        ]
+      }
+    },
+    "bilirubin_umol_l": {
+      "label": "Total bilirubin (µmol/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "demo_value": 12,
+      "ui_section": "labs",
+      "unit": "µmol/L",
+      "visible_when": {
+        "field": "treatment_phase",
+        "operator": "in",
+        "value": [
+          "induction_day1",
+          "induction_day8"
+        ]
+      }
+    },
+    "significant_hearing_impairment_tinnitus": {
+      "label": "Significant hearing impairment or tinnitus",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "visible_when": {
+        "field": "treatment_phase",
+        "operator": "in",
+        "value": [
+          "induction_day1",
+          "induction_day8"
+        ]
+      }
+    },
+    "weight_kg": {
+      "label": "Body weight (kg)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 300,
+      "step": 0.1,
+      "demo_value": 70,
+      "ui_section": "labs",
+      "unit": "kg"
+    },
+    "prior_grade3_or_higher_irae": {
+      "label": "Prior grade 3 or higher immune-related adverse event",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "unresolved_irae_over_grade1": {
+      "label": "Unresolved prior immune-related adverse event above grade 1",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "biliary_infection_or_cholangitis": {
+      "label": "Suspected cholangitis or biliary tract infection",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
     },
     "hypersensitivity": {
       "label": "Relevant drug hypersensitivity",
@@ -612,55 +803,13 @@
       "demo_value": false,
       "ui_section": "clinical",
       "help": "FBC abnormalities are monitored but do not trigger a protocol-defined ANC/platelet hold unless the source protocol states a threshold."
-    },
-    "weight_kg": {
-      "label": "Body weight",
-      "type": "number",
-      "required": false,
-      "min": 1,
-      "max": 300,
-      "step": 0.1,
-      "demo_value": 70,
-      "ui_section": "treatment_context",
-      "unit": "kg",
-      "help": "Patients weighing 30 kg or less require the protocol weight-based schedule.",
-      "always_show": true
-    },
-    "days_since_chemoradiotherapy": {
-      "label": "Days since completion of chemoradiotherapy",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 365,
-      "step": 1,
-      "demo_value": 30,
-      "ui_section": "treatment_context",
-      "unit": "days",
-      "always_show": true,
-      "visible_when": {
-        "field": "cycle_number",
-        "operator": "==",
-        "value": 1
-      }
-    },
-    "disease_progressed_after_crt": {
-      "label": "Disease progressed after chemoradiotherapy",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "ui_section": "treatment_context",
-      "visible_when": {
-        "field": "cycle_number",
-        "operator": "==",
-        "value": 1
-      },
-      "always_show": true
     }
   },
   "required_inputs": [
     "indication_id",
     "assessment_type",
-    "cycle_number"
+    "cycle_number",
+    "treatment_phase"
   ],
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
@@ -696,7 +845,7 @@
           "recommendation": "Do not administer durvalumab; obtain consultant review."
         },
         "source": {
-          "page": 2
+          "page": 5
         },
         "explanation": "Relevant hypersensitivity is an exclusion."
       },
@@ -722,26 +871,9 @@
           "recommendation": "Do not proceed without urgent consultant review of pregnancy or breastfeeding risk."
         },
         "source": {
-          "page": 2
+          "page": 5
         },
         "explanation": "Pregnancy or breastfeeding requires specialist review."
-      },
-      {
-        "rule_id": "ACTIVE_INFECTION_REQUIRING_THERAPY",
-        "field": "active_infection_requiring_therapy",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "durvalumab"
-          ],
-          "recommendation": "Withhold durvalumab and treat/review the infection until clinically stable."
-        },
-        "source": {
-          "page": 2
-        },
-        "explanation": "Active clinically significant infection requiring therapy is an exclusion."
       },
       {
         "rule_id": "INFECTION_G3_G4",
@@ -761,57 +893,6 @@
         "explanation": "Grade 3–4 infection requires withholding until stable."
       },
       {
-        "rule_id": "CRT_START_WINDOW",
-        "field": "days_since_chemoradiotherapy",
-        "operator": ">",
-        "value": 42,
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "durvalumab"
-          ],
-          "recommendation": "Cycle 1 falls outside the encoded 42-day post-chemoradiotherapy window; obtain consultant review."
-        },
-        "source": {
-          "page": 1
-        },
-        "explanation": "Cycle 1 should commence within 42 days of completing chemoradiotherapy."
-      },
-      {
-        "rule_id": "DISEASE_PROGRESSION_AFTER_CRT",
-        "field": "disease_progressed_after_crt",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "durvalumab"
-          ],
-          "recommendation": "Do not administer under this indication because progression after chemoradiotherapy was recorded."
-        },
-        "source": {
-          "page": 1
-        },
-        "explanation": "The indication requires no disease progression after definitive chemoradiotherapy."
-      },
-      {
-        "rule_id": "LOW_BODY_WEIGHT_SCHEDULE",
-        "field": "weight_kg",
-        "operator": "<=",
-        "value": 30,
-        "action": {
-          "type": "proceed_with_caution",
-          "components": [
-            "durvalumab"
-          ],
-          "recommendation": "Use the protocol weight-based durvalumab schedule while body weight is 30 kg or less."
-        },
-        "source": {
-          "page": 1
-        },
-        "explanation": "Patients weighing 30 kg or less require weight-based dosing."
-      },
-      {
         "rule_id": "FBC_ABNORMALITY_REVIEW",
         "field": "fbc_clinical_concern",
         "operator": "==",
@@ -824,7 +905,7 @@
           "recommendation": "Review the FBC abnormality clinically; no protocol-defined ANC or platelet hold threshold is encoded for single-agent durvalumab."
         },
         "source": {
-          "page": 2
+          "page": 5
         },
         "explanation": "FBC is monitored, but the NCCP protocol does not specify an ANC or platelet treatment threshold."
       },
@@ -841,7 +922,7 @@
           "recommendation": "Withhold durvalumab and manage as immune-mediated pneumonitis."
         },
         "source": {
-          "page": 3
+          "page": 5
         },
         "explanation": "Grade 2 immune-mediated pneumonitis requires withholding."
       },
@@ -858,7 +939,7 @@
           "recommendation": "Permanently discontinue durvalumab for grade 3–4 pneumonitis."
         },
         "source": {
-          "page": 3
+          "page": 5
         },
         "explanation": "Grade 3–4 immune-mediated pneumonitis requires permanent discontinuation."
       },
@@ -902,7 +983,7 @@
           "recommendation": "Withhold durvalumab and manage as immune-mediated hepatitis."
         },
         "source": {
-          "page": 3
+          "page": 5
         },
         "explanation": "ALT/AST >3–5×ULN or bilirubin >1.5–3×ULN requires withholding."
       },
@@ -942,7 +1023,7 @@
           "recommendation": "Permanently discontinue durvalumab for severe immune-mediated hepatitis."
         },
         "source": {
-          "page": 3
+          "page": 5
         },
         "explanation": "ALT/AST >5×ULN, bilirubin >3×ULN, or concurrent transaminase and bilirubin elevation meets the permanent-discontinuation pathway."
       },
@@ -962,7 +1043,7 @@
           "recommendation": "Withhold durvalumab and manage the immune-mediated diarrhoea/colitis pathway."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Grade 2–3 immune-mediated diarrhoea or colitis requires withholding."
       },
@@ -979,7 +1060,7 @@
           "recommendation": "Permanently discontinue durvalumab for grade 4 immune-mediated diarrhoea/colitis."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Grade 4 immune-mediated diarrhoea or colitis requires permanent discontinuation."
       },
@@ -996,7 +1077,7 @@
           "recommendation": "Withhold durvalumab until clinically stable; treat hyperthyroidism/thyroiditis as indicated."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Grade 2–4 immune-mediated hyperthyroidism or thyroiditis requires withholding until stable."
       },
@@ -1013,7 +1094,7 @@
           "recommendation": "Durvalumab dose change is not required solely for hypothyroidism; initiate thyroid replacement and confirm clinical stability."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Immune-mediated hypothyroidism is treated with hormone replacement without a protocol dose change."
       },
@@ -1030,7 +1111,7 @@
           "recommendation": "Withhold durvalumab until clinically stable and initiate corticosteroid/hormone replacement as indicated."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Symptomatic adrenal insufficiency or hypophysitis requires withholding until stable."
       },
@@ -1064,7 +1145,7 @@
           "recommendation": "Urgently assess and treat suspected immune-mediated diabetes with insulin as clinically indicated; the protocol does not require an automatic durvalumab dose change solely for controlled type 1 diabetes."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Immune-mediated type 1 diabetes is managed with insulin without a protocol dose change."
       },
@@ -1090,7 +1171,7 @@
           "recommendation": "Withhold durvalumab and manage as immune-mediated nephritis."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Creatinine >1.5–3× baseline or ULN meets the grade 2 nephritis pathway."
       },
@@ -1107,7 +1188,7 @@
           "recommendation": "Permanently discontinue durvalumab for grade 3–4 immune-mediated nephritis."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Creatinine >3× baseline or ULN meets the permanent-discontinuation pathway."
       },
@@ -1124,7 +1205,7 @@
           "recommendation": "Withhold durvalumab for grade 2 rash lasting more than one week."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Grade 2 immune-mediated rash lasting more than one week requires withholding."
       },
@@ -1141,7 +1222,7 @@
           "recommendation": "Withhold durvalumab and manage the grade 3 rash pathway."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Grade 3 immune-mediated rash requires withholding."
       },
@@ -1158,7 +1239,7 @@
           "recommendation": "Permanently discontinue durvalumab for grade 4 immune-mediated rash."
         },
         "source": {
-          "page": 4
+          "page": 5
         },
         "explanation": "Grade 4 immune-mediated rash requires permanent discontinuation."
       },
@@ -1357,11 +1438,378 @@
           "page": 6
         },
         "explanation": "Grade 4 non-immune adverse reactions generally require permanent discontinuation."
+      },
+      {
+        "rule_id": "PRIOR_SEVERE_IRAE_EXCLUSION",
+        "any": [
+          {
+            "field": "prior_grade3_or_higher_irae",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "unresolved_irae_over_grade1",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "durvalumab"
+          ],
+          "recommendation": "Do not administer durvalumab without consultant review because the source excludes prior grade ≥3 or unresolved >grade 1 immune toxicity."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Prior severe or unresolved immune toxicity is an exclusion."
+      },
+      {
+        "rule_id": "ACTIVE_INFECTION_ALL_COMPONENTS",
+        "field": "active_infection_requiring_therapy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "durvalumab",
+            "gemcitabine",
+            "cisplatin"
+          ],
+          "recommendation": "Withhold treatment and treat/review the clinically significant infection until stable."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Active clinically significant infection requiring therapy is a caution."
+      },
+      {
+        "rule_id": "BILIARY_INFECTION",
+        "field": "biliary_infection_or_cholangitis",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "durvalumab",
+            "gemcitabine",
+            "cisplatin"
+          ],
+          "recommendation": "Withhold and urgently assess/treat suspected cholangitis or biliary tract infection."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Biliary tract infection/cholangitis requires close monitoring and treatment review."
+      },
+      {
+        "rule_id": "LOW_WEIGHT_DURVALUMAB",
+        "field": "weight_kg",
+        "operator": "<=",
+        "value": 36,
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "durvalumab"
+          ],
+          "recommendation": "Use weight-based durvalumab 20 mg/kg rather than the fixed 1500 mg dose while body weight is 36 kg or less."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Patients ≤36 kg require weight-based durvalumab dosing."
+      },
+      {
+        "rule_id": "CHEMO_COUNTS_75_GEM",
+        "all": [
+          {
+            "field": "treatment_phase",
+            "operator": "in",
+            "value": [
+              "induction_day1",
+              "induction_day8"
+            ]
+          },
+          {
+            "any": [
+              {
+                "all": [
+                  {
+                    "field": "anc",
+                    "operator": ">=",
+                    "value": 0.5
+                  },
+                  {
+                    "field": "anc",
+                    "operator": "<",
+                    "value": 1.0
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "platelets",
+                    "operator": ">=",
+                    "value": 50
+                  },
+                  {
+                    "field": "platelets",
+                    "operator": "<=",
+                    "value": 100
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Give gemcitabine at 75%; cisplatin remains at 100% according to Table 3."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "ANC 0.5–0.99 or platelets 50–100 requires gemcitabine 75% and cisplatin 100%."
+      },
+      {
+        "rule_id": "CHEMO_COUNTS_OMIT",
+        "all": [
+          {
+            "field": "treatment_phase",
+            "operator": "in",
+            "value": [
+              "induction_day1",
+              "induction_day8"
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "anc",
+                "operator": "<",
+                "value": 0.5
+              },
+              {
+                "field": "platelets",
+                "operator": "<",
+                "value": 50
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "omit",
+          "components": [
+            "gemcitabine",
+            "cisplatin"
+          ],
+          "recommendation": "Omit gemcitabine and cisplatin for this treatment day. Assess durvalumab separately using the immune-toxicity pathway."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "ANC <0.5 or platelets <50 requires omission of gemcitabine and cisplatin."
+      },
+      {
+        "rule_id": "CISPLATIN_CRCL_50_59",
+        "all": [
+          {
+            "field": "treatment_phase",
+            "operator": "in",
+            "value": [
+              "induction_day1",
+              "induction_day8"
+            ]
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 50
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<=",
+            "value": 59
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Give cisplatin at 75% of the original dose."
+        },
+        "source": {
+          "page": 5,
+          "table": "Table 4"
+        },
+        "explanation": "CrCl 50–59 mL/min requires cisplatin 75%."
+      },
+      {
+        "rule_id": "CISPLATIN_CRCL_40_49",
+        "all": [
+          {
+            "field": "treatment_phase",
+            "operator": "in",
+            "value": [
+              "induction_day1",
+              "induction_day8"
+            ]
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 40
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<=",
+            "value": 49
+          }
+        ],
+        "action": {
+          "type": "dose_reduce_two_levels",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Give cisplatin at 50% of the original dose."
+        },
+        "source": {
+          "page": 5,
+          "table": "Table 4"
+        },
+        "explanation": "CrCl 40–49 mL/min requires cisplatin 50%."
+      },
+      {
+        "rule_id": "CISPLATIN_CRCL_LT40",
+        "all": [
+          {
+            "field": "treatment_phase",
+            "operator": "in",
+            "value": [
+              "induction_day1",
+              "induction_day8"
+            ]
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 40
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Cisplatin is not recommended at CrCl below 40 mL/min; obtain consultant/pharmacy review of the regimen."
+        },
+        "source": {
+          "page": 5,
+          "table": "Table 4"
+        },
+        "explanation": "Cisplatin is not recommended below CrCl 40 mL/min."
+      },
+      {
+        "rule_id": "CISPLATIN_HAEMODIALYSIS",
+        "all": [
+          {
+            "field": "treatment_phase",
+            "operator": "in",
+            "value": [
+              "induction_day1",
+              "induction_day8"
+            ]
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "In haemodialysis, 50% cisplatin may be considered; specialist consultant/pharmacy review is required."
+        },
+        "source": {
+          "page": 5,
+          "table": "Table 4"
+        },
+        "explanation": "The source permits consideration of 50% cisplatin in haemodialysis."
+      },
+      {
+        "rule_id": "GEMCITABINE_BILI_GE27",
+        "all": [
+          {
+            "field": "treatment_phase",
+            "operator": "in",
+            "value": [
+              "induction_day1",
+              "induction_day8"
+            ]
+          },
+          {
+            "field": "bilirubin_umol_l",
+            "operator": ">=",
+            "value": 27
+          }
+        ],
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Consider starting gemcitabine at 80% and increasing if tolerated, or full dose with active monitoring."
+        },
+        "source": {
+          "page": 5,
+          "table": "Table 4"
+        },
+        "explanation": "Bilirubin ≥27 µmol/L requires an 80% start or active monitoring option."
+      },
+      {
+        "rule_id": "HEARING_IMPAIRMENT_CISPLATIN",
+        "all": [
+          {
+            "field": "treatment_phase",
+            "operator": "in",
+            "value": [
+              "induction_day1",
+              "induction_day8"
+            ]
+          },
+          {
+            "field": "significant_hearing_impairment_tinnitus",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Significant hearing impairment/tinnitus is an exclusion for cisplatin; obtain consultant review."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Significant hearing impairment/tinnitus is an exclusion."
       }
     ]
   },
   "output_templates": {
-    "proceed": "No encoded immune-toxicity, exclusion or treatment-context rule was triggered. Complete normal prescribing, laboratory, clinical and pharmacy checks.",
-    "coverage_gap": "One or more potentially relevant ICI domains were not assessed."
+    "proceed": "No encoded contraindication, hold, dose-modification or treatment-context criterion was triggered. Complete normal prescribing, clinical and pharmacy checks.",
+    "coverage_gap": "One or more potentially relevant protocol domains were not assessed."
   }
 }
