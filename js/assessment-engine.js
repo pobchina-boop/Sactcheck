@@ -757,7 +757,7 @@
   }
 
   return Object.freeze({
-    version: "0.27.1",
+    version: "0.27.2",
     getProfiles,
     getInputDefinitions,
     explicitInputDefinitions,

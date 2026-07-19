@@ -1,3 +1,12 @@
+# SACTCheck Changelog
+
+## v0.27.2 — Duplicate durvalumab card hotfix — 19 July 2026
+
+- Merged the older hard-coded **Durvalumab maintenance** catalogue card with the current NCCP 00655 JSON **Durvalumab monotherapy** protocol.
+- The library now displays one durvalumab card and launches the current JSON assessment.
+- The legacy durvalumab screen remains in the codebase only as a fallback.
+- Added a regression test preventing duplicate NCCP 00655 cards.
+
 # Changelog
 
 ## v0.27.1 — Duplicate carboplatin–etoposide card hotfix — 19 July 2026

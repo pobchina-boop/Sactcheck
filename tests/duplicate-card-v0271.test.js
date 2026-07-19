@@ -12,6 +12,6 @@ assert.equal(carboplatinEtoposideEntries[0].legacy_card_id, "openCarboEtop", "Th
 assert.equal((html.match(/id="openCarboEtop"/g) || []).length, 1, "The legacy catalogue card must expose one integration target.");
 assert(loader.includes("updateIntegratedCardMetadata"), "Integrated cards must be refreshed from current JSON metadata.");
 assert(loader.includes("updateIntegratedCardMetadata(entry, protocol, card)"), "Metadata refresh must run during integration.");
-assert(html.includes("js/protocol-loader.js?v=0.27.1"), "The loader cache key must be updated for the hotfix.");
+assert(html.includes("js/protocol-loader.js?v=0.27.2"), "The loader cache key must be updated for the hotfix.");
 
-console.log("v0.27.1 duplicate-card regression tests passed.");
+console.log("v0.27.2 duplicate-card regression tests passed.");
