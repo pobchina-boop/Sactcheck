@@ -1,3 +1,9 @@
+## v0.24.2
+- Promoted NCCP 00515 Version 7 Modified FOLFIRINOX to the live generic JSON assessment engine.
+- Connected the existing Modified FOLFIRINOX catalogue card to JSON assessment and the official NCCP PDF.
+- Kept standard FOLFIRINOX NCCP 00329 as a separate live protocol.
+- Added regression tests for both distinct FOLFIRINOX regimens.
+
 ## v0.24.1 — FOLFIRI/FOLFIRINOX catalogue integration hotfix
 
 - Connected the existing FOLFIRI catalogue card to the live JSON assessment.

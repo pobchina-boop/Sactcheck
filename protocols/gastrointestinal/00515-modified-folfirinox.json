@@ -1,0 +1,1534 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00515-v7",
+  "file_name": "00515-modified-folfirinox.json",
+  "status": "live_json_assessment_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00515",
+    "nccp_version": "7",
+    "tumour_group": "Gastrointestinal",
+    "title": "FOLFIRINOX Modified Therapy",
+    "short_title": "Modified FOLFIRINOX",
+    "indication": "Adjuvant treatment of pancreatic ductal adenocarcinoma or treatment of metastatic pancreatic cancer. Treatment every 14 days for up to 12 cycles.",
+    "published_date": "2018-10-10",
+    "review_date": "2030-10-31",
+    "source_document_pages": 11,
+    "source_url": "https://healthservice.hse.ie/documents/6516/515_v7_FOLFIRINOX_modified.pdf",
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "validation": {
+      "source_document_checked": true,
+      "automated_shadow_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "JSON assessment encoding derived from NCCP 00515 Version 7. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+  },
+  "indications": [
+    {
+      "indication_id": "00515a",
+      "description": "Adjuvant treatment of pancreatic ductal adenocarcinoma."
+    },
+    {
+      "indication_id": "00515b",
+      "description": "Metastatic pancreatic cancer."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "fourteen_day_cycle",
+      "cycle_length_days": 14,
+      "administration": [
+        {
+          "day": 1,
+          "drug": "oxaliplatin",
+          "dose": {
+            "value": 85,
+            "unit": "mg/m2 IV"
+          }
+        },
+        {
+          "day": 1,
+          "drug": "folinic_acid",
+          "dose": {
+            "value": 400,
+            "unit": "mg/m2 IV"
+          }
+        },
+        {
+          "day": 1,
+          "drug": "irinotecan",
+          "dose": {
+            "value": 150,
+            "unit": "mg/m2 IV"
+          }
+        },
+        {
+          "day": 1,
+          "drug": "fluorouracil_infusion",
+          "dose": {
+            "value": 2400,
+            "unit": "mg/m2 continuous IV over 46 hours"
+          }
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "oxaliplatin": {
+      "0": 85,
+      "-1": 60,
+      "-2": 42.5
+    },
+    "irinotecan": {
+      "0": 150,
+      "-1": 120,
+      "-2": 75
+    },
+    "fluorouracil_infusion": {
+      "0": 2400,
+      "-1": 1800,
+      "-2": 1200
+    }
+  },
+  "required_inputs": [
+    "assessment_type",
+    "cycle_number",
+    "hypersensitivity",
+    "pregnancy",
+    "breastfeeding",
+    "bowel_obstruction_or_chronic_bowel_disease",
+    "dpd_status",
+    "anc_x10e9_l",
+    "platelets_x10e9_l",
+    "day1_anc_low_occurrence",
+    "day1_platelets_low_occurrence",
+    "severe_neutropenic_event_occurrence",
+    "severe_thrombocytopenia_occurrence",
+    "crcl_ml_min",
+    "haemodialysis",
+    "bilirubin_ratio_uln",
+    "bilirubin_umol_l",
+    "ast_u_l",
+    "hepatic_impairment_severity",
+    "diarrhoea_current_grade",
+    "diarrhoea_highest_grade",
+    "toxicity_delay_weeks",
+    "stomatitis_current_grade",
+    "stomatitis_highest_grade",
+    "neuropathy_pattern",
+    "neuropathy_grade3_occurrence",
+    "laryngopharyngeal_dysaesthesia",
+    "acute_cholinergic_syndrome",
+    "diarrhoea_occurrence",
+    "hand_foot_syndrome_current_grade",
+    "hand_foot_syndrome_highest_grade"
+  ],
+  "output_templates": {
+    "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
+    "discontinue": "The entered data trigger protocol discontinuation.",
+    "withhold": "Hold treatment and follow the protocol reassessment pathway.",
+    "consultant_review": "Consultant review is required before treatment proceeds.",
+    "dose_reduce": "Treatment may proceed only after the encoded component modifications are reviewed and prescribed.",
+    "proceed": "No encoded dose-modification criterion was triggered by the entered data."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
+    "missing_data_policy": "Do not infer missing clinical values.",
+    "actions_ranked_most_to_least_restrictive": [
+      "contraindicated",
+      "discontinue",
+      "withhold",
+      "consultant_review",
+      "dose_reduce",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Hypersensitivity to irinotecan, oxaliplatin, fluorouracil or an excipient is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_PREGNANCY_BREASTFEEDING",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy or breastfeeding is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_BOWEL_DISEASE_OBSTRUCTION",
+        "field": "bowel_obstruction_or_chronic_bowel_disease",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Chronic bowel disease and/or bowel obstruction is an exclusion."
+      },
+      {
+        "rule_id": "DPD_COMPLETE",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "complete",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Complete DPD deficiency contraindicates fluorouracil."
+      },
+      {
+        "rule_id": "DPD_PARTIAL",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "partial",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Consider a reduced starting fluorouracil dose with careful monitoring."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Partial DPD deficiency requires an individualised reduced starting dose."
+      },
+      {
+        "rule_id": "DPD_UNKNOWN_BASELINE",
+        "all": [
+          {
+            "field": "assessment_type",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "dpd_status",
+            "operator": "==",
+            "value": "unknown"
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Confirm DPD status before first treatment."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "DPD testing is required before first fluorouracil treatment unless previously tested."
+      },
+      {
+        "rule_id": "DAY1_COUNTS_HOLD",
+        "any": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 75
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Delay 1–2 weeks and reassess."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Do not administer unless ANC ≥1.5 and platelets ≥75 ×10⁹/L."
+      },
+      {
+        "rule_id": "DAY1_COUNTS_NO_RECOVERY",
+        "all": [
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.5
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 75
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Discuss discontinuation with the supervising Consultant."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "No count recovery after two weeks should prompt consideration of discontinuation."
+      },
+      {
+        "rule_id": "ANC_LOW_FIRST",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1.5
+          },
+          {
+            "field": "day1_anc_low_occurrence",
+            "operator": "==",
+            "value": 1
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "After count recovery, reduce irinotecan to 120 mg/m²."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "First Day 1 ANC <1.5: reduce irinotecan to 120 mg/m²."
+      },
+      {
+        "rule_id": "ANC_LOW_SECOND",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1.5
+          },
+          {
+            "field": "day1_anc_low_occurrence",
+            "operator": "==",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan",
+            "oxaliplatin"
+          ],
+          "recommendation": "Maintain irinotecan at 120 mg/m² and reduce oxaliplatin to 60 mg/m²."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Second Day 1 ANC <1.5: maintain irinotecan 120 mg/m² and reduce oxaliplatin to 60 mg/m²."
+      },
+      {
+        "rule_id": "ANC_LOW_THIRD",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1.5
+          },
+          {
+            "field": "day1_anc_low_occurrence",
+            "operator": ">=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Third Day 1 ANC <1.5: stop treatment."
+      },
+      {
+        "rule_id": "PLATELETS_LOW_FIRST",
+        "all": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 75
+          },
+          {
+            "field": "day1_platelets_low_occurrence",
+            "operator": "==",
+            "value": 1
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce oxaliplatin to 60 mg/m² and infusional 5-FU to 75% of the original dose."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "First Day 1 platelet count <75: oxaliplatin 60 mg/m² and infusional 5-FU 75%."
+      },
+      {
+        "rule_id": "PLATELETS_LOW_SECOND",
+        "all": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 75
+          },
+          {
+            "field": "day1_platelets_low_occurrence",
+            "operator": "==",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan",
+            "oxaliplatin",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce irinotecan to 120 mg/m²; maintain oxaliplatin at 60 mg/m² and 5-FU at 75%."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Second Day 1 platelet count <75: irinotecan 120 mg/m², oxaliplatin 60 mg/m² and 5-FU 75%."
+      },
+      {
+        "rule_id": "PLATELETS_LOW_THIRD",
+        "all": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 75
+          },
+          {
+            "field": "day1_platelets_low_occurrence",
+            "operator": ">=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Third Day 1 platelets <75: stop treatment."
+      },
+      {
+        "rule_id": "SEVERE_NEUTROPENIC_EVENT_FIRST",
+        "field": "severe_neutropenic_event_occurrence",
+        "operator": "==",
+        "value": 1,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Maintain irinotecan; reduce oxaliplatin to 60 mg/m² and infusional 5-FU to 75%. Consider G-CSF prophylaxis."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "First febrile neutropenia/prolonged severe neutropenia/infection with ANC <1: irinotecan 150 and omit bolus 5-FU."
+      },
+      {
+        "rule_id": "SEVERE_NEUTROPENIC_EVENT_SECOND",
+        "field": "severe_neutropenic_event_occurrence",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan",
+            "oxaliplatin",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce irinotecan to 120 mg/m², maintain oxaliplatin at 60 mg/m² and reduce infusional 5-FU to 50%. Consider G-CSF prophylaxis."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Second severe neutropenic event: maintain irinotecan 150 and reduce oxaliplatin to 60."
+      },
+      {
+        "rule_id": "SEVERE_NEUTROPENIC_EVENT_THIRD",
+        "field": "severe_neutropenic_event_occurrence",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Third severe neutropenic event: stop treatment."
+      },
+      {
+        "rule_id": "SEVERE_THROMBOCYTOPENIA_FIRST",
+        "field": "severe_thrombocytopenia_occurrence",
+        "operator": "==",
+        "value": 1,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Maintain irinotecan; reduce oxaliplatin to 60 mg/m² and infusional 5-FU to 75%."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "First platelet nadir <50: oxaliplatin 60 and both fluorouracil components 75%."
+      },
+      {
+        "rule_id": "SEVERE_THROMBOCYTOPENIA_SECOND",
+        "field": "severe_thrombocytopenia_occurrence",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan",
+            "oxaliplatin",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce irinotecan to 120 mg/m², maintain oxaliplatin at 60 mg/m² and reduce infusional 5-FU by an additional 25%."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Second platelet nadir <50: irinotecan 150 and further 25% reduction of infusional 5-FU."
+      },
+      {
+        "rule_id": "SEVERE_THROMBOCYTOPENIA_THIRD",
+        "field": "severe_thrombocytopenia_occurrence",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Third platelet nadir <50: discontinue treatment."
+      },
+      {
+        "rule_id": "RENAL_SEVERE_EXCLUSION",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 30
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Severe renal impairment is a caution. Apply component-specific renal guidance and obtain consultant review."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "CrCl <30 mL/min is a caution in this regimen, requiring component-specific dose review."
+      },
+      {
+        "rule_id": "OXALIPLATIN_RENAL_LT30",
+        "field": "crcl_ml_min",
+        "operator": "<",
+        "value": 30,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Consider oxaliplatin at 50% of the original dose."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Oxaliplatin: consider 50% of original dose when CrCl <30 mL/min."
+      },
+      {
+        "rule_id": "HAEMODIALYSIS_REVIEW",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin",
+            "irinotecan"
+          ],
+          "recommendation": "Consider 50% oxaliplatin with dialysis within 1.5 hours; irinotecan 50–66% and titrate if tolerated."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Haemodialysis requires individualised oxaliplatin and irinotecan dosing and timing."
+      },
+      {
+        "rule_id": "IRINOTECAN_BILI_GT3ULN",
+        "field": "bilirubin_ratio_uln",
+        "operator": ">",
+        "value": 3,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "irinotecan",
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Irinotecan is contraindicated when bilirubin exceeds 3 × ULN."
+      },
+      {
+        "rule_id": "FIVEFU_HEPATIC_CONTRAINDICATED",
+        "any": [
+          {
+            "field": "bilirubin_umol_l",
+            "operator": ">",
+            "value": 85
+          },
+          {
+            "field": "ast_u_l",
+            "operator": ">",
+            "value": 180
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Fluorouracil is contraindicated when bilirubin >85 µmol/L or AST >180 U/L."
+      },
+      {
+        "rule_id": "FIVEFU_MODERATE_HEPATIC",
+        "field": "hepatic_impairment_severity",
+        "operator": "==",
+        "value": "moderate",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce initial fluorouracil dose by one third; increase if no toxicity."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Moderate hepatic impairment: reduce initial fluorouracil dose by one third."
+      },
+      {
+        "rule_id": "FIVEFU_SEVERE_HEPATIC",
+        "field": "hepatic_impairment_severity",
+        "operator": "==",
+        "value": "severe",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Reduce initial fluorouracil dose by one half; increase if no toxicity."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Severe hepatic impairment: reduce initial fluorouracil dose by one half."
+      },
+      {
+        "rule_id": "DIARRHOEA_CURRENT_G2_HOLD",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Hold and reassess; proceed only when toxicity is below grade 2."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Current diarrhoea grade ≥2: hold treatment for up to two weeks."
+      },
+      {
+        "rule_id": "DIARRHOEA_PERSISTENT_G2_STOP",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Diarrhoea remains grade ≥2 after two weeks: discontinue treatment."
+      },
+      {
+        "rule_id": "STOMATITIS_CURRENT_G2_HOLD",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Hold and reassess; proceed only when toxicity is below grade 2."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Current stomatitis grade ≥2: hold treatment for up to two weeks."
+      },
+      {
+        "rule_id": "HAND_FOOT_CURRENT_G2_HOLD",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Hold and reassess; proceed only when toxicity is below grade 2."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Hold treatment until hand-foot syndrome has recovered below grade 2.",
+        "field": "hand_foot_syndrome_current_grade"
+      },
+      {
+        "rule_id": "STOMATITIS_PERSISTENT_G2_STOP",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Stomatitis remains grade ≥2 after two weeks: discontinue treatment."
+      },
+      {
+        "rule_id": "DIARRHOEA_HIGHEST_G3",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "For a first grade 3–4 diarrhoea occurrence, reduce irinotecan to 120 mg/m² after recovery."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "First grade 3–4 diarrhoea occurrence: reduce irinotecan to 120 mg/m².",
+        "all": [
+          {
+            "field": "diarrhoea_highest_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "diarrhoea_occurrence",
+            "operator": "==",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "rule_id": "DIARRHOEA_HIGHEST_G4",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan",
+            "oxaliplatin",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "For a second grade 3–4 diarrhoea occurrence, maintain irinotecan at 120 mg/m², reduce oxaliplatin to 60 mg/m² and 5-FU to 75%."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Second grade 3–4 diarrhoea occurrence: irinotecan 120 mg/m², oxaliplatin 60 mg/m² and 5-FU 75%.",
+        "all": [
+          {
+            "field": "diarrhoea_highest_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "diarrhoea_occurrence",
+            "operator": "==",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "rule_id": "STOMATITIS_HIGHEST_G3",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "For grade 3–4 mucositis or hand-foot syndrome, reduce infusional 5-FU to 75% of the original dose."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Grade 3–4 mucositis or hand-foot syndrome: reduce infusional 5-FU to 75%.",
+        "any": [
+          {
+            "field": "stomatitis_highest_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "hand_foot_syndrome_highest_grade",
+            "operator": ">=",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "rule_id": "DIARRHOEA_THIRD_OCCURRENCE",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Third grade 3–4 diarrhoea occurrence: discontinue treatment.",
+        "all": [
+          {
+            "field": "diarrhoea_highest_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "diarrhoea_occurrence",
+            "operator": ">=",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "rule_id": "NEUROPATHY_G2_PERSISTENT",
+        "field": "neuropathy_pattern",
+        "operator": "==",
+        "value": "grade2_persistent_to_next_cycle",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Decrease oxaliplatin by 25%."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Transient grade 3 symptoms or grade 2 symptoms lasting >7 days: decrease oxaliplatin by 25%."
+      },
+      {
+        "rule_id": "NEUROPATHY_G3_FIRST",
+        "all": [
+          {
+            "field": "neuropathy_pattern",
+            "operator": "in",
+            "value": [
+              "grade3_1_to_7_days",
+              "grade3_over_7_days_resolved",
+              "grade3_persistent_to_next_cycle"
+            ]
+          },
+          {
+            "field": "neuropathy_grade3_occurrence",
+            "operator": "==",
+            "value": 1
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Decrease oxaliplatin by 25%."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Transient grade 3 symptoms or grade 2 symptoms lasting >7 days: decrease oxaliplatin by 25%."
+      },
+      {
+        "rule_id": "NEUROPATHY_G3_SECOND_OR_PERSISTENT",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "neuropathy_pattern",
+                "operator": "in",
+                "value": [
+                  "grade3_1_to_7_days",
+                  "grade3_over_7_days_resolved"
+                ]
+              },
+              {
+                "field": "neuropathy_grade3_occurrence",
+                "operator": ">=",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "field": "neuropathy_pattern",
+            "operator": "==",
+            "value": "grade3_persistent_to_next_cycle"
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Second grade 3 occurrence or persistent grade 3 neuropathy: discontinue therapy."
+      },
+      {
+        "rule_id": "NEUROPATHY_G4",
+        "field": "neuropathy_pattern",
+        "operator": "==",
+        "value": "grade4_any_duration",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Grade 4 neuropathy: discontinue therapy."
+      },
+      {
+        "rule_id": "LARYNGOPHARYNGEAL_DYSAESTHESIA",
+        "field": "laryngopharyngeal_dysaesthesia",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "proceed",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Maintain dose; increase oxaliplatin infusion duration to 6 hours."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Laryngopharyngeal dysaesthesia: maintain dose and increase oxaliplatin infusion time from 2 to 6 hours."
+      },
+      {
+        "rule_id": "ACUTE_CHOLINERGIC_SYNDROME",
+        "field": "acute_cholinergic_syndrome",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Administer atropine 250 micrograms SC unless contraindicated; consider prophylactic atropine in subsequent cycles."
+        },
+        "source": {
+          "page": 8
+        },
+        "explanation": "Acute cholinergic syndrome requires atropine unless contraindicated and prophylaxis with subsequent irinotecan may be appropriate."
+      },
+      {
+        "rule_id": "PROCEED_NO_ENCODED_MODIFICATION",
+        "all": [
+          {
+            "field": "hypersensitivity",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "bowel_obstruction_or_chronic_bowel_disease",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "dpd_status",
+            "operator": "==",
+            "value": "documented_normal"
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": "<=",
+            "value": 3
+          },
+          {
+            "field": "bilirubin_umol_l",
+            "operator": "<=",
+            "value": 85
+          },
+          {
+            "field": "ast_u_l",
+            "operator": "<=",
+            "value": 180
+          },
+          {
+            "field": "hepatic_impairment_severity",
+            "operator": "==",
+            "value": "none"
+          },
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "stomatitis_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "neuropathy_pattern",
+            "operator": "==",
+            "value": "none_or_grade1"
+          },
+          {
+            "field": "acute_cholinergic_syndrome",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "No encoded dose-modification criterion was triggered by the entered data."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Entered values meet the encoded Day 1 treatment parameters and do not trigger an encoded toxicity modification."
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_type": {
+      "label": "Assessment type",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "current",
+          "label": "Current pre-treatment assessment"
+        },
+        {
+          "value": "baseline",
+          "label": "Baseline / cycle 1 assessment"
+        }
+      ],
+      "demo_value": "current"
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "demo_value": 2
+    },
+    "hypersensitivity": {
+      "label": "Known hypersensitivity to regimen components",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "bowel_obstruction_or_chronic_bowel_disease": {
+      "label": "Chronic bowel disease and/or bowel obstruction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "laryngopharyngeal_dysaesthesia": {
+      "label": "Previous laryngopharyngeal dysaesthesia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "acute_cholinergic_syndrome": {
+      "label": "Acute cholinergic syndrome with irinotecan",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "documented_normal",
+          "label": "Normal / no deficiency identified"
+        },
+        {
+          "value": "partial",
+          "label": "Partial deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Not documented"
+        }
+      ],
+      "demo_value": "documented_normal"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 2.0
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180
+    },
+    "day1_anc_low_occurrence": {
+      "label": "Occurrence number: Day 1 ANC <1.5",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9,
+      "step": 1,
+      "demo_value": 0
+    },
+    "day1_platelets_low_occurrence": {
+      "label": "Occurrence number: Day 1 platelets <75",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9,
+      "step": 1,
+      "demo_value": 0
+    },
+    "severe_neutropenic_event_occurrence": {
+      "label": "Occurrence number: febrile/prolonged severe neutropenic event",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9,
+      "step": 1,
+      "demo_value": 0
+    },
+    "severe_thrombocytopenia_occurrence": {
+      "label": "Occurrence number: platelet nadir <50",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9,
+      "step": 1,
+      "demo_value": 0
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "demo_value": 75
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin (×ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.1,
+      "demo_value": 0.7
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin (µmol/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "demo_value": 12
+    },
+    "ast_u_l": {
+      "label": "AST (U/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 5000,
+      "step": 1,
+      "demo_value": 25
+    },
+    "hepatic_impairment_severity": {
+      "label": "Hepatic impairment severity",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None / not clinically impaired"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "toxicity_delay_weeks": {
+      "label": "Current toxicity-related delay (weeks)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "diarrhoea_current_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "diarrhoea_highest_grade": {
+      "label": "Highest diarrhoea grade this cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "stomatitis_current_grade": {
+      "label": "Current stomatitis grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "stomatitis_highest_grade": {
+      "label": "Highest stomatitis grade this cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "neuropathy_pattern": {
+      "label": "Oxaliplatin neuropathy pattern",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none_or_grade1",
+          "label": "None / grade 1"
+        },
+        {
+          "value": "grade2_persistent_to_next_cycle",
+          "label": "Grade 2 persistent at next cycle"
+        },
+        {
+          "value": "grade3_1_to_7_days",
+          "label": "Grade 3 lasting 1–7 days"
+        },
+        {
+          "value": "grade3_over_7_days_resolved",
+          "label": "Grade 3 >7 days, resolved before next cycle"
+        },
+        {
+          "value": "grade3_persistent_to_next_cycle",
+          "label": "Grade 3 persistent at next cycle"
+        },
+        {
+          "value": "grade4_any_duration",
+          "label": "Grade 4, any duration"
+        }
+      ],
+      "demo_value": "none_or_grade1"
+    },
+    "neuropathy_grade3_occurrence": {
+      "label": "Grade 3 neuropathy occurrence number",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9,
+      "step": 1,
+      "demo_value": 0
+    },
+    "diarrhoea_occurrence": {
+      "label": "Grade 3–4 diarrhoea occurrence number",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9,
+      "step": 1,
+      "demo_value": 0
+    },
+    "hand_foot_syndrome_current_grade": {
+      "label": "Current hand-foot syndrome grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "hand_foot_syndrome_highest_grade": {
+      "label": "Highest hand-foot syndrome grade this cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    }
+  }
+}

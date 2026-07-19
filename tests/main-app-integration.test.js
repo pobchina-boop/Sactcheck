@@ -12,6 +12,11 @@ assert(folfox, 'Modified FOLFOX-6 must be present in the protocol index.');
 assert.strictEqual(folfox.mode, 'live_json', 'Modified FOLFOX-6 must be promoted to the live JSON engine.');
 assert.strictEqual(folfox.legacy_card_id, 'openFolfox', 'The existing FOLFOX catalogue card must be reusable by the generic launcher.');
 
+const modifiedFolfirinox = index.protocols.find(item => item.id === 'nccp-00515-v7');
+assert(modifiedFolfirinox, 'Modified FOLFIRINOX must be present in the protocol index.');
+assert.strictEqual(modifiedFolfirinox.mode, 'live_json', 'Modified FOLFIRINOX must be published through the live JSON engine.');
+assert.strictEqual(modifiedFolfirinox.legacy_card_id, 'openFolfirinoxModified', 'The existing Modified FOLFIRINOX card must be connected to the generic launcher.');
+
 const olaparib = index.protocols.find(item => item.id === 'nccp-00588-v5b');
 assert(olaparib, 'Olaparib must be present in the protocol index.');
 assert.strictEqual(olaparib.mode, 'live_json', 'Olaparib must remain published through the JSON engine.');
@@ -33,6 +38,7 @@ assert(loader.includes('metadata.source_url'), 'Generated protocol cards must de
 const html = fs.readFileSync('index.html', 'utf8');
 assert(!html.includes('js/paclitaxel-shadow-ui.js'), 'The obsolete paclitaxel shadow launcher must not load.');
 assert(html.includes('id="openPaclitaxel"'), 'The weekly paclitaxel legacy catalogue target must remain available for generic replacement.');
+assert(html.includes('id="openFolfirinoxModified"'), 'The Modified FOLFIRINOX catalogue target must remain available for generic replacement.');
 assert(html.includes('js/protocol-loader.js?v=0.24'), 'The main app must load the v0.24 protocol expansion release without stale caching.');
 
 console.log('Main-app protocol-agnostic launcher tests passed.');
