@@ -4,7 +4,7 @@ SACTCheck is a clinician-focused oncology decision-support prototype based on NC
 
 Copyright © 2026 Dr Paul O’Brien. All rights reserved. This software, clinical rule structure, user interface and associated documentation may not be copied, modified, distributed, sublicensed, commercialised or incorporated into another product without prior written permission.
 
-## v0.28 protocol-driven assessment platform
+## v0.29 protocol-driven assessment platform
 
 The repository supports a reviewed **schema 2.x protocol JSON** as the only regimen-specific source file required for publication. v0.17 adds conditional visibility and requirement rules so irrelevant fields no longer block an assessment.
 
@@ -31,7 +31,7 @@ The browser then generates the assessment form and evaluates the protocol withou
 - `tools/build-protocol-index.js` — scans `protocols/`, validates files and rebuilds `protocols/index.json`.
 - `.github/workflows/protocol-library.yml` — validates JSON changes, runs regression tests and commits the generated catalogue.
 
-The generated catalogue now contains 28 JSON protocols. The v0.28 expansion adds TCHP, pertuzumab/trastuzumab maintenance, atezolizumab/bevacizumab for HCC, durvalumab/gemcitabine/cisplatin for biliary tract cancer and pembrolizumab 400 mg monotherapy. Each published protocol remains subject to consultant, oncology-pharmacy and local governance review before clinical deployment.
+The generated catalogue now contains 33 JSON protocols. The v0.29 expansion adds bevacizumab 15 mg/kg component assessment, gemcitabine/carboplatin AUC4, carboplatin/pegylated liposomal doxorubicin, bevacizumab/paclitaxel/cisplatin for cervical cancer and niraparib tablets monotherapy. Each published protocol remains subject to consultant, oncology-pharmacy and local governance review before clinical deployment.
 
 ## Adding a protocol
 
@@ -59,6 +59,6 @@ npm test
 
 Current expected result:
 
-- all 19 automated test scripts pass, covering protocol publication, engine behaviour, conditional fields, protocol boundaries, catalogue integration and duplicate-card prevention.
+- all 20 automated test scripts pass, covering protocol publication, engine behaviour, conditional fields, protocol boundaries, catalogue integration and duplicate-card prevention.
 
 Automated validation does not constitute clinical validation. Consultant review, oncology-pharmacy review, source verification, boundary testing, governance and local authorisation remain required before clinical deployment.

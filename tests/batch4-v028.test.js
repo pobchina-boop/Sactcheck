@@ -18,7 +18,7 @@ const expected = [
 ];
 
 const index = read("protocols/index.json");
-assert.strictEqual(index.protocol_count, 28, "v0.28 index should contain 28 protocols");
+assert.ok(index.protocol_count >= 28, "The cumulative index should retain all v0.28 protocols.");
 
 const protocols = {};
 for (const [relative, code] of expected) {

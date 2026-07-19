@@ -1,5 +1,17 @@
 # SACTCheck Changelog
 
+## v0.29.0 — Batch 3 gynaecology expansion — 19 July 2026
+
+- Added five live schema-2 JSON assessments: NCCP 00215 bevacizumab 15 mg/kg component/continuation, 00306 gemcitabine + carboplatin AUC4, 00624 carboplatin + pegylated liposomal doxorubicin, 00799 bevacizumab + paclitaxel + cisplatin for cervical cancer, and 00862 niraparib tablets monotherapy.
+- Replaced the originally proposed unsupported bevacizumab/carboplatin/PLD triple with the current official NCCP 00624 carboplatin/PLD doublet.
+- Migrated the existing legacy NCCP 00624 catalogue card to the generic JSON assessment, preventing a duplicate card while retaining the old screen as fallback code.
+- Added indication, treatment-day, cycle, current-dose and conditional-toxicity controls appropriate to each regimen.
+- Added official HSE/NCCP PDF access and source-page explanations for all five protocols.
+- Preserved source-specific safety logic: bevacizumab 00215 has clinical-review monitoring rather than invented cycle-by-cycle ANC/platelet holds; day-1/day-8 gemcitabine rules remain distinct; niraparib uses event-specific interruption and dose-level pathways.
+- Rebuilt the catalogue to 33 JSON protocols.
+- Added v0.29 regression coverage; all 20 automated test scripts pass.
+- All new encodings remain pending formal consultant and oncology-pharmacy validation.
+
 ## v0.28.0 — Batch 4 protocol expansion — 19 July 2026
 
 - Added five live schema-2 JSON assessments: NCCP 00722 TCHP, 00726 pertuzumab/trastuzumab maintenance, 00831 atezolizumab/bevacizumab for HCC, 00897 durvalumab/gemcitabine/cisplatin for biliary tract cancer, and 00558 pembrolizumab 400 mg monotherapy.

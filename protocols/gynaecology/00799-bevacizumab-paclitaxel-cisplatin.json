@@ -1,0 +1,1093 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00799-v2",
+  "file_name": "00799-bevacizumab-paclitaxel-cisplatin.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00799",
+    "nccp_version": 2,
+    "tumour_group": "Gynaecology",
+    "title": "Bevacizumab 15 mg/kg, PACLitaxel 175 mg/m² and CISplatin 50 mg/m² Therapy",
+    "short_title": "Bevacizumab + paclitaxel + cisplatin",
+    "indication": "Locally advanced, recurrent or metastatic cervical cancer not amenable to curative surgery or radiation.",
+    "published_date": "2023-03-10",
+    "review_date": "2029-04-12",
+    "source_url": "https://healthservice.hse.ie/documents/6422/799_V2_Bev_Pacli_CIS.pdf",
+    "source_document_pages": 9,
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json"
+    },
+    "sactcheck_encoding_version": "0.29.0",
+    "partial_assessment_supported": true,
+    "source_checked_date": "2026-07-19"
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "anaphylaxis_facilities_required": true,
+    "disclaimer": "Decision-support encoding of the NCCP source document. It does not replace the current NCCP regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
+  },
+  "indications": [
+    {
+      "indication_id": "advanced_cervical",
+      "code": "00799a",
+      "description": "Locally advanced, recurrent or metastatic cervical cancer not amenable to curative surgery or radiation therapy."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "21_day_cycle",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "paclitaxel",
+          "dose": {
+            "value": 175,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "drug": "cisplatin",
+          "dose": {
+            "value": 50,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "order": 3,
+          "drug": "bevacizumab",
+          "dose": {
+            "value": 15,
+            "unit": "mg/kg"
+          },
+          "route": "IV infusion"
+        }
+      ]
+    }
+  ],
+  "input_definitions": {
+    "indication_id": {
+      "label": "Indication",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "advanced_cervical",
+          "label": "00799a — Locally advanced, recurrent or metastatic cervical cancer not amenable to curative surgery or radiation"
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "advanced_cervical"
+    },
+    "assessment_type": {
+      "label": "Assessment type",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "pre_treatment",
+          "label": "Pre-treatment assessment"
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "pre_treatment"
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "demo_value": 1,
+      "ui_section": "treatment_context"
+    },
+    "anc": {
+      "label": "ANC",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 2,
+      "ui_section": "labs",
+      "unit": "×10⁹/L"
+    },
+    "platelets": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 200,
+      "ui_section": "labs",
+      "unit": "×10⁹/L"
+    },
+    "clinically_well_for_platelet_discretion": {
+      "label": "Clinically well for platelet 75–99 ×10⁹/L discretion",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "ui_section": "clinical",
+      "visible_when": {
+        "all": [
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 100
+          }
+        ]
+      }
+    },
+    "febrile_neutropenia": {
+      "label": "Febrile neutropenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 250,
+      "step": 1,
+      "demo_value": 90,
+      "ui_section": "labs",
+      "unit": "mL/min"
+    },
+    "alt_uln_multiple": {
+      "label": "ALT / AST",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 1,
+      "ui_section": "labs",
+      "unit": "× ULN"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.01,
+      "demo_value": 1,
+      "ui_section": "labs",
+      "unit": "× ULN"
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": 0
+    },
+    "neuropathy_delay_weeks": {
+      "label": "Weeks treatment delayed for neuropathy",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "demo_value": 0,
+      "ui_section": "clinical",
+      "unit": "weeks",
+      "visible_when": {
+        "field": "neuropathy_grade",
+        "operator": ">=",
+        "value": 2
+      }
+    },
+    "recurrent_grade2_neuropathy": {
+      "label": "Recurrent grade 2 neuropathy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "visible_when": {
+        "field": "neuropathy_grade",
+        "operator": "==",
+        "value": 2
+      }
+    },
+    "hearing_impairment_or_tinnitus_significant": {
+      "label": "Significant hearing impairment or tinnitus",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "uncontrolled_or_symptomatic_hypertension": {
+      "label": "Uncontrolled or symptomatic hypertension",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "hypertension_grade": {
+      "label": "Hypertension grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": 0,
+      "visible_when": {
+        "field": "uncontrolled_or_symptomatic_hypertension",
+        "operator": "==",
+        "value": true
+      }
+    },
+    "proteinuria_dipstick": {
+      "label": "Urine dipstick protein",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "negative",
+          "label": "Negative"
+        },
+        {
+          "value": "1+",
+          "label": "1+"
+        },
+        {
+          "value": "2+",
+          "label": "2+"
+        },
+        {
+          "value": "3+",
+          "label": "3+"
+        },
+        {
+          "value": "4+",
+          "label": "4+"
+        }
+      ],
+      "ui_section": "labs",
+      "demo_value": "negative"
+    },
+    "urine_protein_g_24h": {
+      "label": "24-hour urine protein",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.1,
+      "demo_value": 2,
+      "ui_section": "labs",
+      "unit": "g/24 h",
+      "visible_when": {
+        "field": "proteinuria_dipstick",
+        "operator": "in",
+        "value": [
+          "2+",
+          "3+",
+          "4+"
+        ]
+      }
+    },
+    "recent_major_surgery_or_unhealed_wound": {
+      "label": "Major surgery within 4 weeks or unhealed wound",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "fistula_grade": {
+      "label": "Fistula grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": 0
+    },
+    "thromboembolic_event_grade": {
+      "label": "Thromboembolic event grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": 0
+    },
+    "haemorrhage_grade": {
+      "label": "Haemorrhage grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": 0
+    },
+    "gi_perforation": {
+      "label": "Gastrointestinal perforation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "pregnancy_or_breastfeeding": {
+      "label": "Pregnant or breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    }
+  },
+  "required_inputs": [
+    "indication_id",
+    "assessment_type",
+    "cycle_number"
+  ],
+  "rule_engine": {
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab",
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Do not administer this regimen; obtain consultant review."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Relevant hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "PREGNANCY_LACTATION",
+        "field": "pregnancy_or_breastfeeding",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab",
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Do not administer during pregnancy or lactation; urgent consultant review required."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy/lactation is an exclusion."
+      },
+      {
+        "rule_id": "RECENT_SURGERY",
+        "field": "recent_major_surgery_or_unhealed_wound",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Do not administer bevacizumab until the postoperative interval and wound healing are adequate."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Major surgery within 4 weeks is an exclusion."
+      },
+      {
+        "rule_id": "ANC_0_5_TO_1",
+        "all": [
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.0
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "bevacizumab",
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Delay treatment for ANC 0.5–<1.0 ×10⁹/L and repeat FBC."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Moderate neutropenia requires delay."
+      },
+      {
+        "rule_id": "ANC_BELOW_0_5",
+        "field": "anc",
+        "operator": "<",
+        "value": 0.5,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Delay treatment and consider a 25% reduction of paclitaxel and cisplatin after recovery."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe neutropenia requires delay and dose-reduction review."
+      },
+      {
+        "rule_id": "FEBRILE_NEUTROPENIA",
+        "field": "febrile_neutropenia",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Delay treatment and consider a 25% reduction of paclitaxel and cisplatin after febrile neutropenia."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Febrile neutropenia requires delay and reduction review."
+      },
+      {
+        "rule_id": "PLATELETS_75_TO_99",
+        "all": [
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 100
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab",
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Treatment may be considered if the patient is clinically well; consultant decision required."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Platelets 75–<100 require clinical discretion."
+      },
+      {
+        "rule_id": "PLATELETS_50_TO_74",
+        "all": [
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 50
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 75
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "bevacizumab",
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Delay treatment for platelets 50–<75 ×10⁹/L."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Thrombocytopenia requires delay."
+      },
+      {
+        "rule_id": "PLATELETS_BELOW_50",
+        "field": "platelets",
+        "operator": "<",
+        "value": 50,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Delay treatment and consider a 25% reduction of paclitaxel and cisplatin after recovery."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe thrombocytopenia requires delay and reduction review."
+      },
+      {
+        "rule_id": "CISPLATIN_CRCL_50_59",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 50
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 60
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Give cisplatin at 75% for CrCl 50–59 mL/min."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Moderate renal impairment requires dose reduction."
+      },
+      {
+        "rule_id": "CISPLATIN_CRCL_40_49",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 40
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 50
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Give cisplatin at 50% for CrCl 40–49 mL/min."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "More severe renal impairment requires greater dose reduction."
+      },
+      {
+        "rule_id": "CISPLATIN_CRCL_BELOW_40",
+        "field": "crcl_ml_min",
+        "operator": "<",
+        "value": 40,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Cisplatin is not recommended at CrCl <40 mL/min; select an alternative plan after consultant review."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe renal impairment is incompatible with standard cisplatin dosing."
+      },
+      {
+        "rule_id": "PACLITAXEL_HEPATIC_135",
+        "all": [
+          {
+            "field": "alt_uln_multiple",
+            "operator": "<",
+            "value": 10
+          },
+          {
+            "field": "bilirubin_uln_multiple",
+            "operator": ">",
+            "value": 1.25
+          },
+          {
+            "field": "bilirubin_uln_multiple",
+            "operator": "<=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Reduce paclitaxel to 135 mg/m² for bilirubin 1.26–2 × ULN when transaminases are <10 × ULN."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Hepatic impairment requires paclitaxel reduction."
+      },
+      {
+        "rule_id": "PACLITAXEL_HEPATIC_90",
+        "all": [
+          {
+            "field": "alt_uln_multiple",
+            "operator": "<",
+            "value": 10
+          },
+          {
+            "field": "bilirubin_uln_multiple",
+            "operator": ">",
+            "value": 2
+          },
+          {
+            "field": "bilirubin_uln_multiple",
+            "operator": "<=",
+            "value": 5
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Reduce paclitaxel to 90 mg/m² for bilirubin 2.01–5 × ULN when transaminases are <10 × ULN."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "More severe hepatic impairment requires a larger paclitaxel reduction."
+      },
+      {
+        "rule_id": "PACLITAXEL_HEPATIC_CONTRAINDICATED",
+        "any": [
+          {
+            "field": "alt_uln_multiple",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "field": "bilirubin_uln_multiple",
+            "operator": ">",
+            "value": 5
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Do not administer paclitaxel when transaminases are ≥10 × ULN or bilirubin >5 × ULN."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe hepatic impairment contraindicates paclitaxel."
+      },
+      {
+        "rule_id": "NEUROPATHY_G2",
+        "field": "neuropathy_grade",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Withhold paclitaxel and cisplatin until neuropathy improves to grade 1 or less, then reduce both by 25%."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 2 neuropathy requires withholding and reduction."
+      },
+      {
+        "rule_id": "NEUROPATHY_G2_RECURRENT_OR_DELAYED",
+        "any": [
+          {
+            "field": "recurrent_grade2_neuropathy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "neuropathy_delay_weeks",
+            "operator": ">",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "cease",
+          "components": [
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Cease paclitaxel and cisplatin if grade 2 neuropathy recurs or causes a delay longer than 3 weeks."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Recurrent/prolonged neuropathy requires cessation."
+      },
+      {
+        "rule_id": "NEUROPATHY_G3PLUS",
+        "field": "neuropathy_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "cease",
+          "components": [
+            "paclitaxel",
+            "cisplatin"
+          ],
+          "recommendation": "Cease paclitaxel and cisplatin for grade 3 or greater neuropathy."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe neuropathy requires cessation."
+      },
+      {
+        "rule_id": "HEARING_IMPAIRMENT",
+        "field": "hearing_impairment_or_tinnitus_significant",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Significant hearing impairment/tinnitus requires consultant review of cisplatin suitability."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Significant hearing impairment is an exclusion/caution."
+      },
+      {
+        "rule_id": "BEV_HYPERTENSION",
+        "field": "uncontrolled_or_symptomatic_hypertension",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Withhold bevacizumab and treat uncontrolled or symptomatic hypertension."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Uncontrolled hypertension requires withholding."
+      },
+      {
+        "rule_id": "BEV_HYPERTENSION_SEVERE",
+        "field": "hypertension_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 4 or persistent grade 3 hypertension."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe hypertension requires discontinuation."
+      },
+      {
+        "rule_id": "BEV_DIPSTICK_4",
+        "field": "proteinuria_dipstick",
+        "operator": "==",
+        "value": "4+",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Withhold bevacizumab and obtain a 24-hour urine protein measurement."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "4+ dipstick requires withholding."
+      },
+      {
+        "rule_id": "BEV_PROTEIN_2_TO_4",
+        "all": [
+          {
+            "field": "urine_protein_g_24h",
+            "operator": ">",
+            "value": 2
+          },
+          {
+            "field": "urine_protein_g_24h",
+            "operator": "<=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Hold bevacizumab and resume when urine protein is ≤2 g/24 h."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Urine protein >2–4 g/24 h requires holding."
+      },
+      {
+        "rule_id": "BEV_PROTEIN_OVER_4",
+        "field": "urine_protein_g_24h",
+        "operator": ">",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for urine protein >4 g/24 h."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe proteinuria requires discontinuation."
+      },
+      {
+        "rule_id": "BEV_GRADE4_FISTULA",
+        "field": "fistula_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 4 fistula."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 4 fistula requires discontinuation."
+      },
+      {
+        "rule_id": "BEV_GRADE4_THROMBOEMBOLIC",
+        "field": "thromboembolic_event_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 4 thromboembolic toxicity."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 4 thromboembolism requires discontinuation."
+      },
+      {
+        "rule_id": "BEV_HAEMORRHAGE_G3PLUS",
+        "field": "haemorrhage_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 3 or greater haemorrhage."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe haemorrhage requires discontinuation."
+      },
+      {
+        "rule_id": "BEV_GI_PERFORATION",
+        "field": "gi_perforation",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Permanently discontinue bevacizumab for gastrointestinal perforation."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "GI perforation requires permanent discontinuation."
+      }
+    ]
+  },
+  "output_templates": {
+    "proceed": "No encoded hold, discontinuation, or modification criterion was triggered by the entered data.",
+    "coverage_gap": "One or more optional clinical domains were not assessed. Missing values have not been interpreted as normal."
+  }
+}
