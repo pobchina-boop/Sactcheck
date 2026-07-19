@@ -1,3 +1,9 @@
+## v0.24.0
+- Added live NCCP 00227 Version 9 FOLFIRI assessment with 33 encoded rules and direct access to the official NCCP PDF.
+- Added haematology recovery/nadir, renal, hepatic, DPD, diarrhoea, stomatitis, UGT1A1 and irinotecan cholinergic-syndrome pathways.
+- Added dedicated FOLFIRI regression tests.
+- No regimen-specific JavaScript or HTML was added; the protocol runs through the generic JSON launcher and assessment engine.
+
 # v0.17.1
 
 - Enabled partial, single-value JSON assessments across the generic assessment screen.

@@ -20,3 +20,10 @@
 - Add reusable section/group metadata to improve long protocol forms.
 - Add a protocol-level automated scenario format so each JSON can carry its own regression cases.
 - Define protocol owner, reviewer, approval, expiry and emergency-withdrawal governance.
+## Laboratory ULN calculation enhancement
+
+- Replace manual “× ULN” clinical inputs with paired actual-result and editable ULN fields for ALT, AST, bilirubin and ALP where relevant.
+- Calculate result ÷ ULN centrally in the shared assessment engine so every protocol can continue to express rules as multiples of ULN.
+- Allow editable local defaults (initially CUH values once confirmed) rather than hard-coding assumptions.
+- Retain raw-value inputs where an NCCP rule uses an absolute threshold, such as bilirubin in µmol/L or AST in U/L.
+
