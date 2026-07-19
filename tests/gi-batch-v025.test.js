@@ -30,5 +30,5 @@ for (const [, id] of cases) {
   assert(item, `${id} must be in index`);
   assert.strictEqual(item.mode, 'live_json');
 }
-assert.strictEqual(index.protocol_count, 13);
+assert.ok(index.protocol_count >= 13);
 console.log('v0.25 GI five-protocol batch tests passed.');

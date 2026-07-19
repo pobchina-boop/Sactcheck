@@ -39,6 +39,6 @@ const html = fs.readFileSync('index.html', 'utf8');
 assert(!html.includes('js/paclitaxel-shadow-ui.js'), 'The obsolete paclitaxel shadow launcher must not load.');
 assert(html.includes('id="openPaclitaxel"'), 'The weekly paclitaxel legacy catalogue target must remain available for generic replacement.');
 assert(html.includes('id="openFolfirinoxModified"'), 'The Modified FOLFIRINOX catalogue target must remain available for generic replacement.');
-assert(html.includes('js/protocol-loader.js?v=0.25'), 'The main app must load the v0.25 GI batch release without stale caching.');
+assert(html.includes('js/protocol-loader.js?v=0.26'), 'The main app must load the v0.26 ten-protocol batch release without stale caching.');
 
 console.log('Main-app protocol-agnostic launcher tests passed.');

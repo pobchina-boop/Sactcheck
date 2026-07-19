@@ -1,3 +1,12 @@
+## v0.26.0 — Ten-protocol breast, lung and gynaecology expansion
+
+- Added live JSON assessments for NCCP 00250 TC, 00252 AC, 00512 weekly paclitaxel/trastuzumab and 00858 pembrolizumab with weekly carboplatin/paclitaxel followed by AC.
+- Added live JSON assessments for NCCP 00271 carboplatin/etoposide, 00280 cisplatin/etoposide, 00593 atezolizumab maintenance and 00655 durvalumab maintenance.
+- Added live JSON assessments for NCCP 00303 carboplatin/paclitaxel and 00766 bevacizumab/carboplatin/paclitaxel.
+- Added official NCCP source links and batch integration tests.
+- Protocol index now contains 23 entries.
+- All new encodings remain pending formal consultant and oncology-pharmacy validation.
+
 ## v0.25.0 — Gastrointestinal five-protocol batch
 
 - Added Capecitabine Monotherapy (NCCP 00216 v8) as a live JSON assessment with Official NCCP PDF access.

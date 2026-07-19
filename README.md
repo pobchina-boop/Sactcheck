@@ -4,7 +4,7 @@ SACTCheck is a clinician-focused oncology decision-support prototype based on NC
 
 Copyright © 2026 Dr Paul O’Brien. All rights reserved. This software, clinical rule structure, user interface and associated documentation may not be copied, modified, distributed, sublicensed, commercialised or incorporated into another product without prior written permission.
 
-## v0.25 protocol-driven assessment platform
+## v0.26 protocol-driven assessment platform
 
 The repository supports a reviewed **schema 2.x protocol JSON** as the only regimen-specific source file required for publication. v0.17 adds conditional visibility and requirement rules so irrelevant fields no longer block an assessment.
 
