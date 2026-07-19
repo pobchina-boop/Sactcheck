@@ -163,6 +163,36 @@
     });
   }
 
+  function updateIntegratedCardMetadata(entry, protocol, card) {
+    const metadata = protocol.metadata || {};
+    const title = getProtocolTitle(protocol);
+    const code = getProtocolCode(protocol);
+    const version = metadata.nccp_version || "";
+    const tumourGroups = getTumourGroups(entry, protocol);
+    const tumourDisplay = tumourGroups.join(" · ");
+    const indication = getIndication(protocol);
+
+    const category = card.querySelector(".category-chip");
+    if (category) category.textContent = tumourDisplay;
+
+    const heading = card.querySelector("h2");
+    if (heading) heading.textContent = title;
+
+    const codeLine = [...card.querySelectorAll(":scope > p")].find(item => item.querySelector("strong"));
+    if (codeLine) {
+      codeLine.innerHTML = `<strong>NCCP ${escapeHtml(code)}${version ? ` · Version ${escapeHtml(version)}` : ""}</strong>`;
+    }
+
+    const description = [...card.querySelectorAll(":scope > p")].find(item => !item.querySelector("strong"));
+    if (description) {
+      description.textContent = shorten(indication);
+      description.classList.add("regimen-description");
+    }
+
+    card.dataset.name = [title, code, version, tumourDisplay, indication, entry.path].join(" ");
+    card.dataset.tumour = tumourGroups.join(",");
+  }
+
   function integrateExistingCard(entry, protocol) {
     const legacyButtonId = entry.legacy_card_id;
     if (!legacyButtonId) return false;
@@ -175,6 +205,7 @@
     const assessmentReady = validation.valid && Boolean(window.SACTCheckGenericAssessment);
     const protocolId = getProtocolId(entry, protocol);
     protocolsById.set(protocolId, protocol);
+    updateIntegratedCardMetadata(entry, protocol, card);
 
     // Replace the legacy navigation action with the protocol-driven JSON assessment.
     const replacement = document.createElement("button");

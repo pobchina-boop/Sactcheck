@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.27.1 — Duplicate carboplatin–etoposide card hotfix — 19 July 2026
+
+- Merged the legacy NCCP 00271 catalogue card with the live JSON protocol card.
+- The library now shows one Carboplatin + Etoposide card, using the current v7 JSON assessment.
+- Preserved the legacy assessment screen in the codebase as a fallback, but removed the duplicate public entry point.
+- Updated integrated legacy cards from protocol JSON metadata so titles, versions, indications and tumour groups do not remain stale.
+- Added regression coverage for the one-card rule.
+
 ## v0.27.0 — ICI safety, treatment context and catalogue correction — 19 July 2026
 
 - Removed inherited cytotoxic ANC and platelet hold rules from single-agent durvalumab and atezolizumab.

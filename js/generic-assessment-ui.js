@@ -498,7 +498,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.27.0",
+    version: "0.27.1",
     open,
     ensureScreen
   });
