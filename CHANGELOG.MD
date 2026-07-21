@@ -1,3 +1,12 @@
+# v0.30.0 — Batch 2 lung expansion
+
+- Added NCCP 00689 v4 atezolizumab + carboplatin + etoposide, with induction-only cytotoxic rules and atezolizumab maintenance logic.
+- Added NCCP 00304 v8 carboplatin AUC6 + paclitaxel 200 mg/m².
+- Added NCCP 00310 v7 gemcitabine + carboplatin AUC5.
+- Added NCCP 00281 v7 gemcitabine + cisplatin 75 mg/m².
+- Added NCCP 00317 v7 pemetrexed + cisplatin.
+- Added Batch 2 regression tests, source register, and updated app/cache version labels.
+
 # SACTCheck Changelog
 
 ## v0.29.0 — Batch 3 gynaecology expansion — 19 July 2026

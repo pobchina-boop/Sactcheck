@@ -1,3 +1,5 @@
+**Current baseline: v0.30.0 — Batch 2 lung expansion.**
+
 # SACTCheck
 
 SACTCheck is a clinician-focused oncology decision-support prototype based on NCCP/HSE systemic anti-cancer therapy protocols. It provides structured pre-treatment assessment, protocol-specific eligibility checks, explainable recommendations and copyable documentation to support consistent oncology day-ward review.
@@ -31,7 +33,7 @@ The browser then generates the assessment form and evaluates the protocol withou
 - `tools/build-protocol-index.js` — scans `protocols/`, validates files and rebuilds `protocols/index.json`.
 - `.github/workflows/protocol-library.yml` — validates JSON changes, runs regression tests and commits the generated catalogue.
 
-The generated catalogue now contains 33 JSON protocols. The v0.29 expansion adds bevacizumab 15 mg/kg component assessment, gemcitabine/carboplatin AUC4, carboplatin/pegylated liposomal doxorubicin, bevacizumab/paclitaxel/cisplatin for cervical cancer and niraparib tablets monotherapy. Each published protocol remains subject to consultant, oncology-pharmacy and local governance review before clinical deployment.
+The generated catalogue now contains 38 JSON protocols. The v0.30 lung expansion adds atezolizumab/carboplatin/etoposide, carboplatin/paclitaxel for NSCLC, gemcitabine/carboplatin AUC5, gemcitabine/cisplatin and pemetrexed/cisplatin. Each published protocol remains subject to consultant, oncology-pharmacy and local governance review before clinical deployment.
 
 ## Adding a protocol
 

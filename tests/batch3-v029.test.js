@@ -18,7 +18,7 @@ const expected = [
 ];
 
 const index = read("protocols/index.json");
-assert.strictEqual(index.protocol_count, 33, "v0.29 should publish 33 JSON protocols");
+assert.ok(index.protocol_count >= 33, "The cumulative build must retain all v0.29 protocols");
 
 const protocols = {};
 for (const [relative, code] of expected) {
@@ -114,8 +114,8 @@ assert.strictEqual(result.actionType, "permanently_discontinue", "Hypertensive c
 
 const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 assert.ok(html.includes('id="openPldCarbo"'), "The legacy 00624 card must have a stable migration target");
-assert.ok(html.includes("SACTCheck v0.29.0"));
-assert.ok(html.includes("Version 0.29.0 · Batch 3 gynaecology expansion"));
-assert.ok(html.includes("js/protocol-loader.js?v=0.29.0"));
+assert.ok(html.includes("SACTCheck v0.30.0"));
+assert.ok(html.includes("Version 0.30.0 · Batch 2 lung expansion"));
+assert.ok(html.includes("js/protocol-loader.js?v=0.30.0"));
 
 console.log("v0.29 Batch 3 protocol tests passed.");
