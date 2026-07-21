@@ -18,7 +18,7 @@ const expected = [
 ];
 
 const index = read("protocols/index.json");
-assert.strictEqual(index.protocol_count, 38, "v0.30 should publish 38 JSON protocols");
+assert.ok(index.protocol_count >= 38, "v0.30 protocols should remain published in later cumulative releases");
 
 const protocols = {};
 for (const [relative, code] of expected) {
@@ -124,8 +124,8 @@ for (const code of Object.keys(protocols)) {
 }
 
 const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-assert.ok(html.includes("SACTCheck v0.30.0 — Batch 2 lung expansion"));
-assert.ok(html.includes("Version 0.30.0 · Batch 2 lung expansion"));
-assert.ok(html.includes("js/protocol-loader.js?v=0.30.0"));
+assert.ok(html.includes("SACTCheck v0.31.0 — Batch 4 GI expansion"));
+assert.ok(html.includes("Version 0.31.0 · Batch 4 GI expansion"));
+assert.ok(html.includes("js/protocol-loader.js?v=0.31.0"));
 
 console.log("v0.30 Batch 2 lung protocol tests passed.");

@@ -27,3 +27,7 @@
 - Allow editable local defaults (initially CUH values once confirmed) rather than hard-coding assumptions.
 - Retain raw-value inputs where an NCCP rule uses an absolute threshold, such as bilirubin in µmol/L or AST in U/L.
 
+
+
+## ECOG context placeholder
+- Central placeholder added in v0.31.0. Future implementation should distinguish baseline eligibility from optional ongoing-cycle context and must never block partial/single-value assessments when ECOG is absent.

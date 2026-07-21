@@ -1,0 +1,1491 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00447-v6b",
+  "file_name": "00447-panitumumab-modified-folfox6.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00447",
+    "nccp_version": "6b",
+    "tumour_group": "Gastrointestinal",
+    "title": "Panitumumab 6mg/kg and Modified FOLFOX-6 Therapy -14 day",
+    "short_title": "Panitumumab + mFOLFOX6",
+    "indication": "First-line treatment of adult patients with wild-type RAS metastatic colorectal cancer.",
+    "published_date": "2017-10-23",
+    "review_date": "2026-12-21",
+    "source_document_pages": 9,
+    "source_url": "https://healthservice.hse.ie/documents/6479/447_v6b_Panitumumab_plus_mFOLFOX-6.pdf",
+    "migration": {
+      "mode": "live_json",
+      "legacy_engine": "FolfoxEngine",
+      "legacy_card_id": "openFolfox",
+      "switch_to_generic_assessment": true
+    },
+    "validation": {
+      "source_document_checked": true,
+      "automated_shadow_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    },
+    "regimen_reimbursement_code": "00447a",
+    "sactcheck_encoding_version": "0.31.0",
+    "catalog": {
+      "enabled": true
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "JSON assessment encoding derived from NCCP 00209 Version 10a. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+  },
+  "indications": [
+    {
+      "code": "00447a",
+      "description": "First-line treatment of adult patients with wild-type RAS metastatic colorectal cancer."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "fourteen_day_cycle",
+      "cycle_length_days": 14,
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "panitumumab",
+          "dose": {
+            "value": 6,
+            "unit": "mg/kg"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "drug": "oxaliplatin",
+          "dose": {
+            "value": 85,
+            "unit": "mg/m2"
+          },
+          "order": 2
+        },
+        {
+          "day": 1,
+          "drug": "folinic_acid",
+          "dose": {
+            "value": 400,
+            "unit": "mg/m2"
+          },
+          "order": 2
+        },
+        {
+          "day": 1,
+          "drug": "bolus_5fu",
+          "dose": {
+            "value": 400,
+            "unit": "mg/m2"
+          },
+          "order": 2
+        },
+        {
+          "day": 1,
+          "drug": "infusional_5fu",
+          "dose": {
+            "value": 2400,
+            "unit": "mg/m2 over 46 hours"
+          },
+          "order": 2
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "oxaliplatin": {
+      "0": 85,
+      "-1": 65,
+      "-2": 50,
+      "-3": "discontinue"
+    },
+    "folinic_acid": {
+      "0": 400,
+      "-1": 400,
+      "-2": 400,
+      "-3": "discontinue"
+    },
+    "bolus_5fu": {
+      "0": 400,
+      "-1": 320,
+      "-2": 260,
+      "-3": "discontinue"
+    },
+    "infusional_5fu": {
+      "0": 2400,
+      "-1": 1900,
+      "-2": 1500,
+      "-3": "discontinue"
+    }
+  },
+  "required_inputs": [],
+  "output_templates": {
+    "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
+    "discontinue": "The entered data trigger protocol discontinuation.",
+    "withhold": "Hold treatment and follow the protocol reassessment pathway.",
+    "consultant_review": "Consultant review is required before treatment proceeds.",
+    "dose_reduce": "Treatment may proceed only after the encoded component modifications are reviewed and prescribed.",
+    "proceed": "No encoded dose-modification criterion was triggered by the entered data."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
+    "missing_data_policy": "Evaluate only supplied values; do not infer missing values. Eligibility/context fields remain optional unless a specific rule requires them.",
+    "actions_ranked_most_to_least_restrictive": [
+      "contraindicated",
+      "discontinue",
+      "withhold",
+      "consultant_review",
+      "dose_reduce",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Known hypersensitivity to oxaliplatin, 5-fluorouracil or an excipient is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_PREGNANCY_OR_BREASTFEEDING",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy and breastfeeding are protocol exclusions."
+      },
+      {
+        "rule_id": "EXCLUSION_BASELINE_FUNCTIONAL_NEUROPATHY",
+        "all": [
+          {
+            "field": "assessment_type",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "baseline_functional_neuropathy",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Peripheral neuropathy with functional impairment before cycle 1 is an exclusion."
+      },
+      {
+        "rule_id": "DPD_COMPLETE_DEFICIENCY",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "complete",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen",
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Known complete DPD deficiency is an exclusion to fluoropyrimidine treatment in this regimen."
+      },
+      {
+        "rule_id": "DPD_PARTIAL_DEFICIENCY",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "partial",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "recommendation": "Consider a reduced starting 5-FU dose with careful subsequent titration."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Partial DPD deficiency requires individualised Consultant-directed fluoropyrimidine dosing."
+      },
+      {
+        "rule_id": "DPD_STATUS_UNKNOWN",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "unknown",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "recommendation": "Confirm DPD status before treatment."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "DPD status has not been confirmed."
+      },
+      {
+        "rule_id": "HAEM_COUNTS_LOW_AFTER_FOUR_WEEKS",
+        "all": [
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.5
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 75
+              }
+            ]
+          },
+          {
+            "field": "delay_weeks",
+            "operator": ">=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 4,
+          "table": 2
+        },
+        "explanation": "ANC remains below 1.5 ×10⁹/L or platelets below 75 ×10⁹/L after four delayed weeks."
+      },
+      {
+        "rule_id": "HAEM_COUNTS_LOW_WITHIN_FOUR_WEEKS",
+        "all": [
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.5
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 75
+              }
+            ]
+          },
+          {
+            "field": "delay_weeks",
+            "operator": "<",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "hold",
+          "until": "count recovery",
+          "maximum_delay_weeks": 4
+        },
+        "source": {
+          "page": 4,
+          "table": 2
+        },
+        "explanation": "The day-1 ANC or platelet threshold is not met; hold the complete regimen and repeat FBC weekly."
+      },
+      {
+        "rule_id": "HAEM_RECOVERED_ANC_GRADE3",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "lowest_anc_delayed_weeks_x10e9_l",
+            "operator": "between",
+            "value": [
+              0.5,
+              0.99
+            ]
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 2
+        },
+        "explanation": "After count recovery, an ANC nadir of 0.5–0.99 ×10⁹/L requires a one-level oxaliplatin reduction."
+      },
+      {
+        "rule_id": "HAEM_RECOVERED_ANC_GRADE4",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "lowest_anc_delayed_weeks_x10e9_l",
+            "operator": "<",
+            "value": 0.5
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            },
+            "bolus_5fu": {
+              "omit": true
+            },
+            "folinic_acid": {
+              "omit": true
+            },
+            "infusional_5fu": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 2
+        },
+        "explanation": "After count recovery, an ANC nadir below 0.5 ×10⁹/L requires oxaliplatin reduction, omission of bolus 5-FU/folinic acid and one-level infusional 5-FU reduction."
+      },
+      {
+        "rule_id": "HAEM_RECOVERED_PLATELETS_GRADE3",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "lowest_platelets_delayed_weeks_x10e9_l",
+            "operator": "between",
+            "value": [
+              10,
+              49.9
+            ]
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 2
+        },
+        "explanation": "After platelet recovery, a nadir of 10–49.9 ×10⁹/L requires a one-level oxaliplatin reduction."
+      },
+      {
+        "rule_id": "HAEM_RECOVERED_PLATELETS_GRADE4",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "lowest_platelets_delayed_weeks_x10e9_l",
+            "operator": "<",
+            "value": 10
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -2
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 2
+        },
+        "explanation": "After platelet recovery, a nadir below 10 ×10⁹/L requires a two-level oxaliplatin reduction."
+      },
+      {
+        "rule_id": "RENAL_HAEMODIALYSIS",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          },
+          "recommendation": "Consider 50% of the original oxaliplatin dose and haemodialyse within 1.5 hours after administration."
+        },
+        "source": {
+          "page": 4,
+          "table": 3
+        },
+        "explanation": "Haemodialysis requires Consultant-directed consideration of 50% of the original oxaliplatin dose."
+      },
+      {
+        "rule_id": "RENAL_CRCL_BELOW30",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 30
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          },
+          "recommendation": "Consider 50% of the original oxaliplatin dose."
+        },
+        "source": {
+          "page": 4,
+          "table": 3
+        },
+        "explanation": "CrCl below 30 mL/min requires consideration of 50% of the original oxaliplatin dose."
+      },
+      {
+        "rule_id": "HEPATIC_SEVERE",
+        "field": "hepatic_impairment_category",
+        "operator": "==",
+        "value": "severe",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bolus_5fu",
+            "infusional_5fu",
+            "folinic_acid"
+          ],
+          "component_changes": {
+            "bolus_5fu": {
+              "discontinue": true
+            },
+            "infusional_5fu": {
+              "discontinue": true
+            },
+            "folinic_acid": {
+              "omit": true
+            }
+          },
+          "recommendation": "5-FU is not recommended in severe hepatic impairment."
+        },
+        "source": {
+          "page": 4,
+          "table": 3
+        },
+        "explanation": "5-FU is not recommended in severe hepatic impairment; Consultant determination is required."
+      },
+      {
+        "rule_id": "HEPATIC_MILD_MODERATE_WITH_RENAL",
+        "all": [
+          {
+            "field": "hepatic_impairment_category",
+            "operator": "in",
+            "value": [
+              "mild",
+              "moderate"
+            ]
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 30
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "The no-adjustment statement for mild/moderate hepatic impairment applies without renal impairment."
+        },
+        "source": {
+          "page": 4,
+          "table": 3
+        },
+        "explanation": "Combined mild/moderate hepatic and severe renal impairment requires individualised review."
+      },
+      {
+        "rule_id": "NEUROPATHY_GRADE2",
+        "field": "neuropathy_grade",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 5,
+          "table": 4
+        },
+        "explanation": "Grade 2 neuropathy at the start of a cycle requires a one-level oxaliplatin reduction."
+      },
+      {
+        "rule_id": "NEUROPATHY_GRADE3_FIRST_OR_SECOND",
+        "all": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 3
+          },
+          {
+            "field": "neuropathy_pattern",
+            "operator": "in",
+            "value": [
+              "first",
+              "second"
+            ]
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 5,
+          "table": 4
+        },
+        "explanation": "The first or second occurrence of grade 3 neuropathy requires a one-level oxaliplatin reduction."
+      },
+      {
+        "rule_id": "NEUROPATHY_GRADE3_PERSISTENT",
+        "all": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 3
+          },
+          {
+            "field": "neuropathy_pattern",
+            "operator": "==",
+            "value": "persistent"
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "discontinue": true
+            }
+          }
+        },
+        "source": {
+          "page": 5,
+          "table": 4
+        },
+        "explanation": "Persistent grade 3 neuropathy requires discontinuation of oxaliplatin."
+      },
+      {
+        "rule_id": "NEUROPATHY_GRADE4",
+        "field": "neuropathy_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "discontinue": true
+            }
+          }
+        },
+        "source": {
+          "page": 5,
+          "table": 4
+        },
+        "explanation": "Grade 4 neuropathy requires discontinuation of oxaliplatin."
+      },
+      {
+        "rule_id": "LARYNGOPHARYNGEAL_DYSAESTHESIA",
+        "field": "laryngopharyngeal_dysaesthesia",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "infusion_hours": 6
+            }
+          },
+          "recommendation": "Increase the oxaliplatin infusion time from 2 to 6 hours."
+        },
+        "source": {
+          "page": 5,
+          "table": 4
+        },
+        "explanation": "Laryngo-pharyngeal dysaesthesia requires prolongation of oxaliplatin infusion to 6 hours."
+      },
+      {
+        "rule_id": "UNEXPLAINED_RESPIRATORY_SYMPTOMS",
+        "field": "unexplained_respiratory_symptoms",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "hold": true
+            }
+          },
+          "until": "interstitial lung disease or pulmonary fibrosis is excluded"
+        },
+        "source": {
+          "page": 5,
+          "table": 4
+        },
+        "explanation": "Withhold oxaliplatin until interstitial lung disease or pulmonary fibrosis is excluded."
+      },
+      {
+        "rule_id": "DIARRHOEA_PERSISTENT_FOUR_WEEKS",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "diarrhoea_duration_weeks",
+            "operator": ">=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 5,
+          "table": 5
+        },
+        "explanation": "Diarrhoea remains grade 2 or greater after four weeks; discontinue treatment."
+      },
+      {
+        "rule_id": "DIARRHOEA_HOLD",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "diarrhoea_duration_weeks",
+            "operator": "<",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "hold",
+          "maximum_delay_weeks": 4
+        },
+        "source": {
+          "page": 5,
+          "table": 5
+        },
+        "explanation": "Grade 2 or greater diarrhoea on day 1 requires the complete regimen to be held and reviewed weekly."
+      },
+      {
+        "rule_id": "DIARRHOEA_RECOVERED_GRADE3",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "diarrhoea_highest_grade",
+            "operator": "==",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "component_changes": {
+            "bolus_5fu": {
+              "dose_level_change": -1
+            },
+            "infusional_5fu": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 5,
+          "table": 5
+        },
+        "explanation": "After recovery from grade 3 diarrhoea, reduce bolus and infusional 5-FU by one dose level."
+      },
+      {
+        "rule_id": "DIARRHOEA_RECOVERED_GRADE4",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "diarrhoea_highest_grade",
+            "operator": ">=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            },
+            "bolus_5fu": {
+              "dose_level_change": -1
+            },
+            "infusional_5fu": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 5,
+          "table": 5
+        },
+        "explanation": "After recovery from grade 4 diarrhoea, reduce oxaliplatin, bolus 5-FU and infusional 5-FU by one dose level."
+      },
+      {
+        "rule_id": "STOMATITIS_PERSISTENT_TWO_WEEKS",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "stomatitis_duration_weeks",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 6,
+          "table": 6
+        },
+        "explanation": "Stomatitis remains grade 2 or greater after two weeks; discontinue treatment."
+      },
+      {
+        "rule_id": "STOMATITIS_HOLD",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "stomatitis_duration_weeks",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "hold",
+          "maximum_delay_weeks": 2
+        },
+        "source": {
+          "page": 6,
+          "table": 6
+        },
+        "explanation": "Grade 2 or greater stomatitis on day 1 requires the complete regimen to be held and reviewed weekly."
+      },
+      {
+        "rule_id": "STOMATITIS_RECOVERED_GRADE3",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "stomatitis_highest_grade",
+            "operator": "==",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "component_changes": {
+            "bolus_5fu": {
+              "dose_level_change": -1
+            },
+            "infusional_5fu": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 6,
+          "table": 6
+        },
+        "explanation": "After recovery from grade 3 stomatitis, reduce bolus and infusional 5-FU by one dose level."
+      },
+      {
+        "rule_id": "STOMATITIS_RECOVERED_GRADE4",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "stomatitis_highest_grade",
+            "operator": ">=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            },
+            "bolus_5fu": {
+              "dose_level_change": -1
+            },
+            "infusional_5fu": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 6,
+          "table": 6
+        },
+        "explanation": "After recovery from grade 4 stomatitis, reduce oxaliplatin, bolus 5-FU and infusional 5-FU by one dose level."
+      },
+      {
+        "rule_id": "SIGNIFICANT_PPE",
+        "field": "significant_ppe",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "recommendation": "Review local PPE policy and discuss any dose modification with a Consultant."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Clinically significant PPE requires local-policy and Consultant review."
+      },
+      {
+        "rule_id": "DEFAULT_PROCEED",
+        "field": "cycle_number",
+        "operator": ">=",
+        "value": 1,
+        "action": {
+          "type": "proceed",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "No encoded FOLFOX hold, discontinuation, Consultant-review or component-modification rule was triggered."
+      },
+      {
+        "rule_id": "PANITUMUMAB_RASH_G3",
+        "field": "rash_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Withhold panitumumab and follow the protocol dermatologic toxicity pathway."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Withhold panitumumab and follow the protocol dermatologic toxicity pathway."
+      },
+      {
+        "rule_id": "PANITUMUMAB_LOW_MAG",
+        "field": "magnesium_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Correct magnesium and obtain consultant review before treatment."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Correct magnesium and obtain consultant review before treatment."
+      },
+      {
+        "rule_id": "PANITUMUMAB_INFUSION_G3",
+        "field": "infusion_reaction_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Permanently discontinue panitumumab for a severe infusion reaction."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Permanently discontinue panitumumab for a severe infusion reaction."
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_type": {
+      "label": "Assessment type",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "current",
+          "label": "Current pre-treatment assessment"
+        },
+        {
+          "value": "baseline",
+          "label": "Baseline / cycle 1 assessment"
+        }
+      ],
+      "demo_value": "current"
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": 1,
+      "demo_value": 2,
+      "max": 99
+    },
+    "delay_weeks": {
+      "label": "Current treatment delay",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.5,
+      "demo_value": 0,
+      "unit": "weeks"
+    },
+    "current_oxaliplatin_level": {
+      "label": "Current oxaliplatin dose level",
+      "type": "number",
+      "required": false,
+      "min": -2,
+      "step": 1,
+      "demo_value": 0,
+      "max": 0,
+      "unit": "dose level"
+    },
+    "current_bolus_5fu_level": {
+      "label": "Current bolus 5-FU dose level",
+      "type": "number",
+      "required": false,
+      "min": -2,
+      "step": 1,
+      "demo_value": 0,
+      "max": 0,
+      "unit": "dose level"
+    },
+    "current_infusional_5fu_level": {
+      "label": "Current infusional 5-FU dose level",
+      "type": "number",
+      "required": false,
+      "min": -2,
+      "step": 1,
+      "demo_value": 0,
+      "max": 0,
+      "unit": "dose level"
+    },
+    "hypersensitivity": {
+      "label": "Known hypersensitivity to regimen component or excipient",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "baseline_functional_neuropathy": {
+      "label": "Baseline peripheral neuropathy with functional impairment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "normal",
+          "label": "No known DPD deficiency"
+        },
+        {
+          "value": "partial",
+          "label": "Partial DPD deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete DPD deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Unknown / not available"
+        }
+      ],
+      "demo_value": "normal"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2,
+      "unit": "×10⁹/L"
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 200,
+      "unit": "×10⁹/L"
+    },
+    "lowest_anc_delayed_weeks_x10e9_l": {
+      "label": "Lowest ANC during the delayed period",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2,
+      "unit": "×10⁹/L"
+    },
+    "lowest_platelets_delayed_weeks_x10e9_l": {
+      "label": "Lowest platelets during the delayed period",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 200,
+      "unit": "×10⁹/L"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 70,
+      "unit": "mL/min"
+    },
+    "haemodialysis": {
+      "label": "Patient receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "hepatic_impairment_category": {
+      "label": "Hepatic impairment category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "max": 4,
+      "unit": "CTCAE grade"
+    },
+    "neuropathy_pattern": {
+      "label": "Neuropathy pattern",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No clinically significant neuropathy"
+        },
+        {
+          "value": "first",
+          "label": "First occurrence"
+        },
+        {
+          "value": "second",
+          "label": "Second occurrence"
+        },
+        {
+          "value": "persistent",
+          "label": "Persistent neuropathy"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "laryngopharyngeal_dysaesthesia": {
+      "label": "Laryngopharyngeal dysaesthesia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "unexplained_respiratory_symptoms": {
+      "label": "Unexplained respiratory symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "diarrhoea_current_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "max": 5,
+      "unit": "CTCAE grade"
+    },
+    "diarrhoea_highest_grade": {
+      "label": "Highest diarrhoea grade since previous cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "max": 5,
+      "unit": "CTCAE grade"
+    },
+    "diarrhoea_duration_weeks": {
+      "label": "Duration of diarrhoea",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.5,
+      "demo_value": 0,
+      "unit": "weeks"
+    },
+    "stomatitis_current_grade": {
+      "label": "Current stomatitis grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "max": 5,
+      "unit": "CTCAE grade"
+    },
+    "stomatitis_highest_grade": {
+      "label": "Highest stomatitis grade since previous cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "max": 5,
+      "unit": "CTCAE grade"
+    },
+    "stomatitis_duration_weeks": {
+      "label": "Duration of stomatitis",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.5,
+      "demo_value": 0,
+      "unit": "weeks"
+    },
+    "significant_ppe": {
+      "label": "Clinically significant palmar–plantar erythrodysaesthesia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "rash_grade": {
+      "label": "Acneiform/dermatologic toxicity grade",
+      "type": "number",
+      "required": false,
+      "ui_section": "clinical",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "magnesium_grade": {
+      "label": "Hypomagnesaemia grade",
+      "type": "number",
+      "required": false,
+      "ui_section": "labs",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "infusion_reaction_grade": {
+      "label": "Infusion reaction grade",
+      "type": "number",
+      "required": false,
+      "ui_section": "clinical",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    }
+  },
+  "assessment_profiles": [
+    {
+      "id": "default",
+      "label": "Modified FOLFOX-6 assessment",
+      "required_inputs": [
+        "assessment_type",
+        "cycle_number",
+        "delay_weeks",
+        "current_oxaliplatin_level",
+        "current_bolus_5fu_level",
+        "current_infusional_5fu_level",
+        "hypersensitivity",
+        "pregnancy",
+        "breastfeeding",
+        "baseline_functional_neuropathy",
+        "dpd_status",
+        "anc_x10e9_l",
+        "platelets_x10e9_l",
+        "lowest_anc_delayed_weeks_x10e9_l",
+        "lowest_platelets_delayed_weeks_x10e9_l",
+        "crcl_ml_min",
+        "haemodialysis",
+        "hepatic_impairment_category",
+        "neuropathy_grade",
+        "neuropathy_pattern",
+        "laryngopharyngeal_dysaesthesia",
+        "unexplained_respiratory_symptoms",
+        "diarrhoea_current_grade",
+        "diarrhoea_highest_grade",
+        "diarrhoea_duration_weeks",
+        "stomatitis_current_grade",
+        "stomatitis_highest_grade",
+        "stomatitis_duration_weeks",
+        "significant_ppe"
+      ],
+      "context": {}
+    }
+  ]
+}

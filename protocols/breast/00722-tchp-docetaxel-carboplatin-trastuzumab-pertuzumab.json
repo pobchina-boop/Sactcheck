@@ -21,7 +21,7 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.28.0"
+    "sactcheck_encoding_version": "0.30.1"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -95,7 +95,7 @@
     "indication_id": {
       "label": "Indication",
       "type": "select",
-      "required": true,
+      "required": false,
       "options": [
         {
           "value": "00722a",
@@ -109,7 +109,7 @@
     "assessment_type": {
       "label": "Assessment stage",
       "type": "select",
-      "required": true,
+      "required": false,
       "options": [
         {
           "value": "pre_treatment",
@@ -123,7 +123,7 @@
     "cycle_number": {
       "label": "Cycle number",
       "type": "number",
-      "required": true,
+      "required": false,
       "min": 1,
       "max": 200,
       "step": 1,
@@ -134,7 +134,7 @@
     "assessment_stage": {
       "label": "Treatment assessment context",
       "type": "select",
-      "required": true,
+      "required": false,
       "options": [
         {
           "value": "baseline",
@@ -427,12 +427,7 @@
       "ui_section": "clinical"
     }
   },
-  "required_inputs": [
-    "indication_id",
-    "assessment_type",
-    "cycle_number",
-    "assessment_stage"
-  ],
+  "required_inputs": [],
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
     "missing_data_policy": "report_unassessed_coverage_gap",
@@ -593,6 +588,34 @@
           "page": 4
         },
         "explanation": "Baseline grade 2 or greater neuropathy is excluded."
+      },
+      {
+        "rule_id": "COUNTS_LOW_IMMEDIATE_DELAY",
+        "any": [
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.0
+          },
+          {
+            "field": "platelets",
+            "operator": "<=",
+            "value": 100
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Delay docetaxel and carboplatin for low counts. Enter the selected haematological management strategy to refine the post-recovery dose plan."
+        },
+        "source": {
+          "page": 5,
+          "table": "Table 2"
+        },
+        "explanation": "ANC below 1.0 or platelets 100 or below requires an immediate treatment delay; the selected G-CSF or dose-reduction pathway refines subsequent dosing."
       },
       {
         "rule_id": "COUNTS_INTERMEDIATE_REDUCE",

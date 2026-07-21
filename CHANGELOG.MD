@@ -1,3 +1,20 @@
+# Version 0.31.0
+
+## Batch 4 — GI biologics, immunotherapy combinations and pancreas
+- Added 10 non-duplicate NCCP protocols: 00238, 00256, 00446, 00447, 00448, 00449, 00704, 00843, 00844 and 00926.
+- Added an inactive central ECOG context placeholder; ECOG remains non-blocking for partial assessments.
+- Catalogue increased from 38 to 48 protocols.
+- Added duplicate-ID/path regression checks for the expanded catalogue.
+
+# Version 0.30.1 — duplicate-control and TCHP partial-assessment correction
+
+- Audited the complete v0.30 catalogue and established a canonical 38-protocol inventory.
+- Removed the stale nested `protocols/protocols/` copy containing legacy duplicate JSON files.
+- Confirmed there are no duplicate active protocol IDs or active catalogue paths.
+- Documented intentionally similar but clinically distinct NCCP regimens so future batches do not remove or recreate them incorrectly.
+- Corrected NCCP 00722 TCHP so cycle number and assessment-stage fields no longer block single-value partial assessments.
+- Added a TCHP regression test for ANC-only and platelet-only assessment.
+
 # v0.30.0 — Batch 2 lung expansion
 
 - Added NCCP 00689 v4 atezolizumab + carboplatin + etoposide, with induction-only cytotoxic rules and atezolizumab maintenance logic.

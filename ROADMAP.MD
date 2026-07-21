@@ -40,3 +40,7 @@
 - Formal audit logging and governance design
 - Controlled protocol authoring interface
 - Role-based deployment and hospital integration planning
+
+
+## ECOG context placeholder
+- Central placeholder added in v0.31.0. Future implementation should distinguish baseline eligibility from optional ongoing-cycle context and must never block partial/single-value assessments when ECOG is absent.

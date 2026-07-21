@@ -1,0 +1,2555 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00843-v2a",
+  "file_name": "00843-nivolumab-xelox.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00843",
+    "nccp_version": "2a",
+    "tumour_group": "Gastrointestinal",
+    "title": "Nivolumab and XELOX Therapy",
+    "short_title": "Nivolumab + XELOX",
+    "indication": "First-line treatment of HER2-negative advanced or metastatic gastric, GEJ or oesophageal adenocarcinoma with PD-L1 CPS ≥5.",
+    "published_date": "2024-08-13",
+    "review_date": "2030-04-16",
+    "source_document_pages": 12,
+    "source_url": "https://healthservice.hse.ie/documents/6444/843_Nivolumab_and_XELOX.pdf",
+    "migration": {
+      "mode": "live_json",
+      "legacy_engine": "XeloxEngine",
+      "legacy_card_id": "openXelox",
+      "switch_to_generic_assessment": true
+    },
+    "validation": {
+      "source_document_checked": true,
+      "automated_shadow_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    },
+    "regimen_reimbursement_code": "00843a",
+    "sactcheck_encoding_version": "0.31.0",
+    "catalog": {
+      "enabled": true
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "JSON assessment encoding derived from NCCP 00321 Version 9. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+  },
+  "indications": [
+    {
+      "code": "00843a",
+      "description": "First-line treatment of HER2-negative advanced or metastatic gastric, GEJ or oesophageal adenocarcinoma with PD-L1 CPS ≥5."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "twenty_one_day_cycle",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "nivolumab",
+          "dose": {
+            "value": "protocol-defined fixed dose",
+            "unit": "mg"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "drug": "oxaliplatin",
+          "dose": {
+            "value": 130,
+            "unit": "mg/m2 IV over 2 hours"
+          },
+          "order": 2
+        },
+        {
+          "day": "1-14",
+          "drug": "capecitabine",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m2 twice daily PO with food"
+          },
+          "order": 2
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "oxaliplatin": {
+      "0": 130,
+      "-1": 100,
+      "-2": 85,
+      "-3": "discontinue"
+    },
+    "capecitabine": {
+      "0": 1000,
+      "-1": 750,
+      "-2": 500,
+      "-3": "discontinue"
+    }
+  },
+  "required_inputs": [],
+  "output_templates": {
+    "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
+    "discontinue": "The entered data trigger protocol discontinuation.",
+    "withhold": "Hold treatment and follow the protocol reassessment pathway.",
+    "consultant_review": "Consultant review is required before treatment proceeds.",
+    "dose_reduce": "Treatment may proceed only after the encoded component modifications are reviewed and prescribed.",
+    "proceed": "No encoded dose-modification criterion was triggered by the entered data."
+  },
+  "rule_engine": {
+    "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
+    "missing_data_policy": "Evaluate only supplied values; do not infer missing values. Eligibility/context fields remain optional unless a specific rule requires them.",
+    "actions_ranked_most_to_least_restrictive": [
+      "contraindicated",
+      "discontinue",
+      "withhold",
+      "consultant_review",
+      "dose_reduce",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Hypersensitivity to capecitabine, oxaliplatin or an excipient is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_PREGNANCY_OR_BREASTFEEDING",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy and breastfeeding are protocol exclusions."
+      },
+      {
+        "rule_id": "EXCLUSION_BASELINE_FUNCTIONAL_NEUROPATHY",
+        "all": [
+          {
+            "field": "assessment_type",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "baseline_functional_neuropathy",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Peripheral neuropathy with functional impairment before cycle 1 is an exclusion."
+      },
+      {
+        "rule_id": "DPD_COMPLETE_DEFICIENCY",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "complete",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen",
+            "capecitabine"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Known complete DPD deficiency is a contraindication to capecitabine."
+      },
+      {
+        "rule_id": "DPD_PARTIAL_DEFICIENCY",
+        "field": "dpd_status",
+        "operator": "==",
+        "value": "partial",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Consider an individualised reduced capecitabine starting dose with careful monitoring."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Partial DPD deficiency requires an individualised reduced starting dose and Consultant review."
+      },
+      {
+        "rule_id": "DPD_NOT_DOCUMENTED_BASELINE",
+        "all": [
+          {
+            "field": "assessment_type",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "dpd_status",
+            "operator": "==",
+            "value": "unknown"
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Confirm DPD testing before first capecitabine treatment unless previously tested."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "DPD testing is required before first treatment with capecitabine unless previously completed."
+      },
+      {
+        "rule_id": "BASELINE_COUNTS_EXCLUSION",
+        "all": [
+          {
+            "field": "assessment_type",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.5
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 100
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "hold"
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Baseline ANC below 1.5 or platelets below 100 should not be treated with capecitabine."
+      },
+      {
+        "rule_id": "DAY1_COUNTS_PERSIST_TWO_WEEKS",
+        "all": [
+          {
+            "field": "delay_weeks",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.2
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 75
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 3,
+          "table": 2
+        },
+        "explanation": "If ANC remains below 1.2 or platelets below 75 after two weeks, discontinue treatment."
+      },
+      {
+        "rule_id": "DAY1_COUNTS_HOLD",
+        "all": [
+          {
+            "field": "delay_weeks",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.2
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 75
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "hold",
+          "maximum_delay_weeks": 2
+        },
+        "source": {
+          "page": 3,
+          "table": 2
+        },
+        "explanation": "Hold treatment and repeat FBC weekly when ANC is below 1.2 or platelets below 75 on day 1."
+      },
+      {
+        "rule_id": "RECOVERED_NADIR_REDUCE_ONE",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.2
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "any": [
+              {
+                "all": [
+                  {
+                    "field": "lowest_anc_delayed_weeks_x10e9_l",
+                    "operator": ">=",
+                    "value": 0.5
+                  },
+                  {
+                    "field": "lowest_anc_delayed_weeks_x10e9_l",
+                    "operator": "<",
+                    "value": 1.0
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "lowest_platelets_delayed_weeks_x10e9_l",
+                    "operator": ">=",
+                    "value": 10
+                  },
+                  {
+                    "field": "lowest_platelets_delayed_weeks_x10e9_l",
+                    "operator": "<",
+                    "value": 50
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "capecitabine"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            },
+            "capecitabine": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 3,
+          "table": 2
+        },
+        "explanation": "After recovery, a grade 3 delayed-week nadir requires both drugs to be reduced by one dose level."
+      },
+      {
+        "rule_id": "RECOVERED_NADIR_REDUCE_TWO",
+        "all": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.2
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "any": [
+              {
+                "field": "lowest_anc_delayed_weeks_x10e9_l",
+                "operator": "<",
+                "value": 0.5
+              },
+              {
+                "field": "lowest_platelets_delayed_weeks_x10e9_l",
+                "operator": "<",
+                "value": 10
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "capecitabine"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -2
+            },
+            "capecitabine": {
+              "dose_level_change": -2
+            }
+          }
+        },
+        "source": {
+          "page": 3,
+          "table": 2
+        },
+        "explanation": "After recovery, a grade 4 delayed-week nadir requires both drugs to be reduced by two dose levels."
+      },
+      {
+        "rule_id": "RENAL_CAPECITABINE_30_50",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<=",
+            "value": 50
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75
+            }
+          },
+          "recommendation": "Use 75% of the original capecitabine dose."
+        },
+        "source": {
+          "page": 4,
+          "table": 3
+        },
+        "explanation": "CrCl 30–50 mL/min requires capecitabine at 75% of the original dose."
+      },
+      {
+        "rule_id": "RENAL_BELOW_30",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 30
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine",
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "capecitabine": {
+              "discontinue": true
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          },
+          "recommendation": "Capecitabine is not recommended; consider oxaliplatin at 50% only after Consultant review."
+        },
+        "source": {
+          "page": 4,
+          "table": 3
+        },
+        "explanation": "For CrCl below 30 mL/min capecitabine is not recommended and oxaliplatin may be considered at 50%."
+      },
+      {
+        "rule_id": "RENAL_HAEMODIALYSIS",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine",
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "capecitabine": {
+              "discontinue": true
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          },
+          "recommendation": "Capecitabine is not recommended; consider oxaliplatin at 50% with haemodialysis within 90 minutes after administration."
+        },
+        "source": {
+          "page": 4,
+          "table": 3
+        },
+        "explanation": "For haemodialysis, capecitabine is not recommended; oxaliplatin may be considered at 50% with dialysis timing specified."
+      },
+      {
+        "rule_id": "HEPATOTOXICITY_HOLD",
+        "any": [
+          {
+            "field": "bilirubin_ratio_uln",
+            "operator": ">",
+            "value": 3
+          },
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": ">",
+            "value": 2.5
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "component_changes": {
+            "capecitabine": {
+              "hold": true
+            }
+          },
+          "until": "bilirubin is 3 ×ULN or less and ALT/AST are 2.5 ×ULN or less"
+        },
+        "source": {
+          "page": 5,
+          "table": 5
+        },
+        "explanation": "Withhold capecitabine for bilirubin above 3 ×ULN or ALT/AST above 2.5 ×ULN."
+      },
+      {
+        "rule_id": "DIARRHOEA_PERSIST_TWO_WEEKS",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 4,
+          "table": 4
+        },
+        "explanation": "If diarrhoea remains grade 2 or greater after two weeks, discontinue treatment."
+      },
+      {
+        "rule_id": "DIARRHOEA_HOLD",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "hold",
+          "maximum_delay_weeks": 2
+        },
+        "source": {
+          "page": 4,
+          "table": 4
+        },
+        "explanation": "Grade 2 or greater diarrhoea on day 1 requires treatment to be held and reviewed weekly."
+      },
+      {
+        "rule_id": "DIARRHOEA_RECOVERED_GRADE3",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "diarrhoea_highest_grade",
+            "operator": "==",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "component_changes": {
+            "capecitabine": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 4
+        },
+        "explanation": "After recovery from grade 3 diarrhoea, reduce capecitabine by one dose level."
+      },
+      {
+        "rule_id": "DIARRHOEA_RECOVERED_GRADE4",
+        "all": [
+          {
+            "field": "diarrhoea_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "diarrhoea_highest_grade",
+            "operator": ">=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "capecitabine"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            },
+            "capecitabine": {
+              "dose_level_change": -2
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 4
+        },
+        "explanation": "After recovery from grade 4 diarrhoea, reduce oxaliplatin by one dose level and capecitabine by two dose levels."
+      },
+      {
+        "rule_id": "STOMATITIS_PERSIST_TWO_WEEKS",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 4,
+          "table": 4
+        },
+        "explanation": "If stomatitis remains grade 2 or greater after two weeks, discontinue treatment."
+      },
+      {
+        "rule_id": "STOMATITIS_HOLD",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "hold",
+          "maximum_delay_weeks": 2
+        },
+        "source": {
+          "page": 4,
+          "table": 4
+        },
+        "explanation": "Grade 2 or greater stomatitis on day 1 requires treatment to be held and reviewed weekly."
+      },
+      {
+        "rule_id": "STOMATITIS_RECOVERED_GRADE3",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "stomatitis_highest_grade",
+            "operator": "==",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "component_changes": {
+            "capecitabine": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 4
+        },
+        "explanation": "After recovery from grade 3 stomatitis, reduce capecitabine by one dose level."
+      },
+      {
+        "rule_id": "STOMATITIS_RECOVERED_GRADE4",
+        "all": [
+          {
+            "field": "stomatitis_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "stomatitis_highest_grade",
+            "operator": ">=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin",
+            "capecitabine"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1
+            },
+            "capecitabine": {
+              "dose_level_change": -2
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 4
+        },
+        "explanation": "After recovery from grade 4 stomatitis, reduce oxaliplatin by one dose level and capecitabine by two dose levels."
+      },
+      {
+        "rule_id": "HFS_PERSIST_TWO_WEEKS",
+        "all": [
+          {
+            "field": "hand_foot_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "discontinue"
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "If hand-foot syndrome remains grade 2 or greater after two weeks, discontinue treatment."
+      },
+      {
+        "rule_id": "HFS_HOLD",
+        "all": [
+          {
+            "field": "hand_foot_current_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": "<",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "whole_regimen": "hold",
+          "maximum_delay_weeks": 2
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 2 or greater hand-foot syndrome on day 1 requires treatment to be held and reviewed weekly."
+      },
+      {
+        "rule_id": "HFS_RECOVERED_GRADE3",
+        "all": [
+          {
+            "field": "hand_foot_current_grade",
+            "operator": "<",
+            "value": 2
+          },
+          {
+            "field": "hand_foot_highest_grade",
+            "operator": "==",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "component_changes": {
+            "capecitabine": {
+              "dose_level_change": -1
+            }
+          }
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "After recovery from grade 3 hand-foot syndrome, reduce capecitabine by one dose level."
+      },
+      {
+        "rule_id": "NEUROPATHY_G2_PERSISTENT",
+        "field": "neuropathy_pattern",
+        "operator": "==",
+        "value": "grade2_persistent_to_next_cycle",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "absolute_dose_mg_m2": 100
+            }
+          },
+          "recommendation": "Reduce oxaliplatin to 100 mg/m²."
+        },
+        "source": {
+          "page": 5,
+          "table": 6
+        },
+        "explanation": "Grade 2 paraesthesia persisting until the next cycle requires oxaliplatin 100 mg/m²."
+      },
+      {
+        "rule_id": "NEUROPATHY_G3_RESOLVED",
+        "field": "neuropathy_pattern",
+        "operator": "==",
+        "value": "grade3_over_7_days_resolved",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "absolute_dose_mg_m2": 100
+            }
+          },
+          "recommendation": "Reduce oxaliplatin to 100 mg/m²."
+        },
+        "source": {
+          "page": 5,
+          "table": 6
+        },
+        "explanation": "Grade 3 paraesthesia lasting more than seven days but resolving before the next cycle requires oxaliplatin 100 mg/m²."
+      },
+      {
+        "rule_id": "NEUROPATHY_G3_PERSISTENT",
+        "field": "neuropathy_pattern",
+        "operator": "==",
+        "value": "grade3_persistent_to_next_cycle",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "discontinue": true
+            }
+          },
+          "recommendation": "Discontinue oxaliplatin."
+        },
+        "source": {
+          "page": 5,
+          "table": 6
+        },
+        "explanation": "Grade 3 paraesthesia persisting until the next cycle requires oxaliplatin discontinuation."
+      },
+      {
+        "rule_id": "NEUROPATHY_G4",
+        "field": "neuropathy_pattern",
+        "operator": "==",
+        "value": "grade4_any_duration",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "discontinue": true
+            }
+          },
+          "recommendation": "Discontinue oxaliplatin."
+        },
+        "source": {
+          "page": 5,
+          "table": 6
+        },
+        "explanation": "Grade 4 neuropathy of any duration requires oxaliplatin discontinuation."
+      },
+      {
+        "rule_id": "LARYNGOPHARYNGEAL_DYSAESTHESIA",
+        "field": "laryngopharyngeal_dysaesthesia",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "component_changes": {
+            "oxaliplatin": {
+              "infusion_hours": 6
+            }
+          },
+          "recommendation": "Increase oxaliplatin infusion duration to 4–6 hours."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Increase oxaliplatin infusion time to 4–6 hours after laryngopharyngeal dysaesthesia."
+      },
+      {
+        "rule_id": "DEFAULT_PROCEED",
+        "field": "cycle_number",
+        "operator": ">=",
+        "value": 1,
+        "action": {
+          "type": "proceed",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "No encoded XELOX hold, contraindication, Consultant-review or dose-modification rule was triggered."
+      },
+      {
+        "rule_id": "ICI_EXCLUSION_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Do not administer nivolumab; obtain consultant review."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Relevant hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "ICI_PREGNANCY_OR_BREASTFEEDING_REVIEW",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Do not proceed without urgent consultant review of pregnancy or breastfeeding risk."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy or breastfeeding requires specialist review."
+      },
+      {
+        "rule_id": "ICI_ACTIVE_INFECTION_REQUIRING_THERAPY",
+        "field": "active_infection_requiring_therapy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab and treat/review the infection until clinically stable."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Active clinically significant infection requiring therapy is an exclusion."
+      },
+      {
+        "rule_id": "ICI_INFECTION_G3_G4",
+        "field": "infection_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab until the infection is clinically stable."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 3–4 infection requires withholding until stable."
+      },
+      {
+        "rule_id": "ICI_CRT_START_WINDOW",
+        "field": "days_since_chemoradiotherapy",
+        "operator": ">",
+        "value": 42,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Cycle 1 falls outside the encoded 42-day post-chemoradiotherapy window; obtain consultant review."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Cycle 1 should commence within 42 days of completing chemoradiotherapy."
+      },
+      {
+        "rule_id": "ICI_DISEASE_PROGRESSION_AFTER_CRT",
+        "field": "disease_progressed_after_crt",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Do not administer under this indication because progression after chemoradiotherapy was recorded."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "The indication requires no disease progression after definitive chemoradiotherapy."
+      },
+      {
+        "rule_id": "ICI_LOW_BODY_WEIGHT_SCHEDULE",
+        "field": "weight_kg",
+        "operator": "<=",
+        "value": 30,
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Use the protocol weight-based nivolumab schedule while body weight is 30 kg or less."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Patients weighing 30 kg or less require weight-based dosing."
+      },
+      {
+        "rule_id": "ICI_FBC_ABNORMALITY_REVIEW",
+        "field": "fbc_clinical_concern",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Review the FBC abnormality clinically; no protocol-defined ANC or platelet hold threshold is encoded for single-agent nivolumab."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "FBC is monitored, but the NCCP protocol does not specify an ANC or platelet treatment threshold."
+      },
+      {
+        "rule_id": "ICI_PNEUMONITIS_G2",
+        "field": "pneumonitis_grade",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab and manage as immune-mediated pneumonitis."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Grade 2 immune-mediated pneumonitis requires withholding."
+      },
+      {
+        "rule_id": "ICI_PNEUMONITIS_G3_G4",
+        "field": "pneumonitis_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for grade 3–4 pneumonitis."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Grade 3–4 immune-mediated pneumonitis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "ICI_HEPATITIS_WITHHOLD",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "alt_ast_uln_multiple",
+                "operator": ">",
+                "value": 3
+              },
+              {
+                "field": "alt_ast_uln_multiple",
+                "operator": "<=",
+                "value": 5
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": ">",
+                "value": 1.5
+              },
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": "<=",
+                "value": 3
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab and manage as immune-mediated hepatitis."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "ALT/AST >3–5×ULN or bilirubin >1.5–3×ULN requires withholding."
+      },
+      {
+        "rule_id": "ICI_HEPATITIS_PERMANENT",
+        "any": [
+          {
+            "field": "alt_ast_uln_multiple",
+            "operator": ">",
+            "value": 5
+          },
+          {
+            "field": "bilirubin_uln_multiple",
+            "operator": ">",
+            "value": 3
+          },
+          {
+            "all": [
+              {
+                "field": "alt_ast_uln_multiple",
+                "operator": ">",
+                "value": 3
+              },
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": ">",
+                "value": 2
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for severe immune-mediated hepatitis."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "ALT/AST >5×ULN, bilirubin >3×ULN, or concurrent transaminase and bilirubin elevation meets the permanent-discontinuation pathway."
+      },
+      {
+        "rule_id": "ICI_COLITIS_G2_G3",
+        "field": "diarrhoea_colitis_grade",
+        "operator": "between",
+        "value": [
+          2,
+          3
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab and manage the immune-mediated diarrhoea/colitis pathway."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 2–3 immune-mediated diarrhoea or colitis requires withholding."
+      },
+      {
+        "rule_id": "ICI_COLITIS_G4",
+        "field": "diarrhoea_colitis_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for grade 4 immune-mediated diarrhoea/colitis."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 4 immune-mediated diarrhoea or colitis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "ICI_ENDOCRINE_HYPERTHYROID_THYROIDITIS",
+        "field": "endocrine_status",
+        "operator": "==",
+        "value": "symptomatic_hyperthyroidism_or_thyroiditis",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab until clinically stable; treat hyperthyroidism/thyroiditis as indicated."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 2–4 immune-mediated hyperthyroidism or thyroiditis requires withholding until stable."
+      },
+      {
+        "rule_id": "ICI_ENDOCRINE_HYPOTHYROID",
+        "field": "endocrine_status",
+        "operator": "==",
+        "value": "symptomatic_hypothyroidism",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Nivolumab dose change is not required solely for hypothyroidism; initiate thyroid replacement and confirm clinical stability."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Immune-mediated hypothyroidism is treated with hormone replacement without a protocol dose change."
+      },
+      {
+        "rule_id": "ICI_ENDOCRINE_ADRENAL_HYPOPHYSITIS",
+        "field": "endocrine_status",
+        "operator": "==",
+        "value": "symptomatic_adrenal_insufficiency_or_hypophysitis",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab until clinically stable and initiate corticosteroid/hormone replacement as indicated."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Symptomatic adrenal insufficiency or hypophysitis requires withholding until stable."
+      },
+      {
+        "rule_id": "ICI_ENDOCRINE_CONTROLLED_REPLACEMENT",
+        "field": "endocrine_status",
+        "operator": "==",
+        "value": "controlled_on_replacement",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Endocrinopathy controlled on replacement therapy does not automatically require permanent discontinuation; confirm stability."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Controlled endocrinopathies are an exception to the general permanent-discontinuation rule."
+      },
+      {
+        "rule_id": "ICI_IMMUNE_DIABETES",
+        "field": "immune_diabetes_suspected",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Urgently assess and treat suspected immune-mediated diabetes with insulin as clinically indicated; the protocol does not require an automatic nivolumab dose change solely for controlled type 1 diabetes."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Immune-mediated type 1 diabetes is managed with insulin without a protocol dose change."
+      },
+      {
+        "rule_id": "ICI_NEPHRITIS_G2",
+        "all": [
+          {
+            "field": "creatinine_ratio_baseline_or_uln",
+            "operator": ">",
+            "value": 1.5
+          },
+          {
+            "field": "creatinine_ratio_baseline_or_uln",
+            "operator": "<=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab and manage as immune-mediated nephritis."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Creatinine >1.5–3× baseline or ULN meets the grade 2 nephritis pathway."
+      },
+      {
+        "rule_id": "ICI_NEPHRITIS_G3_G4",
+        "field": "creatinine_ratio_baseline_or_uln",
+        "operator": ">",
+        "value": 3,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for grade 3–4 immune-mediated nephritis."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Creatinine >3× baseline or ULN meets the permanent-discontinuation pathway."
+      },
+      {
+        "rule_id": "ICI_RASH_G2_OVER_WEEK",
+        "field": "rash_grade_2_over_one_week",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab for grade 2 rash lasting more than one week."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 2 immune-mediated rash lasting more than one week requires withholding."
+      },
+      {
+        "rule_id": "ICI_RASH_G3",
+        "field": "rash_grade",
+        "operator": "==",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab and manage the grade 3 rash pathway."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 3 immune-mediated rash requires withholding."
+      },
+      {
+        "rule_id": "ICI_RASH_G4",
+        "field": "rash_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for grade 4 immune-mediated rash."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 4 immune-mediated rash requires permanent discontinuation."
+      },
+      {
+        "rule_id": "ICI_MYOCARDITIS_G2_PLUS",
+        "field": "myocarditis_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab and urgently manage suspected immune-mediated myocarditis."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 2–4 myocarditis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "ICI_MYOSITIS_G2_G3",
+        "field": "myositis_grade",
+        "operator": "between",
+        "value": [
+          2,
+          3
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab and manage immune-mediated myositis/polymyositis."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 2–3 myositis requires withholding."
+      },
+      {
+        "rule_id": "ICI_MYOSITIS_G4",
+        "field": "myositis_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for grade 4 myositis."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 4 myositis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "ICI_SERIOUS_NEUROLOGICAL_IRAE",
+        "field": "serious_neurological_irae_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab and urgently manage the serious immune-mediated neurological syndrome."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Serious neurological immune-mediated syndromes generally require permanent discontinuation."
+      },
+      {
+        "rule_id": "ICI_INFUSION_REACTION_G1_G2",
+        "field": "infusion_reaction_grade",
+        "operator": "between",
+        "value": [
+          1,
+          2
+        ],
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Interrupt or slow the infusion; consider prophylaxis and close monitoring for subsequent doses."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 1–2 infusion reactions require interruption or slowing rather than an automatic permanent hold."
+      },
+      {
+        "rule_id": "ICI_INFUSION_REACTION_G3_G4",
+        "field": "infusion_reaction_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for a grade 3–4 infusion reaction."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 3–4 infusion reactions require permanent discontinuation."
+      },
+      {
+        "rule_id": "ICI_OTHER_IMMUNE_G3",
+        "field": "other_immune_toxicity_grade",
+        "operator": "==",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab and follow the toxicity-specific immune-mediated pathway."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 3 other immune-mediated toxicity requires withholding."
+      },
+      {
+        "rule_id": "ICI_OTHER_IMMUNE_G4",
+        "field": "other_immune_toxicity_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for grade 4 immune-mediated toxicity, except controlled endocrinopathies."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 4 immune-mediated toxicity generally requires permanent discontinuation."
+      },
+      {
+        "rule_id": "ICI_RECURRENT_G3_IMMUNE",
+        "field": "recurrent_grade_3_immune_toxicity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for recurrent grade 3 immune-mediated toxicity."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Recurrent grade 3 immune-mediated toxicity requires permanent discontinuation."
+      },
+      {
+        "rule_id": "ICI_NONIMMUNE_G2_G3",
+        "field": "other_nonimmune_toxicity_grade",
+        "operator": "between",
+        "value": [
+          2,
+          3
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Withhold nivolumab until the adverse reaction returns to grade 1 or baseline."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 2–3 non-immune adverse reactions require withholding."
+      },
+      {
+        "rule_id": "ICI_NONIMMUNE_G4",
+        "field": "other_nonimmune_toxicity_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "recommendation": "Permanently discontinue nivolumab for a grade 4 non-immune adverse reaction unless the protocol exception is agreed by the consultant."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 4 non-immune adverse reactions generally require permanent discontinuation."
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_type": {
+      "label": "Assessment type",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "current",
+          "label": "Current pre-treatment assessment"
+        },
+        {
+          "value": "baseline",
+          "label": "Baseline / cycle 1 assessment"
+        }
+      ],
+      "demo_value": "current"
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": 1,
+      "max": 99,
+      "demo_value": 2
+    },
+    "delay_weeks": {
+      "label": "Haematological delay (weeks)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 4,
+      "demo_value": 0
+    },
+    "toxicity_delay_weeks": {
+      "label": "Current toxicity-related delay (weeks)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 4,
+      "demo_value": 0
+    },
+    "current_oxaliplatin_level": {
+      "label": "Current oxaliplatin dose level",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "0",
+          "label": "Dose level 0 · 130 mg/m²"
+        },
+        {
+          "value": "-1",
+          "label": "Dose level -1 · 100 mg/m²"
+        },
+        {
+          "value": "-2",
+          "label": "Dose level -2 · 85 mg/m²"
+        }
+      ],
+      "demo_value": "0"
+    },
+    "current_capecitabine_level": {
+      "label": "Current capecitabine dose level",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "0",
+          "label": "Dose level 0 · 1000 mg/m² twice daily"
+        },
+        {
+          "value": "-1",
+          "label": "Dose level -1 · 750 mg/m² twice daily"
+        },
+        {
+          "value": "-2",
+          "label": "Dose level -2 · 500 mg/m² twice daily"
+        }
+      ],
+      "demo_value": "0"
+    },
+    "hypersensitivity": {
+      "label": "Known hypersensitivity to capecitabine or oxaliplatin",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "baseline_functional_neuropathy": {
+      "label": "Baseline peripheral neuropathy with functional impairment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "visible_when": {
+        "field": "assessment_type",
+        "operator": "==",
+        "value": "baseline"
+      }
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "documented_normal",
+          "label": "Normal / no deficiency identified"
+        },
+        {
+          "value": "partial",
+          "label": "Partial deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Not documented"
+        }
+      ],
+      "demo_value": "documented_normal"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "max": 50,
+      "demo_value": 2
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 2000,
+      "demo_value": 180
+    },
+    "lowest_anc_delayed_weeks_x10e9_l": {
+      "label": "Lowest ANC during delayed week(s)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "max": 50,
+      "demo_value": 2,
+      "visible_when": {
+        "field": "delay_weeks",
+        "operator": ">",
+        "value": 0
+      }
+    },
+    "lowest_platelets_delayed_weeks_x10e9_l": {
+      "label": "Lowest platelets during delayed week(s)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 2000,
+      "demo_value": 180,
+      "visible_when": {
+        "field": "delay_weeks",
+        "operator": ">",
+        "value": 0
+      }
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 300,
+      "demo_value": 75
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin (×ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "max": 20,
+      "demo_value": 0.7
+    },
+    "alt_ast_ratio_uln": {
+      "label": "ALT / AST (highest ×ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "max": 100,
+      "demo_value": 0.8
+    },
+    "diarrhoea_current_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 4,
+      "demo_value": 0
+    },
+    "diarrhoea_highest_grade": {
+      "label": "Highest diarrhoea grade this cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 4,
+      "demo_value": 0
+    },
+    "stomatitis_current_grade": {
+      "label": "Current stomatitis grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 4,
+      "demo_value": 0
+    },
+    "stomatitis_highest_grade": {
+      "label": "Highest stomatitis grade this cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 4,
+      "demo_value": 0
+    },
+    "hand_foot_current_grade": {
+      "label": "Current hand-foot syndrome grade",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 3,
+      "demo_value": 0
+    },
+    "hand_foot_highest_grade": {
+      "label": "Highest hand-foot syndrome grade this cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "max": 3,
+      "demo_value": 0
+    },
+    "neuropathy_pattern": {
+      "label": "Oxaliplatin neuropathy pattern",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none_or_grade1",
+          "label": "None / grade 1"
+        },
+        {
+          "value": "grade2_persistent_to_next_cycle",
+          "label": "Grade 2 persisting until next cycle"
+        },
+        {
+          "value": "grade3_over_7_days_resolved",
+          "label": "Grade 3 >7 days but resolved before next cycle"
+        },
+        {
+          "value": "grade3_persistent_to_next_cycle",
+          "label": "Grade 3 persisting until next cycle"
+        },
+        {
+          "value": "grade4_any_duration",
+          "label": "Grade 4 of any duration"
+        }
+      ],
+      "demo_value": "none_or_grade1"
+    },
+    "laryngopharyngeal_dysaesthesia": {
+      "label": "Previous laryngopharyngeal dysaesthesia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "active_infection_requiring_therapy": {
+      "label": "Active clinically significant infection requiring therapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "infection_grade": {
+      "label": "Infection grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "pneumonitis_grade": {
+      "label": "Immune-mediated pneumonitis / interstitial lung disease grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "diarrhoea_colitis_grade": {
+      "label": "Immune-mediated diarrhoea / colitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "alt_ast_uln_multiple": {
+      "label": "Highest ALT or AST",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 1,
+      "ui_section": "clinical",
+      "unit": "× ULN",
+      "always_show": true
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Total bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.01,
+      "demo_value": 1,
+      "ui_section": "clinical",
+      "unit": "× ULN",
+      "always_show": true
+    },
+    "creatinine_ratio_baseline_or_uln": {
+      "label": "Serum creatinine relative to baseline or ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.01,
+      "demo_value": 1,
+      "ui_section": "clinical",
+      "unit": "× baseline/ULN",
+      "always_show": true
+    },
+    "tsh_miu_l": {
+      "label": "TSH",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "demo_value": 2,
+      "ui_section": "clinical",
+      "unit": "mIU/L",
+      "help": "Interpret with free T4 and symptoms; no universal numeric hold threshold is encoded.",
+      "always_show": true
+    },
+    "free_t4_pmol_l": {
+      "label": "Free T4",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "demo_value": 15,
+      "ui_section": "clinical",
+      "unit": "pmol/L",
+      "help": "Interpret with TSH and symptoms; no universal numeric hold threshold is encoded.",
+      "always_show": true
+    },
+    "cortisol_nmol_l": {
+      "label": "Cortisol",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 400,
+      "ui_section": "clinical",
+      "unit": "nmol/L",
+      "help": "Interpret according to sampling time, symptoms and local endocrine guidance.",
+      "always_show": true
+    },
+    "endocrine_status": {
+      "label": "Immune-mediated endocrine status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No suspected endocrine toxicity"
+        },
+        {
+          "value": "symptomatic_hypothyroidism",
+          "label": "Symptomatic hypothyroidism"
+        },
+        {
+          "value": "symptomatic_hyperthyroidism_or_thyroiditis",
+          "label": "Symptomatic hyperthyroidism / thyroiditis"
+        },
+        {
+          "value": "symptomatic_adrenal_insufficiency_or_hypophysitis",
+          "label": "Symptomatic adrenal insufficiency / hypophysitis"
+        },
+        {
+          "value": "controlled_on_replacement",
+          "label": "Endocrinopathy controlled on replacement therapy"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": "none",
+      "help": "Use the clinical syndrome and laboratory pattern together."
+    },
+    "glucose_mmol_l": {
+      "label": "Blood glucose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 60,
+      "step": 0.1,
+      "demo_value": 6,
+      "ui_section": "clinical",
+      "unit": "mmol/L",
+      "always_show": true
+    },
+    "immune_diabetes_suspected": {
+      "label": "Suspected immune-mediated type 1 diabetes",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "rash_grade": {
+      "label": "Immune-mediated rash / dermatitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "rash_grade_2_over_one_week": {
+      "label": "Grade 2 rash lasting more than one week",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "scar_status": {
+      "label": "Severe cutaneous adverse reaction (SCAR) status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No suspected SCAR"
+        },
+        {
+          "value": "suspected",
+          "label": "Suspected SJS/TEN or other SCAR"
+        },
+        {
+          "value": "confirmed",
+          "label": "Confirmed SJS/TEN or other SCAR"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": "none"
+    },
+    "myocarditis_grade": {
+      "label": "Immune-mediated myocarditis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "myositis_grade": {
+      "label": "Immune-mediated myositis / polymyositis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "serious_neurological_irae_grade": {
+      "label": "Serious immune-mediated neurological syndrome grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical",
+      "help": "For syndromes such as myasthenia gravis, encephalitis, Guillain–Barré syndrome, myelitis or meningitis."
+    },
+    "infusion_reaction_grade": {
+      "label": "Infusion-related reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "other_immune_toxicity_grade": {
+      "label": "Other immune-mediated toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "recurrent_grade_3_immune_toxicity": {
+      "label": "Recurrent grade 3 immune-mediated toxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "other_nonimmune_toxicity_grade": {
+      "label": "Other non-immune adverse reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "systemic_steroids_mg_pred": {
+      "label": "Current systemic steroid dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "demo_value": 0,
+      "ui_section": "clinical",
+      "unit": "mg prednisolone equivalent/day"
+    },
+    "fbc_clinical_concern": {
+      "label": "FBC abnormality requiring clinical review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "help": "FBC abnormalities are monitored but do not trigger a protocol-defined ANC/platelet hold unless the source protocol states a threshold."
+    },
+    "weight_kg": {
+      "label": "Body weight",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 300,
+      "step": 0.1,
+      "demo_value": 70,
+      "ui_section": "treatment_context",
+      "unit": "kg",
+      "help": "Patients weighing 30 kg or less require the protocol weight-based schedule.",
+      "always_show": true
+    },
+    "days_since_chemoradiotherapy": {
+      "label": "Days since completion of chemoradiotherapy",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 365,
+      "step": 1,
+      "demo_value": 30,
+      "ui_section": "treatment_context",
+      "unit": "days",
+      "always_show": true,
+      "visible_when": {
+        "field": "cycle_number",
+        "operator": "==",
+        "value": 1
+      }
+    },
+    "disease_progressed_after_crt": {
+      "label": "Disease progressed after chemoradiotherapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "treatment_context",
+      "visible_when": {
+        "field": "cycle_number",
+        "operator": "==",
+        "value": 1
+      },
+      "always_show": true
+    }
+  }
+}

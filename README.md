@@ -1,4 +1,4 @@
-**Current baseline: v0.30.0 — Batch 2 lung expansion.**
+**Current baseline: v0.31.0 — Batch 4 GI expansion.**
 
 # SACTCheck
 
@@ -33,7 +33,7 @@ The browser then generates the assessment form and evaluates the protocol withou
 - `tools/build-protocol-index.js` — scans `protocols/`, validates files and rebuilds `protocols/index.json`.
 - `.github/workflows/protocol-library.yml` — validates JSON changes, runs regression tests and commits the generated catalogue.
 
-The generated catalogue now contains 38 JSON protocols. The v0.30 lung expansion adds atezolizumab/carboplatin/etoposide, carboplatin/paclitaxel for NSCLC, gemcitabine/carboplatin AUC5, gemcitabine/cisplatin and pemetrexed/cisplatin. Each published protocol remains subject to consultant, oncology-pharmacy and local governance review before clinical deployment.
+The generated catalogue now contains 48 JSON protocols. The v0.31 GI expansion adds ten non-duplicate protocols spanning anti-VEGF, anti-EGFR, HER2, immunotherapy combinations and pancreatic therapy. Each published protocol remains subject to consultant, oncology-pharmacy and local governance review before clinical deployment.
 
 ## Adding a protocol
 
