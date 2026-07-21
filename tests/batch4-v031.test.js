@@ -18,7 +18,7 @@ const expected = [
  ["00926","protocols/gastrointestinal/00926-tremelimumab-durvalumab.json"]
 ];
 const index=read("protocols/index.json");
-assert.strictEqual(index.protocol_count,48,"v0.31 should publish 48 protocols");
+assert.ok(index.protocol_count>=48,"v0.31 protocols must remain present in later releases");
 const ids=index.protocols.map(x=>x.id), paths=index.protocols.map(x=>x.path);
 assert.strictEqual(new Set(ids).size,ids.length,"protocol IDs must be unique");
 assert.strictEqual(new Set(paths).size,paths.length,"protocol paths must be unique");

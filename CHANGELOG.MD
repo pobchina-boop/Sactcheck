@@ -1,3 +1,40 @@
+## Version 0.34.0 — Batch 6 early breast expansion
+
+- Expands the active catalogue from 58 to 68 unique NCCP protocols.
+- Adds ten non-duplicate early breast regimens: 00258, 00260, 00265, 00278, 00316, 00432, 00433, 00485, 00619 and 00745.
+- Preserves single-value and partial assessment without mandatory cycle or phase entry.
+- Uses conservative phase-dependent outputs where anthracycline and paclitaxel thresholds differ.
+- Retains explicit patient-result versus protocol-cutoff comparison, official NCCP PDF validation and the pending emetogenic-risk/supportive-care framework.
+- All new encodings remain prototypes pending formal clinical and pharmacy validation.
+
+## Version 0.33.1 — explicit threshold comparison hotfix
+
+- Displays the entered patient value beside the exact encoded protocol cutoff for triggered generic JSON rules.
+- Shows the triggering operator and inherited units in a prominent comparison panel.
+- Preserves the rule condition in deterministic engine findings for transparent rendering and documentation.
+- Adds dedicated regression testing while retaining the 58-protocol catalogue and v0.33 rapid-assessment workflow.
+
+# SACTCheck change log
+
+## Version 0.33.0 — rapid assessment interface and emetogenic-risk framework
+
+- Moves ANC, platelets, haemoglobin and WBC-type inputs to the top of the JSON assessment screen.
+- Removes browser-level mandatory-entry restrictions from protocol and treatment-context controls.
+- Retains safe partial assessment: omitted domains are unassessed and are never assumed normal.
+- Replaces large optional input blocks with compact clickable rows showing “Not assessed” until a value is entered.
+- Adds a regimen-level emetogenic traffic-light framework to catalogue cards and protocol assessments.
+- Adds a central mapping file covering every active protocol. All entries remain grey/pending until the user-supplied antiemetic proforma is mapped; no risk category has been inferred.
+- Retains all 58 unique active protocols and previous PDF, duplicate and TCHP regression safeguards.
+
+# Version 0.32.0
+
+## Batch 5 — early breast cancer expansion and PDF integrity
+- Added 10 non-duplicate NCCP breast protocols: 00348, 00350, 00731, 00734, 00775, 00789, 00790, 00860, 00861 and 00892.
+- Added breast treatment-setting metadata for neoadjuvant and adjuvant catalogue grouping.
+- Restored the official NCCP PDF link for regimen 00857.
+- Added a release-blocking regression test requiring every active protocol to provide an official HSE NCCP document URL.
+- Catalogue increased from 48 to 58 active protocols.
+
 # Version 0.31.0
 
 ## Batch 4 — GI biologics, immunotherapy combinations and pancreas

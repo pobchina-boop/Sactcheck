@@ -607,7 +607,7 @@
       actionType: "incomplete",
       status: "Assessment incomplete",
       statusClass: "warn",
-      recommendation: "Complete the core or conditionally required field or fields highlighted below before relying on the encoded rule assessment.",
+      recommendation: "Correct the invalid entered value or values highlighted below, then run the assessment again. Blank fields remain optional and are not treated as normal.",
       protocol: {
         id: protocol.protocol_id,
         title: getProtocolTitle(protocol),
@@ -757,7 +757,7 @@
   }
 
   return Object.freeze({
-    version: "0.31.0",
+    version: "0.34.0",
     getProfiles,
     getInputDefinitions,
     explicitInputDefinitions,

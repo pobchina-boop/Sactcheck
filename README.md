@@ -1,66 +1,16 @@
-**Current baseline: v0.31.0 — Batch 4 GI expansion.**
+# SACTCheck v0.34.0
 
-# SACTCheck
+Protocol-driven SACT assessment prototype with 68 active NCCP regimens. v0.34.0 adds ten non-duplicate early breast cancer regimens while retaining blood-first rapid assessment, optional partial entry, explicit patient-value versus protocol-threshold comparisons, official NCCP PDF access and the pending emetogenic-risk/supportive-care framework.
 
-SACTCheck is a clinician-focused oncology decision-support prototype based on NCCP/HSE systemic anti-cancer therapy protocols. It provides structured pre-treatment assessment, protocol-specific eligibility checks, explainable recommendations and copyable documentation to support consistent oncology day-ward review.
+## Current release
 
-Copyright © 2026 Dr Paul O’Brien. All rights reserved. This software, clinical rule structure, user interface and associated documentation may not be copied, modified, distributed, sublicensed, commercialised or incorporated into another product without prior written permission.
+- 68 active NCCP protocol entries.
+- 27 breast entries across neoadjuvant, adjuvant and shared treatment contexts.
+- Ten new early-breast protocols in Batch 6.
+- No duplicate active NCCP IDs or catalogue paths.
+- Every active protocol retains an official HSE NCCP PDF link.
+- New encodings are prototypes pending consultant and oncology-pharmacy validation.
 
-## v0.29 protocol-driven assessment platform
+## Safety
 
-The repository supports a reviewed **schema 2.x protocol JSON** as the only regimen-specific source file required for publication. v0.17 adds conditional visibility and requirement rules so irrelevant fields no longer block an assessment.
-
-A protocol JSON describes its own:
-
-- metadata, NCCP code/version, tumour group and source;
-- assessment profiles;
-- input labels, units, control types, options, ranges and demonstration values;
-- core, optional and conditionally required inputs using `visible_when` and `required_when`;
-- deterministic decision rules and action priority;
-- explanations, component-specific actions and source references;
-- validation and migration status.
-
-The browser then generates the assessment form and evaluates the protocol without adding regimen-specific JavaScript or HTML.
-
-### Core modules
-
-- `js/rule-engine.js` — deterministic rule evaluation and action priority.
-- `js/protocol-validator.js` — structural and semantic protocol validation.
-- `js/assessment-engine.js` — assessment profiles, explicit input definitions and explainable results.
-- `js/generic-assessment-ui.js` — protocol-generated forms and documentation.
-- `js/protocol-loader.js` — loads the generated protocol catalogue.
-- `js/protocol-importer-ui.js` — local JSON validation and preview before publication.
-- `tools/build-protocol-index.js` — scans `protocols/`, validates files and rebuilds `protocols/index.json`.
-- `.github/workflows/protocol-library.yml` — validates JSON changes, runs regression tests and commits the generated catalogue.
-
-The generated catalogue now contains 48 JSON protocols. The v0.31 GI expansion adds ten non-duplicate protocols spanning anti-VEGF, anti-EGFR, HER2, immunotherapy combinations and pancreatic therapy. Each published protocol remains subject to consultant, oncology-pharmacy and local governance review before clinical deployment.
-
-## Adding a protocol
-
-1. Copy `protocols/_template/protocol-template.json`.
-2. Encode and clinically review the new protocol.
-3. Open SACTCheck and select **Preview protocol JSON**.
-4. Correct every validation error and review all warnings.
-5. Place the file in the appropriate tumour-site folder under `protocols/`.
-6. Commit and push the single JSON file.
-7. GitHub Actions validates the library, runs regression tests and rebuilds `protocols/index.json` automatically.
-
-A malformed protocol blocks publication rather than silently appearing in the catalogue. See `PROTOCOL_AUTHORING_GUIDE.md` for the complete authoring and validation workflow.
-
-## Local use
-
-Run the project through GitHub Pages, VS Code Live Server or another local HTTP server. Directly opening `index.html` from the file system may prevent browser `fetch()` calls from loading protocol JSON.
-
-## Automated tests
-
-With Node.js installed:
-
-```text
-npm test
-```
-
-Current expected result:
-
-- all 20 automated test scripts pass, covering protocol publication, engine behaviour, conditional fields, protocol boundaries, catalogue integration and duplicate-card prevention.
-
-Automated validation does not constitute clinical validation. Consultant review, oncology-pharmacy review, source verification, boundary testing, governance and local authorisation remain required before clinical deployment.
+SACTCheck is clinical decision support only. Always verify against the current official NCCP regimen, local policy, pharmacy review and consultant judgement.

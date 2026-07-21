@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="SACTCheck">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>SACTCheck v0.31.0 — Batch 4 GI expansion</title>
+  <title>SACTCheck v0.34.0 — early breast expansion with rapid threshold comparison</title>
   <style>
     :root {
       --navy:#12314a; --blue:#176b9b; --blue2:#0f567f; --light:#f3f6f8;
@@ -103,6 +103,16 @@
     .finding.modify{border-left-color:#c57b00}.finding.consult{border-left-color:var(--purple)}.finding.info{border-left-color:#6c879a}
     .finding h3{margin:0 0 5px;font-size:15px;color:var(--text)}
     .finding p{margin:5px 0;line-height:1.42}.source{color:var(--muted);font-size:12px}
+
+    .threshold-comparison{margin:10px 0 12px;border:2px solid #d8e1e8;border-radius:8px;overflow:hidden;background:#f8fafc}
+    .threshold-comparison-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid #d8e1e8}
+    .threshold-comparison-row:last-child{border-bottom:0}
+    .threshold-comparison-row>div:first-child{text-align:left}.threshold-comparison-row>div:last-child{text-align:right}
+    .threshold-label{display:block;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+    .patient-value,.cutoff-value{display:block;font-size:19px;line-height:1.15;color:var(--text)}
+    .patient-value{color:#a61b29}.cutoff-value{color:var(--navy)}
+    .comparison-symbol{font-size:22px;font-weight:800;color:var(--warn);text-align:center}
+    @media(max-width:600px){.threshold-comparison-row{grid-template-columns:1fr auto 1fr;gap:8px;padding:10px}.patient-value,.cutoff-value{font-size:17px}}
     .error-list{background:#fff0f0;border:1px solid #efb4b4;color:var(--bad);border-radius:7px;padding:11px 13px;line-height:1.5;font-weight:700}
     .summary-box{min-height:220px;line-height:1.45;background:#fbfcfd}
     .toast{display:none;position:fixed;right:20px;bottom:20px;background:var(--navy);color:#fff;padding:12px 16px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.2);z-index:20}
@@ -200,6 +210,39 @@
       body.json-assessment-open .result-actions{display:none!important}
       body.json-assessment-open #jsonResult{display:block!important}
     }
+
+    .emetogenic-badge{display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+    .emetogenic-dot{width:10px;height:10px;border-radius:999px;background:#7a858e;display:inline-block;flex:0 0 auto}
+    .emetogenic-high{background:#fde8e8!important;color:#8f1f1f!important}.emetogenic-high .emetogenic-dot{background:#c62828}
+    .emetogenic-moderate{background:#fff0dc!important;color:#8a4d00!important}.emetogenic-moderate .emetogenic-dot{background:#ef8b00}
+    .emetogenic-low{background:#e8f6ec!important;color:#176536!important}.emetogenic-low .emetogenic-dot{background:#2e8b57}
+    .emetogenic-pending{background:#edf0f2!important;color:#5f6b74!important}.emetogenic-pending .emetogenic-dot{background:#7a858e}
+    .emetogenic-inline{display:inline-flex;align-items:center;gap:6px}.emetogenic-inline::before{content:'';width:10px;height:10px;border-radius:999px;background:#7a858e}
+    .emetogenic-inline.emetogenic-high::before{background:#c62828}.emetogenic-inline.emetogenic-moderate::before{background:#ef8b00}.emetogenic-inline.emetogenic-low::before{background:#2e8b57}
+    .blood-threshold-section{border-top:6px solid var(--blue);background:linear-gradient(180deg,#f8fcff,#fff)}
+    .blood-input-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .blood-input-card{border:1px solid #b8cbd8;border-radius:10px;padding:13px;background:#fff;box-shadow:0 1px 2px rgba(15,86,127,.06)}
+    .blood-input-card label{font-size:14px;color:var(--navy)}
+    .blood-input-card input,.blood-input-card select{font-size:18px;font-weight:700;border-width:2px}
+    .compact-input-list{display:grid;gap:8px}
+    .compact-assessment-input{margin:0;border-radius:8px;box-shadow:none}
+    .compact-assessment-input summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;font-size:13px}
+    .compact-assessment-input summary::-webkit-details-marker{display:none}
+    .compact-assessment-input summary::after{content:'＋';color:var(--blue);font-size:16px;order:3}
+    .compact-assessment-input[open] summary::after{content:'−'}
+    .compact-input-state{margin-left:auto;padding:3px 8px;border-radius:999px;background:#edf0f2;color:#68747d;font-size:11px;font-weight:700;max-width:45%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .compact-assessment-input.assessed{border-color:#91b7cb}.compact-assessment-input.assessed .compact-input-state{background:#e4f1fb;color:#0f567f}
+    .compact-input-body{padding:0 12px 12px}
+    .assessment-admin-section{background:#f8fafb}
+
+    .coverage-gap-details{margin:0 0 15px;background:#f8fafb}
+    .coverage-gap-details summary{padding:10px 12px;font-size:13px}
+    .coverage-gap-list{display:flex;flex-wrap:wrap;gap:6px}
+    .coverage-gap-list span{padding:4px 8px;border-radius:999px;background:#edf0f2;color:#5f6b74;font-size:11px}
+    .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    @media(max-width:900px){.blood-input-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:520px){.blood-input-grid{grid-template-columns:1fr 1fr}.blood-input-card{padding:10px}.blood-input-card input,.blood-input-card select{font-size:17px}.compact-input-state{max-width:42%}}
+
 </style>
 </head>
 <body>
@@ -214,7 +257,7 @@
 
   <div id="libraryScreen" class="screen active">
     <section class="library-only">
-      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Search or browse available NCCP protocols. Select a protocol to begin a structured day-ward assessment.</p></div><div class="toolbar protocol-publisher-actions" style="margin:0"><span class="badge">Version 0.31.0 · Batch 4 GI expansion</span><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
+      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Search or browse available NCCP protocols. Select a protocol to begin a structured day-ward assessment.</p></div><div class="toolbar protocol-publisher-actions" style="margin:0"><span class="badge">Version 0.34.0 · Batch 6 early breast completion</span><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
       <div class="health-dashboard" id="protocolHealthDashboard" aria-label="Protocol health dashboard" style="display:none">
         <div class="health-head">
           <div><h3>Protocol Health Dashboard</h3><p class="subtle">Live summary of library coverage, rule-pack maturity and validation status.</p></div>
@@ -1914,14 +1957,15 @@ function openProtocolPreview(event){
   }
 }
 </script>
-<script src="js/rule-engine.js?v=0.31.0"></script>
-<script src="js/protocol-validator.js?v=0.31.0"></script>
-<script src="js/assessment-engine.js?v=0.31.0"></script>
-<script src="js/generic-assessment-ui.js?v=0.31.0"></script>
+<script src="js/emetogenic-risk.js?v=0.34.0"></script>
+<script src="js/rule-engine.js?v=0.34.0"></script>
+<script src="js/protocol-validator.js?v=0.34.0"></script>
+<script src="js/assessment-engine.js?v=0.34.0"></script>
+<script src="js/generic-assessment-ui.js?v=0.34.0"></script>
 <script src="js/folfox-shadow-core.js"></script>
 <script src="js/folfox-shadow-ui.js"></script>
 
-<script src="js/protocol-loader.js?v=0.31.0"></script>
-<script src="js/protocol-importer-ui.js?v=0.31.0"></script>
+<script src="js/protocol-loader.js?v=0.34.0"></script>
+<script src="js/protocol-importer-ui.js?v=0.34.0"></script>
 </body>
 </html>

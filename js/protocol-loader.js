@@ -89,6 +89,10 @@
     return badges.join("");
   }
 
+  function emetogenicBadge(protocol) {
+    return window.SACTCheckEmetogenicRisk?.badge(protocol) || '<span class="badge emetogenic-badge emetogenic-pending"><span class="emetogenic-dot" aria-hidden="true"></span>Awaiting proforma mapping</span>';
+  }
+
   function replaceRuleControl(card, jsonEngine) {
     const ruleButton = card.querySelector(".rule-explorer-btn, .card-actions button[onclick*='openRuleExplorer']");
     if (!ruleButton) return;
@@ -110,7 +114,7 @@
       if (row) {
         row.innerHTML = planned
           ? '<span class="badge engine-legacy">Engine · Catalogue only</span><span class="badge source-missing">Source · Required</span>'
-          : statusBadges({ engine: "Legacy", clinicalValidated: false, sourceUrl: source });
+          : `${statusBadges({ engine: "Legacy", clinicalValidated: false, sourceUrl: source })}${emetogenicBadge(null)}`;
       }
       const description = [...card.querySelectorAll(":scope > p")].find(p => !p.querySelector("strong"));
       description?.classList.add("regimen-description");
@@ -229,13 +233,13 @@
 
     const validationRow = card.querySelector(".validation-row");
     if (validationRow) {
-      validationRow.innerHTML = statusBadges({
+      validationRow.innerHTML = `${statusBadges({
         engine: "JSON",
         clinicalValidated: isClinicallyValidated(protocol),
         sourceUrl: protocol?.metadata?.source_url,
         shadow: entry.mode === "shadow_validation",
         ready: assessmentReady
-      });
+      })}${emetogenicBadge(protocol)}`;
     }
 
     replaceRuleControl(card, true);
@@ -290,7 +294,7 @@
           shadow: migrationMode === "shadow_validation",
           localPreview,
           ready: assessmentReady
-        })}</div>
+        })}${emetogenicBadge(protocol)}</div>
         <details>
           <summary>View encoded protocol summary</summary>
           <div class="details-body">
@@ -341,6 +345,7 @@
 
   async function loadProtocols() {
     try {
+      await window.SACTCheckEmetogenicRisk?.load();
       const index = await fetchJson(INDEX_PATH);
       if (!Array.isArray(index.protocols)) throw new Error("protocols/index.json does not contain a protocols array.");
 

@@ -205,7 +205,7 @@
     if (rule.any) return { any: rule.any };
     if (rule.none) return { none: rule.none };
     if (rule.not) return { not: rule.not };
-    if (rule.field) return rule;
+    if (rule.field) return { field: rule.field, operator: rule.operator, value: rule.value };
     return null;
   }
 
@@ -321,7 +321,8 @@
       explanation: getRuleExplanation(rule, protocol),
       source: rule.source || null,
       sourceText: sourceText(rule.source),
-      conditionFields: collectConditionFields(conditionFromRule(rule))
+      conditionFields: collectConditionFields(conditionFromRule(rule)),
+      condition: conditionFromRule(rule)
     };
   }
 

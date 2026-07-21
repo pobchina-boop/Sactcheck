@@ -11,6 +11,6 @@ assert.equal(entries.length, 1, "NCCP 00655 must have one index entry.");
 assert.equal(entries[0].legacy_card_id, "openDurvalumab", "The JSON protocol must replace the existing durvalumab catalogue card.");
 assert.equal((html.match(/id="openDurvalumab"/g) || []).length, 1, "The legacy durvalumab card must expose one integration target.");
 assert(loader.includes("integrateExistingCard"), "JSON protocols must integrate with an existing card when configured.");
-assert(html.includes("js/protocol-loader.js?v=0.31.0"), "The loader cache key must be updated for the hotfix.");
+assert(html.includes("js/protocol-loader.js?v=0.34.0"), "The loader cache key must be updated for the hotfix.");
 
 console.log("v0.30.0 durvalumab duplicate-card regression tests passed.");

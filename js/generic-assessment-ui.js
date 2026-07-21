@@ -36,6 +36,7 @@
         <div class="toolbar" style="margin:0">
           <a href="#libraryScreen" class="btn secondary" id="jsonBackLibrary" role="button">← Regimen library</a>
           <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
+          <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Antiemetic proforma</a>
         </div>
         <span class="badge engine-json">JSON engine v${escapeHtml(Engine.version)}</span>
       </div>
@@ -50,15 +51,34 @@
             <div class="protocol-item"><span>Encoding status</span><strong id="jsonProtocolStatus">—</strong></div>
             <div class="protocol-item"><span>Rules encoded</span><strong id="jsonProtocolRuleCount">—</strong></div>
             <div class="protocol-item"><span>Clinical validation</span><strong id="jsonProtocolValidation">—</strong></div>
+            <div class="protocol-item"><span>Emetogenic potential</span><strong id="jsonEmetogenicRisk" class="emetogenic-inline emetogenic-pending">Awaiting proforma mapping</strong></div>
           </div>
           <p class="subtle" id="jsonProtocolIndication"></p>
           <p class="subtle"><strong>Safety design:</strong> enter any clinically relevant value and run the assessment. Independent rules are evaluated immediately; omitted domains remain explicitly unassessed and are never assumed normal. A single normal value cannot clear the whole regimen.</p>
         </div>
       </details>
 
-      <form id="jsonAssessmentForm">
+      <form id="jsonAssessmentForm" novalidate>
+        <section class="blood-threshold-section">
+          <div class="section-heading"><div><h2>Blood thresholds</h2><p class="subtle">Enter any available blood result. These are deliberately placed first for rapid day-ward checks.</p></div><span class="step" id="jsonBloodInputCount">—</span></div>
+          <div id="jsonBloodInputGrid" class="grid blood-input-grid"></div>
+          <p class="subtle" id="jsonNoBloodInputs">This regimen has no encoded blood-count input.</p>
+        </section>
+
         <section>
-          <div class="section-heading"><h2>Assessment context</h2><span class="step">Protocol-driven form</span></div>
+          <div class="section-heading"><h2>Other clinical inputs</h2><span class="step" id="jsonInputCount">—</span></div>
+          <p class="subtle">All fields are optional. Tap a compact row to assess that domain; omitted domains remain explicitly unassessed.</p>
+          <div id="jsonInputGrid" class="compact-input-list"></div>
+        </section>
+
+        <section id="jsonTreatmentContextSection">
+          <div class="section-heading"><h2>Protocol and treatment context</h2><span class="step" id="jsonContextCount">—</span></div>
+          <p class="subtle">Context can refine pathway-specific rules but does not block an independent single-value assessment.</p>
+          <div id="jsonTreatmentContextGrid" class="compact-input-list"></div>
+        </section>
+
+        <section class="assessment-admin-section">
+          <div class="section-heading"><h2>Assessment details</h2><span class="step">Optional documentation</span></div>
           <div class="grid three">
             <div>
               <label for="jsonAssessmentId">Anonymous assessment ID</label>
@@ -71,16 +91,6 @@
               <span class="hint">Select the treatment phase or assessment context.</span>
             </div>
           </div>
-        </section>
-
-        <section id="jsonTreatmentContextSection">
-          <div class="section-heading"><h2>Protocol and treatment context</h2><span class="step" id="jsonContextCount">—</span></div>
-          <div id="jsonTreatmentContextGrid" class="grid three"></div>
-        </section>
-
-        <section>
-          <div class="section-heading"><h2>Clinical inputs</h2><span class="step" id="jsonInputCount">—</span></div>
-          <div id="jsonInputGrid" class="grid three"></div>
         </section>
 
         <div class="toolbar">
@@ -147,7 +157,7 @@
       runAssessment();
     });
 
-    [document.getElementById("jsonTreatmentContextGrid"), document.getElementById("jsonInputGrid")]
+    [document.getElementById("jsonBloodInputGrid"), document.getElementById("jsonTreatmentContextGrid"), document.getElementById("jsonInputGrid")]
       .filter(Boolean)
       .forEach(grid => {
         grid.addEventListener("change", updateConditionalInputs);
@@ -222,6 +232,25 @@
       : String(deterministicRules);
     document.getElementById("jsonProtocolValidation").textContent = validationComplete ? "Validated" : "Pending formal validation";
     document.getElementById("jsonProtocolIndication").textContent = metadata.indication || indicationSummary(protocol);
+
+    const risk = root.SACTCheckEmetogenicRisk?.get(protocol) || {
+      level: "pending",
+      label: "Awaiting proforma mapping",
+      className: "emetogenic-pending",
+      proformaUrl: null
+    };
+    const riskElement = document.getElementById("jsonEmetogenicRisk");
+    riskElement.textContent = risk.label;
+    riskElement.className = `emetogenic-inline ${risk.className}`;
+    const proformaLink = document.getElementById("jsonAntiemeticProforma");
+    if (risk.proformaUrl) {
+      proformaLink.href = risk.proformaUrl;
+      proformaLink.classList.remove("hidden");
+    } else {
+      proformaLink.removeAttribute("href");
+      proformaLink.classList.add("hidden");
+    }
+
     const officialPdf = document.getElementById("jsonOfficialPdf");
     if (metadata.source_url) {
       officialPdf.href = metadata.source_url;
@@ -242,68 +271,124 @@
     return definition.ui_section === "treatment_context" || TREATMENT_CONTEXT_FIELDS.has(definition.id);
   }
 
+  const BLOOD_FIELD_PRIORITIES = [
+    { pattern: /^(anc|anc_x10e9_l|baseline_neutrophils_x10e9_l|neutrophils?(?:_x10e9_l)?)$/, priority: 10 },
+    { pattern: /^(platelets?|platelets_x10e9_l|baseline_platelets(?:_x10e9_l)?)$/, priority: 20 },
+    { pattern: /^(haemoglobin|haemoglobin_g_l|hemoglobin|hemoglobin_g_l|hb|hb_g_l)$/, priority: 30 },
+    { pattern: /^(wbc|wbc_x10e9_l|white_cell_count|white_cell_count_x10e9_l)$/, priority: 40 }
+  ];
+
+  function bloodFieldPriority(definition) {
+    const id = String(definition?.id || "").toLowerCase();
+    const match = BLOOD_FIELD_PRIORITIES.find(item => item.pattern.test(id));
+    return match?.priority ?? null;
+  }
+
+  function isBloodThreshold(definition) {
+    return definition?.ui_section === "blood_thresholds" || bloodFieldPriority(definition) !== null;
+  }
+
   function renderInputs(rawInputs = {}) {
     if (!activeProtocol) return;
     const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, rawInputs);
     const contextDefinitions = definitions.filter(isTreatmentContext);
     const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition));
-    document.getElementById("jsonTreatmentContextGrid").innerHTML = contextDefinitions.map(renderInput).join("");
-    document.getElementById("jsonInputGrid").innerHTML = clinicalDefinitions.map(renderInput).join("");
+    const bloodDefinitions = clinicalDefinitions
+      .filter(isBloodThreshold)
+      .sort((a, b) => (bloodFieldPriority(a) ?? 999) - (bloodFieldPriority(b) ?? 999));
+    const additionalDefinitions = clinicalDefinitions.filter(definition => !isBloodThreshold(definition));
+
+    document.getElementById("jsonBloodInputGrid").innerHTML = bloodDefinitions.map(definition => renderInput(definition, { compact: false, blood: true })).join("");
+    document.getElementById("jsonInputGrid").innerHTML = additionalDefinitions.map(definition => renderInput(definition, { compact: true })).join("");
+    document.getElementById("jsonTreatmentContextGrid").innerHTML = contextDefinitions.map(definition => renderInput(definition, { compact: true, context: true })).join("");
+
+    document.getElementById("jsonNoBloodInputs").classList.toggle("hidden", bloodDefinitions.length > 0);
+    document.getElementById("jsonInputGrid").classList.toggle("hidden", additionalDefinitions.length === 0);
     document.getElementById("jsonTreatmentContextSection").classList.toggle("hidden", contextDefinitions.length === 0);
-    document.getElementById("jsonContextCount").textContent = `${contextDefinitions.filter(definition => definition.visible !== false).length} context field${contextDefinitions.length === 1 ? "" : "s"}`;
-    updateInputCount(clinicalDefinitions);
+    document.getElementById("jsonBloodInputCount").textContent = `${bloodDefinitions.filter(definition => definition.visible !== false).length} prioritised field${bloodDefinitions.length === 1 ? "" : "s"}`;
+    document.getElementById("jsonContextCount").textContent = `${contextDefinitions.filter(definition => definition.visible !== false).length} optional field${contextDefinitions.length === 1 ? "" : "s"}`;
+    updateInputCount(additionalDefinitions);
+    refreshCompactInputStates();
   }
 
   function updateInputCount(definitions) {
     const visible = definitions.filter(definition => definition.visible !== false);
-    const conditional = visible.filter(definition => definition.conditionalRequired).length;
-    const parts = [`${visible.length} clinical field${visible.length === 1 ? "" : "s"}`];
-    if (conditional) parts.push(`${conditional} pathway-specific`);
-    parts.push("partial assessment enabled");
+    const parts = [`${visible.length} optional field${visible.length === 1 ? "" : "s"}`];
+    parts.push("single-value assessment enabled");
     document.getElementById("jsonInputCount").textContent = parts.join(" · ");
   }
 
-  function renderInput(definition) {
-    const contextRequired = isTreatmentContext(definition) && definition.required === true;
-    const requiredMark = contextRequired ? " *" : "";
-    const requiredAttribute = contextRequired ? " required" : "";
+  function buildControl(definition) {
     const disabledAttribute = definition.visible === false ? " disabled" : "";
-    const wrapperClass = definition.visible === false ? "hidden" : "";
-    let control = "";
-
     if (definition.type === "boolean") {
-      control = `
-        <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="boolean"${requiredAttribute}${disabledAttribute}>
-          <option value="">Select…</option>
+      return `
+        <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="boolean"${disabledAttribute}>
+          <option value="">Not assessed</option>
           <option value="false">No</option>
           <option value="true">Yes</option>
         </select>`;
-    } else if (definition.type === "select") {
-      control = `
-        <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="select"${requiredAttribute}${disabledAttribute}>
-          ${(definition.options || []).length === 1 ? "" : '<option value="">Select…</option>'}
-          ${(definition.options || []).map((option, index, all) => `<option value="${escapeHtml(option.value)}"${all.length === 1 ? " selected" : ""}>${escapeHtml(option.label)}</option>`).join("")}
-        </select>`;
-    } else if (definition.type === "text") {
-      control = `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="text" type="text"${requiredAttribute}${disabledAttribute}>`;
-    } else {
-      const minimum = definition.min !== undefined ? ` min="${escapeHtml(definition.min)}"` : "";
-      const maximum = definition.max !== undefined ? ` max="${escapeHtml(definition.max)}"` : "";
-      control = `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="number" type="number"${minimum}${maximum} step="${escapeHtml(definition.step ?? "any")}"${requiredAttribute}${disabledAttribute}>`;
     }
+    if (definition.type === "select") {
+      return `
+        <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="select"${disabledAttribute}>
+          <option value="">Not assessed</option>
+          ${(definition.options || []).map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`).join("")}
+        </select>`;
+    }
+    if (definition.type === "text") {
+      return `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="text" type="text" placeholder="Not assessed"${disabledAttribute}>`;
+    }
+    const minimum = definition.min !== undefined ? ` min="${escapeHtml(definition.min)}"` : "";
+    const maximum = definition.max !== undefined ? ` max="${escapeHtml(definition.max)}"` : "";
+    return `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="number" type="number" placeholder="Not assessed"${minimum}${maximum} step="${escapeHtml(definition.step ?? "any")}"${disabledAttribute}>`;
+  }
 
+  function renderInput(definition, options = {}) {
+    const wrapperClass = definition.visible === false ? "hidden" : "";
+    const control = buildControl(definition);
     const unit = definition.unit ? ` <span class="subtle">(${escapeHtml(definition.unit)})</span>` : "";
     const hints = [];
     if (definition.help) hints.push(escapeHtml(definition.help));
-    if (definition.conditionalRequired) hints.push("This pathway-specific value may refine the action, but it does not block independent findings.");
-    else hints.push("May be left blank; relevant unevaluated rules will be reported as coverage gaps.");
+    hints.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
+
+    if (options.compact) {
+      return `
+        <details class="compact-assessment-input ${wrapperClass}" data-input-wrapper="${escapeHtml(definition.id)}">
+          <summary><span>${escapeHtml(definition.label)}${unit}</span><span class="compact-input-state" data-input-state>Not assessed</span></summary>
+          <div class="compact-input-body">
+            <label class="sr-only" for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}</label>
+            ${control}
+            <span class="hint" data-input-hint>${hints.join(" ")}</span>
+          </div>
+        </details>`;
+    }
 
     return `
-      <div class="${wrapperClass}" data-input-wrapper="${escapeHtml(definition.id)}">
-        <label for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}${unit}<span data-required-marker>${requiredMark}</span></label>
+      <div class="blood-input-card ${wrapperClass}" data-input-wrapper="${escapeHtml(definition.id)}">
+        <label for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}${unit}</label>
         ${control}
         <span class="hint" data-input-hint>${hints.join(" ")}</span>
       </div>`;
+  }
+
+  function updateCompactInputState(control, definition) {
+    const wrapper = control?.closest(".compact-assessment-input");
+    const state = wrapper?.querySelector("[data-input-state]");
+    if (!wrapper || !state) return;
+    let label = "Not assessed";
+    if (control.value !== "") {
+      if (control.tagName === "SELECT") label = control.options[control.selectedIndex]?.text || control.value;
+      else label = `${control.value}${definition?.unit ? ` ${definition.unit}` : ""}`;
+    }
+    state.textContent = label;
+    wrapper.classList.toggle("assessed", control.value !== "");
+  }
+
+  function refreshCompactInputStates(definitions) {
+    const byId = new Map((definitions || Engine.getInputDefinitions(activeProtocol, activeProfileId, collectRawInputs(true))).map(definition => [definition.id, definition]));
+    document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(control => {
+      updateCompactInputState(control, byId.get(control.dataset.field));
+    });
   }
 
   function updateConditionalInputs() {
@@ -319,22 +404,21 @@
       const visible = definition.visible !== false;
       wrapper.classList.toggle("hidden", !visible);
       control.disabled = !visible;
-      control.required = visible && isTreatmentContext(definition) && definition.required === true;
+      control.required = false;
       if (!visible && control.value !== "") control.value = "";
 
-      const marker = wrapper.querySelector("[data-required-marker]");
-      if (marker) marker.textContent = "";
       const hint = wrapper.querySelector("[data-input-hint]");
       if (hint) {
         const parts = [];
         if (definition.help) parts.push(definition.help);
-        if (definition.conditionalRequired) parts.push("This pathway-specific value may refine the action, but it does not block independent findings.");
-        else parts.push("May be left blank; relevant unevaluated rules will be reported as coverage gaps.");
+        parts.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
         hint.textContent = parts.join(" ");
       }
+      updateCompactInputState(control, definition);
     });
 
-    updateInputCount(definitions);
+    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition));
+    updateInputCount(clinicalDefinitions.filter(definition => !isBloodThreshold(definition)));
     hideResult();
   }
 
@@ -360,7 +444,7 @@
     for (let pass = 0; pass < 3; pass += 1) {
       const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, collectRawInputs(true));
       const byId = new Map(definitions.map(definition => [definition.id, definition]));
-      document.querySelectorAll("#jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
+      document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
         const definition = byId.get(element.dataset.field);
         if (!definition || definition.visible === false) return;
         const value = fallbackDemoValue(definition);
@@ -373,7 +457,7 @@
 
   function collectRawInputs(includeDisabled = false) {
     const inputs = {};
-    document.querySelectorAll("#jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
+    document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
       if (!includeDisabled && element.disabled) return;
       inputs[element.dataset.field] = element.value;
     });
@@ -411,15 +495,24 @@
   }
 
   function renderErrors(result) {
-    const messages = [
+    const blockingMessages = [
       ...result.missing.map(item => `Missing: ${item.label}`),
-      ...(result.unassessed || []).map(item => `Not assessed: ${item.label}`),
       ...result.invalid.map(item => `Invalid: ${item.label} — ${item.reason}`),
       ...result.errors.map(item => `Rule error ${item.ruleId}: ${item.message}`)
     ];
-    document.getElementById("jsonErrors").innerHTML = messages.length
-      ? `<div class="error-list">${messages.map(escapeHtml).join("<br>")}</div>`
-      : "";
+    const unassessed = result.unassessed || [];
+    const blocks = [];
+    if (blockingMessages.length) {
+      blocks.push(`<div class="error-list">${blockingMessages.map(escapeHtml).join("<br>")}</div>`);
+    }
+    if (unassessed.length) {
+      blocks.push(`
+        <details class="coverage-gap-details">
+          <summary>${unassessed.length} domain${unassessed.length === 1 ? "" : "s"} not assessed</summary>
+          <div class="details-body"><p class="subtle">These values were left blank and have not been assumed normal.</p><div class="coverage-gap-list">${unassessed.map(item => `<span>${escapeHtml(item.label)}</span>`).join("")}</div></div>
+        </details>`);
+    }
+    document.getElementById("jsonErrors").innerHTML = blocks.join("");
   }
 
   function renderFindings(result) {
@@ -436,11 +529,84 @@
         <div class="finding ${className}">
           <h3>${escapeHtml(finding.ruleId)}</h3>
           <p><strong>${escapeHtml(Engine.actionLabels[finding.actionType] || humanise(finding.actionType))}</strong></p>
+          ${renderThresholdComparison(finding, result)}
           <p>${escapeHtml(finding.explanation)}</p>
           ${detail ? `<p><strong>Encoded action detail:</strong> ${escapeHtml(detail)}</p>` : ""}
           <div class="source">${escapeHtml(finding.sourceText)}</div>
         </div>`;
     }).join("");
+  }
+
+  function renderThresholdComparison(finding, result) {
+    const comparisons = comparisonRows(finding.condition, result.inputs, result.definitions);
+    if (!comparisons.length) return "";
+    return `<div class="threshold-comparison" role="group" aria-label="Triggered threshold comparison">
+      ${comparisons.map(item => `
+        <div class="threshold-comparison-row">
+          <div><span class="threshold-label">${escapeHtml(item.label)}</span><strong class="patient-value">${escapeHtml(item.actual)}</strong></div>
+          <div class="comparison-symbol">${escapeHtml(item.symbol)}</div>
+          <div><span class="threshold-label">Protocol cutoff</span><strong class="cutoff-value">${escapeHtml(item.cutoff)}</strong></div>
+        </div>`).join("")}
+    </div>`;
+  }
+
+  function comparisonRows(condition, inputs, definitions) {
+    if (!condition || typeof condition !== "object") return [];
+    const definitionMap = new Map((definitions || []).map(definition => [definition.id, definition]));
+    const leaves = [];
+    collectConditionLeaves(condition, leaves);
+    return leaves
+      .filter(leaf => leaf.field && inputs?.[leaf.field] !== undefined && inputs?.[leaf.field] !== null && inputs?.[leaf.field] !== "")
+      .map(leaf => {
+        const definition = definitionMap.get(leaf.field) || {};
+        const unit = definition.unit ? ` ${definition.unit}` : "";
+        return {
+          label: definition.label || humanise(leaf.field),
+          actual: `${formatComparisonValue(inputs[leaf.field])}${unit}`,
+          symbol: operatorSymbol(leaf.operator),
+          cutoff: `${formatCutoff(leaf.value, leaf.operator)}${unit}`
+        };
+      });
+  }
+
+  function collectConditionLeaves(node, output) {
+    if (!node) return output;
+    if (Array.isArray(node)) {
+      node.forEach(item => collectConditionLeaves(item, output));
+      return output;
+    }
+    if (node.field) output.push(node);
+    ["all", "any", "none"].forEach(key => {
+      if (node[key]) collectConditionLeaves(node[key], output);
+    });
+    if (node.not) collectConditionLeaves(node.not, output);
+    return output;
+  }
+
+  function operatorSymbol(operator) {
+    const symbols = {
+      lt: "<", "<": "<", lte: "≤", "<=": "≤",
+      gt: ">", ">": ">", gte: "≥", ">=": "≥",
+      eq: "=", equals: "=", "==": "=", "=": "=",
+      neq: "≠", not_equals: "≠", "!=": "≠", "<>": "≠",
+      between: "within", between_inclusive: "within", between_exclusive: "within",
+      outside: "outside", in: "in", one_of: "in", not_in: "not in"
+    };
+    return symbols[String(operator || "==").toLowerCase()] || String(operator || "=");
+  }
+
+  function formatCutoff(value, operator) {
+    if (Array.isArray(value)) {
+      const joiner = ["between", "between_inclusive", "between_exclusive"].includes(String(operator).toLowerCase()) ? "–" : ", ";
+      return value.map(formatComparisonValue).join(joiner);
+    }
+    return formatComparisonValue(value);
+  }
+
+  function formatComparisonValue(value) {
+    if (value === true) return "Yes";
+    if (value === false) return "No";
+    return String(value);
   }
 
   function findingClass(actionType) {
@@ -498,7 +664,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.31.0",
+    version: "0.34.0",
     open,
     ensureScreen
   });

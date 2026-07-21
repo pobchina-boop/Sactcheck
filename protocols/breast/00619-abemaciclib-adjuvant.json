@@ -1,0 +1,319 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00619-vcurrent",
+  "file_name": "00619-abemaciclib-adjuvant.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00619",
+    "nccp_version": "current",
+    "tumour_group": "Breast",
+    "title": "Abemaciclib with endocrine therapy \u2013 adjuvant",
+    "short_title": "Adjuvant abemaciclib",
+    "indication": "Adjuvant treatment of HR-positive, HER2-negative, node-positive early breast cancer at high risk of recurrence.",
+    "icd10": "C50",
+    "source_document_pages": 6,
+    "source_url": "https://healthservice.hse.ie/documents/6415/619_Abemaciclib.pdf",
+    "sactcheck_encoding_version": "0.34.0",
+    "treatment_setting": [
+      "adjuvant"
+    ],
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json"
+    },
+    "validation": {
+      "source_document_checked": true,
+      "software_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the official regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
+  },
+  "input_definitions": {
+    "anc_x10e9_l": {
+      "label": "ANC",
+      "type": "number",
+      "unit": "\u00d710\u2079/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "unit": "\u00d710\u2079/L",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 200
+    },
+    "hb_g_dl": {
+      "label": "Haemoglobin",
+      "type": "number",
+      "unit": "g/dL",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 12
+    },
+    "haematological_toxicity_grade": {
+      "label": "Haematological toxicity grade",
+      "type": "number",
+      "unit": "CTCAE grade",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
+      "type": "number",
+      "unit": "CTCAE grade",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "alt_grade": {
+      "label": "ALT elevation grade",
+      "type": "number",
+      "unit": "CTCAE grade",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "ast_grade": {
+      "label": "AST elevation grade",
+      "type": "number",
+      "unit": "CTCAE grade",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    },
+    "child_pugh_class": {
+      "label": "Child\u2013Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "A",
+          "label": "A"
+        },
+        {
+          "value": "B",
+          "label": "B"
+        },
+        {
+          "value": "C",
+          "label": "C"
+        }
+      ],
+      "demo_value": "A"
+    }
+  },
+  "required_inputs": [],
+  "assessment_profiles": [
+    {
+      "id": "default",
+      "label": "Rapid partial assessment",
+      "required_inputs": [
+        "anc_x10e9_l",
+        "platelets_x10e9_l",
+        "hb_g_dl",
+        "haematological_toxicity_grade",
+        "diarrhoea_grade",
+        "alt_grade",
+        "ast_grade",
+        "child_pugh_class"
+      ],
+      "context": {}
+    }
+  ],
+  "output_templates": {
+    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
+    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
+    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
+    "consultant_review": "The entered result lies in a phase-dependent or non-deterministic range. Confirm the treatment phase and review the official NCCP protocol."
+  },
+  "rule_engine": {
+    "conflict_policy": "Return the most restrictive applicable action and display every triggered rule.",
+    "missing_data_policy": "Evaluate only supplied values. Do not infer missing values and do not block a partial assessment.",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "omit",
+      "withhold",
+      "delay",
+      "consultant_review",
+      "dose_reduce",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "BASELINE_ANC_REVIEW",
+        "any": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1.5
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Before initiation, ANC \u22651.5 \u00d710\u2079/L is recommended."
+      },
+      {
+        "rule_id": "BASELINE_PLATELET_REVIEW",
+        "any": [
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 100
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Before initiation, platelets \u2265100 \u00d710\u2079/L are recommended."
+      },
+      {
+        "rule_id": "BASELINE_HB_REVIEW",
+        "any": [
+          {
+            "field": "hb_g_dl",
+            "operator": "<",
+            "value": 8
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Before initiation, haemoglobin \u22658 g/dL is recommended."
+      },
+      {
+        "rule_id": "HAEM_GRADE3_HOLD",
+        "any": [
+          {
+            "field": "haematological_toxicity_grade",
+            "operator": ">=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Grade 3 or 4 haematological toxicity requires suspension until recovery to grade 2 or lower."
+      },
+      {
+        "rule_id": "DIARRHOEA_GRADE2_PLUS",
+        "any": [
+          {
+            "field": "diarrhoea_grade",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Persistent or recurrent grade 2, or grade 3\u20134 diarrhoea, requires interruption and protocol-directed management."
+      },
+      {
+        "rule_id": "HEPATIC_GRADE3_PLUS",
+        "any": [
+          {
+            "field": "alt_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "ast_grade",
+            "operator": ">=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Grade 3 or higher transaminase toxicity requires interruption and dose-modification review."
+      },
+      {
+        "rule_id": "CHILD_PUGH_C",
+        "any": [
+          {
+            "field": "child_pugh_class",
+            "operator": "==",
+            "value": "C"
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Child\u2013Pugh C requires reducing abemaciclib dosing frequency to once daily."
+      }
+    ]
+  },
+  "supportive_care": {
+    "emetogenic_risk": "unmapped",
+    "supportive_medications_pdf_url": null,
+    "display_status": "Awaiting user proforma mapping"
+  }
+}
