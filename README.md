@@ -1,3 +1,7 @@
+## Current release
+
+SACTCheck v0.36.0 includes 121 active protocols and completes current NCCP breast catalogue coverage using validated live encodings plus clearly labelled placeholder cards.
+
 # SACTCheck v0.34.0
 
 Protocol-driven SACT assessment prototype with 68 active NCCP regimens. v0.34.0 adds ten non-duplicate early breast cancer regimens while retaining blood-first rapid assessment, optional partial entry, explicit patient-value versus protocol-threshold comparisons, official NCCP PDF access and the pending emetogenic-risk/supportive-care framework.

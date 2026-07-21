@@ -1,0 +1,93 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00776-vcurrent",
+  "file_name": "00776-trastuzumab-deruxtecan.json",
+  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "metadata": {
+    "nccp_regimen_code": "00776",
+    "nccp_version": "current",
+    "tumour_group": "Breast",
+    "title": "Trastuzumab Deruxtecan 5.4 mg/kg (Enhertu)",
+    "short_title": "Trastuzumab deruxtecan",
+    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "icd10": "C50",
+    "source_document_pages": null,
+    "source_url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+    "sactcheck_encoding_version": "0.36.0",
+    "treatment_setting": [
+      "metastatic"
+    ],
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json"
+    },
+    "validation": {
+      "source_document_checked": false,
+      "software_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+  },
+  "input_definitions": {
+    "placeholder_review": {
+      "label": "Protocol-specific automated assessment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "review",
+          "label": "Open consultant review pathway"
+        }
+      ],
+      "demo_value": "review"
+    }
+  },
+  "required_inputs": [],
+  "assessment_profiles": [
+    {
+      "id": "default",
+      "label": "Placeholder protocol card",
+      "required_inputs": [
+        "placeholder_review"
+      ],
+      "context": {}
+    }
+  ],
+  "output_templates": {
+    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
+    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
+    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
+    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+  },
+  "rule_engine": {
+    "evaluation_mode": "highest_priority_triggered",
+    "rules": [
+      {
+        "id": "placeholder_review",
+        "priority": 100,
+        "when": {
+          "field": "placeholder_review",
+          "operator": "==",
+          "value": "review"
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
+        }
+      }
+    ]
+  },
+  "supportive_care": {
+    "emetogenic_risk": "awaiting_proforma_mapping",
+    "supportive_medications_pdf_url": null,
+    "supportive_medications_label": "Supportive medications / antiemetic guide"
+  }
+}

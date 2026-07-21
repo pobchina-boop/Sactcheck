@@ -20,7 +20,7 @@ assert(ui.includes('coverage-gap-details'), 'Unassessed result domains must coll
 assert(ui.includes('<form id="jsonAssessmentForm" novalidate>'), 'Form-level browser validation must be disabled');
 assert(!ui.includes(' requiredAttribute'), 'UI should not create required HTML attributes');
 assert(ui.includes('control.required = false'), 'Dynamic inputs must remain non-mandatory');
-assert(indexHtml.includes('js/emetogenic-risk.js?v=0.35.0'), 'Emetogenic risk module not loaded');
+assert(indexHtml.includes('js/emetogenic-risk.js?v=0.36.0'), 'Emetogenic risk module not loaded');
 assert(indexHtml.indexOf('js/emetogenic-risk.js') < indexHtml.indexOf('js/protocol-loader.js'), 'Emetogenic risk module must load before protocol loader');
 assert(loader.includes('emetogenicBadge(protocol)'), 'Protocol cards must render emetogenic status');
 

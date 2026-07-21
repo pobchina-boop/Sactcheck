@@ -271,3 +271,12 @@ Browser imports are local previews only. A protocol becomes available to all use
 - Expands the active catalogue from 68 to 88 protocols.
 - Retains blood-first partial assessment, explicit threshold comparison, official NCCP PDF tiles, duplicate safeguards, and the pending emetogenic/supportive-care PDF framework.
 - New encodings remain prototypes pending consultant and oncology-pharmacy validation against the official NCCP documents.
+
+## v0.36.0 — Complete NCCP breast protocol library
+
+- Reconciled the active catalogue against the current NCCP neoadjuvant/adjuvant and locally advanced/metastatic breast libraries.
+- Added 33 non-duplicate breast regimen cards, increasing the active catalogue from 88 to 121 protocols.
+- Added full NCCP PDF access for every new card.
+- Marked newly added cards as catalogue placeholders pending protocol-specific rule encoding and consultant/oncology-pharmacy feedback.
+- Preserved existing validated live assessment rules and prevented duplicate NCCP IDs or paths.
+- Expanded the pending emetogenic-risk map to all active protocols.
