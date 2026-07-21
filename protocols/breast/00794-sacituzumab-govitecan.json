@@ -2,10 +2,10 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00794-vcurrent",
   "file_name": "00794-sacituzumab-govitecan.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00794",
-    "nccp_version": "current",
+    "nccp_version": 3,
     "tumour_group": "Breast",
     "title": "Sacituzumab Govitecan Therapy",
     "short_title": "Sacituzumab govitecan",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": null,
     "source_url": "https://healthservice.hse.ie/documents/6417/794_v3_Sacituzumab_Govitecan_Therapy.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.3",
     "treatment_setting": [
       "metastatic"
     ],
@@ -24,7 +24,7 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,54 +34,537 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "cycle_day": {
+      "label": "Treatment day",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": 1,
+          "label": "Day 1"
+        },
+        {
+          "value": 8,
+          "label": "Day 8"
         }
       ],
-      "demo_value": "review"
+      "demo_value": 1
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 2
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity to sacituzumab govitecan/excipients",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "active_uncontrolled_infection": {
+      "label": "Active uncontrolled infection",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "ugt1a1_28_homozygous": {
+      "label": "Known homozygous UGT1A1*28",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "life_threatening_infusion_reaction": {
+      "label": "Life-threatening infusion-related reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "severe_neutropenia_occurrence": {
+      "label": "Severe-neutropenia occurrence number",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "None"
+        },
+        {
+          "value": 1,
+          "label": "First"
+        },
+        {
+          "value": 2,
+          "label": "Second"
+        },
+        {
+          "value": 3,
+          "label": "Third"
+        },
+        {
+          "value": 4,
+          "label": "Fourth"
+        }
+      ],
+      "demo_value": 0
+    },
+    "neutropenia_delay_weeks": {
+      "label": "Dose delay from grade 3–4 neutropenia (weeks)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.5,
+      "unit": "weeks",
+      "demo_value": 0
+    },
+    "febrile_neutropenia_grade34": {
+      "label": "Grade 3–4 febrile neutropenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "grade4_neutropenia_days": {
+      "label": "Duration grade 4 neutropenia (days)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "days",
+      "demo_value": 0
+    },
+    "non_neutropenic_severe_occurrence": {
+      "label": "Severe non-neutropenic toxicity occurrence",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "None"
+        },
+        {
+          "value": 1,
+          "label": "First"
+        },
+        {
+          "value": 2,
+          "label": "Second"
+        },
+        {
+          "value": 3,
+          "label": "Third"
+        }
+      ],
+      "demo_value": 0
+    },
+    "nonhaem_grade": {
+      "label": "Non-haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "uncontrolled_nvd": {
+      "label": "Grade 3–4 nausea/vomiting/diarrhoea uncontrolled despite treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "not_recovered_within_3_weeks": {
+      "label": "Grade 3–4 toxicity not recovered to ≤grade 1 within 3 weeks",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
-        },
+        "rule_id": "HS",
         "action": {
-          "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "type": "contraindicated",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Do not administer sacituzumab govitecan."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer sacituzumab govitecan.",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "PREG_LACT",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Do not administer during pregnancy or breastfeeding."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer during pregnancy or breastfeeding.",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      {
+        "rule_id": "INFECTION",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Withhold and obtain consultant review for active uncontrolled infection."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Withhold and obtain consultant review for active uncontrolled infection.",
+        "field": "active_uncontrolled_infection",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "UGT",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Consider a lower starting dose and dose escalation according to cycle-1 toxicity."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Consider a lower starting dose and dose escalation according to cycle-1 toxicity.",
+        "field": "ugt1a1_28_homozygous",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "D1_ANC",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Do not administer on Day 1 if ANC <1.5 ×10⁹/L."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer on Day 1 if ANC <1.5 ×10⁹/L.",
+        "all": [
+          {
+            "field": "cycle_day",
+            "operator": "==",
+            "value": 1
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.5
+          }
+        ]
+      },
+      {
+        "rule_id": "D8_ANC",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Do not administer on Day 8 if ANC <1.0 ×10⁹/L."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer on Day 8 if ANC <1.0 ×10⁹/L.",
+        "all": [
+          {
+            "field": "cycle_day",
+            "operator": "==",
+            "value": 8
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.0
+          }
+        ]
+      },
+      {
+        "rule_id": "LIFE_IRR",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Permanently discontinue for a life-threatening infusion-related reaction."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Permanently discontinue for a life-threatening infusion-related reaction.",
+        "field": "life_threatening_infusion_reaction",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "DELAY_GT3W",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Discontinue when grade 3–4 neutropenia delays dosing beyond 3 weeks; administer G-CSF as clinically indicated."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Discontinue when grade 3–4 neutropenia delays dosing beyond 3 weeks; administer G-CSF as clinically indicated.",
+        "field": "neutropenia_delay_weeks",
+        "operator": ">",
+        "value": 3
+      },
+      {
+        "rule_id": "SEVERE_NEUT_4TH",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Fourth severe-neutropenia occurrence: discontinue and administer G-CSF as clinically indicated."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Fourth severe-neutropenia occurrence: discontinue and administer G-CSF as clinically indicated.",
+        "field": "severe_neutropenia_occurrence",
+        "operator": ">=",
+        "value": 4
+      },
+      {
+        "rule_id": "SEVERE_NEUT_3RD",
+        "action": {
+          "type": "dose_reduce_two_levels",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Third severe-neutropenia occurrence: reduce dose by 50% and administer G-CSF."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Third severe-neutropenia occurrence: reduce dose by 50% and administer G-CSF.",
+        "field": "severe_neutropenia_occurrence",
+        "operator": "==",
+        "value": 3
+      },
+      {
+        "rule_id": "SEVERE_NEUT_2ND",
+        "action": {
+          "type": "dose_reduce_one_level",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Second severe-neutropenia occurrence: reduce dose by 25% and administer G-CSF."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Second severe-neutropenia occurrence: reduce dose by 25% and administer G-CSF.",
+        "field": "severe_neutropenia_occurrence",
+        "operator": "==",
+        "value": 2
+      },
+      {
+        "rule_id": "SEVERE_NEUT_1ST",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "First severe-neutropenia occurrence: administer G-CSF as soon as clinically indicated."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "First severe-neutropenia occurrence: administer G-CSF as soon as clinically indicated.",
+        "any": [
+          {
+            "field": "severe_neutropenia_occurrence",
+            "operator": "==",
+            "value": 1
+          },
+          {
+            "field": "febrile_neutropenia_grade34",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "grade4_neutropenia_days",
+            "operator": ">=",
+            "value": 7
+          }
+        ]
+      },
+      {
+        "rule_id": "NONNEUT_3RD",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Third severe non-neutropenic toxicity occurrence: discontinue treatment."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Third severe non-neutropenic toxicity occurrence: discontinue treatment.",
+        "field": "non_neutropenic_severe_occurrence",
+        "operator": ">=",
+        "value": 3
+      },
+      {
+        "rule_id": "NONNEUT_1_2",
+        "action": {
+          "type": "dose_reduce_one_level",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Severe non-neutropenic toxicity: reduce dose by 25% for the first or second occurrence."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Severe non-neutropenic toxicity: reduce dose by 25% for the first or second occurrence.",
+        "all": [
+          {
+            "field": "non_neutropenic_severe_occurrence",
+            "operator": ">=",
+            "value": 1
+          },
+          {
+            "field": "non_neutropenic_severe_occurrence",
+            "operator": "<=",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "rule_id": "NO_RECOVERY",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "Discontinue if grade 3–4 toxicity does not recover to ≤grade 1 within 3 weeks."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Discontinue if grade 3–4 toxicity does not recover to ≤grade 1 within 3 weeks.",
+        "field": "not_recovered_within_3_weeks",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "UNCONTROLLED_NVD",
+        "action": {
+          "type": "dose_reduce_one_level",
+          "components": [
+            "sacituzumab govitecan"
+          ],
+          "recommendation": "For uncontrolled grade 3–4 nausea, vomiting or diarrhoea, apply the occurrence-based 25% dose-reduction pathway."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "For uncontrolled grade 3–4 nausea, vomiting or diarrhoea, apply the occurrence-based 25% dose-reduction pathway.",
+        "field": "uncontrolled_nvd",
+        "operator": "==",
+        "value": true
       }
     ]
   },

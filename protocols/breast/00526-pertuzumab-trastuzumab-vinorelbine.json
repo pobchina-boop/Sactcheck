@@ -1,19 +1,19 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00526-vcurrent",
+  "protocol_id": "nccp-00526-v5",
   "file_name": "00526-pertuzumab-trastuzumab-vinorelbine.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00526",
-    "nccp_version": "current",
+    "nccp_version": 5,
     "tumour_group": "Breast",
-    "title": "Pertuzumab, Trastuzumab and Vinorelbine",
+    "title": "Pertuzumab, Trastuzumab and Vinorelbine - 21 day",
     "short_title": "Pertuzumab + trastuzumab + vinorelbine",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "HER2-positive metastatic or locally recurrent unresectable breast cancer where taxane therapy is unsuitable.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 9,
     "source_url": "https://healthservice.hse.ie/documents/6630/526_v5_Pertuzumab_Vinorelbine_trastuzumab_zOGbzKp.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.2",
     "treatment_setting": [
       "metastatic"
     ],
@@ -24,7 +24,7 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,54 +34,986 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "assessment_stage": {
+      "label": "Assessment stage",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": "baseline",
+          "label": "Baseline / treatment initiation"
+        },
+        {
+          "value": "on_treatment",
+          "label": "On-treatment / pre-dose"
         }
       ],
-      "demo_value": "review"
+      "demo_value": "on_treatment"
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "active_or_recent_severe_infection": {
+      "label": "Severe infection current or within 2 weeks",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "febrile_neutropenia_prior": {
+      "label": "Febrile neutropenia in prior cycle",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "prior_myelosuppression_delay": {
+      "label": "Previous delay for myelosuppression",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 2.0
+    },
+    "platelets": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "unit": "×10⁹/L",
+      "demo_value": 200
+    },
+    "anc_below_1_weeks": {
+      "label": "Duration ANC <1.0 (weeks)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.5,
+      "demo_value": 0
+    },
+    "hepatic_impairment": {
+      "label": "Hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild_moderate",
+          "label": "Mild/moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "constipation_grade": {
+      "label": "Constipation grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "other_toxicity_grade": {
+      "label": "Other toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "indication_id": {
+      "label": "Indication",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "00726a",
+          "label": "Maintenance treatment of adults with HER2-positive metastatic or locally recurrent unresectable breast cancer after completion of the chemotherapy component."
+        }
+      ],
+      "demo_value": "00726a",
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "assessment_type": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "pre_treatment",
+          "label": "Pre-treatment assessment"
+        }
+      ],
+      "demo_value": "pre_treatment",
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "max": 200,
+      "step": 1,
+      "demo_value": 1,
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "lvef_percent": {
+      "label": "Current LVEF (%)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "demo_value": 55,
+      "ui_section": "labs",
+      "unit": "%"
+    },
+    "lvef_drop_points": {
+      "label": "Absolute LVEF fall from pretreatment value (percentage points)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "demo_value": 0,
+      "ui_section": "labs",
+      "unit": "percentage points"
+    },
+    "symptomatic_heart_failure": {
+      "label": "Symptomatic heart failure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "clinically_significant_cardiac_disease": {
+      "label": "Clinically significant cardiac disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "hypersensitivity_grade": {
+      "label": "Infusion/hypersensitivity reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "relevant_drug_hypersensitivity": {
+      "label": "Relevant drug hypersensitivity before treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "diarrhoea_not_improving": {
+      "label": "Severe/prolonged diarrhoea not improving with supportive treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "weeks_since_last_dose": {
+      "label": "Weeks since last pertuzumab/trastuzumab dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 52,
+      "step": 0.1,
+      "demo_value": 3,
+      "ui_section": "labs",
+      "unit": "weeks"
+    },
+    "fbc_clinical_concern": {
+      "label": "FBC abnormality requiring clinical review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "help": "The protocol requires FBC monitoring but does not define a numerical ANC/platelet hold threshold."
+    },
+    "ecog_over_1": {
+      "label": "ECOG performance status >1",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "baseline_lvef_below_50": {
+      "label": "Baseline LVEF <50%",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
+        "rule_id": "EXCLUSION_HS",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Do not administer vinorelbine; consultant review required."
         },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer vinorelbine; consultant review required."
+      },
+      {
+        "rule_id": "EXCLUSION_PREG_LACT",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Do not administer vinorelbine."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer vinorelbine."
+      },
+      {
+        "rule_id": "EXCLUSION_INFECTION",
+        "field": "active_or_recent_severe_infection",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Withhold because of severe current/recent infection; consultant assessment required."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Withhold because of severe current/recent infection; consultant assessment required."
+      },
+      {
+        "rule_id": "ANC_EXCLUSION",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "ANC is below the NCCP exclusion threshold of 1.5 ×10⁹/L; do not administer without consultant review."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "ANC is below the NCCP exclusion threshold of 1.5 ×10⁹/L; do not administer without consultant review.",
+        "all": [
+          {
+            "field": "assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.5
+          }
+        ]
+      },
+      {
+        "rule_id": "PLT_EXCLUSION",
+        "field": "platelets",
+        "operator": "<",
+        "value": 75,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Platelets are below the NCCP exclusion threshold of 75 ×10⁹/L."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Platelets are below the NCCP exclusion threshold of 75 ×10⁹/L."
+      },
+      {
+        "rule_id": "ANC_DISCONTINUE",
+        "field": "anc_below_1_weeks",
+        "operator": ">",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Discontinue if ANC has remained below 1.0 ×10⁹/L for more than 3 weeks."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Discontinue if ANC has remained below 1.0 ×10⁹/L for more than 3 weeks."
+      },
+      {
+        "rule_id": "ANC_LT05",
+        "field": "anc",
+        "operator": "<",
+        "value": 0.5,
+        "action": {
+          "type": "delay",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Delay one week and repeat FBC."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay one week and repeat FBC."
+      },
+      {
+        "rule_id": "PLT_LT75",
+        "field": "platelets",
+        "operator": "<",
+        "value": 75,
+        "action": {
+          "type": "delay",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Delay one week and repeat FBC."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay one week and repeat FBC."
+      },
+      {
+        "rule_id": "ANC_05_099",
+        "all": [
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Give 75% dose."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Give 75% dose."
+      },
+      {
+        "rule_id": "PLT_75_99",
+        "all": [
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 100
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Give 75% dose."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Give 75% dose."
+      },
+      {
+        "rule_id": "FN_PRIOR",
+        "field": "febrile_neutropenia_prior",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Delay until recovery and reduce subsequent vinorelbine by 25%."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay until recovery and reduce subsequent vinorelbine by 25%."
+      },
+      {
+        "rule_id": "MYELO_DELAY",
+        "field": "prior_myelosuppression_delay",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Delay until recovery and reduce subsequent vinorelbine by 25%."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay until recovery and reduce subsequent vinorelbine by 25%."
+      },
+      {
+        "rule_id": "HEPATIC_SEVERE",
+        "field": "hepatic_impairment",
+        "operator": "==",
+        "value": "severe",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Consider 66% of original vinorelbine dose."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Consider 66% of original vinorelbine dose."
+      },
+      {
+        "rule_id": "NEURO_G3",
+        "field": "neuropathy_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Discontinue vinorelbine for grade 3 neuropathy."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Discontinue vinorelbine for grade 3 neuropathy."
+      },
+      {
+        "rule_id": "NEURO_G2",
+        "field": "neuropathy_grade",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Withhold until recovery to grade 1, then give 75% dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Withhold until recovery to grade 1, then give 75% dose."
+      },
+      {
+        "rule_id": "CONST_G3",
+        "field": "constipation_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "After symptom management, consider 75% dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "After symptom management, consider 75% dose."
+      },
+      {
+        "rule_id": "OTHER_G3",
+        "field": "other_toxicity_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "delay",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Defer one week until resolved to grade ≤1; discuss if delay exceeds one week."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Defer one week until resolved to grade ≤1; discuss if delay exceeds one week."
+      },
+      {
+        "rule_id": "HER2_EXCLUSION_HYPERSENSITIVITY",
+        "field": "relevant_drug_hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Do not administer; obtain consultant review."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Relevant hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "HER2_EXCLUSION_PREGNANCY_BREASTFEEDING",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Do not administer during pregnancy or breastfeeding; urgent consultant review required."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy and breastfeeding are exclusions."
+      },
+      {
+        "rule_id": "HER2_CARDIAC_DISEASE_EXCLUSION",
+        "field": "clinically_significant_cardiac_disease",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Do not proceed without consultant/cardiology review."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Clinically significant cardiac disease is an exclusion."
+      },
+      {
+        "rule_id": "HER2_LVEF_WITHHOLD_LOW",
+        "field": "lvef_percent",
+        "operator": "<",
+        "value": 40,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Withhold pertuzumab and trastuzumab for at least 3 weeks and repeat LVEF assessment."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "LVEF below 40% requires withholding."
+      },
+      {
+        "rule_id": "HER2_LVEF_WITHHOLD_40_45",
+        "all": [
+          {
+            "field": "lvef_percent",
+            "operator": ">=",
+            "value": 40
+          },
+          {
+            "field": "lvef_percent",
+            "operator": "<=",
+            "value": 45
+          },
+          {
+            "field": "lvef_drop_points",
+            "operator": ">=",
+            "value": 10
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Withhold pertuzumab and trastuzumab for at least 3 weeks and repeat LVEF assessment."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "LVEF 40–45% with a fall of at least 10 points requires withholding."
+      },
+      {
+        "rule_id": "HER2_SYMPTOMATIC_HEART_FAILURE",
+        "field": "symptomatic_heart_failure",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Discontinue treatment for symptomatic heart failure and obtain urgent cardiology review."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "Symptomatic heart failure requires discontinuation."
+      },
+      {
+        "rule_id": "HER2_HYPERSENSITIVITY_G4",
+        "field": "hypersensitivity_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Discontinue treatment for grade 4 hypersensitivity/anaphylaxis."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "Grade 4 hypersensitivity requires discontinuation."
+      },
+      {
+        "rule_id": "HER2_INFUSION_REACTION_G1_G2",
+        "all": [
+          {
+            "field": "hypersensitivity_grade",
+            "operator": ">=",
+            "value": 1
+          },
+          {
+            "field": "hypersensitivity_grade",
+            "operator": "<=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Slow or interrupt the infusion and provide appropriate supportive treatment; resume only after symptoms resolve."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Mild/moderate infusion reactions require interruption or slowing and supportive care."
+      },
+      {
+        "rule_id": "HER2_DIARRHOEA_NOT_CONTROLLED",
+        "all": [
+          {
+            "field": "diarrhoea_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "diarrhoea_not_improving",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "Consider interrupting pertuzumab until severe/prolonged diarrhoea is controlled."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Pertuzumab interruption should be considered if severe diarrhoea does not improve."
+      },
+      {
+        "rule_id": "HER2_MISSED_DOSE_RELOAD",
+        "field": "weeks_since_last_dose",
+        "operator": ">=",
+        "value": 6,
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "The interval is 6 weeks or longer: re-administer the pertuzumab 840 mg and trastuzumab 8 mg/kg loading doses, then resume the 3-weekly maintenance schedule."
+        },
+        "source": {
+          "page": 3,
+          "table": "Table 1"
+        },
+        "explanation": "A gap of at least 6 weeks requires reloading doses."
+      },
+      {
+        "rule_id": "EXCLUSION_ECOG_OVER_1",
+        "field": "ecog_over_1",
+        "operator": "==",
+        "value": true,
         "action": {
           "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "components": [
+            "pertuzumab",
+            "trastuzumab",
+            "vinorelbine"
+          ],
+          "recommendation": "Baseline ECOG >1 falls outside the NCCP eligibility criteria; consultant review required."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Baseline ECOG >1 falls outside the NCCP eligibility criteria; consultant review required."
+      },
+      {
+        "rule_id": "EXCLUSION_BASELINE_LVEF_BELOW_50",
+        "field": "baseline_lvef_below_50",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab",
+            "vinorelbine"
+          ],
+          "recommendation": "Baseline LVEF <50% falls outside the NCCP eligibility criteria; do not initiate without consultant/cardiology review."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Baseline LVEF <50% falls outside the NCCP eligibility criteria; do not initiate without consultant/cardiology review."
       }
     ]
   },

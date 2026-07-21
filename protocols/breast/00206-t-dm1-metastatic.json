@@ -2,10 +2,10 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00206-vcurrent",
   "file_name": "00206-t-dm1-metastatic.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00206",
-    "nccp_version": "current",
+    "nccp_version": 5,
     "tumour_group": "Breast",
     "title": "Trastuzumab Emtansine (Kadcyla) - 21 days",
     "short_title": "T-DM1 metastatic",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": null,
     "source_url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.3",
     "treatment_setting": [
       "metastatic"
     ],
@@ -24,7 +24,7 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,54 +34,432 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "platelets": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "unit": "×10⁹/L",
+      "demo_value": 150
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity to trastuzumab emtansine/excipients",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "lvef_percent": {
+      "label": "Current LVEF (%)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "demo_value": 55
+    },
+    "lvef_drop_points": {
+      "label": "LVEF fall from baseline (percentage points)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "demo_value": 0
+    },
+    "symptomatic_chf": {
+      "label": "Symptomatic congestive heart failure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "ast_alt_grade": {
+      "label": "AST/ALT elevation grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
         }
       ],
-      "demo_value": "review"
+      "demo_value": 0
+    },
+    "bilirubin_grade": {
+      "label": "Hyperbilirubinaemia grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "peripheral_neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "pulmonary_toxicity": {
+      "label": "Interstitial lung disease / pneumonitis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "nodular_regenerative_hyperplasia": {
+      "label": "Nodular regenerative hyperplasia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "dose_reduction_level": {
+      "label": "Current dose-reduction level",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "3.6 mg/kg"
+        },
+        {
+          "value": 1,
+          "label": "3.0 mg/kg"
+        },
+        {
+          "value": 2,
+          "label": "2.4 mg/kg"
+        }
+      ],
+      "demo_value": 0
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
-        },
+        "rule_id": "HS",
         "action": {
-          "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Do not administer trastuzumab emtansine."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer trastuzumab emtansine.",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "PREG_LACT",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Do not administer during pregnancy or breastfeeding."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer during pregnancy or breastfeeding.",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      {
+        "rule_id": "PLT_LT25",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Withhold until platelets recover to ≥75 ×10⁹/L, then reduce one dose level."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Withhold until platelets recover to ≥75 ×10⁹/L, then reduce one dose level.",
+        "field": "platelets",
+        "operator": "<",
+        "value": 25
+      },
+      {
+        "rule_id": "PLT_25_49",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Withhold until platelets recover to ≥75 ×10⁹/L; no dose modification is required."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Withhold until platelets recover to ≥75 ×10⁹/L; no dose modification is required.",
+        "all": [
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 25
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 50
+          }
+        ]
+      },
+      {
+        "rule_id": "LVEF_LT40",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Do not administer; repeat LVEF within 3 weeks. Discontinue if LVEF <40% is confirmed."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Do not administer; repeat LVEF within 3 weeks. Discontinue if LVEF <40% is confirmed.",
+        "field": "lvef_percent",
+        "operator": "<",
+        "value": 40
+      },
+      {
+        "rule_id": "LVEF_40_45_DROP",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Do not administer; repeat LVEF within 3 weeks. Discontinue if not recovered to within 10 percentage points of baseline."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Do not administer; repeat LVEF within 3 weeks. Discontinue if not recovered to within 10 percentage points of baseline.",
+        "all": [
+          {
+            "field": "lvef_percent",
+            "operator": ">=",
+            "value": 40
+          },
+          {
+            "field": "lvef_percent",
+            "operator": "<=",
+            "value": 45
+          },
+          {
+            "field": "lvef_drop_points",
+            "operator": ">=",
+            "value": 10
+          }
+        ]
+      },
+      {
+        "rule_id": "CHF",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Discontinue trastuzumab emtansine."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Discontinue trastuzumab emtansine.",
+        "field": "symptomatic_chf",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "NRH",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Permanently discontinue for nodular regenerative hyperplasia."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Permanently discontinue for nodular regenerative hyperplasia.",
+        "field": "nodular_regenerative_hyperplasia",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "PULMONARY",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Permanently discontinue for interstitial lung disease/pneumonitis."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Permanently discontinue for interstitial lung disease/pneumonitis.",
+        "field": "pulmonary_toxicity",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "NEURO_G3",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Temporarily discontinue until peripheral neuropathy resolves to grade ≤2; consider dose reduction."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Temporarily discontinue until peripheral neuropathy resolves to grade ≤2; consider dose reduction.",
+        "field": "peripheral_neuropathy_grade",
+        "operator": ">=",
+        "value": 3
+      },
+      {
+        "rule_id": "FURTHER_REDUCTION",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Further dose reduction below 2.4 mg/kg is not permitted; discontinue treatment."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Further dose reduction below 2.4 mg/kg is not permitted; discontinue treatment.",
+        "all": [
+          {
+            "field": "dose_reduction_level",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "ast_alt_grade",
+            "operator": ">=",
+            "value": 3
+          }
+        ]
       }
     ]
   },

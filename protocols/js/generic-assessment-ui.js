@@ -248,7 +248,7 @@
       control = `
         <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="select"${requiredAttribute}${disabledAttribute}>
           <option value="">Select…</option>
-          ${(definition.options || []).map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`).join("")}
+          ${(definition.options || []).map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(root.SACTCheckCTCAE?.optionLabel(definition, option) || option.label)}</option>`).join("")}
         </select>`;
     } else if (definition.type === "text") {
       control = `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="text" type="text"${requiredAttribute}${disabledAttribute}>`;

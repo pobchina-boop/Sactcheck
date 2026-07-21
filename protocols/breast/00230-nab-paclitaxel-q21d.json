@@ -1,19 +1,19 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00230-vcurrent",
+  "protocol_id": "nccp-00230-v7",
   "file_name": "00230-nab-paclitaxel-q21d.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00230",
-    "nccp_version": "current",
+    "nccp_version": 7,
     "tumour_group": "Breast",
     "title": "nab-Paclitaxel Monotherapy - 21 day",
     "short_title": "nab-Paclitaxel q21d",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "Metastatic breast cancer after failure of first-line metastatic treatment when standard anthracycline-containing therapy is not indicated.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 5,
     "source_url": "https://healthservice.hse.ie/documents/6565/230_v7_nab-PACLitaxel.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.1",
     "treatment_setting": [
       "metastatic"
     ],
@@ -24,7 +24,7 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,54 +34,388 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "assessment_stage": {
+      "label": "Assessment stage",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": "baseline",
+          "label": "Baseline / treatment initiation"
+        },
+        {
+          "value": "on_treatment",
+          "label": "On-treatment / pre-dose"
         }
       ],
-      "demo_value": "review"
+      "demo_value": "on_treatment"
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "active_or_recent_severe_infection": {
+      "label": "Severe infection current or within 2 weeks",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "febrile_neutropenia_prior": {
+      "label": "Febrile neutropenia in prior cycle",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "prior_myelosuppression_delay": {
+      "label": "Previous delay for myelosuppression",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 2.0
+    },
+    "platelets": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 200
+    },
+    "febrile_neutropenia_occurrences": {
+      "label": "Febrile neutropenia occurrences",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "demo_value": 0
+    },
+    "neuropathy_grade": {
+      "label": "Motor/sensory neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "neuropathy_occurrence": {
+      "label": "Neuropathy occurrence",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 1,
+          "label": "First"
+        },
+        {
+          "value": 2,
+          "label": "Second or later"
+        }
+      ],
+      "demo_value": 1
+    },
+    "hepatic_impairment": {
+      "label": "Hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none_mild",
+          "label": "None/mild"
+        },
+        {
+          "value": "moderate_severe",
+          "label": "Moderate/severe"
+        }
+      ],
+      "demo_value": "none_mild"
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
-        },
+        "rule_id": "EXCLUSION_HS",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
         "action": {
-          "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "type": "contraindicated",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Do not administer nab-paclitaxel."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer nab-paclitaxel."
+      },
+      {
+        "rule_id": "EXCLUSION_ANC",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Baseline ANC <1.5 ×10⁹/L is an exclusion."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Baseline ANC <1.5 ×10⁹/L is an exclusion.",
+        "all": [
+          {
+            "field": "assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.5
+          }
+        ]
+      },
+      {
+        "rule_id": "EXCLUSION_BF",
+        "field": "breastfeeding",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Do not administer while breastfeeding."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer while breastfeeding."
+      },
+      {
+        "rule_id": "PLT_LT100",
+        "field": "platelets",
+        "operator": "<",
+        "value": 100,
+        "action": {
+          "type": "delay",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Delay until platelets recover to ≥100 ×10⁹/L; consider 220 mg/m² after recovery."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay until platelets recover to ≥100 ×10⁹/L; consider 220 mg/m² after recovery."
+      },
+      {
+        "rule_id": "ANC_LT1",
+        "field": "anc",
+        "operator": "<",
+        "value": 1,
+        "action": {
+          "type": "delay",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Delay until ANC ≥1.5 ×10⁹/L; consider 220 mg/m² after recovery."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay until ANC ≥1.5 ×10⁹/L; consider 220 mg/m² after recovery."
+      },
+      {
+        "rule_id": "ANC_1_149",
+        "all": [
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 1
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.5
+          }
+        ],
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Delay one week and consider 220 mg/m²."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay one week and consider 220 mg/m²."
+      },
+      {
+        "rule_id": "FN_FIRST",
+        "field": "febrile_neutropenia_occurrences",
+        "operator": "==",
+        "value": 1,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Delay until ANC ≥1.5 and platelets ≥100, then reduce to 220 mg/m²."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay until ANC ≥1.5 and platelets ≥100, then reduce to 220 mg/m²."
+      },
+      {
+        "rule_id": "FN_SECOND",
+        "field": "febrile_neutropenia_occurrences",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Delay until recovery, then reduce to 180 mg/m²."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay until recovery, then reduce to 180 mg/m²."
+      },
+      {
+        "rule_id": "HEPATIC",
+        "field": "hepatic_impairment",
+        "operator": "==",
+        "value": "moderate_severe",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Moderate/severe hepatic impairment: use approximately 80% of original dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Moderate/severe hepatic impairment: use approximately 80% of original dose."
+      },
+      {
+        "rule_id": "NEURO_G3",
+        "field": "neuropathy_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Hold until neuropathy is grade ≤2, then reduce dose according to occurrence."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Hold until neuropathy is grade ≤2, then reduce dose according to occurrence."
+      },
+      {
+        "rule_id": "NEURO_G4_SECOND",
+        "all": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 4
+          },
+          {
+            "field": "neuropathy_occurrence",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Second occurrence grade 4 neuropathy: discontinue or consultant-directed hold/reduction."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Second occurrence grade 4 neuropathy: discontinue or consultant-directed hold/reduction."
       }
     ]
   },

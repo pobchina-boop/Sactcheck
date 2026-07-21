@@ -332,7 +332,7 @@
       return `
         <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="select"${disabledAttribute}>
           <option value="">Not assessed</option>
-          ${(definition.options || []).map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`).join("")}
+          ${(definition.options || []).map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(root.SACTCheckCTCAE?.optionLabel(definition, option) || option.label)}</option>`).join("")}
         </select>`;
     }
     if (definition.type === "text") {
@@ -349,6 +349,7 @@
     const unit = definition.unit ? ` <span class="subtle">(${escapeHtml(definition.unit)})</span>` : "";
     const hints = [];
     if (definition.help) hints.push(escapeHtml(definition.help));
+    if (definition.type === "select" && /grade/i.test(`${definition.id || ""} ${definition.label || ""}`)) hints.push("Grade descriptors are concise CTCAE v5.0 educational aids; verify the full criterion when clinically important.");
     hints.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
 
     if (options.compact) {
@@ -411,6 +412,7 @@
       if (hint) {
         const parts = [];
         if (definition.help) parts.push(definition.help);
+        if (definition.type === "select" && /grade/i.test(`${definition.id || ""} ${definition.label || ""}`)) parts.push("Grade descriptors are concise CTCAE v5.0 educational aids; verify the full criterion when clinically important.");
         parts.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
         hint.textContent = parts.join(" ");
       }

@@ -1,19 +1,19 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00232-vcurrent",
+  "protocol_id": "nccp-00232-v5",
   "file_name": "00232-vinorelbine-iv.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00232",
-    "nccp_version": "current",
+    "nccp_version": 5,
     "tumour_group": "Breast",
     "title": "Intravenous Vinorelbine Monotherapy - 21 days",
     "short_title": "Vinorelbine IV",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "Advanced breast cancer; also NCCP indications in NSCLC and platinum-refractory ovarian carcinoma.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 4,
     "source_url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.1",
     "treatment_setting": [
       "metastatic"
     ],
@@ -24,7 +24,7 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,54 +34,545 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "assessment_stage": {
+      "label": "Assessment stage",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": "baseline",
+          "label": "Baseline / treatment initiation"
+        },
+        {
+          "value": "on_treatment",
+          "label": "On-treatment / pre-dose"
         }
       ],
-      "demo_value": "review"
+      "demo_value": "on_treatment"
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "active_or_recent_severe_infection": {
+      "label": "Severe infection current or within 2 weeks",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "febrile_neutropenia_prior": {
+      "label": "Febrile neutropenia in prior cycle",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "prior_myelosuppression_delay": {
+      "label": "Previous delay for myelosuppression",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 2.0
+    },
+    "platelets": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "unit": "×10⁹/L",
+      "demo_value": 200
+    },
+    "anc_below_1_weeks": {
+      "label": "Duration ANC <1.0 (weeks)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.5,
+      "demo_value": 0
+    },
+    "hepatic_impairment": {
+      "label": "Hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild_moderate",
+          "label": "Mild/moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "constipation_grade": {
+      "label": "Constipation grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "other_toxicity_grade": {
+      "label": "Other toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
-        },
+        "rule_id": "EXCLUSION_HS",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
         "action": {
-          "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "type": "contraindicated",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Do not administer vinorelbine; consultant review required."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer vinorelbine; consultant review required."
+      },
+      {
+        "rule_id": "EXCLUSION_PREG_LACT",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Do not administer vinorelbine."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer vinorelbine."
+      },
+      {
+        "rule_id": "EXCLUSION_INFECTION",
+        "field": "active_or_recent_severe_infection",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Withhold because of severe current/recent infection; consultant assessment required."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Withhold because of severe current/recent infection; consultant assessment required."
+      },
+      {
+        "rule_id": "ANC_EXCLUSION",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "ANC is below the NCCP exclusion threshold of 1.5 ×10⁹/L; do not administer without consultant review."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "ANC is below the NCCP exclusion threshold of 1.5 ×10⁹/L; do not administer without consultant review.",
+        "all": [
+          {
+            "field": "assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.5
+          }
+        ]
+      },
+      {
+        "rule_id": "PLT_EXCLUSION",
+        "field": "platelets",
+        "operator": "<",
+        "value": 75,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Platelets are below the NCCP exclusion threshold of 75 ×10⁹/L."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Platelets are below the NCCP exclusion threshold of 75 ×10⁹/L."
+      },
+      {
+        "rule_id": "ANC_DISCONTINUE",
+        "field": "anc_below_1_weeks",
+        "operator": ">",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Discontinue if ANC has remained below 1.0 ×10⁹/L for more than 3 weeks."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Discontinue if ANC has remained below 1.0 ×10⁹/L for more than 3 weeks."
+      },
+      {
+        "rule_id": "ANC_LT05",
+        "field": "anc",
+        "operator": "<",
+        "value": 0.5,
+        "action": {
+          "type": "delay",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Delay one week and repeat FBC."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay one week and repeat FBC."
+      },
+      {
+        "rule_id": "PLT_LT75",
+        "field": "platelets",
+        "operator": "<",
+        "value": 75,
+        "action": {
+          "type": "delay",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Delay one week and repeat FBC."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay one week and repeat FBC."
+      },
+      {
+        "rule_id": "ANC_05_099",
+        "all": [
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Give 75% dose."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Give 75% dose."
+      },
+      {
+        "rule_id": "PLT_75_99",
+        "all": [
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 75
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 100
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Give 75% dose."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Give 75% dose."
+      },
+      {
+        "rule_id": "FN_PRIOR",
+        "field": "febrile_neutropenia_prior",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Delay until recovery and reduce subsequent vinorelbine by 25%."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay until recovery and reduce subsequent vinorelbine by 25%."
+      },
+      {
+        "rule_id": "MYELO_DELAY",
+        "field": "prior_myelosuppression_delay",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Delay until recovery and reduce subsequent vinorelbine by 25%."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Delay until recovery and reduce subsequent vinorelbine by 25%."
+      },
+      {
+        "rule_id": "HEPATIC_SEVERE",
+        "field": "hepatic_impairment",
+        "operator": "==",
+        "value": "severe",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Consider 66% of original vinorelbine dose."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Consider 66% of original vinorelbine dose."
+      },
+      {
+        "rule_id": "NEURO_G3",
+        "field": "neuropathy_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Discontinue vinorelbine for grade 3 neuropathy."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Discontinue vinorelbine for grade 3 neuropathy."
+      },
+      {
+        "rule_id": "NEURO_G2",
+        "field": "neuropathy_grade",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Withhold until recovery to grade 1, then give 75% dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Withhold until recovery to grade 1, then give 75% dose."
+      },
+      {
+        "rule_id": "CONST_G3",
+        "field": "constipation_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "After symptom management, consider 75% dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "After symptom management, consider 75% dose."
+      },
+      {
+        "rule_id": "OTHER_G3",
+        "field": "other_toxicity_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "delay",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Defer one week until resolved to grade ≤1; discuss if delay exceeds one week."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Defer one week until resolved to grade ≤1; discuss if delay exceeds one week."
       }
     ]
   },

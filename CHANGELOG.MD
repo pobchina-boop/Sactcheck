@@ -1,3 +1,25 @@
+# SACTCheck v0.36.4 — Platform-wide CTCAE grade descriptors
+
+- Adds a central reusable CTCAE v5.0 educational descriptor library.
+- Enhances every grade-based select input across all previously encoded regimens.
+- Adds concise toxicity-specific one-line descriptions for neuropathy, diarrhoea/colitis, mucositis, pneumonitis, rash, infusion/hypersensitivity reactions, hypertension, proteinuria, haemorrhage, infection, PPE, cardiac, neurological and hepatic toxicity.
+- Uses a standard Grade 0–5 severity descriptor when no toxicity-specific mapping is available.
+- Preserves all existing protocol rules, values and decision logic; this release changes display and education only.
+- Applies automatically to future protocols that use grade-based inputs.
+- Adds a visible reminder that descriptors are concise educational aids and the full CTCAE criterion should be checked when clinically important.
+
+# Version 0.36.3 — Breast Rule Remediation Batch 3
+
+Converted five additional breast catalogue placeholders into protocol-specific encoded prototypes:
+
+- NCCP 00204 pertuzumab, trastuzumab and docetaxel
+- NCCP 00206 trastuzumab emtansine (metastatic)
+- NCCP 00414 palbociclib
+- NCCP 00525 ribociclib (metastatic)
+- NCCP 00794 sacituzumab govitecan
+
+Priority was given to NCCP exclusions, hard stops, ANC/platelet criteria, cardiac and organ-function restrictions, dose interruption/reduction pathways and regimen-specific severe toxicities. Sacituzumab includes day-specific ANC thresholds and occurrence-based G-CSF/dose-reduction logic. All remain pending consultant and oncology-pharmacy validation.
+
 ## Version 0.34.0 — Batch 6 early breast expansion
 
 - Expands the active catalogue from 58 to 68 unique NCCP protocols.
@@ -280,3 +302,26 @@ Browser imports are local previews only. A protocol becomes available to all use
 - Marked newly added cards as catalogue placeholders pending protocol-specific rule encoding and consultant/oncology-pharmacy feedback.
 - Preserved existing validated live assessment rules and prevented duplicate NCCP IDs or paths.
 - Expanded the pending emetogenic-risk map to all active protocols.
+
+## 0.36.1 — Breast clinical-rule remediation batch 1
+
+Converted five breast catalogue placeholders into source-checked encoded prototypes:
+- NCCP 00232 intravenous vinorelbine
+- NCCP 00259 oral vinorelbine
+- NCCP 00251 carboplatin AUC 4–6 every 28 days
+- NCCP 00230 nab-paclitaxel every 21 days
+- NCCP 00738 bevacizumab plus weekly paclitaxel
+
+Prioritises exact NCCP exclusions, baseline-versus-on-treatment context, ANC and platelet thresholds, renal/hepatic hard stops, dose delays/reductions, febrile neutropenia and key regimen-specific toxicity rules. All remain pending consultant and oncology-pharmacy validation before clinical authorisation.
+
+## 0.36.2 — Breast clinical-rule remediation batch 2
+
+Converted five additional breast catalogue placeholders into clinically encoded prototypes:
+
+- NCCP 00261 carboplatin AUC 4–6 monotherapy, 21 day
+- NCCP 00430 gemcitabine and carboplatin AUC2, 21 day
+- NCCP 00507 pertuzumab, trastuzumab and weekly paclitaxel
+- NCCP 00526 pertuzumab, trastuzumab and vinorelbine
+- NCCP 00621 paclitaxel 80 mg/m² days 1, 8 and 15, 28 day
+
+Prioritises source-specific exclusions, hard treatment stops, ANC and platelet thresholds, renal/hepatic restrictions, cardiac safety, hypersensitivity, neuropathy, febrile neutropenia and dose modification pathways. All remain encoded prototypes pending consultant and oncology-pharmacy validation.

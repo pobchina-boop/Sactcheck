@@ -2,10 +2,10 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00414-vcurrent",
   "file_name": "00414-palbociclib.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00414",
-    "nccp_version": "current",
+    "nccp_version": 5,
     "tumour_group": "Breast",
     "title": "Palbociclib Therapy - 28 day",
     "short_title": "Palbociclib",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": null,
     "source_url": "https://healthservice.hse.ie/documents/6457/414_v5_Palbociclib_o9nHDn7.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.3",
     "treatment_setting": [
       "metastatic"
     ],
@@ -24,7 +24,7 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,54 +34,395 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "assessment_day": {
+      "label": "Assessment timing",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": "day1",
+          "label": "Day 1 of cycle"
+        },
+        {
+          "value": "day15",
+          "label": "Day 15 of cycles 1–2"
+        },
+        {
+          "value": "other",
+          "label": "Other / symptom review"
         }
       ],
-      "demo_value": "review"
+      "demo_value": "day1"
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 2
+    },
+    "platelets": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "unit": "×10⁹/L",
+      "demo_value": 150
+    },
+    "fever_or_infection": {
+      "label": "Fever ≥38.5°C and/or infection with grade 3 neutropenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "prolonged_or_recurrent_grade3": {
+      "label": "Prolonged (>1 week) or recurrent grade 3 neutropenia on Day 1",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "nonhaem_toxicity_grade": {
+      "label": "Non-haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "nonhaem_persists_despite_treatment": {
+      "label": "Grade ≥3 toxicity persists despite medical treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "child_pugh": {
+      "label": "Child-Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No hepatic impairment"
+        },
+        {
+          "value": "A",
+          "label": "A"
+        },
+        {
+          "value": "B",
+          "label": "B"
+        },
+        {
+          "value": "C",
+          "label": "C"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "dose_level": {
+      "label": "Current palbociclib dose",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 125,
+          "label": "125 mg"
+        },
+        {
+          "value": 100,
+          "label": "100 mg"
+        },
+        {
+          "value": 75,
+          "label": "75 mg"
+        }
+      ],
+      "demo_value": 125
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
-        },
+        "rule_id": "ANC_G4",
         "action": {
-          "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "type": "withhold_then_reduce",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "Withhold until ANC ≥1.0 and platelets ≥50 ×10⁹/L, then resume at the next lower dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Withhold until ANC ≥1.0 and platelets ≥50 ×10⁹/L, then resume at the next lower dose.",
+        "field": "anc",
+        "operator": "<",
+        "value": 0.5
+      },
+      {
+        "rule_id": "PLT_G4",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "Withhold until ANC ≥1.0 and platelets ≥50 ×10⁹/L, then resume at the next lower dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Withhold until ANC ≥1.0 and platelets ≥50 ×10⁹/L, then resume at the next lower dose.",
+        "field": "platelets",
+        "operator": "<",
+        "value": 25
+      },
+      {
+        "rule_id": "FEBRILE_G3",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "Withhold until ANC ≥1.0 and platelets ≥50 ×10⁹/L, then resume at the next lower dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Withhold until ANC ≥1.0 and platelets ≥50 ×10⁹/L, then resume at the next lower dose.",
+        "field": "fever_or_infection",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "DAY1_G3_ANC",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "Day 1 grade 3 neutropenia: withhold and repeat FBC within 1 week; resume at same dose after ANC ≥1.0 and platelets ≥50."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Day 1 grade 3 neutropenia: withhold and repeat FBC within 1 week; resume at same dose after ANC ≥1.0 and platelets ≥50.",
+        "all": [
+          {
+            "field": "assessment_day",
+            "operator": "==",
+            "value": "day1"
+          },
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.0
+          }
+        ]
+      },
+      {
+        "rule_id": "DAY1_G3_PLT",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "Day 1 grade 3 thrombocytopenia: withhold and repeat FBC within 1 week; resume at same dose after recovery."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Day 1 grade 3 thrombocytopenia: withhold and repeat FBC within 1 week; resume at same dose after recovery.",
+        "all": [
+          {
+            "field": "assessment_day",
+            "operator": "==",
+            "value": "day1"
+          },
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 25
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 50
+          }
+        ]
+      },
+      {
+        "rule_id": "DAY15_G3",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "On Day 15 of cycles 1–2, continue current dose for grade 3 cytopenia and repeat FBC on Day 22."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "On Day 15 of cycles 1–2, continue current dose for grade 3 cytopenia and repeat FBC on Day 22.",
+        "all": [
+          {
+            "field": "assessment_day",
+            "operator": "==",
+            "value": "day15"
+          },
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.0
+          }
+        ]
+      },
+      {
+        "rule_id": "RECURRENT_G3",
+        "action": {
+          "type": "dose_reduce_one_level",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "Consider one dose-level reduction for prolonged or recurrent grade 3 neutropenia."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Consider one dose-level reduction for prolonged or recurrent grade 3 neutropenia.",
+        "field": "prolonged_or_recurrent_grade3",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "NONHAEM_G3",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "Withhold until recovery to grade ≤1, or grade 2 if not a safety risk, then resume at the next lower dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Withhold until recovery to grade ≤1, or grade 2 if not a safety risk, then resume at the next lower dose.",
+        "all": [
+          {
+            "field": "nonhaem_toxicity_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "nonhaem_persists_despite_treatment",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      {
+        "rule_id": "CHILDPUGH_C",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "Use 60% of the original dose in Child-Pugh C."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Use 60% of the original dose in Child-Pugh C.",
+        "field": "child_pugh",
+        "operator": "==",
+        "value": "C"
+      },
+      {
+        "rule_id": "BELOW75",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "palbociclib"
+          ],
+          "recommendation": "If a further dose reduction below 75 mg/day is required, discontinue treatment."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "If a further dose reduction below 75 mg/day is required, discontinue treatment.",
+        "all": [
+          {
+            "field": "dose_level",
+            "operator": "==",
+            "value": 75
+          },
+          {
+            "field": "prolonged_or_recurrent_grade3",
+            "operator": "==",
+            "value": true
+          }
+        ]
       }
     ]
   },

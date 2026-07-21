@@ -1,19 +1,19 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00738-vcurrent",
+  "protocol_id": "nccp-00738-v3",
   "file_name": "00738-bevacizumab-paclitaxel.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00738",
-    "nccp_version": "current",
+    "nccp_version": 3,
     "tumour_group": "Breast",
     "title": "Bevacizumab 10 mg/kg and Paclitaxel 80 mg/m2",
     "short_title": "Bevacizumab + paclitaxel",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "First-line treatment of metastatic breast cancer in the NCCP-defined population.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 10,
     "source_url": "https://healthservice.hse.ie/documents/6671/738.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.1",
     "treatment_setting": [
       "metastatic"
     ],
@@ -24,7 +24,7 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,54 +34,761 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "assessment_stage": {
+      "label": "Assessment stage",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": "baseline",
+          "label": "Baseline / treatment initiation"
+        },
+        {
+          "value": "on_treatment",
+          "label": "On-treatment / pre-dose"
         }
       ],
-      "demo_value": "review"
+      "demo_value": "on_treatment"
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "active_or_recent_severe_infection": {
+      "label": "Severe infection current or within 2 weeks",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "febrile_neutropenia_prior": {
+      "label": "Febrile neutropenia in prior cycle",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "prior_myelosuppression_delay": {
+      "label": "Previous delay for myelosuppression",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "cho_hypersensitivity": {
+      "label": "Hypersensitivity to CHO-cell/recombinant antibodies",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 2.0
+    },
+    "platelets": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 200
+    },
+    "anc_below_05_days": {
+      "label": "Days ANC <0.5 ×10⁹/L",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "demo_value": 0
+    },
+    "febrile_neutropenia": {
+      "label": "Febrile neutropenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "alt_uln_multiple": {
+      "label": "ALT (×ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 1.0
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin (×ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.01,
+      "demo_value": 1.0
+    },
+    "neuropathy_grade": {
+      "label": "Neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "other_nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "urine_dipstick": {
+      "label": "Urine protein dipstick",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "negative_1",
+          "label": "Negative/1+"
+        },
+        {
+          "value": "2_3",
+          "label": "2+/3+"
+        },
+        {
+          "value": "4",
+          "label": "4+"
+        }
+      ],
+      "demo_value": "negative_1"
+    },
+    "urine_protein_g_24h": {
+      "label": "24-hour urine protein (g/24h)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.1,
+      "demo_value": 0
+    },
+    "hypertension_status": {
+      "label": "Hypertension status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "controlled",
+          "label": "Controlled"
+        },
+        {
+          "value": "uncontrolled_symptomatic",
+          "label": "Uncontrolled/symptomatic"
+        },
+        {
+          "value": "grade2_3",
+          "label": "Grade 2–3"
+        },
+        {
+          "value": "grade4_persistent3",
+          "label": "Grade 4 or persistent grade 3"
+        }
+      ],
+      "demo_value": "controlled"
+    },
+    "grade4_fistula": {
+      "label": "Tracheoesophageal or grade 4 fistula",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "grade4_thromboembolism": {
+      "label": "Grade 4 thromboembolic event",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "haemorrhage_grade": {
+      "label": "Haemorrhage grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "gi_perforation": {
+      "label": "Gastrointestinal perforation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
+        "rule_id": "EXCLUSION_HS",
+        "any": [
+          {
+            "field": "hypersensitivity",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "cho_hypersensitivity",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab",
+            "paclitaxel"
+          ],
+          "recommendation": "Do not administer bevacizumab/paclitaxel."
         },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer bevacizumab/paclitaxel."
+      },
+      {
+        "rule_id": "EXCLUSION_ANC",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab",
+            "paclitaxel"
+          ],
+          "recommendation": "Baseline ANC <1.5 ×10⁹/L is an exclusion."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Baseline ANC <1.5 ×10⁹/L is an exclusion.",
+        "all": [
+          {
+            "field": "assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.5
+          }
+        ]
+      },
+      {
+        "rule_id": "EXCLUSION_HEPATIC",
+        "field": "severe_hepatic_impairment",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Severe hepatic impairment is an exclusion."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Severe hepatic impairment is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_PREG",
+        "field": "pregnancy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab",
+            "paclitaxel"
+          ],
+          "recommendation": "Do not administer during pregnancy."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer during pregnancy."
+      },
+      {
+        "rule_id": "ANC_05_099",
+        "all": [
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay and consider paclitaxel dose reduction at the subsequent cycle."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Delay and consider paclitaxel dose reduction at the subsequent cycle."
+      },
+      {
+        "rule_id": "PLT_70_90",
+        "all": [
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 70
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 90
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay and consider paclitaxel dose reduction at the subsequent cycle."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Delay and consider paclitaxel dose reduction at the subsequent cycle."
+      },
+      {
+        "rule_id": "ANC_LT05_7D",
+        "field": "anc_below_05_days",
+        "operator": ">=",
+        "value": 7,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay and reduce paclitaxel by one dose level after recovery."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Delay and reduce paclitaxel by one dose level after recovery."
+      },
+      {
+        "rule_id": "PLT_LT70",
+        "field": "platelets",
+        "operator": "<",
+        "value": 70,
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay and reduce paclitaxel by one dose level after recovery."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Delay and reduce paclitaxel by one dose level after recovery."
+      },
+      {
+        "rule_id": "FN_GCSF",
+        "field": "febrile_neutropenia",
+        "operator": "==",
+        "value": true,
         "action": {
           "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Consider addition of G-CSF."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Consider addition of G-CSF."
+      },
+      {
+        "rule_id": "HEP_CONTRA",
+        "any": [
+          {
+            "field": "alt_uln_multiple",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "field": "bilirubin_uln_multiple",
+            "operator": ">",
+            "value": 5
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Paclitaxel is contraindicated if ALT ≥10 ×ULN or bilirubin >5 ×ULN."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Paclitaxel is contraindicated if ALT ≥10 ×ULN or bilirubin >5 ×ULN."
+      },
+      {
+        "rule_id": "HEP_BILI_2_5",
+        "field": "bilirubin_uln_multiple",
+        "operator": ">",
+        "value": 2,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Use paclitaxel 40 mg/m²."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Use paclitaxel 40 mg/m²."
+      },
+      {
+        "rule_id": "HEP_BILI_125_2",
+        "field": "bilirubin_uln_multiple",
+        "operator": ">",
+        "value": 1.25,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Use paclitaxel 60 mg/m²."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Use paclitaxel 60 mg/m²."
+      },
+      {
+        "rule_id": "NEURO_G2",
+        "field": "neuropathy_grade",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Decrease paclitaxel by 10 mg/m²."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Decrease paclitaxel by 10 mg/m²."
+      },
+      {
+        "rule_id": "NONHAEM_G2",
+        "field": "other_nonhaem_toxicity_grade",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Hold until ≤grade 1, then reduce subsequent paclitaxel by 10 mg/m²."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Hold until ≤grade 1, then reduce subsequent paclitaxel by 10 mg/m²."
+      },
+      {
+        "rule_id": "TOX_G3",
+        "field": "other_nonhaem_toxicity_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Discontinue paclitaxel for grade ≥3 reaction."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Discontinue paclitaxel for grade ≥3 reaction."
+      },
+      {
+        "rule_id": "PROTEIN_4PLUS",
+        "field": "urine_dipstick",
+        "operator": "==",
+        "value": "4",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Withhold bevacizumab and obtain 24-hour urine protein."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Withhold bevacizumab and obtain 24-hour urine protein."
+      },
+      {
+        "rule_id": "PROTEIN_GT4",
+        "field": "urine_protein_g_24h",
+        "operator": ">",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Discontinue bevacizumab."
+      },
+      {
+        "rule_id": "PROTEIN_GT2",
+        "field": "urine_protein_g_24h",
+        "operator": ">",
+        "value": 2,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Hold bevacizumab; recheck every 2 weeks and resume when ≤2 g/24h."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Hold bevacizumab; recheck every 2 weeks and resume when ≤2 g/24h."
+      },
+      {
+        "rule_id": "HTN_UNCONTROLLED",
+        "field": "hypertension_status",
+        "operator": "==",
+        "value": "uncontrolled_symptomatic",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Withhold bevacizumab and initiate/adjust antihypertensive therapy."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Withhold bevacizumab and initiate/adjust antihypertensive therapy."
+      },
+      {
+        "rule_id": "HTN_GRADE4",
+        "field": "hypertension_status",
+        "operator": "==",
+        "value": "grade4_persistent3",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Discontinue bevacizumab."
+      },
+      {
+        "rule_id": "FISTULA",
+        "field": "grade4_fistula",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Discontinue bevacizumab."
+      },
+      {
+        "rule_id": "TE_G4",
+        "field": "grade4_thromboembolism",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Discontinue bevacizumab."
+      },
+      {
+        "rule_id": "HAEM_G3",
+        "field": "haemorrhage_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for haemorrhage grade ≥3."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Discontinue bevacizumab for haemorrhage grade ≥3."
+      },
+      {
+        "rule_id": "GI_PERF",
+        "field": "gi_perforation",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Discontinue bevacizumab."
       }
     ]
   },
