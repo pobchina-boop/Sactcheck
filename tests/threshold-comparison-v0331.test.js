@@ -26,4 +26,4 @@ assert(ui.includes('renderThresholdComparison(finding, result)'), 'Result render
 assert(ui.includes('Protocol cutoff'), 'Protocol cutoff label is missing');
 assert(ui.includes('patient-value'), 'Patient value styling is missing');
 assert(html.includes('.threshold-comparison-row'), 'Threshold comparison CSS is missing');
-console.log('v0.34.0 threshold comparison tests passed');
+console.log('v0.35.0 threshold comparison tests passed');

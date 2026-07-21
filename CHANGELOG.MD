@@ -265,3 +265,9 @@ Browser imports are local previews only. A protocol becomes available to all use
 - Added a reusable JSON-generated assessment interface.
 - Added explainable findings and copyable/downloadable documentation.
 - Retained all existing regimen-specific assessment screens as migration fallbacks.
+
+## v0.35.0 — Batch 7 breast completion expansion
+- Adds 20 non-duplicate breast regimens spanning remaining early/endocrine and locally advanced/metastatic treatment.
+- Expands the active catalogue from 68 to 88 protocols.
+- Retains blood-first partial assessment, explicit threshold comparison, official NCCP PDF tiles, duplicate safeguards, and the pending emetogenic/supportive-care PDF framework.
+- New encodings remain prototypes pending consultant and oncology-pharmacy validation against the official NCCP documents.

@@ -1,0 +1,142 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00228-vcurrent",
+  "file_name": "00228-eribulin-monotherapy.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00228",
+    "nccp_version": "current",
+    "tumour_group": "Breast",
+    "title": "eriBULin Monotherapy",
+    "short_title": "Eribulin",
+    "indication": "Locally advanced or metastatic breast cancer after prior chemotherapy.",
+    "icd10": "C50",
+    "source_document_pages": 7,
+    "source_url": "https://healthservice.hse.ie/documents/6564/228_eriBULin.pdf",
+    "sactcheck_encoding_version": "0.35.0",
+    "treatment_setting": [
+      "locally_advanced",
+      "metastatic"
+    ],
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json"
+    },
+    "validation": {
+      "source_document_checked": true,
+      "software_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the official regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
+  },
+  "input_definitions": {
+    "anc_x10e9_l": {
+      "label": "ANC",
+      "type": "number",
+      "unit": "×10⁹/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "unit": "×10⁹/L",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 200
+    },
+    "hb_g_dl": {
+      "label": "Haemoglobin",
+      "type": "number",
+      "unit": "g/dL",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 12
+    },
+    "febrile_neutropenia": {
+      "label": "Febrile neutropenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "number",
+      "unit": "CTCAE grade",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "demo_value": 0
+    }
+  },
+  "required_inputs": [],
+  "assessment_profiles": [
+    {
+      "id": "default",
+      "label": "Rapid partial assessment",
+      "required_inputs": [
+        "anc_x10e9_l",
+        "platelets_x10e9_l",
+        "hb_g_dl",
+        "febrile_neutropenia",
+        "neuropathy_grade"
+      ],
+      "context": {}
+    }
+  ],
+  "output_templates": {
+    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
+    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
+    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
+    "consultant_review": "The entered result lies in a phase-dependent or non-deterministic range. Confirm the treatment phase and review the official NCCP protocol."
+  },
+  "rule_engine": {
+    "evaluation_mode": "highest_priority_triggered",
+    "rules": [
+      {
+        "id": "anc_below_cutoff",
+        "priority": 100,
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1.0
+        },
+        "action": {
+          "type": "delay",
+          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
+        }
+      },
+      {
+        "id": "platelets_below_cutoff",
+        "priority": 100,
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 100
+        },
+        "action": {
+          "type": "delay",
+          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
+        }
+      }
+    ]
+  },
+  "supportive_care": {
+    "emetogenic_risk": "awaiting_proforma_mapping",
+    "supportive_medications_pdf_url": null,
+    "supportive_medications_label": "Supportive medications / antiemetic guide"
+  }
+}
