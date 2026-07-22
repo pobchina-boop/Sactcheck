@@ -147,7 +147,7 @@
     .health-dashboard{margin:14px 0 18px;background:linear-gradient(135deg,#f8fbfc,#eef7f4);border:1px solid var(--line);border-radius:12px;padding:14px}
     .health-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
     .health-head h3{margin:0 0 4px;font-size:18px}.health-head p{margin:0}
-    .health-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+    .health-metrics{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
     .health-metric{background:#fff;border:1px solid var(--line);border-radius:9px;padding:11px;min-height:72px}
     .health-metric span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
     .health-metric strong{display:block;font-size:23px;line-height:1.1}.health-metric small{display:block;color:var(--muted);margin-top:4px}
@@ -269,6 +269,8 @@
           <div class="health-metric"><span>Rules encoded</span><strong id="healthRules">—</strong><small>Rule Explorer entries</small></div>
           <div class="health-metric"><span>Automated tests</span><strong id="healthTests">Pending run</strong><small>Focused engine tests passed</small></div>
           <div class="health-metric"><span>Clinically validated</span><strong id="healthValidated">0</strong><small>Consultant + pharmacy</small></div>
+          <div class="health-metric"><span>Placeholder cards</span><strong id="healthPlaceholders">—</strong><small>Queued for replacement</small></div>
+          <div class="health-metric"><span>Supportive care mapped</span><strong id="healthSupportiveMapped">—</strong><small>Traffic light + script resolved</small></div>
         </div>
         <div class="health-bars">
           <div class="health-panel"><h4>Library maturity</h4>
@@ -1774,9 +1776,11 @@ function updateProtocolHealthDashboard(){
   const consultant=uro.filter(r=>r.validation&&r.validation.consultantReviewed).length;
   const pharmacy=uro.filter(r=>r.validation&&r.validation.pharmacyReviewed).length;
   const validated=uro.filter(r=>r.validation&&r.validation.consultantReviewed&&r.validation.pharmacyReviewed).length;
+  const placeholders=cards.filter(c=>c.dataset.status==='planned'||c.classList.contains('planned')||/placeholder|catalogue only/i.test(c.textContent)).length;
+  const supportiveMapped=cards.filter(c=>c.querySelector('.emetogenic-high,.emetogenic-moderate,.emetogenic-low')).length;
   const pct=(n,d)=>d?Math.round(n/d*100):0;
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
-  set('healthTotal',total);set('healthActive',active);set('healthRules',ruleCount);set('healthValidated',validated);
+  set('healthTotal',total);set('healthActive',active);set('healthRules',ruleCount);set('healthValidated',validated);set('healthPlaceholders',placeholders);set('healthSupportiveMapped',supportiveMapped);
   const ap=pct(active,total),cp=pct(consultant,active),pp=pct(pharmacy,active);
   set('healthActivePct',ap+'%');set('healthConsultPct',cp+'%');set('healthPharmPct',pp+'%');
   const bars=[['healthActiveBar',ap],['healthConsultBar',cp],['healthPharmBar',pp]];bars.forEach(([id,v])=>{const e=document.getElementById(id);if(e)e.style.width=v+'%'});
@@ -1957,12 +1961,12 @@ function openProtocolPreview(event){
   }
 }
 </script>
-<script src="js/emetogenic-risk.js?v=0.36.5"></script>
+<script src="js/emetogenic-risk.js?v=0.36.7"></script>
 <script src="js/rule-engine.js?v=0.36.0"></script>
 <script src="js/protocol-validator.js?v=0.36.0"></script>
 <script src="js/assessment-engine.js?v=0.36.0"></script>
 <script src="js/ctcae-descriptors.js?v=0.36.4"></script>
-<script src="js/generic-assessment-ui.js?v=0.36.5"></script>
+<script src="js/generic-assessment-ui.js?v=0.36.7"></script>
 <script src="js/folfox-shadow-core.js"></script>
 <script src="js/folfox-shadow-ui.js"></script>
 

@@ -13,7 +13,7 @@
     proformaUrl: null,
     proformaAnchor: null
   });
-  let mapping = { source: {}, levels: {}, protocols: {} };
+  let mapping = { source: {}, levels: {}, scripts: {}, protocols: {} };
 
   async function load(path = "data/emetogenic-risk-map.json") {
     try {
@@ -40,12 +40,18 @@
     const record = mapping.protocols?.[codeFor(protocol)] || {};
     const level = normaliseLevel(metadata.emetogenic_risk || record.level);
     const levelDefinition = mapping.levels?.[level] || {};
-    const baseUrl = metadata.antiemetic_proforma_url || record.proforma_url || mapping.source?.url || null;
+    const supportive = protocol?.supportive_care || {};
+    const scriptId = supportive.script_id || metadata.supportive_script_id || record.script_id || levelDefinition.default_script_id || null;
+    const script = scriptId ? (mapping.scripts?.[scriptId] || {}) : {};
+    const baseUrl = supportive.supportive_medications_pdf_url || metadata.antiemetic_proforma_url || record.proforma_url || script.url || null;
     const anchor = metadata.antiemetic_proforma_anchor || record.proforma_anchor || null;
     return {
       level,
       label: levelDefinition.label || DEFAULT_RECORD.label,
       className: `emetogenic-${level}`,
+      scriptId,
+      scriptStatus: script.status || (baseUrl ? "available" : "unmapped"),
+      scriptLabel: supportive.supportive_medications_label || script.label || null,
       proformaUrl: baseUrl ? `${baseUrl}${anchor ? `#${anchor}` : ""}` : null,
       proformaAnchor: anchor
     };
@@ -59,5 +65,5 @@
     return `<${tag} class="badge emetogenic-badge ${risk.className}"${href}${title}><span class="emetogenic-dot" aria-hidden="true"></span>${risk.label}</${tag}>`;
   }
 
-  root.SACTCheckEmetogenicRisk = Object.freeze({ version: "0.36.5", load, get, badge });
+  root.SACTCheckEmetogenicRisk = Object.freeze({ version: "0.36.7", load, get, badge });
 })(typeof globalThis !== "undefined" ? globalThis : this);
