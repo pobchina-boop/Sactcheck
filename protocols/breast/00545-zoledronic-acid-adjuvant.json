@@ -1,19 +1,19 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00545-vcurrent",
+  "protocol_id": "nccp-00545-v3",
   "file_name": "00545-zoledronic-acid-adjuvant.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00545",
-    "nccp_version": "current",
+    "nccp_version": 3,
     "tumour_group": "Breast",
     "title": "Zoledronic Acid Monotherapy",
     "short_title": "Zoledronic acid adjuvant",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "Adjuvant treatment of breast cancer in endocrine-depleted pre- or post-menopausal women.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 4,
     "source_url": "https://healthservice.hse.ie/documents/6381/545_Zoledronic_acid.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.9",
     "treatment_setting": [
       "adjuvant"
     ],
@@ -24,7 +24,7 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,60 +34,362 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the NCCP source document. It does not replace the current NCCP regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
   },
+  "indications": [
+    {
+      "code": "00545a",
+      "description": "Adjuvant treatment of breast cancer in endocrine-depleted pre- or post-menopausal women."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "adjuvant",
+      "cycle_length_days": 182,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "zoledronic acid",
+          "dose": {
+            "value": "4 mg (renal-adjusted where applicable)",
+            "unit": "mg"
+          },
+          "route": "IV",
+          "administration_note": "Infuse over at least 15 minutes every 6 months for up to 5 years; ensure appropriate hydration."
+        }
+      ]
+    }
+  ],
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "indication_id": {
+      "label": "Indication",
       "type": "select",
-      "required": false,
+      "required": true,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": "00545a",
+          "label": "Adjuvant endocrine-depleted breast cancer"
         }
       ],
-      "demo_value": "review"
+      "demo_value": "00545a",
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "demo_value": 1,
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "crcl": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 250,
+      "step": 1,
+      "demo_value": 70,
+      "ui_section": "labs",
+      "unit": "mL/min"
+    },
+    "baseline_creatinine": {
+      "label": "Baseline creatinine",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 80,
+      "ui_section": "labs",
+      "unit": "µmol/L"
+    },
+    "current_creatinine": {
+      "label": "Current creatinine",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 80,
+      "ui_section": "labs",
+      "unit": "µmol/L"
+    },
+    "hypocalcaemia": {
+      "label": "Hypocalcaemia present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "labs"
+    },
+    "hypomagnesaemia": {
+      "label": "Hypomagnesaemia present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "labs"
+    },
+    "hypophosphataemia": {
+      "label": "Hypophosphataemia present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "labs"
+    },
+    "dental_onj_concern": {
+      "label": "Dental concern or suspected osteonecrosis of the jaw",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "relevant_drug_hypersensitivity": {
+      "label": "Hypersensitivity to zoledronic acid/bisphosphonates",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
     }
   },
   "required_inputs": [],
   "assessment_profiles": [
     {
       "id": "default",
-      "label": "Placeholder protocol card",
+      "label": "Zoledronic acid assessment",
       "required_inputs": [
-        "placeholder_review"
+        "indication_id",
+        "cycle_number"
       ],
       "context": {}
     }
   ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "Entered values do not trigger an encoded hold or dose-adjustment rule.",
+    "delay": "Withhold and correct the identified abnormality before treatment.",
+    "dose_reduce": "Use the renal-adjusted dose shown and obtain prescribing/pharmacy verification.",
+    "consultant_review": "Consultant review is required."
   },
   "rule_engine": {
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
-        },
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "relevant_drug_hypersensitivity",
+        "operator": "==",
+        "value": true,
         "action": {
-          "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "type": "contraindicated",
+          "components": [
+            "zoledronic acid"
+          ],
+          "recommendation": "Do not administer."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_PREGNANCY_BREASTFEEDING",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "zoledronic acid"
+          ],
+          "recommendation": "Do not administer during pregnancy or breastfeeding."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Pregnancy and breastfeeding are exclusions."
+      },
+      {
+        "rule_id": "ELECTROLYTE_CORRECTION",
+        "any": [
+          {
+            "field": "hypocalcaemia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "hypomagnesaemia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "hypophosphataemia",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "zoledronic acid"
+          ],
+          "recommendation": "Correct calcium, magnesium and/or phosphate abnormality before treatment."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Electrolyte abnormalities must be corrected before commencing."
+      },
+      {
+        "rule_id": "CRCL_LT30",
+        "field": "crcl",
+        "operator": "<",
+        "value": 30,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "zoledronic acid"
+          ],
+          "recommendation": "Zoledronic acid is not recommended when CrCl is <30 mL/min."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Severe renal impairment is an exclusion."
+      },
+      {
+        "rule_id": "CRCL_30_39",
+        "all": [
+          {
+            "field": "crcl",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "field": "crcl",
+            "operator": "<",
+            "value": 40
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "zoledronic acid"
+          ],
+          "recommendation": "Use zoledronic acid 3 mg."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "CrCl 30–39 mL/min: 3 mg."
+      },
+      {
+        "rule_id": "CRCL_40_49",
+        "all": [
+          {
+            "field": "crcl",
+            "operator": ">=",
+            "value": 40
+          },
+          {
+            "field": "crcl",
+            "operator": "<",
+            "value": 50
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "zoledronic acid"
+          ],
+          "recommendation": "Use zoledronic acid 3.3 mg."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "CrCl 40–49 mL/min: 3.3 mg."
+      },
+      {
+        "rule_id": "CRCL_50_60",
+        "all": [
+          {
+            "field": "crcl",
+            "operator": ">=",
+            "value": 50
+          },
+          {
+            "field": "crcl",
+            "operator": "<=",
+            "value": 60
+          }
+        ],
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "zoledronic acid"
+          ],
+          "recommendation": "Use zoledronic acid 3.5 mg."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "CrCl 50–60 mL/min: 3.5 mg."
+      },
+      {
+        "rule_id": "ONJ_CONCERN",
+        "field": "dental_onj_concern",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "zoledronic acid"
+          ],
+          "recommendation": "Withhold and obtain dental/maxillofacial and consultant review for suspected ONJ or significant dental concern."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Dental assessment is required where clinically indicated."
       }
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
+    "emetogenic_risk": "minimal",
+    "script_id": "none-required",
     "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "supportive_medications_label": "No routine antiemetic script required",
+    "summary": [
+      "No routine premedication required.",
+      "Ensure oral calcium at least 500 mg and vitamin D at least 400 IU daily unless hypercalcaemic.",
+      "Ensure hydration; avoid overhydration in patients at risk of cardiac failure."
+    ],
+    "validation_status": "pending_oncology_pharmacy_review"
   }
 }

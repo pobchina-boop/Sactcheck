@@ -2,92 +2,383 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00200-vcurrent",
   "file_name": "00200-trastuzumab-iv-q21d.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00200",
     "nccp_version": "current",
     "tumour_group": "Breast",
-    "title": "Trastuzumab (IV) Monotherapy - 21 days",
+    "title": "Trastuzumab Intravenous Monotherapy – 21 days",
     "short_title": "Trastuzumab IV q21d",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
-    "icd10": "C50",
-    "source_document_pages": null,
+    "indication": "HER2-positive breast cancer treated with intravenous trastuzumab every 21 days.",
+    "regimen_reimbursement_code": "00785a",
+    "published_date": "2022-12-20",
+    "review_date": "2029-04-12",
     "source_url": "https://healthservice.hse.ie/documents/6330/200_Trastuzumab_21days_Ubeecpc.pdf",
-    "sactcheck_encoding_version": "0.36.0",
-    "treatment_setting": [
-      "metastatic"
-    ],
+    "source_document_pages": 5,
     "catalog": {
       "enabled": true
     },
     "migration": {
       "mode": "live_json"
     },
+    "sactcheck_encoding_version": "0.36.9",
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
-    }
+    },
+    "treatment_setting": [
+      "metastatic"
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "anaphylaxis_facilities_required": true,
+    "disclaimer": "Decision-support encoding of the NCCP source document. It does not replace the current NCCP regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
   },
+  "indications": [
+    {
+      "code": "00200a",
+      "description": "HER2-positive breast cancer treated with intravenous trastuzumab every 21 days."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "treatment",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "trastuzumab",
+          "dose": {
+            "value": "8 mg/kg loading then 6 mg/kg",
+            "unit": "mg/kg"
+          },
+          "route": "IV",
+          "administration_note": "Facilities to treat anaphylaxis must be available; use loading/maintenance schedule per NCCP."
+        }
+      ]
+    }
+  ],
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "indication_id": {
+      "label": "Indication",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "00200a",
+          "label": "HER2-positive breast cancer treated with intravenous trastuzumab every 21 days."
+        }
+      ],
+      "demo_value": "00200a",
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "assessment_type": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "pre_treatment",
+          "label": "Pre-treatment assessment"
+        }
+      ],
+      "demo_value": "pre_treatment",
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "max": 200,
+      "step": 1,
+      "demo_value": 1,
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "lvef_percent": {
+      "label": "Current LVEF (%)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "demo_value": 55,
+      "ui_section": "labs",
+      "unit": "%"
+    },
+    "lvef_drop_points": {
+      "label": "Absolute LVEF fall from pretreatment value (percentage points)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "demo_value": 0,
+      "ui_section": "labs",
+      "unit": "percentage points"
+    },
+    "symptomatic_heart_failure": {
+      "label": "Symptomatic heart failure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "clinically_significant_cardiac_disease": {
+      "label": "Clinically significant cardiac disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "hypersensitivity_grade": {
+      "label": "Infusion/hypersensitivity reaction grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
         }
       ],
-      "demo_value": "review"
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "relevant_drug_hypersensitivity": {
+      "label": "Relevant drug hypersensitivity before treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "fbc_clinical_concern": {
+      "label": "FBC abnormality requiring clinical review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "help": "The protocol requires FBC monitoring but does not define a numerical ANC/platelet hold threshold."
     }
   },
-  "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
+  "required_inputs": [
+    "indication_id",
+    "assessment_type",
+    "cycle_number"
   ],
-  "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
-  },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "relevant_drug_hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Do not administer; obtain consultant review."
         },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Relevant hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_PREGNANCY_BREASTFEEDING",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Do not administer during pregnancy or breastfeeding; urgent consultant review required."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy and breastfeeding are exclusions."
+      },
+      {
+        "rule_id": "CARDIAC_DISEASE_EXCLUSION",
+        "field": "clinically_significant_cardiac_disease",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Do not proceed without consultant/cardiology review."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Clinically significant cardiac disease is an exclusion."
+      },
+      {
+        "rule_id": "LVEF_WITHHOLD",
+        "all": [
+          {
+            "field": "lvef_percent",
+            "operator": "<",
+            "value": 50
+          },
+          {
+            "field": "lvef_drop_points",
+            "operator": ">=",
+            "value": 10
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Withhold trastuzumab and repeat LVEF after approximately 3 weeks. If no improvement or further decline, consider discontinuation and refer to cardiology."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "LVEF fall ≥10 points from baseline and to below 50% requires withholding."
+      },
+      {
+        "rule_id": "SYMPTOMATIC_HEART_FAILURE",
+        "field": "symptomatic_heart_failure",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Consider discontinuation and refer urgently to cardiology."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Symptomatic heart failure requires consultant/cardiology review and possible discontinuation."
+      },
+      {
+        "rule_id": "HYPERSENSITIVITY_G4",
+        "field": "hypersensitivity_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Permanently discontinue for Grade 4 hypersensitivity."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Grade 4 hypersensitivity requires discontinuation."
+      },
+      {
+        "rule_id": "FBC_CLINICAL_REVIEW",
+        "field": "fbc_clinical_concern",
+        "operator": "==",
+        "value": true,
         "action": {
           "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Review clinically. Trastuzumab may continue during reversible chemotherapy-induced myelosuppression with careful monitoring."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "No numerical trastuzumab-specific cytopenia threshold is specified."
       }
     ]
   },
+  "output_templates": {
+    "proceed": "No encoded contraindication, hold, dose-modification or treatment-context criterion was triggered. Complete normal prescribing, clinical and pharmacy checks.",
+    "coverage_gap": "One or more potentially relevant protocol domains were not assessed."
+  },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
-    "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "emetogenic_risk": "minimal",
+    "script_id": "generic-low-cuh-v2",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
+    "supportive_medications_label": "CUH low-emetogenic supportive medicines guide",
+    "summary": [
+      "Minimal emetogenic potential.",
+      "Premedication not usually required unless prior hypersensitivity.",
+      "Consider paracetamol and antihistamine cover where clinically appropriate."
+    ],
+    "validation_status": "pending_oncology_pharmacy_review"
   }
 }

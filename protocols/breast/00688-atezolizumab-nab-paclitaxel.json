@@ -1,30 +1,39 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00688-vcurrent",
+  "protocol_id": "nccp-00688-v2a",
   "file_name": "00688-atezolizumab-nab-paclitaxel.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00688",
-    "nccp_version": "current",
-    "tumour_group": "Breast",
+    "nccp_version": "2a",
     "title": "Atezolizumab and nab-Paclitaxel",
     "short_title": "Atezolizumab + nab-paclitaxel",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
-    "icd10": "C50",
-    "source_document_pages": null,
+    "indication": "PD-L1 positive unresectable locally advanced or metastatic triple-negative breast cancer, first-line systemic therapy context.",
+    "regimen_reimbursement_code": "00593a-f",
+    "published_date": "2020-04-09",
+    "review_date": "2026-09-09",
     "source_url": "https://healthservice.hse.ie/documents/6530/688_v2a_Atezolizumab_nab-PACLitaxel.pdf",
-    "sactcheck_encoding_version": "0.36.0",
-    "treatment_setting": [
-      "metastatic"
-    ],
+    "source_document_pages": 10,
     "catalog": {
       "enabled": true
     },
     "migration": {
       "mode": "live_json"
     },
+    "tumour_groups": [
+      "Lung",
+      "Genitourinary"
+    ],
+    "assessment_model": "single_agent_ici",
+    "sactcheck_encoding_version": "0.36.9",
+    "partial_assessment_supported": true,
+    "safety_correction": "Cytotoxic ANC and platelet hold thresholds removed; current v10a ICI-specific adverse-event rules encoded.",
+    "tumour_group": "Breast",
+    "treatment_setting": [
+      "metastatic"
+    ],
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,60 +43,1654 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "anaphylaxis_facilities_required": true,
+    "disclaimer": "Decision-support encoding of the NCCP source document. It does not replace the current NCCP regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
   },
+  "indications": [
+    {
+      "code": "00688a",
+      "description": "PD-L1 positive unresectable locally advanced or metastatic triple-negative breast cancer, first-line systemic therapy context."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "atezolizumab",
+      "cycle_length_days": 28,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "atezolizumab",
+          "dose": {
+            "value": 1680,
+            "unit": "mg"
+          },
+          "route": "IV infusion"
+        }
+      ]
+    }
+  ],
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "indication_id": {
+      "label": "Indication",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "00688a",
+          "label": "PD-L1 positive unresectable locally advanced or metastatic triple-negative breast cancer, first-line systemic therapy context."
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "00688a",
+      "help": "Select the NCCP indication being assessed.",
+      "always_show": true
+    },
+    "assessment_type": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "pre_treatment",
+          "label": "Pre-treatment assessment"
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "pre_treatment",
+      "help": "Protocol-driven assessment stage.",
+      "always_show": true
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "demo_value": 1,
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "active_infection_requiring_therapy": {
+      "label": "Active clinically significant infection requiring therapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "infection_grade": {
+      "label": "Infection grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
         }
       ],
-      "demo_value": "review"
-    }
-  },
-  "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "pneumonitis_grade": {
+      "label": "Immune-mediated pneumonitis / interstitial lung disease grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
       ],
-      "context": {}
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "diarrhoea_colitis_grade": {
+      "label": "Immune-mediated diarrhoea / colitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "alt_ast_uln_multiple": {
+      "label": "Highest ALT or AST",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 1,
+      "ui_section": "clinical",
+      "unit": "× ULN",
+      "always_show": true
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Total bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.01,
+      "demo_value": 1,
+      "ui_section": "clinical",
+      "unit": "× ULN",
+      "always_show": true
+    },
+    "creatinine_ratio_baseline_or_uln": {
+      "label": "Serum creatinine relative to baseline or ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.01,
+      "demo_value": 1,
+      "ui_section": "clinical",
+      "unit": "× baseline/ULN",
+      "always_show": true
+    },
+    "tsh_miu_l": {
+      "label": "TSH",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "demo_value": 2,
+      "ui_section": "clinical",
+      "unit": "mIU/L",
+      "help": "Interpret with free T4 and symptoms; no universal numeric hold threshold is encoded.",
+      "always_show": true
+    },
+    "free_t4_pmol_l": {
+      "label": "Free T4",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "demo_value": 15,
+      "ui_section": "clinical",
+      "unit": "pmol/L",
+      "help": "Interpret with TSH and symptoms; no universal numeric hold threshold is encoded.",
+      "always_show": true
+    },
+    "cortisol_nmol_l": {
+      "label": "Cortisol",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 400,
+      "ui_section": "clinical",
+      "unit": "nmol/L",
+      "help": "Interpret according to sampling time, symptoms and local endocrine guidance.",
+      "always_show": true
+    },
+    "endocrine_status": {
+      "label": "Immune-mediated endocrine status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No suspected endocrine toxicity"
+        },
+        {
+          "value": "symptomatic_hypothyroidism",
+          "label": "Symptomatic hypothyroidism"
+        },
+        {
+          "value": "symptomatic_hyperthyroidism_or_thyroiditis",
+          "label": "Symptomatic hyperthyroidism / thyroiditis"
+        },
+        {
+          "value": "symptomatic_adrenal_insufficiency_or_hypophysitis",
+          "label": "Symptomatic adrenal insufficiency / hypophysitis"
+        },
+        {
+          "value": "controlled_on_replacement",
+          "label": "Endocrinopathy controlled on replacement therapy"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": "none",
+      "help": "Use the clinical syndrome and laboratory pattern together."
+    },
+    "glucose_mmol_l": {
+      "label": "Blood glucose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 60,
+      "step": 0.1,
+      "demo_value": 6,
+      "ui_section": "clinical",
+      "unit": "mmol/L",
+      "always_show": true
+    },
+    "immune_diabetes_suspected": {
+      "label": "Suspected immune-mediated type 1 diabetes",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "rash_grade": {
+      "label": "Immune-mediated rash / dermatitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "rash_grade_2_over_one_week": {
+      "label": "Grade 2 rash lasting more than one week",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "scar_status": {
+      "label": "Severe cutaneous adverse reaction (SCAR) status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No suspected SCAR"
+        },
+        {
+          "value": "suspected",
+          "label": "Suspected SJS/TEN or other SCAR"
+        },
+        {
+          "value": "confirmed",
+          "label": "Confirmed SJS/TEN or other SCAR"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": "none"
+    },
+    "myocarditis_grade": {
+      "label": "Immune-mediated myocarditis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "myositis_grade": {
+      "label": "Immune-mediated myositis / polymyositis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "serious_neurological_irae_grade": {
+      "label": "Serious immune-mediated neurological syndrome grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical",
+      "help": "For syndromes such as myasthenia gravis, encephalitis, Guillain–Barré syndrome, myelitis or meningitis."
+    },
+    "infusion_reaction_grade": {
+      "label": "Infusion-related reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "other_immune_toxicity_grade": {
+      "label": "Other immune-mediated toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "recurrent_grade_3_immune_toxicity": {
+      "label": "Recurrent grade 3 immune-mediated toxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "other_nonimmune_toxicity_grade": {
+      "label": "Other non-immune adverse reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "systemic_steroids_mg_pred": {
+      "label": "Current systemic steroid dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "demo_value": 0,
+      "ui_section": "clinical",
+      "unit": "mg prednisolone equivalent/day"
+    },
+    "fbc_clinical_concern": {
+      "label": "FBC abnormality requiring clinical review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "help": "FBC abnormalities are monitored but do not trigger a protocol-defined ANC/platelet hold unless the source protocol states a threshold."
+    },
+    "pancreatitis_grade": {
+      "label": "Immune-mediated pancreatitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "amylase_lipase_uln_multiple": {
+      "label": "Highest amylase or lipase",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 1,
+      "ui_section": "clinical",
+      "unit": "× ULN"
+    },
+    "pericardial_disorder_grade": {
+      "label": "Immune-mediated pericardial disorder grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "hlh_suspected": {
+      "label": "Suspected haemophagocytic lymphohistiocytosis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "treatment_day": {
+      "label": "Treatment day",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": 1,
+          "label": "Day 1"
+        },
+        {
+          "value": 8,
+          "label": "Day 8"
+        },
+        {
+          "value": 15,
+          "label": "Day 15"
+        }
+      ],
+      "demo_value": 1,
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "anc": {
+      "label": "ANC",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 2,
+      "ui_section": "labs",
+      "unit": "×10⁹/L"
+    },
+    "platelets": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 200,
+      "ui_section": "labs",
+      "unit": "×10⁹/L"
+    },
+    "peripheral_neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "neuropathy_occurrence": {
+      "label": "Grade 3–4 neuropathy occurrence",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 1,
+          "label": "First"
+        },
+        {
+          "value": 2,
+          "label": "Second"
+        },
+        {
+          "value": 3,
+          "label": "Third"
+        }
+      ],
+      "demo_value": 1,
+      "ui_section": "clinical"
+    },
+    "severe_active_infection": {
+      "label": "Active clinically significant infection requiring therapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "systemic_steroids_over_10mg": {
+      "label": "Systemic corticosteroid/immunosuppressive dose >10 mg prednisolone equivalent daily",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
     }
-  ],
-  "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
   },
+  "required_inputs": [
+    "indication_id",
+    "assessment_type",
+    "cycle_number"
+  ],
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
+        "rule_id": "EXCLUSION_ACTIVE_INFECTION",
+        "field": "severe_active_infection",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "atezolizumab",
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Do not proceed while active clinically significant infection requires therapy; consultant review."
         },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Active clinically significant infection is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_IMMUNOSUPPRESSION",
+        "field": "systemic_steroids_over_10mg",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Do not administer atezolizumab while receiving immunosuppressive systemic corticosteroid doses >10 mg prednisolone equivalent daily, unless specifically authorised."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Immunosuppressive systemic steroids are an exclusion."
+      },
+      {
+        "rule_id": "D1_ANC_HOLD",
+        "all": [
+          {
+            "field": "treatment_day",
+            "operator": "==",
+            "value": 1
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.5
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Withhold nab-paclitaxel on Day 1 until ANC is ≥1.5 ×10⁹/L."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Day 1 ANC threshold is 1.5 ×10⁹/L."
+      },
+      {
+        "rule_id": "D1_PLT_HOLD",
+        "all": [
+          {
+            "field": "treatment_day",
+            "operator": "==",
+            "value": 1
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 100
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Withhold nab-paclitaxel on Day 1 until platelets are ≥100 ×10⁹/L."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Day 1 platelet threshold is 100 ×10⁹/L."
+      },
+      {
+        "rule_id": "D8_D15_ANC_HOLD",
+        "all": [
+          {
+            "field": "treatment_day",
+            "operator": "in",
+            "value": [
+              8,
+              15
+            ]
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 0.5
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Do not administer nab-paclitaxel on Day 8 or 15 until ANC is ≥0.5 ×10⁹/L."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Day 8/15 ANC threshold is 0.5 ×10⁹/L."
+      },
+      {
+        "rule_id": "D8_D15_PLT_HOLD",
+        "all": [
+          {
+            "field": "treatment_day",
+            "operator": "in",
+            "value": [
+              8,
+              15
+            ]
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 50
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Do not administer nab-paclitaxel on Day 8 or 15 until platelets are ≥50 ×10⁹/L."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Day 8/15 platelet threshold is 50 ×10⁹/L."
+      },
+      {
+        "rule_id": "NEUROPATHY_G3_G4",
+        "field": "peripheral_neuropathy_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nab-paclitaxel"
+          ],
+          "recommendation": "Hold nab-paclitaxel until neuropathy resolves to Grade ≤1; reduce to 75 mg/m² after first occurrence, 50 mg/m² after second, and discontinue after third."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 3–4 neuropathy requires hold and stepwise dose reduction."
+      },
+      {
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Do not administer atezolizumab; obtain consultant review."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Relevant hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "PREGNANCY_OR_BREASTFEEDING_REVIEW",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
         "action": {
           "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Do not proceed without urgent consultant review of pregnancy or breastfeeding risk."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Pregnancy or breastfeeding requires specialist review."
+      },
+      {
+        "rule_id": "ACTIVE_INFECTION_REQUIRING_THERAPY",
+        "field": "active_infection_requiring_therapy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and treat/review the infection until clinically stable."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Clinically significant active infection requires review before treatment."
+      },
+      {
+        "rule_id": "FBC_ABNORMALITY_REVIEW",
+        "field": "fbc_clinical_concern",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Review the FBC abnormality clinically; no protocol-defined ANC or platelet hold threshold is encoded for single-agent atezolizumab."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "FBC is monitored, but NCCP 00593 does not specify an ANC or platelet treatment threshold."
+      },
+      {
+        "rule_id": "PNEUMONITIS_G2",
+        "field": "pneumonitis_grade",
+        "operator": "==",
+        "value": 2,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and manage as immune-mediated pneumonitis."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 2 pneumonitis requires withholding."
+      },
+      {
+        "rule_id": "PNEUMONITIS_G3_G4",
+        "field": "pneumonitis_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for grade 3–4 pneumonitis."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 3–4 pneumonitis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "HEPATITIS_WITHHOLD",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "alt_ast_uln_multiple",
+                "operator": ">",
+                "value": 3
+              },
+              {
+                "field": "alt_ast_uln_multiple",
+                "operator": "<=",
+                "value": 5
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": ">",
+                "value": 1.5
+              },
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": "<=",
+                "value": 3
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and manage as immune-mediated hepatitis."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "ALT/AST >3–5×ULN or bilirubin >1.5–3×ULN requires withholding."
+      },
+      {
+        "rule_id": "HEPATITIS_PERMANENT",
+        "any": [
+          {
+            "field": "alt_ast_uln_multiple",
+            "operator": ">",
+            "value": 5
+          },
+          {
+            "field": "bilirubin_uln_multiple",
+            "operator": ">",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for severe immune-mediated hepatitis."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "ALT/AST >5×ULN or bilirubin >3×ULN requires permanent discontinuation."
+      },
+      {
+        "rule_id": "COLITIS_G2_G3",
+        "field": "diarrhoea_colitis_grade",
+        "operator": "between",
+        "value": [
+          2,
+          3
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and manage the immune-mediated diarrhoea/colitis pathway."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 2–3 immune-mediated diarrhoea/colitis requires withholding."
+      },
+      {
+        "rule_id": "COLITIS_G4",
+        "field": "diarrhoea_colitis_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for grade 4 diarrhoea/colitis."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 4 diarrhoea/colitis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "THYROID_SYMPTOMATIC",
+        "any": [
+          {
+            "field": "endocrine_status",
+            "operator": "==",
+            "value": "symptomatic_hypothyroidism"
+          },
+          {
+            "field": "endocrine_status",
+            "operator": "==",
+            "value": "symptomatic_hyperthyroidism_or_thyroiditis"
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab until symptomatic thyroid dysfunction is controlled and thyroid function is improving."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Symptomatic hypothyroidism or hyperthyroidism requires withholding."
+      },
+      {
+        "rule_id": "ADRENAL_HYPOPHYSITIS_SYMPTOMATIC",
+        "field": "endocrine_status",
+        "operator": "==",
+        "value": "symptomatic_adrenal_insufficiency_or_hypophysitis",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab until clinically stable on appropriate replacement therapy."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Symptomatic adrenal insufficiency or grade 2–3 hypophysitis requires withholding."
+      },
+      {
+        "rule_id": "ENDOCRINE_CONTROLLED_REPLACEMENT",
+        "field": "endocrine_status",
+        "operator": "==",
+        "value": "controlled_on_replacement",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Controlled endocrinopathy on replacement therapy does not automatically require permanent discontinuation; confirm stability."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Controlled endocrinopathies are an exception to the general permanent-discontinuation rule."
+      },
+      {
+        "rule_id": "IMMUNE_DIABETES_G3_G4",
+        "all": [
+          {
+            "field": "immune_diabetes_suspected",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "glucose_mmol_l",
+            "operator": ">",
+            "value": 13.9
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and urgently establish metabolic control with insulin."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Suspected immune-mediated diabetes with glucose >13.9 mmol/L meets the grade 3–4 hyperglycaemia pathway."
+      },
+      {
+        "rule_id": "SCAR_SUSPECTED",
+        "field": "scar_status",
+        "operator": "==",
+        "value": "suspected",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and refer for specialist assessment of suspected SCAR."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Suspected SJS/TEN or another SCAR requires withholding."
+      },
+      {
+        "rule_id": "SCAR_CONFIRMED",
+        "field": "scar_status",
+        "operator": "==",
+        "value": "confirmed",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for confirmed SJS/TEN or another severe cutaneous adverse reaction."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Confirmed SJS/TEN requires permanent discontinuation."
+      },
+      {
+        "rule_id": "RASH_G3",
+        "field": "rash_grade",
+        "operator": "==",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab for grade 3 immune-mediated rash."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 3 rash requires withholding."
+      },
+      {
+        "rule_id": "RASH_G4",
+        "field": "rash_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for grade 4 rash."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 4 rash requires permanent discontinuation."
+      },
+      {
+        "rule_id": "PANCREATITIS_WITHHOLD",
+        "any": [
+          {
+            "field": "pancreatitis_grade",
+            "operator": "between",
+            "value": [
+              2,
+              3
+            ]
+          },
+          {
+            "field": "amylase_lipase_uln_multiple",
+            "operator": ">",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and manage the immune-mediated pancreatitis pathway."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 2–3 pancreatitis or amylase/lipase >2×ULN with grade 3–4 elevation requires withholding."
+      },
+      {
+        "rule_id": "PANCREATITIS_G4",
+        "field": "pancreatitis_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for grade 4 or recurrent pancreatitis."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 4 pancreatitis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "MYOCARDITIS_G2_PLUS",
+        "field": "myocarditis_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab and urgently manage suspected immune-mediated myocarditis."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 2 or above myocarditis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "NEPHRITIS_G2",
+        "all": [
+          {
+            "field": "creatinine_ratio_baseline_or_uln",
+            "operator": ">",
+            "value": 1.5
+          },
+          {
+            "field": "creatinine_ratio_baseline_or_uln",
+            "operator": "<=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and manage as immune-mediated nephritis."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Creatinine >1.5–3× baseline or ULN meets the grade 2 nephritis pathway."
+      },
+      {
+        "rule_id": "NEPHRITIS_G3_G4",
+        "field": "creatinine_ratio_baseline_or_uln",
+        "operator": ">",
+        "value": 3,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for grade 3–4 nephritis."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Creatinine >3× baseline or ULN requires permanent discontinuation."
+      },
+      {
+        "rule_id": "MYOSITIS_G2_G3",
+        "field": "myositis_grade",
+        "operator": "between",
+        "value": [
+          2,
+          3
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and manage immune-mediated myositis."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 2–3 myositis requires withholding."
+      },
+      {
+        "rule_id": "MYOSITIS_G4_OR_RECURRENT_G3",
+        "any": [
+          {
+            "field": "myositis_grade",
+            "operator": ">=",
+            "value": 4
+          },
+          {
+            "all": [
+              {
+                "field": "myositis_grade",
+                "operator": "==",
+                "value": 3
+              },
+              {
+                "field": "recurrent_grade_3_immune_toxicity",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for grade 4 or recurrent grade 3 myositis."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 4 or recurrent grade 3 myositis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "SERIOUS_NEUROLOGICAL_IRAE",
+        "field": "serious_neurological_irae_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab and urgently manage the serious neurological immune-mediated syndrome."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Serious neurological immune-mediated syndromes generally require permanent discontinuation."
+      },
+      {
+        "rule_id": "PERICARDIAL_G1",
+        "field": "pericardial_disorder_grade",
+        "operator": "==",
+        "value": 1,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab and obtain detailed cardiac assessment."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 1 pericardial disorder requires withholding and cardiac evaluation."
+      },
+      {
+        "rule_id": "PERICARDIAL_G2_PLUS",
+        "field": "pericardial_disorder_grade",
+        "operator": ">=",
+        "value": 2,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for grade 2 or higher pericardial disorder."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 2 or higher pericardial disorder requires permanent discontinuation."
+      },
+      {
+        "rule_id": "SUSPECTED_HLH",
+        "field": "hlh_suspected",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab and urgently assess/manage suspected HLH."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Suspected haemophagocytic lymphohistiocytosis requires permanent discontinuation."
+      },
+      {
+        "rule_id": "OTHER_IMMUNE_G2_G3",
+        "field": "other_immune_toxicity_grade",
+        "operator": "between",
+        "value": [
+          2,
+          3
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Withhold atezolizumab until recovery to grade 0–1 and steroid reduction as specified."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 2–3 other immune-mediated toxicity requires withholding."
+      },
+      {
+        "rule_id": "OTHER_IMMUNE_G4",
+        "field": "other_immune_toxicity_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for grade 4 immune-mediated toxicity, except controlled endocrinopathies."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Grade 4 other immune-mediated toxicity requires permanent discontinuation."
+      },
+      {
+        "rule_id": "RECURRENT_G3_IMMUNE",
+        "field": "recurrent_grade_3_immune_toxicity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for recurrent grade 3 immune-mediated toxicity."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Recurrent grade 3 immune-mediated toxicity requires permanent discontinuation."
+      },
+      {
+        "rule_id": "INFUSION_REACTION_G1_G2",
+        "field": "infusion_reaction_grade",
+        "operator": "between",
+        "value": [
+          1,
+          2
+        ],
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Reduce the infusion rate or interrupt; treatment may resume once the event resolves."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Grade 1–2 infusion reactions require slowing or interruption."
+      },
+      {
+        "rule_id": "INFUSION_REACTION_G3_G4",
+        "field": "infusion_reaction_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "atezolizumab"
+          ],
+          "recommendation": "Permanently discontinue atezolizumab for a grade 3–4 infusion reaction."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Grade 3–4 infusion reactions require permanent discontinuation."
       }
     ]
   },
+  "output_templates": {
+    "proceed": "No encoded immune-toxicity or exclusion rule was triggered. Complete normal prescribing, laboratory, clinical and pharmacy checks.",
+    "coverage_gap": "One or more potentially relevant ICI domains were not assessed."
+  },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
-    "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "emetogenic_risk": "low",
+    "script_id": "generic-low-cuh-v2",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
+    "supportive_medications_label": "CUH low-emetogenic supportive medicines guide",
+    "summary": [
+      "Low emetogenic potential; use local antiemetic policy.",
+      "No routine corticosteroid premedication for atezolizumab; nab-paclitaxel generally does not require taxane solvent premedication.",
+      "Provide prompt diarrhoea, fever and immune-toxicity safety-netting."
+    ],
+    "validation_status": "pending_oncology_pharmacy_review"
   }
 }
