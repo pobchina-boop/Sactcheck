@@ -1,30 +1,29 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00785-vcurrent",
+  "protocol_id": "nccp-00785-v3a",
   "file_name": "00785-phesgo-maintenance.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00785",
-    "nccp_version": "current",
+    "nccp_version": 3,
     "tumour_group": "Breast",
-    "title": "Pertuzumab and Trastuzumab (Phesgo) Maintenance",
+    "title": "Pertuzumab and Trastuzumab (Phesgo\u00ae) Maintenance Therapy",
     "short_title": "Phesgo maintenance",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
-    "icd10": "C50",
-    "source_document_pages": null,
+    "indication": "Maintenance treatment of adult patients with HER2-positive metastatic or locally recurrent unresectable breast cancer following completion of the chemotherapy component.",
+    "regimen_reimbursement_code": "00785a",
+    "published_date": "2022-12-20",
+    "review_date": "2029-04-12",
     "source_url": "https://healthservice.hse.ie/documents/6659/785_v3_Pertuzumab_trastuzumab_Phesgo.pdf",
-    "sactcheck_encoding_version": "0.36.0",
-    "treatment_setting": [
-      "metastatic"
-    ],
+    "source_document_pages": 6,
     "catalog": {
       "enabled": true
     },
     "migration": {
       "mode": "live_json"
     },
+    "sactcheck_encoding_version": "0.36.8",
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,60 +33,513 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "anaphylaxis_facilities_required": true,
+    "disclaimer": "Decision-support encoding of the NCCP source document. It does not replace the current NCCP regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
   },
+  "indications": [
+    {
+      "code": "00785a",
+      "description": "Maintenance treatment of adults with HER2-positive metastatic or locally recurrent unresectable breast cancer after completion of the chemotherapy component."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "maintenance",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "pertuzumab/trastuzumab (Phesgo\u00ae)",
+          "dose": {
+            "value": "600 mg/600 mg maintenance; 1200 mg/600 mg loading if required",
+            "unit": "fixed dose"
+          },
+          "route": "SC",
+          "administration_note": "Inject over approximately 5 minutes; observe for 15 minutes after maintenance dose."
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "drug": "pertuzumab/trastuzumab (Phesgo\u00ae)",
+          "dose": {
+            "value": "600 mg/600 mg maintenance; 1200 mg/600 mg loading if required",
+            "unit": "fixed dose"
+          },
+          "route": "SC",
+          "administration_note": "Inject over approximately 5 minutes; observe for 15 minutes after maintenance dose."
+        }
+      ]
+    }
+  ],
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "indication_id": {
+      "label": "Indication",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "00785a",
+          "label": "Maintenance treatment of adults with HER2-positive metastatic or locally recurrent unresectable breast cancer after completion of the chemotherapy component."
+        }
+      ],
+      "demo_value": "00785a",
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "assessment_type": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "pre_treatment",
+          "label": "Pre-treatment assessment"
+        }
+      ],
+      "demo_value": "pre_treatment",
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "max": 200,
+      "step": 1,
+      "demo_value": 1,
+      "ui_section": "treatment_context",
+      "always_show": true
+    },
+    "lvef_percent": {
+      "label": "Current LVEF (%)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "demo_value": 55,
+      "ui_section": "labs",
+      "unit": "%"
+    },
+    "lvef_drop_points": {
+      "label": "Absolute LVEF fall from pretreatment value (percentage points)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "demo_value": 0,
+      "ui_section": "labs",
+      "unit": "percentage points"
+    },
+    "symptomatic_heart_failure": {
+      "label": "Symptomatic heart failure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "clinically_significant_cardiac_disease": {
+      "label": "Clinically significant cardiac disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "hypersensitivity_grade": {
+      "label": "Infusion/hypersensitivity reaction grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
         }
       ],
-      "demo_value": "review"
-    }
-  },
-  "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "relevant_drug_hypersensitivity": {
+      "label": "Relevant drug hypersensitivity before treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
       ],
-      "context": {}
+      "demo_value": 0,
+      "ui_section": "clinical"
+    },
+    "diarrhoea_not_improving": {
+      "label": "Severe/prolonged diarrhoea not improving with supportive treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "weeks_since_last_dose": {
+      "label": "Weeks since last pertuzumab/trastuzumab (Phesgo\u00ae) dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 52,
+      "step": 0.1,
+      "demo_value": 3,
+      "ui_section": "labs",
+      "unit": "weeks"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "fbc_clinical_concern": {
+      "label": "FBC abnormality requiring clinical review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "help": "The protocol requires FBC monitoring but does not define a numerical ANC/platelet hold threshold."
     }
-  ],
-  "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
   },
+  "required_inputs": [
+    "indication_id",
+    "assessment_type",
+    "cycle_number"
+  ],
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "relevant_drug_hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Do not administer; obtain consultant review."
         },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Relevant hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "EXCLUSION_PREGNANCY_BREASTFEEDING",
+        "any": [
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Do not administer during pregnancy or breastfeeding; urgent consultant review required."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Pregnancy and breastfeeding are exclusions."
+      },
+      {
+        "rule_id": "CARDIAC_DISEASE_EXCLUSION",
+        "field": "clinically_significant_cardiac_disease",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Do not proceed without consultant/cardiology review."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Clinically significant cardiac disease is an exclusion."
+      },
+      {
+        "rule_id": "FBC_CLINICAL_REVIEW",
+        "field": "fbc_clinical_concern",
+        "operator": "==",
+        "value": true,
         "action": {
           "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Review the FBC abnormality clinically; the source does not define a numerical cytotoxic count hold for this maintenance regimen."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "FBC is monitored, but no numerical count threshold is specified."
+      },
+      {
+        "rule_id": "LVEF_WITHHOLD_LOW",
+        "field": "lvef_percent",
+        "operator": "<",
+        "value": 40,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Withhold pertuzumab/trastuzumab (Phesgo\u00ae) for at least 3 weeks and repeat LVEF assessment."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "LVEF below 40% requires withholding."
+      },
+      {
+        "rule_id": "LVEF_WITHHOLD_40_45",
+        "all": [
+          {
+            "field": "lvef_percent",
+            "operator": ">=",
+            "value": 40
+          },
+          {
+            "field": "lvef_percent",
+            "operator": "<=",
+            "value": 45
+          },
+          {
+            "field": "lvef_drop_points",
+            "operator": ">=",
+            "value": 10
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Withhold pertuzumab/trastuzumab (Phesgo\u00ae) for at least 3 weeks and repeat LVEF assessment."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "LVEF 40\u201345% with a fall of at least 10 points requires withholding."
+      },
+      {
+        "rule_id": "SYMPTOMATIC_HEART_FAILURE",
+        "field": "symptomatic_heart_failure",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Discontinue treatment for symptomatic heart failure and obtain urgent cardiology review."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "Symptomatic heart failure requires discontinuation."
+      },
+      {
+        "rule_id": "HYPERSENSITIVITY_G4",
+        "field": "hypersensitivity_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Discontinue treatment for grade 4 hypersensitivity/anaphylaxis."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3"
+        },
+        "explanation": "Grade 4 hypersensitivity requires discontinuation."
+      },
+      {
+        "rule_id": "INFUSION_REACTION_G1_G2",
+        "all": [
+          {
+            "field": "hypersensitivity_grade",
+            "operator": ">=",
+            "value": 1
+          },
+          {
+            "field": "hypersensitivity_grade",
+            "operator": "<=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Slow or interrupt the infusion and provide appropriate supportive treatment; resume only after symptoms resolve."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Mild/moderate infusion reactions require interruption or slowing and supportive care."
+      },
+      {
+        "rule_id": "DIARRHOEA_NOT_CONTROLLED",
+        "all": [
+          {
+            "field": "diarrhoea_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "diarrhoea_not_improving",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "Consider interrupting pertuzumab until severe/prolonged diarrhoea is controlled."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Pertuzumab interruption should be considered if severe diarrhoea does not improve."
+      },
+      {
+        "rule_id": "MISSED_DOSE_RELOAD",
+        "field": "weeks_since_last_dose",
+        "operator": ">=",
+        "value": 6,
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "The interval is 6 weeks or longer: re-administer the pertuzumab 840 mg and trastuzumab 8 mg/kg loading doses, then resume the 3-weekly maintenance schedule."
+        },
+        "source": {
+          "page": 3,
+          "table": "Table 1"
+        },
+        "explanation": "A gap of at least 6 weeks requires reloading doses."
       }
     ]
   },
+  "output_templates": {
+    "proceed": "No encoded contraindication, hold, dose-modification or treatment-context criterion was triggered. Complete normal prescribing, clinical and pharmacy checks.",
+    "coverage_gap": "One or more potentially relevant protocol domains were not assessed."
+  },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
-    "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "emetogenic_risk": "minimal",
+    "script_id": "generic-low-cuh-v2",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
+    "supportive_medications_label": "CUH low-emetogenic supportive medicines guide",
+    "summary": [
+      "Phesgo has minimal emetogenic potential.",
+      "No routine regimen-specific premedication; follow local policy.",
+      "Observe for injection-related and hypersensitivity reactions."
+    ],
+    "validation_status": "pending_oncology_pharmacy_review"
   }
 }

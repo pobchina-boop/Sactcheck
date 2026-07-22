@@ -65,5 +65,5 @@
     return `<${tag} class="badge emetogenic-badge ${risk.className}"${href}${title}><span class="emetogenic-dot" aria-hidden="true"></span>${risk.label}</${tag}>`;
   }
 
-  root.SACTCheckEmetogenicRisk = Object.freeze({ version: "0.36.7", load, get, badge });
+  root.SACTCheckEmetogenicRisk = Object.freeze({ version: "0.36.8", load, get, badge });
 })(typeof globalThis !== "undefined" ? globalThis : this);

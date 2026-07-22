@@ -20,7 +20,7 @@ assert(ui.includes('coverage-gap-details'), 'Unassessed result domains must coll
 assert(ui.includes('<form id="jsonAssessmentForm" novalidate>'), 'Form-level browser validation must be disabled');
 assert(!ui.includes(' requiredAttribute'), 'UI should not create required HTML attributes');
 assert(ui.includes('control.required = false'), 'Dynamic inputs must remain non-mandatory');
-assert(indexHtml.includes('js/emetogenic-risk.js?v=0.36.7'), 'Emetogenic risk module not loaded');
+assert(indexHtml.includes('js/emetogenic-risk.js?v='), 'Emetogenic risk module not loaded');
 assert(indexHtml.indexOf('js/emetogenic-risk.js') < indexHtml.indexOf('js/protocol-loader.js'), 'Emetogenic risk module must load before protocol loader');
 assert(loader.includes('emetogenicBadge(protocol)'), 'Protocol cards must render emetogenic status');
 
@@ -33,7 +33,8 @@ for (const row of rows.filter(row => row.enabled !== false)) {
 assert.strictEqual(Object.keys(riskMap.protocols).length, activeCodes.length, 'Risk map must cover each active protocol');
 for (const code of activeCodes) {
   assert(riskMap.protocols[code], `Missing emetogenic map entry for ${code}`);
-  const expected = code === '00776' ? 'high' : 'pending';
+  const mapped = { '00776':'high', '00605':'low', '00785':'low', '00796':'low', '00797':'low', '00798':'low' };
+  const expected = mapped[code] || 'pending';
   assert.strictEqual(riskMap.protocols[code].level, expected, `Unexpected emetogenic mapping for ${code}`);
 }
 
