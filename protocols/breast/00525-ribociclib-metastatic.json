@@ -9,11 +9,11 @@
     "tumour_group": "Breast",
     "title": "Ribociclib Therapy (Metastatic) - 28 day",
     "short_title": "Ribociclib metastatic",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "Ribociclib with an aromatase inhibitor or fulvestrant for eligible HR-positive, HER2-negative locally advanced or metastatic breast cancer.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 9,
     "source_url": "https://healthservice.hse.ie/documents/6629/525_v6_Ribociclib_Metastatic_hghzyyD.pdf",
-    "sactcheck_encoding_version": "0.36.3",
+    "sactcheck_encoding_version": "0.36.11",
     "treatment_setting": [
       "metastatic"
     ],
@@ -29,7 +29,22 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
-    }
+    },
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Only entered values are assessed; omitted clinical domains remain explicitly unassessed.",
+    "treatment_class": [
+      "cdk4_6_inhibitor",
+      "targeted_oral_therapy",
+      "endocrine_combination"
+    ],
+    "treatment_context": [
+      "metastatic"
+    ],
+    "administration_route": [
+      "oral"
+    ],
+    "cytotoxic": false,
+    "review_date": "2029-11-29"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -55,22 +70,6 @@
     },
     "recurrent_grade3": {
       "label": "Recurrent grade 3 neutropenia",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false
-    },
-    "crcl": {
-      "label": "Creatinine clearance (mL/min)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 300,
-      "step": 1,
-      "unit": "mL/min",
-      "demo_value": 90
-    },
-    "haemodialysis": {
-      "label": "Receiving haemodialysis",
       "type": "boolean",
       "required": false,
       "demo_value": false
@@ -122,32 +121,33 @@
       "demo_value": false
     },
     "ast_alt_grade": {
-      "label": "AST/ALT elevation grade",
+      "label": "AST/ALT elevation grade (CTCAE)",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0 — within normal range"
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1 — >ULN to 3 × ULN"
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2 — >3 to 5 × ULN"
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3 — >5 to 20 × ULN"
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4 — >20 × ULN"
         }
       ],
-      "demo_value": 0
+      "demo_value": 0,
+      "assessment_guidance": "Calculate the multiple of ULN from the measured ALT/AST and the laboratory ULN. Also assess bilirubin and whether cholestasis or another cause is present."
     },
     "bilirubin_elevated": {
       "label": "Bilirubin elevated with AST/ALT abnormality",
@@ -156,32 +156,38 @@
       "demo_value": false
     },
     "nonhaem_toxicity_grade": {
-      "label": "Other non-haematological toxicity grade",
+      "label": "Other non-haematological toxicity (CTCAE)",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0 — no toxicity",
+          "description": "No clinical or laboratory evidence of other non-haematological toxicity."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1 — mild",
+          "description": "Mild or asymptomatic; clinical observation or diagnostic review only; intervention generally not indicated."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2 — moderate",
+          "description": "Moderate symptoms or abnormality; minimal, local or non-invasive intervention may be indicated; limits age-appropriate instrumental activities of daily living."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3 — severe",
+          "description": "Severe or medically significant but not immediately life-threatening; hospitalisation or prolongation of hospitalisation may be indicated; disabling; limits self-care activities of daily living."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4 — life-threatening",
+          "description": "Life-threatening consequences requiring urgent intervention."
         }
       ],
-      "demo_value": 0
+      "demo_value": 0,
+      "assessment_guidance": "Use the toxicity-specific CTCAE definition, including intervention required, admission and effect on instrumental/self-care activities of daily living."
     },
     "dose_level": {
       "label": "Current ribociclib dose",
@@ -202,6 +208,27 @@
         }
       ],
       "demo_value": 600
+    },
+    "renal_band": {
+      "label": "Creatinine-clearance category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge30",
+          "label": "CrCl ≥30 mL/min — no renal dose adjustment"
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30 mL/min — use 33% of original starting dose"
+        },
+        {
+          "value": "dialysis",
+          "label": "Haemodialysis — not recommended"
+        }
+      ],
+      "demo_value": "ge30",
+      "assessment_guidance": "Select the exact NCCP renal tier. Do not infer a finer range than the source protocol."
     }
   },
   "required_inputs": [],
@@ -339,9 +366,9 @@
           "page": 4
         },
         "explanation": "Ribociclib is not recommended in haemodialysis.",
-        "field": "haemodialysis",
+        "field": "renal_band",
         "operator": "==",
-        "value": true
+        "value": "dialysis"
       },
       {
         "rule_id": "CRCL_LT30",
@@ -356,9 +383,9 @@
           "page": 4
         },
         "explanation": "Use 33% of the original starting dose for CrCl <30 mL/min.",
-        "field": "crcl",
-        "operator": "<",
-        "value": 30
+        "field": "renal_band",
+        "operator": "==",
+        "value": "lt30"
       },
       {
         "rule_id": "CHILDPUGH_BC",
@@ -501,8 +528,21 @@
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
-    "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "emetogenic_risk": "moderate_to_high",
+    "supportive_care_profile": "oral_cdk46_moderate_high",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Moderate_V2_05.21.pdf",
+    "supportive_medications_label": "Moderate/high emetogenic oral therapy antiemetic script — follow NCCP/local policy",
+    "premedication_summary": [
+      "Routine premedication is not usually required; prescribe rescue or prophylactic antiemetics according to individual risk and local policy."
+    ],
+    "other_supportive_care": [
+      "Correct potassium, calcium, magnesium and phosphate before treatment.",
+      "Repeat ECG at Day 14 of cycle 1 and as clinically indicated.",
+      "Avoid grapefruit and review QT-prolonging/CYP3A interacting medicines."
+    ]
+  },
+  "ctcae_standard": {
+    "reference": "CTCAE grading as cited by the NCCP source protocol",
+    "display_requirement": "Every grade-based input includes toxicity-specific criteria and practical assessment guidance. Do not select a grade from the number alone."
   }
 }

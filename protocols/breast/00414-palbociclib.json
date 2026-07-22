@@ -9,11 +9,11 @@
     "tumour_group": "Breast",
     "title": "Palbociclib Therapy - 28 day",
     "short_title": "Palbociclib",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "Palbociclib in combination with an aromatase inhibitor or fulvestrant for eligible HR-positive, HER2-negative locally advanced or metastatic breast cancer.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 8,
     "source_url": "https://healthservice.hse.ie/documents/6457/414_v5_Palbociclib_o9nHDn7.pdf",
-    "sactcheck_encoding_version": "0.36.3",
+    "sactcheck_encoding_version": "0.36.11",
     "treatment_setting": [
       "metastatic"
     ],
@@ -29,7 +29,21 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
-    }
+    },
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Only entered values are assessed; omitted clinical domains remain explicitly unassessed.",
+    "treatment_class": [
+      "cdk4_6_inhibitor",
+      "targeted_oral_therapy",
+      "endocrine_combination"
+    ],
+    "treatment_context": [
+      "metastatic"
+    ],
+    "administration_route": [
+      "oral"
+    ],
+    "cytotoxic": false
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -81,7 +95,8 @@
       "label": "Fever ≥38.5°C and/or infection with grade 3 neutropenia",
       "type": "boolean",
       "required": false,
-      "demo_value": false
+      "demo_value": false,
+      "help_text": "Grade 3 neutropenia with fever ≥38.5°C and/or infection follows the febrile/infected neutropenia dose-interruption pathway."
     },
     "prolonged_or_recurrent_grade3": {
       "label": "Prolonged (>1 week) or recurrent grade 3 neutropenia on Day 1",
@@ -90,32 +105,38 @@
       "demo_value": false
     },
     "nonhaem_toxicity_grade": {
-      "label": "Non-haematological toxicity grade",
+      "label": "Worst current non-haematological toxicity (CTCAE)",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0 — no toxicity",
+          "description": "No clinical or laboratory evidence of non-haematological toxicity."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1 — mild",
+          "description": "Mild or asymptomatic; clinical observation or diagnostic review only; intervention generally not indicated."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2 — moderate",
+          "description": "Moderate symptoms or abnormality; minimal, local or non-invasive intervention may be indicated; limits age-appropriate instrumental activities of daily living."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3 — severe",
+          "description": "Severe or medically significant but not immediately life-threatening; hospitalisation or prolongation of hospitalisation may be indicated; disabling; limits self-care activities of daily living."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4 — life-threatening",
+          "description": "Life-threatening consequences requiring urgent intervention."
         }
       ],
-      "demo_value": 0
+      "demo_value": 0,
+      "assessment_guidance": "Grade the named toxicity using its CTCAE definition. Record functional impact, treatment required and whether it persists despite optimal medical management."
     },
     "nonhaem_persists_despite_treatment": {
       "label": "Grade ≥3 toxicity persists despite medical treatment",
@@ -166,6 +187,27 @@
         }
       ],
       "demo_value": 125
+    },
+    "renal_band": {
+      "label": "Renal function category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "crcl_ge15",
+          "label": "CrCl ≥15 mL/min — no protocol dose adjustment required"
+        },
+        {
+          "value": "crcl_lt15",
+          "label": "CrCl <15 mL/min / end-stage renal disease — limited evidence; specialist review"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis — specialist oncology/pharmacy review"
+        }
+      ],
+      "demo_value": "crcl_ge15",
+      "assessment_guidance": "Use the most recent clinically appropriate CrCl. The source protocol does not require finer dose tiers for CrCl ≥15 mL/min."
     }
   },
   "required_inputs": [],
@@ -399,6 +441,29 @@
         "value": "C"
       },
       {
+        "rule_id": "RENAL_ESRD_REVIEW",
+        "any": [
+          {
+            "field": "renal_band",
+            "operator": "in",
+            "value": [
+              "crcl_lt15",
+              "dialysis"
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "palbociclib"
+          ]
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Severe end-stage renal impairment or dialysis requires consultant and oncology-pharmacy review because evidence is limited."
+      },
+      {
         "rule_id": "BELOW75",
         "action": {
           "type": "discontinue",
@@ -427,8 +492,20 @@
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
-    "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "emetogenic_risk": "low",
+    "supportive_care_profile": "oral_targeted_low_risk",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
+    "supportive_medications_label": "Low-emetogenic-risk oral targeted therapy antiemetic script",
+    "premedication_summary": [
+      "Routine premedication is not usually required."
+    ],
+    "other_supportive_care": [
+      "Provide patient-held advice on fever, infection and neutropenia.",
+      "Check CYP3A interactions and avoid grapefruit products where applicable."
+    ]
+  },
+  "ctcae_standard": {
+    "reference": "CTCAE grading as cited by the NCCP source protocol",
+    "display_requirement": "Every grade-based input includes toxicity-specific criteria and practical assessment guidance. Do not select a grade from the number alone."
   }
 }
