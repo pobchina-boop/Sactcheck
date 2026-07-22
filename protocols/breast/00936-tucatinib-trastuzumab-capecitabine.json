@@ -2,18 +2,18 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00936-vcurrent",
   "file_name": "00936-tucatinib-trastuzumab-capecitabine.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00936",
     "nccp_version": "current",
     "tumour_group": "Breast",
-    "title": "Tucatinib, Trastuzumab and Capecitabine",
+    "title": "Tucatinib, Trastuzumab and Capecitabine Therapy - 21 days",
     "short_title": "Tucatinib + trastuzumab + capecitabine",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "HER2-positive locally advanced or metastatic breast cancer after at least two prior anti-HER2 treatment regimens.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 8,
     "source_url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.6",
     "treatment_setting": [
       "metastatic"
     ],
@@ -24,7 +24,7 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -34,60 +34,531 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "demo_value": 2.0
+    },
+    "platelets": {
+      "label": "Platelets (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180
+    },
+    "crcl": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 250,
+      "step": 1,
+      "demo_value": 80
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
         }
       ],
-      "demo_value": "review"
+      "demo_value": 0
+    },
+    "hand_foot_grade": {
+      "label": "Palmar-plantar erythrodysaesthesia grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "other_toxicity_grade": {
+      "label": "Other treatment-related toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "alt_grade": {
+      "label": "ALT/AST elevation grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "bilirubin_grade": {
+      "label": "Bilirubin elevation grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "lvef_percent": {
+      "label": "Current LVEF (%)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "demo_value": 55
+    },
+    "symptomatic_chf": {
+      "label": "Symptomatic cardiac failure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "strong_cyp3a_inducer": {
+      "label": "Strong CYP3A inducer present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "strong_cyp2c8_inhibitor": {
+      "label": "Strong CYP2C8 inhibitor present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
+        "rule_id": "EXCL_HS",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tucatinib",
+            "trastuzumab",
+            "capecitabine"
+          ],
+          "recommendation": "Do not administer; relevant hypersensitivity is present."
         },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer; relevant hypersensitivity is present."
+      },
+      {
+        "rule_id": "EXCL_PREG",
+        "field": "pregnancy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tucatinib",
+            "trastuzumab",
+            "capecitabine"
+          ],
+          "recommendation": "Do not administer during pregnancy."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer during pregnancy."
+      },
+      {
+        "rule_id": "EXCL_BF",
+        "field": "breastfeeding",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tucatinib",
+            "trastuzumab",
+            "capecitabine"
+          ],
+          "recommendation": "Do not administer while breastfeeding."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Do not administer while breastfeeding."
+      },
+      {
+        "rule_id": "ANC_LOW",
+        "field": "anc",
+        "operator": "<",
+        "value": 1.5,
+        "action": {
+          "type": "delay",
+          "components": [
+            "tucatinib",
+            "trastuzumab",
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine-containing treatment and reassess."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Delay capecitabine-containing treatment and reassess."
+      },
+      {
+        "rule_id": "PLT_LOW",
+        "field": "platelets",
+        "operator": "<",
+        "value": 100,
+        "action": {
+          "type": "delay",
+          "components": [
+            "tucatinib",
+            "trastuzumab",
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine-containing treatment and reassess."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Delay capecitabine-containing treatment and reassess."
+      },
+      {
+        "rule_id": "CRCL_LT30",
+        "field": "crcl",
+        "operator": "<",
+        "value": 30,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Capecitabine is contraindicated when creatinine clearance is below 30 mL/min."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Capecitabine is contraindicated when creatinine clearance is below 30 mL/min."
+      },
+      {
+        "rule_id": "SEV_HEP",
+        "field": "severe_hepatic_impairment",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Severe hepatic impairment requires tucatinib dose adjustment and consultant/pharmacy verification."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Severe hepatic impairment requires tucatinib dose adjustment and consultant/pharmacy verification."
+      },
+      {
+        "rule_id": "DIARR_G3",
+        "field": "diarrhoea_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "tucatinib",
+            "capecitabine"
+          ],
+          "recommendation": "Interrupt tucatinib/capecitabine, treat diarrhoea and resume according to the NCCP dose-modification pathway after recovery."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Interrupt tucatinib/capecitabine, treat diarrhoea and resume according to the NCCP dose-modification pathway after recovery."
+      },
+      {
+        "rule_id": "HFS_G3",
+        "field": "hand_foot_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Interrupt capecitabine until recovery and resume with protocol-directed dose reduction."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Interrupt capecitabine until recovery and resume with protocol-directed dose reduction."
+      },
+      {
+        "rule_id": "HEP_G3",
+        "field": "alt_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Withhold tucatinib and reassess liver tests; resume with protocol-directed dose modification only after recovery."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Withhold tucatinib and reassess liver tests; resume with protocol-directed dose modification only after recovery."
+      },
+      {
+        "rule_id": "BILI_G3",
+        "field": "bilirubin_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Withhold tucatinib and reassess bilirubin; resume with protocol-directed dose modification only after recovery."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Withhold tucatinib and reassess bilirubin; resume with protocol-directed dose modification only after recovery."
+      },
+      {
+        "rule_id": "CHF",
+        "field": "symptomatic_chf",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Withhold trastuzumab and obtain urgent cardiac assessment."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Withhold trastuzumab and obtain urgent cardiac assessment."
+      },
+      {
+        "rule_id": "LVEF_LOW",
+        "field": "lvef_percent",
+        "operator": "<",
+        "value": 50,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "LVEF below 50%: withhold trastuzumab and follow the NCCP cardiac pathway."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "LVEF below 50%: withhold trastuzumab and follow the NCCP cardiac pathway."
+      },
+      {
+        "rule_id": "CYP3A_IND",
+        "field": "strong_cyp3a_inducer",
+        "operator": "==",
+        "value": true,
         "action": {
           "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Strong CYP3A inducer may reduce tucatinib exposure: avoid or obtain specialist pharmacy review."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Strong CYP3A inducer may reduce tucatinib exposure: avoid or obtain specialist pharmacy review."
+      },
+      {
+        "rule_id": "CYP2C8_INH",
+        "field": "strong_cyp2c8_inhibitor",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Strong CYP2C8 inhibitor may increase tucatinib exposure: avoid or obtain specialist pharmacy review."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Strong CYP2C8 inhibitor may increase tucatinib exposure: avoid or obtain specialist pharmacy review."
       }
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
-    "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "emetogenic_risk": "low",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
+    "supportive_medications_label": "CUH low-emetogenic supportive medicines",
+    "summary": [
+      "Low-emetogenic antiemetic pathway",
+      "Early diarrhoea management and hydration advice",
+      "Capecitabine hand-foot syndrome counselling and oral-adherence review"
+    ],
+    "provenance": "CUH local supportive-care prescription sheet; verify current local policy before prescribing."
   }
 }

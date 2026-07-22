@@ -1,19 +1,19 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00776-vcurrent",
+  "protocol_id": "nccp-00776-v3b",
   "file_name": "00776-trastuzumab-deruxtecan.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00776",
-    "nccp_version": "current",
+    "nccp_version": "3b",
     "tumour_group": "Breast",
-    "title": "Trastuzumab Deruxtecan 5.4 mg/kg (Enhertu)",
+    "title": "Trastuzumab Deruxtecan 5.4 mg/kg (Enhertu) Therapy",
     "short_title": "Trastuzumab deruxtecan",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "Monotherapy for eligible adult patients with unresectable or metastatic HER2-positive or HER2-low breast cancer in the NCCP-defined treatment settings.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 6,
     "source_url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.5",
     "treatment_setting": [
       "metastatic"
     ],
@@ -24,70 +24,686 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": false,
+      "source_document_checked": true,
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
-    }
+    },
+    "emetogenic_risk": "high",
+    "antiemetic_proforma_url": "assets/supportive-care/Antiemetics_High_V2_05.21.pdf"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
-    "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "dose_modification_note": "Any dose modification should be discussed with a Consultant. Dose must not be re-escalated after reduction.",
+    "disclaimer": "Decision-support encoding of NCCP regimen 00776 v3b. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "hypersensitivity": {
+      "label": "Hypersensitivity to trastuzumab deruxtecan/excipients",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "clinically_significant_cardiac_disease": {
+      "label": "Clinically significant cardiac disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "history_ild_pneumonitis": {
+      "label": "History of ILD or pneumonitis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 2
+    },
+    "temperature_c": {
+      "label": "Current temperature (°C)",
+      "type": "number",
+      "required": false,
+      "min": 30,
+      "max": 45,
+      "step": 0.1,
+      "unit": "°C",
+      "demo_value": 36.8
+    },
+    "temperature_38_duration_hours": {
+      "label": "Duration temperature ≥38°C (hours)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 72,
+      "step": 0.5,
+      "unit": "hours",
+      "demo_value": 0
+    },
+    "ild_pneumonitis_grade": {
+      "label": "Current ILD/pneumonitis grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
         }
       ],
-      "demo_value": "review"
+      "demo_value": 0
+    },
+    "ild_grade1_resolution_days": {
+      "label": "Days from Grade 1 ILD onset to resolution",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 365,
+      "step": 1,
+      "unit": "days",
+      "demo_value": 0
+    },
+    "lvef_percent": {
+      "label": "Current LVEF (%)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "demo_value": 55
+    },
+    "lvef_drop_points": {
+      "label": "Absolute LVEF decrease from baseline (percentage points)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "percentage points",
+      "demo_value": 0
+    },
+    "symptomatic_chf": {
+      "label": "Symptomatic congestive heart failure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "severe_infusion_reaction": {
+      "label": "Severe infusion-related reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "hepatic_impairment": {
+      "label": "Hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none_mild",
+          "label": "None or mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none_mild"
+    },
+    "dose_reduction_level": {
+      "label": "Current trastuzumab deruxtecan dose level",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "5.4 mg/kg"
+        },
+        {
+          "value": 1,
+          "label": "4.4 mg/kg"
+        },
+        {
+          "value": 2,
+          "label": "3.2 mg/kg"
+        }
+      ],
+      "demo_value": 0
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
-        },
+        "rule_id": "EX_HS",
         "action": {
-          "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Do not administer trastuzumab deruxtecan."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer trastuzumab deruxtecan.",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "EX_CARDIAC",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Clinically significant cardiac disease is an NCCP exclusion."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Clinically significant cardiac disease is an NCCP exclusion.",
+        "field": "clinically_significant_cardiac_disease",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "EX_ILD_HISTORY",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "A history of ILD or pneumonitis is an NCCP exclusion."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "A history of ILD or pneumonitis is an NCCP exclusion.",
+        "field": "history_ild_pneumonitis",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "EX_PREG",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Do not administer during pregnancy."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer during pregnancy.",
+        "field": "pregnancy",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "EX_BF",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Do not administer while breastfeeding."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer while breastfeeding.",
+        "field": "breastfeeding",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "SEVERE_INFUSION",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Permanently discontinue for a severe infusion-related reaction."
+        },
+        "source": {
+          "page": 1
+        },
+        "explanation": "Permanently discontinue for a severe infusion-related reaction.",
+        "field": "severe_infusion_reaction",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "ILD_G2PLUS",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Permanently discontinue for symptomatic Grade 2 or greater ILD/pneumonitis and promptly initiate corticosteroid treatment."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Permanently discontinue for symptomatic Grade 2 or greater ILD/pneumonitis and promptly initiate corticosteroid treatment.",
+        "field": "ild_pneumonitis_grade",
+        "operator": ">=",
+        "value": 2
+      },
+      {
+        "rule_id": "ILD_G1_LONG",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Interrupt until Grade 0; because resolution took >28 days, reduce one dose level."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Interrupt until Grade 0; because resolution took >28 days, reduce one dose level.",
+        "all": [
+          {
+            "field": "ild_pneumonitis_grade",
+            "operator": "==",
+            "value": 1
+          },
+          {
+            "field": "ild_grade1_resolution_days",
+            "operator": ">",
+            "value": 28
+          }
+        ]
+      },
+      {
+        "rule_id": "ILD_G1",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Interrupt for Grade 1 ILD/pneumonitis until resolved to Grade 0; consider corticosteroids as soon as suspected."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Interrupt for Grade 1 ILD/pneumonitis until resolved to Grade 0; consider corticosteroids as soon as suspected.",
+        "field": "ild_pneumonitis_grade",
+        "operator": "==",
+        "value": 1
+      },
+      {
+        "rule_id": "ANC_G4",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Interrupt for ANC <0.5 ×10⁹/L until recovered to Grade ≤2, then reduce one dose level."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Interrupt for ANC <0.5 ×10⁹/L until recovered to Grade ≤2, then reduce one dose level.",
+        "field": "anc",
+        "operator": "<",
+        "value": 0.5
+      },
+      {
+        "rule_id": "ANC_G3",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Interrupt for ANC 0.5 to <1.0 ×10⁹/L until recovered to Grade ≤2, then maintain dose."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Interrupt for ANC 0.5 to <1.0 ×10⁹/L until recovered to Grade ≤2, then maintain dose.",
+        "all": [
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.0
+          }
+        ]
+      },
+      {
+        "rule_id": "FEBRILE_NEUTROPENIA_383",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Febrile neutropenia criterion met: interrupt until resolved, then reduce one dose level."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Febrile neutropenia criterion met: interrupt until resolved, then reduce one dose level.",
+        "all": [
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.0
+          },
+          {
+            "field": "temperature_c",
+            "operator": ">",
+            "value": 38.3
+          }
+        ]
+      },
+      {
+        "rule_id": "FEBRILE_NEUTROPENIA_38",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Febrile neutropenia criterion met: ANC <1.0 with temperature ≥38°C sustained >1 hour; interrupt until resolved, then reduce one dose level."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Febrile neutropenia criterion met: ANC <1.0 with temperature ≥38°C sustained >1 hour; interrupt until resolved, then reduce one dose level.",
+        "all": [
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.0
+          },
+          {
+            "field": "temperature_c",
+            "operator": ">=",
+            "value": 38.0
+          },
+          {
+            "field": "temperature_38_duration_hours",
+            "operator": ">",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "rule_id": "CHF",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Permanently discontinue for symptomatic congestive heart failure."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Permanently discontinue for symptomatic congestive heart failure.",
+        "field": "symptomatic_chf",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "LVEF_LT40",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Interrupt for LVEF <40%; repeat within 3 weeks. If confirmed, permanently discontinue."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Interrupt for LVEF <40%; repeat within 3 weeks. If confirmed, permanently discontinue.",
+        "field": "lvef_percent",
+        "operator": "<",
+        "value": 40
+      },
+      {
+        "rule_id": "LVEF_DROP_GT20",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Interrupt for an absolute LVEF decrease >20 percentage points; repeat within 3 weeks and permanently discontinue if confirmed."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Interrupt for an absolute LVEF decrease >20 percentage points; repeat within 3 weeks and permanently discontinue if confirmed.",
+        "field": "lvef_drop_points",
+        "operator": ">",
+        "value": 20
+      },
+      {
+        "rule_id": "LVEF_40_45_DROP10",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "LVEF 40-45% with a 10-20 point fall: interrupt and repeat within 3 weeks; discontinue if not recovered to within 10 points of baseline."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "LVEF 40-45% with a 10-20 point fall: interrupt and repeat within 3 weeks; discontinue if not recovered to within 10 points of baseline.",
+        "all": [
+          {
+            "field": "lvef_percent",
+            "operator": ">=",
+            "value": 40
+          },
+          {
+            "field": "lvef_percent",
+            "operator": "<=",
+            "value": 45
+          },
+          {
+            "field": "lvef_drop_points",
+            "operator": ">=",
+            "value": 10
+          }
+        ]
+      },
+      {
+        "rule_id": "LVEF_40_45_SMALLDROP",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "LVEF 40-45% with <10 point fall: treatment may continue; repeat LVEF within 3 weeks."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "LVEF 40-45% with <10 point fall: treatment may continue; repeat LVEF within 3 weeks.",
+        "all": [
+          {
+            "field": "lvef_percent",
+            "operator": ">=",
+            "value": 40
+          },
+          {
+            "field": "lvef_percent",
+            "operator": "<=",
+            "value": 45
+          },
+          {
+            "field": "lvef_drop_points",
+            "operator": "<",
+            "value": 10
+          }
+        ]
+      },
+      {
+        "rule_id": "LVEF_GT45_DROP10",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "LVEF >45% with a 10-20 point fall: continue treatment with cardiac surveillance."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "LVEF >45% with a 10-20 point fall: continue treatment with cardiac surveillance.",
+        "all": [
+          {
+            "field": "lvef_percent",
+            "operator": ">",
+            "value": 45
+          },
+          {
+            "field": "lvef_drop_points",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "field": "lvef_drop_points",
+            "operator": "<=",
+            "value": 20
+          }
+        ]
+      },
+      {
+        "rule_id": "SEVERE_HEPATIC",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Severe hepatic impairment: trastuzumab deruxtecan is not recommended."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Severe hepatic impairment: trastuzumab deruxtecan is not recommended.",
+        "field": "hepatic_impairment",
+        "operator": "==",
+        "value": "severe"
+      },
+      {
+        "rule_id": "MOD_HEPATIC",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Moderate hepatic impairment: no adjustment expected, but close toxicity monitoring is recommended."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Moderate hepatic impairment: no adjustment expected, but close toxicity monitoring is recommended.",
+        "field": "hepatic_impairment",
+        "operator": "==",
+        "value": "moderate"
+      },
+      {
+        "rule_id": "FURTHER_REDUCTION",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "A further dose reduction below 3.2 mg/kg is required: discontinue treatment."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "A further dose reduction below 3.2 mg/kg is required: discontinue treatment.",
+        "field": "dose_reduction_level",
+        "operator": ">",
+        "value": 2
       }
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
-    "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "emetogenic_risk": "high",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_High_V2_05.21.pdf",
+    "supportive_medications_label": "CUH high-emetogenic supportive medicines",
+    "summary": [
+      "Aprepitant 125 mg PO Day 1, then 80 mg PO Days 2-3",
+      "Dexamethasone 8 mg PO Days 2-4",
+      "Omeprazole 20 mg PO Days 1-4",
+      "PRN cyclizine or metoclopramide; loperamide guidance included"
+    ],
+    "provenance": "CUH local supportive-care prescription sheet; verify current local policy before prescribing."
   }
 }

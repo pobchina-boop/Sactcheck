@@ -5,15 +5,15 @@
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00720",
-    "nccp_version": "2",
+    "nccp_version": 2,
     "tumour_group": "Breast",
     "title": "Neratinib Therapy",
-    "short_title": "Neratinib",
-    "indication": "Extended adjuvant treatment of HR-positive, HER2-positive early breast cancer after trastuzumab-based therapy.",
+    "short_title": "Neratinib extended adjuvant",
+    "indication": "Extended adjuvant treatment of adults with early-stage HR-positive, HER2-overexpressed/amplified breast cancer who completed adjuvant trastuzumab-based therapy less than one year ago.",
     "icd10": "C50",
-    "source_document_pages": 6,
+    "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
-    "sactcheck_encoding_version": "0.35.0",
+    "sactcheck_encoding_version": "0.36.6",
     "treatment_setting": [
       "adjuvant"
     ],
@@ -34,78 +34,280 @@
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the official regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
-    "anc_x10e9_l": {
-      "label": "ANC",
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "anc": {
+      "label": "ANC (×10⁹/L)",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
+      "max": 50,
       "step": 0.01,
-      "demo_value": 2
+      "demo_value": 2.0
     },
-    "platelets_x10e9_l": {
-      "label": "Platelets",
+    "platelets": {
+      "label": "Platelets (×10⁹/L)",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
+      "max": 2000,
       "step": 1,
-      "demo_value": 200
+      "demo_value": 180
     },
-    "hb_g_dl": {
-      "label": "Haemoglobin",
+    "crcl": {
+      "label": "Creatinine clearance (mL/min)",
       "type": "number",
-      "unit": "g/dL",
       "required": false,
       "min": 0,
-      "step": 0.1,
-      "demo_value": 12
-    },
-    "haematological_toxicity_grade": {
-      "label": "Haematological toxicity grade",
-      "type": "number",
-      "unit": "CTCAE grade",
-      "required": false,
-      "min": 0,
-      "max": 4,
+      "max": 250,
       "step": 1,
-      "demo_value": 0
+      "demo_value": 80
     },
     "diarrhoea_grade": {
       "label": "Diarrhoea grade",
-      "type": "number",
-      "unit": "CTCAE grade",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "hand_foot_grade": {
+      "label": "Palmar-plantar erythrodysaesthesia grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "other_toxicity_grade": {
+      "label": "Other treatment-related toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
       "demo_value": 0
     },
     "alt_grade": {
-      "label": "ALT elevation grade",
+      "label": "ALT/AST elevation grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "bilirubin_grade": {
+      "label": "Bilirubin elevation grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "lvef_percent": {
+      "label": "Current LVEF (%)",
       "type": "number",
-      "unit": "CTCAE grade",
       "required": false,
       "min": 0,
-      "max": 4,
+      "max": 100,
+      "step": 1,
+      "demo_value": 55
+    },
+    "symptomatic_chf": {
+      "label": "Symptomatic cardiac failure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "history_heart_disease": {
+      "label": "History of heart disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "qtc_seconds": {
+      "label": "QTc interval (seconds)",
+      "type": "number",
+      "required": false,
+      "min": 0.2,
+      "max": 0.8,
+      "step": 0.01,
+      "demo_value": 0.42
+    },
+    "gi_disease_diarrhoea": {
+      "label": "GI disease with diarrhoea as major symptom",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "diarrhoea_duration_days": {
+      "label": "Current diarrhoea duration (days)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
       "step": 1,
       "demo_value": 0
     },
-    "ast_grade": {
-      "label": "AST elevation grade",
+    "complicated_diarrhoea": {
+      "label": "Complicated diarrhoea features (dehydration, fever, hypotension, renal failure or grade 3-4 neutropenia)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "toxicity_delay_weeks": {
+      "label": "Treatment delay for toxicity (weeks)",
       "type": "number",
-      "unit": "CTCAE grade",
       "required": false,
       "min": 0,
-      "max": 4,
-      "step": 1,
+      "max": 20,
+      "step": 0.5,
       "demo_value": 0
     },
-    "child_pugh_class": {
-      "label": "Child–Pugh class",
+    "current_dose_mg": {
+      "label": "Current neratinib dose (mg daily)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 240,
+          "label": "240 mg"
+        },
+        {
+          "value": 200,
+          "label": "200 mg"
+        },
+        {
+          "value": 160,
+          "label": "160 mg"
+        },
+        {
+          "value": 120,
+          "label": "120 mg"
+        }
+      ],
+      "demo_value": 240
+    },
+    "child_pugh": {
+      "label": "Child-Pugh class",
       "type": "select",
       "required": false,
       "options": [
@@ -123,66 +325,418 @@
         }
       ],
       "demo_value": "A"
+    },
+    "cyp3a_pgp_inhibitor": {
+      "label": "Strong or moderate CYP3A/P-gp inhibitor",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Rapid partial assessment",
-      "required_inputs": [
-        "anc_x10e9_l",
-        "platelets_x10e9_l",
-        "hb_g_dl",
-        "haematological_toxicity_grade",
-        "diarrhoea_grade",
-        "alt_grade",
-        "ast_grade",
-        "child_pugh_class"
-      ],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "The entered result lies in a phase-dependent or non-deterministic range. Confirm the treatment phase and review the official NCCP protocol."
+    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
+    "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "severe_reported_toxicity_review",
-        "priority": 100,
-        "when": {
-          "field": "haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
+        "rule_id": "EXCL_HS",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
         "action": {
-          "type": "consultant_review",
-          "message": "Grade 3 or greater toxicity entered. Review the official NCCP regimen and discuss with the treating oncology team before continuing."
-        }
+          "type": "contraindicated",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Do not administer neratinib."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer neratinib."
       },
       {
-        "id": "severe_hepatic_impairment_review",
-        "priority": 90,
-        "when": {
-          "field": "child_pugh_class",
-          "operator": "==",
-          "value": "C"
+        "rule_id": "EXCL_HEART",
+        "field": "history_heart_disease",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "History of heart disease is an NCCP exclusion."
         },
+        "source": {
+          "page": 2
+        },
+        "explanation": "History of heart disease is an NCCP exclusion."
+      },
+      {
+        "rule_id": "EXCL_QT",
+        "field": "qtc_seconds",
+        "operator": ">",
+        "value": 0.45,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "QTc >0.45 seconds is an NCCP exclusion."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "QTc >0.45 seconds is an NCCP exclusion."
+      },
+      {
+        "rule_id": "EXCL_GI",
+        "field": "gi_disease_diarrhoea",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "GI disease with diarrhoea as the major symptom is an NCCP exclusion."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "GI disease with diarrhoea as the major symptom is an NCCP exclusion."
+      },
+      {
+        "rule_id": "EXCL_PREG",
+        "field": "pregnancy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Do not administer during pregnancy."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer during pregnancy."
+      },
+      {
+        "rule_id": "EXCL_BF",
+        "field": "breastfeeding",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Do not administer while breastfeeding."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Do not administer while breastfeeding."
+      },
+      {
+        "rule_id": "BLOODS_DELAY",
+        "all": [
+          {
+            "field": "anc",
+            "operator": "<=",
+            "value": 0.9
+          },
+          {
+            "field": "platelets",
+            "operator": "<=",
+            "value": 99
+          }
+        ],
+        "action": {
+          "type": "delay",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Delay neratinib by one week and repeat blood counts."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "ANC ≤0.9 and platelets ≤99 triggers a one-week delay."
+      },
+      {
+        "rule_id": "CP_C",
+        "field": "child_pugh",
+        "operator": "==",
+        "value": "C",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Child-Pugh C: use approximately 33% of the original dose with specialist verification."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Child-Pugh C: use approximately 33% of the original dose with specialist verification."
+      },
+      {
+        "rule_id": "GEN_G4",
+        "field": "other_toxicity_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Permanently discontinue for grade 4 treatment-related toxicity."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Permanently discontinue for grade 4 treatment-related toxicity."
+      },
+      {
+        "rule_id": "GEN_G3",
+        "field": "other_toxicity_grade",
+        "operator": "==",
+        "value": 3,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Stop until recovery to grade 0-1/baseline within 3 weeks, then resume at the next lower dose; permanently discontinue if not recovered within 3 weeks."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Stop until recovery to grade 0-1/baseline within 3 weeks, then resume at the next lower dose; permanently discontinue if not recovered within 3 weeks."
+      },
+      {
+        "rule_id": "DELAY_GT3",
+        "field": "toxicity_delay_weeks",
+        "operator": ">",
+        "value": 3,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Permanently discontinue when treatment-related toxicity causes a delay longer than 3 weeks."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Permanently discontinue when treatment-related toxicity causes a delay longer than 3 weeks."
+      },
+      {
+        "rule_id": "DIARR_COMPLICATED",
+        "field": "complicated_diarrhoea",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Interrupt neratinib, institute active diarrhoea management and hydration; resume according to time-to-recovery and dose-reduction pathway."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Any-grade diarrhoea with complicated features requires interruption."
+      },
+      {
+        "rule_id": "DIARR_G4",
+        "field": "diarrhoea_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Permanently discontinue neratinib for grade 4 diarrhoea."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 4 diarrhoea requires permanent discontinuation."
+      },
+      {
+        "rule_id": "DIARR_G3_LONG",
+        "all": [
+          {
+            "field": "diarrhoea_grade",
+            "operator": "==",
+            "value": 3
+          },
+          {
+            "field": "diarrhoea_duration_days",
+            "operator": ">",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Interrupt neratinib. If recovery to grade 0-1 occurs within 1 week resume same dose; if later, resume at a reduced dose. Permanently discontinue if grade 3 persists >3 weeks."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 3 diarrhoea lasting over 2 days requires interruption."
+      },
+      {
+        "rule_id": "DIARR_G2_LONG",
+        "all": [
+          {
+            "field": "diarrhoea_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "diarrhoea_duration_days",
+            "operator": ">=",
+            "value": 5
+          }
+        ],
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Interrupt neratinib; resume according to time-to-recovery and dose-reduction pathway."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Grade 2 diarrhoea lasting 5 days or longer requires interruption."
+      },
+      {
+        "rule_id": "ALT_G4",
+        "field": "alt_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Permanently discontinue for grade 4 ALT elevation."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Permanently discontinue for grade 4 ALT elevation."
+      },
+      {
+        "rule_id": "BILI_G4",
+        "field": "bilirubin_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Permanently discontinue for grade 4 bilirubin elevation."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Permanently discontinue for grade 4 bilirubin elevation."
+      },
+      {
+        "rule_id": "ALT_G3",
+        "field": "alt_grade",
+        "operator": "==",
+        "value": 3,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Stop until recovery to grade 0-1; if recovered within 3 weeks resume at the next lower dose. Discontinue for recurrence or persistence beyond 3 weeks."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Stop until recovery to grade 0-1; if recovered within 3 weeks resume at the next lower dose. Discontinue for recurrence or persistence beyond 3 weeks."
+      },
+      {
+        "rule_id": "BILI_G3",
+        "field": "bilirubin_grade",
+        "operator": "==",
+        "value": 3,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Stop until recovery to grade 0-1; if recovered within 3 weeks resume at the next lower dose. Discontinue for recurrence or persistence beyond 3 weeks."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Stop until recovery to grade 0-1; if recovered within 3 weeks resume at the next lower dose. Discontinue for recurrence or persistence beyond 3 weeks."
+      },
+      {
+        "rule_id": "CYP_INH",
+        "field": "cyp3a_pgp_inhibitor",
+        "operator": "==",
+        "value": true,
         "action": {
           "type": "consultant_review",
-          "message": "Severe hepatic impairment entered. Review the official NCCP regimen and consultant plan before continuing."
-        }
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Avoid strong/moderate CYP3A and P-gp inhibitors where possible; specialist dose adjustment and pharmacy review are required if unavoidable."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Avoid strong/moderate CYP3A and P-gp inhibitors where possible; specialist dose adjustment and pharmacy review are required if unavoidable."
       }
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
-    "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "emetogenic_risk": "low",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
+    "supportive_medications_label": "CUH low-emetogenic supportive medicines",
+    "summary": [
+      "Minimal-to-low emetogenic pathway",
+      "Mandatory early anti-diarrhoeal prophylaxis: loperamide from the first dose, titrated to 1-2 bowel movements/day",
+      "Hydration, diet and rapid diarrhoea escalation advice"
+    ],
+    "provenance": "CUH local supportive-care prescription sheet; verify current local policy before prescribing."
   }
 }

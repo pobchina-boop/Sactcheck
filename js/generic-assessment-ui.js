@@ -36,7 +36,7 @@
         <div class="toolbar" style="margin:0">
           <a href="#libraryScreen" class="btn secondary" id="jsonBackLibrary" role="button">← Regimen library</a>
           <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
-          <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Antiemetic proforma</a>
+          <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Supportive medicines</a>
         </div>
         <span class="badge engine-json">JSON engine v${escapeHtml(Engine.version)}</span>
       </div>
@@ -243,8 +243,9 @@
     riskElement.textContent = risk.label;
     riskElement.className = `emetogenic-inline ${risk.className}`;
     const proformaLink = document.getElementById("jsonAntiemeticProforma");
-    if (risk.proformaUrl) {
-      proformaLink.href = risk.proformaUrl;
+    const supportiveUrl = protocol.supportive_care?.supportive_medications_pdf_url || risk.proformaUrl;
+    if (supportiveUrl) {
+      proformaLink.href = supportiveUrl;
       proformaLink.classList.remove("hidden");
     } else {
       proformaLink.removeAttribute("href");

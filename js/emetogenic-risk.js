@@ -40,7 +40,7 @@
     const record = mapping.protocols?.[codeFor(protocol)] || {};
     const level = normaliseLevel(metadata.emetogenic_risk || record.level);
     const levelDefinition = mapping.levels?.[level] || {};
-    const baseUrl = metadata.antiemetic_proforma_url || mapping.source?.url || null;
+    const baseUrl = metadata.antiemetic_proforma_url || record.proforma_url || mapping.source?.url || null;
     const anchor = metadata.antiemetic_proforma_anchor || record.proforma_anchor || null;
     return {
       level,
@@ -59,5 +59,5 @@
     return `<${tag} class="badge emetogenic-badge ${risk.className}"${href}${title}><span class="emetogenic-dot" aria-hidden="true"></span>${risk.label}</${tag}>`;
   }
 
-  root.SACTCheckEmetogenicRisk = Object.freeze({ version: "0.36.0", load, get, badge });
+  root.SACTCheckEmetogenicRisk = Object.freeze({ version: "0.36.5", load, get, badge });
 })(typeof globalThis !== "undefined" ? globalThis : this);

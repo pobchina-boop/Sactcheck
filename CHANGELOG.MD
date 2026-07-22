@@ -1,3 +1,9 @@
+## v0.36.6
+
+- Encoded five breast placeholder regimens.
+- Applied reusable low-emetogenic traffic-light and CUH supportive-script mapping.
+- Added regression coverage for the remediation batch.
+
 # SACTCheck v0.36.4 — Platform-wide CTCAE grade descriptors
 
 - Adds a central reusable CTCAE v5.0 educational descriptor library.
