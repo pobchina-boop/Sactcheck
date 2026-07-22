@@ -2,20 +2,21 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00253-vcurrent",
   "file_name": "00253-tamoxifen.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00253",
     "nccp_version": "current",
     "tumour_group": "Breast",
     "title": "Tamoxifen Monotherapy",
     "short_title": "Tamoxifen",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
+    "indication": "Hormone receptor-positive early, locally advanced or metastatic breast cancer in accordance with the NCCP regimen.",
     "icd10": "C50",
-    "source_document_pages": null,
+    "source_document_pages": 6,
     "source_url": "https://healthservice.hse.ie/documents/6357/253_Tamoxifen_Monotherapy.pdf",
-    "sactcheck_encoding_version": "0.36.0",
+    "sactcheck_encoding_version": "0.36.10",
     "treatment_setting": [
       "adjuvant",
+      "locally_advanced",
       "metastatic"
     ],
     "catalog": {
@@ -30,65 +31,280 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
-    }
+    },
+    "treatment_class": [
+      "endocrine_therapy"
+    ],
+    "administration_route": [
+      "oral"
+    ],
+    "cytotoxic": false
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "disclaimer": "Decision-support encoding of the NCCP source. It does not replace the NCCP regimen, clinical judgement, medicines reconciliation or specialist review."
   },
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "tamoxifen_hypersensitivity": {
+      "label": "Tamoxifen/excipient hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "active_or_recent_vte": {
+      "label": "Active or recent DVT / pulmonary embolism",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "unexplained_vaginal_bleeding": {
+      "label": "Unexplained vaginal bleeding or concerning endometrial symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "visual_symptoms": {
+      "label": "New significant visual symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment or clinically significant liver concern",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "strong_cyp2d6_inhibitor": {
+      "label": "Strong CYP2D6 inhibitor identified (for example paroxetine or fluoxetine)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "other_toxicity_grade": {
+      "label": "Other treatment-related toxicity grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
         }
       ],
-      "demo_value": "review"
+      "demo_value": 0
     }
   },
   "required_inputs": [],
   "assessment_profiles": [
     {
       "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
-      ],
+      "label": "Tamoxifen assessment",
+      "required_inputs": [],
       "context": {}
     }
   ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
+    "proceed": "No entered feature triggered an encoded tamoxifen safety rule.",
+    "contraindicated": "An encoded contraindication is present. Do not start or continue without specialist review.",
+    "withhold": "Withhold tamoxifen and arrange clinical review.",
+    "consultant_review": "Specialist review or medicines reconciliation is required."
   },
   "rule_engine": {
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
+        "rule_id": "TAM_HS",
+        "field": "tamoxifen_hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tamoxifen"
+          ],
+          "recommendation": "Do not administer tamoxifen; relevant hypersensitivity is present."
         },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Relevant hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "TAM_PREG",
+        "field": "pregnancy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tamoxifen"
+          ],
+          "recommendation": "Do not administer tamoxifen during pregnancy; urgent oncology review is required."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Tamoxifen is contraindicated in pregnancy."
+      },
+      {
+        "rule_id": "TAM_BF",
+        "field": "breastfeeding",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tamoxifen"
+          ],
+          "recommendation": "Do not administer tamoxifen while breastfeeding."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Breastfeeding is incompatible with treatment."
+      },
+      {
+        "rule_id": "TAM_VTE",
+        "field": "active_or_recent_vte",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tamoxifen"
+          ],
+          "recommendation": "Withhold tamoxifen and obtain oncology review because of active or recent venous thromboembolism."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Tamoxifen increases venous thromboembolic risk."
+      },
+      {
+        "rule_id": "TAM_BLEEDING",
+        "field": "unexplained_vaginal_bleeding",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tamoxifen"
+          ],
+          "recommendation": "Withhold pending prompt gynaecological/endometrial assessment and oncology review."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Unexplained bleeding requires investigation."
+      },
+      {
+        "rule_id": "TAM_VISUAL",
+        "field": "visual_symptoms",
+        "operator": "==",
+        "value": true,
         "action": {
           "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "components": [
+            "tamoxifen"
+          ],
+          "recommendation": "Arrange prompt clinical and ophthalmic review before continuing."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "New visual symptoms require assessment."
+      },
+      {
+        "rule_id": "TAM_LIVER",
+        "field": "severe_hepatic_impairment",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tamoxifen"
+          ],
+          "recommendation": "Review liver function and suitability with the treating oncologist."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Clinically significant hepatic impairment requires individual review."
+      },
+      {
+        "rule_id": "TAM_CYP2D6",
+        "field": "strong_cyp2d6_inhibitor",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tamoxifen"
+          ],
+          "recommendation": "Reconcile medicines and consider an alternative to the strong CYP2D6 inhibitor."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Strong CYP2D6 inhibition may reduce formation of active tamoxifen metabolites."
+      },
+      {
+        "rule_id": "TAM_TOX",
+        "field": "other_toxicity_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tamoxifen"
+          ],
+          "recommendation": "Withhold for grade 3 or greater treatment-related toxicity and obtain oncology review."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Severe toxicity requires review."
       }
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
+    "emetogenic_risk": "minimal",
+    "script_id": "none-routine",
     "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "supportive_medications_label": "No routine antiemetic script required",
+    "summary": [
+      "Endocrine therapy; routine antiemetic prophylaxis is not generally required.",
+      "Provide symptom-directed supportive care and counsel regarding VTE and abnormal vaginal bleeding."
+    ],
+    "validation_status": "pending_oncology_pharmacy_review"
   }
 }

@@ -12,7 +12,7 @@ for (const file of files) {
   const p = path.join(__dirname, '..', 'protocols', 'breast', file);
   const protocol = JSON.parse(fs.readFileSync(p, 'utf8'));
   assert.equal(protocol.status, 'encoded_prototype_pending_clinical_and_pharmacy_validation');
-  assert.equal(protocol.metadata.sactcheck_encoding_version, '0.36.3');
+  assert.ok(/^0\.36\./.test(protocol.metadata.sactcheck_encoding_version));
   assert.ok(Object.keys(protocol.input_definitions).length >= 9);
   assert.ok(protocol.rule_engine.rules.length >= 10);
   assert.ok(protocol.metadata.source_url.startsWith('https://'));

@@ -1,93 +1,871 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00212-vcurrent",
+  "protocol_id": "nccp-00212-v6a",
   "file_name": "00212-bevacizumab-q14d.json",
-  "status": "catalog_placeholder_pending_full_rule_encoding",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00212",
-    "nccp_version": "current",
+    "nccp_version": "6a",
     "tumour_group": "Breast",
-    "title": "Bevacizumab 10 mg/kg - 14 days",
+    "title": "Bevacizumab 10 mg/kg – 14 days",
     "short_title": "Bevacizumab q14d",
-    "indication": "NCCP breast regimen catalogue placeholder. Full protocol-specific assessment rules require consultant and oncology-pharmacy review.",
-    "icd10": "C50",
-    "source_document_pages": null,
+    "indication": "Bevacizumab component of an NCCP breast cancer regimen administered every 14 days. Partner systemic therapy must be assessed separately.",
+    "published_date": "2015-06-12",
+    "review_date": "2021-04-28",
     "source_url": "https://healthservice.hse.ie/documents/6942/212_V6a_Bevacizumab_10mgkg.pdf",
-    "sactcheck_encoding_version": "0.36.0",
-    "treatment_setting": [
-      "metastatic"
-    ],
+    "source_document_pages": 7,
     "catalog": {
       "enabled": true
     },
     "migration": {
       "mode": "live_json"
     },
+    "sactcheck_encoding_version": "0.36.10",
+    "partial_assessment_supported": true,
+    "source_checked_date": "2026-07-19",
+    "assessment_model": "bevacizumab_component",
+    "treatment_setting": [
+      "metastatic"
+    ],
+    "treatment_class": [
+      "anti_angiogenic_targeted_therapy"
+    ],
+    "administration_route": [
+      "intravenous"
+    ],
+    "cytotoxic": false,
     "validation": {
-      "source_document_checked": false,
-      "software_tests_completed": true,
-      "consultant_reviewed": false,
-      "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "software_tests_completed": true
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Catalogue placeholder linked to the official NCCP source. Automated protocol-specific treatment clearance is not yet encoded; use the official PDF and clinical judgement."
+    "anaphylaxis_facilities_required": true,
+    "disclaimer": "Decision-support encoding of the NCCP source document. It does not replace the current NCCP regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
   },
+  "indications": [
+    {
+      "indication_id": "ovarian_frontline_or_continuation",
+      "code": "00215a",
+      "description": "Bevacizumab with carboplatin/paclitaxel followed by single-agent continuation for advanced ovarian, fallopian tube or primary peritoneal cancer."
+    },
+    {
+      "indication_id": "platinum_resistant_ovarian",
+      "code": "00215c",
+      "description": "Bevacizumab with topotecan for platinum-resistant recurrent ovarian, fallopian tube or primary peritoneal cancer."
+    },
+    {
+      "indication_id": "metastatic_colorectal",
+      "code": "00215d",
+      "description": "Bevacizumab with fluoropyrimidine-based chemotherapy for metastatic colorectal cancer."
+    },
+    {
+      "indication_id": "metastatic_breast",
+      "code": "00215e",
+      "description": "Bevacizumab with paclitaxel for first-line HER2-negative metastatic breast cancer."
+    },
+    {
+      "indication_id": "nonsquamous_nsclc_platinum",
+      "code": "00215f",
+      "description": "Bevacizumab with platinum-based chemotherapy for unresectable advanced, metastatic or recurrent non-squamous NSCLC."
+    },
+    {
+      "indication_id": "egfr_mutant_nsclc_erlotinib",
+      "code": "00215g",
+      "description": "Bevacizumab with erlotinib for EGFR-mutated non-squamous NSCLC."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "bevacizumab_21_day",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "bevacizumab",
+          "dose": {
+            "value": 15,
+            "unit": "mg/kg"
+          },
+          "route": "IV infusion"
+        }
+      ]
+    }
+  ],
   "input_definitions": {
-    "placeholder_review": {
-      "label": "Protocol-specific automated assessment",
+    "indication_id": {
+      "label": "Indication",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "metastatic_breast",
+          "label": "00212 — Bevacizumab-containing treatment for metastatic breast cancer"
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "metastatic_breast"
+    },
+    "assessment_type": {
+      "label": "Assessment type",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "pre_treatment",
+          "label": "Pre-treatment assessment"
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "pre_treatment"
+    },
+    "treatment_context": {
+      "label": "Treatment context",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "bevacizumab_only",
+          "label": "Bevacizumab continuation / monotherapy component"
+        },
+        {
+          "value": "combination",
+          "label": "Bevacizumab component of a combination regimen"
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "bevacizumab_only"
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "max": 200,
+      "step": 1,
+      "demo_value": 7,
+      "ui_section": "treatment_context"
+    },
+    "partner_sact_assessed_separately": {
+      "label": "If combination therapy: partner SACT assessed separately",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "treatment_context",
+      "visible_when": {
+        "field": "treatment_context",
+        "operator": "==",
+        "value": "combination"
+      },
+      "required_when": {
+        "field": "treatment_context",
+        "operator": "==",
+        "value": "combination"
+      }
+    },
+    "hypersensitivity": {
+      "label": "Relevant bevacizumab / CHO-product hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "recent_major_surgery_or_unhealed_wound": {
+      "label": "Recent major surgery or unhealed wound",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "planned_major_surgery": {
+      "label": "Major elective surgery planned",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "uncontrolled_or_symptomatic_hypertension": {
+      "label": "Uncontrolled or symptomatic hypertension",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "hypertension_grade": {
+      "label": "Hypertension grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "review",
-          "label": "Open consultant review pathway"
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
         }
       ],
-      "demo_value": "review"
-    }
-  },
-  "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Placeholder protocol card",
-      "required_inputs": [
-        "placeholder_review"
+      "ui_section": "clinical",
+      "demo_value": 0,
+      "visible_when": {
+        "field": "uncontrolled_or_symptomatic_hypertension",
+        "operator": "==",
+        "value": true
+      }
+    },
+    "severe_bp_uncontrolled": {
+      "label": "Blood pressure >200/110 mmHg and uncontrolled",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "hypertensive_crisis_or_encephalopathy": {
+      "label": "Hypertensive crisis or hypertensive encephalopathy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "proteinuria_dipstick": {
+      "label": "Urine dipstick protein",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "negative",
+          "label": "Negative"
+        },
+        {
+          "value": "1+",
+          "label": "1+"
+        },
+        {
+          "value": "2+",
+          "label": "2+"
+        },
+        {
+          "value": "3+",
+          "label": "3+"
+        },
+        {
+          "value": "4+",
+          "label": "4+"
+        }
       ],
-      "context": {}
+      "ui_section": "labs",
+      "demo_value": "negative"
+    },
+    "urine_protein_g_24h": {
+      "label": "24-hour urine protein",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 0.1,
+      "demo_value": 2.0,
+      "ui_section": "labs",
+      "unit": "g/24 h",
+      "visible_when": {
+        "field": "proteinuria_dipstick",
+        "operator": "in",
+        "value": [
+          "2+",
+          "3+",
+          "4+"
+        ]
+      }
+    },
+    "fistula_grade": {
+      "label": "Fistula grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": 0
+    },
+    "thromboembolic_event_grade": {
+      "label": "Thromboembolic event grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": 0
+    },
+    "arterial_thromboembolic_event": {
+      "label": "Arterial thromboembolic event",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "haemorrhage_grade": {
+      "label": "Haemorrhage grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ui_section": "clinical",
+      "demo_value": 0
+    },
+    "gi_perforation": {
+      "label": "Gastrointestinal perforation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "necrotising_fasciitis": {
+      "label": "Necrotising fasciitis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "pres_confirmed": {
+      "label": "Posterior reversible encephalopathy syndrome (PRES) confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical"
+    },
+    "fbc_clinical_concern": {
+      "label": "FBC abnormality requiring clinical review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "labs"
+    },
+    "renal_or_hepatic_clinical_concern": {
+      "label": "Renal or hepatic abnormality requiring clinical review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "labs"
     }
-  ],
-  "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "Protocol card available; full automated rules pending clinical validation."
   },
+  "required_inputs": [
+    "indication_id",
+    "assessment_type",
+    "treatment_context",
+    "cycle_number"
+  ],
   "rule_engine": {
-    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
     "rules": [
       {
-        "id": "placeholder_review",
-        "priority": 100,
-        "when": {
-          "field": "placeholder_review",
-          "operator": "==",
-          "value": "review"
+        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Do not administer bevacizumab; obtain consultant review."
         },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Hypersensitivity is an exclusion."
+      },
+      {
+        "rule_id": "PREGNANCY_REVIEW",
+        "field": "pregnancy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Do not administer bevacizumab during pregnancy; urgent consultant review is required."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Pregnancy is an exclusion."
+      },
+      {
+        "rule_id": "COMBINATION_SCOPE_GAP",
+        "all": [
+          {
+            "field": "treatment_context",
+            "operator": "==",
+            "value": "combination"
+          },
+          {
+            "field": "partner_sact_assessed_separately",
+            "operator": "==",
+            "value": false
+          }
+        ],
         "action": {
           "type": "consultant_review",
-          "message": "This regimen is included as a breast-library placeholder. Review the official NCCP PDF; protocol-specific automated thresholds are pending consultant and oncology-pharmacy feedback."
-        }
+          "components": [
+            "combination regimen"
+          ],
+          "recommendation": "Complete the assessment of all partner SACT components before treatment; this JSON evaluates the bevacizumab component only."
+        },
+        "source": {
+          "page": 2
+        },
+        "explanation": "Combination partner rules are outside this protocol component."
+      },
+      {
+        "rule_id": "UNHEALED_WOUND_OR_RECENT_SURGERY",
+        "field": "recent_major_surgery_or_unhealed_wound",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Withhold bevacizumab until the wound is fully healed and the postoperative interval is appropriate."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Bevacizumab can impair wound healing."
+      },
+      {
+        "rule_id": "PLANNED_MAJOR_SURGERY",
+        "field": "planned_major_surgery",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Withhold bevacizumab around major elective surgery according to the NCCP timing guidance and consultant plan."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Bevacizumab should be withheld for major elective surgery."
+      },
+      {
+        "rule_id": "UNCONTROLLED_HYPERTENSION",
+        "field": "uncontrolled_or_symptomatic_hypertension",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Withhold bevacizumab and start or adjust antihypertensive treatment."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Uncontrolled or symptomatic hypertension requires withholding."
+      },
+      {
+        "rule_id": "PERSISTENT_G3_OR_G4_HYPERTENSION",
+        "field": "hypertension_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 4 or persisting grade 3 hypertension."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Persistent severe hypertension requires discontinuation."
+      },
+      {
+        "rule_id": "SEVERE_UNCONTROLLED_BP",
+        "field": "severe_bp_uncontrolled",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for severe blood pressure >200/110 mmHg that remains uncontrolled."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Severe uncontrolled hypertension requires discontinuation."
+      },
+      {
+        "rule_id": "HYPERTENSIVE_CRISIS_PRES",
+        "field": "hypertensive_crisis_or_encephalopathy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Permanently discontinue bevacizumab and manage urgently."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Hypertensive crisis/encephalopathy requires permanent discontinuation."
+      },
+      {
+        "rule_id": "PROTEIN_DIPSTICK_2_3",
+        "field": "proteinuria_dipstick",
+        "operator": "in",
+        "value": [
+          "2+",
+          "3+"
+        ],
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Bevacizumab may proceed while a 24-hour urine collection is arranged before the next dose."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "2+ or 3+ dipstick requires quantification."
+      },
+      {
+        "rule_id": "PROTEIN_DIPSTICK_4",
+        "field": "proteinuria_dipstick",
+        "operator": "==",
+        "value": "4+",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Withhold bevacizumab and obtain a 24-hour urine protein measurement."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "4+ dipstick requires withholding pending quantification."
+      },
+      {
+        "rule_id": "PROTEIN_2_TO_4",
+        "all": [
+          {
+            "field": "urine_protein_g_24h",
+            "operator": ">",
+            "value": 2
+          },
+          {
+            "field": "urine_protein_g_24h",
+            "operator": "<=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Hold bevacizumab; repeat 24-hour urine protein every 2 weeks and resume when ≤2 g/24 h."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Urine protein >2–4 g/24 h requires holding."
+      },
+      {
+        "rule_id": "PROTEIN_OVER_4",
+        "field": "urine_protein_g_24h",
+        "operator": ">",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for urine protein >4 g/24 h."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe proteinuria requires discontinuation."
+      },
+      {
+        "rule_id": "GRADE4_FISTULA",
+        "field": "fistula_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 4 fistula."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 4 fistula requires discontinuation."
+      },
+      {
+        "rule_id": "THROMBOEMBOLIC_G4",
+        "field": "thromboembolic_event_grade",
+        "operator": ">=",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 4 thromboembolic toxicity."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Grade 4 thromboembolic event requires discontinuation."
+      },
+      {
+        "rule_id": "ARTERIAL_THROMBOEMBOLIC_EVENT",
+        "field": "arterial_thromboembolic_event",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Permanently discontinue bevacizumab after an arterial thromboembolic event."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "Arterial thromboembolism requires permanent discontinuation."
+      },
+      {
+        "rule_id": "HAEMORRHAGE_G3PLUS",
+        "field": "haemorrhage_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 3 or higher haemorrhage."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "Severe haemorrhage requires discontinuation."
+      },
+      {
+        "rule_id": "GI_PERFORATION",
+        "field": "gi_perforation",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Permanently discontinue bevacizumab for gastrointestinal perforation."
+        },
+        "source": {
+          "page": 5
+        },
+        "explanation": "GI perforation requires permanent discontinuation."
+      },
+      {
+        "rule_id": "NECROTISING_FASCIITIS",
+        "field": "necrotising_fasciitis",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab and institute urgent treatment for necrotising fasciitis."
+        },
+        "source": {
+          "page": 6
+        },
+        "explanation": "Necrotising fasciitis requires discontinuation."
+      },
+      {
+        "rule_id": "PRES",
+        "field": "pres_confirmed",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab and urgently manage confirmed PRES."
+        },
+        "source": {
+          "page": 7
+        },
+        "explanation": "PRES requires discontinuation."
+      },
+      {
+        "rule_id": "FBC_REVIEW_ONLY",
+        "field": "fbc_clinical_concern",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Review the FBC abnormality clinically. No cycle-by-cycle numerical ANC or platelet hold threshold is encoded in NCCP 00215."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Routine FBC is monitored without a protocol-defined dose threshold."
+      },
+      {
+        "rule_id": "ORGAN_FUNCTION_REVIEW",
+        "field": "renal_or_hepatic_clinical_concern",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Review renal or hepatic abnormality with the consultant; no validated dose adjustment is specified."
+        },
+        "source": {
+          "page": 4
+        },
+        "explanation": "Renal/hepatic impairment lacks a defined dose-adjustment table."
       }
     ]
   },
+  "output_templates": {
+    "proceed": "No encoded hold, discontinuation, or modification criterion was triggered by the entered data.",
+    "coverage_gap": "One or more optional clinical domains were not assessed. Missing values have not been interpreted as normal."
+  },
   "supportive_care": {
-    "emetogenic_risk": "awaiting_proforma_mapping",
-    "supportive_medications_pdf_url": null,
-    "supportive_medications_label": "Supportive medications / antiemetic guide"
+    "emetogenic_risk": "minimal",
+    "script_id": "generic-low-cuh-v2",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
+    "supportive_medications_label": "CUH low-emetogenic supportive medicines guide",
+    "summary": [
+      "Bevacizumab alone has minimal emetogenic potential.",
+      "Assess the emetogenic risk and supportive medicines of any partner SACT separately.",
+      "Monitor blood pressure, proteinuria, bleeding, thrombosis, wound healing and gastrointestinal perforation risk."
+    ],
+    "validation_status": "pending_oncology_pharmacy_review"
   }
 }

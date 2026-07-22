@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6559/217_Lapatinib_and_Capecitabine_therapy.pdf",
-    "sactcheck_encoding_version": "0.36.6",
+    "sactcheck_encoding_version": "0.36.10",
     "treatment_setting": [
       "metastatic"
     ],
@@ -29,7 +29,16 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
-    }
+    },
+    "treatment_class": [
+      "targeted_oral_therapy",
+      "cytotoxic_chemotherapy"
+    ],
+    "administration_route": [
+      "oral"
+    ],
+    "cytotoxic": true,
+    "renal_input_status": "protocol_specific_band_verified"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -72,15 +81,6 @@
       "max": 2000,
       "step": 1,
       "demo_value": 180
-    },
-    "crcl": {
-      "label": "Creatinine clearance (mL/min)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 250,
-      "step": 1,
-      "demo_value": 80
     },
     "diarrhoea_grade": {
       "label": "Diarrhoea grade",
@@ -257,6 +257,31 @@
       "type": "boolean",
       "required": false,
       "demo_value": false
+    },
+    "crcl_band": {
+      "label": "Creatinine clearance range",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "gte_51",
+          "label": "CrCl ≥51 mL/min — standard capecitabine renal dose"
+        },
+        {
+          "value": "30_50",
+          "label": "CrCl 30–50 mL/min — reduced starting dose / protocol modification"
+        },
+        {
+          "value": "lt_30",
+          "label": "CrCl <30 mL/min — capecitabine contraindicated"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis — specialist review required"
+        }
+      ],
+      "demo_value": "gte_51",
+      "ui_section": "labs"
     }
   },
   "required_inputs": [],
@@ -426,9 +451,9 @@
       },
       {
         "rule_id": "CRCL_LT30",
-        "field": "crcl",
-        "operator": "<",
-        "value": 30,
+        "field": "crcl_band",
+        "operator": "==",
+        "value": "lt_30",
         "action": {
           "type": "contraindicated",
           "components": [
@@ -528,18 +553,54 @@
           "page": 5
         },
         "explanation": "Clinically significant CYP3A interaction identified: reconcile medicines before treatment."
+      },
+      {
+        "rule_id": "CRCL_30_50",
+        "field": "crcl_band",
+        "operator": "==",
+        "value": "30_50",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Use the NCCP protocol-directed reduced capecitabine starting dose for CrCl 30–50 mL/min and verify the prescribed dose."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "The NCCP renal guidance uses a discrete dose-reduction band for CrCl 30–50 mL/min."
+      },
+      {
+        "rule_id": "CRCL_DIALYSIS",
+        "field": "crcl_band",
+        "operator": "==",
+        "value": "dialysis",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine",
+            "lapatinib"
+          ],
+          "recommendation": "Dialysis is outside the routine encoded pathway; do not proceed without specialist oncology and pharmacy review."
+        },
+        "source": {
+          "page": 3
+        },
+        "explanation": "Specialist review is required."
       }
     ]
   },
   "supportive_care": {
     "emetogenic_risk": "low",
     "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
-    "supportive_medications_label": "CUH low-emetogenic supportive medicines",
+    "supportive_medications_label": "CUH low-emetogenic supportive medicines guide",
     "summary": [
-      "Low-emetogenic antiemetic pathway",
-      "Early loperamide access and diarrhoea education",
-      "Capecitabine hand-foot syndrome and oral adherence counselling"
+      "Low emetogenic potential.",
+      "Use PRN antiemetics according to local policy.",
+      "Provide diarrhoea and hand-foot syndrome education and early-treatment instructions."
     ],
-    "provenance": "CUH local supportive-care prescription sheet; verify current local policy before prescribing."
+    "provenance": "CUH local supportive-care prescription sheet; verify current local policy before prescribing.",
+    "script_id": "generic-low-cuh-v2"
   }
 }
