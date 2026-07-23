@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="SACTCheck">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>SACTCheck v0.37.0 — Platform standardisation</title>
+  <title>SACTCheck v0.37.2 — Tissue UI and automatic local ULN calculations</title>
   <style>
     :root {
       --navy:#12314a; --blue:#176b9b; --blue2:#0f567f; --light:#f3f6f8;
@@ -230,6 +230,7 @@
     .emetogenic-pending{background:#edf0f2!important;color:#5f6b74!important}.emetogenic-pending .emetogenic-dot{background:#7a858e}
     .emetogenic-inline{display:inline-flex;align-items:center;gap:6px}.emetogenic-inline::before{content:'';width:10px;height:10px;border-radius:999px;background:#7a858e}
     .emetogenic-inline.emetogenic-high::before{background:#c62828}.emetogenic-inline.emetogenic-moderate::before{background:#ef8b00}.emetogenic-inline.emetogenic-low::before{background:#2e8b57}
+    .regimen-aliases{margin:4px 0 8px!important;font-size:13px;color:#4f6472}.regimen-aliases strong{color:#284e63}
     .blood-threshold-section{border-top:6px solid var(--blue);background:linear-gradient(180deg,#f8fcff,#fff)}
     .blood-input-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
     .blood-input-card{border:1px solid #b8cbd8;border-radius:10px;padding:13px;background:#fff;box-shadow:0 1px 2px rgba(15,86,127,.06)}
@@ -254,6 +255,30 @@
     @media(max-width:900px){.blood-input-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:520px){.blood-input-grid{grid-template-columns:1fr 1fr}.blood-input-card{padding:10px}.blood-input-card input,.blood-input-card select{font-size:17px}.compact-input-state{max-width:42%}}
 
+    /* v0.37.2 tissue navigation and local-laboratory UI */
+    .tissue-explorer{margin:18px 0 20px;padding:16px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#fbfdff,#f4f7f9)}
+    .tissue-explorer-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:13px}
+    .tissue-explorer-head h3{margin:0 0 4px;font-size:18px;color:var(--navy)}
+    .tissue-type-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px}
+    .tissue-tile{--tissue-color:var(--blue);display:flex;align-items:center;gap:9px;min-height:66px;padding:9px 10px;border:1px solid #d8e1e8;border-radius:11px;background:#fff;color:var(--navy);text-align:left;box-shadow:0 1px 2px rgba(18,49,74,.04)}
+    .tissue-tile:hover,.tissue-tile.active{border-color:var(--tissue-color);box-shadow:0 0 0 2px color-mix(in srgb,var(--tissue-color) 22%,transparent)}
+    .tissue-tile.active{background:color-mix(in srgb,var(--tissue-color) 8%,#fff)}
+    .tissue-icon{--tissue-color:var(--blue);display:inline-flex;width:38px;height:38px;min-width:38px;align-items:center;justify-content:center;border-radius:11px;background:color-mix(in srgb,var(--tissue-color) 14%,#fff);color:var(--tissue-color)}
+    .tissue-icon svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+    .tissue-tile-copy{display:flex;min-width:0;flex-direction:column}.tissue-tile-copy strong{font-size:13px}.tissue-tile-copy small{font-size:10.5px;color:var(--muted);margin-top:2px}
+    .tissue-landing-panel{--tissue-color:var(--blue);display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin-top:13px;padding:15px;border-left:7px solid var(--tissue-color);border-radius:11px;background:#fff;box-shadow:0 1px 2px rgba(18,49,74,.05)}
+    .tissue-landing-icon .tissue-icon{width:58px;height:58px;min-width:58px;border-radius:16px}.tissue-landing-icon .tissue-icon svg{width:42px;height:42px}
+    .tissue-eyebrow{display:block;color:var(--tissue-color);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+    .tissue-landing-copy h3{font-size:21px;margin:0 0 4px;color:var(--navy)}.tissue-landing-copy p{margin:0 0 10px;color:var(--muted);font-size:13px}
+    .tissue-section-links{display:flex;gap:7px;flex-wrap:wrap}.tissue-section-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid color-mix(in srgb,var(--tissue-color) 36%,#d8e1e8);border-radius:999px;background:#fff;color:var(--navy);font-size:11px}.tissue-section-chip span{display:inline-grid;place-items:center;min-width:19px;height:19px;border-radius:999px;background:color-mix(in srgb,var(--tissue-color) 15%,#fff);color:var(--tissue-color);font-weight:800}
+    .regimen-card.tissue-themed-card.active-regimen{border-top-color:var(--tissue-color)}
+    .card-tissue-badge{display:inline-flex;align-items:center;gap:7px;width:max-content;margin-bottom:8px;color:var(--tissue-color);font-size:11px;font-weight:800}.card-tissue-badge .tissue-icon{width:30px;height:30px;min-width:30px;border-radius:9px}.card-tissue-badge .tissue-icon svg{width:21px;height:21px}
+    .lab-profile-details{margin:14px 0 0;background:#f8fbfd}.lab-profile-details summary{font-size:13px}
+    .lab-actual-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lab-actual-inputs>div{min-width:0}.lab-calculation-preview{grid-column:1/-1;padding:8px 10px;border-radius:7px;background:#edf3f6;color:var(--muted);font-size:12px;font-weight:700}.lab-calculation-preview.assessed{background:#e7f5eb;color:var(--good)}
+    .immunotherapy-blood-section{border-top:6px solid #7C5CC4;background:linear-gradient(180deg,#fbf9ff,#fff)}
+    @media(max-width:1050px){.tissue-type-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+    @media(max-width:700px){.tissue-type-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tissue-landing-panel{grid-template-columns:1fr}.tissue-landing-icon{display:none}.lab-actual-inputs{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -268,7 +293,7 @@
 
   <div id="libraryScreen" class="screen active">
     <section class="library-only">
-      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Search or browse available NCCP protocols. Select a protocol to begin a structured day-ward assessment.</p></div><div class="toolbar protocol-publisher-actions" style="margin:0"><span class="badge">Version 0.37.0 · Platform standardisation</span><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
+      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Search or browse available NCCP protocols. Select a protocol to begin a structured day-ward assessment.</p></div><div class="toolbar protocol-publisher-actions" style="margin:0"><span class="badge">Version 0.37.2 · Tissue UI + automatic ULN</span><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
       <div class="health-dashboard" id="protocolHealthDashboard" aria-label="Protocol health dashboard" style="display:none">
         <div class="health-head">
           <div><h3>Protocol Health Dashboard</h3><p class="subtle">Live summary of library coverage, rule-pack maturity and validation status.</p></div>
@@ -291,6 +316,12 @@
           </div>
           <div class="health-panel"><h4>Tumour-site coverage</h4><div class="health-list" id="healthTumourSites"></div><p class="subtle" style="margin:10px 0 0">Last platform update: <strong>23 July 2026</strong></p></div>
         </div>
+      </div>
+
+      <div class="tissue-explorer" id="tissueExplorer">
+        <div class="tissue-explorer-head"><div><h3>Browse by tumour site</h3><p class="subtle" style="margin:0">Each tissue page carries a stable icon and colour throughout its catalogue section. Search still covers the entire library.</p></div><span class="badge">Visual navigation</span></div>
+        <div class="tissue-type-grid" id="tissueTypeGrid" aria-label="Tumour-site navigation"></div>
+        <div class="tissue-landing-panel" id="tissueLandingPanel" aria-live="polite"></div>
       </div>
 
       <div class="library-controls">
@@ -1984,16 +2015,19 @@ function openProtocolPreview(event){
   }
 }
 </script>
-<script src="js/emetogenic-risk.js?v=0.37.0"></script>
-<script src="js/rule-engine.js?v=0.37.0"></script>
-<script src="js/protocol-validator.js?v=0.37.0"></script>
-<script src="js/assessment-engine.js?v=0.37.0"></script>
-<script src="js/ctcae-descriptors.js?v=0.37.0"></script>
-<script src="js/generic-assessment-ui.js?v=0.37.0"></script>
+<script src="js/emetogenic-risk.js?v=0.37.2"></script>
+<script src="js/drug-aliases.js?v=0.37.2"></script>
+<script src="js/local-lab-profile.js?v=0.37.2"></script>
+<script src="js/rule-engine.js?v=0.37.2"></script>
+<script src="js/protocol-validator.js?v=0.37.2"></script>
+<script src="js/assessment-engine.js?v=0.37.2"></script>
+<script src="js/ctcae-descriptors.js?v=0.37.2"></script>
+<script src="js/generic-assessment-ui.js?v=0.37.2"></script>
 <script src="js/folfox-shadow-core.js"></script>
 <script src="js/folfox-shadow-ui.js"></script>
 
-<script src="js/protocol-loader.js?v=0.37.0"></script>
-<script src="js/protocol-importer-ui.js?v=0.37.0"></script>
+<script src="js/tissue-ui.js?v=0.37.2"></script>
+<script src="js/protocol-loader.js?v=0.37.2"></script>
+<script src="js/protocol-importer-ui.js?v=0.37.2"></script>
 </body>
 </html>

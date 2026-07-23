@@ -7,12 +7,14 @@
   "use strict";
 
   const Engine = root.SACTCheckAssessmentEngine;
+  const LocalLab = root.SACTCheckLocalLab;
   if (!Engine) throw new Error("SACTCheckAssessmentEngine must load before generic-assessment-ui.js.");
 
   let activeProtocol = null;
   let activeProfileId = null;
   let latestResult = null;
   let latestAssessmentId = "";
+  let latestLabCalculations = {};
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -46,6 +48,7 @@
         <div class="details-body">
           <div class="protocol-grid">
             <div class="protocol-item"><span>Regimen</span><strong id="jsonProtocolTitle">—</strong></div>
+            <div class="protocol-item"><span>Common / trade names</span><strong id="jsonProtocolAliases">None mapped</strong></div>
             <div class="protocol-item"><span>NCCP code / version</span><strong id="jsonProtocolCode">—</strong></div>
             <div class="protocol-item"><span>Tumour group</span><strong id="jsonProtocolTumour">—</strong></div>
             <div class="protocol-item"><span>Encoding status</span><strong id="jsonProtocolStatus">—</strong></div>
@@ -64,6 +67,23 @@
           <div class="section-heading"><div><h2>Blood thresholds</h2><p class="subtle">Enter any available blood result. These are deliberately placed first for rapid day-ward checks.</p></div><span class="step" id="jsonBloodInputCount">—</span></div>
           <div id="jsonBloodInputGrid" class="grid blood-input-grid"></div>
           <p class="subtle" id="jsonNoBloodInputs">This regimen has no encoded blood-count input.</p>
+          <details id="jsonLabProfilePanel" class="lab-profile-details hidden">
+            <summary>Local laboratory profile · automatic ×ULN calculation</summary>
+            <div class="details-body">
+              <p class="subtle">Enter the actual ALT, AST or bilirubin result. SACTCheck calculates the protocol decision value using the centrally configured CUH upper limits.</p>
+              <div class="grid three">
+                <div><label for="jsonLabAltUln">ALT ULN (U/L)</label><input id="jsonLabAltUln" type="number" min="1" step="1"></div>
+                <div><label for="jsonLabAstUln">AST ULN (U/L)</label><input id="jsonLabAstUln" type="number" min="1" step="1"></div>
+                <div><label for="jsonLabBilirubinUln">Bilirubin ULN (µmol/L)</label><input id="jsonLabBilirubinUln" type="number" min="1" step="1"></div>
+              </div>
+              <div class="toolbar" style="margin-top:10px"><button class="btn secondary" type="button" id="jsonLabReset">Reset CUH defaults</button><span class="subtle">Defaults: ALT 34 U/L · AST 42 U/L · bilirubin 20 µmol/L.</span></div>
+            </div>
+          </details>
+        </section>
+
+        <section id="jsonImmunotherapyBloodSection" class="immunotherapy-blood-section hidden">
+          <div class="section-heading"><div><h2>Optional immunotherapy bloods</h2><p class="subtle">Endocrine screening and symptom-triggered results only. These fields never block an assessment.</p></div><span class="step" id="jsonImmunotherapyBloodCount">—</span></div>
+          <div id="jsonImmunotherapyBloodGrid" class="grid blood-input-grid"></div>
         </section>
 
         <section>
@@ -117,7 +137,7 @@
         <div id="jsonErrors"></div>
 
         <div class="result-block">
-          <h2>Triggered encoded rules</h2>
+          <h2>Assessment findings</h2>
           <div id="jsonFindings"></div>
         </div>
 
@@ -159,12 +179,22 @@
       runAssessment();
     });
 
-    [document.getElementById("jsonBloodInputGrid"), document.getElementById("jsonTreatmentContextGrid"), document.getElementById("jsonInputGrid")]
+    [document.getElementById("jsonBloodInputGrid"), document.getElementById("jsonImmunotherapyBloodGrid"), document.getElementById("jsonTreatmentContextGrid"), document.getElementById("jsonInputGrid")]
       .filter(Boolean)
       .forEach(grid => {
         grid.addEventListener("change", updateConditionalInputs);
         grid.addEventListener("input", updateConditionalInputs);
       });
+
+    ["jsonLabAltUln", "jsonLabAstUln", "jsonLabBilirubinUln"].forEach(id => {
+      document.getElementById(id)?.addEventListener("change", saveLabProfile);
+    });
+    document.getElementById("jsonLabReset")?.addEventListener("click", () => {
+      LocalLab?.reset();
+      populateLabProfileControls();
+      refreshCompactInputStates();
+      hideResult();
+    });
 
     document.getElementById("jsonDemo").addEventListener("click", loadDemonstrationValues);
 
@@ -224,6 +254,8 @@
     );
 
     document.getElementById("jsonProtocolTitle").textContent = Engine.getProtocolTitle(protocol);
+    const aliases = root.SACTCheckDrugAliases?.forProtocol(protocol) || [];
+    document.getElementById("jsonProtocolAliases").textContent = aliases.length ? aliases.join(" · ") : "None mapped";
     document.getElementById("jsonProtocolCode").textContent = `${Engine.getProtocolCode(protocol)}${metadata.nccp_version ? ` / ${metadata.nccp_version}` : ""}`;
     document.getElementById("jsonProtocolTumour").textContent = asArray(metadata.tumour_groups || metadata.tumour_group).join(" · ") || "Uncategorised";
     document.getElementById("jsonProtocolStatus").textContent = humanise(protocol.status || "not specified");
@@ -298,6 +330,28 @@
     return definition.ui_section === "treatment_context" || TREATMENT_CONTEXT_FIELDS.has(definition.id);
   }
 
+  function isImmunotherapyBlood(definition) {
+    return definition?.ui_section === "immunotherapy_bloods";
+  }
+
+  function populateLabProfileControls() {
+    if (!LocalLab) return;
+    const settings = LocalLab.read();
+    const map = { jsonLabAltUln: settings.altUln, jsonLabAstUln: settings.astUln, jsonLabBilirubinUln: settings.bilirubinUln };
+    Object.entries(map).forEach(([id, value]) => { const element = document.getElementById(id); if (element) element.value = String(value); });
+  }
+
+  function saveLabProfile() {
+    if (!LocalLab) return;
+    LocalLab.write({
+      altUln: document.getElementById("jsonLabAltUln")?.value,
+      astUln: document.getElementById("jsonLabAstUln")?.value,
+      bilirubinUln: document.getElementById("jsonLabBilirubinUln")?.value
+    });
+    refreshCompactInputStates();
+    hideResult();
+  }
+
   const BLOOD_FIELD_PRIORITIES = [
     { pattern: /^(anc|anc_x10e9_l|baseline_neutrophils_x10e9_l|neutrophils?(?:_x10e9_l)?)$/, priority: 10 },
     { pattern: /^(platelets?|platelets_x10e9_l|baseline_platelets(?:_x10e9_l)?)$/, priority: 20 },
@@ -319,23 +373,29 @@
     if (!activeProtocol) return;
     const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, rawInputs);
     const contextDefinitions = definitions.filter(isTreatmentContext);
-    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition));
+    const immunotherapyDefinitions = definitions.filter(isImmunotherapyBlood);
+    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition) && !isImmunotherapyBlood(definition));
     const bloodDefinitions = clinicalDefinitions
       .filter(isBloodThreshold)
       .sort((a, b) => (bloodFieldPriority(a) ?? 999) - (bloodFieldPriority(b) ?? 999));
     const additionalDefinitions = clinicalDefinitions.filter(definition => !isBloodThreshold(definition));
 
     document.getElementById("jsonBloodInputGrid").innerHTML = bloodDefinitions.map(definition => renderInput(definition, { compact: false, blood: true })).join("");
+    document.getElementById("jsonImmunotherapyBloodGrid").innerHTML = immunotherapyDefinitions.map(definition => renderInput(definition, { compact: false, immunotherapy: true })).join("");
     document.getElementById("jsonInputGrid").innerHTML = additionalDefinitions.map(definition => renderInput(definition, { compact: true })).join("");
     document.getElementById("jsonTreatmentContextGrid").innerHTML = contextDefinitions.map(definition => renderInput(definition, { compact: true, context: true })).join("");
 
     document.getElementById("jsonNoBloodInputs").classList.toggle("hidden", bloodDefinitions.length > 0);
     document.getElementById("jsonInputGrid").classList.toggle("hidden", additionalDefinitions.length === 0);
     document.getElementById("jsonTreatmentContextSection").classList.toggle("hidden", contextDefinitions.length === 0);
+    document.getElementById("jsonImmunotherapyBloodSection").classList.toggle("hidden", immunotherapyDefinitions.length === 0);
+    document.getElementById("jsonImmunotherapyBloodCount").textContent = `${immunotherapyDefinitions.length} optional field${immunotherapyDefinitions.length === 1 ? "" : "s"}`;
+    document.getElementById("jsonLabProfilePanel").classList.toggle("hidden", !definitions.some(definition => LocalLab?.adapterFor(definition)));
+    populateLabProfileControls();
     document.getElementById("jsonBloodInputCount").textContent = `${bloodDefinitions.filter(definition => definition.visible !== false).length} prioritised field${bloodDefinitions.length === 1 ? "" : "s"}`;
     document.getElementById("jsonContextCount").textContent = `${contextDefinitions.filter(definition => definition.visible !== false).length} optional field${contextDefinitions.length === 1 ? "" : "s"}`;
     updateInputCount(additionalDefinitions);
-    refreshCompactInputStates();
+    refreshCompactInputStates(definitions);
   }
 
   function updateInputCount(definitions) {
@@ -347,6 +407,14 @@
 
   function buildControl(definition) {
     const disabledAttribute = definition.visible === false ? " disabled" : "";
+    const labAdapter = LocalLab?.adapterFor(definition);
+    if (labAdapter) {
+      const settings = LocalLab.read();
+      return `<div class="lab-actual-inputs" data-lab-control-group="${escapeHtml(definition.id)}">${labAdapter.analytes.map(analyte => {
+        const upper = settings[analyte.setting];
+        return `<div><label for="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}">${escapeHtml(analyte.label)} <span class="subtle">(${escapeHtml(analyte.unit)})</span></label><input id="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}" data-lab-target="${escapeHtml(definition.id)}" data-lab-analyte="${escapeHtml(analyte.id)}" data-type="number" type="number" min="0" step="0.1" placeholder="Not assessed"${disabledAttribute}><span class="hint">Local ULN ${escapeHtml(upper)} ${escapeHtml(analyte.unit)}.</span></div>`;
+      }).join("")}<div class="lab-calculation-preview" data-lab-preview="${escapeHtml(definition.id)}">Enter an actual result; ×ULN is calculated automatically.</div></div>`;
+    }
     if (definition.type === "boolean") {
       return `
         <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="boolean"${disabledAttribute}>
@@ -388,10 +456,16 @@
 
   function renderInput(definition, options = {}) {
     const wrapperClass = definition.visible === false ? "hidden" : "";
+    const labAdapter = LocalLab?.adapterFor(definition);
     const control = buildControl(definition);
-    const unit = definition.unit ? ` <span class="subtle">(${escapeHtml(definition.unit)})</span>` : "";
+    const displayLabel = labAdapter ? `${labAdapter.title} · automatic ×ULN` : definition.label;
+    const unit = !labAdapter && definition.unit ? ` <span class="subtle">(${escapeHtml(definition.unit)})</span>` : "";
+    const labelFor = labAdapter ? "" : ` for="jsonInput_${escapeHtml(definition.id)}"`;
     const hints = [];
     if (definition.help) hints.push(escapeHtml(definition.help));
+    if (labAdapter) hints.push("Enter the actual laboratory result; the configured local ULN is applied automatically to the encoded protocol rule.");
+    if (definition.id === "tsh_miu_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("tsh")));
+    if (definition.id === "free_t4_pmol_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("free_t4")));
     if (definition.assessment_guidance && !root.SACTCheckCTCAE?.guide(definition)) hints.push(escapeHtml(definition.assessment_guidance));
     hints.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
     const ctcaeGuide = renderCtcaeGuide(definition);
@@ -399,9 +473,9 @@
     if (options.compact) {
       return `
         <details class="compact-assessment-input ${wrapperClass}" data-input-wrapper="${escapeHtml(definition.id)}">
-          <summary><span>${escapeHtml(definition.label)}${unit}</span><span class="compact-input-state" data-input-state>Not assessed</span></summary>
+          <summary><span>${escapeHtml(displayLabel)}${unit}</span><span class="compact-input-state" data-input-state>Not assessed</span></summary>
           <div class="compact-input-body">
-            <label class="sr-only" for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}</label>
+            ${labAdapter ? "" : `<label class="sr-only" for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}</label>`}
             ${control}
             <span class="hint" data-input-hint>${hints.join(" ")}</span>
             ${ctcaeGuide}
@@ -411,7 +485,7 @@
 
     return `
       <div class="blood-input-card ${wrapperClass}" data-input-wrapper="${escapeHtml(definition.id)}">
-        <label for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}${unit}</label>
+        <label${labelFor}>${escapeHtml(displayLabel)}${unit}</label>
         ${control}
         <span class="hint" data-input-hint>${hints.join(" ")}</span>
         ${ctcaeGuide}
@@ -422,6 +496,13 @@
     const wrapper = control?.closest(".compact-assessment-input");
     const state = wrapper?.querySelector("[data-input-state]");
     if (!wrapper || !state) return;
+    const target = control.dataset.labTarget;
+    if (target && LocalLab) {
+      const calculation = calculateLabTarget(target);
+      state.textContent = calculation?.decisionDisplay || "Not assessed";
+      wrapper.classList.toggle("assessed", Boolean(calculation));
+      return;
+    }
     let label = "Not assessed";
     if (control.value !== "") {
       if (control.tagName === "SELECT") label = control.options[control.selectedIndex]?.text || control.value;
@@ -433,9 +514,10 @@
 
   function refreshCompactInputStates(definitions) {
     const byId = new Map((definitions || Engine.getInputDefinitions(activeProtocol, activeProfileId, collectRawInputs(true))).map(definition => [definition.id, definition]));
-    document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(control => {
-      updateCompactInputState(control, byId.get(control.dataset.field));
+    document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonBloodInputGrid [data-lab-target], #jsonImmunotherapyBloodGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field], #jsonInputGrid [data-lab-target]").forEach(control => {
+      updateCompactInputState(control, byId.get(control.dataset.field || control.dataset.labTarget));
     });
+    refreshLabPreviews();
   }
 
   function updateConditionalInputs() {
@@ -445,28 +527,34 @@
 
     definitions.forEach(definition => {
       const wrapper = document.querySelector(`[data-input-wrapper="${cssEscape(definition.id)}"]`);
-      const control = document.getElementById(`jsonInput_${definition.id}`);
-      if (!wrapper || !control) return;
+      const controls = [...document.querySelectorAll(`[data-field="${cssEscape(definition.id)}"], [data-lab-target="${cssEscape(definition.id)}"]`)];
+      if (!wrapper || !controls.length) return;
 
       const visible = definition.visible !== false;
       wrapper.classList.toggle("hidden", !visible);
-      control.disabled = !visible;
-      control.required = false;
-      if (!visible && control.value !== "") control.value = "";
+      controls.forEach(control => {
+        control.disabled = !visible;
+        control.required = false;
+        if (!visible && control.value !== "") control.value = "";
+      });
 
       const hint = wrapper.querySelector("[data-input-hint]");
       if (hint) {
         const parts = [];
         if (definition.help) parts.push(definition.help);
+        if (LocalLab?.adapterFor(definition)) parts.push("Enter the actual laboratory result; the configured local ULN is applied automatically to the encoded protocol rule.");
+        if (definition.id === "tsh_miu_l" && LocalLab) parts.push(LocalLab.referenceText("tsh"));
+        if (definition.id === "free_t4_pmol_l" && LocalLab) parts.push(LocalLab.referenceText("free_t4"));
         if (definition.assessment_guidance && !root.SACTCheckCTCAE?.guide(definition)) parts.push(definition.assessment_guidance);
         parts.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
         hint.textContent = parts.join(" ");
       }
-      updateCompactInputState(control, definition);
+      controls.forEach(control => updateCompactInputState(control, definition));
     });
 
-    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition));
+    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition) && !isImmunotherapyBlood(definition));
     updateInputCount(clinicalDefinitions.filter(definition => !isBloodThreshold(definition)));
+    refreshLabPreviews();
     hideResult();
   }
 
@@ -492,11 +580,19 @@
     for (let pass = 0; pass < 3; pass += 1) {
       const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, collectRawInputs(true));
       const byId = new Map(definitions.map(definition => [definition.id, definition]));
-      document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
+      document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonImmunotherapyBloodGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
         const definition = byId.get(element.dataset.field);
         if (!definition || definition.visible === false) return;
         const value = fallbackDemoValue(definition);
         if (value !== undefined && value !== null) element.value = String(value);
+      });
+      document.querySelectorAll("[data-lab-target]").forEach(element => {
+        const targetDefinition = byId.get(element.dataset.labTarget);
+        if (!targetDefinition || targetDefinition.visible === false || !LocalLab) return;
+        const settings = LocalLab.read();
+        const adapter = LocalLab.adapterFor(targetDefinition);
+        const analyte = adapter?.analytes.find(item => item.id === element.dataset.labAnalyte);
+        if (analyte) element.value = String(settings[analyte.setting]);
       });
       updateConditionalInputs();
     }
@@ -505,11 +601,37 @@
 
   function collectRawInputs(includeDisabled = false) {
     const inputs = {};
-    document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
+    latestLabCalculations = {};
+    document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonImmunotherapyBloodGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
       if (!includeDisabled && element.disabled) return;
       inputs[element.dataset.field] = element.value;
     });
+    const targets = [...new Set([...document.querySelectorAll("[data-lab-target]")].filter(element => includeDisabled || !element.disabled).map(element => element.dataset.labTarget))];
+    targets.forEach(target => {
+      const calculation = calculateLabTarget(target);
+      if (calculation) {
+        inputs[target] = String(calculation.ratio);
+        latestLabCalculations[target] = calculation;
+      }
+    });
     return inputs;
+  }
+
+  function calculateLabTarget(target) {
+    if (!LocalLab) return null;
+    const actualValues = {};
+    document.querySelectorAll(`[data-lab-target="${cssEscape(target)}"]`).forEach(element => {
+      actualValues[element.dataset.labAnalyte] = element.value;
+    });
+    return LocalLab.calculate(target, actualValues);
+  }
+
+  function refreshLabPreviews() {
+    document.querySelectorAll("[data-lab-preview]").forEach(preview => {
+      const calculation = calculateLabTarget(preview.dataset.labPreview);
+      preview.textContent = calculation?.display || "Enter an actual result; ×ULN is calculated automatically.";
+      preview.classList.toggle("assessed", Boolean(calculation));
+    });
   }
 
   function runAssessment() {
@@ -538,7 +660,10 @@
 
     renderErrors(result);
     renderFindings(result);
-    document.getElementById("jsonSummary").value = Engine.documentationSummary(result, latestAssessmentId);
+    let summary = Engine.documentationSummary(result, latestAssessmentId);
+    const labLines = Object.values(latestLabCalculations).map(calculation => `- ${calculation.display} → decision value ${calculation.decisionDisplay}`);
+    if (labLines.length) summary += `\n\nAutomatic local-laboratory calculations (${LocalLab?.read().profileName || "local profile"}):\n${labLines.join("\n")}`;
+    document.getElementById("jsonSummary").value = summary;
     container.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -566,17 +691,22 @@
   function renderFindings(result) {
     const target = document.getElementById("jsonFindings");
     if (!result.findings.length) {
-      target.innerHTML = '<div class="finding consult"><h3>No deterministic rule result</h3><p>No encoded rule was triggered for the supplied values. Senior review is required before this can be treated as a proceed decision.</p></div>';
+      target.innerHTML = '<div class="finding consult"><h3>No assessment finding</h3><p>Enter any relevant clinical value. Blank fields do not block an independent rule and are not assumed normal.</p></div>';
       return;
     }
 
     target.innerHTML = result.findings.map(finding => {
       const className = findingClass(finding.actionType);
       const detail = Engine.actionDetail(finding.action);
+      const actionLabel = finding.domainAssessment
+        ? "Assessed domain only — encoded restrictive threshold not triggered"
+        : finding.contextRequired
+          ? "Additional linked context required"
+          : (Engine.actionLabels[finding.actionType] || humanise(finding.actionType));
       return `
         <div class="finding ${className}">
-          <h3>${escapeHtml(finding.ruleId)}</h3>
-          <p><strong>${escapeHtml(Engine.actionLabels[finding.actionType] || humanise(finding.actionType))}</strong></p>
+          <h3>${escapeHtml(finding.displayTitle || finding.ruleId)}</h3>
+          <p><strong>${escapeHtml(actionLabel)}</strong></p>
           ${renderThresholdComparison(finding, result)}
           <p>${escapeHtml(finding.explanation)}</p>
           ${detail ? `<p><strong>Encoded action detail:</strong> ${escapeHtml(detail)}</p>` : ""}
@@ -586,10 +716,14 @@
   }
 
   function renderThresholdComparison(finding, result) {
-    const comparisons = comparisonRows(finding.condition, result.inputs, result.definitions);
-    if (!comparisons.length) return "";
-    return `<div class="threshold-comparison" role="group" aria-label="Triggered threshold comparison">
-      ${comparisons.map(item => `
+    const conditions = finding.conditions?.length ? finding.conditions : [finding.condition];
+    const comparisons = conditions.flatMap(condition => comparisonRows(condition, result.inputs, result.definitions));
+    const uniqueComparisons = comparisons.filter((item, index, array) =>
+      array.findIndex(other => other.label === item.label && other.actual === item.actual && other.symbol === item.symbol && other.cutoff === item.cutoff) === index
+    );
+    if (!uniqueComparisons.length) return "";
+    return `<div class="threshold-comparison" role="group" aria-label="Encoded threshold comparison">
+      ${uniqueComparisons.map(item => `
         <div class="threshold-comparison-row">
           <div><span class="threshold-label">${escapeHtml(item.label)}</span><strong class="patient-value">${escapeHtml(item.actual)}</strong></div>
           <div class="comparison-symbol">${escapeHtml(item.symbol)}</div>
@@ -607,10 +741,11 @@
       .filter(leaf => leaf.field && inputs?.[leaf.field] !== undefined && inputs?.[leaf.field] !== null && inputs?.[leaf.field] !== "")
       .map(leaf => {
         const definition = definitionMap.get(leaf.field) || {};
+        const labCalculation = latestLabCalculations[leaf.field];
         const unit = definition.unit ? ` ${definition.unit}` : "";
         return {
-          label: definition.label || humanise(leaf.field),
-          actual: `${formatComparisonValue(inputs[leaf.field])}${unit}`,
+          label: labCalculation ? `${definition.label || humanise(leaf.field)} · calculated` : (definition.label || humanise(leaf.field)),
+          actual: labCalculation ? `${labCalculation.display} → ${labCalculation.decisionDisplay}` : `${formatComparisonValue(inputs[leaf.field])}${unit}`,
           symbol: operatorSymbol(leaf.operator),
           cutoff: `${formatCutoff(leaf.value, leaf.operator)}${unit}`
         };
@@ -660,7 +795,7 @@
   function findingClass(actionType) {
     if (["permanently_discontinue", "contraindicated", "discontinue", "cease"].includes(actionType)) return "critical";
     if (["omit", "withhold", "withhold_then_reduce", "delay", "delay_then_dose_reduce"].includes(actionType)) return "hold";
-    if (actionType === "consultant_review") return "consult";
+    if (["consultant_review", "partial_context_required"].includes(actionType)) return "consult";
     if (actionType.includes("dose_reduce")) return "modify";
     return "info";
   }
@@ -712,7 +847,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.37.0",
+    version: "0.37.2",
     open,
     ensureScreen
   });

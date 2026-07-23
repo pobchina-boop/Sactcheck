@@ -67,6 +67,17 @@
     return [...new Set(groups)];
   }
 
+  function getAliases(protocol) {
+    return window.SACTCheckDrugAliases?.forProtocol(protocol) || [];
+  }
+
+  function aliasMarkup(protocol) {
+    const aliases = getAliases(protocol);
+    return aliases.length
+      ? `<p class="regimen-aliases"><strong>Common / trade names:</strong> ${aliases.map(escapeHtml).join(" · ")}</p>`
+      : "";
+  }
+
   function getIndication(protocol) {
     return protocol?.metadata?.indication ||
       asArray(protocol.indications).map(item => item?.description).filter(Boolean).join(" ") ||
@@ -247,6 +258,7 @@
     const tumourGroups = getTumourGroups(entry, protocol);
     const tumourDisplay = tumourGroups.join(" · ");
     const indication = getIndication(protocol);
+    const aliases = getAliases(protocol);
 
     const category = card.querySelector(".category-chip");
     if (category) category.textContent = tumourDisplay;
@@ -254,12 +266,17 @@
     const heading = card.querySelector("h2");
     if (heading) heading.textContent = title;
 
-    const codeLine = [...card.querySelectorAll(":scope > p")].find(item => item.querySelector("strong"));
+    card.querySelector(".regimen-aliases")?.remove();
+    if (aliases.length && heading) {
+      heading.insertAdjacentHTML("afterend", aliasMarkup(protocol));
+    }
+
+    const codeLine = [...card.querySelectorAll(":scope > p:not(.regimen-aliases)")].find(item => item.querySelector("strong"));
     if (codeLine) {
       codeLine.innerHTML = `<strong>NCCP ${escapeHtml(code)}${version ? ` · Version ${escapeHtml(version)}` : ""}</strong>`;
     }
 
-    const description = [...card.querySelectorAll(":scope > p")].find(item => !item.querySelector("strong"));
+    const description = [...card.querySelectorAll(":scope > p:not(.regimen-aliases)")].find(item => !item.querySelector("strong"));
     if (description) {
       description.textContent = shorten(indication);
       description.classList.add("regimen-description");
@@ -267,7 +284,7 @@
 
     const sectionLabel = getCatalogueSectionLabel(protocol);
     const classes = asArray(metadata.treatment_class).join(" ");
-    card.dataset.name = [title, code, version, tumourDisplay, indication, sectionLabel, classes, entry.path].join(" ");
+    card.dataset.name = [title, aliases.join(" "), code, version, tumourDisplay, indication, sectionLabel, classes, entry.path].join(" ");
     card.dataset.tumour = tumourGroups.join(",");
     applyTreatmentMetadata(card, protocol);
   }
@@ -344,6 +361,7 @@
       const tumourGroups = getTumourGroups(entry, protocol);
       const tumourDisplay = tumourGroups.join(" · ");
       const indication = getIndication(protocol);
+      const aliases = getAliases(protocol);
       const totalRules = asArray(protocol.rule_engine?.rules).length + asArray(protocol.pembrolizumab_irae_rules?.rules).length;
       const validation = protocolValidation(protocol);
       const assessmentReady = validation.valid && Boolean(window.SACTCheckGenericAssessment);
@@ -351,7 +369,7 @@
       const section = getCatalogueSection(protocol);
       const sectionLabel = getCatalogueSectionLabel(protocol);
       const classes = asArray(metadata.treatment_class).join(" ");
-      const searchableText = [title, code, version, tumourDisplay, indication, sectionLabel, classes, entry.path].join(" ");
+      const searchableText = [title, aliases.join(" "), code, version, tumourDisplay, indication, sectionLabel, classes, entry.path].join(" ");
 
       const card = document.createElement("article");
       card.className = `card regimen-card json-regimen-card ${assessmentReady ? "active-regimen" : "planned"}`;
@@ -366,6 +384,7 @@
         <span class="category-chip">${escapeHtml(tumourDisplay)}</span>
         <span class="treatment-chip treatment-chip-${escapeHtml(section)}">${escapeHtml(treatmentClassLabel(protocol))}</span>
         <h2>${escapeHtml(title)}</h2>
+        ${aliasMarkup(protocol)}
         <p><strong>NCCP ${escapeHtml(code)}${version ? ` · Version ${escapeHtml(version)}` : ""}</strong></p>
         <p class="regimen-description">${escapeHtml(shorten(indication))}</p>
         <div class="validation-row">${statusBadges({
@@ -478,7 +497,7 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
-    version: "0.37.0",
+    version: "0.37.2",
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,

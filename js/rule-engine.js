@@ -201,6 +201,7 @@
   }
 
   function conditionFromRule(rule) {
+    if (rule.when) return rule.when;
     if (rule.all) return { all: rule.all };
     if (rule.any) return { any: rule.any };
     if (rule.none) return { none: rule.none };
@@ -239,6 +240,26 @@
     if (scope.day !== undefined && !constraintMatches(context.day, scope.day, allowUnknown)) return false;
     if (scope.schedule !== undefined && !constraintMatches(context.schedule, scope.schedule, allowUnknown)) return false;
     return true;
+  }
+
+  function evaluateScope(rule, context = {}) {
+    const scope = rule.applies_to;
+    if (!scope) return { state: true, missingContext: [] };
+    const missingContext = [];
+    for (const key of ["phase", "cycle", "day", "schedule"]) {
+      if (scope[key] === undefined) continue;
+      const actual = context[key];
+      if (!hasValue(actual)) {
+        missingContext.push(key);
+        continue;
+      }
+      if (!constraintMatches(actual, scope[key], false)) {
+        return { state: false, missingContext: [] };
+      }
+    }
+    return missingContext.length
+      ? { state: "unknown", missingContext }
+      : { state: true, missingContext: [] };
   }
 
   function componentsMatch(rule, context = {}) {
@@ -345,21 +366,38 @@
     const regularRules = allRules.filter(rule => !isFallbackRule(rule));
     const fallbackRules = allRules.filter(isFallbackRule);
     const matched = [];
+    const notMatched = [];
     const skipped = [];
     const errors = [];
 
     regularRules.forEach(rule => {
-      if (!isApplicable(rule, context)) return;
+      if (!componentsMatch(rule, context)) return;
+      const scopeResult = evaluateScope(rule, context);
+      if (scopeResult.state === false) return;
+      const condition = conditionFromRule(rule);
+      if (scopeResult.state === "unknown") {
+        skipped.push({
+          ...createFinding(rule, protocol),
+          missingFields: [],
+          missingContext: scopeResult.missingContext,
+          conditionFields: collectConditionFields(condition),
+          condition
+        });
+        return;
+      }
       try {
-        const condition = conditionFromRule(rule);
         const result = evaluateCondition(condition, inputs);
         if (result.state === true) {
           matched.push(createFinding(rule, protocol));
+        } else if (result.state === false) {
+          notMatched.push(createFinding(rule, protocol));
         } else if (result.state === "unknown") {
           skipped.push({
-            ruleId: rule.rule_id || rule.id || "unnamed_rule",
+            ...createFinding(rule, protocol),
             missingFields: result.missingFields,
-            source: rule.source || null
+            missingContext: [],
+            conditionFields: collectConditionFields(condition),
+            condition
           });
         }
       } catch (error) {
@@ -382,11 +420,12 @@
     return {
       overallAction,
       findings: matched,
+      notMatchedRules: notMatched,
       skippedRules: skipped,
       errors,
       complete: skipped.length === 0 && errors.length === 0,
-      applicableRuleCount: regularRules.filter(rule => isApplicable(rule, context)).length +
-        fallbackRules.filter(rule => isApplicable(rule, context)).length
+      applicableRuleCount: regularRules.filter(rule => componentsMatch(rule, context) && evaluateScope(rule, context).state !== false).length +
+        fallbackRules.filter(rule => isPotentiallyApplicable(rule, context)).length
     };
   }
 
@@ -397,6 +436,7 @@
     collectConditionFields,
     conditionFromRule,
     scopeMatches,
+    evaluateScope,
     componentsMatch,
     isPotentiallyApplicable,
     isApplicable,

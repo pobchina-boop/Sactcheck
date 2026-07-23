@@ -44,7 +44,14 @@
     paclitaxel_dose_reduction_count: "Previous paclitaxel dose reductions",
     active_pembrolizumab_irae: "Active pembrolizumab immune-related adverse event",
     cyp3a_inhibitor_class: "CYP3A inhibitor class",
-    current_dose_level: "Current dose level"
+    current_dose_level: "Current dose level",
+    tsh_miu_l: "TSH",
+    free_t4_pmol_l: "Free T4",
+    cortisol_nmol_l: "Cortisol",
+    cortisol_sample_time: "Cortisol sample time",
+    acth_result: "ACTH result",
+    glucose_mmol_l: "Glucose",
+    ketones_mmol_l: "Blood ketones"
   });
 
   const ACTION_LABELS = Object.freeze({
@@ -61,7 +68,8 @@
     dose_reduce_two_levels: "Reduce by two dose levels",
     dose_reduce_one_level: "Reduce by one dose level",
     dose_reduce: "Dose reduction indicated",
-    proceed_with_caution: "Proceed with caution",
+    proceed_with_caution: "Assessed domain meets encoded criteria",
+    partial_context_required: "Partial assessment — additional context required",
     proceed: "Encoded criteria met"
   });
 
@@ -80,6 +88,7 @@
     dose_reduce_one_level: "warn",
     dose_reduce: "warn",
     proceed_with_caution: "warn",
+    partial_context_required: "warn",
     proceed: "good",
     incomplete: "warn"
   });
@@ -225,6 +234,28 @@
     return output;
   }
 
+  function isImmunotherapyProtocol(protocol) {
+    const metadata = protocol?.metadata || {};
+    const classes = asArray(metadata.treatment_class).map(value => String(value).toLowerCase());
+    const section = String(metadata.catalogue_section || "").toLowerCase();
+    const text = [metadata.title, metadata.short_title, protocol?.treatment?.drug, ...classes].filter(Boolean).join(" ").toLowerCase();
+    return section === "immunotherapy" || classes.some(value => value.includes("immunotherapy") || value.includes("immune checkpoint")) ||
+      /(pembrolizumab|nivolumab|atezolizumab|durvalumab|ipilimumab|tremelimumab|cemiplimab|avelumab)/.test(text);
+  }
+
+  function optionalImmunotherapyDefinitions(protocol) {
+    if (!isImmunotherapyProtocol(protocol)) return [];
+    return [
+      { id: "tsh_miu_l", label: "TSH", type: "number", step: "0.01", min: 0, unit: "mIU/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional immune-endocrine screening. CUH local reference range is applied in the interface.", demo_value: 1.2 },
+      { id: "free_t4_pmol_l", label: "Free T4", type: "number", step: "0.1", min: 0, unit: "pmol/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional immune-endocrine screening. Interpret with TSH and the clinical picture.", demo_value: 12 },
+      { id: "cortisol_nmol_l", label: "Cortisol", type: "number", step: "1", min: 0, unit: "nmol/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional and symptom-triggered. Interpretation depends on sampling time, steroid exposure and clinical context.", demo_value: 300 },
+      { id: "cortisol_sample_time", label: "Cortisol sample time", type: "text", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional. Record the collection time when cortisol is entered.", demo_value: "09:00" },
+      { id: "acth_result", label: "ACTH result", type: "text", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional and symptom-triggered. Enter the reported result with local units if available.", demo_value: "Reported if clinically indicated" },
+      { id: "glucose_mmol_l", label: "Glucose", type: "number", step: "0.1", min: 0, unit: "mmol/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional immune-mediated diabetes screening or symptom-triggered result.", demo_value: 5 },
+      { id: "ketones_mmol_l", label: "Blood ketones", type: "number", step: "0.1", min: 0, unit: "mmol/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional and symptom-triggered; assess urgently with hyperglycaemia or suspected ketoacidosis.", demo_value: 0.1 }
+    ];
+  }
+
   function getInputDefinitions(protocol, profileId, rawInputs = {}) {
     const profile = getSelectedProfile(protocol, profileId);
     const potentialRules = getPotentialRules(protocol, profile.context);
@@ -265,9 +296,26 @@
       profile,
       explicitDefinitions.get(field)
     ));
-    const inputs = coerceInputs(baseDefinitions, rawInputs || {});
+    const immunotherapyDefaults = optionalImmunotherapyDefinitions(protocol);
+    const immunotherapyById = new Map(immunotherapyDefaults.map(definition => [definition.id, definition]));
+    const mergedBaseDefinitions = baseDefinitions.map(definition => {
+      const optionalDefault = immunotherapyById.get(definition.id);
+      if (!optionalDefault) return definition;
+      return {
+        ...definition,
+        ...optionalDefault,
+        id: definition.id,
+        required: false,
+        baseRequired: false,
+        explicitlyRequired: false
+      };
+    });
+    const existingIds = new Set(mergedBaseDefinitions.map(definition => definition.id));
+    const optionalDefinitions = immunotherapyDefaults.filter(definition => !existingIds.has(definition.id));
+    const allDefinitions = [...mergedBaseDefinitions, ...optionalDefinitions];
+    const inputs = coerceInputs(allDefinitions, rawInputs || {});
 
-    return baseDefinitions.map(definition => applyDynamicInputState(definition, inputs));
+    return allDefinitions.map(definition => applyDynamicInputState(definition, inputs));
   }
 
   function conditionState(condition, inputs) {
@@ -541,6 +589,177 @@
     };
   }
 
+  function hasEnteredValue(value) {
+    return value !== undefined && value !== null && value !== "";
+  }
+
+  function contextLabel(value) {
+    const labels = {
+      phase: "treatment phase",
+      cycle: "cycle number",
+      day: "treatment day",
+      schedule: "treatment schedule"
+    };
+    return labels[value] || humanise(value);
+  }
+
+  function collectFieldLeaves(node, field, output = []) {
+    if (!node) return output;
+    if (Array.isArray(node)) {
+      node.forEach(item => collectFieldLeaves(item, field, output));
+      return output;
+    }
+    if (typeof node !== "object") return output;
+    if (node.field === field) output.push(node);
+    ["all", "any", "none"].forEach(key => {
+      if (node[key]) collectFieldLeaves(node[key], field, output);
+    });
+    if (node.not) collectFieldLeaves(node.not, field, output);
+    return output;
+  }
+
+  function projectConditionToField(node, field) {
+    if (!node) return null;
+    if (Array.isArray(node)) {
+      const projected = node.map(item => projectConditionToField(item, field)).filter(Boolean);
+      if (!projected.length) return null;
+      return projected.length === 1 ? projected[0] : { all: projected };
+    }
+    if (typeof node !== "object") return null;
+    if (node.field) return node.field === field ? node : null;
+    for (const key of ["all", "any", "none"]) {
+      if (!node[key]) continue;
+      const projected = asArray(node[key]).map(item => projectConditionToField(item, field)).filter(Boolean);
+      if (!projected.length) return null;
+      return projected.length === 1 ? projected[0] : { [key]: projected };
+    }
+    if (node.not) {
+      const projected = projectConditionToField(node.not, field);
+      return projected ? { not: projected } : null;
+    }
+    return null;
+  }
+
+  function buildPartialDomainFindings(evaluated, definitions, inputs, displayInputs, triggeredFindings) {
+    const byId = new Map(definitions.map(definition => [definition.id, definition]));
+    const enteredFields = definitions
+      .filter(definition => definition.visible !== false && hasEnteredValue(inputs[definition.id]))
+      .map(definition => definition.id);
+    const output = [];
+
+    enteredFields.forEach(field => {
+      const definition = byId.get(field) || { id: field, label: FIELD_LABELS[field] || humanise(field) };
+      const triggered = triggeredFindings.filter(item => asArray(item.conditionFields).includes(field));
+      if (triggered.length) return;
+
+      const assessedFalse = asArray(evaluated.notMatchedRules).filter(item => asArray(item.conditionFields).includes(field));
+      const relatedSkipped = asArray(evaluated.skippedRules).filter(item => asArray(item.conditionFields).includes(field));
+      const relatedRules = [...assessedFalse, ...relatedSkipped];
+      const fieldEvidence = relatedRules.map(rule => {
+        const fieldCondition = projectConditionToField(rule.condition, field);
+        return fieldCondition ? {
+          rule,
+          fieldCondition,
+          state: RuleEngine.evaluateCondition(fieldCondition, inputs).state
+        } : null;
+      }).filter(Boolean);
+      const pendingRestrictiveEvidence = fieldEvidence.filter(item =>
+        item.rule.actionType !== "proceed" && item.state === true && relatedSkipped.includes(item.rule)
+      );
+      const clearFieldEvidence = fieldEvidence.filter(item =>
+        (item.rule.actionType === "proceed" && item.state === true) ||
+        (item.rule.actionType !== "proceed" && item.state === false)
+      );
+      const clearRules = unique([
+        ...assessedFalse.map(item => item.ruleId),
+        ...clearFieldEvidence.map(item => item.rule.ruleId)
+      ]);
+      const clearConditions = [
+        ...assessedFalse.map(item => item.condition),
+        ...clearFieldEvidence.map(item => item.fieldCondition)
+      ].filter(Boolean);
+
+      if (pendingRestrictiveEvidence.length) {
+        const neededFields = unique(relatedSkipped.flatMap(item => item.missingFields || []))
+          .filter(id => id !== field)
+          .map(id => byId.get(id)?.label || FIELD_LABELS[id] || humanise(id));
+        const neededContext = unique(relatedSkipped.flatMap(item => item.missingContext || [])).map(contextLabel);
+        const needed = unique([...neededFields, ...neededContext]);
+        output.push({
+          ruleId: `PARTIAL_${String(field).toUpperCase()}_CONTEXT_REQUIRED`,
+          displayTitle: `${definition.label}: possible threshold reached — context required`,
+          actionType: "partial_context_required",
+          action: { type: "partial_context_required", scope: "assessed domain only" },
+          priority: 1,
+          explanation: `${definition.label} ${displayInputs[field] || formatValue(inputs[field])} reaches an encoded threshold, but the final action also depends on ${needed.length ? needed.join(", ") : "additional protocol context"}. Do not treat this as clearance.`,
+          source: pendingRestrictiveEvidence[0].rule.source || null,
+          sourceText: unique(pendingRestrictiveEvidence.map(item => item.rule.sourceText)).join(" · ") || "Encoded protocol rules",
+          conditionFields: [field],
+          conditions: pendingRestrictiveEvidence.map(item => item.fieldCondition),
+          contextRequired: true
+        });
+        return;
+      }
+
+      if (clearRules.length || clearConditions.length) {
+        const evidenceWord = clearRules.length === 1 ? "rule" : "rules";
+        output.push({
+          ruleId: `PARTIAL_${String(field).toUpperCase()}_NO_RESTRICTION`,
+          displayTitle: `${definition.label}: no restrictive threshold triggered`,
+          actionType: "proceed_with_caution",
+          action: { type: "proceed_with_caution", scope: "assessed domain only" },
+          priority: 1,
+          explanation: `${definition.label} ${displayInputs[field] || formatValue(inputs[field])} meets the encoded criterion or does not trigger the restrictive threshold in ${Math.max(1, clearRules.length)} assessed ${evidenceWord}. This is an assessed-domain result only and does not clear unassessed parts of the regimen.`,
+          source: relatedRules[0]?.source || null,
+          sourceText: unique(relatedRules.map(item => item.sourceText)).join(" · ") || "Encoded protocol rules",
+          conditionFields: [field],
+          conditions: clearConditions,
+          domainAssessment: true,
+          evaluatedRuleIds: clearRules
+        });
+        return;
+      }
+
+      if (relatedSkipped.length) {
+        const missingFields = unique(relatedSkipped.flatMap(item => item.missingFields || []))
+          .filter(id => id !== field)
+          .map(id => byId.get(id)?.label || FIELD_LABELS[id] || humanise(id));
+        const missingContext = unique(relatedSkipped.flatMap(item => item.missingContext || [])).map(contextLabel);
+        const needed = unique([...missingFields, ...missingContext]);
+        output.push({
+          ruleId: `PARTIAL_${String(field).toUpperCase()}_CONTEXT_REQUIRED`,
+          displayTitle: `${definition.label}: additional context required`,
+          actionType: "partial_context_required",
+          action: { type: "partial_context_required", scope: "assessed domain only" },
+          priority: 1,
+          explanation: `${definition.label} ${displayInputs[field] || formatValue(inputs[field])} was entered, but the relevant encoded pathway also requires ${needed.length ? needed.join(", ") : "additional protocol context"}. The value has been retained and has not been assumed normal or abnormal.`,
+          source: relatedSkipped[0].source || null,
+          sourceText: unique(relatedSkipped.map(item => RuleEngine.sourceText(item.source))).join(" · ") || "Encoded protocol rules",
+          conditionFields: [field],
+          conditions: relatedSkipped.map(item => item.condition).filter(Boolean),
+          contextRequired: true
+        });
+        return;
+      }
+
+      output.push({
+        ruleId: `PARTIAL_${String(field).toUpperCase()}_RECORDED`,
+        displayTitle: `${definition.label}: value recorded`,
+        actionType: "partial_context_required",
+        action: { type: "partial_context_required", scope: "recorded context only" },
+        priority: 1,
+        explanation: `${definition.label} ${displayInputs[field] || formatValue(inputs[field])} was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.`,
+        source: null,
+        sourceText: "No standalone rule encoded",
+        conditionFields: [field],
+        conditions: [],
+        contextRequired: true
+      });
+    });
+
+    return output;
+  }
+
   function syntheticIraeFinding(protocol) {
     const source = protocol?.pembrolizumab_irae_rules?.source || { pages: [8, 9], table: 4 };
     return {
@@ -581,11 +800,18 @@
       findings.sort((a, b) => b.priority - a.priority);
     }
 
-    const skippedFields = unique(evaluated.skippedRules.flatMap(rule => rule.missingFields));
+    const skippedFields = unique(evaluated.skippedRules.flatMap(rule => rule.missingFields || []));
+    const skippedContext = unique(evaluated.skippedRules.flatMap(rule => rule.missingContext || []));
     const definitionById = new Map(definitions.map(definition => [definition.id, definition]));
-    const complete = skippedFields.length === 0 && evaluated.errors.length === 0;
+    const complete = evaluated.skippedRules.length === 0 && evaluated.errors.length === 0;
+    const displayInputs = buildDisplayInputs(definitions, rawInputs || {}, inputs);
     const restrictiveFindings = findings.filter(finding => finding.actionType !== "proceed");
     const proceedFindings = findings.filter(finding => finding.actionType === "proceed");
+    const partialDomainFindings = complete ? [] : buildPartialDomainFindings(evaluated, definitions, inputs, displayInputs, findings);
+    const domainClearFindings = partialDomainFindings.filter(item => item.actionType === "proceed_with_caution");
+    const contextRequiredFindings = partialDomainFindings.filter(item => item.actionType === "partial_context_required");
+    const allFindings = [...findings, ...partialDomainFindings].sort((a, b) => (b.priority || 0) - (a.priority || 0));
+    const hasEnteredClinicalValue = definitions.some(definition => definition.visible !== false && hasEnteredValue(inputs[definition.id]));
 
     let actionType;
     if (restrictiveFindings.length) {
@@ -594,8 +820,10 @@
       actionType = restrictiveFindings[0].actionType;
     } else if (complete && proceedFindings.length) {
       actionType = "proceed";
-    } else if (proceedFindings.length) {
+    } else if (proceedFindings.length || domainClearFindings.length) {
       actionType = "proceed_with_caution";
+    } else if (contextRequiredFindings.length || hasEnteredClinicalValue) {
+      actionType = "partial_context_required";
     } else if (!complete) {
       actionType = "incomplete";
     } else {
@@ -605,17 +833,19 @@
     const recommendation = restrictiveFindings.length && !complete
       ? `${buildRecommendation(protocol, actionType, findings)} This is a partial assessment; review the listed unassessed domains before any final treatment decision.`
       : actionType === "incomplete"
-        ? "No restrictive encoded rule could be determined from the supplied values. Enter additional relevant values to expand rule coverage; missing fields have not been assumed normal."
-        : actionType === "proceed_with_caution"
-          ? "No restrictive rule was triggered in the assessed domain or domains, but the overall regimen is not cleared because one or more clinical domains were not assessed."
-          : buildRecommendation(protocol, actionType, findings);
+        ? "No clinical value was supplied. Enter any relevant value to obtain an immediate partial assessment; missing fields are not assumed normal."
+        : actionType === "partial_context_required"
+          ? "The entered value has been assessed as far as the encoded pathway allows, but additional linked context is required to determine a treatment action. Unrelated fields remain optional."
+          : actionType === "proceed_with_caution"
+            ? "No restrictive rule was triggered in the assessed domain or domains. This is not an overall proceed decision because one or more clinical domains were not assessed."
+            : buildRecommendation(protocol, actionType, findings);
 
     return {
       complete,
       coverageComplete: skippedFields.length === 0,
       partialAssessment: !complete,
       actionType,
-      status: actionType === "incomplete" ? "Partial assessment — insufficient data for an action" : (ACTION_LABELS[actionType] || humanise(actionType)),
+      status: actionType === "incomplete" ? "No assessment value entered" : (ACTION_LABELS[actionType] || humanise(actionType)),
       statusClass: STATUS_CLASS[actionType] || "warn",
       recommendation,
       protocol: {
@@ -629,18 +859,25 @@
       context,
       definitions,
       inputs,
-      displayInputs: buildDisplayInputs(definitions, rawInputs || {}, inputs),
+      displayInputs,
       missing: [],
-      unassessed: skippedFields.map(field => ({
-        id: field,
-        label: definitionById.get(field)?.label || FIELD_LABELS[field] || humanise(field)
-      })),
+      unassessed: [
+        ...skippedFields.map(field => ({
+          id: field,
+          label: definitionById.get(field)?.label || FIELD_LABELS[field] || humanise(field)
+        })),
+        ...skippedContext.map(item => ({
+          id: `context_${item}`,
+          label: contextLabel(item)
+        }))
+      ].filter((item, index, array) => array.findIndex(other => other.id === item.id) === index),
       invalid: [],
-      findings,
+      findings: allFindings,
       skippedRules: evaluated.skippedRules,
+      notMatchedRules: evaluated.notMatchedRules,
       errors: evaluated.errors,
       applicableRuleCount: evaluated.applicableRuleCount,
-      assessedRuleCount: evaluated.applicableRuleCount - evaluated.skippedRules.length
+      assessedRuleCount: Math.max(0, evaluated.applicableRuleCount - evaluated.skippedRules.length)
     };
   }
 
@@ -750,10 +987,10 @@
     if (result.findings.length) {
       result.findings.forEach(finding => {
         const detail = actionDetail(finding.action);
-        lines.push(`- ${finding.ruleId}: ${finding.explanation}${detail ? ` ${detail}.` : ""} (${finding.sourceText})`);
+        lines.push(`- ${finding.displayTitle || finding.ruleId}: ${finding.explanation}${detail ? ` ${detail}.` : ""} (${finding.sourceText})`);
       });
     } else {
-      lines.push("- No encoded rule was triggered.");
+      lines.push("- No assessment finding was generated.");
     }
 
     if (result.missing.length || result.unassessed?.length || result.invalid.length || result.errors.length) {
@@ -803,7 +1040,7 @@
   }
 
   return Object.freeze({
-    version: "0.37.0",
+    version: "0.37.2",
     getProfiles,
     getInputDefinitions,
     explicitInputDefinitions,

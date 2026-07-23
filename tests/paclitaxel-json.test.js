@@ -118,7 +118,7 @@ assert.ok(plateletsOnly.findings.some(item => item.ruleId === 'PLATELETS_LT_70_I
 console.log('✓ paclitaxel platelets 40 alone produces an immediate delay result');
 
 const normalAncOnly = Engine.assess(protocol, { anc_x10e9_l: 2 }, { profileId: 'default' });
-assert.equal(normalAncOnly.actionType, 'incomplete');
+assert.equal(normalAncOnly.actionType, 'proceed_with_caution');
 assert.equal(normalAncOnly.complete, false);
 console.log('✓ a normal paclitaxel ANC alone does not produce an overall proceed result');
 

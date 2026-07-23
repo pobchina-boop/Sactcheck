@@ -1,3 +1,23 @@
+# SACTCheck v0.37.2 — Tissue UI and automatic local ULN calculations
+
+- Adds a stable icon and colour system for tumour-site navigation, landing banners and regimen-card accents.
+- Adds Breast, GI, Lung, Gynaecology, Genitourinary/Men’s, Neuro-oncology, Sarcoma, Haematology, Skin/Melanoma and Head & Neck UI identities.
+- Replaces manual ALT/AST/bilirubin ×ULN entry with actual laboratory result entry and automatic calculation from a central CUH profile.
+- Uses ALT 34 U/L, AST 42 U/L and bilirubin 20 µmol/L as editable CUH defaults.
+- Applies automatic actual-result conversion to 94 existing protocol input definitions.
+- Adds optional immunotherapy-only TSH, free T4, cortisol, sample time, ACTH, glucose and ketone inputs.
+- Keeps all new immunotherapy blood fields optional and preserves single-value partial assessment.
+- Adds focused v0.37.2 tests and passes the complete historical regression suite.
+
+# SACTCheck v0.37.1 — Single-entry assessment and alias support
+
+- Enforces meaningful one-value partial assessments across the active protocol library.
+- Adds explicit normal-domain findings rather than generic insufficient-data output.
+- Identifies linked fields/context only when genuinely required by a rule.
+- Corrects ANC-only assessment behaviour for NCCP 00624 carboplatin + PLD.
+- Adds central searchable common/trade-name aliases while retaining official NCCP names.
+- Adds full-library single-entry and alias regression tests.
+
 # SACTCheck v0.37.0 - Platform standardisation
 
 - Standardises the complete 121-regimen catalogue rather than adding a new regimen batch.

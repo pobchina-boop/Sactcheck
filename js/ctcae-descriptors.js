@@ -452,7 +452,7 @@
   }
 
   root.SACTCheckCTCAE = Object.freeze({
-    version: "0.37.0 / CTCAE v5.0 grading support",
+    version: "0.37.2 / CTCAE v5.0 grading support",
     sourceUrl: SOURCE_URL,
     generic: GENERIC,
     sets: SETS,
