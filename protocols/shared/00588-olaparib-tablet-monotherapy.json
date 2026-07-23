@@ -46,14 +46,24 @@
       "software_tests_completed": false,
       "clinical_use_authorised": false
     },
-    "sactcheck_encoding_version": "0.27.0",
+    "sactcheck_encoding_version": "0.37.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Independent olaparib rule domains may be assessed from a single supplied value; omitted domains remain explicitly unassessed.",
     "migration": {
       "mode": "live_json",
       "switch_to_generic_assessment": true
     },
-    "source_url": "https://healthservice.hse.ie/documents/6397/588_Olaparib_tablet_monotherapy_FZxXOtF.pdf"
+    "source_url": "https://healthservice.hse.ie/documents/6397/588_Olaparib_tablet_monotherapy_FZxXOtF.pdf",
+    "catalogue_section": "targeted_her2_therapy",
+    "catalogue_section_label": "Targeted & HER2 therapies",
+    "treatment_class": [
+      "parp_inhibitor",
+      "oral_targeted_therapy"
+    ],
+    "cytotoxic": false,
+    "catalog": {
+      "enabled": true
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -808,7 +818,17 @@
       "female_patient": "Use effective contraception before and during therapy and for 6 months after the last dose. Because of potential interaction with hormonal contraception, consider an additional non-hormonal method and regular pregnancy testing.",
       "male_patient": "Use reliable contraception during therapy and for 3 months after the last dose.",
       "female_partner_of_male_patient": "Use highly effective contraception if of childbearing potential."
-    }
+    },
+    "emetogenic_risk": "oral_moderate_high",
+    "script_id": "nccp-oral-moderate-high",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Oral SACT classification from NCCP V6 Table 8.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "supportive_medications_label": "Oral SACT moderate-high guidance"
   },
   "required_inputs": [
     "indication_id",
@@ -928,12 +948,9 @@
     },
     "febrile_neutropenia_grade": {
       "label": "Febrile neutropenia grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "step": 1,
       "demo_value": 0,
-      "max": 5,
       "unit": "CTCAE grade",
       "visible_when": {
         "field": "febrile_neutropenia",
@@ -945,16 +962,82 @@
         "operator": "==",
         "value": true
       },
-      "help": "Required only when febrile neutropenia is present."
+      "help": "Required only when febrile neutropenia is present.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "febrile_neutropenia",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Confirm ANC and temperature criteria, assess sepsis, haemodynamic stability, organ dysfunction and need for urgent IV antimicrobial treatment.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "crcl_ml_min": {
-      "label": "Creatinine clearance",
-      "type": "number",
+      "label": "Creatinine clearance category",
+      "type": "select",
       "required": true,
-      "min": 0,
-      "step": 1,
-      "demo_value": 70,
-      "unit": "mL/min"
+      "demo_value": "renal_51_plus",
+      "unit": "mL/min",
+      "options": [
+        {
+          "value": "renal_0_29",
+          "label": "<30 mL/min",
+          "decision_value": 14,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 29
+        },
+        {
+          "value": "renal_30_50",
+          "label": "30-50 mL/min",
+          "decision_value": 40,
+          "range_min_inclusive": 30,
+          "range_max_inclusive": 50
+        },
+        {
+          "value": "renal_51_plus",
+          "label": ">=51 mL/min",
+          "decision_value": 51,
+          "range_min_inclusive": 51,
+          "range_max_inclusive": null
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis - use the protocol-specific dialysis pathway / specialist review",
+          "decision_value": 0,
+          "sets_fields": {
+            "haemodialysis": true
+          }
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "haemodialysis": {
       "label": "Patient receiving haemodialysis",
@@ -971,7 +1054,9 @@
         "operator": "<",
         "value": 30
       },
-      "help": "Required only in severe renal impairment to distinguish haemodialysis."
+      "help": "Required only in severe renal impairment to distinguish haemodialysis.",
+      "visible": false,
+      "derived_from": "crcl_ml_min"
     },
     "child_pugh_class": {
       "label": "Child–Pugh class",

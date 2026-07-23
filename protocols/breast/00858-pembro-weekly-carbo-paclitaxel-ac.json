@@ -7,8 +7,8 @@
     "nccp_regimen_code": "00858",
     "nccp_version": 3,
     "tumour_group": "Breast",
-    "title": "Pembrolizumab 200 mg, weekly CARBOplatin AUC 1.5 and PACLitaxel 80 mg/m\u00b2 followed by DOXOrubicin and cycloPHOSphamide Therapy",
-    "short_title": "Pembrolizumab + weekly Carboplatin/Paclitaxel \u2192 AC",
+    "title": "Pembrolizumab 200 mg, weekly CARBOplatin AUC 1.5 and PACLitaxel 80 mg/m² followed by DOXOrubicin and cycloPHOSphamide Therapy",
+    "short_title": "Pembrolizumab + weekly Carboplatin/Paclitaxel → AC",
     "indication": "Pembrolizumab in combination with chemotherapy as neoadjuvant treatment, then continued as monotherapy as adjuvant treatment after surgery, for adults with locally advanced or early-stage triple-negative breast cancer at high risk of recurrence.",
     "icd10": "C50",
     "regimen_reimbursement_code": "00858a",
@@ -64,7 +64,16 @@
     },
     "catalog": {
       "enabled": true
-    }
+    },
+    "catalogue_section": "chemotherapy_combination_sact",
+    "catalogue_section_label": "Chemotherapy & combination SACT",
+    "treatment_class": [
+      "cytotoxic_chemotherapy",
+      "combination_sact",
+      "immunotherapy"
+    ],
+    "cytotoxic": true,
+    "sactcheck_encoding_version": "0.37.0"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -1501,7 +1510,29 @@
     "other": [
       "Consider analgesia for paclitaxel-associated myalgia or arthralgia.",
       "Encourage oral fluid intake of 2-3 litres on day 1 to reduce cyclophosphamide-associated haemorrhagic cystitis risk."
-    ]
+    ],
+    "emetogenic_risk": "phase_dependent",
+    "script_id": null,
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Risk changes by treatment phase; use the phase/day-specific profile rather than one regimen-wide script.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "phase_profiles": {
+      "taxane_or_weekly_phase": {
+        "level": "moderate",
+        "script_id": "nccp-parenteral-moderate"
+      },
+      "anthracycline_cyclophosphamide_phase": {
+        "level": "high",
+        "script_id": "nccp-parenteral-high"
+      },
+      "adjuvant_immunotherapy_phase": {
+        "level": "minimal",
+        "script_id": "nccp-minimal-no-routine-prophylaxis"
+      }
+    }
   },
   "global_safety_rules": [
     {
@@ -1605,7 +1636,7 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 2,
-      "unit": "\u00d710\u2079/L"
+      "unit": "×10⁹/L"
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
@@ -1614,7 +1645,7 @@
       "min": 0,
       "step": 1,
       "demo_value": 200,
-      "unit": "\u00d710\u2079/L"
+      "unit": "×10⁹/L"
     },
     "crcl_ml_min": {
       "label": "Creatinine clearance",
@@ -1623,7 +1654,13 @@
       "min": 0,
       "step": 1,
       "demo_value": 70,
-      "unit": "mL/min"
+      "unit": "mL/min",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Required for carboplatin Calvert dosing and renal safety assessment."
+      },
+      "assessment_guidance": "Enter the verified continuous GFR/CrCl used for carboplatin dosing. The app will apply encoded renal thresholds; confirm the Calvert calculation and local dosing policy independently."
     },
     "gfr_ml_min": {
       "label": "GFR",
@@ -1632,7 +1669,13 @@
       "min": 0,
       "step": 1,
       "demo_value": 90,
-      "unit": "mL/min"
+      "unit": "mL/min",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Required for carboplatin Calvert dosing and renal safety assessment."
+      },
+      "assessment_guidance": "Enter the verified continuous GFR/CrCl used for carboplatin dosing. The app will apply encoded renal thresholds; confirm the Calvert calculation and local dosing policy independently."
     },
     "haemodialysis": {
       "label": "Patient receiving haemodialysis",
@@ -1647,7 +1690,7 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "\u00d7 ULN"
+      "unit": "× ULN"
     },
     "bilirubin_ratio_uln": {
       "label": "Bilirubin",
@@ -1656,7 +1699,7 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "\u00d7 ULN"
+      "unit": "× ULN"
     },
     "bilirubin_umol_l": {
       "label": "Bilirubin",
@@ -1665,10 +1708,10 @@
       "min": 0,
       "step": 1,
       "demo_value": 10,
-      "unit": "\u00b5mol/L"
+      "unit": "µmol/L"
     },
     "child_pugh_class": {
-      "label": "Child\u2013Pugh class",
+      "label": "Child–Pugh class",
       "type": "select",
       "required": false,
       "options": [
@@ -1699,13 +1742,41 @@
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "step": 1,
       "demo_value": 0,
-      "max": 4,
-      "unit": "CTCAE grade"
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
@@ -1726,7 +1797,7 @@
       "min": 0,
       "step": 1,
       "demo_value": 200,
-      "unit": "\u00d710\u2079/L"
+      "unit": "×10⁹/L"
     },
     "anc_below_0_5_duration_days": {
       "label": "Duration ANC below 0.5",
@@ -1746,7 +1817,7 @@
         "operator": "<",
         "value": 0.5
       },
-      "help": "Required only when ANC is below 0.5 \u00d710\u2079/L."
+      "help": "Required only when ANC is below 0.5 ×10⁹/L."
     },
     "bleeding_tendency": {
       "label": "Clinically significant bleeding tendency",
@@ -1806,23 +1877,79 @@
     },
     "other_non_haematological_toxicity_grade": {
       "label": "Other non-haematological toxicity grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "step": 1,
       "demo_value": 0,
-      "max": 5,
-      "unit": "CTCAE grade"
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Name the exact non-haematological adverse event first and apply that event's own CTCAE v5.0 criterion. The general Grade 1-4 severity anchors are a screening aid only and are not a substitute for the named term.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "paclitaxel_non_haematological_toxicity_grade": {
       "label": "Paclitaxel-related non-haematological toxicity grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "step": 1,
       "demo_value": 0,
-      "max": 5,
-      "unit": "CTCAE grade"
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Name the exact non-haematological adverse event first and apply that event's own CTCAE v5.0 criterion. The general Grade 1-4 severity anchors are a screening aid only and are not a substitute for the named term.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "paclitaxel_dose_reduction_count": {
       "label": "Previous paclitaxel dose reductions",
@@ -1862,7 +1989,7 @@
   "assessment_profiles": [
     {
       "id": "neoadjuvant_cycles_1_to_4_day_1",
-      "label": "Neoadjuvant cycles 1\u20134 \u00b7 day 1",
+      "label": "Neoadjuvant cycles 1–4 · day 1",
       "required_inputs": [
         "cycle_number",
         "day_number",
@@ -1900,7 +2027,7 @@
     },
     {
       "id": "neoadjuvant_cycles_1_to_4_day_8_or_15",
-      "label": "Neoadjuvant cycles 1\u20134 \u00b7 day 8 or 15",
+      "label": "Neoadjuvant cycles 1–4 · day 8 or 15",
       "required_inputs": [
         "cycle_number",
         "day_number",
@@ -1940,7 +2067,7 @@
     },
     {
       "id": "neoadjuvant_cycles_5_to_8_day_1",
-      "label": "Neoadjuvant cycles 5\u20138 \u00b7 day 1",
+      "label": "Neoadjuvant cycles 5–8 · day 1",
       "required_inputs": [
         "cycle_number",
         "anc_x10e9_l",

@@ -26,7 +26,7 @@ for(const [code,p] of expected){
  const d=read(p), v=Validator.validate(d,{strict:true});
  assert.ok(v.valid,`${code} should validate: ${Validator.formatIssues(v).join('; ')}`);
  assert.strictEqual(d.metadata.nccp_regimen_code,code);
- assert.strictEqual(d.metadata.sactcheck_encoding_version,"0.31.0");
+ assert.strictEqual(d.metadata.sactcheck_encoding_version,"0.37.0");
  assert.ok(index.protocols.some(x=>x.id===d.protocol_id && x.path===p),`${code} must be indexed`);
  assert.deepStrictEqual(d.required_inputs,[],`${code} must permit partial assessment`);
 }

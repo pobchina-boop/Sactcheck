@@ -8,6 +8,22 @@
   const INDEX_PATH = "protocols/index.json";
   const protocolsById = new Map();
   let loadedProtocolRecords = [];
+  const SECTION_ORDER = [
+    "chemotherapy_combination_sact",
+    "targeted_her2_therapy",
+    "immunotherapy",
+    "endocrine_hormonal_therapy",
+    "bone_modifying_therapy",
+    "supportive_other"
+  ];
+  const SECTION_LABELS = {
+    chemotherapy_combination_sact: "Chemotherapy & combination SACT",
+    targeted_her2_therapy: "Targeted & HER2 therapies",
+    immunotherapy: "Immunotherapy",
+    endocrine_hormonal_therapy: "Endocrine (hormonal) therapies",
+    bone_modifying_therapy: "Bone-modifying therapies",
+    supportive_other: "Other SACT / supportive therapy"
+  };
 
   async function fetchJson(path) {
     const response = await fetch(path, { cache: "no-store" });
@@ -57,6 +73,60 @@
       "Machine-readable NCCP regimen encoded for the SACTCheck protocol library.";
   }
 
+  function getCatalogueSection(protocol) {
+    const value = protocol?.metadata?.catalogue_section || "supportive_other";
+    return SECTION_ORDER.includes(value) ? value : "supportive_other";
+  }
+
+  function getCatalogueSectionLabel(protocol) {
+    const section = getCatalogueSection(protocol);
+    return protocol?.metadata?.catalogue_section_label || SECTION_LABELS[section];
+  }
+
+  function treatmentClassLabel(protocol) {
+    const classes = asArray(protocol?.metadata?.treatment_class);
+    if (!classes.length) return getCatalogueSectionLabel(protocol);
+    return classes.slice(0, 2).map(value => String(value).replaceAll("_", " ").replace(/\b\w/g, character => character.toUpperCase())).join(" · ");
+  }
+
+  function applyTreatmentMetadata(card, protocol) {
+    const section = getCatalogueSection(protocol);
+    const sectionLabel = getCatalogueSectionLabel(protocol);
+    card.dataset.section = section;
+    card.dataset.sectionLabel = sectionLabel;
+    card.querySelector(".treatment-chip")?.remove();
+    const chip = document.createElement("span");
+    chip.className = `treatment-chip treatment-chip-${section}`;
+    chip.textContent = treatmentClassLabel(protocol);
+    const category = card.querySelector(".category-chip");
+    if (category) category.insertAdjacentElement("afterend", chip);
+    else card.prepend(chip);
+  }
+
+  function groupCatalogueCards(grid) {
+    grid.querySelectorAll(".catalogue-section-heading").forEach(item => item.remove());
+    const cards = [...grid.querySelectorAll(".regimen-card")];
+    cards.forEach(card => {
+      if (!card.dataset.section) card.dataset.section = "supportive_other";
+      if (!card.dataset.sectionLabel) card.dataset.sectionLabel = SECTION_LABELS[card.dataset.section] || SECTION_LABELS.supportive_other;
+    });
+    cards.sort((a, b) => {
+      const sectionDifference = SECTION_ORDER.indexOf(a.dataset.section) - SECTION_ORDER.indexOf(b.dataset.section);
+      if (sectionDifference) return sectionDifference;
+      return String(a.dataset.name || a.querySelector("h2")?.textContent || "").localeCompare(String(b.dataset.name || b.querySelector("h2")?.textContent || ""));
+    });
+    cards.forEach(card => grid.appendChild(card));
+    SECTION_ORDER.forEach(section => {
+      const first = cards.find(card => card.dataset.section === section);
+      if (!first) return;
+      const heading = document.createElement("div");
+      heading.className = "catalogue-section-heading";
+      heading.dataset.sectionHeading = section;
+      heading.innerHTML = `<h2>${escapeHtml(SECTION_LABELS[section])}</h2><p>Use search and tumour-site filters across the full catalogue.</p>`;
+      grid.insertBefore(heading, first);
+    });
+  }
+
   function protocolValidation(protocol) {
     const validator = window.SACTCheckProtocolValidator;
     if (validator?.validate) {
@@ -90,7 +160,7 @@
   }
 
   function emetogenicBadge(protocol) {
-    return window.SACTCheckEmetogenicRisk?.badge(protocol) || '<span class="badge emetogenic-badge emetogenic-pending"><span class="emetogenic-dot" aria-hidden="true"></span>Awaiting proforma mapping</span>';
+    return window.SACTCheckEmetogenicRisk?.badge(protocol) || '<span class="badge emetogenic-badge emetogenic-pending"><span class="emetogenic-dot" aria-hidden="true"></span>Supportive-care mapping requires review</span>';
   }
 
   function replaceRuleControl(card, jsonEngine) {
@@ -108,6 +178,8 @@
 
   function normaliseRemainingLegacyCards(grid) {
     grid.querySelectorAll(".regimen-card:not([data-json-protocol-id])").forEach(card => {
+      if (!card.dataset.section) card.dataset.section = "supportive_other";
+      if (!card.dataset.sectionLabel) card.dataset.sectionLabel = SECTION_LABELS.supportive_other;
       const planned = card.dataset.status === "planned" || card.classList.contains("planned");
       const source = card.querySelector(".official-pdf-link, a[href*='healthservice.hse.ie/documents/']")?.href || null;
       const row = card.querySelector(".validation-row");
@@ -193,8 +265,11 @@
       description.classList.add("regimen-description");
     }
 
-    card.dataset.name = [title, code, version, tumourDisplay, indication, entry.path].join(" ");
+    const sectionLabel = getCatalogueSectionLabel(protocol);
+    const classes = asArray(metadata.treatment_class).join(" ");
+    card.dataset.name = [title, code, version, tumourDisplay, indication, sectionLabel, classes, entry.path].join(" ");
     card.dataset.tumour = tumourGroups.join(",");
+    applyTreatmentMetadata(card, protocol);
   }
 
   function integrateExistingCard(entry, protocol) {
@@ -273,17 +348,23 @@
       const validation = protocolValidation(protocol);
       const assessmentReady = validation.valid && Boolean(window.SACTCheckGenericAssessment);
       const localPreview = Boolean(entry.localPreview);
-      const searchableText = [title, code, version, tumourDisplay, indication, entry.path].join(" ");
+      const section = getCatalogueSection(protocol);
+      const sectionLabel = getCatalogueSectionLabel(protocol);
+      const classes = asArray(metadata.treatment_class).join(" ");
+      const searchableText = [title, code, version, tumourDisplay, indication, sectionLabel, classes, entry.path].join(" ");
 
       const card = document.createElement("article");
       card.className = `card regimen-card json-regimen-card ${assessmentReady ? "active-regimen" : "planned"}`;
       card.dataset.name = searchableText;
       card.dataset.tumour = tumourGroups.join(",");
       card.dataset.status = assessmentReady ? "active" : "planned";
+      card.dataset.section = section;
+      card.dataset.sectionLabel = sectionLabel;
       card.dataset.jsonProtocolId = protocolId;
 
       card.innerHTML = `
         <span class="category-chip">${escapeHtml(tumourDisplay)}</span>
+        <span class="treatment-chip treatment-chip-${escapeHtml(section)}">${escapeHtml(treatmentClassLabel(protocol))}</span>
         <h2>${escapeHtml(title)}</h2>
         <p><strong>NCCP ${escapeHtml(code)}${version ? ` · Version ${escapeHtml(version)}` : ""}</strong></p>
         <p class="regimen-description">${escapeHtml(shorten(indication))}</p>
@@ -319,6 +400,7 @@
     });
 
     normaliseRemainingLegacyCards(grid);
+    groupCatalogueCards(grid);
 
     if (typeof window.filterRegimens === "function") {
       window.filterRegimens();
@@ -396,6 +478,7 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
+    version: "0.37.0",
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,

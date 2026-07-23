@@ -15,7 +15,7 @@
     "source_url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
     "published_date": "2021-05-01",
     "review_date": "2028-09-06",
-    "sactcheck_encoding_version": "0.36.8",
+    "sactcheck_encoding_version": "0.37.0",
     "treatment_setting": [
       "metastatic"
     ],
@@ -31,7 +31,14 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
-    }
+    },
+    "catalogue_section": "targeted_her2_therapy",
+    "catalogue_section_label": "Targeted & HER2 therapies",
+    "treatment_class": [
+      "parp_inhibitor",
+      "oral_targeted_therapy"
+    ],
+    "cytotoxic": false
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -75,54 +82,73 @@
       "unit": "g/dL"
     },
     "anc": {
-      "label": "ANC (\u00d710\u2079/L)",
+      "label": "ANC (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
       "max": 50,
       "step": 0.01,
       "demo_value": 2,
-      "unit": "\u00d710\u2079/L"
+      "unit": "×10⁹/L"
     },
     "platelets": {
-      "label": "Platelets (\u00d710\u2079/L)",
+      "label": "Platelets (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
       "max": 2000,
       "step": 0.01,
       "demo_value": 150,
-      "unit": "\u00d710\u2079/L"
+      "unit": "×10⁹/L"
     },
     "crcl": {
-      "label": "Creatinine clearance (mL/min)",
-      "type": "number",
+      "label": "Creatinine clearance category",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 250,
-      "step": 0.01,
-      "demo_value": 80,
-      "unit": "mL/min"
+      "demo_value": "renal_15_plus",
+      "unit": "mL/min",
+      "options": [
+        {
+          "value": "renal_0_14",
+          "label": "<15 mL/min",
+          "decision_value": 7,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 14
+        },
+        {
+          "value": "renal_15_plus",
+          "label": ">=15 mL/min",
+          "decision_value": 15,
+          "range_min_inclusive": 15,
+          "range_max_inclusive": null
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "bilirubin_uln": {
-      "label": "Bilirubin (\u00d7 ULN)",
+      "label": "Bilirubin (× ULN)",
       "type": "number",
       "required": false,
       "min": 0,
       "max": 20,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "\u00d7 ULN"
+      "unit": "× ULN"
     },
     "ast_uln": {
-      "label": "AST (\u00d7 ULN)",
+      "label": "AST (× ULN)",
       "type": "number",
       "required": false,
       "min": 0,
       "max": 50,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "\u00d7 ULN"
+      "unit": "× ULN"
     },
     "nonhaem_toxicity_grade": {
       "label": "Worst non-haematological toxicity grade",
@@ -131,26 +157,35 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Name the exact non-haematological adverse event first and apply that event's own CTCAE v5.0 criterion. The general Grade 1-4 severity anchors are a screening aid only and are not a substitute for the named term."
     },
     "strong_pgp_inhibitor": {
       "label": "Unavoidable strong P-gp inhibitor",
@@ -227,12 +262,12 @@
           "components": [
             "talazoparib"
           ],
-          "recommendation": "Withhold talazoparib. Resume only when Hb \u22659 g/dL and at the next lower dose level."
+          "recommendation": "Withhold talazoparib. Resume only when Hb ≥9 g/dL and at the next lower dose level."
         },
         "source": {
           "page": 3
         },
-        "explanation": "Withhold talazoparib. Resume only when Hb \u22659 g/dL and at the next lower dose level."
+        "explanation": "Withhold talazoparib. Resume only when Hb ≥9 g/dL and at the next lower dose level."
       },
       {
         "rule_id": "ANC_INTERRUPT",
@@ -244,12 +279,12 @@
           "components": [
             "talazoparib"
           ],
-          "recommendation": "Withhold talazoparib. Resume only when ANC \u22651.5 \u00d710\u2079/L and at the next lower dose level."
+          "recommendation": "Withhold talazoparib. Resume only when ANC ≥1.5 ×10⁹/L and at the next lower dose level."
         },
         "source": {
           "page": 3
         },
-        "explanation": "Withhold talazoparib. Resume only when ANC \u22651.5 \u00d710\u2079/L and at the next lower dose level."
+        "explanation": "Withhold talazoparib. Resume only when ANC ≥1.5 ×10⁹/L and at the next lower dose level."
       },
       {
         "rule_id": "PLT_INTERRUPT",
@@ -261,12 +296,12 @@
           "components": [
             "talazoparib"
           ],
-          "recommendation": "Withhold talazoparib. Resume only when platelets \u226575 \u00d710\u2079/L and at the next lower dose level."
+          "recommendation": "Withhold talazoparib. Resume only when platelets ≥75 ×10⁹/L and at the next lower dose level."
         },
         "source": {
           "page": 3
         },
-        "explanation": "Withhold talazoparib. Resume only when platelets \u226575 \u00d710\u2079/L and at the next lower dose level."
+        "explanation": "Withhold talazoparib. Resume only when platelets ≥75 ×10⁹/L and at the next lower dose level."
       },
       {
         "rule_id": "RENAL_30_59",
@@ -281,12 +316,12 @@
           "components": [
             "talazoparib"
           ],
-          "recommendation": "Creatinine clearance 30\u201359 mL/min: recommended starting dose is 0.75 mg once daily."
+          "recommendation": "Creatinine clearance 30–59 mL/min: recommended starting dose is 0.75 mg once daily."
         },
         "source": {
           "page": 3
         },
-        "explanation": "Creatinine clearance 30\u201359 mL/min: recommended starting dose is 0.75 mg once daily."
+        "explanation": "Creatinine clearance 30–59 mL/min: recommended starting dose is 0.75 mg once daily."
       },
       {
         "rule_id": "RENAL_15_29",
@@ -301,12 +336,12 @@
           "components": [
             "talazoparib"
           ],
-          "recommendation": "Creatinine clearance 15\u201329 mL/min: recommended starting dose is 0.5 mg once daily."
+          "recommendation": "Creatinine clearance 15–29 mL/min: recommended starting dose is 0.5 mg once daily."
         },
         "source": {
           "page": 3
         },
-        "explanation": "Creatinine clearance 15\u201329 mL/min: recommended starting dose is 0.5 mg once daily."
+        "explanation": "Creatinine clearance 15–29 mL/min: recommended starting dose is 0.5 mg once daily."
       },
       {
         "rule_id": "RENAL_LT15",
@@ -335,12 +370,12 @@
           "components": [
             "talazoparib"
           ],
-          "recommendation": "Withhold for grade 3\u20134 non-haematological toxicity until recovery to grade \u22641; consider resuming at the next lower dose or discontinue."
+          "recommendation": "Withhold for grade 3–4 non-haematological toxicity until recovery to grade ≤1; consider resuming at the next lower dose or discontinue."
         },
         "source": {
           "page": 3
         },
-        "explanation": "Withhold for grade 3\u20134 non-haematological toxicity until recovery to grade \u22641; consider resuming at the next lower dose or discontinue."
+        "explanation": "Withhold for grade 3–4 non-haematological toxicity until recovery to grade ≤1; consider resuming at the next lower dose or discontinue."
       },
       {
         "rule_id": "PGP_STRONG",
@@ -447,15 +482,20 @@
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "low",
-    "script_id": "generic-low-cuh-v2",
-    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
-    "supportive_medications_label": "CUH low-emetogenic supportive medicines guide",
+    "emetogenic_risk": "oral_minimal_low",
+    "script_id": "nccp-oral-minimal-low",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "supportive_medications_label": "Oral SACT minimal-low guidance",
     "summary": [
       "Minimal-to-low emetogenic potential.",
       "No routine premedication specified by NCCP.",
       "Monitor FBC monthly and provide transfusion or growth-factor support when clinically appropriate."
     ],
-    "validation_status": "pending_oncology_pharmacy_review"
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Oral SACT classification from NCCP V6 Table 8.",
+    "mapping_confidence": "high",
+    "breakthrough_profile_id": "nccp-breakthrough-general"
   }
 }

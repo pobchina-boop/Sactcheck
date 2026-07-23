@@ -39,7 +39,9 @@ for (const file of walk(path.join(root, 'protocols')).filter(f => f.endsWith('.j
 if (gradeFields < 30) throw new Error(`Expected broad grade-field coverage; found ${gradeFields}`);
 if (gradeOptions < 100) throw new Error(`Expected broad grade-option coverage; found ${gradeOptions}`);
 
-for (const file of ['index.html', path.join('protocols', 'index.html')]) {
+// v0.37.0 removed the obsolete nested preview application from protocols/.
+// Validate script ordering in the single canonical application entry point.
+for (const file of ['index.html']) {
   const html = fs.readFileSync(path.join(root, file), 'utf8');
   const descriptorPosition = html.indexOf('ctcae-descriptors.js');
   const uiPosition = html.indexOf('generic-assessment-ui.js');

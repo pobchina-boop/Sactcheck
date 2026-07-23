@@ -5,7 +5,7 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const root = path.resolve(__dirname, '..');
 const pkg = require(path.join(root, 'package.json'));
-const out = path.join(path.dirname(root), `SACTCheck_v${pkg.version}_Technical_Consolidation.zip`);
+const out = path.join(path.dirname(root), `SACTCheck_v${pkg.version}_Platform_Standardisation.zip`);
 const exclusions = [
   '.git/*', 'node_modules/*', 'protocols/protocols/*',
   'INSTALL_v0.*', 'DROP_IN_FILE_LIST_v0.*', 'VALIDATION_v0.*',

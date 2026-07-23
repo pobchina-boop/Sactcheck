@@ -51,9 +51,10 @@
             <div class="protocol-item"><span>Encoding status</span><strong id="jsonProtocolStatus">—</strong></div>
             <div class="protocol-item"><span>Rules encoded</span><strong id="jsonProtocolRuleCount">—</strong></div>
             <div class="protocol-item"><span>Clinical validation</span><strong id="jsonProtocolValidation">—</strong></div>
-            <div class="protocol-item"><span>Emetogenic potential</span><strong id="jsonEmetogenicRisk" class="emetogenic-inline emetogenic-pending">Awaiting proforma mapping</strong></div>
+            <div class="protocol-item"><span>Emetogenic potential</span><strong id="jsonEmetogenicRisk" class="emetogenic-inline emetogenic-pending">Supportive-care mapping requires review</strong></div>
           </div>
           <p class="subtle" id="jsonProtocolIndication"></p>
+          <div id="jsonSupportiveCareSummary" class="supportive-care-summary" aria-live="polite"></div>
           <p class="subtle"><strong>Safety design:</strong> enter any clinically relevant value and run the assessment. Independent rules are evaluated immediately; omitted domains remain explicitly unassessed and are never assumed normal. A single normal value cannot clear the whole regimen.</p>
         </div>
       </details>
@@ -148,6 +149,7 @@
 
     document.getElementById("jsonProfile").addEventListener("change", event => {
       activeProfileId = event.target.value;
+      renderProtocolInformation(activeProtocol);
       renderInputs();
       hideResult();
     });
@@ -233,11 +235,13 @@
     document.getElementById("jsonProtocolValidation").textContent = validationComplete ? "Validated" : "Pending formal validation";
     document.getElementById("jsonProtocolIndication").textContent = metadata.indication || indicationSummary(protocol);
 
-    const risk = root.SACTCheckEmetogenicRisk?.get(protocol) || {
+    const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId }) || {
       level: "pending",
-      label: "Awaiting proforma mapping",
+      label: "Supportive-care mapping requires review",
       className: "emetogenic-pending",
-      proformaUrl: null
+      proformaUrl: null,
+      summary: "No supportive-care mapping is available.",
+      warning: "Confirm the current NCCP regimen and local pharmacy policy."
     };
     const riskElement = document.getElementById("jsonEmetogenicRisk");
     riskElement.textContent = risk.label;
@@ -246,10 +250,32 @@
     const supportiveUrl = protocol.supportive_care?.supportive_medications_pdf_url || risk.proformaUrl;
     if (supportiveUrl) {
       proformaLink.href = supportiveUrl;
+      const isLocalAsset = !/^https?:/i.test(supportiveUrl);
+      proformaLink.innerHTML = isLocalAsset
+        ? '<span aria-hidden="true">●</span> Local supportive sheet (validate)'
+        : '<span aria-hidden="true">●</span> NCCP antiemetic guidance';
       proformaLink.classList.remove("hidden");
     } else {
       proformaLink.removeAttribute("href");
+      proformaLink.innerHTML = '<span aria-hidden="true">●</span> Supportive medicines';
       proformaLink.classList.add("hidden");
+    }
+
+    const supportiveSummary = document.getElementById("jsonSupportiveCareSummary");
+    if (supportiveSummary) {
+      const detailRows = [
+        `<p><strong>${escapeHtml(risk.label)}</strong></p>`,
+        risk.summary ? `<p>${escapeHtml(risk.summary)}</p>` : "",
+        risk.subsequentDays ? `<p><strong>Subsequent days:</strong> ${escapeHtml(risk.subsequentDays)}</p>` : "",
+        risk.breakthrough?.summary ? `<p><strong>Breakthrough symptoms:</strong> ${escapeHtml(risk.breakthrough.summary)}</p>` : "",
+        risk.mappingBasis ? `<p class="subtle"><strong>Mapping basis:</strong> ${escapeHtml(risk.mappingBasis)}</p>` : "",
+        risk.sourceUrl && risk.sourceUrl !== supportiveUrl
+          ? `<p><a href="${escapeHtml(risk.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open NCCP antiemetic source</a></p>`
+          : "",
+        `<p class="supportive-warning"><strong>Verification:</strong> ${escapeHtml(risk.warning || "Confirm the current NCCP regimen and local oncology-pharmacy policy.")}</p>`
+      ];
+      supportiveSummary.innerHTML = detailRows.join("");
+      supportiveSummary.className = `supportive-care-summary ${risk.className}`;
     }
 
     const officialPdf = document.getElementById("jsonOfficialPdf");
@@ -344,14 +370,31 @@
     return `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="number" type="number" placeholder="Not assessed"${minimum}${maximum} step="${escapeHtml(definition.step ?? "any")}"${disabledAttribute}>`;
   }
 
+  function renderCtcaeGuide(definition) {
+    const guide = root.SACTCheckCTCAE?.guide(definition);
+    if (!guide) return "";
+    const grades = guide.grades.map(item => `
+      <li><strong>Grade ${escapeHtml(item.grade)}</strong><span>${escapeHtml(item.description)}</span></li>`).join("");
+    return `
+      <details class="ctcae-guide" data-ctcae-guide="${escapeHtml(definition.id)}" open>
+        <summary>${escapeHtml(guide.version)} grading and how to assess</summary>
+        <div class="ctcae-guide-body">
+          <p><strong>How to assess:</strong> ${escapeHtml(guide.guidance)}</p>
+          <ol class="ctcae-grade-list">${grades}</ol>
+          <p class="subtle">Use the named CTCAE adverse-event term. <a href="${escapeHtml(guide.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the CTCAE v5.0 source</a>.</p>
+        </div>
+      </details>`;
+  }
+
   function renderInput(definition, options = {}) {
     const wrapperClass = definition.visible === false ? "hidden" : "";
     const control = buildControl(definition);
     const unit = definition.unit ? ` <span class="subtle">(${escapeHtml(definition.unit)})</span>` : "";
     const hints = [];
     if (definition.help) hints.push(escapeHtml(definition.help));
-    if (definition.type === "select" && /grade/i.test(`${definition.id || ""} ${definition.label || ""}`)) hints.push("Grade descriptors are concise CTCAE v5.0 educational aids; verify the full criterion when clinically important.");
+    if (definition.assessment_guidance && !root.SACTCheckCTCAE?.guide(definition)) hints.push(escapeHtml(definition.assessment_guidance));
     hints.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
+    const ctcaeGuide = renderCtcaeGuide(definition);
 
     if (options.compact) {
       return `
@@ -361,6 +404,7 @@
             <label class="sr-only" for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}</label>
             ${control}
             <span class="hint" data-input-hint>${hints.join(" ")}</span>
+            ${ctcaeGuide}
           </div>
         </details>`;
     }
@@ -370,6 +414,7 @@
         <label for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}${unit}</label>
         ${control}
         <span class="hint" data-input-hint>${hints.join(" ")}</span>
+        ${ctcaeGuide}
       </div>`;
   }
 
@@ -413,7 +458,7 @@
       if (hint) {
         const parts = [];
         if (definition.help) parts.push(definition.help);
-        if (definition.type === "select" && /grade/i.test(`${definition.id || ""} ${definition.label || ""}`)) parts.push("Grade descriptors are concise CTCAE v5.0 educational aids; verify the full criterion when clinically important.");
+        if (definition.assessment_guidance && !root.SACTCheckCTCAE?.guide(definition)) parts.push(definition.assessment_guidance);
         parts.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
         hint.textContent = parts.join(" ");
       }
@@ -667,7 +712,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.36.0",
+    version: "0.37.0",
     open,
     ensureScreen
   });

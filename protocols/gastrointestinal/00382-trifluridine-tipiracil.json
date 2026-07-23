@@ -7,9 +7,9 @@
     "nccp_regimen_code": "00382",
     "nccp_version": "3",
     "tumour_group": "Gastrointestinal",
-    "title": "Trifluridine and Tipiracil (Lonsurf\u00ae) Therapy",
+    "title": "Trifluridine and Tipiracil (Lonsurf®) Therapy",
     "short_title": "Lonsurf",
-    "indication": "Previously treated metastatic colorectal cancer; 35 mg/m\u00b2 twice daily on days 1\u20135 and 8\u201312 every 28 days.",
+    "indication": "Previously treated metastatic colorectal cancer; 35 mg/m² twice daily on days 1–5 and 8–12 every 28 days.",
     "published_date": "2017-02-01",
     "review_date": "2026-01-06",
     "source_document_pages": 6,
@@ -24,6 +24,18 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "catalogue_section": "chemotherapy_combination_sact",
+    "catalogue_section_label": "Chemotherapy & combination SACT",
+    "treatment_class": [
+      "cytotoxic_chemotherapy",
+      "combination_sact",
+      "oral_targeted_therapy"
+    ],
+    "cytotoxic": true,
+    "sactcheck_encoding_version": "0.37.0",
+    "catalog": {
+      "enabled": true
     }
   },
   "clinical_governance": {
@@ -152,7 +164,7 @@
           "components": [
             "lonsurf"
           ],
-          "recommendation": "Interrupt until ANC \u22651.5 \u00d710\u2079/L."
+          "recommendation": "Interrupt until ANC ≥1.5 ×10⁹/L."
         },
         "source": {
           "page": 2
@@ -169,7 +181,7 @@
           "components": [
             "lonsurf"
           ],
-          "recommendation": "Interrupt until platelets \u226575 \u00d710\u2079/L."
+          "recommendation": "Interrupt until platelets ≥75 ×10⁹/L."
         },
         "source": {
           "page": 2
@@ -195,7 +207,7 @@
           "components": [
             "lonsurf"
           ],
-          "recommendation": "Do not start the next cycle until ANC \u22651.5 \u00d710\u2079/L."
+          "recommendation": "Do not start the next cycle until ANC ≥1.5 ×10⁹/L."
         },
         "source": {
           "page": 2
@@ -221,7 +233,7 @@
           "components": [
             "lonsurf"
           ],
-          "recommendation": "Do not start the next cycle until platelets \u226575 \u00d710\u2079/L."
+          "recommendation": "Do not start the next cycle until platelets ≥75 ×10⁹/L."
         },
         "source": {
           "page": 2
@@ -257,7 +269,7 @@
           "components": [
             "lonsurf"
           ],
-          "recommendation": "After recovery, reduce by 5 mg/m\u00b2 per dose; maximum three reductions, minimum 20 mg/m\u00b2 BD (or 15 mg/m\u00b2 in severe renal impairment)."
+          "recommendation": "After recovery, reduce by 5 mg/m² per dose; maximum three reductions, minimum 20 mg/m² BD (or 15 mg/m² in severe renal impairment)."
         },
         "source": {
           "page": 3
@@ -283,7 +295,7 @@
           "components": [
             "lonsurf"
           ],
-          "recommendation": "Use a starting dose of 20 mg/m\u00b2 twice daily; one reduction to 15 mg/m\u00b2 is permitted."
+          "recommendation": "Use a starting dose of 20 mg/m² twice daily; one reduction to 15 mg/m² is permitted."
         },
         "source": {
           "page": 4
@@ -438,10 +450,12 @@
       "label": "Dialysis",
       "type": "boolean",
       "required": false,
-      "demo_value": false
+      "demo_value": false,
+      "visible": false,
+      "derived_from": "crcl_ml_min"
     },
     "anc_x10e9_l": {
-      "label": "ANC (\u00d710\u2079/L)",
+      "label": "ANC (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -450,7 +464,7 @@
       "demo_value": 2
     },
     "platelets_x10e9_l": {
-      "label": "Platelets (\u00d710\u2079/L)",
+      "label": "Platelets (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -477,22 +491,56 @@
       "demo_value": false
     },
     "toxicity_requiring_interruption": {
-      "label": "Grade 3\u20134 non-haematological toxicity requiring interruption",
+      "label": "Grade 3–4 non-haematological toxicity requiring interruption",
       "type": "boolean",
       "required": false,
       "demo_value": false
     },
     "crcl_ml_min": {
-      "label": "Creatinine clearance (mL/min)",
-      "type": "number",
+      "label": "Creatinine clearance category",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 300,
-      "step": 1,
-      "demo_value": 75
+      "demo_value": "renal_30_plus",
+      "options": [
+        {
+          "value": "renal_0_14",
+          "label": "<15 mL/min",
+          "decision_value": 7,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 14
+        },
+        {
+          "value": "renal_15_29",
+          "label": "15-29 mL/min",
+          "decision_value": 22,
+          "range_min_inclusive": 15,
+          "range_max_inclusive": 29
+        },
+        {
+          "value": "renal_30_plus",
+          "label": ">=30 mL/min",
+          "decision_value": 30,
+          "range_min_inclusive": 30,
+          "range_max_inclusive": null
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis - use the protocol-specific dialysis pathway / specialist review",
+          "decision_value": 0,
+          "sets_fields": {
+            "dialysis": true
+          }
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "bilirubin_ratio_uln": {
-      "label": "Baseline bilirubin (\u00d7ULN)",
+      "label": "Baseline bilirubin (×ULN)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -531,26 +579,38 @@
       "options": [
         {
           "value": "35",
-          "label": "35 mg/m\u00b2 twice daily"
+          "label": "35 mg/m² twice daily"
         },
         {
           "value": "30",
-          "label": "30 mg/m\u00b2 twice daily"
+          "label": "30 mg/m² twice daily"
         },
         {
           "value": "25",
-          "label": "25 mg/m\u00b2 twice daily"
+          "label": "25 mg/m² twice daily"
         },
         {
           "value": "20",
-          "label": "20 mg/m\u00b2 twice daily"
+          "label": "20 mg/m² twice daily"
         },
         {
           "value": "15",
-          "label": "15 mg/m\u00b2 twice daily (severe renal impairment minimum)"
+          "label": "15 mg/m² twice daily (severe renal impairment minimum)"
         }
       ],
       "demo_value": "35"
     }
+  },
+  "supportive_care": {
+    "emetogenic_risk": "oral_moderate_high",
+    "script_id": "nccp-oral-moderate-high",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Oral SACT classification from NCCP V6 Table 8.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "supportive_medications_label": "Oral SACT moderate-high guidance"
   }
 }

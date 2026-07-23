@@ -21,7 +21,7 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.32.0",
+    "sactcheck_encoding_version": "0.37.0",
     "icd10": "C50",
     "treatment_setting": [
       "neoadjuvant",
@@ -31,7 +31,13 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
-    }
+    },
+    "catalogue_section": "targeted_her2_therapy",
+    "catalogue_section_label": "Targeted & HER2 therapies",
+    "treatment_class": [
+      "her2_targeted_therapy"
+    ],
+    "cytotoxic": false
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -207,15 +213,41 @@
       "ui_section": "clinical"
     },
     "gfr_ml_min": {
-      "label": "GFR (mL/min)",
-      "type": "number",
+      "label": "GFR category",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 250,
-      "step": 1,
-      "demo_value": 90,
+      "demo_value": "renal_31_plus",
       "ui_section": "labs",
-      "unit": "mL/min"
+      "unit": "mL/min",
+      "options": [
+        {
+          "value": "renal_0_20",
+          "label": "<21 mL/min",
+          "decision_value": 10,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 20
+        },
+        {
+          "value": "renal_21_30",
+          "label": "21-30 mL/min",
+          "decision_value": 25,
+          "range_min_inclusive": 21,
+          "range_max_inclusive": 30
+        },
+        {
+          "value": "renal_31_plus",
+          "label": ">=31 mL/min",
+          "decision_value": 31,
+          "range_min_inclusive": 31,
+          "range_max_inclusive": null
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "bilirubin_abnormal": {
       "label": "Bilirubin above the laboratory normal range",
@@ -282,27 +314,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy."
     },
     "stomatitis_grade": {
       "label": "Stomatitis grade",
@@ -311,27 +352,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired."
     },
     "current_docetaxel_dose": {
       "label": "Current docetaxel dose level",
@@ -361,27 +411,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "hypersensitivity_anaphylaxis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess bronchospasm, urticaria, angioedema, hypotension, airway compromise, treatment route and hospitalisation. Anaphylaxis or life-threatening hypersensitivity requires immediate emergency treatment."
     },
     "relevant_drug_hypersensitivity": {
       "label": "Relevant drug hypersensitivity before treatment",
@@ -1382,5 +1441,15 @@
   "output_templates": {
     "proceed": "No encoded contraindication, hold, dose-modification or treatment-context criterion was triggered. Complete normal prescribing, clinical and pharmacy checks.",
     "coverage_gap": "One or more potentially relevant protocol domains were not assessed."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "variable",
+    "script_id": null,
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "The companion chemotherapy is not fixed in the catalogue title; antiemetic prophylaxis must follow the most emetogenic active component.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general"
   }
 }

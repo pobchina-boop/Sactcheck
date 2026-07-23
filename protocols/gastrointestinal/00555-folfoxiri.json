@@ -24,6 +24,16 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "catalogue_section": "chemotherapy_combination_sact",
+    "catalogue_section_label": "Chemotherapy & combination SACT",
+    "treatment_class": [
+      "cytotoxic_chemotherapy"
+    ],
+    "cytotoxic": true,
+    "sactcheck_encoding_version": "0.37.0",
+    "catalog": {
+      "enabled": true
     }
   },
   "clinical_governance": {
@@ -213,7 +223,7 @@
         "source": {
           "page": 2
         },
-        "explanation": "Bilirubin >3\u00d7ULN is an exclusion."
+        "explanation": "Bilirubin >3×ULN is an exclusion."
       },
       {
         "rule_id": "DPD_COMPLETE",
@@ -243,7 +253,7 @@
           "components": [
             "whole_regimen"
           ],
-          "recommendation": "Delay 1\u20132 weeks; occurrence-based component reductions apply after recovery."
+          "recommendation": "Delay 1–2 weeks; occurrence-based component reductions apply after recovery."
         },
         "source": {
           "page": 3
@@ -260,7 +270,7 @@
           "components": [
             "whole_regimen"
           ],
-          "recommendation": "Delay 1\u20132 weeks; occurrence-based component reductions apply after recovery."
+          "recommendation": "Delay 1–2 weeks; occurrence-based component reductions apply after recovery."
         },
         "source": {
           "page": 3
@@ -318,7 +328,7 @@
         "source": {
           "page": 4
         },
-        "explanation": "Grade 3\u20134 diarrhoea triggers reductions."
+        "explanation": "Grade 3–4 diarrhoea triggers reductions."
       },
       {
         "rule_id": "MUCOSITIS_G3PLUS",
@@ -330,7 +340,7 @@
           "components": [
             "fluorouracil"
           ],
-          "recommendation": "Reduce fluorouracil to 75% for grade 3\u20134 mucositis/HFS."
+          "recommendation": "Reduce fluorouracil to 75% for grade 3–4 mucositis/HFS."
         },
         "source": {
           "page": 4
@@ -526,7 +536,7 @@
       "demo_value": "documented_normal"
     },
     "anc_x10e9_l": {
-      "label": "ANC (\u00d710\u2079/L)",
+      "label": "ANC (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -535,7 +545,7 @@
       "demo_value": 2
     },
     "platelets_x10e9_l": {
-      "label": "Platelets (\u00d710\u2079/L)",
+      "label": "Platelets (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -571,19 +581,38 @@
       "demo_value": 180
     },
     "grade4_neutropenia_with_grade2_fever": {
-      "label": "Grade 4 neutropenia with \u2265grade 2 fever",
+      "label": "Grade 4 neutropenia with ≥grade 2 fever",
       "type": "boolean",
       "required": false,
       "demo_value": false
     },
     "crcl_ml_min": {
-      "label": "Creatinine clearance (mL/min)",
-      "type": "number",
+      "label": "Creatinine clearance category",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 300,
-      "step": 1,
-      "demo_value": 75
+      "demo_value": "renal_30_plus",
+      "options": [
+        {
+          "value": "renal_0_29",
+          "label": "<30 mL/min",
+          "decision_value": 14,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 29
+        },
+        {
+          "value": "renal_30_plus",
+          "label": ">=30 mL/min",
+          "decision_value": 30,
+          "range_min_inclusive": 30,
+          "range_max_inclusive": null
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "hepatic_impairment_severity": {
       "label": "Hepatic impairment",
@@ -606,7 +635,7 @@
       "demo_value": "none"
     },
     "bilirubin_umol_l": {
-      "label": "Bilirubin (\u00b5mol/L)",
+      "label": "Bilirubin (µmol/L)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -625,42 +654,154 @@
     },
     "diarrhoea_current_grade": {
       "label": "Current diarrhoea grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "diarrhoea_highest_grade": {
       "label": "Highest diarrhoea grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "stomatitis_current_grade": {
       "label": "Current stomatitis grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "stomatitis_highest_grade": {
       "label": "Highest stomatitis grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "baseline_neutrophils_x10e9_l": {
-      "label": "Baseline neutrophils (\u00d710\u2079/L)",
+      "label": "Baseline neutrophils (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -669,7 +810,7 @@
       "demo_value": 2.2
     },
     "baseline_platelets_x10e9_l": {
-      "label": "Baseline platelets (\u00d710\u2079/L)",
+      "label": "Baseline platelets (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -678,7 +819,7 @@
       "demo_value": 180
     },
     "bilirubin_ratio_uln": {
-      "label": "Bilirubin (\u00d7ULN)",
+      "label": "Bilirubin (×ULN)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -688,12 +829,40 @@
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "laryngopharyngeal_dysaesthesia": {
       "label": "Laryngopharyngeal dysaesthesia",
@@ -713,5 +882,17 @@
       "required": false,
       "demo_value": false
     }
+  },
+  "supportive_care": {
+    "emetogenic_risk": "moderate",
+    "script_id": "nccp-parenteral-moderate",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "FOLFOXIRI contains irinotecan and oxaliplatin; the highest active component is moderate risk.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Moderate_V2_05.21.pdf",
+    "supportive_medications_label": "CUH moderate-risk prescription sheet (2021; pharmacy reconciliation required)"
   }
 }

@@ -425,19 +425,62 @@
 
   function coerceInputs(definitions, rawInputs) {
     const inputs = {};
+    const derivedAssignments = [];
+
     definitions.forEach(definition => {
       const raw = rawInputs[definition.id];
       if (raw === undefined || raw === null || raw === "") {
         inputs[definition.id] = null;
-      } else if (definition.type === "number") {
-        inputs[definition.id] = Number(raw);
-      } else if (definition.type === "boolean") {
-        inputs[definition.id] = raw === true || raw === "true";
-      } else {
-        inputs[definition.id] = raw;
+        return;
       }
+
+      if (definition.type === "number") {
+        inputs[definition.id] = Number(raw);
+        return;
+      }
+      if (definition.type === "boolean") {
+        inputs[definition.id] = raw === true || raw === "true";
+        return;
+      }
+      if (definition.type === "select") {
+        const option = asArray(definition.options).find(item => String(item?.value) === String(raw));
+        if (option) {
+          inputs[definition.id] = Object.prototype.hasOwnProperty.call(option, "decision_value")
+            ? option.decision_value
+            : option.value;
+          if (option.sets_fields && typeof option.sets_fields === "object") {
+            derivedAssignments.push(option.sets_fields);
+          }
+          return;
+        }
+      }
+      inputs[definition.id] = raw;
     });
+
+    // A protocol-specific band may also select a linked pathway (for example,
+    // dialysis). Apply those derived values only after all direct inputs have
+    // been parsed so the selector is the single source of truth.
+    derivedAssignments.forEach(assignments => {
+      Object.entries(assignments).forEach(([field, value]) => {
+        inputs[field] = value;
+      });
+    });
+
     return inputs;
+  }
+
+  function buildDisplayInputs(definitions, rawInputs, inputs) {
+    const display = {};
+    definitions.forEach(definition => {
+      const raw = rawInputs?.[definition.id];
+      if (definition.type === "select" && raw !== undefined && raw !== null && raw !== "") {
+        const option = asArray(definition.options).find(item => String(item?.value) === String(raw));
+        display[definition.id] = option?.label || String(raw);
+        return;
+      }
+      display[definition.id] = formatValue(inputs?.[definition.id]);
+    });
+    return display;
   }
 
   function validateInputs(definitions, inputs) {
@@ -524,7 +567,7 @@
     // rule engine evaluates every rule it can and reports the remainder as
     // unassessed coverage.
     if (validation.invalid.length) {
-      return buildIncompleteResult(protocol, profile, context, inputs, definitions, validation);
+      return buildIncompleteResult(protocol, profile, context, inputs, definitions, validation, rawInputs || {});
     }
 
     const evaluated = RuleEngine.evaluate(protocol, inputs, context);
@@ -586,6 +629,7 @@
       context,
       definitions,
       inputs,
+      displayInputs: buildDisplayInputs(definitions, rawInputs || {}, inputs),
       missing: [],
       unassessed: skippedFields.map(field => ({
         id: field,
@@ -600,7 +644,7 @@
     };
   }
 
-  function buildIncompleteResult(protocol, profile, context, inputs, definitions, validation) {
+  function buildIncompleteResult(protocol, profile, context, inputs, definitions, validation, rawInputs = {}) {
     return {
       complete: false,
       coverageComplete: false,
@@ -619,6 +663,7 @@
       context,
       definitions,
       inputs,
+      displayInputs: buildDisplayInputs(definitions, rawInputs, inputs),
       missing: validation.missing,
       unassessed: [],
       invalid: validation.invalid,
@@ -696,8 +741,9 @@
     ];
 
     result.definitions.forEach(definition => {
-      const value = result.inputs[definition.id];
-      lines.push(`- ${definition.label}: ${formatValue(value)}`);
+      if (definition.visible === false && (result.inputs[definition.id] === null || result.inputs[definition.id] === undefined)) return;
+      const displayValue = result.displayInputs?.[definition.id] ?? formatValue(result.inputs[definition.id]);
+      lines.push(`- ${definition.label}: ${displayValue}`);
     });
 
     lines.push("", "Triggered rules:");
@@ -757,7 +803,7 @@
   }
 
   return Object.freeze({
-    version: "0.36.0",
+    version: "0.37.0",
     getProfiles,
     getInputDefinitions,
     explicitInputDefinitions,

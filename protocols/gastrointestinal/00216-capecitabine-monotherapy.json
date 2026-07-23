@@ -12,7 +12,7 @@
     ],
     "title": "Capecitabine Monotherapy",
     "short_title": "Capecitabine",
-    "indication": "Breast and colorectal cancer indications; 1250 mg/m\u00b2 twice daily on days 1\u201314 every 21 days.",
+    "indication": "Breast and colorectal cancer indications; 1250 mg/m² twice daily on days 1–14 every 21 days.",
     "published_date": "2015-01-10",
     "review_date": "2030-01-27",
     "source_document_pages": 8,
@@ -27,6 +27,16 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "catalogue_section": "chemotherapy_combination_sact",
+    "catalogue_section_label": "Chemotherapy & combination SACT",
+    "treatment_class": [
+      "cytotoxic_chemotherapy"
+    ],
+    "cytotoxic": true,
+    "sactcheck_encoding_version": "0.37.0",
+    "catalog": {
+      "enabled": true
     }
   },
   "clinical_governance": {
@@ -230,7 +240,7 @@
           "components": [
             "capecitabine"
           ],
-          "recommendation": "Delay until ANC \u22651.5 \u00d710\u2079/L, then apply occurrence-based dose adjustment."
+          "recommendation": "Delay until ANC ≥1.5 ×10⁹/L, then apply occurrence-based dose adjustment."
         },
         "source": {
           "page": 3
@@ -247,7 +257,7 @@
           "components": [
             "capecitabine"
           ],
-          "recommendation": "Delay until platelets \u226575 \u00d710\u2079/L, then apply occurrence-based dose adjustment."
+          "recommendation": "Delay until platelets ≥75 ×10⁹/L, then apply occurrence-based dose adjustment."
         },
         "source": {
           "page": 3
@@ -278,7 +288,7 @@
         "source": {
           "page": 3
         },
-        "explanation": "CrCl 30\u201350 mL/min requires 75% dose."
+        "explanation": "CrCl 30–50 mL/min requires 75% dose."
       },
       {
         "rule_id": "CRCL_LT30",
@@ -324,12 +334,12 @@
           "components": [
             "capecitabine"
           ],
-          "recommendation": "Interrupt until resolved to grade 0\u20131; subsequent dose depends on grade and occurrence."
+          "recommendation": "Interrupt until resolved to grade 0–1; subsequent dose depends on grade and occurrence."
         },
         "source": {
           "page": 4
         },
-        "explanation": "Grade \u22652 diarrhoea requires interruption."
+        "explanation": "Grade ≥2 diarrhoea requires interruption."
       },
       {
         "rule_id": "HFS_G2PLUS",
@@ -346,7 +356,7 @@
         "source": {
           "page": 5
         },
-        "explanation": "Grade \u22652 hand-foot syndrome requires withholding."
+        "explanation": "Grade ≥2 hand-foot syndrome requires withholding."
       },
       {
         "rule_id": "HEPATOTOXICITY",
@@ -367,7 +377,7 @@
           "components": [
             "capecitabine"
           ],
-          "recommendation": "Withhold until bilirubin \u22643\u00d7ULN and ALT/AST \u22642.5\u00d7ULN."
+          "recommendation": "Withhold until bilirubin ≤3×ULN and ALT/AST ≤2.5×ULN."
         },
         "source": {
           "page": 6
@@ -533,7 +543,7 @@
       "demo_value": "documented_normal"
     },
     "anc_x10e9_l": {
-      "label": "ANC (\u00d710\u2079/L)",
+      "label": "ANC (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -542,7 +552,7 @@
       "demo_value": 2
     },
     "platelets_x10e9_l": {
-      "label": "Platelets (\u00d710\u2079/L)",
+      "label": "Platelets (×10⁹/L)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -560,28 +570,92 @@
       "demo_value": 0
     },
     "crcl_ml_min": {
-      "label": "Creatinine clearance (mL/min)",
-      "type": "number",
+      "label": "Creatinine clearance category",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 300,
-      "step": 1,
-      "demo_value": 75
+      "demo_value": "renal_51_plus",
+      "options": [
+        {
+          "value": "renal_0_29",
+          "label": "<30 mL/min",
+          "decision_value": 14,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 29
+        },
+        {
+          "value": "renal_30_50",
+          "label": "30-50 mL/min",
+          "decision_value": 40,
+          "range_min_inclusive": 30,
+          "range_max_inclusive": 50
+        },
+        {
+          "value": "renal_51_plus",
+          "label": ">=51 mL/min",
+          "decision_value": 51,
+          "range_min_inclusive": 51,
+          "range_max_inclusive": null
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis - use the protocol-specific dialysis pathway / specialist review",
+          "decision_value": 0,
+          "sets_fields": {
+            "haemodialysis": true
+          }
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "haemodialysis": {
       "label": "Haemodialysis",
       "type": "boolean",
       "required": false,
-      "demo_value": false
+      "demo_value": false,
+      "visible": false,
+      "derived_from": "crcl_ml_min"
     },
     "diarrhoea_current_grade": {
       "label": "Current diarrhoea grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "diarrhoea_occurrence": {
       "label": "Diarrhoea occurrence number",
@@ -594,12 +668,40 @@
     },
     "hand_foot_grade": {
       "label": "Hand-foot syndrome grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 3,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "ppe",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess painful erythema, swelling, hyperkeratosis, peeling or blistering of palms/soles and the effect on instrumental or self-care activities.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "toxicity_occurrence": {
       "label": "General toxicity occurrence number",
@@ -611,7 +713,7 @@
       "demo_value": 0
     },
     "bilirubin_ratio_uln": {
-      "label": "Bilirubin (\u00d7ULN)",
+      "label": "Bilirubin (×ULN)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -620,7 +722,7 @@
       "demo_value": 0.7
     },
     "alt_ast_ratio_uln": {
-      "label": "ALT or AST (highest \u00d7ULN)",
+      "label": "ALT or AST (highest ×ULN)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -628,5 +730,17 @@
       "step": 0.1,
       "demo_value": 1
     }
+  },
+  "supportive_care": {
+    "emetogenic_risk": "oral_minimal_low",
+    "script_id": "nccp-oral-minimal-low",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Oral SACT classification from NCCP V6 Table 8.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "supportive_medications_label": "Oral SACT minimal-low guidance"
   }
 }

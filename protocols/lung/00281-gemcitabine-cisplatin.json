@@ -22,9 +22,16 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.30.0",
+    "sactcheck_encoding_version": "0.37.0",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-07-20"
+    "source_checked_date": "2026-07-20",
+    "catalogue_section": "chemotherapy_combination_sact",
+    "catalogue_section_label": "Chemotherapy & combination SACT",
+    "treatment_class": [
+      "cytotoxic_chemotherapy",
+      "combination_sact"
+    ],
+    "cytotoxic": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -189,15 +196,48 @@
       "unit": "×10⁹/L"
     },
     "crcl_ml_min": {
-      "label": "Creatinine clearance",
-      "type": "number",
+      "label": "Creatinine clearance category",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 250,
-      "step": 1,
-      "demo_value": 90,
+      "demo_value": "renal_60_plus",
       "ui_section": "labs",
-      "unit": "mL/min"
+      "unit": "mL/min",
+      "options": [
+        {
+          "value": "renal_0_29",
+          "label": "<30 mL/min",
+          "decision_value": 14,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 29
+        },
+        {
+          "value": "renal_30_44",
+          "label": "30-44 mL/min",
+          "decision_value": 37,
+          "range_min_inclusive": 30,
+          "range_max_inclusive": 44
+        },
+        {
+          "value": "renal_45_59",
+          "label": "45-59 mL/min",
+          "decision_value": 52,
+          "range_min_inclusive": 45,
+          "range_max_inclusive": 59
+        },
+        {
+          "value": "renal_60_plus",
+          "label": ">=60 mL/min",
+          "decision_value": 60,
+          "range_min_inclusive": 60,
+          "range_max_inclusive": null
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "bilirubin_micromol_l": {
       "label": "Bilirubin",
@@ -250,27 +290,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Name the exact non-haematological adverse event first and apply that event's own CTCAE v5.0 criterion. The general Grade 1-4 severity anchors are a screening aid only and are not a substitute for the named term."
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
@@ -279,27 +328,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy."
     },
     "pneumonitis_grade": {
       "label": "Pneumonitis grade",
@@ -308,27 +366,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "pneumonitis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess new cough, dyspnoea, oxygen requirement, imaging findings, infection and alternative causes. Immune-related or drug-related pneumonitis requires urgent senior review when symptomatic."
     },
     "scar_status": {
       "label": "Severe cutaneous adverse reaction",
@@ -799,5 +866,17 @@
   "output_templates": {
     "proceed": "No encoded hold, discontinuation, or modification criterion was triggered by the entered data.",
     "coverage_gap": "One or more optional clinical domains were not assessed. Missing values have not been interpreted as normal."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "high",
+    "script_id": "nccp-parenteral-high",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Cisplatin is high emetogenic risk in NCCP V6 Table 7.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_High_V2_05.21.pdf",
+    "supportive_medications_label": "CUH high-risk prescription sheet (2021; pharmacy reconciliation required)"
   }
 }

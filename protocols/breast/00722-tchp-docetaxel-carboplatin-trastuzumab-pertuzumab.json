@@ -21,7 +21,15 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.30.1"
+    "sactcheck_encoding_version": "0.37.0",
+    "catalogue_section": "chemotherapy_combination_sact",
+    "catalogue_section_label": "Chemotherapy & combination SACT",
+    "treatment_class": [
+      "cytotoxic_chemotherapy",
+      "combination_sact",
+      "her2_targeted_therapy"
+    ],
+    "cytotoxic": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -223,7 +231,13 @@
       "step": 1,
       "demo_value": 90,
       "ui_section": "labs",
-      "unit": "mL/min"
+      "unit": "mL/min",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Required for carboplatin Calvert dosing and renal safety assessment."
+      },
+      "assessment_guidance": "Enter the verified continuous GFR/CrCl used for carboplatin dosing. The app will apply encoded renal thresholds; confirm the Calvert calculation and local dosing policy independently."
     },
     "bilirubin_abnormal": {
       "label": "Bilirubin above the laboratory normal range",
@@ -290,27 +304,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy."
     },
     "stomatitis_grade": {
       "label": "Stomatitis grade",
@@ -319,27 +342,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired."
     },
     "current_docetaxel_dose": {
       "label": "Current docetaxel dose level",
@@ -369,27 +401,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "hypersensitivity_anaphylaxis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess bronchospasm, urticaria, angioedema, hypotension, airway compromise, treatment route and hospitalisation. Anaphylaxis or life-threatening hypersensitivity requires immediate emergency treatment."
     },
     "relevant_drug_hypersensitivity": {
       "label": "Relevant drug hypersensitivity before treatment",
@@ -1390,5 +1431,17 @@
   "output_templates": {
     "proceed": "No encoded contraindication, hold, dose-modification or treatment-context criterion was triggered. Complete normal prescribing, clinical and pharmacy checks.",
     "coverage_gap": "One or more potentially relevant protocol domains were not assessed."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "high",
+    "script_id": "nccp-parenteral-high",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Carboplatin-containing TCH/TCHP/TRAIN-2 regimen; protocol-specific carboplatin dosing requires high-risk prophylaxis mapping confirmation.",
+    "mapping_confidence": "moderate",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_High_V2_05.21.pdf",
+    "supportive_medications_label": "CUH high-risk prescription sheet (2021; pharmacy reconciliation required)"
   }
 }

@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="SACTCheck">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>SACTCheck v0.36.0 — Complete NCCP breast library</title>
+  <title>SACTCheck v0.37.0 — Platform standardisation</title>
   <style>
     :root {
       --navy:#12314a; --blue:#176b9b; --blue2:#0f567f; --light:#f3f6f8;
@@ -142,7 +142,7 @@
     @media(max-width:800px){.mobile-open-note{display:block}}
 
   
-    .library-controls{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin:14px 0 18px}
+    .library-controls{display:grid;grid-template-columns:2fr 1fr 1.25fr 1fr;gap:10px;margin:14px 0 18px}
     .catalog-count{font-size:13px;color:var(--muted);margin:0 0 12px}
     .health-dashboard{margin:14px 0 18px;background:linear-gradient(135deg,#f8fbfc,#eef7f4);border:1px solid var(--line);border-radius:12px;padding:14px}
     .health-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
@@ -160,7 +160,18 @@
     @media(max-width:900px){.health-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.health-bars{grid-template-columns:1fr}}
     @media(max-width:520px){.health-metrics{grid-template-columns:1fr 1fr}.health-head{display:block}.health-head .badge{margin-top:8px}.progress-row{grid-template-columns:90px 1fr 34px}}
 
-    .category-chip{display:inline-block;padding:4px 8px;border-radius:999px;background:#edf4ff;color:#244b7a;font-size:12px;font-weight:700;margin-bottom:8px}
+    .category-chip{display:inline-block;padding:4px 8px;border-radius:999px;background:#edf4ff;color:#244b7a;font-size:12px;font-weight:700;margin:0 6px 8px 0}
+    .treatment-chip{display:inline-block;padding:4px 8px;border-radius:999px;background:#eef7f4;color:#205f4d;font-size:12px;font-weight:700;margin:0 0 8px}
+    .catalogue-section-heading{grid-column:1/-1;border-bottom:2px solid var(--line);padding:20px 2px 8px;margin-top:10px}
+    .catalogue-section-heading h2{margin:0 0 3px;font-size:21px}.catalogue-section-heading p{margin:0;color:var(--muted);font-size:13px}
+    .supportive-care-summary{border:1px solid var(--line);border-left:5px solid #68869a;border-radius:10px;padding:12px 14px;margin:12px 0;background:#f8fafb}
+    .supportive-care-summary p{margin:5px 0}.supportive-warning{color:#5a4212}
+    .ctcae-guide{margin-top:10px;border:1px solid #d7e1e7;border-radius:9px;background:#f8fbfc}
+    .ctcae-guide summary{cursor:pointer;padding:9px 11px;font-weight:700;color:#284e63}
+    .ctcae-guide-body{padding:0 11px 11px}.ctcae-guide-body p{margin:7px 0}
+    .ctcae-grade-list{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px}
+    .ctcae-grade-list li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:7px 8px;border-radius:7px;background:#fff;border:1px solid #e1e8ec;font-size:13px}
+    @media(max-width:520px){.ctcae-grade-list li{grid-template-columns:1fr}.catalogue-section-heading{padding-top:14px}}
     .validation-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
     .badge.validated{background:#e5f5ea;color:#186a39}.badge.review{background:#fff2cd;color:#795c00}.badge.catalog{background:#eef1f5;color:#4b5563}
     @media(max-width:700px){.library-controls{grid-template-columns:1fr}}
@@ -257,7 +268,7 @@
 
   <div id="libraryScreen" class="screen active">
     <section class="library-only">
-      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Search or browse available NCCP protocols. Select a protocol to begin a structured day-ward assessment.</p></div><div class="toolbar protocol-publisher-actions" style="margin:0"><span class="badge">Version 0.36.0 · Complete NCCP breast library</span><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
+      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Search or browse available NCCP protocols. Select a protocol to begin a structured day-ward assessment.</p></div><div class="toolbar protocol-publisher-actions" style="margin:0"><span class="badge">Version 0.37.0 · Platform standardisation</span><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
       <div class="health-dashboard" id="protocolHealthDashboard" aria-label="Protocol health dashboard" style="display:none">
         <div class="health-head">
           <div><h3>Protocol Health Dashboard</h3><p class="subtle">Live summary of library coverage, rule-pack maturity and validation status.</p></div>
@@ -278,13 +289,14 @@
             <div class="progress-row"><span>Consultant reviewed</span><div class="progress-track"><div class="progress-fill" id="healthConsultBar" style="width:0%"></div></div><strong id="healthConsultPct">0%</strong></div>
             <div class="progress-row"><span>Pharmacy reviewed</span><div class="progress-track"><div class="progress-fill" id="healthPharmBar" style="width:0%"></div></div><strong id="healthPharmPct">0%</strong></div>
           </div>
-          <div class="health-panel"><h4>Tumour-site coverage</h4><div class="health-list" id="healthTumourSites"></div><p class="subtle" style="margin:10px 0 0">Last platform update: <strong>19 July 2026</strong></p></div>
+          <div class="health-panel"><h4>Tumour-site coverage</h4><div class="health-list" id="healthTumourSites"></div><p class="subtle" style="margin:10px 0 0">Last platform update: <strong>23 July 2026</strong></p></div>
         </div>
       </div>
 
       <div class="library-controls">
         <div><label for="regimenSearch">Search regimen</label><input id="regimenSearch" type="search" placeholder="Search by name, drug, NCCP code or indication"></div>
         <div><label for="tumourFilter">Cancer type</label><select id="tumourFilter"><option value="all">All cancer types</option><option value="Gastrointestinal">Gastrointestinal</option><option value="Breast">Breast</option><option value="Gynaecology">Gynaecology</option><option value="Lung">Lung</option><option value="Genitourinary">Genitourinary</option></select></div>
+        <div><label for="treatmentFilter">Treatment category</label><select id="treatmentFilter"><option value="all">All treatment categories</option><option value="chemotherapy_combination_sact">Chemotherapy &amp; combination SACT</option><option value="targeted_her2_therapy">Targeted &amp; HER2 therapies</option><option value="immunotherapy">Immunotherapy</option><option value="endocrine_hormonal_therapy">Endocrine (hormonal) therapies</option><option value="bone_modifying_therapy">Bone-modifying therapies</option><option value="supportive_other">Other SACT / supportive therapy</option></select></div>
         <div><label for="statusFilter">Status</label><select id="statusFilter"><option value="all">All statuses</option><option value="active">Active assessments</option><option value="planned">Catalog / planned</option></select></div>
       </div>
       <p id="catalogCount" class="catalog-count"></p>
@@ -984,11 +996,22 @@
   function showToast(text){const t=$("toast");t.textContent=text;t.style.display="block";setTimeout(()=>t.style.display="none",1800);}
 
   function filterRegimens(){
-    const q=(value("regimenSearch")||"").toLowerCase().trim(), tumour=value("tumourFilter"), status=value("statusFilter");let shown=0;
-    document.querySelectorAll("#regimenGrid .regimen-card").forEach(card=>{const name=(card.dataset.name||"").toLowerCase(), tumours=(card.dataset.tumour||"").split(","), st=card.dataset.status;const okQ=!q||name.includes(q),okT=tumour==="all"||tumours.includes(tumour),okS=status==="all"||st===status;card.style.display=okQ&&okT&&okS?"flex":"none";if(okQ&&okT&&okS)shown++;});
+    const q=(value("regimenSearch")||"").toLowerCase().trim();
+    const tumour=value("tumourFilter"), treatment=value("treatmentFilter")||"all", status=value("statusFilter");
+    let shown=0;
+    document.querySelectorAll("#regimenGrid .regimen-card").forEach(card=>{
+      const name=(card.dataset.name||"").toLowerCase(), tumours=(card.dataset.tumour||"").split(","), st=card.dataset.status, section=card.dataset.section||"supportive_other";
+      const okQ=!q||name.includes(q),okT=tumour==="all"||tumours.includes(tumour),okC=treatment==="all"||section===treatment,okS=status==="all"||st===status;
+      const visible=okQ&&okT&&okC&&okS;card.style.display=visible?"flex":"none";if(visible)shown++;
+    });
+    document.querySelectorAll("#regimenGrid .catalogue-section-heading").forEach(heading=>{
+      const section=heading.dataset.sectionHeading;
+      const anyVisible=[...document.querySelectorAll(`#regimenGrid .regimen-card[data-section="${section}"]`)].some(card=>card.style.display!=="none");
+      heading.style.display=anyVisible?"block":"none";
+    });
     $("catalogCount").textContent=`${shown} regimen${shown===1?"":"s"} shown`;
   }
-  ["regimenSearch","tumourFilter","statusFilter"].forEach(id=>$(id).addEventListener(id==="regimenSearch"?"input":"change",filterRegimens));
+  ["regimenSearch","tumourFilter","treatmentFilter","statusFilter"].forEach(id=>$(id).addEventListener(id==="regimenSearch"?"input":"change",filterRegimens));
   bindNavigation();filterRegimens();updateDayOptions();updateLiveRatios();
 </script>
 
@@ -1961,16 +1984,16 @@ function openProtocolPreview(event){
   }
 }
 </script>
-<script src="js/emetogenic-risk.js?v=0.36.8"></script>
-<script src="js/rule-engine.js?v=0.36.0"></script>
-<script src="js/protocol-validator.js?v=0.36.0"></script>
-<script src="js/assessment-engine.js?v=0.36.0"></script>
-<script src="js/ctcae-descriptors.js?v=0.36.4"></script>
-<script src="js/generic-assessment-ui.js?v=0.36.8"></script>
+<script src="js/emetogenic-risk.js?v=0.37.0"></script>
+<script src="js/rule-engine.js?v=0.37.0"></script>
+<script src="js/protocol-validator.js?v=0.37.0"></script>
+<script src="js/assessment-engine.js?v=0.37.0"></script>
+<script src="js/ctcae-descriptors.js?v=0.37.0"></script>
+<script src="js/generic-assessment-ui.js?v=0.37.0"></script>
 <script src="js/folfox-shadow-core.js"></script>
 <script src="js/folfox-shadow-ui.js"></script>
 
-<script src="js/protocol-loader.js?v=0.36.0"></script>
-<script src="js/protocol-importer-ui.js?v=0.36.0"></script>
+<script src="js/protocol-loader.js?v=0.37.0"></script>
+<script src="js/protocol-importer-ui.js?v=0.37.0"></script>
 </body>
 </html>

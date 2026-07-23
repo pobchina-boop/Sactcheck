@@ -20,10 +20,17 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.29.0",
+    "sactcheck_encoding_version": "0.37.0",
     "partial_assessment_supported": true,
     "source_checked_date": "2026-07-19",
-    "assessment_model": "oral_parp_inhibitor"
+    "assessment_model": "oral_parp_inhibitor",
+    "catalogue_section": "targeted_her2_therapy",
+    "catalogue_section_label": "Targeted & HER2 therapies",
+    "treatment_class": [
+      "parp_inhibitor",
+      "oral_targeted_therapy"
+    ],
+    "cytotoxic": false
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -264,15 +271,42 @@
       "ui_section": "clinical"
     },
     "crcl_ml_min": {
-      "label": "Creatinine clearance",
-      "type": "number",
+      "label": "Creatinine clearance category",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 250,
-      "step": 1,
-      "demo_value": 90,
+      "demo_value": "renal_30_plus",
       "ui_section": "labs",
-      "unit": "mL/min"
+      "unit": "mL/min",
+      "options": [
+        {
+          "value": "renal_0_29",
+          "label": "<30 mL/min",
+          "decision_value": 14,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 29
+        },
+        {
+          "value": "renal_30_plus",
+          "label": ">=30 mL/min",
+          "decision_value": 30,
+          "range_min_inclusive": 30,
+          "range_max_inclusive": null
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis - use the protocol-specific dialysis pathway / specialist review",
+          "decision_value": 0,
+          "sets_fields": {
+            "haemodialysis": true
+          }
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "haemodialysis": {
       "label": "Receiving haemodialysis",
@@ -284,7 +318,9 @@
         "field": "crcl_ml_min",
         "operator": "<",
         "value": 30
-      }
+      },
+      "visible": false,
+      "derived_from": "crcl_ml_min"
     },
     "hepatic_impairment": {
       "label": "Hepatic impairment",
@@ -314,27 +350,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "ui_section": "clinical",
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Name the exact non-haematological adverse event first and apply that event's own CTCAE v5.0 criterion. The general Grade 1-4 severity anchors are a screening aid only and are not a substitute for the named term."
     },
     "other_ae_occurrence": {
       "label": "Other ≥grade 3 adverse-event occurrence",
@@ -898,5 +943,17 @@
   "output_templates": {
     "proceed": "No encoded hold, discontinuation, or modification criterion was triggered by the entered data.",
     "coverage_gap": "One or more optional clinical domains were not assessed. Missing values have not been interpreted as normal."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "oral_moderate_high",
+    "script_id": "nccp-oral-moderate-high",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Oral SACT classification from NCCP V6 Table 8.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "supportive_medications_label": "Oral SACT moderate-high guidance"
   }
 }

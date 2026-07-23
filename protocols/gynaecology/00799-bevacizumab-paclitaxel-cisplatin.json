@@ -20,9 +20,17 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.29.0",
+    "sactcheck_encoding_version": "0.37.0",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-07-19"
+    "source_checked_date": "2026-07-19",
+    "catalogue_section": "chemotherapy_combination_sact",
+    "catalogue_section_label": "Chemotherapy & combination SACT",
+    "treatment_class": [
+      "cytotoxic_chemotherapy",
+      "combination_sact",
+      "antiangiogenic_therapy"
+    ],
+    "cytotoxic": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -164,15 +172,48 @@
       "ui_section": "clinical"
     },
     "crcl_ml_min": {
-      "label": "Creatinine clearance",
-      "type": "number",
+      "label": "Creatinine clearance category",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 250,
-      "step": 1,
-      "demo_value": 90,
+      "demo_value": "renal_60_plus",
       "ui_section": "labs",
-      "unit": "mL/min"
+      "unit": "mL/min",
+      "options": [
+        {
+          "value": "renal_0_39",
+          "label": "<40 mL/min",
+          "decision_value": 19,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 39
+        },
+        {
+          "value": "renal_40_49",
+          "label": "40-49 mL/min",
+          "decision_value": 44,
+          "range_min_inclusive": 40,
+          "range_max_inclusive": 49
+        },
+        {
+          "value": "renal_50_59",
+          "label": "50-59 mL/min",
+          "decision_value": 54,
+          "range_min_inclusive": 50,
+          "range_max_inclusive": 59
+        },
+        {
+          "value": "renal_60_plus",
+          "label": ">=60 mL/min",
+          "decision_value": 60,
+          "range_min_inclusive": 60,
+          "range_max_inclusive": null
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "alt_uln_multiple": {
       "label": "ALT / AST",
@@ -203,27 +244,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "ui_section": "clinical",
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy."
     },
     "neuropathy_delay_weeks": {
       "label": "Weeks treatment delayed for neuropathy",
@@ -274,23 +324,28 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "ui_section": "clinical",
@@ -299,7 +354,11 @@
         "field": "uncontrolled_or_symptomatic_hypertension",
         "operator": "==",
         "value": true
-      }
+      },
+      "ctcae_version": "5.0",
+      "ctcae_category": "hypertension",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Use repeated, correctly measured blood pressure readings and record whether antihypertensive treatment or urgent intervention is required."
     },
     "proteinuria_dipstick": {
       "label": "Urine dipstick protein",
@@ -364,27 +423,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "ui_section": "clinical",
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "fistula",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Use the anatomical site-specific CTCAE fistula term; assess symptoms, need for invasive intervention and life-threatening consequences."
     },
     "thromboembolic_event_grade": {
       "label": "Thromboembolic event grade",
@@ -393,27 +461,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "ui_section": "clinical",
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "thromboembolism",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Confirm the event and assess symptoms, need for anticoagulation or urgent intervention, hospitalisation, haemodynamic or neurological instability."
     },
     "haemorrhage_grade": {
       "label": "Haemorrhage grade",
@@ -422,27 +499,36 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
       "ui_section": "clinical",
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "haemorrhage",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Grade using the site-specific CTCAE haemorrhage term, intervention required, transfusion need, hospitalisation and haemodynamic consequences."
     },
     "gi_perforation": {
       "label": "Gastrointestinal perforation",
@@ -1089,5 +1175,17 @@
   "output_templates": {
     "proceed": "No encoded hold, discontinuation, or modification criterion was triggered by the entered data.",
     "coverage_gap": "One or more optional clinical domains were not assessed. Missing values have not been interpreted as normal."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "high",
+    "script_id": "nccp-parenteral-high",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Cisplatin is high emetogenic risk in NCCP V6 Table 7.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_High_V2_05.21.pdf",
+    "supportive_medications_label": "CUH high-risk prescription sheet (2021; pharmacy reconciliation required)"
   }
 }

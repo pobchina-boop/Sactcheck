@@ -1,77 +1,50 @@
-SACTCheck v0.17 drop-in update
-==============================
-
-Purpose
--------
-v0.17 fixes over-strict generated forms and adds weekly paclitaxel as the first
-new regimen encoded against the final conditional schema. Core and applicable
-conditional fields can block completion; optional or irrelevant fields do not.
-Blank optional values are never interpreted as normal and remain visible in the
-result as unassessed rule-coverage domains.
+SACTCheck v0.37.0 update checks
+===============================
 
 Before copying
 --------------
-1. Confirm the current v0.16.2 changes are committed and pushed on develop.
-2. Keep the existing Sactcheck repository folder and its .git folder.
+1. Commit and push the current branch or create a backup.
+2. Retain the existing repository .git folder.
 
 Install
 -------
-1. Extract SACTCheck_v0.17_drop_in_update.zip anywhere convenient.
-2. Open the extracted SACTCheck_v0.17_drop_in folder.
-3. Copy everything inside it into the root of the existing Sactcheck repository.
-4. Choose "Replace the files in the destination".
-5. Open index.html with VS Code Live Server.
-6. Press Ctrl+F5 once in the browser.
+1. Extract SACTCheck_v0.37.0_Platform_Standardisation.zip.
+2. Copy the contents of the extracted Sactcheck folder into the repository root.
+3. Replace existing files when prompted.
+4. Run `npm run protocols:build`.
+5. Run `npm test`.
+6. Start VS Code Live Server and hard-refresh the browser.
 
 Manual browser checks
 ---------------------
-1. Confirm the catalogue badge reads "Version 0.17 · Conditional JSON assessments".
-2. Open olaparib. Initially confirm febrile-neutropenia grade, haematological
-   occurrence number and haemodialysis are not shown when their triggers do not apply.
-3. Select febrile neutropenia. Confirm grade and occurrence fields appear and become
-   mandatory.
-4. Enter creatinine clearance below 30 mL/min. Confirm haemodialysis appears and
-   becomes mandatory.
-5. Leave optional Child-Pugh and CYP3A fields blank. Confirm the assessment runs,
-   does not infer normality, and lists the omitted domains as unassessed.
-6. Find Weekly paclitaxel. Confirm both the original "Open protocol assessment"
-   button and the new "Open JSON shadow assessment" button remain available.
-7. In the JSON shadow form, load demonstration values and run the assessment.
-8. Test ANC 0.99, platelets 69, bilirubin 1.26 × ULN, bilirubin 5.01 × ULN,
-   grade 2 neuropathy and grade 3 neuropathy.
-9. Confirm Preview protocol JSON still validates and opens the authoring template.
-10. Confirm FOLFOX legacy assessment and its shadow-comparison screen still work.
+1. Confirm the badge reads "Version 0.37.0 · Platform standardisation".
+2. Confirm Treatment Category appears beside the tumour-site and status filters.
+3. Filter Breast + Endocrine and confirm tamoxifen, anastrozole, letrozole, exemestane and fulvestrant appear outside the chemotherapy section.
+4. Search for an endocrine medicine while another treatment category is selected and confirm filter behaviour is explicit and predictable.
+5. Open a high-risk regimen such as sacituzumab govitecan and confirm the supportive-care summary, mapping basis, validation warning and NCCP source link appear.
+6. Open a phase-dependent pembrolizumab/taxane-carboplatin/AC regimen and confirm the antiemetic profile changes with the selected treatment phase rather than showing one static script.
+7. Open a minimal-risk biologic and confirm it does not link to the old parenteral low-risk prescription sheet.
+8. Open a protocol with diarrhoea/colitis, mucositis, neuropathy, rash or infusion-reaction grading and confirm Grade 0-4 definitions and "How to assess" guidance are displayed beside the selector.
+9. Open a protocol with "other non-haematological toxicity" and confirm the app warns that the named CTCAE term must be identified before grading.
+10. Open a protocol with categorical renal guidance and confirm ranges are selected rather than entered as an exact number.
+11. Open a carboplatin regimen and confirm the continuous GFR/CrCl field remains numerical for Calvert dosing.
+12. Confirm each protocol still provides one-click access to the official NCCP PDF.
 
-Automated tests
----------------
-Open a terminal in the repository and run:
+Automated checks
+----------------
+Run:
 
+npm run protocols:build
 npm test
 
-Expected results:
-- 9 protocol-publishing tests passed.
-- 13 generic assessment-engine tests passed.
-- 7 conditional-input tests passed.
-- 24 weekly-paclitaxel JSON tests passed.
-- 17 FOLFOX shadow-comparison tests passed.
-- 70 tests in total.
-
-One-file publication workflow
------------------------------
-1. Copy protocols/_template/protocol-template.json.
-2. Encode and clinically review the regimen.
-3. Preview the JSON in SACTCheck and correct every validation error.
-4. Place the reviewed JSON under the correct protocols/<tumour-site>/ folder.
-5. Commit and push that single JSON file.
-6. GitHub Actions validates the library, rebuilds protocols/index.json, runs all
-   regression tests and commits the regenerated catalogue after a successful push.
-
-Suggested commit message
-------------------------
-Add conditional inputs and weekly paclitaxel JSON v0.17
+Expected v0.37.0 platform audit totals:
+- 121 active regimen protocols
+- 415 CTCAE-enabled fields
+- 32 protocol-specific renal-band fields
+- 27 exact carboplatin renal fields
+- no duplicate protocol IDs, NCCP codes or normalised titles
+- no active regimen placeholders
 
 Clinical boundary
 -----------------
-Weekly paclitaxel remains in JSON shadow-validation mode. The original pathway stays
-active pending consultant, oncology-pharmacy and governance review. Automated
-structural validation and tests do not establish clinical authorisation.
+Do not treat a passing software test as clinical validation. The complete library and the included 2021 local supportive-medicine sheets require consultant, oncology-pharmacy and governance review before deployment.

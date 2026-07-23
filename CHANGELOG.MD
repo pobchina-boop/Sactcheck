@@ -1,3 +1,19 @@
+# SACTCheck v0.37.0 - Platform standardisation
+
+- Standardises the complete 121-regimen catalogue rather than adding a new regimen batch.
+- Separates pure endocrine/hormonal medicines from chemotherapy while retaining global search and tumour-site filtering.
+- Adds explicit catalogue sections and treatment-class metadata to every active regimen.
+- Maps every regimen to the central NCCP V6 emetogenic/supportive-care registry, including phase-dependent and oral SACT pathways.
+- Reconciles stale per-protocol supportive links and clearly labels the included 2021 CUH sheets as pending local pharmacy reconciliation.
+- Upgrades 415 CTCAE-based controls with beside-control Grade 0-4 explanations and practical assessment guidance.
+- Corrects non-haematological toxicity classification and adds specialised diarrhoea/colitis, mucositis/diarrhoea, acneiform, allergic/anaphylaxis, myocarditis, myositis and neurological guidance.
+- Converts 32 categorical renal-rule inputs to protocol-specific range selectors while retaining 27 exact carboplatin/Calvert inputs.
+- Adds treatment-category filtering, section headings, supportive-care summaries and national-source links.
+- Confirms no duplicate protocol IDs, NCCP codes or normalised titles and no active regimen placeholders.
+- Adds the v0.37.0 platform-standardisation regression suite.
+
+All clinical encodings and local supportive-care documents remain pending consultant, oncology-pharmacy and governance validation.
+
 ## v0.36.6
 
 - Encoded five breast placeholder regimens.

@@ -27,10 +27,18 @@
       "clinical_use_authorised": false
     },
     "regimen_reimbursement_code": "00238a",
-    "sactcheck_encoding_version": "0.31.0",
+    "sactcheck_encoding_version": "0.37.0",
     "catalog": {
       "enabled": true
-    }
+    },
+    "catalogue_section": "chemotherapy_combination_sact",
+    "catalogue_section_label": "Chemotherapy & combination SACT",
+    "treatment_class": [
+      "cytotoxic_chemotherapy",
+      "combination_sact",
+      "antiangiogenic_therapy"
+    ],
+    "cytotoxic": true
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -1177,19 +1185,48 @@
       "demo_value": 0
     },
     "crcl_ml_min": {
-      "label": "Creatinine clearance (mL/min)",
-      "type": "number",
+      "label": "Creatinine clearance category",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 300,
-      "step": 1,
-      "demo_value": 75
+      "demo_value": "renal_10_plus",
+      "options": [
+        {
+          "value": "renal_0_9",
+          "label": "<10 mL/min",
+          "decision_value": 4,
+          "range_min_inclusive": 0,
+          "range_max_inclusive": 9
+        },
+        {
+          "value": "renal_10_plus",
+          "label": ">=10 mL/min",
+          "decision_value": 10,
+          "range_min_inclusive": 10,
+          "range_max_inclusive": null
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis - use the protocol-specific dialysis pathway / specialist review",
+          "decision_value": 0,
+          "sets_fields": {
+            "haemodialysis": true
+          }
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Encoded rule thresholds",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
     },
     "haemodialysis": {
       "label": "Haemodialysis",
       "type": "boolean",
       "required": false,
-      "demo_value": false
+      "demo_value": false,
+      "visible": false,
+      "derived_from": "crcl_ml_min"
     },
     "bilirubin_ratio_uln": {
       "label": "Bilirubin (×ULN)",
@@ -1240,39 +1277,151 @@
     },
     "diarrhoea_current_grade": {
       "label": "Current diarrhoea grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "diarrhoea_highest_grade": {
       "label": "Highest diarrhoea grade this cycle",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "stomatitis_current_grade": {
       "label": "Current stomatitis grade",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "stomatitis_highest_grade": {
       "label": "Highest stomatitis grade this cycle",
-      "type": "number",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "demo_value": 0
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ]
     },
     "acute_cholinergic_syndrome": {
       "label": "Acute cholinergic syndrome with irinotecan",
@@ -1361,5 +1510,17 @@
       "ui_section": "clinical",
       "demo_value": false
     }
+  },
+  "supportive_care": {
+    "emetogenic_risk": "low",
+    "script_id": "nccp-parenteral-low",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Highest active parenteral component is low emetogenic risk in NCCP V6 Table 7.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
+    "supportive_medications_label": "CUH low-risk prescription sheet (2021; pharmacy reconciliation required)"
   }
 }
