@@ -45,13 +45,20 @@
       .replaceAll("'", "&#039;");
   }
 
+
+  function normaliseDisplayText(value) {
+    return String(value ?? "")
+      .replaceAll("prednisoLONE", "prednisolone")
+      .replaceAll("predniSONE", "prednisone");
+  }
+
   function shorten(value, maximumLength = 240) {
     const text = String(value ?? "").trim();
     return text.length <= maximumLength ? text : `${text.slice(0, maximumLength - 1).trim()}…`;
   }
 
   function getProtocolTitle(protocol) {
-    return protocol?.metadata?.short_title || protocol?.metadata?.title || protocol?.file_name || "Unnamed protocol";
+    return normaliseDisplayText(protocol?.metadata?.short_title || protocol?.metadata?.title || protocol?.file_name || "Unnamed protocol");
   }
 
   function getProtocolCode(protocol) {

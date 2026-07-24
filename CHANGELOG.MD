@@ -1,3 +1,11 @@
+
+## v0.38.1 — GU catalogue display and alias hotfix
+
+- Context-aware tissue badges and active-site-first multi-tissue labels.
+- Corrected prednisolone display casing.
+- Prevented indication text from creating false trade-name aliases.
+- Added regression coverage for shared GU regimens and alias precision.
+
 # SACTCheck v0.38.0 — Complete prostate treatment library
 
 - Completes the current NCCP prostate deck with 26 fully encoded regimen protocols and no prostate placeholders.

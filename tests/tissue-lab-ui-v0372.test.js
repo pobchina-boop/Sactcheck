@@ -55,11 +55,11 @@ const cytotoxicDefinitions = Engine.getInputDefinitions(cytotoxic, Engine.getPro
 assert(!cytotoxicDefinitions.some(item => item.ui_section === 'immunotherapy_bloods'), 'Non-immunotherapy protocols must not display endocrine screening fields.');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('Version 0.38.0 · Complete prostate library'));
+assert(html.includes('Version 0.38.1 · GU display and alias hotfix'));
 assert(html.includes('id="tissueTypeGrid"'));
 assert(html.includes('id="tissueLandingPanel"'));
-assert(html.includes('js/local-lab-profile.js?v=0.38.0'));
-assert(html.includes('js/tissue-ui.js?v=0.38.0'));
+assert(html.includes('js/local-lab-profile.js?v=0.38.1'));
+assert(html.includes('js/tissue-ui.js?v=0.38.1'));
 const genericUi = fs.readFileSync(path.join(root, 'js/generic-assessment-ui.js'), 'utf8');
 assert(genericUi.includes('id="jsonImmunotherapyBloodSection"'));
 assert(genericUi.includes('id="jsonLabProfilePanel"'));

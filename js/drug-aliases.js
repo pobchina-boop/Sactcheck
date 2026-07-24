@@ -79,13 +79,14 @@
     const values = [
       metadata.title,
       metadata.short_title,
-      metadata.indication,
       protocol?.file_name,
-      ...asArray(protocol?.indications).map(item => item?.description),
       ...asArray(protocol?.treatment_phases).flatMap(phase =>
         asArray(phase?.administration).map(item => item?.drug)
       ),
-      protocol?.treatment?.drug
+      ...asArray(protocol?.treatment?.drugs),
+      protocol?.treatment?.drug,
+      ...asArray(protocol?.regimen_components).map(item => item?.drug || item?.name),
+      ...asArray(metadata.drugs)
     ];
     return values.filter(Boolean).join(" ").toLowerCase();
   }
@@ -112,7 +113,7 @@
   }
 
   root.SACTCheckDrugAliases = Object.freeze({
-    version: "0.38.0",
+    version: "0.38.1",
     entries: ENTRIES,
     forProtocol,
     searchText

@@ -137,37 +137,75 @@
     TISSUES.slice(1).forEach(tissue => ensureFilterOption(selectElement, tissue.values[0], tissue.label));
   }
 
-  function tissueForGroups(groups = []) {
+  function selectedTissue() {
+    const selectedValue = document.getElementById("tumourFilter")?.value || "all";
+    if (selectedValue === "all") return TISSUES[0];
+    return TISSUES.slice(1).find(tissue => tissue.values.includes(selectedValue)) || TISSUES[0];
+  }
+
+  function tissueForGroups(groups = [], preferredTissue = null) {
+    if (preferredTissue && preferredTissue.id !== "all" && preferredTissue.values.some(value => groups.includes(value))) {
+      return preferredTissue;
+    }
     return TISSUES.slice(1).find(tissue => tissue.values.some(value => groups.includes(value))) || TISSUES[0];
   }
 
+  function contextualTumourLabel(groups, activeTissue) {
+    if (!groups.length) return "Uncategorised";
+    if (!activeTissue || activeTissue.id === "all" || !activeTissue.values.some(value => groups.includes(value))) {
+      return groups.join(" · ");
+    }
+    const activeValue = activeTissue.values.find(value => groups.includes(value));
+    const remaining = groups.filter(value => value !== activeValue);
+    return remaining.length ? `${activeValue} · Also: ${remaining.join(" · ")}` : activeValue;
+  }
+
   function decorateCards() {
+    const activeTissue = selectedTissue();
     document.querySelectorAll("#regimenGrid .regimen-card").forEach(card => {
       const groups = String(card.dataset.tumour || "").split(",").map(value => value.trim()).filter(Boolean);
-      const tissue = tissueForGroups(groups);
+      const tissue = tissueForGroups(groups, activeTissue);
       card.style.setProperty("--tissue-color", tissue.color);
       card.classList.add("tissue-themed-card");
+      const category = card.querySelector(":scope > .category-chip");
+      if (category) category.textContent = contextualTumourLabel(groups, activeTissue);
       const existing = card.querySelector(":scope > .card-tissue-badge");
       if (existing) existing.remove();
       const badge = document.createElement("span");
       badge.className = "card-tissue-badge";
-      badge.title = tissue.label;
+      badge.title = tissue.id === "all" ? "Multiple tumour sites" : tissue.label;
       badge.innerHTML = `${icon(tissue)}<span>${escapeHtml(tissue.short)}</span>`;
       card.prepend(badge);
     });
   }
 
-  function refresh() {
-    populateFilter();
+  function syncFromFilter() {
+    const tissue = selectedTissue();
+    document.querySelectorAll(".tissue-tile").forEach(button => {
+      const active = button.dataset.tissueId === tissue.id;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    renderLanding(tissue);
     decorateCards();
-    renderTiles();
-    const activeId = document.querySelector(".tissue-tile.active")?.dataset.tissueId || "all";
-    renderLanding(TISSUES.find(item => item.id === activeId) || TISSUES[0]);
   }
 
-  root.SACTCheckTissueUI = Object.freeze({ version: "0.37.2", tissues: TISSUES, refresh, select });
+  function refresh() {
+    populateFilter();
+    renderTiles();
+    syncFromFilter();
+  }
+
+  root.SACTCheckTissueUI = Object.freeze({ version: "0.38.1", tissues: TISSUES, refresh, select, contextualTumourLabel, tissueForGroups });
   root.addEventListener?.("sactcheck:protocols-loaded", refresh);
   root.addEventListener?.("sactcheck:local-protocol-added", refresh);
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", refresh);
-  else refresh();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      refresh();
+      document.getElementById("tumourFilter")?.addEventListener("change", syncFromFilter);
+    });
+  } else {
+    refresh();
+    document.getElementById("tumourFilter")?.addEventListener("change", syncFromFilter);
+  }
 })(typeof globalThis !== "undefined" ? globalThis : this);

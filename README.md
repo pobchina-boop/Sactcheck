@@ -2,11 +2,11 @@
 
 ## Current release
 
-**SACTCheck v0.38.0 — Complete prostate treatment library**
+**SACTCheck v0.38.1 — Complete prostate treatment library**
 
 SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This release completes the current prostate treatment deck as fully encoded clinical prototypes while preserving tissue-specific navigation, automatic local ULN calculations, optional immunotherapy endocrine bloods, searchable trade-name aliases and single-entry partial assessment.
 
-### v0.38.0 highlights
+### v0.38.1 highlights
 
 - 26 distinct current NCCP prostate regimen protocols, with no prostate placeholders.
 - 24 new Genitourinary JSON protocols plus upgrades to the shared NCCP 00203 docetaxel and NCCP 00588 olaparib protocols.
@@ -18,7 +18,7 @@ SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototy
 - Single-value assessment retained across all 145 active regimens.
 - Complete regression suite passed, including 180 prostate single-input checks.
 
-See `RELEASE_NOTES_v0.38.0.md`, `PROSTATE_LIBRARY_SOURCES_v0.38.0.md` and `VALIDATION_REPORT_v0.38.0.md`.
+See `RELEASE_NOTES_v0.38.1.md`, `PROSTATE_LIBRARY_SOURCES_v0.38.1.md` and `VALIDATION_REPORT_v0.38.1.md`.
 
 ## Safety and governance
 

@@ -108,8 +108,14 @@
       .replace(/\b\w/g, character => character.toUpperCase());
   }
 
+  function normaliseDisplayText(value) {
+    return String(value ?? "")
+      .replaceAll("prednisoLONE", "prednisolone")
+      .replaceAll("predniSONE", "prednisone");
+  }
+
   function getProtocolTitle(protocol) {
-    return protocol?.metadata?.short_title || protocol?.metadata?.title || protocol?.file_name || "Unnamed protocol";
+    return normaliseDisplayText(protocol?.metadata?.short_title || protocol?.metadata?.title || protocol?.file_name || "Unnamed protocol");
   }
 
   function getProtocolCode(protocol) {
