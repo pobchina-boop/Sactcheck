@@ -2,14 +2,11 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00216-v8",
   "file_name": "00216-capecitabine-monotherapy.json",
-  "status": "live_json_assessment_pending_clinical_and_pharmacy_validation",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00216",
     "nccp_version": "8",
-    "tumour_group": [
-      "Breast",
-      "Gastrointestinal"
-    ],
+    "tumour_group": "Gastrointestinal",
     "title": "Capecitabine Monotherapy",
     "short_title": "Capecitabine",
     "indication": "Breast and colorectal cancer indications; 1250 mg/m² twice daily on days 1–14 every 21 days.",
@@ -26,7 +23,10 @@
       "automated_shadow_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "software_tests_completed": true,
+      "official_catalogue_and_source_link_checked": true,
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -34,10 +34,19 @@
       "cytotoxic_chemotherapy"
     ],
     "cytotoxic": true,
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.39.0",
     "catalog": {
       "enabled": true
-    }
+    },
+    "gi_subgroup": "colorectal",
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
+    "drugs": [
+      "capecitabine"
+    ],
+    "common_trade_names": [
+      "Xeloda"
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -68,6 +77,10 @@
     {
       "indication_id": "00216f",
       "description": "Adjuvant residual triple-negative breast cancer after neoadjuvant chemotherapy."
+    },
+    {
+      "indication_id": "00216-gi",
+      "description": "Metastatic colorectal cancer and adjuvant treatment after resection of stage II/III colon cancer."
     }
   ],
   "treatment_phases": [
@@ -94,27 +107,7 @@
       "-3": "discontinue"
     }
   },
-  "required_inputs": [
-    "assessment_type",
-    "cycle_number",
-    "hypersensitivity",
-    "pregnancy",
-    "breastfeeding",
-    "recent_or_concomitant_brivudine",
-    "history_severe_unexpected_fluoropyrimidine_reaction",
-    "dpd_status",
-    "anc_x10e9_l",
-    "platelets_x10e9_l",
-    "haematology_occurrence",
-    "crcl_ml_min",
-    "haemodialysis",
-    "diarrhoea_current_grade",
-    "diarrhoea_occurrence",
-    "hand_foot_grade",
-    "toxicity_occurrence",
-    "bilirubin_ratio_uln",
-    "alt_ast_ratio_uln"
-  ],
+  "required_inputs": [],
   "output_templates": {
     "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
     "discontinue": "The entered data trigger protocol discontinuation.",
@@ -607,7 +600,6 @@
       ],
       "renal_input": {
         "mode": "protocol_specific_band",
-        "source": "Encoded rule thresholds",
         "exact_value_required": false
       },
       "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
@@ -633,27 +625,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
         }
       ]
     },
@@ -679,27 +676,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No palmar–plantar erythrodysesthesia."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Minimal skin changes or dermatitis, such as erythema, oedema or hyperkeratosis, without pain."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Painful skin changes, including peeling, blisters, bleeding, fissures, oedema or hyperkeratosis; limits instrumental activities of daily living."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Severe painful skin changes; limits self-care activities of daily living."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Grade 4 is not defined under the CTCAE palmar–plantar erythrodysesthesia term; use another term for life-threatening complications."
         }
       ]
     },

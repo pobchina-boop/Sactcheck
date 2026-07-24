@@ -1,3 +1,10 @@
+# v0.39.0 — Complete Gastrointestinal Library (24 July 2026)
+
+- Completed all 93 official NCCP GI regimen cards as active assessment protocols.
+- Added 65 new GI protocol files and reconciled 28 canonical existing/shared protocols.
+- Added GI-wide single-entry, CTCAE, ULN, renal-band, supportive-care and alias regression coverage.
+- Rebuilt the 210-protocol index and central supportive-care map.
+
 
 ## v0.38.1 — GU catalogue display and alias hotfix
 

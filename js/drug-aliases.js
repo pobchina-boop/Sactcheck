@@ -39,6 +39,20 @@
     { terms: ["niraparib"], aliases: ["Zejula"] },
     { terms: ["regorafenib"], aliases: ["Stivarga"] },
     { terms: ["trifluridine_tipiracil", "trifluridine tipiracil", "lonsurf"], aliases: ["Lonsurf"] },
+    { terms: ["cetuximab"], aliases: ["Erbitux"] },
+    { terms: ["ipilimumab"], aliases: ["Yervoy"] },
+    { terms: ["fruquintinib"], aliases: ["Fruzaqla"] },
+    { terms: ["ivosidenib"], aliases: ["Tibsovo"] },
+    { terms: ["lenvatinib"], aliases: ["Lenvima"] },
+    { terms: ["lutetium-177 oxodotreotide", "lutetium (177lu) oxodotreotide", "lutathera"], aliases: ["Lutathera"] },
+    { terms: ["pemigatinib"], aliases: ["Pemazyre"] },
+    { terms: ["sorafenib"], aliases: ["Nexavar"] },
+    { terms: ["tegafur/gimeracil/oteracil", "s-1", "teysuno"], aliases: ["Teysuno"] },
+    { terms: ["tislelizumab"], aliases: ["Tevimbra"] },
+    { terms: ["carboplatin"], aliases: ["Paraplatin"] },
+    { terms: ["cisplatin"], aliases: ["Platinol"] },
+    { terms: ["epirubicin"], aliases: ["Pharmorubicin"] },
+    { terms: ["temozolomide"], aliases: ["Temodal"] },
     { terms: ["aflibercept"], aliases: ["Zaltrap"] },
     { terms: ["bevacizumab"], aliases: ["Avastin"] },
     { terms: ["pembrolizumab"], aliases: ["Keytruda"] },
@@ -113,7 +127,7 @@
   }
 
   root.SACTCheckDrugAliases = Object.freeze({
-    version: "0.38.1",
+    version: "0.39.0",
     entries: ENTRIES,
     forProtocol,
     searchText

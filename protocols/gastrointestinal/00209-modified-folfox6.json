@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00209-v10a",
   "file_name": "00209-modified-folfox6.json",
-  "status": "live_json_assessment_pending_clinical_and_pharmacy_validation",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00209",
     "nccp_version": "10a",
@@ -25,7 +25,10 @@
       "automated_shadow_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "software_tests_completed": true,
+      "official_catalogue_and_source_link_checked": true,
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -33,10 +36,21 @@
       "cytotoxic_chemotherapy"
     ],
     "cytotoxic": true,
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.39.0",
     "catalog": {
       "enabled": true
-    }
+    },
+    "gi_subgroup": "colorectal_upper_gi",
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
+    "drugs": [
+      "oxaliplatin",
+      "folinic acid",
+      "5-fluorouracil"
+    ],
+    "common_trade_names": [
+      "Eloxatin"
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -55,6 +69,10 @@
     {
       "indication_id": "00209c",
       "description": "Advanced or metastatic adenocarcinoma of the stomach or gastro-oesophageal junction."
+    },
+    {
+      "indication_id": "00209-gi",
+      "description": "Adjuvant stage II/III colon cancer, metastatic colorectal cancer, or advanced gastric/GEJ adenocarcinoma."
     }
   ],
   "treatment_phases": [
@@ -123,37 +141,7 @@
       "-3": "discontinue"
     }
   },
-  "required_inputs": [
-    "assessment_type",
-    "cycle_number",
-    "delay_weeks",
-    "current_oxaliplatin_level",
-    "current_bolus_5fu_level",
-    "current_infusional_5fu_level",
-    "hypersensitivity",
-    "pregnancy",
-    "breastfeeding",
-    "baseline_functional_neuropathy",
-    "dpd_status",
-    "anc_x10e9_l",
-    "platelets_x10e9_l",
-    "lowest_anc_delayed_weeks_x10e9_l",
-    "lowest_platelets_delayed_weeks_x10e9_l",
-    "crcl_ml_min",
-    "haemodialysis",
-    "hepatic_impairment_category",
-    "neuropathy_grade",
-    "neuropathy_pattern",
-    "laryngopharyngeal_dysaesthesia",
-    "unexplained_respiratory_symptoms",
-    "diarrhoea_current_grade",
-    "diarrhoea_highest_grade",
-    "diarrhoea_duration_weeks",
-    "stomatitis_current_grade",
-    "stomatitis_highest_grade",
-    "stomatitis_duration_weeks",
-    "significant_ppe"
-  ],
+  "required_inputs": [],
   "output_templates": {
     "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
     "discontinue": "The entered data trigger protocol discontinuation.",
@@ -1280,7 +1268,6 @@
       ],
       "renal_input": {
         "mode": "protocol_specific_band",
-        "source": "Encoded rule thresholds",
         "exact_value_required": false
       },
       "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation."
@@ -1331,27 +1318,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No peripheral sensory or motor neuropathy."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Asymptomatic; clinical or diagnostic observations only. CTCAE v5.0 grades symptomatic paraesthesia separately when that is the more accurate term."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Moderate symptoms that limit instrumental activities of daily living."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Severe symptoms that limit self-care activities of daily living."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening neurological consequences; urgent intervention required."
         }
       ]
     },
@@ -1405,27 +1397,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
         }
       ]
     },
@@ -1443,27 +1440,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
         }
       ]
     },
@@ -1490,27 +1492,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
         }
       ]
     },
@@ -1528,27 +1535,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
         }
       ]
     },
