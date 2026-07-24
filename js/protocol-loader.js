@@ -67,10 +67,17 @@
 
   function getTumourGroups(entry, protocol) {
     const metadata = protocol.metadata || {};
-    const groups = asArray(metadata.tumour_groups || entry.tumour_group || metadata.tumour_group || "Uncategorised")
+    const primary = typeof metadata.tumour_group === "string" ? metadata.tumour_group.trim() : "";
+    const plural = asArray(metadata.tumour_groups)
       .flatMap(group => String(group).split(","))
       .map(group => group.trim())
       .filter(Boolean);
+    const indexed = asArray(entry?.tumour_group)
+      .flatMap(group => String(group).split(","))
+      .map(group => group.trim())
+      .filter(Boolean);
+    if (primary && plural.length && !plural.includes(primary)) return [primary];
+    const groups = plural.length ? plural : (indexed.length ? indexed : (primary ? [primary] : ["Uncategorised"]));
     return [...new Set(groups)];
   }
 

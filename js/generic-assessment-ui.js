@@ -257,7 +257,12 @@
     const aliases = root.SACTCheckDrugAliases?.forProtocol(protocol) || [];
     document.getElementById("jsonProtocolAliases").textContent = aliases.length ? aliases.join(" · ") : "None mapped";
     document.getElementById("jsonProtocolCode").textContent = `${Engine.getProtocolCode(protocol)}${metadata.nccp_version ? ` / ${metadata.nccp_version}` : ""}`;
-    document.getElementById("jsonProtocolTumour").textContent = asArray(metadata.tumour_groups || metadata.tumour_group).join(" · ") || "Uncategorised";
+    const primaryTumour = typeof metadata.tumour_group === "string" ? metadata.tumour_group.trim() : "";
+    const listedTumours = asArray(metadata.tumour_groups).map(value => String(value).trim()).filter(Boolean);
+    const displayedTumours = primaryTumour && listedTumours.length && !listedTumours.includes(primaryTumour)
+      ? [primaryTumour]
+      : (listedTumours.length ? listedTumours : (primaryTumour ? [primaryTumour] : []));
+    document.getElementById("jsonProtocolTumour").textContent = displayedTumours.join(" · ") || "Uncategorised";
     document.getElementById("jsonProtocolStatus").textContent = humanise(protocol.status || "not specified");
     const deterministicRules = asArray(protocol.rule_engine?.rules).length;
     const iraeReferenceRules = asArray(protocol.pembrolizumab_irae_rules?.rules).length;

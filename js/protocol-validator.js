@@ -145,6 +145,17 @@
     target.push({ code, message, path: path || null, ...extra });
   }
 
+  function canonicalTumourGroups(metadata = {}) {
+    const primary = typeof metadata.tumour_group === "string" ? metadata.tumour_group.trim() : "";
+    const plural = asArray(metadata.tumour_groups)
+      .flatMap(group => String(group).split(","))
+      .map(group => group.trim())
+      .filter(Boolean);
+    if (primary && plural.length && !plural.includes(primary)) return [primary];
+    const groups = plural.length ? plural : (primary ? [primary] : []);
+    return [...new Set(groups)];
+  }
+
   function validate(protocol, options = {}) {
     const strict = options.strict !== false;
     const errors = [];
@@ -175,6 +186,14 @@
       });
       if (!metadata.tumour_group && !asArray(metadata.tumour_groups).length) {
         addIssue(errors, "TUMOUR_GROUP_REQUIRED", "A tumour group is required in metadata.tumour_group or metadata.tumour_groups.", "metadata");
+      }
+      const primaryTumourGroup = typeof metadata.tumour_group === "string" ? metadata.tumour_group.trim() : "";
+      const listedTumourGroups = asArray(metadata.tumour_groups)
+        .flatMap(group => String(group).split(","))
+        .map(group => group.trim())
+        .filter(Boolean);
+      if (primaryTumourGroup && listedTumourGroups.length && !listedTumourGroups.includes(primaryTumourGroup)) {
+        addIssue(errors, "TUMOUR_GROUP_CONFLICT", `metadata.tumour_group '${primaryTumourGroup}' is not present in metadata.tumour_groups.`, "metadata.tumour_groups");
       }
       if (!metadata.source_url) {
         addIssue(warnings, "SOURCE_URL_MISSING", "metadata.source_url is not present.", "metadata.source_url");
@@ -361,7 +380,7 @@
 
   function buildIndexEntry(protocol, relativePath) {
     const metadata = protocol?.metadata || {};
-    const groups = asArray(metadata.tumour_groups || metadata.tumour_group).filter(Boolean);
+    const groups = canonicalTumourGroups(metadata);
     const migration = metadata.migration || {};
     const entry = {
       id: protocol.protocol_id,
@@ -388,6 +407,7 @@
     SUPPORTED_ACTION_TYPES,
     normaliseInputDefinitions,
     conditionFromRule,
+    canonicalTumourGroups,
     collectConditionFields,
     validate,
     buildIndexEntry,
