@@ -1,39 +1,36 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00203-v7",
-  "file_name": "00203-docetaxel-75-21-day.json",
+  "protocol_id": "nccp-00101-v8",
+  "file_name": "00101-cabazitaxel-prednisolone.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
-    "nccp_regimen_code": "00203",
-    "nccp_version": 7,
-    "title": "DOCEtaxel Monotherapy 75 mg/m² – 21 day cycle",
-    "short_title": "Docetaxel 75 q21d",
-    "indication": "Docetaxel monotherapy for advanced breast cancer and first-line high-risk non-metastatic or metastatic castration-sensitive prostate cancer.",
-    "icd10": [
-      "C50",
-      "C61"
-    ],
-    "source_document_pages": 5,
-    "source_url": "https://healthservice.hse.ie/documents/6543/203_DOCEtaxel_75-21day.pdf",
+    "nccp_regimen_code": "00101",
+    "nccp_version": 8,
+    "tumour_group": "Genitourinary",
+    "title": "Cabazitaxel and prednisoLONE Therapy",
+    "short_title": "Cabazitaxel + prednisolone",
+    "indication": "Cabazitaxel with prednisone/prednisolone for metastatic castration-resistant prostate cancer previously treated with docetaxel.",
+    "icd10": "C61",
+    "source_document_pages": 7,
+    "source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
     "sactcheck_encoding_version": "0.38.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
-      "locally_advanced",
       "metastatic",
-      "castration_sensitive"
+      "castration_resistant"
     ],
     "treatment_context": [
-      "locally_advanced",
       "metastatic",
-      "castration_sensitive"
+      "castration_resistant"
     ],
     "treatment_class": [
       "cytotoxic_chemotherapy",
       "taxane"
     ],
     "administration_route": [
-      "intravenous"
+      "intravenous",
+      "oral"
     ],
     "cytotoxic": true,
     "catalogue_section": "chemotherapy_combination_sact",
@@ -51,11 +48,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
-    "tumour_groups": [
-      "Breast",
-      "Genitourinary"
-    ],
-    "file_name": "00203-docetaxel-75-21-day.json"
+    "file_name": "00101-cabazitaxel-prednisolone.json"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
@@ -81,8 +74,8 @@
       "demo_value": 200,
       "unit": "×10⁹/L"
     },
-    "febrile_neutropenia_or_prolonged_grade4": {
-      "label": "Febrile neutropenia or ANC <0.5 ×10⁹/L for >1 week",
+    "febrile_neutropenia_or_prolonged_grade3": {
+      "label": "Febrile neutropenia, neutropenic infection, or prolonged Grade ≥3 neutropenia",
       "type": "boolean",
       "required": false,
       "demo_value": false
@@ -94,22 +87,90 @@
       "options": [
         {
           "value": "standard",
-          "label": "Bilirubin normal and enzymes below adjustment bands"
+          "label": "Bilirubin ≤ULN and AST ≤1.5 ×ULN"
         },
         {
-          "value": "dose75",
-          "label": "Bilirubin normal; AST/ALT >1.5–5 ×ULN with ALP >2.5–5 ×ULN — 75% dose"
+          "value": "mild",
+          "label": "Bilirubin >1 to ≤1.5 ×ULN or AST >1.5 ×ULN — 20 mg/m²"
         },
         {
-          "value": "dose50",
-          "label": "Bilirubin 1–1.5 ×ULN and/or AST/ALT >5–10 ×ULN with ALP <6 ×ULN — 50% dose"
+          "value": "moderate",
+          "label": "Bilirubin >1.5 to ≤3 ×ULN — maximum 15 mg/m²"
         },
         {
-          "value": "not_recommended",
-          "label": "Bilirubin >1.5 ×ULN or AST/ALT >10 ×ULN or ALP >6 ×ULN — not recommended"
+          "value": "severe",
+          "label": "Bilirubin >3 ×ULN — contraindicated"
         }
       ],
       "demo_value": "standard"
+    },
+    "renal_band": {
+      "label": "Renal function category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge15",
+          "label": "CrCl ≥15 mL/min — no adjustment"
+        },
+        {
+          "value": "lt15",
+          "label": "CrCl <15 mL/min — caution"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis — caution / specialist review"
+        }
+      ],
+      "demo_value": "ge15",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Official NCCP protocol-specific renal categories",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal category matching the verified CrCl/eGFR. Exact numerical entry is not required because the NCCP decision is categorical."
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No diarrhoea",
+          "description": "No increase over baseline stool frequency.",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Grade 1",
+          "description": "Increase of <4 stools/day over baseline; mild increase in ostomy output.",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Grade 2",
+          "description": "Increase of 4–6 stools/day over baseline; moderate ostomy-output increase; limits instrumental activities of daily living.",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Grade 3",
+          "description": "Increase of ≥7 stools/day over baseline; incontinence, hospitalisation or severe ostomy-output increase; limits self-care activities of daily living.",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Grade 4",
+          "description": "Life-threatening consequences requiring urgent intervention.",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
@@ -153,50 +214,8 @@
       "ctcae_category": "neuropathy",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
     },
-    "skin_toxicity_grade": {
-      "label": "Skin toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0 — No rash",
-          "description": "No rash.",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1 — Grade 1",
-          "description": "Macules/papules covering <10% body-surface area, with or without symptoms.",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2 — Grade 2",
-          "description": "10–30% body-surface area, or limiting instrumental activities of daily living.",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Grade 3",
-          "description": ">30% body-surface area, limiting self-care activities of daily living, or requiring systemic treatment.",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Grade 4",
-          "description": "Life-threatening skin reaction requiring urgent intervention.",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "rash",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
-    },
     "stomatitis_grade": {
-      "label": "Stomatitis / oral mucositis grade",
+      "label": "Stomatitis grade",
       "type": "select",
       "required": false,
       "options": [
@@ -274,7 +293,7 @@
     ],
     "rules": [
       {
-        "id": "ANC_DELAY",
+        "id": "ANC",
         "priority": 8,
         "when": {
           "field": "anc_x10e9_l",
@@ -286,16 +305,16 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Delay docetaxel until ANC ≥1.5 ×10⁹/L."
+          "message": "Delay one week until ANC >1.5 ×10⁹/L."
         },
         "source": {
-          "page": 3,
+          "page": 4,
           "document": "Official NCCP regimen"
         },
-        "explanation": "Delay docetaxel until ANC ≥1.5 ×10⁹/L."
+        "explanation": "Delay one week until ANC >1.5 ×10⁹/L."
       },
       {
-        "id": "PLATELET_REVIEW",
+        "id": "PLT",
         "priority": 8,
         "when": {
           "field": "platelets_x10e9_l",
@@ -307,19 +326,19 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Delay and review thrombocytopenia according to the official NCCP protocol."
+          "message": "Delay until platelets >100 ×10⁹/L."
         },
         "source": {
-          "page": 3,
+          "page": 4,
           "document": "Official NCCP regimen"
         },
-        "explanation": "Delay and review thrombocytopenia according to the official NCCP protocol."
+        "explanation": "Delay until platelets >100 ×10⁹/L."
       },
       {
-        "id": "FN_REDUCE",
+        "id": "FN",
         "priority": 7,
         "when": {
-          "field": "febrile_neutropenia_or_prolonged_grade4",
+          "field": "febrile_neutropenia_or_prolonged_grade3",
           "operator": "==",
           "value": true
         },
@@ -328,139 +347,184 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Delay until recovery, then reduce docetaxel to 60 mg/m²."
+          "message": "Delay until ANC >1.5 then reduce 25→20 mg/m²; for recurrence consider 15 mg/m² or discontinue."
         },
         "source": {
-          "page": 3,
+          "page": 4,
           "document": "Official NCCP regimen"
         },
-        "explanation": "Delay until recovery, then reduce docetaxel to 60 mg/m²."
+        "explanation": "Delay until ANC >1.5 then reduce 25→20 mg/m²; for recurrence consider 15 mg/m² or discontinue."
       },
       {
-        "id": "HEPATIC_75",
+        "id": "HEP_MILD",
         "priority": 12,
         "when": {
           "field": "hepatic_band",
           "operator": "==",
-          "value": "dose75"
+          "value": "mild"
         },
         "action": {
           "type": "dose_reduce",
           "components": [
             "whole_regimen"
           ],
-          "message": "Administer 75% of the original docetaxel dose."
+          "message": "Use cabazitaxel 20 mg/m²."
         },
         "source": {
-          "page": 3,
+          "page": 4,
           "document": "Official NCCP regimen"
         },
-        "explanation": "Administer 75% of the original docetaxel dose."
+        "explanation": "Use cabazitaxel 20 mg/m²."
       },
       {
-        "id": "HEPATIC_50",
+        "id": "HEP_MOD",
         "priority": 12,
         "when": {
           "field": "hepatic_band",
           "operator": "==",
-          "value": "dose50"
+          "value": "moderate"
         },
         "action": {
           "type": "dose_reduce",
           "components": [
             "whole_regimen"
           ],
-          "message": "Administer 50% of the original docetaxel dose."
+          "message": "Use a maximum cabazitaxel dose of 15 mg/m²."
         },
         "source": {
-          "page": 3,
+          "page": 4,
           "document": "Official NCCP regimen"
         },
-        "explanation": "Administer 50% of the original docetaxel dose."
+        "explanation": "Use a maximum cabazitaxel dose of 15 mg/m²."
       },
       {
-        "id": "HEPATIC_STOP",
+        "id": "HEP_SEVERE",
         "priority": 1,
         "when": {
           "field": "hepatic_band",
           "operator": "==",
-          "value": "not_recommended"
+          "value": "severe"
         },
         "action": {
           "type": "contraindicated",
           "components": [
             "whole_regimen"
           ],
-          "message": "Docetaxel is not recommended in this hepatic-function band."
+          "message": "Cabazitaxel is contraindicated when bilirubin >3 ×ULN."
         },
         "source": {
-          "page": 3,
+          "page": 4,
           "document": "Official NCCP regimen"
         },
-        "explanation": "Docetaxel is not recommended in this hepatic-function band."
+        "explanation": "Cabazitaxel is contraindicated when bilirubin >3 ×ULN."
+      },
+      {
+        "id": "RENAL",
+        "priority": 13,
+        "when": {
+          "field": "renal_band",
+          "operator": "in",
+          "value": [
+            "lt15",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "CrCl <15 mL/min or dialysis requires caution and specialist review."
+        },
+        "source": {
+          "page": 4,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "CrCl <15 mL/min or dialysis requires caution and specialist review."
+      },
+      {
+        "id": "DIARRHOEA",
+        "priority": 7,
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Delay Grade ≥3/persistent diarrhoea until improvement, then reduce 25→20 mg/m²."
+        },
+        "source": {
+          "page": 4,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Delay Grade ≥3/persistent diarrhoea until improvement, then reduce 25→20 mg/m²."
       },
       {
         "id": "NEUROPATHY",
-        "priority": 12,
+        "priority": 7,
         "when": {
           "field": "neuropathy_grade",
-          "operator": ">",
+          "operator": ">=",
           "value": 2
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "delay_then_dose_reduce",
           "components": [
             "whole_regimen"
           ],
-          "message": "For neuropathy >Grade 2, reduce to the next dose level; discontinue if persistent at the lower dose."
+          "message": "Delay Grade ≥2 neuropathy until improvement, then reduce dose."
         },
         "source": {
-          "page": 3,
+          "page": 4,
           "document": "Official NCCP regimen"
         },
-        "explanation": "For neuropathy >Grade 2, reduce to the next dose level; discontinue if persistent at the lower dose."
+        "explanation": "Delay Grade ≥2 neuropathy until improvement, then reduce dose."
       },
       {
-        "id": "SKIN",
-        "priority": 12,
+        "id": "STOMATITIS3",
+        "priority": 5,
         "when": {
-          "field": "skin_toxicity_grade",
-          "operator": ">=",
+          "field": "stomatitis_grade",
+          "operator": "==",
           "value": 3
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold_then_reduce",
           "components": [
             "whole_regimen"
           ],
-          "message": "Grade 3 skin toxicity triggers reduction to the next dose level; discontinue if persistent."
+          "message": "Withhold Grade 3 stomatitis until Grade ≤1, then resume at 20 mg/m²."
         },
         "source": {
-          "page": 3,
+          "page": 4,
           "document": "Official NCCP regimen"
         },
-        "explanation": "Grade 3 skin toxicity triggers reduction to the next dose level; discontinue if persistent."
+        "explanation": "Withhold Grade 3 stomatitis until Grade ≤1, then resume at 20 mg/m²."
       },
       {
-        "id": "STOMATITIS",
-        "priority": 12,
+        "id": "STOMATITIS4",
+        "priority": 2,
         "when": {
           "field": "stomatitis_grade",
           "operator": ">=",
-          "value": 3
+          "value": 4
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "discontinue",
           "components": [
             "whole_regimen"
           ],
-          "message": "Grade 3/4 stomatitis triggers reduction to the next dose level; discontinue if persistent."
+          "message": "Discontinue for Grade 4 stomatitis."
         },
         "source": {
-          "page": 3,
+          "page": 4,
           "document": "Official NCCP regimen"
         },
-        "explanation": "Grade 3/4 stomatitis triggers reduction to the next dose level; discontinue if persistent."
+        "explanation": "Discontinue for Grade 4 stomatitis."
       },
       {
         "id": "HSR",
@@ -475,37 +539,44 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Stop docetaxel for a severe hypersensitivity reaction and manage urgently."
+          "message": "Discontinue for severe hypersensitivity."
         },
         "source": {
-          "page": 4,
+          "page": 5,
           "document": "Official NCCP regimen"
         },
-        "explanation": "Stop docetaxel for a severe hypersensitivity reaction and manage urgently."
+        "explanation": "Discontinue for severe hypersensitivity."
       }
     ]
   },
   "treatment": {
-    "cycle": "Every 21 days",
+    "cycle_days": 21,
     "administration": [
       {
-        "drug": "docetaxel",
-        "dose": "75 mg/m²",
-        "route": "IV",
-        "day": 1
+        "drug": "cabazitaxel",
+        "dose": "25 mg/m² IV day 1 (20 mg/m² alternative)",
+        "route": "IV"
+      },
+      {
+        "drug": "predniSONE/prednisoLONE",
+        "dose": "10 mg daily",
+        "route": "PO",
+        "cycle": "continuous"
       }
     ],
     "dose_reductions": [
-      "60 mg/m²"
+      "25 → 20 mg/m²",
+      "Consider 15 mg/m² or discontinue for recurrence"
     ]
   },
   "eligibility": [
-    "Approved indication",
-    "Adequate marrow and organ function"
+    "mCRPC previously treated with docetaxel",
+    "ANC ≥1.5 ×10⁹/L",
+    "Platelets ≥100 ×10⁹/L"
   ],
   "exclusions": [
-    "Hypersensitivity to docetaxel/polysorbate 80",
-    "Hepatic impairment in not-recommended band"
+    "Severe hepatic impairment",
+    "Hypersensitivity"
   ],
   "monitoring": {
     "baseline": [
@@ -513,53 +584,22 @@
     ],
     "regular": [
       "FBC and liver profile before each cycle",
-      "Neuropathy, skin and mucosal toxicity"
+      "GI toxicity and neuropathy"
     ]
   },
   "supportive_care": {
     "emetogenic_risk": "low",
-    "script_id": "docetaxel-cuh-v2",
+    "script_id": "nccp-parenteral-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Docetaxel is low emetogenic risk; the regimen also requires its protocol-specific corticosteroid premedication.",
+    "mapping_basis": "Cabazitaxel is low emetogenic risk.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
-    "premedications": "Docetaxel dexamethasone schedule exactly as stated in the NCCP source; if missed, follow the NCCP/local rescue pathway.",
-    "growth_factor": "G-CSF may be used according to patient/regimen risk and NCCP guidance.",
-    "supportive_medications_pdf_url": "assets/supportive-care/Docetaxel_Supportive_Medicines_V2_05.2021.pdf",
-    "supportive_medications_label": "CUH docetaxel supportive medicines sheet (2021; pharmacy reconciliation required)"
-  },
-  "indications": [
-    {
-      "indication_id": "advanced_breast",
-      "description": "Advanced breast cancer.",
-      "icd10": [
-        "C50"
-      ],
-      "reimbursement_codes": [
-        "00203a"
-      ]
-    },
-    {
-      "indication_id": "high_risk_nonmetastatic_cspc",
-      "description": "First-line high-risk non-metastatic castration-sensitive prostate cancer.",
-      "icd10": [
-        "C61"
-      ],
-      "reimbursement_codes": [
-        "00203b"
-      ]
-    },
-    {
-      "indication_id": "metastatic_cspc",
-      "description": "First-line metastatic castration-sensitive prostate cancer.",
-      "icd10": [
-        "C61"
-      ],
-      "reimbursement_codes": [
-        "00203c"
-      ]
-    }
-  ]
+    "premedications": "Chlorphenamine 10 mg IV, dexamethasone 8 mg IV and famotidine 20 mg IV approximately 30 minutes before cabazitaxel.",
+    "growth_factor": "Consider primary G-CSF for high-risk patients; secondary prophylaxis is recommended after neutropenic complications.",
+    "other": "Provide loperamide and hydration advice from cycle 1.",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
+    "supportive_medications_label": "CUH low-risk prescription sheet (2021; pharmacy reconciliation required)"
+  }
 }

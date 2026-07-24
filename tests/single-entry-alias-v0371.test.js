@@ -58,7 +58,7 @@ for (const file of protocolFiles()) {
   }
   auditedProtocols += 1;
 }
-assert(auditedProtocols >= 121, `Expected to audit at least 121 regimens, audited ${auditedProtocols}.`);
+assert(auditedProtocols >= 145, `Expected to audit at least 145 regimens, audited ${auditedProtocols}.`);
 assert(auditedFields >= 500, `Expected broad single-field coverage, audited only ${auditedFields} fields.`);
 
 const aliasContext = { globalThis: null };
@@ -76,9 +76,9 @@ assert(!Aliases.forProtocol(phesgo).includes('Herceptin'), 'Phesgo should not be
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const loader = fs.readFileSync(path.join(root, 'js', 'protocol-loader.js'), 'utf8');
-assert(html.includes('Version 0.37.2 · Tissue UI + automatic ULN'), 'v0.37.2 badge is missing.');
-assert(html.includes('js/drug-aliases.js?v=0.37.2'), 'Alias registry is not loaded with the current cache key.');
+assert(html.includes('Version 0.38.0 · Complete prostate library'), 'v0.38.0 badge is missing.');
+assert(html.includes('js/drug-aliases.js?v=0.38.0'), 'Alias registry is not loaded with the current cache key.');
 assert(loader.includes('Common / trade names:'), 'Catalogue cards do not display common/trade names.');
 assert(loader.includes('aliases.join(" ")'), 'Trade names are not added to catalogue search text.');
 
-console.log(`v0.37.2 single-entry and alias tests passed across ${auditedProtocols} regimens and ${auditedFields} visible rule inputs.`);
+console.log(`v0.38.0 single-entry and alias tests passed across ${auditedProtocols} regimens and ${auditedFields} visible rule inputs.`);

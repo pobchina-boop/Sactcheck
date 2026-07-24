@@ -57,7 +57,7 @@ function trueGradeField(id, def) {
 }
 
 const protocols = loadProtocols();
-assert.equal(protocols.length, 121, `Expected 121 regimen protocols, found ${protocols.length}`);
+assert.equal(protocols.length, 145, `Expected 145 regimen protocols, found ${protocols.length}`);
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
 
 const ids = new Map();
@@ -92,8 +92,11 @@ for (const { file, data } of protocols) {
 
   assert(validSections.has(metadata.catalogue_section), `${code} has invalid catalogue section ${metadata.catalogue_section}`);
   assert(Array.isArray(metadata.treatment_class) && metadata.treatment_class.length, `${code} lacks treatment_class metadata`);
-  assert.equal(metadata.sactcheck_encoding_version, '0.37.0', `${code} is not migrated to v0.37.0`);
-  assert.notEqual(metadata.catalogue_section, 'supportive_other', `${code} remains incorrectly unclassified`);
+  assert(['0.37.0', '0.38.0'].includes(metadata.sactcheck_encoding_version), `${code} has unsupported SACTCheck encoding version ${metadata.sactcheck_encoding_version}`);
+  if (metadata.catalogue_section === 'supportive_other') {
+    assert.equal(code, '00257', `${code} remains incorrectly unclassified as supportive/other`);
+    assert(metadata.treatment_class.includes('radiopharmaceutical'), 'Radium-223 must be classified as a specialist radiopharmaceutical.');
+  }
   assert(!/placeholder|draft/i.test(String(data.status || '')), `${code} remains a regimen placeholder/draft`);
 
   if (metadata.catalogue_section === 'endocrine_hormonal_therapy') {
@@ -173,13 +176,19 @@ for (const { file, data } of protocols) {
   }
 }
 
-assert.deepEqual([...endocrineCodes].sort(), ['00253', '00254', '00361', '00371', '00376'], 'Pure endocrine medicines are not cleanly separated.');
+const expectedEndocrineCodes = [
+  '00103', '00233', '00253', '00254', '00361', '00371', '00376',
+  '00477', '00478', '00479', '00480', '00481', '00482', '00488',
+  '00489', '00490', '00491', '00492', '00493', '00494', '00574',
+  '00577', '00693', '00830'
+].sort();
+assert.deepEqual([...endocrineCodes].sort(), expectedEndocrineCodes, 'Pure endocrine medicines are not cleanly separated.');
 assert(ctcaeFields >= 400, `Expected at least 400 CTCAE-enabled fields; found ${ctcaeFields}`);
 assert(renalBandFields >= 25, `Expected broad protocol-specific renal band migration; found ${renalBandFields}`);
 assert(exactCarboplatinFields >= 20, `Expected carboplatin continuous-value exceptions; found ${exactCarboplatinFields}`);
 assert.equal(variableRisk, 1, 'Only the regimen with an unspecified chemotherapy companion should remain variable.');
 
-assert.equal(Object.keys(riskMap.protocols || {}).length, 121, 'Central supportive-care map must cover every regimen.');
+assert.equal(Object.keys(riskMap.protocols || {}).length, 145, 'Central supportive-care map must cover every regimen.');
 for (const code of codes.keys()) assert(riskMap.protocols[code], `Central supportive-care map is missing ${code}`);
 
 // Confirm band selections are converted to the rule-engine decision value while
@@ -221,8 +230,8 @@ assert(html.includes('id="treatmentFilter"'), 'Catalogue lacks treatment-categor
 assert(html.includes('Endocrine (hormonal) therapies'), 'Catalogue lacks a distinct endocrine section.');
 assert(html.includes('catalogue-section-heading'), 'Catalogue lacks visual treatment-class grouping.');
 assert(html.includes('ctcae-guide'), 'Assessment UI lacks beside-control CTCAE grading guidance.');
-assert(html.includes('Version 0.37.2 · Tissue UI + automatic ULN'), 'Release badge is stale.');
-assert(html.includes('js/protocol-loader.js?v=0.37.2'), 'Protocol loader cache key is stale.');
+assert(html.includes('Version 0.38.0 · Complete prostate library'), 'Release badge is stale.');
+assert(html.includes('js/protocol-loader.js?v=0.38.0'), 'Protocol loader cache key is stale.');
 assert(!loader.includes('\u0008'), 'Protocol loader contains a stray control character in treatment-class formatting.');
 
 console.log(`v0.37.0 platform standardisation tests passed: ${protocols.length} regimens, ${ctcaeFields} CTCAE fields, ${renalBandFields} renal-band fields, ${exactCarboplatinFields} carboplatin exact-value fields.`);

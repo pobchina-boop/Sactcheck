@@ -2,24 +2,26 @@
 
 ## Current release
 
-**SACTCheck v0.37.2 — Tissue UI and automatic local ULN calculations**
+**SACTCheck v0.38.0 — Complete prostate treatment library**
 
-SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. The current release preserves the platform-wide single-entry assessment architecture and adds tissue-specific visual navigation, actual-result hepatic laboratory entry and optional immunotherapy endocrine bloods.
+SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This release completes the current prostate treatment deck as fully encoded clinical prototypes while preserving tissue-specific navigation, automatic local ULN calculations, optional immunotherapy endocrine bloods, searchable trade-name aliases and single-entry partial assessment.
 
-### v0.37.2 highlights
+### v0.38.0 highlights
 
-- Stable icon and colour system for tumour-site catalogue pages and regimen cards.
-- Tissue landing banners with treatment-class counts and one-tap filtering.
-- Actual ALT, AST and bilirubin entry with central CUH ULNs and automatic ×ULN calculation.
-- Combined transaminase pathways use the highest calculated ALT/AST multiple while still permitting either result to be entered alone.
-- Optional immunotherapy-only TSH, free T4, cortisol, ACTH, glucose and ketone inputs.
-- Existing single-entry assessment, CTCAE descriptions, renal bands, supportive-care mappings and trade-name search retained.
-- Full regression suite passed, including 94 automatic ALT/AST/bilirubin ULN mappings.
+- 26 distinct current NCCP prostate regimen protocols, with no prostate placeholders.
+- 24 new Genitourinary JSON protocols plus upgrades to the shared NCCP 00203 docetaxel and NCCP 00588 olaparib protocols.
+- Prostate endocrine/ADT, chemotherapy, PARP-combination, olaparib and radium-223 treatment pathways.
+- Official NCCP PDF access, treatment schedules, eligibility/exclusions, monitoring and decision rules.
+- CTCAE explanations beside grade-based controls.
+- Protocol-specific tiered renal selectors where the source uses renal categories.
+- Oral and parenteral supportive-care mappings and prostate trade-name aliases.
+- Single-value assessment retained across all 145 active regimens.
+- Complete regression suite passed, including 180 prostate single-input checks.
 
-See `RELEASE_NOTES_v0.37.2.md` and `VALIDATION_REPORT_v0.37.2.md` for the release boundary and automated checks.
+See `RELEASE_NOTES_v0.38.0.md`, `PROSTATE_LIBRARY_SOURCES_v0.38.0.md` and `VALIDATION_REPORT_v0.38.0.md`.
 
 ## Safety and governance
 
 SACTCheck is clinical decision support only and is not an autonomous prescribing system. Always verify the assessment against the current official NCCP regimen, current local policy, oncology-pharmacy review and consultant judgement.
 
-The included local CUH supportive-medicine PDFs date from 2021 and require formal reconciliation with NCCP V6 and current local policy before clinical deployment. The encoded protocols remain pending formal consultant, oncology-pharmacy and governance validation.
+The encoded protocols are fully structured software prototypes, but formal consultant, oncology-pharmacy and governance validation remains pending before clinical deployment outside a controlled shadow-validation process.

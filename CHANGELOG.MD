@@ -1,3 +1,14 @@
+# SACTCheck v0.38.0 — Complete prostate treatment library
+
+- Completes the current NCCP prostate deck with 26 fully encoded regimen protocols and no prostate placeholders.
+- Adds 24 Genitourinary protocol JSON files and upgrades the existing shared NCCP 00203 and 00588 protocols for prostate use.
+- Covers ADT injections, androgen-pathway agents, docetaxel/cabazitaxel chemotherapy, Akeega, olaparib and radium-223.
+- Adds official NCCP PDF links, treatment schedules, eligibility/exclusions, monitoring, dose modifications, CTCAE guidance, renal bands and supportive-care mappings.
+- Adds prostate trade-name aliases while retaining official generic NCCP titles.
+- Preserves single-value partial assessment and audits 180 independently actionable prostate inputs.
+- Rebuilds the catalogue to 145 distinct regimen protocols and updates the central supportive-care map.
+- Passes the complete historical regression suite and prostate-specific release tests.
+
 # SACTCheck v0.37.2 — Tissue UI and automatic local ULN calculations
 
 - Adds a stable icon and colour system for tumour-site navigation, landing banners and regimen-card accents.

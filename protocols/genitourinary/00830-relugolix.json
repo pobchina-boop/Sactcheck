@@ -1,0 +1,327 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00830-v3",
+  "file_name": "00830-relugolix.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00830",
+    "nccp_version": 3,
+    "tumour_group": "Genitourinary",
+    "title": "Relugolix Therapy",
+    "short_title": "Relugolix",
+    "indication": "Relugolix for advanced hormone-sensitive prostate cancer.",
+    "icd10": "C61",
+    "source_document_pages": 4,
+    "source_url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+    "sactcheck_encoding_version": "0.38.0",
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
+    "treatment_setting": [
+      "advanced",
+      "hormone_sensitive"
+    ],
+    "treatment_context": [
+      "advanced",
+      "hormone_sensitive"
+    ],
+    "treatment_class": [
+      "endocrine_therapy",
+      "androgen_receptor_pathway_inhibitor",
+      "oral_targeted_therapy"
+    ],
+    "administration_route": [
+      "oral"
+    ],
+    "cytotoxic": false,
+    "catalogue_section": "endocrine_hormonal_therapy",
+    "catalogue_section_label": "Endocrine (hormonal) therapies",
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json"
+    },
+    "validation": {
+      "source_document_checked": true,
+      "software_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    },
+    "file_name": "00830-relugolix.json"
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
+    "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the official NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
+  },
+  "input_definitions": {
+    "interruption_over_7_days": {
+      "label": "Treatment interrupted for more than 7 days",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "oral_pgp_inhibitor_unavoidable": {
+      "label": "Oral P-gp inhibitor co-administration is unavoidable",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pgp_strong_cyp3a_inducer_unavoidable": {
+      "label": "Combined P-gp and strong CYP3A inducer is unavoidable",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "renal_band": {
+      "label": "Renal function category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "mild_moderate",
+          "label": "Mild/moderate impairment — no adjustment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe impairment — caution"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis — limited evidence; specialist review"
+        }
+      ],
+      "demo_value": "mild_moderate",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "source": "Official NCCP protocol-specific renal categories",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Select the protocol-specific renal category matching the verified CrCl/eGFR. Exact numerical entry is not required because the NCCP decision is categorical."
+    },
+    "hepatic_band": {
+      "label": "Hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "mild_moderate",
+          "label": "Mild/moderate — no adjustment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe — limited evidence; specialist review"
+        }
+      ],
+      "demo_value": "mild_moderate"
+    },
+    "qt_risk": {
+      "label": "QT prolongation risk / QT-prolonging medicines",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    }
+  },
+  "required_inputs": [],
+  "output_templates": {
+    "proceed": "No encoded restriction was triggered in the entered domain(s). This is not an overall treatment clearance.",
+    "coverage_gap": "Only entered values were assessed; all omitted clinically relevant domains remain unassessed.",
+    "consultant_review": "The entered value requires protocol-specific clinical review.",
+    "withhold": "Withhold and reassess according to the official NCCP pathway.",
+    "delay": "Delay treatment and reassess according to the official NCCP pathway."
+  },
+  "rule_engine": {
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "id": "RELOAD",
+        "priority": 9,
+        "when": {
+          "field": "interruption_over_7_days",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Restart with a 360 mg loading dose on day 1, followed by 120 mg once daily."
+        },
+        "source": {
+          "page": 2,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Restart with a 360 mg loading dose on day 1, followed by 120 mg once daily."
+      },
+      {
+        "id": "PGP",
+        "priority": 9,
+        "when": {
+          "field": "oral_pgp_inhibitor_unavoidable",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Administer relugolix first and separate the P-gp inhibitor by at least 6 hours; short interruption up to 2 weeks may be considered."
+        },
+        "source": {
+          "page": 2,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Administer relugolix first and separate the P-gp inhibitor by at least 6 hours; short interruption up to 2 weeks may be considered."
+      },
+      {
+        "id": "INDUCER",
+        "priority": 12,
+        "when": {
+          "field": "pgp_strong_cyp3a_inducer_unavoidable",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "If unavoidable, the NCCP pathway increases relugolix to 240 mg once daily during the combined P-gp/strong CYP3A inducer, then returns to 120 mg once daily after discontinuation; confirm the plan with the treating consultant/pharmacist."
+        },
+        "source": {
+          "page": 2,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "If unavoidable, the NCCP pathway increases relugolix to 240 mg once daily during the combined P-gp/strong CYP3A inducer, then returns to 120 mg once daily after discontinuation; confirm the plan with the treating consultant/pharmacist."
+      },
+      {
+        "id": "RENAL_SEVERE",
+        "priority": 13,
+        "when": {
+          "field": "renal_band",
+          "operator": "in",
+          "value": [
+            "severe",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Use caution in severe renal impairment or dialysis."
+        },
+        "source": {
+          "page": 3,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Use caution in severe renal impairment or dialysis."
+      },
+      {
+        "id": "HEPATIC_SEVERE",
+        "priority": 9,
+        "when": {
+          "field": "hepatic_band",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Severe hepatic impairment requires specialist review because the source only confirms no adjustment for mild/moderate impairment."
+        },
+        "source": {
+          "page": 3,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Severe hepatic impairment requires specialist review because the source only confirms no adjustment for mild/moderate impairment."
+      },
+      {
+        "id": "QT",
+        "priority": 9,
+        "when": {
+          "field": "qt_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Assess the QT-prolongation benefit-risk before treatment."
+        },
+        "source": {
+          "page": 2,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Assess the QT-prolongation benefit-risk before treatment."
+      }
+    ]
+  },
+  "treatment": {
+    "continuous": true,
+    "administration": [
+      {
+        "drug": "Relugolix",
+        "dose": "360 mg loading dose day 1, then 120 mg once daily",
+        "route": "PO",
+        "instructions": "May be taken with or without food; swallow whole. If a dose is >12 hours late, omit it."
+      }
+    ],
+    "additional_requirement": "Continue medical castration unless surgically castrated where specified in the NCCP source."
+  },
+  "eligibility": [
+    "Histologically/cytologically confirmed prostate adenocarcinoma",
+    "ECOG 0–2"
+  ],
+  "exclusions": [
+    "Hypersensitivity"
+  ],
+  "monitoring": {
+    "baseline": [
+      "FBC",
+      "renal and liver profile",
+      "blood pressure/glucose/bone profile as regimen-specific"
+    ],
+    "regular": [
+      "Disease and safety monitoring according to treatment plan and NCCP source."
+    ]
+  },
+  "supportive_care": {
+    "emetogenic_risk": "minimal",
+    "script_id": "nccp-oral-minimal-low",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "The NCCP regimen classifies this oral SACT as minimal emetogenic risk; the linked oral minimal-to-low supportive-care guidance is used rather than a parenteral prescription sheet.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "supportive_medications_label": "Oral SACT minimal-low guidance"
+  }
+}

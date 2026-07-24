@@ -43,12 +43,12 @@
     "validation": {
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "software_tests_completed": false,
+      "software_tests_completed": true,
       "clinical_use_authorised": false
     },
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.38.0",
     "partial_assessment_supported": true,
-    "partial_assessment_note": "Independent olaparib rule domains may be assessed from a single supplied value; omitted domains remain explicitly unassessed.",
+    "partial_assessment_note": "Every independently actionable entered value is assessed; all omitted domains remain explicitly unassessed and never block a partial result.",
     "migration": {
       "mode": "live_json",
       "switch_to_generic_assessment": true
@@ -830,14 +830,7 @@
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "supportive_medications_label": "Oral SACT moderate-high guidance"
   },
-  "required_inputs": [
-    "indication_id",
-    "anc_x10e9_l",
-    "platelets_x10e9_l",
-    "febrile_neutropenia",
-    "crcl_ml_min",
-    "current_dose_level"
-  ],
+  "required_inputs": [],
   "output_templates": {
     "proceed": "Meets the encoded NCCP criteria for olaparib at the assessed dose.",
     "delay_then_dose_reduce": "Delay olaparib until recovery, then restart at the encoded reduced dose level. Consultant review is required.",
@@ -849,7 +842,7 @@
     "indication_id": {
       "label": "Indication",
       "type": "select",
-      "required": true,
+      "required": false,
       "options": [
         {
           "value": "first_line_advanced_ovarian_maintenance",
@@ -877,7 +870,7 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
-      "required": true,
+      "required": false,
       "min": 0,
       "step": 0.01,
       "demo_value": 2,
@@ -886,7 +879,7 @@
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
-      "required": true,
+      "required": false,
       "min": 0,
       "step": 1,
       "demo_value": 200,
@@ -943,7 +936,7 @@
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
-      "required": true,
+      "required": false,
       "demo_value": false
     },
     "febrile_neutropenia_grade": {
@@ -971,34 +964,39 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No febrile neutropenia."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Grade 1 is not defined for febrile neutropenia."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Grade 2 is not defined for febrile neutropenia."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "ANC below 1.0 ×10⁹/L with either a single temperature above 38.3°C or at least 38.0°C sustained for more than one hour."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences requiring urgent intervention."
         }
       ]
     },
     "crcl_ml_min": {
       "label": "Creatinine clearance category",
       "type": "select",
-      "required": true,
+      "required": false,
       "demo_value": "renal_51_plus",
       "unit": "mL/min",
       "options": [
@@ -1103,7 +1101,7 @@
     "current_dose_level": {
       "label": "Current olaparib dose level",
       "type": "select",
-      "required": true,
+      "required": false,
       "options": [
         {
           "value": "starting",

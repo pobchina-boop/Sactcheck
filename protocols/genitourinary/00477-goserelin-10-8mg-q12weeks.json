@@ -1,0 +1,301 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00477-v3",
+  "file_name": "00477-goserelin-10-8mg-q12weeks.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00477",
+    "nccp_version": 3,
+    "tumour_group": "Genitourinary",
+    "title": "Goserelin 10.8 mg Therapy – 12 weeks",
+    "short_title": "Goserelin 10.8 mg",
+    "indication": "Locally advanced or metastatic hormone-sensitive prostate cancer.",
+    "icd10": "C61",
+    "source_document_pages": 3,
+    "source_url": "https://healthservice.hse.ie/documents/6978/477_v3_Goserelin_10.8mg.pdf",
+    "sactcheck_encoding_version": "0.38.0",
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
+    "treatment_setting": [
+      "hormone_sensitive",
+      "advanced"
+    ],
+    "treatment_context": [
+      "hormone_sensitive",
+      "advanced"
+    ],
+    "treatment_class": [
+      "endocrine_therapy",
+      "androgen_deprivation_therapy"
+    ],
+    "administration_route": [
+      "sc"
+    ],
+    "cytotoxic": false,
+    "catalogue_section": "endocrine_hormonal_therapy",
+    "catalogue_section_label": "Endocrine (hormonal) therapies",
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json"
+    },
+    "validation": {
+      "source_document_checked": true,
+      "software_tests_completed": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    },
+    "published_date": "2018-05-30",
+    "review_date": "2030-07-30",
+    "file_name": "00477-goserelin-10-8mg-q12weeks.json"
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
+    "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
+    "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the official NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
+  },
+  "input_definitions": {
+    "hypersensitivity": {
+      "label": "Hypersensitivity to goserelin or excipients",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "qt_risk": {
+      "label": "History/risk factors for QT prolongation or concomitant QT-prolonging medicine",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "uncontrolled_glucose_or_diabetes": {
+      "label": "Poorly controlled diabetes / significant hyperglycaemia requiring review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "bone_health_not_addressed": {
+      "label": "Long-term ADT bone-health assessment/supplementation not addressed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "spinal_cord_compression_or_spinal_mets": {
+      "label": "Spinal cord compression or spinal metastases where this would be sole treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "low_bmi_or_full_anticoagulation": {
+      "label": "Low BMI and/or full anticoagulation (injection caution)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    }
+  },
+  "required_inputs": [],
+  "output_templates": {
+    "proceed": "No encoded restriction was triggered in the entered domain(s). This is not an overall treatment clearance.",
+    "coverage_gap": "Only entered values were assessed; all omitted clinically relevant domains remain unassessed.",
+    "consultant_review": "The entered value requires protocol-specific clinical review.",
+    "withhold": "Withhold and reassess according to the official NCCP pathway.",
+    "delay": "Delay treatment and reassess according to the official NCCP pathway."
+  },
+  "rule_engine": {
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "id": "HYPERSENSITIVITY",
+        "priority": 1,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Hypersensitivity to goserelin or excipients is a contraindication."
+        },
+        "source": {
+          "page": 1,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Hypersensitivity to goserelin or excipients is a contraindication."
+      },
+      {
+        "id": "QT_RISK",
+        "priority": 9,
+        "when": {
+          "field": "qt_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Assess the benefit-risk including torsades risk before starting androgen deprivation therapy."
+        },
+        "source": {
+          "page": 1,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Assess the benefit-risk including torsades risk before starting androgen deprivation therapy."
+      },
+      {
+        "id": "GLUCOSE",
+        "priority": 9,
+        "when": {
+          "field": "uncontrolled_glucose_or_diabetes",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Optimise and monitor glucose/diabetes during ADT."
+        },
+        "source": {
+          "page": 2,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Optimise and monitor glucose/diabetes during ADT."
+      },
+      {
+        "id": "BONE_HEALTH",
+        "priority": 13,
+        "when": {
+          "field": "bone_health_not_addressed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Complete bone-health assessment and apply calcium/vitamin D or other bone protection according to local policy."
+        },
+        "source": {
+          "page": 2,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Complete bone-health assessment and apply calcium/vitamin D or other bone protection according to local policy."
+      },
+      {
+        "id": "CORD_COMPRESSION",
+        "priority": 9,
+        "when": {
+          "field": "spinal_cord_compression_or_spinal_mets",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Do not rely on this agonist as sole treatment where cord compression/spinal metastases create tumour-flare risk; urgent consultant plan required."
+        },
+        "source": {
+          "page": 1,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Do not rely on this agonist as sole treatment where cord compression/spinal metastases create tumour-flare risk; urgent consultant plan required."
+      },
+      {
+        "id": "INJECTION_CAUTION",
+        "priority": 13,
+        "when": {
+          "field": "low_bmi_or_full_anticoagulation",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Use extra care with anterior abdominal-wall goserelin injection in low BMI or fully anticoagulated patients."
+        },
+        "source": {
+          "page": 1,
+          "document": "Official NCCP regimen"
+        },
+        "explanation": "Use extra care with anterior abdominal-wall goserelin injection in low BMI or fully anticoagulated patients."
+      }
+    ]
+  },
+  "treatment": {
+    "administration": [
+      {
+        "drug": "goserelin",
+        "dose": "10.8 mg",
+        "route": "SC",
+        "schedule": "Every 12 weeks"
+      }
+    ],
+    "duration": "Until disease progression or unacceptable toxicity."
+  },
+  "eligibility": [
+    "Approved prostate-cancer indication"
+  ],
+  "exclusions": [
+    "Hypersensitivity to goserelin/excipients"
+  ],
+  "monitoring": {
+    "baseline": [
+      "FBC, renal/liver profile",
+      "bone profile",
+      "blood glucose"
+    ],
+    "regular": [
+      "FBC/renal/liver profile as clinically indicated",
+      "blood glucose and bone profile as clinically indicated"
+    ]
+  },
+  "dose_modifications": {
+    "renal": "No dose modification necessary.",
+    "hepatic": "No dose modification necessary.",
+    "general": "No recommended dose modification."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "minimal",
+    "script_id": "nccp-minimal-no-routine-prophylaxis",
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "goserelin is minimal emetogenic risk.",
+    "mapping_confidence": "high",
+    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "premedications": "None.",
+    "other": "Calcium and vitamin D supplementation according to local policy.",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "supportive_medications_label": "Minimal-risk guidance"
+  }
+}

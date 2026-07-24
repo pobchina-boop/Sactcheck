@@ -9,6 +9,19 @@
   "use strict";
 
   const ENTRIES = Object.freeze([
+    { terms: ["niraparib/abiraterone", "niraparib and abiraterone", "akeega"], aliases: ["Akeega"], suppress: ["niraparib", "abiraterone"] },
+    { terms: ["abiraterone"], aliases: ["Zytiga"] },
+    { terms: ["apalutamide"], aliases: ["Erleada"] },
+    { terms: ["bicalutamide"], aliases: ["Casodex"] },
+    { terms: ["cabazitaxel"], aliases: ["Jevtana"] },
+    { terms: ["darolutamide"], aliases: ["Nubeqa"] },
+    { terms: ["degarelix"], aliases: ["Firmagon"] },
+    { terms: ["enzalutamide"], aliases: ["Xtandi"] },
+    { terms: ["goserelin"], aliases: ["Zoladex"] },
+    { terms: ["leuprorelin"], aliases: ["Prostap", "Eligard"] },
+    { terms: ["radium-223", "radium 223"], aliases: ["Xofigo"] },
+    { terms: ["relugolix"], aliases: ["Orgovyx"] },
+    { terms: ["triptorelin"], aliases: ["Decapeptyl"] },
     { terms: ["pegylated liposomal doxorubicin", "pld 50"], aliases: ["Caelyx", "PLD"], suppress: ["doxorubicin"] },
     { terms: ["trastuzumab deruxtecan"], aliases: ["Enhertu"], suppress: ["trastuzumab"] },
     { terms: ["trastuzumab emtansine", "t-dm1"], aliases: ["Kadcyla", "T-DM1"], suppress: ["trastuzumab"] },
@@ -99,7 +112,7 @@
   }
 
   root.SACTCheckDrugAliases = Object.freeze({
-    version: "0.37.2",
+    version: "0.38.0",
     entries: ENTRIES,
     forProtocol,
     searchText
