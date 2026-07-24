@@ -1,3 +1,12 @@
+# v0.40.0 — Complete Lung Library (24 July 2026)
+
+- Completed all 59 official NCCP Lung regimen cards as active assessment protocols.
+- Added 38 new Lung protocol files and reconciled 21 canonical existing/shared protocols.
+- Added Lung-wide single-entry, CTCAE, ULN, renal-band, supportive-care and alias regression coverage.
+- Corrected historical Lung tumour-site leakage from two breast-only HER2/paclitaxel regimens.
+- Rebuilt the 248-protocol index and central supportive-care map.
+
+
 # v0.39.0 — Complete Gastrointestinal Library (24 July 2026)
 
 - Completed all 93 official NCCP GI regimen cards as active assessment protocols.

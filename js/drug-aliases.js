@@ -9,6 +9,20 @@
   "use strict";
 
   const ENTRIES = Object.freeze([
+    { terms: ["afatinib"], aliases: ["Giotrif"] },
+    { terms: ["alectinib"], aliases: ["Alecensa"] },
+    { terms: ["brigatinib"], aliases: ["Alunbrig"] },
+    { terms: ["ceritinib"], aliases: ["Zykadia"] },
+    { terms: ["crizotinib"], aliases: ["Xalkori"] },
+    { terms: ["dacomitinib"], aliases: ["Vizimpro"] },
+    { terms: ["entrectinib"], aliases: ["Rozlytrek"] },
+    { terms: ["erlotinib"], aliases: ["Tarceva"] },
+    { terms: ["gefitinib"], aliases: ["Iressa"] },
+    { terms: ["lorlatinib"], aliases: ["Lorviqua"] },
+    { terms: ["nintedanib"], aliases: ["Vargatef"] },
+    { terms: ["osimertinib"], aliases: ["Tagrisso"] },
+    { terms: ["tepotinib"], aliases: ["Tepmetko"] },
+    { terms: ["serplulimab"], aliases: ["Hetronifly"] },
     { terms: ["niraparib/abiraterone", "niraparib and abiraterone", "akeega"], aliases: ["Akeega"], suppress: ["niraparib", "abiraterone"] },
     { terms: ["abiraterone"], aliases: ["Zytiga"] },
     { terms: ["apalutamide"], aliases: ["Erleada"] },
@@ -127,7 +141,7 @@
   }
 
   root.SACTCheckDrugAliases = Object.freeze({
-    version: "0.39.0",
+    version: "0.40.0",
     entries: ENTRIES,
     forProtocol,
     searchText

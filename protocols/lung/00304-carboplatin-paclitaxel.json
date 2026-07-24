@@ -5,10 +5,7 @@
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00304",
-    "nccp_version": 8,
-    "tumour_groups": [
-      "Lung"
-    ],
+    "nccp_version": "8",
     "title": "CARBOplatin AUC 6 and PACLitaxel 200 mg/m² Therapy",
     "short_title": "Carboplatin AUC6 + Paclitaxel 200",
     "indication": "Adjuvant and advanced NSCLC, including selected neoadjuvant use with nivolumab.",
@@ -22,7 +19,7 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.40.0",
     "partial_assessment_supported": true,
     "source_checked_date": "2026-07-20",
     "catalogue_section": "chemotherapy_combination_sact",
@@ -31,7 +28,25 @@
       "cytotoxic_chemotherapy",
       "combination_sact"
     ],
-    "cytotoxic": true
+    "cytotoxic": true,
+    "tumour_group": "Lung",
+    "lung_subgroup": "nsclc_chemotherapy",
+    "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
+    "drugs": [
+      "carboplatin",
+      "paclitaxel"
+    ],
+    "common_trade_names": [
+      "Taxol"
+    ],
+    "validation": {
+      "official_catalogue_and_source_link_checked": true,
+      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -54,6 +69,10 @@
       "indication_id": "neoadjuvant_nsclc_nivolumab",
       "code": "00304c",
       "description": "With nivolumab for neoadjuvant treatment of resectable NSCLC at high risk of recurrence with PD-L1 expression ≥1% (3 cycles)."
+    },
+    {
+      "indication_id": "00304-lung",
+      "description": "Adjuvant, advanced/metastatic or neoadjuvant NSCLC indications."
     }
   ],
   "treatment_phases": [
@@ -90,7 +109,7 @@
     "indication_id": {
       "label": "Indication",
       "type": "select",
-      "required": true,
+      "required": false,
       "options": [
         {
           "value": "adjuvant_nsclc",
@@ -112,7 +131,7 @@
     "assessment_type": {
       "label": "Assessment stage",
       "type": "select",
-      "required": true,
+      "required": false,
       "options": [
         {
           "value": "pre_treatment",
@@ -126,7 +145,7 @@
     "cycle_number": {
       "label": "Cycle number",
       "type": "number",
-      "required": true,
+      "required": false,
       "min": 1,
       "max": 100,
       "step": 1,
@@ -162,7 +181,7 @@
       "min": 0,
       "max": 50,
       "step": 0.01,
-      "demo_value": 2.0,
+      "demo_value": 2,
       "ui_section": "labs",
       "unit": "×10⁹/L"
     },
@@ -197,7 +216,7 @@
       "renal_input": {
         "mode": "exact_continuous",
         "exact_value_required": true,
-        "reason": "Required for carboplatin Calvert dosing and renal safety assessment."
+        "reason": "Exact CrCl/GFR is required for Calvert carboplatin dose calculation."
       },
       "assessment_guidance": "Enter the verified continuous GFR/CrCl used for carboplatin dosing. The app will apply encoded renal thresholds; confirm the Calvert calculation and local dosing policy independently."
     },
@@ -231,27 +250,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No peripheral sensory or motor neuropathy."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Asymptomatic; clinical or diagnostic observations only. CTCAE v5.0 grades symptomatic paraesthesia separately when that is the more accurate term."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Moderate symptoms that limit instrumental activities of daily living."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Severe symptoms that limit self-care activities of daily living."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening neurological consequences; urgent intervention required."
         }
       ],
       "demo_value": 0,
@@ -281,27 +305,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
         }
       ],
       "demo_value": 0,
@@ -349,11 +378,7 @@
       "ui_section": "clinical"
     }
   },
-  "required_inputs": [
-    "indication_id",
-    "assessment_type",
-    "cycle_number"
-  ],
+  "required_inputs": [],
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
     "missing_data_policy": "Missing optional inputs are never interpreted as normal; report unassessed domains.",
@@ -440,7 +465,7 @@
           {
             "field": "anc",
             "operator": "<",
-            "value": 1.0
+            "value": 1
           }
         ],
         "action": {
