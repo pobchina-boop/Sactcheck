@@ -9,6 +9,13 @@
   "use strict";
 
   const ENTRIES = Object.freeze([
+    { terms: ["cobimetinib"], aliases: ["Cotellic"] },
+    { terms: ["vemurafenib"], aliases: ["Zelboraf"] },
+    { terms: ["dabrafenib"], aliases: ["Tafinlar"] },
+    { terms: ["encorafenib"], aliases: ["Braftovi"] },
+    { terms: ["binimetinib"], aliases: ["Mektovi"] },
+    { terms: ["trametinib"], aliases: ["Mekinist"] },
+    { terms: ["vismodegib"], aliases: ["Erivedge"] },
     { terms: ["avelumab"], aliases: ["Bavencio"] },
     { terms: ["bacillus calmette-guérin"], aliases: ["BCG"] },
     { terms: ["erdafitinib"], aliases: ["Balversa"] },
@@ -166,7 +173,7 @@
   }
 
   root.SACTCheckDrugAliases = Object.freeze({
-    version: "0.44.0",
+    version: "0.45.0",
     entries: ENTRIES,
     forProtocol,
     searchText

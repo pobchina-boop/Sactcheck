@@ -1,3 +1,10 @@
+## v0.45.0 — Complete Skin and Melanoma Library
+- Added/reconciled all 16 current unique NCCP Skin/Melanoma regimen codes.
+- Added 9 new protocols and reconciled 7 existing/shared canonical protocols without duplicate cards.
+- Added melanoma, Merkel-cell, cutaneous squamous-cell and basal-cell assessment pathways.
+- Expanded the complete indexed library to 338 protocols.
+- Corrected q42-day pembrolizumab metadata and added advanced, adjuvant and phased-course card contexts.
+
 ## v0.44.0 — Complete Genitourinary Library
 - Added/reconciled all 67 current unique NCCP GU regimen codes across bladder, germ-cell, prostate and renal cancer.
 - Added 21 new protocols and reconciled 46 existing/shared canonical protocols without duplicate cards.

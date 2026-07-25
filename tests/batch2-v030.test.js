@@ -124,8 +124,8 @@ for (const code of Object.keys(protocols)) {
 }
 
 const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-assert.ok(html.includes("SACTCheck v0.44.0 — complete Genitourinary library"));
-assert.ok(html.includes("Version 0.44.0 · complete Genitourinary library"));
-assert.ok(html.includes("js/protocol-loader.js?v=0.44.0"));
+assert.ok(html.includes("SACTCheck v0.45.0 — complete Skin and Melanoma library"));
+assert.ok(html.includes("Version 0.45.0 · complete Skin and Melanoma library"));
+assert.ok(html.includes("js/protocol-loader.js?v=0.45.0"));
 
 console.log("v0.30 Batch 2 lung protocol tests passed.");

@@ -25,7 +25,9 @@ const validSections = new Set([
   'newly_diagnosed_glioblastoma',
   'recurrent_high_grade_glioma',
   'intravesical_therapy',
-  'immunotherapy_combination'
+  'immunotherapy_combination',
+  'skin_melanoma',
+  'oral_targeted_therapy'
 ]);
 const validRiskLevels = new Set([
   'high', 'moderate', 'low', 'minimal', 'oral_moderate_high',
@@ -71,7 +73,7 @@ function trueGradeField(id, def) {
 }
 
 const protocols = loadProtocols();
-assert.equal(protocols.length, 329, `Expected 329 canonical regimen protocols, found ${protocols.length}`);
+assert.equal(protocols.length, 338, `Expected 338 canonical regimen protocols, found ${protocols.length}`);
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
 
 const ids = new Map();
@@ -106,7 +108,7 @@ for (const { file, data } of protocols) {
 
   assert(validSections.has(metadata.catalogue_section), `${code} has invalid catalogue section ${metadata.catalogue_section}`);
   assert(Array.isArray(metadata.treatment_class) && metadata.treatment_class.length, `${code} lacks treatment_class metadata`);
-  assert(['0.37.0', '0.38.0', '0.38.2', '0.39.0', '0.40.0', '0.41.0', '0.41.1', '0.42.0', '0.43.0', '0.44.0'].includes(metadata.sactcheck_encoding_version), `${code} has unsupported SACTCheck encoding version ${metadata.sactcheck_encoding_version}`);
+  assert(['0.37.0', '0.38.0', '0.38.2', '0.39.0', '0.40.0', '0.41.0', '0.41.1', '0.42.0', '0.43.0', '0.44.0', '0.45.0'].includes(metadata.sactcheck_encoding_version), `${code} has unsupported SACTCheck encoding version ${metadata.sactcheck_encoding_version}`);
   if (metadata.catalogue_section === 'supportive_other') {
     assert.equal(code, '00257', `${code} remains incorrectly unclassified as supportive/other`);
     assert(metadata.treatment_class.includes('radiopharmaceutical'), 'Radium-223 must be classified as a specialist radiopharmaceutical.');
@@ -202,7 +204,7 @@ assert(renalBandFields >= 25, `Expected broad protocol-specific renal band migra
 assert(exactCarboplatinFields >= 20, `Expected carboplatin continuous-value exceptions; found ${exactCarboplatinFields}`);
 assert.equal(variableRisk, 1, 'Only the regimen with an unspecified chemotherapy companion should remain variable.');
 
-assert.equal(Object.keys(riskMap.protocols || {}).length, 329, 'Central supportive-care map must cover every regimen.');
+assert.equal(Object.keys(riskMap.protocols || {}).length, 338, 'Central supportive-care map must cover every regimen.');
 for (const code of codes.keys()) assert(riskMap.protocols[code], `Central supportive-care map is missing ${code}`);
 
 // Confirm band selections are converted to the rule-engine decision value while
@@ -244,8 +246,8 @@ assert(html.includes('id="treatmentFilter"'), 'Catalogue lacks treatment-categor
 assert(html.includes('Endocrine (hormonal) therapies'), 'Catalogue lacks a distinct endocrine section.');
 assert(html.includes('catalogue-section-heading'), 'Catalogue lacks visual treatment-class grouping.');
 assert(html.includes('ctcae-guide'), 'Assessment UI lacks beside-control CTCAE grading guidance.');
-assert(html.includes('Version 0.44.0 · complete Genitourinary library'), 'Release badge is stale.');
-assert(html.includes('js/protocol-loader.js?v=0.44.0'), 'Protocol loader cache key is stale.');
+assert(html.includes('Version 0.45.0 · complete Skin and Melanoma library'), 'Release badge is stale.');
+assert(html.includes('js/protocol-loader.js?v=0.45.0'), 'Protocol loader cache key is stale.');
 assert(!loader.includes('\u0008'), 'Protocol loader contains a stray control character in treatment-class formatting.');
 
 console.log(`v0.37.0 platform standardisation tests passed: ${protocols.length} regimens, ${ctcaeFields} CTCAE fields, ${renalBandFields} renal-band fields, ${exactCarboplatinFields} carboplatin exact-value fields.`);

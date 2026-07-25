@@ -15,7 +15,7 @@ aliasContext.globalThis = aliasContext;
 vm.createContext(aliasContext);
 vm.runInContext(fs.readFileSync(path.join(root, 'js', 'drug-aliases.js'), 'utf8'), aliasContext);
 const Aliases = aliasContext.SACTCheckDrugAliases;
-assert.strictEqual(Aliases.version, '0.44.0');
+assert.strictEqual(Aliases.version, '0.45.0');
 
 const abiraterone = loadJson('protocols/genitourinary/00103-abiraterone-prednisolone-mcrpc.json');
 const abirateroneAliases = Aliases.forProtocol(abiraterone);
@@ -63,8 +63,8 @@ assert.strictEqual(Tissue.tissueForGroups(lungGuGroups, gu).id, 'gu', 'GU select
 assert.strictEqual(Tissue.contextualTumourLabel(lungGuGroups, gu), 'Genitourinary · Also: Lung');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('Version 0.44.0 · complete Genitourinary library'));
-assert(html.includes('js/tissue-ui.js?v=0.44.0'));
-assert(html.includes('js/drug-aliases.js?v=0.44.0'));
+assert(html.includes('Version 0.45.0 · complete Skin and Melanoma library'));
+assert(html.includes('js/tissue-ui.js?v=0.45.0'));
+assert(html.includes('js/drug-aliases.js?v=0.45.0'));
 
 console.log('v0.38.1 GU display, title casing and alias precision tests passed.');
