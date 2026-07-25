@@ -58,6 +58,6 @@ assert(audited>=170,`Expected >=170 single-entry checks, found ${audited}`);
 
 const aliasCtx={globalThis:null};aliasCtx.globalThis=aliasCtx;vm.createContext(aliasCtx);vm.runInContext(fs.readFileSync(path.join(root,'js/drug-aliases.js'),'utf8'),aliasCtx);const Aliases=aliasCtx.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.45.0');
 assert(Aliases.forProtocol(byCode('00342')).includes('Temodal'));assert(Aliases.forProtocol(byCode('00813')).includes('Avastin'));assert(Aliases.forProtocol(byCode('00805')).includes('CCNU'));assert(Aliases.forProtocol(byCode('00379')).includes('Matulane'));
-const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('Version 0.45.0 · complete Skin and Melanoma library'));assert(html.includes('js/protocol-loader.js?v=0.45.0'));assert(html.includes('js/drug-aliases.js?v=0.45.0'));
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('Version 0.45.1 · contextual shared-regimen indication hotfix'));assert(html.includes('js/protocol-loader.js?v=0.45.1'));assert(html.includes('js/drug-aliases.js?v=0.45.1'));
 const tissue=fs.readFileSync(path.join(root,'js/tissue-ui.js'),'utf8');assert(tissue.includes('label: "Neuro-oncology"'));assert(tissue.includes('#4B5FA8'));
 console.log(`v0.42.0 Neuro-oncology tests passed: 10 protocols, ${inputs} inputs, ${rules} rules and ${audited} individually assessed rule-linked fields.`);

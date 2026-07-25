@@ -1,3 +1,11 @@
+## v0.45.1 — Tissue-specific shared-regimen indication hotfix
+- Added tissue-context resolution for regimens shared across multiple tumour libraries.
+- Regimen-card indication text now follows the active tumour-site filter instead of the protocol's primary indication.
+- Opening a shared regimen now carries the selected tissue into the assessment screen and preselects the relevant indication.
+- Added explicit tumour-group metadata to 134 indications across 37 shared protocol files.
+- Added safe fallback wording where a linked tissue indication has not yet been encoded, preventing unrelated indication text from being shown.
+- Added contextual-indication regression tests; the complete repository suite passes.
+
 ## v0.45.0 — Complete Skin and Melanoma Library
 - Added/reconciled all 16 current unique NCCP Skin/Melanoma regimen codes.
 - Added 9 new protocols and reconciled 7 existing/shared canonical protocols without duplicate cards.

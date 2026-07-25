@@ -132,7 +132,7 @@ for (const { file, data } of lung) {
   const code=String(data.metadata.nccp_regimen_code).padStart(5,'0'); const m=data.metadata || {};
   assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} is not an active encoded prototype.`);
   assert(!/placeholder|draft/i.test(String(data.status || '')),`${code} remains a placeholder/draft.`);
-  assert(['0.40.0','0.43.0','0.44.0','0.45.0'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Lung/Gynaecology reconciliation encoding marker.`);
+  assert(['0.40.0','0.43.0','0.44.0','0.45.0','0.45.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Lung/Gynaecology reconciliation encoding marker.`);
   assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
   assert(/^https:\/\/healthservice\.hse\.ie\/documents\//.test(m.source_url || ''),`${code} lacks direct official HSE/NCCP PDF.`);
   assert(m.lung_subgroup,`${code} lacks Lung subgroup.`);
@@ -241,8 +241,8 @@ for (const {data} of all) {
 }
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('Version 0.45.0 · complete Skin and Melanoma library'),'current release badge missing.');
-assert(html.includes('js/protocol-loader.js?v=0.45.0'),'current loader cache key missing.');
-assert(html.includes('js/drug-aliases.js?v=0.45.0'),'current alias cache key missing.');
+assert(html.includes('Version 0.45.1 · contextual shared-regimen indication hotfix'),'current release badge missing.');
+assert(html.includes('js/protocol-loader.js?v=0.45.1'),'current loader cache key missing.');
+assert(html.includes('js/drug-aliases.js?v=0.45.1'),'current alias cache key missing.');
 
 console.log(`v0.40.0 Lung library tests passed: 59 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);

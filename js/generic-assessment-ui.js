@@ -15,6 +15,7 @@
   let latestResult = null;
   let latestAssessmentId = "";
   let latestLabCalculations = {};
+  let activeTumourGroup = "all";
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -217,9 +218,10 @@
     window.scrollTo(0, 0);
   }
 
-  function open(protocol) {
+  function open(protocol, context = {}) {
     ensureScreen();
     activeProtocol = protocol;
+    activeTumourGroup = root.SACTCheckProtocolContext?.normaliseGroup?.(context.tumourGroup || "all") || context.tumourGroup || "all";
     const validation = Engine.validateProtocol(protocol);
     if (!validation.valid) {
       throw new Error(`Protocol cannot be assessed: ${validation.errors.join(" ")}`);
@@ -262,7 +264,10 @@
     const displayedTumours = primaryTumour && listedTumours.length && !listedTumours.includes(primaryTumour)
       ? [primaryTumour]
       : (listedTumours.length ? listedTumours : (primaryTumour ? [primaryTumour] : []));
-    document.getElementById("jsonProtocolTumour").textContent = displayedTumours.join(" · ") || "Uncategorised";
+    const contextualTumour = activeTumourGroup !== "all" && displayedTumours.includes(activeTumourGroup)
+      ? `${activeTumourGroup}${displayedTumours.length > 1 ? " (shared protocol)" : ""}`
+      : (displayedTumours.join(" · ") || "Uncategorised");
+    document.getElementById("jsonProtocolTumour").textContent = contextualTumour;
     document.getElementById("jsonProtocolStatus").textContent = humanise(protocol.status || "not specified");
     const deterministicRules = asArray(protocol.rule_engine?.rules).length;
     const iraeReferenceRules = asArray(protocol.pembrolizumab_irae_rules?.rules).length;
@@ -270,7 +275,9 @@
       ? `${deterministicRules} deterministic + ${iraeReferenceRules} irAE reference`
       : String(deterministicRules);
     document.getElementById("jsonProtocolValidation").textContent = validationComplete ? "Validated" : "Pending formal validation";
-    document.getElementById("jsonProtocolIndication").textContent = metadata.indication || indicationSummary(protocol);
+    document.getElementById("jsonProtocolIndication").textContent = root.SACTCheckProtocolContext?.descriptionForTissue?.(
+      protocol, activeTumourGroup, { scope: "assessment" }
+    ) || metadata.indication || indicationSummary(protocol);
 
     const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId }) || {
       level: "pending",
@@ -374,6 +381,15 @@
     return definition?.ui_section === "blood_thresholds" || bloodFieldPriority(definition) !== null;
   }
 
+  function applyPreferredIndication() {
+    if (!activeProtocol || activeTumourGroup === "all") return;
+    const preferred = root.SACTCheckProtocolContext?.preferredIndicationId?.(activeProtocol, activeTumourGroup);
+    const select = document.getElementById("jsonInput_indication_id");
+    if (preferred && select && [...select.options].some(option => option.value === preferred)) {
+      select.value = preferred;
+    }
+  }
+
   function renderInputs(rawInputs = {}) {
     if (!activeProtocol) return;
     const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, rawInputs);
@@ -389,6 +405,7 @@
     document.getElementById("jsonImmunotherapyBloodGrid").innerHTML = immunotherapyDefinitions.map(definition => renderInput(definition, { compact: false, immunotherapy: true })).join("");
     document.getElementById("jsonInputGrid").innerHTML = additionalDefinitions.map(definition => renderInput(definition, { compact: true })).join("");
     document.getElementById("jsonTreatmentContextGrid").innerHTML = contextDefinitions.map(definition => renderInput(definition, { compact: true, context: true })).join("");
+    applyPreferredIndication();
 
     document.getElementById("jsonNoBloodInputs").classList.toggle("hidden", bloodDefinitions.length > 0);
     document.getElementById("jsonInputGrid").classList.toggle("hidden", additionalDefinitions.length === 0);
@@ -852,7 +869,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.37.2",
+    version: "0.45.1",
     open,
     ensureScreen
   });

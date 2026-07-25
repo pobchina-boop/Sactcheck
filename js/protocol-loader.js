@@ -106,10 +106,22 @@
       : "";
   }
 
-  function getIndication(protocol) {
-    return protocol?.metadata?.indication ||
+  function getIndication(protocol, tumourGroup = null) {
+    const contextual = window.SACTCheckProtocolContext?.descriptionForTissue(
+      protocol,
+      tumourGroup || window.SACTCheckProtocolContext?.activeTumourGroup?.() || "all",
+      { scope: "card" }
+    );
+    return contextual || protocol?.metadata?.indication ||
       asArray(protocol.indications).map(item => item?.description).filter(Boolean).join(" ") ||
       "Machine-readable NCCP regimen encoded for the SACTCheck protocol library.";
+  }
+
+  function getSearchableIndication(protocol) {
+    return [
+      protocol?.metadata?.indication,
+      ...asArray(protocol?.indications).map(item => item?.description)
+    ].filter(Boolean).join(" ");
   }
 
   function getCatalogueSection(protocol) {
@@ -248,7 +260,8 @@
     if (!window.SACTCheckGenericAssessment?.open) {
       throw new Error("The generic JSON assessment interface is unavailable.");
     }
-    window.SACTCheckGenericAssessment.open(protocol);
+    const tumourGroup = window.SACTCheckProtocolContext?.activeTumourGroup?.() || "all";
+    window.SACTCheckGenericAssessment.open(protocol, { tumourGroup });
   }
 
   function createOfficialPdfLink(protocol) {
@@ -312,7 +325,7 @@
 
     const sectionLabel = getCatalogueSectionLabel(protocol);
     const classes = asArray(metadata.treatment_class).join(" ");
-    card.dataset.name = [title, aliases.join(" "), code, version, tumourDisplay, indication, sectionLabel, classes, entry.path].join(" ");
+    card.dataset.name = [title, aliases.join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, entry.path].join(" ");
     card.dataset.tumour = tumourGroups.join(",");
     applyTreatmentMetadata(card, protocol);
   }
@@ -397,7 +410,7 @@
       const section = getCatalogueSection(protocol);
       const sectionLabel = getCatalogueSectionLabel(protocol);
       const classes = asArray(metadata.treatment_class).join(" ");
-      const searchableText = [title, aliases.join(" "), code, version, tumourDisplay, indication, sectionLabel, classes, entry.path].join(" ");
+      const searchableText = [title, aliases.join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, entry.path].join(" ");
 
       const card = document.createElement("article");
       card.className = `card regimen-card json-regimen-card ${assessmentReady ? "active-regimen" : "planned"}`;
@@ -525,7 +538,7 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
-    version: "0.37.2",
+    version: "0.45.1",
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,

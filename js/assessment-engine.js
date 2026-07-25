@@ -428,7 +428,7 @@
       definition.type = "select";
       definition.options = asArray(protocol.indications).map(item => ({
         value: item.indication_id || item.code,
-        label: item.description
+        label: (typeof globalThis !== "undefined" ? globalThis.SACTCheckProtocolContext?.optionLabel?.(protocol, item) : null) || item.description
       }));
       definition.demo_value = definition.options[0]?.value ?? "";
       definition.ui_section = "treatment_context";
@@ -1060,7 +1060,7 @@
   }
 
   return Object.freeze({
-    version: "0.37.2",
+    version: "0.45.1",
     getProfiles,
     getInputDefinitions,
     explicitInputDefinitions,

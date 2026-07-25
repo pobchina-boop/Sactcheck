@@ -169,6 +169,18 @@
       card.classList.add("tissue-themed-card");
       const category = card.querySelector(":scope > .category-chip");
       if (category) category.textContent = contextualTumourLabel(groups, activeTissue);
+
+      const protocolId = card.dataset.jsonProtocolId;
+      const protocol = protocolId ? root.SACTCheckProtocolLoader?.getProtocolById?.(protocolId) : null;
+      const description = card.querySelector(":scope > .regimen-description");
+      if (protocol && description && root.SACTCheckProtocolContext?.descriptionForTissue) {
+        description.textContent = root.SACTCheckProtocolContext.descriptionForTissue(
+          protocol,
+          activeTissue.id === "all" ? "all" : activeTissue.values[0],
+          { scope: "card" }
+        );
+      }
+
       const existing = card.querySelector(":scope > .card-tissue-badge");
       if (existing) existing.remove();
       const badge = document.createElement("span");
@@ -196,7 +208,7 @@
     syncFromFilter();
   }
 
-  root.SACTCheckTissueUI = Object.freeze({ version: "0.38.2", tissues: TISSUES, refresh, select, contextualTumourLabel, tissueForGroups });
+  root.SACTCheckTissueUI = Object.freeze({ version: "0.45.1", tissues: TISSUES, refresh, select, contextualTumourLabel, tissueForGroups });
   root.addEventListener?.("sactcheck:protocols-loaded", refresh);
   root.addEventListener?.("sactcheck:local-protocol-added", refresh);
   if (document.readyState === "loading") {

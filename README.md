@@ -2,24 +2,21 @@
 
 ## Current release
 
-**SACTCheck v0.41.1 — Regimen Title Normalisation Hotfix**
+**SACTCheck v0.45.1 — Tissue-specific shared-regimen indication hotfix**
 
-SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This release completes the current Sarcoma catalogue with 25 distinct NCCP regimen documents represented as live JSON assessment protocols rather than placeholders.
+SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This hotfix corrects the display and selection of indications for regimens shared across more than one tumour library.
 
-### v0.41.1 highlights
+### v0.45.1 highlights
 
-- 25 active Sarcoma protocols spanning soft-tissue sarcoma, osteosarcoma, Ewing sarcoma, rhabdomyosarcoma, GIST, Kaposi sarcoma and aggressive fibromatosis.
-- 19 dedicated Sarcoma protocol files plus 6 canonical shared protocols reconciled for explicit Sarcoma/GIST use.
-- Source-specific ifosfamide, Mesna, hydration, encephalopathy, MAP/high-dose methotrexate rescue, anthracycline cardiac, cisplatin renal, PLD, trabectedin and oral targeted-therapy pathways.
-- Single-entry partial assessment retained throughout: any independently actionable entered field can return its own finding without unrelated mandatory inputs.
-- CTCAE grade controls use toxicity-specific v5.0 descriptions and practical assessment guidance beside the selector.
-- Actual ALT, AST and bilirubin results use the central local-laboratory ULN adapter.
-- Protocol-specific renal bands are used where guidance is tiered.
-- Phase-dependent antiemetic/supportive-care profiles, trade-name aliases and direct official NCCP PDF access are included.
-- No Sarcoma placeholders or draft regimen cards.
-- Complete catalogue expanded to 270 distinct protocols.
+- Shared regimen cards display the indication relevant to the active tumour-site filter.
+- The selected tissue context is carried into the assessment screen.
+- The relevant indication is preselected while all encoded indications remain available.
+- Indication options are labelled by tumour group for shared protocols.
+- 134 indications across 37 shared protocol files now carry explicit tumour-group metadata.
+- Unresolved source/index mismatches use a safe verification message rather than an unrelated indication.
+- Complete historical and release-specific regression suite passed.
 
-See `RELEASE_NOTES_v0.41.1.md`, `V0411_TITLE_NORMALISATION_AUDIT.json` and `UPDATE_INSTRUCTIONS_v0.41.1.txt`.
+See `RELEASE_NOTES_v0.45.1.md` and `V0451_CONTEXTUAL_INDICATION_AUDIT.json`.
 
 ## Safety and governance
 

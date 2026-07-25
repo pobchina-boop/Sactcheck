@@ -34,7 +34,7 @@ for(const {entry,data} of gu){
  const card=m.regimen_card;assert(card&&Array.isArray(card.contexts)&&card.contexts.length,`${code} card context`);cardContexts+=card.contexts.length;
  assert(card.contexts.some(c=>c.cycle_length_days>0),`${code} cycle interval`);
  const side=cardSidecar.protocols.find(x=>x.id===data.protocol_id);assert(side,`${code} sidecar`);
- if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/genitourinary/'),`${code} new file path`);assert(['0.44.0','0.45.0'].includes(m.sactcheck_encoding_version),`${code} encoding version`);}
+ if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/genitourinary/'),`${code} new file path`);assert(['0.44.0','0.45.0','0.45.1'].includes(m.sactcheck_encoding_version),`${code} encoding version`);}
 }
 assert.strictEqual(newCount,21);assert(inputs>=650);assert(rules>=600);assert(cardContexts>=67);
 const by=c=>gu.find(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')===c).data;
@@ -49,5 +49,5 @@ assert.strictEqual(by('00564').treatment.cycle_length_days,28);assert(/days 1–
 const ctx={console};ctx.globalThis=ctx;vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(root,'js/rule-engine.js'),'utf8'),ctx);vm.runInContext(fs.readFileSync(path.join(root,'js/assessment-engine.js'),'utf8'),ctx);const Engine=ctx.SACTCheckAssessmentEngine,RuleEngine=ctx.SACTCheckRuleEngine;let audited=0;
 for(const {data} of gu){const profileId=Engine.getProfiles(data)[0]?.id||'default',defs=Engine.getInputDefinitions(data,profileId,{}),fields=new Set((data.rule_engine?.rules||[]).flatMap(r=>RuleEngine.collectConditionFields(RuleEngine.conditionFromRule(r)))),candidates=defs.filter(d=>d.visible!==false&&fields.has(d.id)&&demo(d)!=='');assert(candidates.length>0,`${data.protocol_id} no auditable inputs`);for(const d of candidates){const result=Engine.assess(data,{[d.id]:demo(d)},{profileId});assert(result.findings.length>0,`${data.protocol_id}/${d.id} no finding`);assert(!/insufficient data/i.test(String(result.status||'')));audited++;}}
 assert(audited>=500,`single-entry checks ${audited}`);
-const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('Version 0.45.0 · complete Skin and Melanoma library'));assert(html.includes('js/protocol-loader.js?v=0.45.0'));
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('Version 0.45.1 · contextual shared-regimen indication hotfix'));assert(html.includes('js/protocol-loader.js?v=0.45.1'));
 console.log(`v0.44.0 GU tests passed: ${gu.length} protocols, 21 new, ${inputs} inputs, ${rules} rules, ${audited} single-entry checks.`);
