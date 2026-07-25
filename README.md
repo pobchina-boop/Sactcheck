@@ -2,11 +2,11 @@
 
 ## Current release
 
-**SACTCheck v0.41.0 — Complete Sarcoma Library**
+**SACTCheck v0.41.1 — Regimen Title Normalisation Hotfix**
 
 SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This release completes the current Sarcoma catalogue with 25 distinct NCCP regimen documents represented as live JSON assessment protocols rather than placeholders.
 
-### v0.41.0 highlights
+### v0.41.1 highlights
 
 - 25 active Sarcoma protocols spanning soft-tissue sarcoma, osteosarcoma, Ewing sarcoma, rhabdomyosarcoma, GIST, Kaposi sarcoma and aggressive fibromatosis.
 - 19 dedicated Sarcoma protocol files plus 6 canonical shared protocols reconciled for explicit Sarcoma/GIST use.
@@ -19,7 +19,7 @@ SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototy
 - No Sarcoma placeholders or draft regimen cards.
 - Complete catalogue expanded to 270 distinct protocols.
 
-See `RELEASE_NOTES_v0.41.0.md`, `SARCOMA_LIBRARY_SOURCES_v0.41.0.md` and `UPDATE_INSTRUCTIONS_v0.41.0.txt`.
+See `RELEASE_NOTES_v0.41.1.md`, `V0411_TITLE_NORMALISATION_AUDIT.json` and `UPDATE_INSTRUCTIONS_v0.41.1.txt`.
 
 ## Safety and governance
 

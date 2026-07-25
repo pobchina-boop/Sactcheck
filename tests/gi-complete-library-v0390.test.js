@@ -71,12 +71,12 @@ assert.strictEqual(new Set(codes).size, 93, 'The GI deck contains duplicate NCCP
 assert.strictEqual(new Set(gi.map(({ data }) => data.protocol_id)).size, 93, 'The GI deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root, 'protocols', 'index.json'), 'utf8'));
-assert.strictEqual(index.protocol_count, 270, 'Complete protocol index must contain 210 distinct protocols.');
-assert.strictEqual(index.protocols.length, 270, 'Complete protocol index array must contain 210 entries.');
+assert.strictEqual(index.protocol_count, 280, 'Complete protocol index must contain 210 distinct protocols.');
+assert.strictEqual(index.protocols.length, 280, 'Complete protocol index array must contain 210 entries.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
-assert.strictEqual(riskMap.release, '0.41.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 270, 'Central supportive-care map must cover all 210 protocols.');
+assert.strictEqual(riskMap.release, '0.42.0');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 280, 'Central supportive-care map must cover all 210 protocols.');
 
 const ctcaeContext = { window: {} };
 vm.createContext(ctcaeContext);
@@ -190,7 +190,7 @@ aliasContext.globalThis = aliasContext;
 vm.createContext(aliasContext);
 vm.runInContext(fs.readFileSync(path.join(root, 'js', 'drug-aliases.js'), 'utf8'), aliasContext);
 const Aliases = aliasContext.SACTCheckDrugAliases;
-assert.strictEqual(Aliases.version, '0.41.0');
+assert.strictEqual(Aliases.version, '0.42.0');
 const byCode = code => gi.find(({ data }) => String(data.metadata.nccp_regimen_code).padStart(5, '0') === code).data;
 const aliases = {
   '00207': 'Erbitux', '00238': 'Zaltrap', '00235': 'Teysuno', '00642': 'Lutathera',
@@ -207,8 +207,8 @@ assert(!tumourGroups(breast00688).includes('Gastrointestinal'), 'Breast NCCP 006
 for (const code of ['00924', '00925', '00926']) assert(byCode(code), `${code} current GI regimen is missing.`);
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('Version 0.41.0 · complete sarcoma library'), 'v0.39.0 release badge is missing.');
-assert(html.includes('js/protocol-loader.js?v=0.41.0'), 'v0.39.0 cache key is missing.');
-assert(html.includes('js/drug-aliases.js?v=0.41.0'), 'v0.39.0 alias cache key is missing.');
+assert(html.includes('Version 0.42.0 · complete Neuro-oncology library'), 'v0.39.0 release badge is missing.');
+assert(html.includes('js/protocol-loader.js?v=0.42.0'), 'v0.39.0 cache key is missing.');
+assert(html.includes('js/drug-aliases.js?v=0.42.0'), 'v0.39.0 alias cache key is missing.');
 
 console.log(`v0.39.0 GI library tests passed: 93 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);

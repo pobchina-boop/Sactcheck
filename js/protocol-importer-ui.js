@@ -5,6 +5,26 @@
 (function (root) {
   "use strict";
 
+  function normaliseDisplayText(value) {
+    return String(value ?? "")
+      .replaceAll("CARBOplatin", "Carboplatin")
+      .replaceAll("PACLitaxel", "Paclitaxel")
+      .replaceAll("CISplatin", "Cisplatin")
+      .replaceAll("DOXOrubicin", "Doxorubicin")
+      .replaceAll("PEMEtrexed", "Pemetrexed")
+      .replaceAll("DOCEtaxel", "Docetaxel")
+      .replaceAll("cycloPHOSphamide", "Cyclophosphamide")
+      .replaceAll("SUNitinib", "Sunitinib")
+      .replaceAll("vinCRIStine", "Vincristine")
+      .replaceAll("epiRUBicin", "Epirubicin")
+      .replaceAll("eriBULin", "Eribulin")
+      .replaceAll("PAZOPanib", "Pazopanib")
+      .replaceAll("DACTINomycin", "Dactinomycin")
+      .replaceAll("VinBLAStine", "Vinblastine")
+      .replaceAll("prednisoLONE", "Prednisolone")
+      .replaceAll("predniSONE", "Prednisone");
+  }
+
   let importedProtocol = null;
   let importedFileName = "";
   let latestValidation = null;
@@ -176,7 +196,7 @@
       ? "The generic assessment can be generated. Clinical and pharmacy validation remain separate requirements."
       : "Correct every validation error before adding this protocol to the published library.";
 
-    document.getElementById("importerProtocol").textContent = protocol?.metadata?.short_title || protocol?.metadata?.title || importedFileName || "Unknown";
+    document.getElementById("importerProtocol").textContent = normaliseDisplayText(protocol?.metadata?.short_title || protocol?.metadata?.title || importedFileName || "Unknown");
     document.getElementById("importerInputs").textContent = String(validation.summary?.inputCount ?? 0);
     document.getElementById("importerRules").textContent = String(validation.summary?.ruleCount ?? 0);
     document.getElementById("importerValidation").textContent = `${validation.errors.length} error${validation.errors.length === 1 ? "" : "s"}, ${validation.warnings.length} warning${validation.warnings.length === 1 ? "" : "s"}`;

@@ -1,3 +1,17 @@
+## v0.42.0 — Complete Neuro-oncology Library
+- Added 10 fully encoded current NCCP Neuro-oncology protocols.
+- Added glioblastoma, glioma, medulloblastoma/PNET, PCV, CLV, lomustine, bevacizumab and temozolomide pathways.
+- Added source-specific count, renal, hepatic, toxicity, proteinuria, radiotherapy-phase and PJP-prophylaxis logic.
+- Expanded the complete indexed library to 280 protocols.
+- Added 201 Neuro-oncology inputs and 245 source-specific rules, with 180 rule-linked fields individually tested for single-entry assessment.
+- Passed the complete regression suite in the working release and after clean ZIP extraction.
+
+# v0.41.1 — Regimen Title Normalisation Hotfix (25 July 2026)
+
+- Normalised non-standard mixed-capitalisation in regimen display titles across the complete library.
+- Preserved exact NCCP source titles separately for traceability.
+- Added display-layer safeguards and regression testing to prevent recurrence.
+
 # v0.41.0 — Complete Sarcoma Library (25 July 2026)
 
 - Completed all 25 official NCCP Sarcoma regimen cards as active assessment protocols with no placeholders or drafts.

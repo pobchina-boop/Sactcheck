@@ -110,8 +110,22 @@
 
   function normaliseDisplayText(value) {
     return String(value ?? "")
-      .replaceAll("prednisoLONE", "prednisolone")
-      .replaceAll("predniSONE", "prednisone");
+      .replaceAll("CARBOplatin", "Carboplatin")
+      .replaceAll("PACLitaxel", "Paclitaxel")
+      .replaceAll("CISplatin", "Cisplatin")
+      .replaceAll("DOXOrubicin", "Doxorubicin")
+      .replaceAll("PEMEtrexed", "Pemetrexed")
+      .replaceAll("DOCEtaxel", "Docetaxel")
+      .replaceAll("cycloPHOSphamide", "Cyclophosphamide")
+      .replaceAll("SUNitinib", "Sunitinib")
+      .replaceAll("vinCRIStine", "Vincristine")
+      .replaceAll("epiRUBicin", "Epirubicin")
+      .replaceAll("eriBULin", "Eribulin")
+      .replaceAll("PAZOPanib", "Pazopanib")
+      .replaceAll("DACTINomycin", "Dactinomycin")
+      .replaceAll("VinBLAStine", "Vinblastine")
+      .replaceAll("prednisoLONE", "Prednisolone")
+      .replaceAll("predniSONE", "Prednisone");
   }
 
   function getProtocolTitle(protocol) {

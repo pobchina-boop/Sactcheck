@@ -51,13 +51,13 @@ assert.strictEqual(new Set(codes).size,25,'Sarcoma deck contains duplicate NCCP 
 assert.strictEqual(new Set(sarcoma.map(({data})=>data.protocol_id)).size,25,'Sarcoma deck contains duplicate protocol IDs.');
 
 const index=JSON.parse(fs.readFileSync(path.join(root,'protocols','index.json'),'utf8'));
-assert.strictEqual(index.protocol_count,270,'Complete protocol index must contain 270 protocols.');
-assert.strictEqual(index.protocols.length,270,'Complete protocol index array must contain 270 entries.');
-assert.strictEqual(new Set(index.protocols.map(item=>item.id)).size,270,'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 280,'Complete protocol index must contain 270 protocols.');
+assert.strictEqual(index.protocols.length, 280,'Complete protocol index array must contain 270 entries.');
+assert.strictEqual(new Set(index.protocols.map(item=>item.id)).size, 280,'Protocol index contains duplicate IDs.');
 
 const riskMap=JSON.parse(fs.readFileSync(path.join(root,'data','emetogenic-risk-map.json'),'utf8'));
-assert.strictEqual(riskMap.release,'0.41.0');
-assert.strictEqual(Object.keys(riskMap.protocols||{}).length,270,'Supportive-care map must cover all protocols.');
+assert.strictEqual(riskMap.release,'0.42.0');
+assert.strictEqual(Object.keys(riskMap.protocols||{}).length,280,'Supportive-care map must cover all protocols.');
 
 const ctcaeContext={window:{}};vm.createContext(ctcaeContext);
 vm.runInContext(fs.readFileSync(path.join(root,'js','ctcae-descriptors.js'),'utf8'),ctcaeContext);
@@ -155,7 +155,7 @@ assert(auditedFields>=320,`Expected at least 320 independently assessed Sarcoma 
 
 const aliasContext={globalThis:null};aliasContext.globalThis=aliasContext;vm.createContext(aliasContext);
 vm.runInContext(fs.readFileSync(path.join(root,'js','drug-aliases.js'),'utf8'),aliasContext);
-const Aliases=aliasContext.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.41.0');
+const Aliases=aliasContext.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.42.0');
 const byCode=code=>sarcoma.find(({data})=>String(data.metadata.nccp_regimen_code).padStart(5,'0')===code).data;
 const ruleById=(protocol,id)=>(protocol.rule_engine?.rules||[]).find(rule=>rule.id===id);
 const dox500=byCode('00500');
@@ -182,9 +182,9 @@ const aliases={'00511':'DTIC','00500':'Adriamycin','00228':'Halaven','00335':'Gl
 for(const [code,alias] of Object.entries(aliases))assert(Aliases.forProtocol(byCode(code)).includes(alias),`${code} is not searchable by ${alias}.`);
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('Version 0.41.0 · complete sarcoma library'),'v0.41.0 release badge missing.');
-assert(html.includes('js/protocol-loader.js?v=0.41.0'),'v0.41.0 loader cache key missing.');
-assert(html.includes('js/drug-aliases.js?v=0.41.0'),'v0.41.0 alias cache key missing.');
+assert(html.includes('Version 0.42.0 · complete Neuro-oncology library'),'v0.41.1 release badge missing.');
+assert(html.includes('js/protocol-loader.js?v=0.42.0'),'v0.41.1 loader cache key missing.');
+assert(html.includes('js/drug-aliases.js?v=0.42.0'),'v0.41.1 alias cache key missing.');
 const tissueUi=fs.readFileSync(path.join(root,'js','tissue-ui.js'),'utf8');
 assert(tissueUi.includes('label: "Sarcoma"'),'Sarcoma tissue UI label missing.');
 
