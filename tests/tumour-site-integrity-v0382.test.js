@@ -55,8 +55,8 @@ vm.runInContext(fs.readFileSync(path.join(root, 'js', 'tissue-ui.js'), 'utf8'), 
 assert.strictEqual(tissueContext.SACTCheckTissueUI.version, '0.38.2');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('Version 0.42.0 · complete Neuro-oncology library'));
-assert(html.includes('js/tissue-ui.js?v=0.42.0'));
-assert(html.includes('js/protocol-loader.js?v=0.42.0'));
+assert(html.includes('Version 0.43.0 · complete Gynaecology library'));
+assert(html.includes('js/tissue-ui.js?v=0.43.0'));
+assert(html.includes('js/protocol-loader.js?v=0.43.0'));
 
 console.log('v0.38.2 tumour-site metadata integrity tests passed.');

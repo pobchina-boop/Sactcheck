@@ -1,0 +1,52 @@
+# Gynaecology Library Sources — v0.43.0
+
+Official catalogue: https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/gynaecology-sact-regimens/
+
+- NCCP 00203 v7 — Docetaxel Monotherapy 75 mg/m² – 21 day cycle — https://healthservice.hse.ie/documents/6543/203_DOCEtaxel_75-21day.pdf
+- NCCP 00205 v8 — Pegylated Liposomal Doxorubicin 50 mg/m² – 28 day — https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf
+- NCCP 00212 v6a — Bevacizumab 10 mg/kg – 14 days — https://healthservice.hse.ie/documents/6942/212_V6a_Bevacizumab_10mgkg.pdf
+- NCCP 00232 v5 — Intravenous Vinorelbine Monotherapy - 21 days — https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf
+- NCCP 00251 v6 — Carboplatin AUC 4-6 Monotherapy - 28 day — https://healthservice.hse.ie/documents/6355/251_CARBOplatin_AUC4-6_28days.pdf
+- NCCP 00261 v7 — Carboplatin AUC 4-6 Monotherapy - 21 day — https://healthservice.hse.ie/documents/6366/261_CARBOplatinAUC4-6_21days.pdf
+- NCCP 00621 v3 — Paclitaxel 80 mg/m² Days 1, 8 and 15 – 28 day — https://healthservice.hse.ie/documents/6688/621_V3_Paclitaxel_80.pdf
+- NCCP 00246 v5 — Methotrexate 8-day Charing Cross Regimen — https://healthservice.hse.ie/documents/6349/246_Methotrexate_Charing_Cross.pdf
+- NCCP 00247 v4 — Dactinomycin Therapy — https://healthservice.hse.ie/documents/6350/247_V4_DACTINomycin.pdf
+- NCCP 00248 v4 — EMA/CO Therapy — https://healthservice.hse.ie/documents/6351/248_V4_EMA_CO.pdf
+- NCCP 00249 v3 — Intrathecal Methotrexate for CNS Prophylaxis in GTN — https://healthservice.hse.ie/documents/6352/249_V3_Intrathecal_Methotrexate.pdf
+- NCCP 00264 v3b — EMA/EP Therapy — https://healthservice.hse.ie/documents/6689/264_V3b_EMA_EP.pdf
+- NCCP 00266 v4 — Paclitaxel/Etoposide alternating with Paclitaxel/Cisplatin (TE/TP) Therapy — https://healthservice.hse.ie/documents/6691/266_V4_TP_TE.pdf
+- NCCP 00267 v4 — Two-day Etoposide and Cisplatin (EP) Therapy — https://healthservice.hse.ie/documents/6692/267_V4_EP.pdf
+- NCCP 00300 v7b — Bleomycin, Etoposide and Cisplatin (BEP) Therapy — https://healthservice.hse.ie/documents/6706/300_V7b_BEP.pdf
+- NCCP 00301 v5 — Etoposide and Cisplatin 20 mg/m² (EP) 5-day Therapy — https://healthservice.hse.ie/documents/6707/301_V5_EP.pdf
+- NCCP 00303 v6 — Carboplatin AUC 5–7.5 and Paclitaxel 175 mg/m² Therapy – 21 day — https://healthservice.hse.ie/documents/6709/303_V6_CARBOplatin_AUC5-7.5_PACLitaxel_175.pdf
+- NCCP 00306 v7 — Gemcitabine 1000 mg/m² and Carboplatin AUC 4 Therapy — 21 day — https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf
+- NCCP 00308 v7 — Carboplatin AUC 6 and Weekly Paclitaxel 80 mg/m² Therapy — https://healthservice.hse.ie/documents/6712/308_V7_CARBOplatin_AUC6_PACLitaxel80.pdf
+- NCCP 00312 v5 — Topotecan Monotherapy – Weekly — https://healthservice.hse.ie/documents/6715/312__V5_Topotecan_Monotherapy_weekly.pdf
+- NCCP 00375 v6 — Trabectedin and Pegylated Liposomal Doxorubicin Therapy — https://healthservice.hse.ie/documents/6818/375_Trabectedin_and_PLD_therapy.pdf
+- NCCP 00385 v5 — Cisplatin 40 mg/m² Weekly with Radiotherapy — https://healthservice.hse.ie/documents/6341/385_V5_CISplatin_40mgm2_weekly_with_RT.pdf
+- NCCP 00419 v4 — Carboplatin AUC 2 Weekly with Radiotherapy — https://healthservice.hse.ie/documents/6459/419_v4_CarboAUC2and_RT.pdf
+- NCCP 00499 v8 — Gemcitabine 1000 mg/m², Carboplatin AUC 4 and Bevacizumab 15 mg/kg Therapy – 21 day — https://healthservice.hse.ie/documents/6507/499_V8_GemCARBOAUC_4BEV.pdf
+- NCCP 00620 v2 — Bevacizumab 7.5 mg/kg, Carboplatin AUC 5 and Paclitaxel 175 mg/m² Therapy — https://healthservice.hse.ie/documents/6852/620_V2_BevPacliCarbo.pdf
+- NCCP 00624 v3 — Carboplatin AUC 5 and Pegylated Liposomal Doxorubicin 30 mg/m² Therapy — 28 day — https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf
+- NCCP 00676 v3 — Cisplatin 50 mg/m² Chemoradiation followed by Carboplatin AUC 5 and Paclitaxel 175 mg/m² — https://healthservice.hse.ie/documents/6673/676_v3_Cisplatin_50mgm2_with_RT_Pacli_Carbo.pdf
+- NCCP 00716 v2 — Bevacizumab 15 mg/kg, Carboplatin AUC 5 and Paclitaxel 175 mg/m² Therapy — https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf
+- NCCP 00746 v2 — Olaparib (Tablet) and Bevacizumab Therapy — https://healthservice.hse.ie/documents/6626/746_V2_Olaparib_bevacizumab_therapy.pdf
+- NCCP 00766 v2 — Bevacizumab 15 mg/kg, Paclitaxel 175 mg/m² and Carboplatin AUC 6 Therapy — https://healthservice.hse.ie/documents/6667/766_V2_Bevacizumab_15_Paclitaxel_CarboplatinAUC6.pdf
+- NCCP 00769 v2 — Bevacizumab 10 mg/kg and Paclitaxel 80 mg/m² Days 1, 8, 15 and 22 — https://healthservice.hse.ie/documents/6666/769_V2_Bevacizumab10_PACLitaxelDay181522.pdf
+- NCCP 00771 v2 — Bevacizumab 10 mg/kg and Topotecan 4 mg/m² Therapy — https://healthservice.hse.ie/documents/6665/771_V2_Bevacizumab10_Topotecan.pdf
+- NCCP 00772 v3 — Bevacizumab 10 mg/kg and Pegylated Liposomal Doxorubicin 40 mg/m² Therapy — https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf
+- NCCP 00799 v2 — Bevacizumab 15 mg/kg, Paclitaxel 175 mg/m² and Cisplatin 50 mg/m² Therapy — https://healthservice.hse.ie/documents/6422/799_V2_Bev_Pacli_CIS.pdf
+- NCCP 00811 v2 — Pembrolizumab, Paclitaxel 175 mg/m², Carboplatin AUC 5 and Bevacizumab Therapy — https://healthservice.hse.ie/documents/6425/811_V2_Pembrolizumab_Pac_Carbo_Bev.pdf
+- NCCP 00812 v3a — Cemiplimab Therapy — https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf
+- NCCP 00817 v2 — Pembrolizumab, Paclitaxel 175 mg/m² and Carboplatin AUC 5 Therapy — https://healthservice.hse.ie/documents/6429/817_V2_Pembro_Pac_175_Carbo_AUC_5.pdf
+- NCCP 00819 v2 — Dostarlimab Therapy — https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf
+- NCCP 00862 v2 — Niraparib (Tablets) Monotherapy — https://healthservice.hse.ie/documents/6437/862_V2_Niraparib_Tablets_Monotherapy.pdf
+- NCCP 00904 v1 — Rucaparib (Tablets) Monotherapy — https://healthservice.hse.ie/documents/6655/904_V1_Rucaparib_monotherapy.pdf
+- NCCP 00929 v1 — Dostarlimab, Paclitaxel and Carboplatin Therapy — https://healthservice.hse.ie/documents/8284/929_Dostarlimab_-_PACLi_CARBO_Regimen.pdf
+- NCCP 00215 v7 — Bevacizumab 15 mg/kg Therapy — 21 days — https://healthservice.hse.ie/documents/6555/00215_Bevacizumab_15_knZhA52.pdf
+- NCCP 00226 v9 — Paclitaxel Monotherapy 80mg/m² Day 1, 8, 15 and 22 – 28 Day — https://healthservice.hse.ie/documents/6562/226_V9_Paclitaxel_80.pdf
+- NCCP 00279 v7 — Cisplatin 75 mg/m², Etoposide 100 mg/m² and Radiotherapy – 21 day — https://healthservice.hse.ie/documents/6697/279_V7_Cisplatin_and_Etoposide_and_RT.pdf
+- NCCP 00311 v4 — Topotecan Monotherapy – 5 day — https://healthservice.hse.ie/documents/6714/311_v4_Topotecan_Monotherapy_5day.pdf
+- NCCP 00455 v15b — Pembrolizumab 200 mg Monotherapy — https://healthservice.hse.ie/documents/6487/455_v15b_Pembrolizumab_200mg_Monotherapy.pdf
+- NCCP 00558 v12b — Pembrolizumab 400 mg Monotherapy — https://healthservice.hse.ie/documents/6389/558_v12b_Pembrolizumab_400mg_monotherapy.pdf
+- NCCP 00588 v5b — Olaparib (Tablet) Monotherapy — https://healthservice.hse.ie/documents/6397/588_Olaparib_tablet_monotherapy_FZxXOtF.pdf

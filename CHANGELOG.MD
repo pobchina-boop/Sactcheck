@@ -1,3 +1,9 @@
+## v0.43.0 — Complete Gynaecology Library
+- Added/reconciled all 48 current NCCP Gynaecology regimen documents as active encoded protocols.
+- Added cervical, endometrial, ovarian, GTN and ovarian germ-cell pathways.
+- Added immunotherapy, PARP inhibitor, bevacizumab, chemoradiation and specialist GTN assessment logic.
+- Expanded the complete indexed library to 308 protocols.
+
 ## v0.42.0 — Complete Neuro-oncology Library
 - Added 10 fully encoded current NCCP Neuro-oncology protocols.
 - Added glioblastoma, glioma, medulloblastoma/PNET, PCV, CLV, lomustine, bevacizumab and temozolomide pathways.

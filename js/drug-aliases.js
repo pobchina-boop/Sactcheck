@@ -9,6 +9,10 @@
   "use strict";
 
   const ENTRIES = Object.freeze([
+    { terms: ["cemiplimab"], aliases: ["Libtayo"] },
+    { terms: ["dostarlimab"], aliases: ["Jemperli"] },
+    { terms: ["dactinomycin"], aliases: ["Cosmegen"] },
+    { terms: ["rucaparib"], aliases: ["Rubraca"] },
     { terms: ["lomustine"], aliases: ["CCNU"] },
     { terms: ["procarbazine"], aliases: ["Matulane"] },
     { terms: ["dacarbazine"], aliases: ["DTIC"] },
@@ -154,7 +158,7 @@
   }
 
   root.SACTCheckDrugAliases = Object.freeze({
-    version: "0.42.0",
+    version: "0.43.0",
     entries: ENTRIES,
     forProtocol,
     searchText

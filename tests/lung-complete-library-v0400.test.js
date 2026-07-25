@@ -111,13 +111,13 @@ assert.strictEqual(new Set(codes).size, 59, 'The Lung deck contains duplicate NC
 assert.strictEqual(new Set(lung.map(({ data }) => data.protocol_id)).size, 59, 'The Lung deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root,'protocols','index.json'),'utf8'));
-assert.strictEqual(index.protocol_count, 280, 'Complete protocol index must contain 270 protocols.');
-assert.strictEqual(index.protocols.length, 280, 'Complete protocol index array must contain 270 entries.');
-assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 280, 'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 308, 'Complete protocol index must contain 270 protocols.');
+assert.strictEqual(index.protocols.length, 308, 'Complete protocol index array must contain 270 entries.');
+assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 308, 'Protocol index contains duplicate IDs.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root,'data','emetogenic-risk-map.json'),'utf8'));
-assert.strictEqual(riskMap.release, '0.42.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 280, 'Supportive-care map must cover all protocols.');
+assert.strictEqual(riskMap.release, '0.43.0');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 308, 'Supportive-care map must cover all protocols.');
 
 const ctcaeContext = { window: {} };
 vm.createContext(ctcaeContext);
@@ -131,7 +131,7 @@ for (const { file, data } of lung) {
   const code=String(data.metadata.nccp_regimen_code).padStart(5,'0'); const m=data.metadata || {};
   assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} is not an active encoded prototype.`);
   assert(!/placeholder|draft/i.test(String(data.status || '')),`${code} remains a placeholder/draft.`);
-  assert.strictEqual(m.sactcheck_encoding_version,'0.40.0',`${code} lacks v0.40.0 encoding marker.`);
+  assert(['0.40.0','0.43.0'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Lung/Gynaecology reconciliation encoding marker.`);
   assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
   assert(/^https:\/\/healthservice\.hse\.ie\/documents\//.test(m.source_url || ''),`${code} lacks direct official HSE/NCCP PDF.`);
   assert(m.lung_subgroup,`${code} lacks Lung subgroup.`);
@@ -221,7 +221,7 @@ assert(auditedFields>=700,`Expected at least 700 independently assessed Lung inp
 // Targeted-agent trade-name discoverability.
 const aliasContext={globalThis:null};aliasContext.globalThis=aliasContext;vm.createContext(aliasContext);
 vm.runInContext(fs.readFileSync(path.join(root,'js','drug-aliases.js'),'utf8'),aliasContext);
-const Aliases=aliasContext.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.42.0');
+const Aliases=aliasContext.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.43.0');
 const byCode=code => lung.find(({data})=>String(data.metadata.nccp_regimen_code).padStart(5,'0')===code).data;
 const aliases={'00221':'Giotrif','00401':'Alecensa','00562':'Alunbrig','00340':'Zykadia','00243':'Xalkori','00565':'Vizimpro','00702':'Rozlytrek','00219':'Tarceva','00220':'Iressa','00570':'Lorviqua','00372':'Vargatef','00353':'Tagrisso','00823':'Tepmetko','00908':'Hetronifly'};
 for (const [code,alias] of Object.entries(aliases)) assert(Aliases.forProtocol(byCode(code)).includes(alias),`${code} is not searchable by ${alias}.`);
@@ -240,8 +240,8 @@ for (const {data} of all) {
 }
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('Version 0.42.0 · complete Neuro-oncology library'),'current release badge missing.');
-assert(html.includes('js/protocol-loader.js?v=0.42.0'),'current loader cache key missing.');
-assert(html.includes('js/drug-aliases.js?v=0.42.0'),'current alias cache key missing.');
+assert(html.includes('Version 0.43.0 · complete Gynaecology library'),'current release badge missing.');
+assert(html.includes('js/protocol-loader.js?v=0.43.0'),'current loader cache key missing.');
+assert(html.includes('js/drug-aliases.js?v=0.43.0'),'current alias cache key missing.');
 
 console.log(`v0.40.0 Lung library tests passed: 59 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);
