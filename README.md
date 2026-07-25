@@ -2,22 +2,24 @@
 
 ## Current release
 
-**SACTCheck v0.40.0 — Complete Lung Library**
+**SACTCheck v0.41.0 — Complete Sarcoma Library**
 
-SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This release completes the active Lung catalogue with 59 distinct official NCCP regimen documents represented as live JSON assessment protocols rather than placeholders.
+SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This release completes the current Sarcoma catalogue with 25 distinct NCCP regimen documents represented as live JSON assessment protocols rather than placeholders.
 
-### v0.40.0 highlights
+### v0.41.0 highlights
 
-- 59 Lung protocols across NSCLC, SCLC, chemoradiation, mesothelioma, immunotherapy and molecularly targeted therapy.
-- 38 new Lung protocol files and 21 existing/shared protocols reconciled to the official Lung inventory.
+- 25 active Sarcoma protocols spanning soft-tissue sarcoma, osteosarcoma, Ewing sarcoma, rhabdomyosarcoma, GIST, Kaposi sarcoma and aggressive fibromatosis.
+- 19 dedicated Sarcoma protocol files plus 6 canonical shared protocols reconciled for explicit Sarcoma/GIST use.
+- Source-specific ifosfamide, Mesna, hydration, encephalopathy, MAP/high-dose methotrexate rescue, anthracycline cardiac, cisplatin renal, PLD, trabectedin and oral targeted-therapy pathways.
 - Single-entry partial assessment retained throughout: any independently actionable entered field can return its own finding without unrelated mandatory inputs.
 - CTCAE grade controls use toxicity-specific v5.0 descriptions and practical assessment guidance beside the selector.
 - Actual ALT, AST and bilirubin results use the central local-laboratory ULN adapter.
-- Protocol-specific renal bands are used where guidance is tiered; exact CrCl/GFR is retained for Calvert carboplatin dosing.
-- Optional immunotherapy endocrine inputs, central supportive-care mappings, trade-name aliases and direct official NCCP PDF access are included.
-- No Lung placeholders or draft regimen cards.
+- Protocol-specific renal bands are used where guidance is tiered.
+- Phase-dependent antiemetic/supportive-care profiles, trade-name aliases and direct official NCCP PDF access are included.
+- No Sarcoma placeholders or draft regimen cards.
+- Complete catalogue expanded to 270 distinct protocols.
 
-See `RELEASE_NOTES_v0.40.0.md` and `UPDATE_INSTRUCTIONS_v0.40.0.txt`.
+See `RELEASE_NOTES_v0.41.0.md`, `SARCOMA_LIBRARY_SOURCES_v0.41.0.md` and `UPDATE_INSTRUCTIONS_v0.41.0.txt`.
 
 ## Safety and governance
 

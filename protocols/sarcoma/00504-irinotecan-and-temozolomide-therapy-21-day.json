@@ -1,38 +1,40 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00205-v8",
-  "file_name": "00205-pegylated-liposomal-doxorubicin-50-mg-m2-28-day.json",
+  "protocol_id": "nccp-00504-v2",
+  "file_name": "00504-irinotecan-and-temozolomide-therapy-21-day.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
-    "nccp_regimen_code": "00205",
-    "nccp_version": "8",
-    "title": "Pegylated Liposomal DOXOrubicin 50 mg/m² – 28 day",
-    "short_title": "Pegylated Liposomal DOXOrubicin 50 mg/m² – 28 day",
-    "indication": "Metastatic soft tissue sarcoma.",
-    "source_url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
+    "nccp_regimen_code": "00504",
+    "nccp_version": "2",
+    "title": "Irinotecan and Temozolomide Therapy – 21 day",
+    "short_title": "Irinotecan and Temozolomide Therapy – 21 day",
+    "indication": "Relapsed or refractory Ewing sarcoma.",
+    "source_url": "https://healthservice.hse.ie/documents/6740/504_v2_Irinotecan_and_Temozolomide_Therapy.pdf",
     "source_document_pages": null,
     "sactcheck_encoding_version": "0.41.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
-    "sarcoma_subgroup": "soft_tissue_sarcoma",
+    "sarcoma_subgroup": "ewing_relapsed",
     "treatment_context": [
       "sarcoma",
-      "soft_tissue_sarcoma"
+      "ewing_relapsed"
     ],
     "treatment_class": [
       "cytotoxic_chemotherapy"
     ],
     "cytotoxic": true,
-    "catalogue_section": "soft_tissue_sarcoma",
-    "catalogue_section_label": "Soft-tissue sarcoma",
+    "catalogue_section": "ewing_sarcoma",
+    "catalogue_section_label": "Ewing & relapsed bone sarcoma",
     "catalog": {
       "enabled": true
     },
     "drugs": [
-      "pegylated liposomal doxorubicin"
+      "irinotecan",
+      "temozolomide"
     ],
     "common_trade_names": [
-      "Caelyx"
+      "Campto",
+      "Temodal"
     ],
     "migration": {
       "mode": "live_json"
@@ -45,28 +47,25 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
-    "tumour_groups": [
-      "Breast",
-      "Gynaecology",
-      "Sarcoma"
-    ]
+    "tumour_group": "Sarcoma"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00205 Version 8. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00504 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
   "indications": [
     {
-      "indication_id": "00205-sarcoma",
-      "description": "Metastatic soft tissue sarcoma."
+      "indication_id": "00504-sarcoma",
+      "description": "Relapsed or refractory Ewing sarcoma."
     }
   ],
   "treatment": {
-    "cycle_length_days": 28,
-    "schedule_summary": "Pegylated Liposomal DOXOrubicin 50 mg/m² – 28 day",
+    "cycle_length_days": 21,
+    "schedule_summary": "Irinotecan and Temozolomide Therapy – 21 day",
     "drugs": [
-      "pegylated liposomal doxorubicin"
+      "irinotecan",
+      "temozolomide"
     ]
   },
   "input_definitions": {
@@ -220,29 +219,54 @@
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Identify the exact adverse event and grade it using its own CTCAE criteria, objective findings, intervention required and functional impact."
     },
-    "lvef_percent": {
-      "label": "LVEF",
-      "type": "number",
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 60,
-      "unit": "%"
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess increase in stools over baseline, incontinence, need for IV fluids/admission and impact on self-care."
     },
-    "symptomatic_cardiac_dysfunction": {
-      "label": "Symptoms or signs of cardiac dysfunction",
+    "acute_cholinergic_syndrome": {
+      "label": "Acute irinotecan cholinergic syndrome",
       "type": "boolean",
       "required": false,
       "demo_value": false
     },
-    "cumulative_anthracycline_mg_m2": {
-      "label": "Lifetime cumulative anthracycline exposure",
-      "type": "number",
+    "ugt1a1_high_risk_genotype": {
+      "label": "Known high-risk UGT1A1 genotype (for example homozygous *28)",
+      "type": "boolean",
       "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 0,
-      "unit": "mg/m²"
+      "demo_value": false
     },
     "bilirubin_uln_multiple": {
       "label": "Bilirubin result (enter actual result; ×ULN calculated automatically)",
@@ -253,125 +277,65 @@
       "demo_value": 1,
       "unit": "×ULN"
     },
-    "ppe_grade": {
-      "label": "Palmar-plantar erythrodysesthesia grade",
+    "irinotecan_renal_band": {
+      "label": "Renal function for irinotecan",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "value": "ge10",
+          "label": "CrCl ≥10 mL/min"
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "value": "lt10",
+          "label": "CrCl <10 mL/min"
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "value": "dialysis",
+          "label": "Haemodialysis"
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "ppe",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess painful erythema, swelling, blistering, functional limitation and impact on instrumental or self-care activities."
+      "demo_value": "ge10",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
     },
-    "stomatitis_grade": {
-      "label": "Stomatitis grade",
+    "temozolomide_renal_band": {
+      "label": "Renal function for temozolomide",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "value": "ge36",
+          "label": "CrCl ≥36 mL/min"
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "value": "lt36",
+          "label": "CrCl <36 mL/min"
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "value": "dialysis",
+          "label": "Haemodialysis"
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess pain, ulceration, oral intake and nutritional consequences."
+      "demo_value": "ge36",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
     },
-    "infusion_reaction_grade": {
-      "label": "Infusion reaction grade",
-      "type": "select",
+    "delayed_count_recovery_14_days_or_more": {
+      "label": "Count recovery delayed by ≥14 days",
+      "type": "boolean",
       "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess timing, intervention, airway/haemodynamic compromise and recovery."
+      "demo_value": false
     },
-    "lvef_reduction_from_baseline_percent": {
-      "label": "Absolute LVEF reduction from baseline",
-      "type": "number",
+    "recurrent_grade3_febrile_neutropenia": {
+      "label": "Repeated Grade ≥3 febrile neutropenia after at least two cycles",
+      "type": "boolean",
       "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 0,
-      "unit": "percentage points"
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -478,214 +442,193 @@
         "explanation": "Pregnancy or breastfeeding is outside the routine source pathway."
       },
       {
-        "id": "ANC_LT05",
+        "id": "ANC_LT1",
         "priority": 10,
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
-          "value": 0.5
+          "value": 1
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "delay",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "whole_regimen"
           ],
-          "message": "ANC <0.5 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
+          "message": "ANC <1.0 ×10⁹/L: delay treatment."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "ANC <0.5 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
-      },
-      {
-        "id": "PLT_LT25",
-        "priority": 10,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 25
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Platelets <25 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Platelets <25 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
-      },
-      {
-        "id": "ANC_LT15",
-        "priority": 9,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1.5
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "ANC <1.5 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ANC <1.5 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
+        "explanation": "ANC <1.0 ×10⁹/L: delay treatment."
       },
       {
         "id": "PLT_LT75",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
           "value": 75
         },
         "action": {
-          "type": "withhold",
+          "type": "delay",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "whole_regimen"
           ],
-          "message": "Platelets <75 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
+          "message": "Platelets <75 ×10⁹/L: delay treatment."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "Platelets <75 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
+        "explanation": "Platelets <75 ×10⁹/L: delay treatment."
       },
       {
-        "id": "PLD_BILI_GT4_3",
-        "priority": 10,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 4.3
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Bilirubin >86 µmol/L: PLD is not recommended."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin >86 µmol/L: PLD is not recommended."
-      },
-      {
-        "id": "PLD_BILI_GT2_5",
+        "id": "DELAYED_RECOVERY",
         "priority": 9,
         "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 2.5
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Bilirubin 51–86 µmol/L: administer 50% PLD."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin 51–86 µmol/L: administer 50% PLD."
-      },
-      {
-        "id": "PLD_BILI_GT1",
-        "priority": 8,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Bilirubin 20–50 µmol/L: administer 75% PLD."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin 20–50 µmol/L: administer 75% PLD."
-      },
-      {
-        "id": "PPE_G2",
-        "priority": 9,
-        "when": {
-          "field": "ppe_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade ≥2 PPE: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade ≥2 PPE: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-      },
-      {
-        "id": "STOMATITIS_G2",
-        "priority": 9,
-        "when": {
-          "field": "stomatitis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade ≥2 stomatitis: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade ≥2 stomatitis: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-      },
-      {
-        "id": "CARDIAC",
-        "priority": 10,
-        "when": {
-          "field": "symptomatic_cardiac_dysfunction",
+          "field": "delayed_count_recovery_14_days_or_more",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "dose_reduce_one_level",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "temozolomide"
           ],
-          "message": "Cardiac symptoms require withholding and cardiac assessment."
+          "message": "Count recovery delayed by ≥14 days: reduce temozolomide by one dose level."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "Cardiac symptoms require withholding and cardiac assessment."
+        "explanation": "Count recovery delayed by ≥14 days: reduce temozolomide by one dose level."
+      },
+      {
+        "id": "RECURRENT_FN",
+        "priority": 9,
+        "when": {
+          "field": "recurrent_grade3_febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "dose_reduce_one_level",
+          "components": [
+            "temozolomide"
+          ],
+          "message": "Repeated Grade ≥3 febrile neutropenia: reduce temozolomide; prefer G-CSF where appropriate."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Repeated Grade ≥3 febrile neutropenia: reduce temozolomide; prefer G-CSF where appropriate."
+      },
+      {
+        "id": "IRI_CRCL_LT10",
+        "priority": 9,
+        "when": {
+          "field": "irinotecan_renal_band",
+          "operator": "==",
+          "value": "lt10"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan"
+          ],
+          "message": "CrCl <10 mL/min: use 50–66% irinotecan with specialist review."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "CrCl <10 mL/min: use 50–66% irinotecan with specialist review."
+      },
+      {
+        "id": "IRI_DIALYSIS",
+        "priority": 10,
+        "when": {
+          "field": "irinotecan_renal_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan"
+          ],
+          "message": "Haemodialysis: use 50–66% irinotecan with specialist timing review."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Haemodialysis: use 50–66% irinotecan with specialist timing review."
+      },
+      {
+        "id": "IRI_BILI_GT3",
+        "priority": 10,
+        "when": {
+          "field": "bilirubin_uln_multiple",
+          "operator": ">",
+          "value": 3
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "irinotecan"
+          ],
+          "message": "Bilirubin >3 ×ULN: irinotecan is contraindicated."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Bilirubin >3 ×ULN: irinotecan is contraindicated."
+      },
+      {
+        "id": "DIARRHOEA_G3",
+        "priority": 10,
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "irinotecan"
+          ],
+          "message": "Grade ≥3 diarrhoea: withhold, actively treat and apply the source dose-reduction pathway after recovery."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Grade ≥3 diarrhoea: withhold, actively treat and apply the source dose-reduction pathway after recovery."
+      },
+      {
+        "id": "CHOLINERGIC",
+        "priority": 7,
+        "when": {
+          "field": "acute_cholinergic_syndrome",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "irinotecan"
+          ],
+          "message": "Treat acute cholinergic syndrome with the protocol atropine pathway and reassess."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Treat acute cholinergic syndrome with the protocol atropine pathway and reassess."
       }
     ]
   },
@@ -707,19 +650,27 @@
     "Component-specific haematological, renal, hepatic and non-haematological pathways are encoded as independently actionable rules."
   ],
   "supportive_care": {
-    "emetogenic_risk": "low",
-    "script_id": "nccp-parenteral-low",
+    "emetogenic_risk": "phase_dependent",
+    "script_id": "nccp-parenteral-high",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
-    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
-    "supportive_medications_label": "CUH low-risk prescription sheet (2021; pharmacy reconciliation required)",
     "additional_supportive_care": [
-      "PPE prevention/counselling",
-      "Infusion-reaction precautions"
-    ]
+      "Early loperamide pathway for delayed diarrhoea",
+      "Atropine pathway for acute cholinergic syndrome"
+    ],
+    "phase_profiles": {
+      "irinotecan_temozolomide_days_1_to_5": {
+        "level": "moderate",
+        "script_id": "nccp-parenteral-moderate"
+      },
+      "rest_days": {
+        "level": "minimal",
+        "script_id": "nccp-minimal-no-routine-prophylaxis"
+      }
+    }
   }
 }

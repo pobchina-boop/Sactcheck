@@ -111,13 +111,13 @@ assert.strictEqual(new Set(codes).size, 59, 'The Lung deck contains duplicate NC
 assert.strictEqual(new Set(lung.map(({ data }) => data.protocol_id)).size, 59, 'The Lung deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root,'protocols','index.json'),'utf8'));
-assert.strictEqual(index.protocol_count, 248, 'Complete protocol index must contain 248 protocols.');
-assert.strictEqual(index.protocols.length, 248, 'Complete protocol index array must contain 248 entries.');
-assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 248, 'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 270, 'Complete protocol index must contain 270 protocols.');
+assert.strictEqual(index.protocols.length, 270, 'Complete protocol index array must contain 270 entries.');
+assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 270, 'Protocol index contains duplicate IDs.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root,'data','emetogenic-risk-map.json'),'utf8'));
-assert.strictEqual(riskMap.release, '0.40.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 248, 'Supportive-care map must cover all protocols.');
+assert.strictEqual(riskMap.release, '0.41.0');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 270, 'Supportive-care map must cover all protocols.');
 
 const ctcaeContext = { window: {} };
 vm.createContext(ctcaeContext);
@@ -221,7 +221,7 @@ assert(auditedFields>=700,`Expected at least 700 independently assessed Lung inp
 // Targeted-agent trade-name discoverability.
 const aliasContext={globalThis:null};aliasContext.globalThis=aliasContext;vm.createContext(aliasContext);
 vm.runInContext(fs.readFileSync(path.join(root,'js','drug-aliases.js'),'utf8'),aliasContext);
-const Aliases=aliasContext.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.40.0');
+const Aliases=aliasContext.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.41.0');
 const byCode=code => lung.find(({data})=>String(data.metadata.nccp_regimen_code).padStart(5,'0')===code).data;
 const aliases={'00221':'Giotrif','00401':'Alecensa','00562':'Alunbrig','00340':'Zykadia','00243':'Xalkori','00565':'Vizimpro','00702':'Rozlytrek','00219':'Tarceva','00220':'Iressa','00570':'Lorviqua','00372':'Vargatef','00353':'Tagrisso','00823':'Tepmetko','00908':'Hetronifly'};
 for (const [code,alias] of Object.entries(aliases)) assert(Aliases.forProtocol(byCode(code)).includes(alias),`${code} is not searchable by ${alias}.`);
@@ -240,8 +240,8 @@ for (const {data} of all) {
 }
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('Version 0.40.0 · complete lung library'),'v0.40.0 release badge missing.');
-assert(html.includes('js/protocol-loader.js?v=0.40.0'),'v0.40.0 loader cache key missing.');
-assert(html.includes('js/drug-aliases.js?v=0.40.0'),'v0.40.0 alias cache key missing.');
+assert(html.includes('Version 0.41.0 · complete sarcoma library'),'current release badge missing.');
+assert(html.includes('js/protocol-loader.js?v=0.41.0'),'current loader cache key missing.');
+assert(html.includes('js/drug-aliases.js?v=0.41.0'),'current alias cache key missing.');
 
 console.log(`v0.40.0 Lung library tests passed: 59 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);

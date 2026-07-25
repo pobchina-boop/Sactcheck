@@ -1,23 +1,23 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00205-v8",
-  "file_name": "00205-pegylated-liposomal-doxorubicin-50-mg-m2-28-day.json",
+  "protocol_id": "nccp-00554-v2",
+  "file_name": "00554-vinblastine-and-methotrexate-therapy.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
-    "nccp_regimen_code": "00205",
-    "nccp_version": "8",
-    "title": "Pegylated Liposomal DOXOrubicin 50 mg/m² – 28 day",
-    "short_title": "Pegylated Liposomal DOXOrubicin 50 mg/m² – 28 day",
-    "indication": "Metastatic soft tissue sarcoma.",
-    "source_url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
+    "nccp_regimen_code": "00554",
+    "nccp_version": "2",
+    "title": "VinBLAStine and Methotrexate Therapy",
+    "short_title": "VinBLAStine and Methotrexate Therapy",
+    "indication": "Advanced aggressive fibromatosis.",
+    "source_url": "https://healthservice.hse.ie/documents/6742/554_v2_vinblastine_MTX_SAMV.pdf",
     "source_document_pages": null,
     "sactcheck_encoding_version": "0.41.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
-    "sarcoma_subgroup": "soft_tissue_sarcoma",
+    "sarcoma_subgroup": "fibromatosis",
     "treatment_context": [
       "sarcoma",
-      "soft_tissue_sarcoma"
+      "fibromatosis"
     ],
     "treatment_class": [
       "cytotoxic_chemotherapy"
@@ -29,10 +29,11 @@
       "enabled": true
     },
     "drugs": [
-      "pegylated liposomal doxorubicin"
+      "vinblastine",
+      "methotrexate"
     ],
     "common_trade_names": [
-      "Caelyx"
+      "Velbe"
     ],
     "migration": {
       "mode": "live_json"
@@ -45,28 +46,25 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
-    "tumour_groups": [
-      "Breast",
-      "Gynaecology",
-      "Sarcoma"
-    ]
+    "tumour_group": "Sarcoma"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00205 Version 8. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00554 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
   "indications": [
     {
-      "indication_id": "00205-sarcoma",
-      "description": "Metastatic soft tissue sarcoma."
+      "indication_id": "00554-sarcoma",
+      "description": "Advanced aggressive fibromatosis."
     }
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Pegylated Liposomal DOXOrubicin 50 mg/m² – 28 day",
+    "schedule_summary": "VinBLAStine and Methotrexate Therapy",
     "drugs": [
-      "pegylated liposomal doxorubicin"
+      "vinblastine",
+      "methotrexate"
     ]
   },
   "input_definitions": {
@@ -220,32 +218,51 @@
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Identify the exact adverse event and grade it using its own CTCAE criteria, objective findings, intervention required and functional impact."
     },
-    "lvef_percent": {
-      "label": "LVEF",
-      "type": "number",
+    "vinca_neuropathy_grade": {
+      "label": "Vinca-associated neuropathy grade",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 60,
-      "unit": "%"
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess sensory/motor symptoms, ileus/constipation, gait, dexterity and effect on activities."
     },
-    "symptomatic_cardiac_dysfunction": {
-      "label": "Symptoms or signs of cardiac dysfunction",
+    "ileus_or_severe_constipation": {
+      "label": "Ileus or severe constipation",
       "type": "boolean",
       "required": false,
       "demo_value": false
     },
-    "cumulative_anthracycline_mg_m2": {
-      "label": "Lifetime cumulative anthracycline exposure",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 0,
-      "unit": "mg/m²"
-    },
     "bilirubin_uln_multiple": {
-      "label": "Bilirubin result (enter actual result; ×ULN calculated automatically)",
+      "label": "Bilirubin result (actual value entered; ×ULN calculated automatically)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -253,125 +270,87 @@
       "demo_value": 1,
       "unit": "×ULN"
     },
-    "ppe_grade": {
-      "label": "Palmar-plantar erythrodysesthesia grade",
+    "methotrexate_renal_band": {
+      "label": "Renal function for methotrexate",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "value": "gt80",
+          "label": "CrCl >80 mL/min"
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "value": "60_80",
+          "label": "CrCl 60–80 mL/min"
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "value": "45_59",
+          "label": "CrCl 45–59 mL/min"
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
+          "value": "30_44",
+          "label": "CrCl 30–44 mL/min"
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "value": "lt30",
+          "label": "CrCl <30 mL/min"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis"
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "ppe",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess painful erythema, swelling, blistering, functional limitation and impact on instrumental or self-care activities."
+      "demo_value": "gt80",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
     },
-    "stomatitis_grade": {
-      "label": "Stomatitis grade",
+    "methotrexate_hepatic_band": {
+      "label": "Methotrexate hepatic function",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "value": "normal",
+          "label": "Bilirubin <50 µmol/L and AST <180 U/L"
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "value": "moderate",
+          "label": "Bilirubin 51–85 µmol/L or AST >180 U/L"
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "value": "severe",
+          "label": "Bilirubin >85 µmol/L"
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess pain, ulceration, oral intake and nutritional consequences."
+      "demo_value": "normal"
     },
-    "infusion_reaction_grade": {
-      "label": "Infusion reaction grade",
+    "vinblastine_hepatic_band": {
+      "label": "Vinblastine hepatic function",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "value": "normal",
+          "label": "Bilirubin ≤25 µmol/L and AST <60 U/L"
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "value": "half",
+          "label": "Bilirubin 26–51 µmol/L or AST 60–180 U/L"
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "value": "omit",
+          "label": "Bilirubin >51 µmol/L with AST >180 U/L"
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess timing, intervention, airway/haemodynamic compromise and recovery."
+      "demo_value": "normal"
     },
-    "lvef_reduction_from_baseline_percent": {
-      "label": "Absolute LVEF reduction from baseline",
-      "type": "number",
+    "third_space_fluid_significant": {
+      "label": "Significant pleural effusion, ascites or other third-space fluid",
+      "type": "boolean",
       "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 0,
-      "unit": "percentage points"
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -486,206 +465,355 @@
           "value": 0.5
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "delay",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "whole_regimen"
           ],
-          "message": "ANC <0.5 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
+          "message": "ANC <0.5 ×10⁹/L: delay treatment."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "ANC <0.5 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
+        "explanation": "ANC <0.5 ×10⁹/L: delay treatment."
       },
       {
-        "id": "PLT_LT25",
+        "id": "PLT_LT50",
         "priority": 10,
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
-          "value": 25
+          "value": 50
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "delay",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "whole_regimen"
           ],
-          "message": "Platelets <25 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
+          "message": "Platelets <50 ×10⁹/L: delay treatment."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "Platelets <25 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
+        "explanation": "Platelets <50 ×10⁹/L: delay treatment."
       },
       {
-        "id": "ANC_LT15",
-        "priority": 9,
+        "id": "ANC_05_09",
+        "priority": 8,
         "when": {
           "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1.5
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "ANC <1.5 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ANC <1.5 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Platelets <75 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Platelets <75 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
-      },
-      {
-        "id": "PLD_BILI_GT4_3",
-        "priority": 10,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 4.3
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Bilirubin >86 µmol/L: PLD is not recommended."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin >86 µmol/L: PLD is not recommended."
-      },
-      {
-        "id": "PLD_BILI_GT2_5",
-        "priority": 9,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 2.5
+          "operator": "<=",
+          "value": 0.9
         },
         "action": {
           "type": "dose_reduce",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "vinblastine",
+            "methotrexate"
           ],
-          "message": "Bilirubin 51–86 µmol/L: administer 50% PLD."
+          "message": "ANC 0.5–0.9 ×10⁹/L: administer 50% vinblastine and methotrexate."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "Bilirubin 51–86 µmol/L: administer 50% PLD."
+        "explanation": "ANC 0.5–0.9 ×10⁹/L: administer 50% vinblastine and methotrexate."
       },
       {
-        "id": "PLD_BILI_GT1",
+        "id": "PLT_50_99",
         "priority": 8,
         "when": {
-          "field": "bilirubin_uln_multiple",
+          "field": "platelets_x10e9_l",
+          "operator": "<=",
+          "value": 99
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinblastine",
+            "methotrexate"
+          ],
+          "message": "Platelets 50–99 ×10⁹/L: administer 50% vinblastine and methotrexate."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Platelets 50–99 ×10⁹/L: administer 50% vinblastine and methotrexate."
+      },
+      {
+        "id": "MTX_CRCL_60_80",
+        "priority": 8,
+        "when": {
+          "field": "methotrexate_renal_band",
+          "operator": "==",
+          "value": "60_80"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "CrCl 60–80 mL/min: administer 65% methotrexate."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "CrCl 60–80 mL/min: administer 65% methotrexate."
+      },
+      {
+        "id": "MTX_CRCL_45_59",
+        "priority": 9,
+        "when": {
+          "field": "methotrexate_renal_band",
+          "operator": "==",
+          "value": "45_59"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "CrCl 45–59 mL/min: administer 50% methotrexate."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "CrCl 45–59 mL/min: administer 50% methotrexate."
+      },
+      {
+        "id": "MTX_CRCL_30_44",
+        "priority": 10,
+        "when": {
+          "field": "methotrexate_renal_band",
+          "operator": "==",
+          "value": "30_44"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "CrCl 30–44 mL/min: individual clinical/pharmacy decision for methotrexate."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "CrCl 30–44 mL/min: individual clinical/pharmacy decision for methotrexate."
+      },
+      {
+        "id": "MTX_CRCL_LT30",
+        "priority": 10,
+        "when": {
+          "field": "methotrexate_renal_band",
+          "operator": "==",
+          "value": "lt30"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "CrCl <30 mL/min: methotrexate is contraindicated."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "CrCl <30 mL/min: methotrexate is contraindicated."
+      },
+      {
+        "id": "MTX_HD",
+        "priority": 10,
+        "when": {
+          "field": "methotrexate_renal_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Dialysis: methotrexate is contraindicated in the routine pathway."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Dialysis: methotrexate is contraindicated in the routine pathway."
+      },
+      {
+        "id": "MTX_HEP_MOD",
+        "priority": 8,
+        "when": {
+          "field": "methotrexate_hepatic_band",
+          "operator": "==",
+          "value": "moderate"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Bilirubin 51–85 µmol/L or AST >180 U/L: administer 75% methotrexate."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Bilirubin 51–85 µmol/L or AST >180 U/L: administer 75% methotrexate."
+      },
+      {
+        "id": "MTX_HEP_SEV",
+        "priority": 10,
+        "when": {
+          "field": "methotrexate_hepatic_band",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Bilirubin >85 µmol/L: methotrexate is contraindicated."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Bilirubin >85 µmol/L: methotrexate is contraindicated."
+      },
+      {
+        "id": "VBL_HEP_HALF",
+        "priority": 8,
+        "when": {
+          "field": "vinblastine_hepatic_band",
+          "operator": "==",
+          "value": "half"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vinblastine"
+          ],
+          "message": "Moderate hepatic dysfunction: administer 50% vinblastine."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Moderate hepatic dysfunction: administer 50% vinblastine."
+      },
+      {
+        "id": "VBL_HEP_OMIT",
+        "priority": 10,
+        "when": {
+          "field": "vinblastine_hepatic_band",
+          "operator": "==",
+          "value": "omit"
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "vinblastine"
+          ],
+          "message": "Severe combined bilirubin/AST elevation: omit vinblastine."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Severe combined bilirubin/AST elevation: omit vinblastine."
+      },
+      {
+        "id": "NEURO_G2",
+        "priority": 9,
+        "when": {
+          "field": "vinca_neuropathy_grade",
           "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vinblastine"
+          ],
+          "message": "Neuropathy >Grade 2: consultant-led vinblastine reduction/omission review."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Neuropathy >Grade 2: consultant-led vinblastine reduction/omission review."
+      },
+      {
+        "id": "MUCOSITIS_G1",
+        "priority": 7,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
           "value": 1
         },
         "action": {
           "type": "dose_reduce",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "methotrexate"
           ],
-          "message": "Bilirubin 20–50 µmol/L: administer 75% PLD."
+          "message": "Grade 1 mucositis: reduce methotrexate by 50%."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "Bilirubin 20–50 µmol/L: administer 75% PLD."
+        "explanation": "Grade 1 mucositis: reduce methotrexate by 50%."
       },
       {
-        "id": "PPE_G2",
-        "priority": 9,
-        "when": {
-          "field": "ppe_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade ≥2 PPE: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade ≥2 PPE: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-      },
-      {
-        "id": "STOMATITIS_G2",
-        "priority": 9,
-        "when": {
-          "field": "stomatitis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade ≥2 stomatitis: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade ≥2 stomatitis: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-      },
-      {
-        "id": "CARDIAC",
+        "id": "MUCOSITIS_G2",
         "priority": 10,
         "when": {
-          "field": "symptomatic_cardiac_dysfunction",
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Grade ≥2 mucositis: omit methotrexate until recovery and reassess."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Grade ≥2 mucositis: omit methotrexate until recovery and reassess."
+      },
+      {
+        "id": "THIRD_SPACE",
+        "priority": 9,
+        "when": {
+          "field": "third_space_fluid_significant",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "methotrexate"
           ],
-          "message": "Cardiac symptoms require withholding and cardiac assessment."
+          "message": "Significant third-space fluid requires reconsideration because methotrexate elimination may be delayed."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "Cardiac symptoms require withholding and cardiac assessment."
+        "explanation": "Significant third-space fluid requires reconsideration because methotrexate elimination may be delayed."
       }
     ]
   },
@@ -717,9 +845,6 @@
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
     "supportive_medications_label": "CUH low-risk prescription sheet (2021; pharmacy reconciliation required)",
-    "additional_supportive_care": [
-      "PPE prevention/counselling",
-      "Infusion-reaction precautions"
-    ]
+    "additional_supportive_care": []
   }
 }

@@ -1,38 +1,39 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00205-v8",
-  "file_name": "00205-pegylated-liposomal-doxorubicin-50-mg-m2-28-day.json",
+  "protocol_id": "nccp-00680-v2",
+  "file_name": "00680-high-dose-ifosfamide-therapy-21-day.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
-    "nccp_regimen_code": "00205",
-    "nccp_version": "8",
-    "title": "Pegylated Liposomal DOXOrubicin 50 mg/m² – 28 day",
-    "short_title": "Pegylated Liposomal DOXOrubicin 50 mg/m² – 28 day",
-    "indication": "Metastatic soft tissue sarcoma.",
-    "source_url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
+    "nccp_regimen_code": "00680",
+    "nccp_version": "2",
+    "title": "High Dose Ifosfamide Therapy – 21 day",
+    "short_title": "High Dose Ifosfamide Therapy – 21 day",
+    "indication": "Recurrent/primary refractory Ewing sarcoma or relapsed osteosarcoma.",
+    "source_url": "https://healthservice.hse.ie/documents/6767/680_v2_Ifosfamide_highdose.pdf",
     "source_document_pages": null,
     "sactcheck_encoding_version": "0.41.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
-    "sarcoma_subgroup": "soft_tissue_sarcoma",
+    "sarcoma_subgroup": "relapsed_bone_sarcoma",
     "treatment_context": [
       "sarcoma",
-      "soft_tissue_sarcoma"
+      "relapsed_bone_sarcoma"
     ],
     "treatment_class": [
       "cytotoxic_chemotherapy"
     ],
     "cytotoxic": true,
-    "catalogue_section": "soft_tissue_sarcoma",
-    "catalogue_section_label": "Soft-tissue sarcoma",
+    "catalogue_section": "ewing_sarcoma",
+    "catalogue_section_label": "Ewing & relapsed bone sarcoma",
     "catalog": {
       "enabled": true
     },
     "drugs": [
-      "pegylated liposomal doxorubicin"
+      "ifosfamide",
+      "mesna"
     ],
     "common_trade_names": [
-      "Caelyx"
+      "Mitoxana"
     ],
     "migration": {
       "mode": "live_json"
@@ -45,28 +46,25 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
-    "tumour_groups": [
-      "Breast",
-      "Gynaecology",
-      "Sarcoma"
-    ]
+    "tumour_group": "Sarcoma"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00205 Version 8. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00680 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
   "indications": [
     {
-      "indication_id": "00205-sarcoma",
-      "description": "Metastatic soft tissue sarcoma."
+      "indication_id": "00680-sarcoma",
+      "description": "Recurrent/primary refractory Ewing sarcoma or relapsed osteosarcoma."
     }
   ],
   "treatment": {
-    "cycle_length_days": 28,
-    "schedule_summary": "Pegylated Liposomal DOXOrubicin 50 mg/m² – 28 day",
+    "cycle_length_days": 21,
+    "schedule_summary": "High Dose Ifosfamide Therapy – 21 day",
     "drugs": [
-      "pegylated liposomal doxorubicin"
+      "ifosfamide",
+      "mesna"
     ]
   },
   "input_definitions": {
@@ -220,158 +218,84 @@
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Identify the exact adverse event and grade it using its own CTCAE criteria, objective findings, intervention required and functional impact."
     },
-    "lvef_percent": {
-      "label": "LVEF",
-      "type": "number",
+    "ifosfamide_renal_band": {
+      "label": "Renal function for ifosfamide",
+      "type": "select",
       "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 60,
-      "unit": "%"
+      "options": [
+        {
+          "value": "ge50",
+          "label": "CrCl ≥50 mL/min"
+        },
+        {
+          "value": "lt50",
+          "label": "CrCl <50 mL/min"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis"
+        }
+      ],
+      "demo_value": "ge50",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
     },
-    "symptomatic_cardiac_dysfunction": {
-      "label": "Symptoms or signs of cardiac dysfunction",
+    "encephalopathy_grade": {
+      "label": "Ifosfamide-associated encephalopathy/neurotoxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "neurological_toxicity",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess confusion, somnolence, agitation, hallucinations, seizures, consciousness and effect on self-care; exclude metabolic, infectious and drug causes."
+    },
+    "haematuria": {
+      "label": "Haematuria before or during ifosfamide",
       "type": "boolean",
       "required": false,
       "demo_value": false
     },
-    "cumulative_anthracycline_mg_m2": {
-      "label": "Lifetime cumulative anthracycline exposure",
-      "type": "number",
+    "urine_output_below_target": {
+      "label": "Urine output below protocol/local hydration target",
+      "type": "boolean",
       "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 0,
-      "unit": "mg/m²"
+      "demo_value": false
     },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin result (enter actual result; ×ULN calculated automatically)",
-      "type": "number",
+    "fluid_balance_positive_over_1l_or_weight_gain_1kg": {
+      "label": "Positive fluid balance >1 L or weight gain >1 kg",
+      "type": "boolean",
       "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN"
-    },
-    "ppe_grade": {
-      "label": "Palmar-plantar erythrodysesthesia grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "ppe",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess painful erythema, swelling, blistering, functional limitation and impact on instrumental or self-care activities."
-    },
-    "stomatitis_grade": {
-      "label": "Stomatitis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess pain, ulceration, oral intake and nutritional consequences."
-    },
-    "infusion_reaction_grade": {
-      "label": "Infusion reaction grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess timing, intervention, airway/haemodynamic compromise and recovery."
-    },
-    "lvef_reduction_from_baseline_percent": {
-      "label": "Absolute LVEF reduction from baseline",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 0,
-      "unit": "percentage points"
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -478,214 +402,235 @@
         "explanation": "Pregnancy or breastfeeding is outside the routine source pathway."
       },
       {
-        "id": "ANC_LT05",
+        "id": "ANC_LT1",
         "priority": 10,
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
-          "value": 0.5
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "ANC <0.5 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ANC <0.5 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
-      },
-      {
-        "id": "PLT_LT25",
-        "priority": 10,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 25
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Platelets <25 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Platelets <25 ×10⁹/L: hold until recovery, then reduce PLD by 25% or use G-CSF."
-      },
-      {
-        "id": "ANC_LT15",
-        "priority": 9,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1.5
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "ANC <1.5 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ANC <1.5 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Platelets <75 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Platelets <75 ×10⁹/L: hold until recovery; no routine dose reduction for this band."
-      },
-      {
-        "id": "PLD_BILI_GT4_3",
-        "priority": 10,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 4.3
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Bilirubin >86 µmol/L: PLD is not recommended."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin >86 µmol/L: PLD is not recommended."
-      },
-      {
-        "id": "PLD_BILI_GT2_5",
-        "priority": 9,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 2.5
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Bilirubin 51–86 µmol/L: administer 50% PLD."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin 51–86 µmol/L: administer 50% PLD."
-      },
-      {
-        "id": "PLD_BILI_GT1",
-        "priority": 8,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
           "value": 1
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "delay",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "whole_regimen"
           ],
-          "message": "Bilirubin 20–50 µmol/L: administer 75% PLD."
+          "message": "ANC <1.0 ×10⁹/L: delay."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "Bilirubin 20–50 µmol/L: administer 75% PLD."
+        "explanation": "ANC <1.0 ×10⁹/L: delay."
       },
       {
-        "id": "PPE_G2",
-        "priority": 9,
-        "when": {
-          "field": "ppe_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade ≥2 PPE: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade ≥2 PPE: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-      },
-      {
-        "id": "STOMATITIS_G2",
-        "priority": 9,
-        "when": {
-          "field": "stomatitis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade ≥2 stomatitis: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade ≥2 stomatitis: delay until recovery and apply the grade/duration-specific PLD reduction pathway."
-      },
-      {
-        "id": "CARDIAC",
+        "id": "PLT_LT70",
         "priority": 10,
         "when": {
-          "field": "symptomatic_cardiac_dysfunction",
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 70
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Platelets <70 ×10⁹/L: delay."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Platelets <70 ×10⁹/L: delay."
+      },
+      {
+        "id": "ANC_1_1_5",
+        "priority": 8,
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<=",
+          "value": 1.5
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "ANC 1.0–1.5 ×10⁹/L: administer 80% ifosfamide."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "ANC 1.0–1.5 ×10⁹/L: administer 80% ifosfamide."
+      },
+      {
+        "id": "PLT_70_100",
+        "priority": 8,
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<=",
+          "value": 100
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Platelets 70–100 ×10⁹/L: administer 80% ifosfamide."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Platelets 70–100 ×10⁹/L: administer 80% ifosfamide."
+      },
+      {
+        "id": "FN_REDUCE",
+        "priority": 9,
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "ANC nadir <0.5 ×10⁹/L with febrile neutropenia: administer 80% ifosfamide."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "ANC nadir <0.5 ×10⁹/L with febrile neutropenia: administer 80% ifosfamide."
+      },
+      {
+        "id": "IFO_RENAL_LT50",
+        "priority": 10,
+        "when": {
+          "field": "ifosfamide_renal_band",
+          "operator": "==",
+          "value": "lt50"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "CrCl <50 mL/min: high-dose ifosfamide is not routinely recommended."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "CrCl <50 mL/min: high-dose ifosfamide is not routinely recommended."
+      },
+      {
+        "id": "IFO_DIALYSIS",
+        "priority": 10,
+        "when": {
+          "field": "ifosfamide_renal_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Dialysis: high-dose ifosfamide is not routinely recommended."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Dialysis: high-dose ifosfamide is not routinely recommended."
+      },
+      {
+        "id": "MUCOSITIS_G3",
+        "priority": 9,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Grade ≥3 mucositis: administer 80% ifosfamide after recovery."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Grade ≥3 mucositis: administer 80% ifosfamide after recovery."
+      },
+      {
+        "id": "NEURO_G3",
+        "priority": 10,
+        "when": {
+          "field": "encephalopathy_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Grade ≥3 neurotoxicity: discontinue ifosfamide."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Grade ≥3 neurotoxicity: discontinue ifosfamide."
+      },
+      {
+        "id": "HAEMATURIA",
+        "priority": 10,
+        "when": {
+          "field": "haematuria",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "pegylated liposomal doxorubicin"
+            "ifosfamide"
           ],
-          "message": "Cardiac symptoms require withholding and cardiac assessment."
+          "message": "Haematuria requires withholding and urothelial toxicity assessment."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modification section"
         },
-        "explanation": "Cardiac symptoms require withholding and cardiac assessment."
+        "explanation": "Haematuria requires withholding and urothelial toxicity assessment."
+      },
+      {
+        "id": "URINE",
+        "priority": 9,
+        "when": {
+          "field": "urine_output_below_target",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Inadequate urine output requires correction before continuing."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "Dose modification section"
+        },
+        "explanation": "Inadequate urine output requires correction before continuing."
       }
     ]
   },
@@ -707,19 +652,22 @@
     "Component-specific haematological, renal, hepatic and non-haematological pathways are encoded as independently actionable rules."
   ],
   "supportive_care": {
-    "emetogenic_risk": "low",
-    "script_id": "nccp-parenteral-low",
+    "emetogenic_risk": "high",
+    "script_id": "nccp-parenteral-high",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
-    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
-    "supportive_medications_label": "CUH low-risk prescription sheet (2021; pharmacy reconciliation required)",
+    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_High_V2_05.21.pdf",
+    "supportive_medications_label": "CUH high-risk prescription sheet (2021; pharmacy reconciliation required)",
     "additional_supportive_care": [
-      "PPE prevention/counselling",
-      "Infusion-reaction precautions"
+      "Mesna uroprotection",
+      "Protocol-specific IV hydration",
+      "Strict fluid balance and urine monitoring",
+      "Neurological assessment before each ifosfamide dose",
+      "G-CSF where specified by the source regimen"
     ]
   }
 }

@@ -1,3 +1,13 @@
+# v0.41.0 — Complete Sarcoma Library (25 July 2026)
+
+- Completed all 25 official NCCP Sarcoma regimen cards as active assessment protocols with no placeholders or drafts.
+- Added 19 dedicated Sarcoma protocol files and reconciled 6 canonical shared protocols.
+- Added source-specific ifosfamide/Mesna/hydration, MAP/high-dose methotrexate rescue, anthracycline cardiac, cisplatin renal, PLD, trabectedin and GIST targeted-therapy pathways.
+- Added Sarcoma-wide single-entry, CTCAE, ULN, renal-band, supportive-care, source-link and alias regression coverage.
+- Updated NCCP 00500 doxorubicin monotherapy to current Version 3.
+- Rebuilt the complete catalogue to 270 distinct protocols.
+- Passed the complete regression suite before packaging and after clean extraction.
+
 # v0.40.0 — Complete Lung Library (24 July 2026)
 
 - Completed all 59 official NCCP Lung regimen cards as active assessment protocols.

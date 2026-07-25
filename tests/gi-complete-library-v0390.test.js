@@ -71,12 +71,12 @@ assert.strictEqual(new Set(codes).size, 93, 'The GI deck contains duplicate NCCP
 assert.strictEqual(new Set(gi.map(({ data }) => data.protocol_id)).size, 93, 'The GI deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root, 'protocols', 'index.json'), 'utf8'));
-assert.strictEqual(index.protocol_count, 248, 'Complete protocol index must contain 210 distinct protocols.');
-assert.strictEqual(index.protocols.length, 248, 'Complete protocol index array must contain 210 entries.');
+assert.strictEqual(index.protocol_count, 270, 'Complete protocol index must contain 210 distinct protocols.');
+assert.strictEqual(index.protocols.length, 270, 'Complete protocol index array must contain 210 entries.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
-assert.strictEqual(riskMap.release, '0.40.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 248, 'Central supportive-care map must cover all 210 protocols.');
+assert.strictEqual(riskMap.release, '0.41.0');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 270, 'Central supportive-care map must cover all 210 protocols.');
 
 const ctcaeContext = { window: {} };
 vm.createContext(ctcaeContext);
@@ -95,7 +95,7 @@ for (const { file, data } of gi) {
   const metadata = data.metadata || {};
   assert(!/placeholder|draft/i.test(String(data.status || '')), `${code} remains a placeholder or draft.`);
   assert.strictEqual(data.status, 'encoded_prototype_pending_clinical_and_pharmacy_validation', `${code} lacks active encoded-prototype status.`);
-  assert(['0.39.0','0.40.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
+  assert(['0.39.0','0.40.0','0.41.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
   assert.strictEqual(metadata.partial_assessment_supported, true, `${code} does not declare single-entry support.`);
   assert(/^https:\/\/healthservice\.hse\.ie\/documents\//.test(metadata.source_url || ''), `${code} does not link directly to an official HSE/NCCP source PDF.`);
   assert(metadata.gi_subgroup, `${code} lacks a GI subgroup.`);
@@ -190,7 +190,7 @@ aliasContext.globalThis = aliasContext;
 vm.createContext(aliasContext);
 vm.runInContext(fs.readFileSync(path.join(root, 'js', 'drug-aliases.js'), 'utf8'), aliasContext);
 const Aliases = aliasContext.SACTCheckDrugAliases;
-assert.strictEqual(Aliases.version, '0.40.0');
+assert.strictEqual(Aliases.version, '0.41.0');
 const byCode = code => gi.find(({ data }) => String(data.metadata.nccp_regimen_code).padStart(5, '0') === code).data;
 const aliases = {
   '00207': 'Erbitux', '00238': 'Zaltrap', '00235': 'Teysuno', '00642': 'Lutathera',
@@ -207,8 +207,8 @@ assert(!tumourGroups(breast00688).includes('Gastrointestinal'), 'Breast NCCP 006
 for (const code of ['00924', '00925', '00926']) assert(byCode(code), `${code} current GI regimen is missing.`);
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('Version 0.40.0 · complete lung library'), 'v0.39.0 release badge is missing.');
-assert(html.includes('js/protocol-loader.js?v=0.40.0'), 'v0.39.0 cache key is missing.');
-assert(html.includes('js/drug-aliases.js?v=0.40.0'), 'v0.39.0 alias cache key is missing.');
+assert(html.includes('Version 0.41.0 · complete sarcoma library'), 'v0.39.0 release badge is missing.');
+assert(html.includes('js/protocol-loader.js?v=0.41.0'), 'v0.39.0 cache key is missing.');
+assert(html.includes('js/drug-aliases.js?v=0.41.0'), 'v0.39.0 alias cache key is missing.');
 
 console.log(`v0.39.0 GI library tests passed: 93 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);

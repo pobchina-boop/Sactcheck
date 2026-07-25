@@ -9,6 +9,17 @@
   "use strict";
 
   const ENTRIES = Object.freeze([
+    { terms: ["dacarbazine"], aliases: ["DTIC"] },
+    { terms: ["ifosfamide"], aliases: ["Mitoxana"] },
+    { terms: ["imatinib"], aliases: ["Glivec"] },
+    { terms: ["mifamurtide"], aliases: ["Mepact"] },
+    { terms: ["pazopanib"], aliases: ["Votrient"] },
+    { terms: ["pegylated liposomal doxorubicin"], aliases: ["Caelyx"] },
+    { terms: ["sunitinib"], aliases: ["Sutent"] },
+    { terms: ["trabectedin"], aliases: ["Yondelis"] },
+    { terms: ["vinblastine"], aliases: ["Velbe"] },
+    { terms: ["vincristine"], aliases: ["Oncovin"] },
+    { terms: ["cyclophosphamide"], aliases: ["Endoxan"] },
     { terms: ["afatinib"], aliases: ["Giotrif"] },
     { terms: ["alectinib"], aliases: ["Alecensa"] },
     { terms: ["brigatinib"], aliases: ["Alunbrig"] },
@@ -141,7 +152,7 @@
   }
 
   root.SACTCheckDrugAliases = Object.freeze({
-    version: "0.40.0",
+    version: "0.41.0",
     entries: ENTRIES,
     forProtocol,
     searchText
