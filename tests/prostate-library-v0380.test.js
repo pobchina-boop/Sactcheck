@@ -21,6 +21,7 @@ function walk(dir) {
 function readProtocols() {
   return walk(path.join(root, 'protocols'))
     .filter(file => file.endsWith('.json'))
+    .filter(file => !file.includes(`${path.sep}protocols${path.sep}protocols${path.sep}`))
     .filter(file => !['index.json', 'protocol-schema.json', 'package.json'].includes(path.basename(file)))
     .map(file => {
       try { return { file, data: JSON.parse(fs.readFileSync(file, 'utf8')) }; }
@@ -58,13 +59,13 @@ assert.deepStrictEqual(codes, expectedCodes, 'The encoded prostate deck does not
 assert.strictEqual(prostate.length, 26, 'Expected 26 distinct fully encoded prostate regimen protocols.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root, 'protocols', 'index.json'), 'utf8'));
-assert.strictEqual(index.protocol_count, 308, 'The protocol index must contain 210 distinct regimen protocols.');
-assert.strictEqual(index.protocols.length, 308, 'The protocol index array must contain 210 entries.');
-assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 308, 'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 329, 'The protocol index must contain 210 distinct regimen protocols.');
+assert.strictEqual(index.protocols.length, 329, 'The protocol index array must contain 210 entries.');
+assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 329, 'Protocol index contains duplicate IDs.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
-assert.strictEqual(riskMap.release, '0.43.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 308, 'Central supportive-care map must cover the entire indexed library.');
+assert.strictEqual(riskMap.release, '0.44.0');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 329, 'Central supportive-care map must cover the entire indexed library.');
 
 for (const { file, data } of prostate) {
   const code = String(data.metadata.nccp_regimen_code);
@@ -164,8 +165,8 @@ assert.strictEqual(inducerRule.action.type, 'consultant_review', 'Relugolix dose
 assert(/240 mg/.test(inducerRule.explanation), 'Relugolix combined-inducer pathway lacks the encoded 240 mg instruction.');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('Version 0.43.0 · complete Gynaecology library'), 'v0.38.0 release badge is missing.');
-assert(html.includes('js/drug-aliases.js?v=0.43.0'), 'v0.38.0 alias cache key is missing.');
-assert.strictEqual(Aliases.version, '0.43.0');
+assert(html.includes('Version 0.44.0 · complete Genitourinary library'), 'v0.38.0 release badge is missing.');
+assert(html.includes('js/drug-aliases.js?v=0.44.0'), 'v0.38.0 alias cache key is missing.');
+assert.strictEqual(Aliases.version, '0.44.0');
 
 console.log(`v0.38.0 prostate library tests passed: 26 fully encoded NCCP prostate protocols and ${auditedFields} independently assessed rule inputs.`);

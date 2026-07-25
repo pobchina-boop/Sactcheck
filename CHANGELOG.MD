@@ -1,3 +1,10 @@
+## v0.44.0 — Complete Genitourinary Library
+- Added/reconciled all 67 current unique NCCP GU regimen codes across bladder, germ-cell, prostate and renal cancer.
+- Added 21 new protocols and reconciled 46 existing/shared canonical protocols without duplicate cards.
+- Added intravesical, chemoradiation, immunotherapy, targeted-therapy and specialist germ-cell assessment pathways.
+- Expanded the complete indexed library to 329 protocols.
+- Populated GU regimen-card intent, cycle interval and treatment-duration metadata with explicit review flags where duration remains indication-dependent.
+
 ## v0.43.0 — Complete Gynaecology Library
 - Added/reconciled all 48 current NCCP Gynaecology regimen documents as active encoded protocols.
 - Added cervical, endometrial, ovarian, GTN and ovarian germ-cell pathways.

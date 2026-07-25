@@ -26,6 +26,7 @@ function walk(directory) {
 let checked = 0;
 let sourceTitlesRetained = 0;
 for (const file of walk(protocolsRoot)) {
+  if (file.includes(`${path.sep}protocols${path.sep}protocols${path.sep}`)) continue;
   if (["index.json", "protocol-schema.json"].includes(path.basename(file))) continue;
   const protocol = JSON.parse(fs.readFileSync(file, "utf8"));
   const metadata = protocol.metadata || {};

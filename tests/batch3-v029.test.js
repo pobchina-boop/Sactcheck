@@ -114,8 +114,8 @@ assert.strictEqual(result.actionType, "permanently_discontinue", "Hypertensive c
 
 const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 assert.ok(html.includes('id="openPldCarbo"'), "The legacy 00624 card must have a stable migration target");
-assert.ok(html.includes("SACTCheck v0.43.0"));
-assert.ok(html.includes("Version 0.43.0 · complete Gynaecology library"));
-assert.ok(html.includes("js/protocol-loader.js?v=0.43.0"));
+assert.ok(html.includes("SACTCheck v0.44.0"));
+assert.ok(html.includes("Version 0.44.0 · complete Genitourinary library"));
+assert.ok(html.includes("js/protocol-loader.js?v=0.44.0"));
 
 console.log("v0.29 Batch 3 protocol tests passed.");

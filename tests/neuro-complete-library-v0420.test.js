@@ -8,15 +8,15 @@ const root=path.resolve(__dirname,'..');
 const expected=['00334','00342','00379','00461','00658','00742','00804','00805','00806','00813'].sort();
 function read(file){return JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));}
 function walk(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{const p=path.join(dir,e.name);return e.isDirectory()?walk(p):[p];});}
-function allProtocols(){return walk(path.join(root,'protocols')).filter(f=>f.endsWith('.json')&&!['index.json','protocol-schema.json','package.json'].includes(path.basename(f))).map(file=>{try{return {file,data:JSON.parse(fs.readFileSync(file,'utf8'))};}catch{return null;}}).filter(Boolean).filter(x=>x.data?.protocol_id&&x.data?.metadata?.nccp_regimen_code&&x.data.metadata.nccp_regimen_code!=='00000');}
+function allProtocols(){return walk(path.join(root,'protocols')).filter(f=>f.endsWith('.json')&&!f.includes(`${path.sep}protocols${path.sep}protocols${path.sep}`)&&!['index.json','protocol-schema.json','package.json'].includes(path.basename(f))).map(file=>{try{return {file,data:JSON.parse(fs.readFileSync(file,'utf8'))};}catch{return null;}}).filter(Boolean).filter(x=>x.data?.protocol_id&&x.data?.metadata?.nccp_regimen_code&&x.data.metadata.nccp_regimen_code!=='00000');}
 function groups(d){const m=d.metadata||{},out=[];if(typeof m.tumour_group==='string')out.push(m.tumour_group);for(const v of m.tumour_groups||[])if(!out.includes(v))out.push(v);return out;}
 function demo(def){if(def.demo_value!==undefined&&def.demo_value!==null)return String(def.demo_value);if(def.type==='select')return String(def.options?.[0]?.value??'');if(def.type==='boolean')return 'false';if(def.type==='number')return String(Number.isFinite(Number(def.min))?def.min:0);return 'test';}
 const all=allProtocols();const neuro=all.filter(x=>groups(x.data).includes('Neuro-oncology'));
 const codes=neuro.map(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')).sort();
 assert.deepStrictEqual(codes,expected,'Neuro-oncology deck must match the current NCCP catalogue inventory.');
 assert.strictEqual(neuro.length,10);assert.strictEqual(new Set(codes).size,10);assert.strictEqual(new Set(neuro.map(x=>x.data.protocol_id)).size,10);
-const index=read('protocols/index.json');assert.strictEqual(index.protocol_count, 308);assert.strictEqual(index.protocols.length, 308);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size, 308);
-const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.43.0');assert.strictEqual(Object.keys(risk.protocols||{}).length,308);
+const index=read('protocols/index.json');assert.strictEqual(index.protocol_count, 329);assert.strictEqual(index.protocols.length, 329);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size, 329);
+const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.44.0');assert.strictEqual(Object.keys(risk.protocols||{}).length,329);
 let inputs=0,rules=0,ctcae=0,renalBands=0;
 for(const {data,file} of neuro){
  const m=data.metadata,code=String(m.nccp_regimen_code).padStart(5,'0');
@@ -56,8 +56,8 @@ for(const {data} of neuro){
 }
 assert(audited>=170,`Expected >=170 single-entry checks, found ${audited}`);
 
-const aliasCtx={globalThis:null};aliasCtx.globalThis=aliasCtx;vm.createContext(aliasCtx);vm.runInContext(fs.readFileSync(path.join(root,'js/drug-aliases.js'),'utf8'),aliasCtx);const Aliases=aliasCtx.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.43.0');
+const aliasCtx={globalThis:null};aliasCtx.globalThis=aliasCtx;vm.createContext(aliasCtx);vm.runInContext(fs.readFileSync(path.join(root,'js/drug-aliases.js'),'utf8'),aliasCtx);const Aliases=aliasCtx.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.44.0');
 assert(Aliases.forProtocol(byCode('00342')).includes('Temodal'));assert(Aliases.forProtocol(byCode('00813')).includes('Avastin'));assert(Aliases.forProtocol(byCode('00805')).includes('CCNU'));assert(Aliases.forProtocol(byCode('00379')).includes('Matulane'));
-const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('Version 0.43.0 · complete Gynaecology library'));assert(html.includes('js/protocol-loader.js?v=0.43.0'));assert(html.includes('js/drug-aliases.js?v=0.43.0'));
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('Version 0.44.0 · complete Genitourinary library'));assert(html.includes('js/protocol-loader.js?v=0.44.0'));assert(html.includes('js/drug-aliases.js?v=0.44.0'));
 const tissue=fs.readFileSync(path.join(root,'js/tissue-ui.js'),'utf8');assert(tissue.includes('label: "Neuro-oncology"'));assert(tissue.includes('#4B5FA8'));
 console.log(`v0.42.0 Neuro-oncology tests passed: 10 protocols, ${inputs} inputs, ${rules} rules and ${audited} individually assessed rule-linked fields.`);

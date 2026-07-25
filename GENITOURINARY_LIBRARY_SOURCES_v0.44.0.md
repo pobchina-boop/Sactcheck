@@ -1,0 +1,73 @@
+# Genitourinary Library Sources — v0.44.0
+
+Official catalogue: https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/genitourinary-sact-regimens/
+
+Catalogue checked: 25 July 2026
+
+- NCCP 00212 v6a — Bevacizumab 10 mg/kg – 14 days — https://healthservice.hse.ie/documents/6942/212_V6a_Bevacizumab_10mgkg.pdf
+- NCCP 00203 v7 — Docetaxel Monotherapy 75 mg/m² – 21 day cycle — https://healthservice.hse.ie/documents/6543/203_DOCEtaxel_75-21day.pdf
+- NCCP 00226 v9 — Paclitaxel Monotherapy 80mg/m² Day 1, 8, 15 and 22 – 28 Day — https://healthservice.hse.ie/documents/6562/226_V9_Paclitaxel_80.pdf
+- NCCP 00621 v3 — Paclitaxel 80 mg/m² Days 1, 8 and 15 – 28 day — https://healthservice.hse.ie/documents/6688/621_V3_Paclitaxel_80.pdf
+- NCCP 00294 v4 — Sorafenib Therapy — https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf
+- NCCP 00320 v6 — Everolimus Monotherapy — https://healthservice.hse.ie/documents/6718/320_Everolimus.pdf
+- NCCP 00551 v7 — Nivolumab 3 mg/kg with Ipilimumab 1 mg/kg Therapy — https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgk.pdf
+- NCCP 00483 v13a — Nivolumab Monotherapy – 14 day — https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf
+- NCCP 00484 v13a — Nivolumab Monotherapy – 28 day — https://healthservice.hse.ie/documents/6499/484_Nivolumab_28-day_.pdf
+- NCCP 00455 v15b — Pembrolizumab 200 mg Monotherapy — https://healthservice.hse.ie/documents/6487/455_v15b_Pembrolizumab_200mg_Monotherapy.pdf
+- NCCP 00101 v8 — Cabazitaxel and Prednisolone Therapy — https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf
+- NCCP 00103 v9 — Abiraterone and prednisolone Therapy (mCRPC) — https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf
+- NCCP 00104 v6 — Axitinib Monotherapy — https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf
+- NCCP 00233 v7 — Enzalutamide Monotherapy — https://healthservice.hse.ie/documents/6332/233_v7_Enzalutamide_Monotherapy.pdf
+- NCCP 00257 v8 — Radium-223 Therapy — https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf
+- NCCP 00282 v5 — Gemcitabine and Cisplatin 70 mg/m² – 28 day — https://healthservice.hse.ie/documents/6454/282_v5_GemCis_70_28days.pdf
+- NCCP 00313 v5 — Docetaxel Monotherapy 50 mg/m² – 14 day cycle — https://healthservice.hse.ie/documents/6716/313_v5_Docetaxel_50-14day.pdf
+- NCCP 00326 v4 — Temsirolimus Therapy — https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf
+- NCCP 00333 v5a — Dose-dense Methotrexate, Vinblastine, Doxorubicin and Cisplatin (MVAC) – 14 day — https://healthservice.hse.ie/documents/6787/333_v5a_MVAC_14_day.pdf
+- NCCP 00337 v5 — Cisplatin, Methotrexate and Vinblastine (CMV) Therapy — https://healthservice.hse.ie/documents/6798/337_v5_CISplatin_Methotrexate_vinBLAStine_therapy_CMV.pdf
+- NCCP 00338 v5 — Methotrexate, Vinblastine, Doxorubicin and Cisplatin (MVAC) – 28 day — https://healthservice.hse.ie/documents/6799/338_v5_MVAC_28_day.pdf
+- NCCP 00450 v4c — Mitomycin and 5-Fluorouracil with Radiotherapy — https://healthservice.hse.ie/documents/6482/450_v4c_Mitomycin_and_5-FU_5__RT.pdf
+- NCCP 00453 v3 — Carboplatin AUC 7 and Etoposide 750 mg/m² Therapy — https://healthservice.hse.ie/documents/6485/453_v3_CarboAUC7Etop750.pdf
+- NCCP 00477 v3 — Goserelin 10.8 mg Therapy – 12 weeks — https://healthservice.hse.ie/documents/6978/477_v3_Goserelin_10.8mg.pdf
+- NCCP 00478 v3 — Goserelin 3.6 mg Therapy – 28 day — https://healthservice.hse.ie/documents/6493/478_v3_Goserelin_3.6mg.pdf
+- NCCP 00479 v3 — Leuprorelin 22.5 mg Therapy – 12 weeks — https://healthservice.hse.ie/documents/6494/479_v3_Leuprorelin_22.5mg.pdf
+- NCCP 00480 v3 — Triptorelin 11.25 mg Therapy – 12 weeks — https://healthservice.hse.ie/documents/6495/480_v3_Triptorelin_11.25mg.pdf
+- NCCP 00481 v3 — Degarelix Therapy — https://healthservice.hse.ie/documents/6496/481_v3_Degarelix_Therapy.pdf
+- NCCP 00482 v3 — Bicalutamide Therapy — https://healthservice.hse.ie/documents/6497/482_v3_Bicalutamide.pdf
+- NCCP 00488 v3 — Triptorelin 22.5 mg Therapy – 24 weeks — https://healthservice.hse.ie/documents/6502/488_v3_Triptorelin_22.5mg.pdf
+- NCCP 00489 v3 — Triptorelin 3 mg Therapy – 28 day — https://healthservice.hse.ie/documents/6503/489_v3_Triptorelin_3mg.pdf
+- NCCP 00490 v3 — Leuprorelin 7.5 mg Therapy – 28 day — https://healthservice.hse.ie/documents/6979/490_v3_Leuprorelin_7.5mg.pdf
+- NCCP 00491 v3 — Leuprorelin 45 mg Therapy – 24 weeks — https://healthservice.hse.ie/documents/6504/491_v3_Leuprorelin_45mg.pdf
+- NCCP 00492 v3 — Leuprorelin 11.25 mg Therapy – 12 weeks — https://healthservice.hse.ie/documents/6505/492_v3_Leuprorelin_11.25mg.pdf
+- NCCP 00493 v3 — Leuprorelin 30 mg Therapy – 24 weeks — https://healthservice.hse.ie/documents/6506/493_v3_Leuprorelin_30mg.pdf
+- NCCP 00494 v3 — Leuprorelin 3.75 mg Therapy – 28 day — https://healthservice.hse.ie/documents/6980/494_v3_Leuprorelin_3.75mg.pdf
+- NCCP 00518 v2 — Cabozantinib Monotherapy — https://healthservice.hse.ie/documents/6517/518_v2a_Cabozantinib_.pdf
+- NCCP 00535 v6 — Avelumab Monotherapy — https://healthservice.hse.ie/documents/8038/535_Avelumab.pdf
+- NCCP 00546 v3 — Docetaxel 75 mg/m² – Prednisolone Combination Therapy — https://healthservice.hse.ie/documents/6382/546_v3_Docetaxel_75-prednisolone_combination_therapy.pdf
+- NCCP 00564 v3 — Tivozanib Monotherapy — https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf
+- NCCP 00574 v4 — Apalutamide Therapy — https://healthservice.hse.ie/documents/6392/574_v4_Apalutamide.pdf
+- NCCP 00577 v3 — Abiraterone and prednisolone Therapy (mHSPC) — https://healthservice.hse.ie/documents/6393/577_v3_Abiraterone_and_prednisoLONE_Therapy.pdf
+- NCCP 00583 v3b — Pembrolizumab 200 mg and Axitinib Therapy — https://healthservice.hse.ie/documents/6394/583_v3b_Pembrolizumab_200mg_Axitinib_therapy.pdf
+- NCCP 00602 v1 — Paclitaxel, Ifosfamide and Cisplatin (TIP) Therapy — https://healthservice.hse.ie/documents/6411/602_v1_TIP.pdf
+- NCCP 00622 v3 — Gemcitabine and Cisplatin 35 mg/m² – 21 day — https://healthservice.hse.ie/documents/6687/622_v3_GemCis35_21day.pdf
+- NCCP 00628 v3 — Gemcitabine and Cisplatin 70 mg/m² – 21 day — https://healthservice.hse.ie/documents/6684/628_v3_GemCis70_21_day.pdf
+- NCCP 00693 v2 — Darolutamide Therapy — https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf
+- NCCP 00759 v1 — Gemcitabine 100 mg/m² with Radiotherapy — https://healthservice.hse.ie/documents/6669/759_v1_Gemcitabine_100_and_RT.pdf
+- NCCP 00807 v2 — Intravesical BCG — https://healthservice.hse.ie/documents/6424/807_v2_Intravesical_BCG.pdf
+- NCCP 00830 v3 — Relugolix Therapy — https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf
+- NCCP 00846 v3a — Enfortumab Vedotin Monotherapy — https://healthservice.hse.ie/documents/6446/846_v3a_Enfortumab_vedotin.pdf
+- NCCP 00848 v2 — Niraparib and Abiraterone acetate (Akeega®) and Prednisolone Therapy — https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf
+- NCCP 00885 v2 — Erdafitinib Therapy — https://healthservice.hse.ie/documents/6646/885_v2_Erdafitinib.pdf
+- NCCP 00894 v1 — Intravesical Gemcitabine and Docetaxel — https://healthservice.hse.ie/documents/7616/894_Gemcitabine_Docetaxel_intravesical_.pdf
+- NCCP 00945 v1 — Enfortumab Vedotin and Pembrolizumab Therapy — https://healthservice.hse.ie/documents/10493/945_Enfortumab_vedotin_Pembro.pdf
+- NCCP 00325 v6 — Sunitinib 50 mg Therapy – 42 day — https://healthservice.hse.ie/documents/6721/325_v6_SUNitinib_50mg_42_days.pdf
+- NCCP 00445 v3 — Pazopanib Monotherapy — https://healthservice.hse.ie/documents/6477/445_v3_Pazopanib.pdf
+- NCCP 00719 v2 — Sunitinib 50 mg Therapy – 21 day — https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf
+- NCCP 00300 v7b — Bleomycin, Etoposide and Cisplatin (BEP) Therapy — https://healthservice.hse.ie/documents/6706/300_V7b_BEP.pdf
+- NCCP 00301 v5 — Etoposide and Cisplatin 20 mg/m² (EP) 5-day Therapy — https://healthservice.hse.ie/documents/6707/301_V5_EP.pdf
+- NCCP 00385 v5 — Cisplatin 40 mg/m² Weekly with Radiotherapy — https://healthservice.hse.ie/documents/6341/385_V5_CISplatin_40mgm2_weekly_with_RT.pdf
+- NCCP 00588 v5b — Olaparib (Tablet) Monotherapy — https://healthservice.hse.ie/documents/6397/588_Olaparib_tablet_monotherapy_FZxXOtF.pdf
+- NCCP 00310 v7 — Gemcitabine 1000 mg/m² and Carboplatin AUC 5 Therapy — 21 day — https://healthservice.hse.ie/documents/6713/310_v7_GemCARBOAUC_5.pdf
+- NCCP 00544 v14 — Atezolizumab 1200 mg Monotherapy – 21 day — https://healthservice.hse.ie/documents/6644/544_v14_Atezolizumab_21_Day_Monotherapy.pdf
+- NCCP 00592 v3 — Atezolizumab 840 mg Monotherapy – 14 day — https://healthservice.hse.ie/documents/6398/592_v3_Atezolizumab_840mg_Monotherapy_14_Day.pdf
+- NCCP 00593 v10a — Atezolizumab 1680 mg Monotherapy – 28 day — https://healthservice.hse.ie/documents/6399/593_v10a_Atezolizumab_1680mg_Monotherapy.pdf
+- NCCP 00558 v12b — Pembrolizumab 400 mg Monotherapy — https://healthservice.hse.ie/documents/6389/558_v12b_Pembrolizumab_400mg_monotherapy.pdf
