@@ -71,9 +71,9 @@ assert(css.includes("max-height:275mm"));
 assert(css.includes(".print-sheet-footer"));
 
 const index = read("index.html");
-assert(index.includes("Version 0.45.3 · direct clinical PDF generation"));
-assert(index.includes("css/assessment-output.css?v=0.45.3"));
-assert(index.includes("js/assessment-output.js?v=0.45.3"));
+assert(index.includes("Version 0.46.0 · complete Head and Neck library"));
+assert(index.includes("css/assessment-output.css?v=0.46.0"));
+assert(index.includes("js/assessment-output.js?v=0.46.0"));
 assert(index.indexOf("js/assessment-output.js") < index.indexOf("js/generic-assessment-ui.js"));
 
 console.log(`v0.45.2 one-page clinical output tests passed (${model.rows.length} printable rows; ${result.unassessed.length} unassessed domains).`);

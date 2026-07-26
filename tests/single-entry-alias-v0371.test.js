@@ -76,8 +76,8 @@ assert(!Aliases.forProtocol(phesgo).includes('Herceptin'), 'Phesgo should not be
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const loader = fs.readFileSync(path.join(root, 'js', 'protocol-loader.js'), 'utf8');
-assert(html.includes('Version 0.45.3 · direct clinical PDF generation'), 'v0.38.0 badge is missing.');
-assert(html.includes('js/drug-aliases.js?v=0.45.1'), 'Alias registry is not loaded with the current cache key.');
+assert(html.includes('Version 0.46.0 · complete Head and Neck library'), 'v0.38.0 badge is missing.');
+assert(html.includes('js/drug-aliases.js?v=0.46.0'), 'Alias registry is not loaded with the current cache key.');
 assert(loader.includes('Common / trade names:'), 'Catalogue cards do not display common/trade names.');
 assert(loader.includes('aliases.join(" ")'), 'Trade names are not added to catalogue search text.');
 

@@ -1,3 +1,9 @@
+## v0.46.0 — Complete Head and Neck Library
+- Added/reconciled all 30 current unique NCCP Head and Neck regimen codes.
+- Added 21 new protocols and reconciled 9 existing/shared canonical protocols without duplicate cards.
+- Added squamous-cell, nasopharyngeal, salivary-gland and thyroid assessment pathways.
+- Expanded the indexed library to 359 protocols.
+
 ## v0.45.3 - Direct adaptive clinical PDF generation
 - Replaced the browser print dialogue with a direct standard-PDF download.
 - Routine assessments default to one A4 page; exhaustive input paginates automatically.

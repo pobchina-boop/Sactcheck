@@ -51,13 +51,13 @@ assert.strictEqual(new Set(codes).size,25,'Sarcoma deck contains duplicate NCCP 
 assert.strictEqual(new Set(sarcoma.map(({data})=>data.protocol_id)).size,25,'Sarcoma deck contains duplicate protocol IDs.');
 
 const index=JSON.parse(fs.readFileSync(path.join(root,'protocols','index.json'),'utf8'));
-assert.strictEqual(index.protocol_count, 338,'Complete protocol index must contain 270 protocols.');
-assert.strictEqual(index.protocols.length, 338,'Complete protocol index array must contain 270 entries.');
-assert.strictEqual(new Set(index.protocols.map(item=>item.id)).size, 338,'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 359,'Complete protocol index must contain 270 protocols.');
+assert.strictEqual(index.protocols.length, 359,'Complete protocol index array must contain 270 entries.');
+assert.strictEqual(new Set(index.protocols.map(item=>item.id)).size, 359,'Protocol index contains duplicate IDs.');
 
 const riskMap=JSON.parse(fs.readFileSync(path.join(root,'data','emetogenic-risk-map.json'),'utf8'));
-assert.strictEqual(riskMap.release,'0.45.0');
-assert.strictEqual(Object.keys(riskMap.protocols||{}).length,338,'Supportive-care map must cover all protocols.');
+assert.strictEqual(riskMap.release,'0.46.0');
+assert.strictEqual(Object.keys(riskMap.protocols||{}).length,359,'Supportive-care map must cover all protocols.');
 
 const ctcaeContext={window:{}};vm.createContext(ctcaeContext);
 vm.runInContext(fs.readFileSync(path.join(root,'js','ctcae-descriptors.js'),'utf8'),ctcaeContext);
@@ -69,7 +69,7 @@ for(const {data} of sarcoma){
  const code=String(data.metadata.nccp_regimen_code).padStart(5,'0');const m=data.metadata||{};
  assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} is not an active encoded prototype.`);
  assert(!/placeholder|draft/i.test(String(data.status||'')),`${code} remains a placeholder/draft.`);
- assert(['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
+ assert(['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
  assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
  assert(/^https:\/\/(healthservice\.hse\.ie\/documents\/|www\.hse\.ie\/eng\/services\/list\/5\/cancer\/profinfo\/chemoprotocols\/)/.test(m.source_url||''),`${code} lacks an official HSE/NCCP PDF link.`);
  assert(m.sarcoma_subgroup,`${code} lacks Sarcoma subgroup.`);
@@ -155,7 +155,7 @@ assert(auditedFields>=320,`Expected at least 320 independently assessed Sarcoma 
 
 const aliasContext={globalThis:null};aliasContext.globalThis=aliasContext;vm.createContext(aliasContext);
 vm.runInContext(fs.readFileSync(path.join(root,'js','drug-aliases.js'),'utf8'),aliasContext);
-const Aliases=aliasContext.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.45.0');
+const Aliases=aliasContext.SACTCheckDrugAliases;assert.strictEqual(Aliases.version,'0.46.0');
 const byCode=code=>sarcoma.find(({data})=>String(data.metadata.nccp_regimen_code).padStart(5,'0')===code).data;
 const ruleById=(protocol,id)=>(protocol.rule_engine?.rules||[]).find(rule=>rule.id===id);
 const dox500=byCode('00500');
@@ -182,9 +182,9 @@ const aliases={'00511':'DTIC','00500':'Adriamycin','00228':'Halaven','00335':'Gl
 for(const [code,alias] of Object.entries(aliases))assert(Aliases.forProtocol(byCode(code)).includes(alias),`${code} is not searchable by ${alias}.`);
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('Version 0.45.3 · direct clinical PDF generation'),'v0.41.1 release badge missing.');
-assert(html.includes('js/protocol-loader.js?v=0.45.1'),'v0.41.1 loader cache key missing.');
-assert(html.includes('js/drug-aliases.js?v=0.45.1'),'v0.41.1 alias cache key missing.');
+assert(html.includes('Version 0.46.0 · complete Head and Neck library'),'v0.41.1 release badge missing.');
+assert(html.includes('js/protocol-loader.js?v=0.46.0'),'v0.41.1 loader cache key missing.');
+assert(html.includes('js/drug-aliases.js?v=0.46.0'),'v0.41.1 alias cache key missing.');
 const tissueUi=fs.readFileSync(path.join(root,'js','tissue-ui.js'),'utf8');
 assert(tissueUi.includes('label: "Sarcoma"'),'Sarcoma tissue UI label missing.');
 

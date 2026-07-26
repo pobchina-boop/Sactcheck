@@ -9,6 +9,9 @@
   "use strict";
 
   const ENTRIES = Object.freeze([
+    { terms: ["fluorouracil"], aliases: ["5-FU"] },
+    { terms: ["methotrexate"], aliases: ["MTX"] },
+    { terms: ["vandetanib"], aliases: ["Caprelsa"] },
     { terms: ["cobimetinib"], aliases: ["Cotellic"] },
     { terms: ["vemurafenib"], aliases: ["Zelboraf"] },
     { terms: ["dabrafenib"], aliases: ["Tafinlar"] },
@@ -173,7 +176,7 @@
   }
 
   root.SACTCheckDrugAliases = Object.freeze({
-    version: "0.45.0",
+    version: "0.46.0",
     entries: ENTRIES,
     forProtocol,
     searchText
