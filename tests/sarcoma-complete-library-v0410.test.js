@@ -182,7 +182,7 @@ const aliases={'00511':'DTIC','00500':'Adriamycin','00228':'Halaven','00335':'Gl
 for(const [code,alias] of Object.entries(aliases))assert(Aliases.forProtocol(byCode(code)).includes(alias),`${code} is not searchable by ${alias}.`);
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('Version 0.45.2 · one-page clinical output and safety-language update'),'v0.41.1 release badge missing.');
+assert(html.includes('Version 0.45.3 · direct clinical PDF generation'),'v0.41.1 release badge missing.');
 assert(html.includes('js/protocol-loader.js?v=0.45.1'),'v0.41.1 loader cache key missing.');
 assert(html.includes('js/drug-aliases.js?v=0.45.1'),'v0.41.1 alias cache key missing.');
 const tissueUi=fs.readFileSync(path.join(root,'js','tissue-ui.js'),'utf8');

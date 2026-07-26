@@ -1,7 +1,9 @@
 /**
  * SACTCheck concise assessment-output builder.
  *
- * Produces a transparent one-page clinical summary from an assessment result.
+ * Produces a transparent concise clinical summary from an assessment result.
+ * The HTML preview is compact; the direct PDF generator retains all entered
+ * printable rows and paginates only when clinically necessary.
  * It reports encoded criteria as met, not met/requiring review, or unassessed;
  * it does not authorise treatment or replace clinician judgement.
  */
@@ -12,7 +14,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const VERSION = "0.45.2";
+  const VERSION = "0.45.3";
   const MAX_ROUTINE_ROWS = 10;
   const DISCLAIMER = "SACTCheck applies encoded NCCP protocol criteria to clinician-entered information. This output does not constitute treatment clearance and does not replace complete clinical assessment, the current official NCCP protocol, prescribing information, local policy or professional judgement. The responsible oncology clinician retains responsibility for the final treatment decision.";
 
@@ -199,6 +201,7 @@
 
     return {
       rows: visible,
+      allRows: deduplicated,
       omittedRoutineCount: Math.max(0, routine.length - routineAllowance),
       totalCount: deduplicated.length
     };
@@ -315,6 +318,7 @@
       treatmentContext: contextParts.join(" · ") || "Not entered",
       outcome,
       rows: rowData.rows,
+      allRows: rowData.allRows,
       omittedRoutineCount: rowData.omittedRoutineCount,
       unassessed: compactList(result?.unassessed),
       invalid: compactList([...(result?.missing || []), ...(result?.invalid || []), ...(result?.errors || [])]),
@@ -340,10 +344,10 @@
 
   function renderHtml(model) {
     const omitted = model.omittedRoutineCount > 0
-      ? `<p class="print-omitted-note">${escapeHtml(model.omittedRoutineCount)} additional routine entered ${model.omittedRoutineCount === 1 ? "value is" : "values are"} retained in the detailed electronic assessment.</p>`
+      ? `<p class="print-omitted-note">${escapeHtml(model.omittedRoutineCount)} additional routine entered ${model.omittedRoutineCount === 1 ? "value will" : "values will"} be included in the generated PDF if an additional page is required.</p>`
       : "";
     return `
-      <article class="assessment-print-sheet" aria-label="One-page SACTCheck clinical assessment summary">
+      <article class="assessment-print-sheet" aria-label="Concise SACTCheck clinical assessment summary">
         <header class="print-sheet-header">
           <div><span class="print-eyebrow">SACTCheck treatment assessment</span><h2>${escapeHtml(model.protocolTitle)}</h2></div>
           <div class="print-document-id"><strong>${escapeHtml(model.sourceLabel)}</strong><span>SACTCheck v${escapeHtml(model.appVersion)}</span></div>
@@ -401,12 +405,12 @@
       "",
       "Entered values and encoded criteria:"
     ];
-    if (model.rows.length) {
-      model.rows.forEach(row => lines.push(`- ${row.label}: ${row.actual} | ${row.criterion} | ${row.outcome}`));
+    const textRows = model.allRows?.length ? model.allRows : model.rows;
+    if (textRows.length) {
+      textRows.forEach(row => lines.push(`- ${row.label}: ${row.actual} | ${row.criterion} | ${row.outcome}`));
     } else {
       lines.push("- No printable criterion row generated.");
     }
-    if (model.omittedRoutineCount) lines.push(`- ${model.omittedRoutineCount} additional routine entered value(s) retained in the detailed electronic assessment.`);
     lines.push(
       "",
       `Unassessed domains: ${model.unassessed}`,

@@ -17,7 +17,7 @@ global.SACTCheckRegimenCourseMetadata = CourseMetadata;
 delete require.cache[require.resolve(path.join(ROOT, "js/assessment-output.js"))];
 const Output = require(path.join(ROOT, "js/assessment-output.js"));
 
-assert.strictEqual(Output.version, "0.45.2");
+assert.strictEqual(Output.version, "0.45.3");
 assert.match(Output.disclaimer, /does not constitute treatment clearance/i);
 assert.match(Output.disclaimer, /responsible oncology clinician retains responsibility/i);
 
@@ -32,7 +32,7 @@ const model = Output.buildModel({
   tumourGroup: "Breast",
   clinicianDecision: "hold",
   clinicianNote: "Counts below the encoded threshold; repeat FBC and review.",
-  appVersion: "0.45.2"
+  appVersion: "0.45.3"
 });
 
 assert.strictEqual(model.assessmentId, "OUTPUT-TEST-001");
@@ -60,11 +60,10 @@ const ui = read("js/generic-assessment-ui.js");
 assert(ui.includes('id="jsonOnePageSection"'));
 assert(ui.includes('id="jsonClinicianDecision"'));
 assert(ui.includes('id="jsonClinicianNote"'));
-assert(ui.includes('id="jsonPrintOnePage"'));
-assert(ui.includes("json-one-page-print"));
+assert(ui.includes('id="jsonGeneratePdf"'));
 assert(ui.includes("AssessmentOutput.buildModel"));
 assert(ui.includes("AssessmentOutput.disclaimer"));
-assert(ui.includes('version: "0.45.2"'));
+assert(ui.includes('version: "0.45.3"'));
 
 const css = read("css/assessment-output.css");
 assert(css.includes("@page{size:A4 portrait"));
@@ -72,9 +71,9 @@ assert(css.includes("max-height:275mm"));
 assert(css.includes(".print-sheet-footer"));
 
 const index = read("index.html");
-assert(index.includes("Version 0.45.2 · one-page clinical output and safety-language update"));
-assert(index.includes("css/assessment-output.css?v=0.45.2"));
-assert(index.includes("js/assessment-output.js?v=0.45.2"));
+assert(index.includes("Version 0.45.3 · direct clinical PDF generation"));
+assert(index.includes("css/assessment-output.css?v=0.45.3"));
+assert(index.includes("js/assessment-output.js?v=0.45.3"));
 assert(index.indexOf("js/assessment-output.js") < index.indexOf("js/generic-assessment-ui.js"));
 
 console.log(`v0.45.2 one-page clinical output tests passed (${model.rows.length} printable rows; ${result.unassessed.length} unassessed domains).`);

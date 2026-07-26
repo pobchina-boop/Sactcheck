@@ -1,3 +1,12 @@
+## v0.45.3 - Direct adaptive clinical PDF generation
+- Replaced the browser print dialogue with a direct standard-PDF download.
+- Routine assessments default to one A4 page; exhaustive input paginates automatically.
+- Generated PDFs retain every entered printable value and repeat headings on continuation pages.
+- Added page numbering, source-verification footers and local/offline PDF generation.
+- Preserved clinician decision documentation, unassessed-domain disclosure and the permanent disclaimer.
+- Added page-count estimation and direct-PDF regression tests.
+- Verified one-page and multi-page PDFs by render inspection.
+
 ## v0.45.2 — One-page clinical output and safety-language update
 - Added a dedicated one-page A4 assessment summary for printing or saving as PDF.
 - Added non-directive encoded-criteria outcomes: criteria breached/requiring review, partial assessment, or no encoded criterion breached.

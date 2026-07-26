@@ -9,8 +9,10 @@
   const Engine = root.SACTCheckAssessmentEngine;
   const LocalLab = root.SACTCheckLocalLab;
   const AssessmentOutput = root.SACTCheckAssessmentOutput;
+  const AssessmentPdf = root.SACTCheckAssessmentPdf;
   if (!Engine) throw new Error("SACTCheckAssessmentEngine must load before generic-assessment-ui.js.");
   if (!AssessmentOutput) throw new Error("SACTCheckAssessmentOutput must load before generic-assessment-ui.js.");
+  if (!AssessmentPdf) throw new Error("SACTCheckAssessmentPdf must load before generic-assessment-ui.js.");
 
   let activeProtocol = null;
   let activeProfileId = null;
@@ -142,7 +144,7 @@
         <div id="jsonErrors"></div>
 
         <div class="result-block one-page-output-block" id="jsonOnePageSection">
-          <div class="section-heading"><div><h2>One-page clinical summary</h2><p class="subtle">A concise print/PDF record containing entered values, encoded criteria, unassessed domains, the clinician decision and NCCP traceability.</p></div><span class="step">A4 output</span></div>
+          <div class="section-heading"><div><h2>Concise clinical PDF</h2><p class="subtle">Generates a standard downloadable A4 PDF containing entered values, encoded criteria, unassessed domains, the clinician decision and NCCP traceability. Routine assessments default to one page; extensive input flows onto additional pages.</p></div><span class="step" id="jsonPdfPageEstimate">A4 PDF</span></div>
           <div class="output-documentation-grid">
             <div>
               <label for="jsonClinicianDecision">Final clinician decision</label>
@@ -158,14 +160,14 @@
             </div>
             <div>
               <label for="jsonClinicianNote">Decision rationale or override</label>
-              <textarea id="jsonClinicianNote" rows="2" maxlength="220" placeholder="Optional concise rationale; do not enter identifiable patient information."></textarea>
-              <span class="hint">Maximum 220 characters to preserve a one-page output.</span>
+              <textarea id="jsonClinicianNote" rows="2" maxlength="400" placeholder="Optional concise rationale; do not enter identifiable patient information."></textarea>
+              <span class="hint">Keep this concise. Longer content may move the PDF onto an additional page.</span>
             </div>
           </div>
           <div id="jsonPrintSummary" class="assessment-output-preview"></div>
           <div class="toolbar result-actions" style="margin-top:10px">
-            <button type="button" class="btn" id="jsonPrintOnePage">Print / save one-page PDF</button>
-            <button type="button" class="btn secondary" id="jsonCopyOnePage">Copy one-page summary</button>
+            <button type="button" class="btn" id="jsonGeneratePdf">Generate PDF</button>
+            <button type="button" class="btn secondary" id="jsonCopyOnePage">Copy concise summary</button>
           </div>
         </div>
 
@@ -237,7 +239,7 @@
 
     document.getElementById("jsonCopy").addEventListener("click", copySummary);
     document.getElementById("jsonDownload").addEventListener("click", downloadSummary);
-    document.getElementById("jsonPrintOnePage").addEventListener("click", printOnePageSummary);
+    document.getElementById("jsonGeneratePdf").addEventListener("click", generatePdfSummary);
     document.getElementById("jsonCopyOnePage").addEventListener("click", copyOnePageSummary);
     document.getElementById("jsonClinicianDecision").addEventListener("change", renderOnePageSummary);
     document.getElementById("jsonClinicianNote").addEventListener("input", renderOnePageSummary);
@@ -737,7 +739,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.45.2"
+      appVersion: "0.45.3"
     });
   }
 
@@ -746,6 +748,9 @@
     const model = currentOutputModel();
     if (!target || !model) return;
     target.innerHTML = AssessmentOutput.renderHtml(model);
+    const estimate = AssessmentPdf.estimatePageCount(model);
+    const estimateTarget = document.getElementById("jsonPdfPageEstimate");
+    if (estimateTarget) estimateTarget.textContent = `${estimate} page${estimate === 1 ? "" : "s"} estimated`;
   }
 
   function resetOutputDocumentation() {
@@ -773,22 +778,22 @@
       document.execCommand("copy");
       textarea.remove();
     }
-    if (typeof root.showToast === "function") root.showToast("One-page summary copied");
+    if (typeof root.showToast === "function") root.showToast("Concise summary copied");
   }
 
-  function printOnePageSummary() {
-    if (!latestResult) return;
-    renderOnePageSummary();
-    document.body.classList.add("json-one-page-print");
-    const previousTitle = document.title;
-    document.title = `SACTCheck_${latestAssessmentId || activeProtocol?.protocol_id || "assessment"}`;
-    const cleanup = () => {
-      document.body.classList.remove("json-one-page-print");
-      document.title = previousTitle;
-    };
-    window.addEventListener("afterprint", cleanup, { once: true });
-    window.setTimeout(() => window.print(), 30);
-    window.setTimeout(cleanup, 30000);
+  function generatePdfSummary() {
+    const model = currentOutputModel();
+    if (!model) return;
+    try {
+      const generated = AssessmentPdf.download(model, latestAssessmentId || activeProtocol?.protocol_id || "assessment");
+      if (typeof root.showToast === "function") {
+        root.showToast(`PDF generated (${generated.pageCount} page${generated.pageCount === 1 ? "" : "s"})`);
+      }
+    } catch (error) {
+      console.error("Could not generate the SACTCheck PDF", error);
+      if (typeof root.showToast === "function") root.showToast("PDF generation failed");
+      else root.alert?.("The PDF could not be generated. Please retry after refreshing SACTCheck.");
+    }
   }
 
   function renderErrors(result) {
@@ -928,7 +933,6 @@
     document.getElementById("jsonResult")?.classList.add("hidden");
     latestResult = null;
     resetOutputDocumentation();
-    document.body.classList.remove("json-one-page-print");
   }
 
   async function copySummary() {
@@ -973,7 +977,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.45.2",
+    version: "0.45.3",
     open,
     ensureScreen
   });
