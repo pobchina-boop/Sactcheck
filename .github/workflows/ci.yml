@@ -1,0 +1,48 @@
+name: Validate SACTCheck
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run repository security checks
+        run: npm run security:check
+
+      - name: Rebuild generated protocol artefacts
+        run: npm run protocols:build
+
+      - name: Confirm generated artefacts are committed
+        run: git diff --exit-code -- protocols/index.json data/regimen-card-metadata.json REGIMEN_CARD_METADATA_REVIEW.csv
+
+      - name: Run complete regression suite
+        run: npm test
+
+      - name: Build deployable site from allowlisted files
+        run: npm run build:pages
+
+      - name: Validate deployable site contents
+        run: npm run security:site
