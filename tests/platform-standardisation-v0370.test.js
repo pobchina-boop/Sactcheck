@@ -246,8 +246,8 @@ assert(html.includes('id="treatmentFilter"'), 'Catalogue lacks treatment-categor
 assert(html.includes('Endocrine (hormonal) therapies'), 'Catalogue lacks a distinct endocrine section.');
 assert(html.includes('catalogue-section-heading'), 'Catalogue lacks visual treatment-class grouping.');
 assert(html.includes('ctcae-guide'), 'Assessment UI lacks beside-control CTCAE grading guidance.');
-assert(html.includes('v0.47.2 · What changed?'), 'Release badge is stale.');
-assert(html.includes('js/protocol-loader.js?v=0.47.2'), 'Protocol loader cache key is stale.');
+assert(html.includes('v0.48.0 · What changed?'), 'Release badge is stale.');
+assert(html.includes('js/protocol-loader.js?v=0.48.0'), 'Protocol loader cache key is stale.');
 assert(!loader.includes('\u0008'), 'Protocol loader contains a stray control character in treatment-class formatting.');
 
 console.log(`v0.37.0 platform standardisation tests passed: ${protocols.length} regimens, ${ctcaeFields} CTCAE fields, ${renalBandFields} renal-band fields, ${exactCarboplatinFields} carboplatin exact-value fields.`);

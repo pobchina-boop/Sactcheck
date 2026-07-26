@@ -793,7 +793,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.47.2"
+      appVersion: "0.48.0"
     });
   }
 
@@ -1030,7 +1030,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.47.2",
+    version: "0.48.0",
     open,
     ensureScreen
   });

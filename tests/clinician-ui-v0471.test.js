@@ -18,13 +18,13 @@ const rows = Array.isArray(protocolIndex) ? protocolIndex : protocolIndex.protoc
 const enabled = rows.filter(row => row.enabled !== false);
 
 assert.strictEqual(enabled.length, 361, 'The clinician catalogue must expose all 361 canonical protocols');
-assert(/v0\.47\.\d+ · What changed\?/.test(index), 'Compact release summary is missing');
+assert(/v0\.48\.\d+ · What changed\?/.test(index), 'Compact release summary is missing');
 assert(index.includes('Search the complete regimen library'), 'Primary regimen search is missing');
 assert(index.includes('id="quickAccessPanel"'), 'Favourite/recent quick access panel is missing');
 assert(index.includes('id="developerTools" hidden'), 'Developer controls must be hidden during normal clinical use');
 assert(index.includes('id="catalogEmptyState"'), 'Empty search result state is missing');
-assert(/css\/ux-v0471\.css\?v=0\.47\.\d+/.test(index), 'Usability stylesheet is not loaded');
-assert(/js\/library-ux\.js\?v=0\.47\.\d+/.test(index), 'Library usability module is not loaded');
+assert(/css\/ux-v0471\.css\?v=0\.48\.\d+/.test(index), 'Usability stylesheet is not loaded');
+assert(/js\/library-ux\.js\?v=0\.48\.\d+/.test(index), 'Library usability module is not loaded');
 assert(index.includes('canonical NCCP regimen'), 'Visible catalogue count must use canonical protocol terminology');
 
 assert(loader.includes('legacyTargetCounts'), 'Duplicate legacy-card reconciliation is missing');
@@ -58,4 +58,4 @@ assert(uxCss.includes('.regimen-card:focus-visible'), 'Keyboard focus styling is
 assert(uxCss.includes('.quick-access-panel'), 'Quick-access styling is missing');
 assert(uxCss.includes('.priority-findings'), 'Priority assessment findings styling is missing');
 
-console.log(`v0.47.2 clinician UI tests passed: ${enabled.length} canonical protocols, streamlined cards and prioritised assessment output.`);
+console.log(`v0.48.0 clinician UI tests passed: ${enabled.length} canonical protocols, streamlined cards and prioritised assessment output.`);

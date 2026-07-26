@@ -1,4 +1,4 @@
-/** SACTCheck v0.47.2 library usability layer. */
+/** SACTCheck v0.48.0 library usability layer. */
 (function (root) {
   "use strict";
 
@@ -183,7 +183,7 @@
     configureDeveloperTools();
   }
 
-  root.SACTCheckLibraryUX = Object.freeze({ version: "0.47.2", refresh, openProtocol });
+  root.SACTCheckLibraryUX = Object.freeze({ version: "0.48.0", refresh, openProtocol });
   root.addEventListener?.("sactcheck:protocols-loaded", refresh);
   document.addEventListener("sactcheck:regimen-card-metadata-rendered", refresh);
   if (document.readyState === "loading") {

@@ -212,7 +212,7 @@
     syncFromFilter();
   }
 
-  root.SACTCheckTissueUI = Object.freeze({ version: "0.47.2", tissues: TISSUES, refresh, select, contextualTumourLabel, tissueForGroups });
+  root.SACTCheckTissueUI = Object.freeze({ version: "0.48.0", tissues: TISSUES, refresh, select, contextualTumourLabel, tissueForGroups });
   root.addEventListener?.("sactcheck:protocols-loaded", refresh);
   root.addEventListener?.("sactcheck:local-protocol-added", refresh);
   if (document.readyState === "loading") {

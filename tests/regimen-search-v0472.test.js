@@ -21,7 +21,7 @@ assert(!search.matchesText(folfox, 'pembrolizumab'), 'Unrelated drug must not ma
 
 const index = read('index.html');
 const css = read('css/ux-v0471.css');
-assert(index.includes('js/regimen-search.js?v=0.47.2'), 'Search normalisation module is not loaded');
+assert(index.includes('js/regimen-search.js?v=0.48.0'), 'Search normalisation module is not loaded');
 assert(index.includes('id="searchResultSummary"'), 'Live search result summary is missing');
 assert(index.includes('searchApi.matchesText(searchable,q)'), 'Library filter does not use normalised search');
 assert(index.includes('event.key==="Enter"'), 'Enter-to-jump search behaviour is missing');
@@ -31,4 +31,4 @@ assert(css.includes('#libraryScreen.search-active #quickAccessPanel'), 'Search m
 assert(css.includes('#libraryScreen.search-active #tissueExplorer'), 'Search mode must bring results up by hiding tumour navigation');
 assert(css.includes('.search-focus-pulse'), 'First-result focus feedback is missing');
 
-console.log('v0.47.2 regimen search tests passed: FOLFOX, 5-FU/5FU, leucovorin, CAPOX/XELOX, PLD and NCCP number aliases resolve.');
+console.log('v0.48.0 regimen search tests passed: FOLFOX, 5-FU/5FU, leucovorin, CAPOX/XELOX, PLD and NCCP number aliases resolve.');

@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.48.0 — Feasibility Study Release
+
+- Added the SACTCheck shield, protocol-document and check-mark visual identity.
+- Added a branded product header, polished landing experience and first-use study onboarding.
+- Added installable favicon, Apple home-screen and PWA icon assets.
+- Added a quick-start guide, feasibility feedback template and tester invitation text.
+- Reframed the distributed build for hypothetical, non-identifiable scenario evaluation.
+- Recorded the explainer-video embed as the next study-release task.
+- Preserved all protocol JSON files and clinical rules unchanged.
+
 ## v0.47.2 — Regimen search hotfix
 
 - Fixed live library search and Enter-to-jump behaviour.

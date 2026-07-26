@@ -573,7 +573,7 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
-    version: "0.47.2",
+    version: "0.48.0",
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,

@@ -12,7 +12,7 @@ const protocols=index.protocols.map(entry=>({entry,data:read(entry.path)}));
 const hn=protocols.filter(x=>groups(x.data).includes('Head and Neck'));
 const codes=hn.map(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')).sort();
 assert.deepStrictEqual(codes,expected);assert.strictEqual(hn.length,30);assert.strictEqual(new Set(codes).size,30);
-const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.47.2');assert.strictEqual(Object.keys(risk.protocols||{}).length,361);
+const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.48.0');assert.strictEqual(Object.keys(risk.protocols||{}).length,361);
 const sidecar=read('data/regimen-card-metadata.json');assert.strictEqual(sidecar.protocol_count,361);
 let inputs=0,rules=0,newCount=0,contexts=0;
 for(const {entry,data} of hn){
@@ -47,5 +47,5 @@ for(const c of ['00261','00419','00207','00385','00483','00484','00455','00558',
 const ctx={console};ctx.globalThis=ctx;vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(root,'js/rule-engine.js'),'utf8'),ctx);vm.runInContext(fs.readFileSync(path.join(root,'js/assessment-engine.js'),'utf8'),ctx);const Engine=ctx.SACTCheckAssessmentEngine,RuleEngine=ctx.SACTCheckRuleEngine;let audited=0;
 for(const {data} of hn){const profileId=Engine.getProfiles(data)[0]?.id||'default',defs=Engine.getInputDefinitions(data,profileId,{}),fields=new Set((data.rule_engine?.rules||[]).flatMap(r=>RuleEngine.collectConditionFields(RuleEngine.conditionFromRule(r)))),candidates=defs.filter(d=>d.visible!==false&&fields.has(d.id)&&demo(d)!=='');assert(candidates.length>0,`${data.protocol_id} no auditable input`);for(const d of candidates){const result=Engine.assess(data,{[d.id]:demo(d)},{profileId});assert(result.findings.length>0,`${data.protocol_id}/${d.id} no finding`);assert(!/insufficient data/i.test(String(result.status||'')));audited++;}}
 assert(audited>=300,`single-entry checks ${audited}`);
-const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('v0.47.2 · What changed?'));assert(html.includes('js/protocol-loader.js?v=0.47.2'));assert(html.includes('js/assessment-pdf.js?v=0.47.2'));
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('v0.48.0 · What changed?'));assert(html.includes('js/protocol-loader.js?v=0.48.0'));assert(html.includes('js/assessment-pdf.js?v=0.48.0'));
 console.log(`v0.46.0 Head and Neck tests passed: ${hn.length} protocols, 21 new, ${inputs} inputs, ${rules} rules, ${audited} single-entry checks.`);

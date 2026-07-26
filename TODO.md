@@ -31,3 +31,11 @@
 
 ## ECOG context placeholder
 - Central placeholder added in v0.31.0. Future implementation should distinguish baseline eligibility from optional ongoing-cycle context and must never block partial/single-value assessments when ECOG is absent.
+
+## Feasibility study release follow-up — explainer video
+
+- Record a 60–120 second screen-capture walkthrough using a hypothetical, non-identifiable scenario.
+- Suggested flow: search a common regimen → confirm indication → enter one value for partial assessment → add a triggering value → review the result and NCCP basis → generate the concise PDF.
+- Embed the final MP4 or unlisted hosted video on the v0.48.0 landing page using click-to-play, no autoplay and a mobile-responsive player.
+- Add captions/transcript and retain the study-use boundary beside the video.
+- Do not display an unfinished video placeholder in the distributed study build.
