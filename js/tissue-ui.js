@@ -13,6 +13,8 @@
     sarcoma: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 12c4-4 9-3 11 1l10 26c2 4-1 9-6 9h-2c-4 0-7-2-8-6L13 22c-2-4 1-9 5-10z"/><path d="M45 11c5 0 8 5 6 9l-6 12M47 41l4 10M42 48l10-4"/></svg>',
     haem: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 7S13 29 13 42a19 19 0 0 0 38 0C51 29 32 7 32 7z"/><circle cx="25" cy="39" r="4"/><circle cx="38" cy="35" r="3"/><circle cx="36" cy="47" r="5"/></svg>',
     skin: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 20c10-7 17 7 27 0s17 7 21 0v30H8V20z"/><path d="M8 31c10-7 17 7 27 0s17 7 21 0M8 42c10-7 17 7 27 0s17 7 21 0"/><circle cx="40" cy="16" r="5"/></svg>',
+    net: '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="20" cy="22" r="8"/><circle cx="44" cy="18" r="6"/><circle cx="40" cy="44" r="9"/><circle cx="17" cy="46" r="5"/><path d="M27 23l11-3M24 29l11 10M22 40l-1-10M39 35l3-11"/></svg>',
+    agnostic: '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="23"/><circle cx="32" cy="32" r="14"/><circle cx="32" cy="32" r="5"/><path d="M32 4v9M32 51v9M4 32h9M51 32h9"/></svg>',
     headneck: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M40 8c-13 0-21 9-21 21 0 8 4 14 10 18v9h20V42c5-4 8-10 8-17C57 15 50 8 40 8z"/><path d="M28 29h8l3-6M38 35c4 2 8 1 10-2M29 47h20"/></svg>'
   };
 
@@ -27,7 +29,9 @@
     { id: "sarcoma", label: "Sarcoma", short: "Sarcoma", color: "#C9783B", values: ["Sarcoma"], icon: "sarcoma", description: "Bone and soft-tissue sarcoma protocols." },
     { id: "haem", label: "Haematology", short: "Haem", color: "#B64545", values: ["Haematology", "Lymphoma", "Myeloma", "Leukaemia"], icon: "haem", description: "Lymphoma, myeloma and haematological malignancy protocols." },
     { id: "skin", label: "Skin / Melanoma", short: "Skin", color: "#5B4B6A", values: ["Skin/Melanoma", "Skin", "Melanoma"], icon: "skin", description: "Melanoma and other cutaneous cancer protocols." },
-    { id: "headneck", label: "Head & Neck", short: "H&N", color: "#C49A3A", values: ["Head and Neck", "Head & Neck"], icon: "headneck", description: "Head-and-neck systemic therapy and chemoradiation protocols." }
+    { id: "headneck", label: "Head & Neck", short: "H&N", color: "#C49A3A", values: ["Head and Neck", "Head & Neck"], icon: "headneck", description: "Head-and-neck systemic therapy and chemoradiation protocols." },
+    { id: "net", label: "Neuroendocrine", short: "NET", color: "#3C8D7A", values: ["Neuroendocrine"], icon: "net", description: "Pancreatic and gastroenteropancreatic neuroendocrine tumour protocols." },
+    { id: "agnostic", label: "Tumour Agnostic", short: "Agnostic", color: "#68758A", values: ["Tumour Agnostic Therapy"], icon: "agnostic", description: "Biomarker-defined treatment independent of the anatomical primary site." }
   ];
 
   const SECTION_LABELS = {
@@ -208,7 +212,7 @@
     syncFromFilter();
   }
 
-  root.SACTCheckTissueUI = Object.freeze({ version: "0.45.1", tissues: TISSUES, refresh, select, contextualTumourLabel, tissueForGroups });
+  root.SACTCheckTissueUI = Object.freeze({ version: "0.47.0", tissues: TISSUES, refresh, select, contextualTumourLabel, tissueForGroups });
   root.addEventListener?.("sactcheck:protocols-loaded", refresh);
   root.addEventListener?.("sactcheck:local-protocol-added", refresh);
   if (document.readyState === "loading") {

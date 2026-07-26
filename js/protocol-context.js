@@ -17,7 +17,9 @@
     "Haematology",
     "Lymphoma",
     "Skin/Melanoma",
-    "Head and Neck"
+    "Head and Neck",
+    "Neuroendocrine",
+    "Tumour Agnostic Therapy"
   ];
 
   const GROUP_ALIASES = new Map([
@@ -41,7 +43,13 @@
     ["melanoma", "Skin/Melanoma"],
     ["head and neck", "Head and Neck"],
     ["head & neck", "Head and Neck"],
-    ["headneck", "Head and Neck"]
+    ["headneck", "Head and Neck"],
+    ["neuroendocrine", "Neuroendocrine"],
+    ["net", "Neuroendocrine"],
+    ["tumour agnostic therapy", "Tumour Agnostic Therapy"],
+    ["tumor agnostic therapy", "Tumour Agnostic Therapy"],
+    ["tumour agnostic", "Tumour Agnostic Therapy"],
+    ["tumor agnostic", "Tumour Agnostic Therapy"]
   ]);
 
   function asArray(value) {
@@ -94,6 +102,8 @@
     if (/(^|[-_])sarcoma([-_]|$)/.test(id)) found.push("Sarcoma");
     if (/(^|[-_])breast([-_]|$)/.test(id)) found.push("Breast");
     if (/(^|[-_])(hn|headneck)([-_]|$)/.test(id)) found.push("Head and Neck");
+    if (/(^|[-_])(net|neuroendocrine)([-_]|$)/.test(id)) found.push("Neuroendocrine");
+    if (/(^|[-_])(ta|agnostic|ntrk)([-_]|$)/.test(id)) found.push("Tumour Agnostic Therapy");
     return found;
   }
 
@@ -108,6 +118,8 @@
     if (/melanoma|merkel cell|cutaneous squamous|basal-cell|basal cell/.test(text)) found.push("Skin/Melanoma");
     if (/soft tissue sarcoma|liposarcoma|\bgist\b/.test(text)) found.push("Sarcoma");
     if (/head and neck|head-and-neck|\bhnscc\b/.test(text)) found.push("Head and Neck");
+    if (/neuroendocrine|\bpnet\b|gastroenteropancreatic/.test(text)) found.push("Neuroendocrine");
+    if (/ntrk gene[ -]?fusion|tumou?r agnostic/.test(text)) found.push("Tumour Agnostic Therapy");
     if (/hodgkin|lymphoma|myeloma|leukaemia|leukemia/.test(text)) found.push("Haematology", "Lymphoma");
     return found;
   }
@@ -185,7 +197,7 @@
   }
 
   root.SACTCheckProtocolContext = Object.freeze({
-    version: "0.45.1",
+    version: "0.47.0",
     normaliseGroup,
     protocolGroups,
     indicationGroups,

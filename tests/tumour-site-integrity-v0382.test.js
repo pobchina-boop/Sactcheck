@@ -52,11 +52,11 @@ const tissueContext = {
 tissueContext.globalThis = tissueContext;
 vm.createContext(tissueContext);
 vm.runInContext(fs.readFileSync(path.join(root, 'js', 'tissue-ui.js'), 'utf8'), tissueContext);
-assert.strictEqual(tissueContext.SACTCheckTissueUI.version, '0.45.1');
+assert.strictEqual(tissueContext.SACTCheckTissueUI.version, '0.47.0');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('Version 0.46.0 · complete Head and Neck library'));
-assert(html.includes('js/tissue-ui.js?v=0.46.0'));
-assert(html.includes('js/protocol-loader.js?v=0.46.0'));
+assert(html.includes('Version 0.47.0 · complete Neuroendocrine and adult tumour-agnostic libraries'));
+assert(html.includes('js/tissue-ui.js?v=0.47.0'));
+assert(html.includes('js/protocol-loader.js?v=0.47.0'));
 
 console.log('v0.38.2 tumour-site metadata integrity tests passed.');

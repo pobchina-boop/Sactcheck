@@ -8,9 +8,9 @@ const importer = fs.readFileSync("js/protocol-importer-ui.js", "utf8");
 const olaparib = JSON.parse(fs.readFileSync("protocols/shared/00588-olaparib-tablet-monotherapy.json", "utf8"));
 const atezo = JSON.parse(fs.readFileSync("protocols/lung/00593-atezolizumab-maintenance.json", "utf8"));
 
-assert(html.includes("SACTCheck v0.46.0"));
-assert(html.includes("Version 0.46.0 · complete Head and Neck library"));
-assert(html.includes("js/protocol-loader.js?v=0.46.0"));
+assert(html.includes("SACTCheck v0.47.0"));
+assert(html.includes("Version 0.47.0 · complete Neuroendocrine and adult tumour-agnostic libraries"));
+assert(html.includes("js/protocol-loader.js?v=0.47.0"));
 assert(!html.includes("Version 0.17 · Conditional JSON assessments"));
 assert(html.includes("Protocol publisher v0.31.0"));
 assert(importer.includes('version: "0.31.0"'));

@@ -1,3 +1,9 @@
+## v0.47.0 — Complete Neuroendocrine and Adult Tumour-Agnostic Libraries
+- Completed 3 Neuroendocrine and 2 adult tumour-agnostic regimen families.
+- Added sunitinib 37.5 mg and adult larotrectinib; reconciled everolimus, lutetium-177 oxodotreotide and entrectinib.
+- Added dedicated navigation, contextual indications and source-specific rule pathways.
+- Expanded the indexed library to 361 protocols.
+
 ## v0.46.0 — Complete Head and Neck Library
 - Added/reconciled all 30 current unique NCCP Head and Neck regimen codes.
 - Added 21 new protocols and reconciled 9 existing/shared canonical protocols without duplicate cards.

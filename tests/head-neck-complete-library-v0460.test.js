@@ -7,13 +7,13 @@ const newlyAdded=new Set(['00552','00591','00589','00332','00418','00417','00387
 function read(f){return JSON.parse(fs.readFileSync(path.join(root,f),'utf8'));}
 function groups(d){const m=d.metadata||{},o=[];if(typeof m.tumour_group==='string')o.push(m.tumour_group);for(const v of m.tumour_groups||[])if(!o.includes(v))o.push(v);return o;}
 function demo(d){if(d.demo_value!==undefined&&d.demo_value!==null)return String(d.demo_value);if(d.type==='select')return String(d.options?.[0]?.value??'');if(d.type==='boolean')return 'false';if(d.type==='number')return String(Number.isFinite(Number(d.min))?d.min:0);return 'test';}
-const index=read('protocols/index.json');assert.strictEqual(index.protocol_count,359);assert.strictEqual(index.protocols.length,359);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size,359);
+const index=read('protocols/index.json');assert.strictEqual(index.protocol_count,361);assert.strictEqual(index.protocols.length,361);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size,361);
 const protocols=index.protocols.map(entry=>({entry,data:read(entry.path)}));
 const hn=protocols.filter(x=>groups(x.data).includes('Head and Neck'));
 const codes=hn.map(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')).sort();
 assert.deepStrictEqual(codes,expected);assert.strictEqual(hn.length,30);assert.strictEqual(new Set(codes).size,30);
-const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.46.0');assert.strictEqual(Object.keys(risk.protocols||{}).length,359);
-const sidecar=read('data/regimen-card-metadata.json');assert.strictEqual(sidecar.protocol_count,359);
+const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.47.0');assert.strictEqual(Object.keys(risk.protocols||{}).length,361);
+const sidecar=read('data/regimen-card-metadata.json');assert.strictEqual(sidecar.protocol_count,361);
 let inputs=0,rules=0,newCount=0,contexts=0;
 for(const {entry,data} of hn){
  const m=data.metadata||{},code=String(m.nccp_regimen_code).padStart(5,'0');
@@ -47,5 +47,5 @@ for(const c of ['00261','00419','00207','00385','00483','00484','00455','00558',
 const ctx={console};ctx.globalThis=ctx;vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(root,'js/rule-engine.js'),'utf8'),ctx);vm.runInContext(fs.readFileSync(path.join(root,'js/assessment-engine.js'),'utf8'),ctx);const Engine=ctx.SACTCheckAssessmentEngine,RuleEngine=ctx.SACTCheckRuleEngine;let audited=0;
 for(const {data} of hn){const profileId=Engine.getProfiles(data)[0]?.id||'default',defs=Engine.getInputDefinitions(data,profileId,{}),fields=new Set((data.rule_engine?.rules||[]).flatMap(r=>RuleEngine.collectConditionFields(RuleEngine.conditionFromRule(r)))),candidates=defs.filter(d=>d.visible!==false&&fields.has(d.id)&&demo(d)!=='');assert(candidates.length>0,`${data.protocol_id} no auditable input`);for(const d of candidates){const result=Engine.assess(data,{[d.id]:demo(d)},{profileId});assert(result.findings.length>0,`${data.protocol_id}/${d.id} no finding`);assert(!/insufficient data/i.test(String(result.status||'')));audited++;}}
 assert(audited>=300,`single-entry checks ${audited}`);
-const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('Version 0.46.0 · complete Head and Neck library'));assert(html.includes('js/protocol-loader.js?v=0.46.0'));assert(html.includes('js/assessment-pdf.js?v=0.46.0'));
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('Version 0.47.0 · complete Neuroendocrine and adult tumour-agnostic libraries'));assert(html.includes('js/protocol-loader.js?v=0.47.0'));assert(html.includes('js/assessment-pdf.js?v=0.47.0'));
 console.log(`v0.46.0 Head and Neck tests passed: ${hn.length} protocols, 21 new, ${inputs} inputs, ${rules} rules, ${audited} single-entry checks.`);
