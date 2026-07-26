@@ -990,8 +990,8 @@
       ...(result.context.indicationLabel ? [`Indication: ${result.context.indicationLabel}`] : []),
       `Assessment time: ${result.context.assessedAt}`,
       "",
-      `Encoded criteria result: ${result.status}`,
-      `Decision-support explanation: ${result.recommendation}`,
+      `Encoded criteria result: ${result.displayStatus || result.status}`,
+      `Decision-support explanation: ${result.displayRecommendation || result.recommendation}`,
       `Rule coverage: ${result.assessedRuleCount} of ${result.applicableRuleCount} applicable rules evaluated.`,
       "",
       "Entered values:"

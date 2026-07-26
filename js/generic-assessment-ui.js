@@ -127,65 +127,76 @@
       </form>
 
       <div id="jsonResult" class="hidden">
-        <div id="jsonStatusBox" class="status warn">
+        <div id="jsonStatusBox" class="status warn result-status-banner">
           <h2 id="jsonStatusTitle"></h2>
           <p id="jsonStatusAction"></p>
         </div>
 
-        <div class="metrics">
-          <div class="metric"><span>Assessment profile</span><strong id="jsonProfileMetric">—</strong></div>
-          <div class="metric"><span>Applicable rules</span><strong id="jsonApplicableMetric">—</strong></div>
-          <div class="metric"><span>Rules evaluated</span><strong id="jsonEvaluatedMetric">—</strong></div>
-          <div class="metric"><span>Completeness</span><strong id="jsonCompleteMetric">—</strong></div>
+        <div class="assessment-summary-strip">
+          <strong id="jsonProfileMetric">—</strong>
+          <span id="jsonCoverageMetric">—</span>
+          <span class="visually-hidden">Applicable rules: <strong id="jsonApplicableMetric">—</strong></span>
+          <span class="visually-hidden">Rules evaluated: <strong id="jsonEvaluatedMetric">—</strong></span>
+          <span class="visually-hidden">Completeness: <strong id="jsonCompleteMetric">—</strong></span>
         </div>
 
-        <div class="decision-support-disclaimer"><strong>Clinical decision support — not treatment clearance.</strong> <span id="jsonScreenDisclaimer"></span></div>
-
+        <div class="decision-support-disclaimer compact"><strong>Decision support — not treatment clearance.</strong> <span id="jsonScreenDisclaimer"></span></div>
         <div id="jsonErrors"></div>
 
-        <div class="result-block one-page-output-block" id="jsonOnePageSection">
-          <div class="section-heading"><div><h2>Concise clinical PDF</h2><p class="subtle">Generates a standard downloadable A4 PDF containing entered values, encoded criteria, unassessed domains, the clinician decision and NCCP traceability. Routine assessments default to one page; extensive input flows onto additional pages.</p></div><span class="step" id="jsonPdfPageEstimate">A4 PDF</span></div>
-          <div class="output-documentation-grid">
-            <div>
-              <label for="jsonClinicianDecision">Final clinician decision</label>
-              <select id="jsonClinicianDecision">
-                <option value="">Not documented</option>
-                <option value="proceed">Proceed</option>
-                <option value="hold">Hold or defer</option>
-                <option value="modify">Dose modify</option>
-                <option value="discuss">Discuss with consultant/pharmacy</option>
-                <option value="other">Other</option>
-              </select>
-              <span class="hint">This records the clinician's decision separately from the calculated protocol-criteria result.</span>
+        <div class="result-block priority-findings-block">
+          <div class="section-heading"><div><h2>Key protocol comparison</h2><p class="subtle">Entered value, applicable encoded criterion and result.</p></div><span class="step" id="jsonPriorityCount">—</span></div>
+          <div id="jsonPriorityFindings"></div>
+        </div>
+
+        <div class="result-action-bar result-actions">
+          <button type="button" class="btn" id="jsonGeneratePdf">Generate PDF</button>
+          <button type="button" class="btn secondary" id="jsonCopyOnePage">Copy concise summary</button>
+          <a class="btn secondary official-pdf-link hidden" id="jsonResultOfficialPdf" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📄</span> Open NCCP protocol</a>
+          <span class="pdf-estimate" id="jsonPdfPageEstimate">A4 PDF</span>
+        </div>
+
+        <details class="result-disclosure pdf-documentation-details" id="jsonOnePageSection">
+          <summary>Add final clinician decision to the PDF</summary>
+          <div class="details-body">
+            <div class="output-documentation-grid">
+              <div>
+                <label for="jsonClinicianDecision">Final clinician decision</label>
+                <select id="jsonClinicianDecision">
+                  <option value="">Not documented</option>
+                  <option value="proceed">Proceed</option>
+                  <option value="hold">Hold or defer</option>
+                  <option value="modify">Dose modify</option>
+                  <option value="discuss">Discuss with consultant/pharmacy</option>
+                  <option value="other">Other</option>
+                </select>
+                <span class="hint">Recorded separately from the calculated protocol-criteria result.</span>
+              </div>
+              <div>
+                <label for="jsonClinicianNote">Decision rationale or override</label>
+                <textarea id="jsonClinicianNote" rows="2" maxlength="400" placeholder="Optional concise rationale; do not enter identifiable patient information."></textarea>
+              </div>
             </div>
-            <div>
-              <label for="jsonClinicianNote">Decision rationale or override</label>
-              <textarea id="jsonClinicianNote" rows="2" maxlength="400" placeholder="Optional concise rationale; do not enter identifiable patient information."></textarea>
-              <span class="hint">Keep this concise. Longer content may move the PDF onto an additional page.</span>
+            <details class="pdf-preview-disclosure"><summary>Preview concise PDF content</summary><div class="details-body"><div id="jsonPrintSummary" class="assessment-output-preview"></div></div></details>
+          </div>
+        </details>
+
+        <details class="result-disclosure" id="jsonWhyResult">
+          <summary>Why this result? View detailed encoded findings</summary>
+          <div class="details-body"><div id="jsonFindings"></div></div>
+        </details>
+
+        <details class="result-disclosure">
+          <summary>Detailed copyable assessment summary</summary>
+          <div class="details-body">
+            <textarea id="jsonSummary" class="summary-box" readonly></textarea>
+            <div class="toolbar result-actions" style="margin-top:10px">
+              <button type="button" class="btn" id="jsonCopy">Copy detailed summary</button>
+              <button type="button" class="btn secondary" id="jsonDownload">Download detailed text summary</button>
             </div>
           </div>
-          <div id="jsonPrintSummary" class="assessment-output-preview"></div>
-          <div class="toolbar result-actions" style="margin-top:10px">
-            <button type="button" class="btn" id="jsonGeneratePdf">Generate PDF</button>
-            <button type="button" class="btn secondary" id="jsonCopyOnePage">Copy concise summary</button>
-          </div>
-        </div>
+        </details>
 
-        <div class="result-block">
-          <h2>Detailed assessment findings</h2>
-          <div id="jsonFindings"></div>
-        </div>
-
-        <div class="result-block">
-          <h2>Detailed copyable assessment summary</h2>
-          <textarea id="jsonSummary" class="summary-box" readonly></textarea>
-          <div class="toolbar result-actions" style="margin-top:10px">
-            <button type="button" class="btn" id="jsonCopy">Copy detailed summary</button>
-            <button type="button" class="btn secondary" id="jsonDownload">Download detailed text summary</button>
-          </div>
-        </div>
-
-        <p class="footer-note">This screen evaluates machine-readable JSON rules loaded from the repository. Encoded protocols remain pending formal consultant, oncology-pharmacy and software validation.</p>
+        <p class="footer-note">Machine-readable protocol comparison. Encoded protocols remain pending formal consultant and oncology-pharmacy validation.</p>
       </div>
     `;
 
@@ -243,7 +254,7 @@
     document.getElementById("jsonCopyOnePage").addEventListener("click", copyOnePageSummary);
     document.getElementById("jsonClinicianDecision").addEventListener("change", renderOnePageSummary);
     document.getElementById("jsonClinicianNote").addEventListener("input", renderOnePageSummary);
-    document.getElementById("jsonScreenDisclaimer").textContent = AssessmentOutput.disclaimer;
+    document.getElementById("jsonScreenDisclaimer").textContent = "Final treatment suitability remains the responsibility of the treating oncology clinician after complete assessment and review of the current NCCP protocol.";
   }
 
   function showScreen(id) {
@@ -362,12 +373,15 @@
     }
 
     const officialPdf = document.getElementById("jsonOfficialPdf");
+    const resultOfficialPdf = document.getElementById("jsonResultOfficialPdf");
     if (metadata.source_url) {
       officialPdf.href = metadata.source_url;
       officialPdf.classList.remove("hidden");
+      if (resultOfficialPdf) { resultOfficialPdf.href = metadata.source_url; resultOfficialPdf.classList.remove("hidden"); }
     } else {
       officialPdf.removeAttribute("href");
       officialPdf.classList.add("hidden");
+      if (resultOfficialPdf) { resultOfficialPdf.removeAttribute("href"); resultOfficialPdf.classList.add("hidden"); }
     }
   }
 
@@ -695,6 +709,40 @@
     });
   }
 
+  function resultPresentation(result) {
+    const action = String(result?.actionType || "");
+    if (result?.invalid?.length || result?.errors?.length || action === "incomplete") {
+      return { title: "Assessment incomplete", detail: result.recommendation };
+    }
+    if (["dose_reduce", "dose_reduce_one_level", "dose_reduce_two_levels", "delay_then_dose_reduce", "withhold_then_reduce"].includes(action)) {
+      return { title: "Dose-modification criteria identified", detail: "One or more entered values triggered an encoded dose-modification pathway. Review the comparison below and the current NCCP protocol before the final clinical decision." };
+    }
+    if (["consultant_review", "partial_context_required"].includes(action)) {
+      return { title: "Additional clinical review required", detail: result.recommendation };
+    }
+    if (["proceed", "proceed_with_caution"].includes(action)) {
+      return { title: "No encoded criteria breached in assessed domains", detail: action === "proceed" ? "No restrictive encoded rule was triggered by the information entered. This is not treatment clearance." : "No restrictive rule was triggered in the assessed domains; unassessed domains remain unknown." };
+    }
+    return { title: "Encoded treatment criteria not met", detail: "One or more entered values triggered a restrictive encoded protocol pathway. Review the key comparison and current NCCP source before the final treatment decision." };
+  }
+
+  function renderPriorityFindings(result) {
+    const target = document.getElementById("jsonPriorityFindings");
+    const count = document.getElementById("jsonPriorityCount");
+    if (!target) return;
+    const restrictive = (result.findings || []).filter(finding => !finding.domainAssessment && !["proceed", "proceed_with_caution"].includes(String(finding.actionType || "")));
+    const selected = restrictive.length ? restrictive.slice(0, 3) : (result.findings || []).filter(finding => finding.domainAssessment || finding.actionType === "proceed").slice(0, 3);
+    if (count) count.textContent = `${selected.length} key finding${selected.length === 1 ? "" : "s"}`;
+    if (!selected.length) {
+      target.innerHTML = '<p class="subtle">Enter a clinical value to generate a protocol comparison.</p>';
+      return;
+    }
+    target.innerHTML = selected.map(finding => {
+      const label = finding.domainAssessment || finding.actionType === "proceed" ? "Criterion assessed" : "Clinical review pathway";
+      return `<div class="priority-finding ${findingClass(finding.actionType)}"><div class="priority-finding-head"><strong>${escapeHtml(finding.displayTitle || finding.ruleId)}</strong><span>${escapeHtml(label)}</span></div>${renderThresholdComparison(finding, result)}<p>${escapeHtml(finding.explanation || "")}</p><small>${escapeHtml(finding.sourceText || "")}</small></div>`;
+    }).join("");
+  }
+
   function runAssessment() {
     if (!activeProtocol) return;
     latestAssessmentId = document.getElementById("jsonAssessmentId").value.trim();
@@ -708,8 +756,11 @@
 
     const statusBox = document.getElementById("jsonStatusBox");
     statusBox.className = `status ${result.statusClass}`;
-    document.getElementById("jsonStatusTitle").textContent = result.status;
-    document.getElementById("jsonStatusAction").textContent = result.recommendation;
+    const presentation = resultPresentation(result);
+    result.displayStatus = presentation.title;
+    result.displayRecommendation = presentation.detail;
+    document.getElementById("jsonStatusTitle").textContent = presentation.title;
+    document.getElementById("jsonStatusAction").textContent = presentation.detail;
     document.getElementById("jsonProfileMetric").textContent = result.context.indicationLabel || result.profile.label;
     document.getElementById("jsonApplicableMetric").textContent = String(result.applicableRuleCount);
     document.getElementById("jsonEvaluatedMetric").textContent = String(result.assessedRuleCount);
@@ -718,8 +769,11 @@
       : result.coverageComplete === false
         ? `Core complete · ${result.unassessed?.length || 0} optional gap${(result.unassessed?.length || 0) === 1 ? "" : "s"}`
         : "Complete";
+    const unassessedCount = result.unassessed?.length || 0;
+    document.getElementById("jsonCoverageMetric").textContent = `${result.assessedRuleCount} of ${result.applicableRuleCount} applicable rules assessed · ${unassessedCount} domain${unassessedCount === 1 ? "" : "s"} unassessed`;
 
     renderErrors(result);
+    renderPriorityFindings(result);
     renderFindings(result);
     let summary = Engine.documentationSummary(result, latestAssessmentId);
     const labLines = Object.values(latestLabCalculations).map(calculation => `- ${calculation.display} → decision value ${calculation.decisionDisplay}`);
@@ -739,7 +793,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.45.3"
+      appVersion: "0.47.2"
     });
   }
 
@@ -808,11 +862,10 @@
       blocks.push(`<div class="error-list">${blockingMessages.map(escapeHtml).join("<br>")}</div>`);
     }
     if (unassessed.length) {
-      blocks.push(`
-        <details class="coverage-gap-details">
-          <summary>${unassessed.length} domain${unassessed.length === 1 ? "" : "s"} not assessed</summary>
-          <div class="details-body"><p class="subtle">These values were left blank and have not been assumed normal.</p><div class="coverage-gap-list">${unassessed.map(item => `<span>${escapeHtml(item.label)}</span>`).join("")}</div></div>
-        </details>`);
+      const labels = unassessed.map(item => item.label);
+      const preview = labels.slice(0, 6).join(", ");
+      const more = labels.length > 6 ? ` + ${labels.length - 6} more` : "";
+      blocks.push(`<div class="coverage-gap-strip"><strong>Partial assessment:</strong> ${escapeHtml(preview)}${escapeHtml(more)} not assessed and not assumed normal.${labels.length > 6 ? `<details><summary>View all unassessed domains</summary><div class="coverage-gap-list">${unassessed.map(item => `<span>${escapeHtml(item.label)}</span>`).join("")}</div></details>` : ""}</div>`);
     }
     document.getElementById("jsonErrors").innerHTML = blocks.join("");
   }
@@ -977,7 +1030,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.45.3",
+    version: "0.47.2",
     open,
     ensureScreen
   });

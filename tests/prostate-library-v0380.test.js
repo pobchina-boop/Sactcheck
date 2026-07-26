@@ -64,7 +64,7 @@ assert.strictEqual(index.protocols.length, 361, 'The protocol index array must c
 assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 361, 'Protocol index contains duplicate IDs.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
-assert.strictEqual(riskMap.release, '0.47.0');
+assert.strictEqual(riskMap.release, '0.47.2');
 assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 361, 'Central supportive-care map must cover the entire indexed library.');
 
 for (const { file, data } of prostate) {
@@ -165,8 +165,8 @@ assert.strictEqual(inducerRule.action.type, 'consultant_review', 'Relugolix dose
 assert(/240 mg/.test(inducerRule.explanation), 'Relugolix combined-inducer pathway lacks the encoded 240 mg instruction.');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('Version 0.47.0 · complete Neuroendocrine and adult tumour-agnostic libraries'), 'v0.38.0 release badge is missing.');
-assert(html.includes('js/drug-aliases.js?v=0.47.0'), 'v0.38.0 alias cache key is missing.');
-assert.strictEqual(Aliases.version, '0.47.0');
+assert(html.includes('v0.47.2 · What changed?'), 'v0.38.0 release badge is missing.');
+assert(html.includes('js/drug-aliases.js?v=0.47.2'), 'v0.38.0 alias cache key is missing.');
+assert.strictEqual(Aliases.version, '0.47.2');
 
 console.log(`v0.38.0 prostate library tests passed: 26 fully encoded NCCP prostate protocols and ${auditedFields} independently assessed rule inputs.`);

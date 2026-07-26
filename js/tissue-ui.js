@@ -27,7 +27,7 @@
     { id: "gu", label: "Genitourinary / Men’s", short: "GU", color: "#3E6FB6", values: ["Genitourinary"], icon: "gu", description: "Prostate, testicular, urothelial and renal cancer regimens." },
     { id: "neuro", label: "Neuro-oncology", short: "Neuro", color: "#4B5FA8", values: ["Neuro-oncology", "Neurology"], icon: "neuro", description: "Brain and central nervous system cancer protocols." },
     { id: "sarcoma", label: "Sarcoma", short: "Sarcoma", color: "#C9783B", values: ["Sarcoma"], icon: "sarcoma", description: "Bone and soft-tissue sarcoma protocols." },
-    { id: "haem", label: "Haematology", short: "Haem", color: "#B64545", values: ["Haematology", "Lymphoma", "Myeloma", "Leukaemia"], icon: "haem", description: "Lymphoma, myeloma and haematological malignancy protocols." },
+    { id: "haem", label: "Haematology — limited coverage", short: "Haem", color: "#B64545", values: ["Haematology", "Lymphoma", "Myeloma", "Leukaemia"], icon: "haem", description: "Limited pilot coverage only. The dedicated haemato-oncology library has not yet been developed.", limited: true },
     { id: "skin", label: "Skin / Melanoma", short: "Skin", color: "#5B4B6A", values: ["Skin/Melanoma", "Skin", "Melanoma"], icon: "skin", description: "Melanoma and other cutaneous cancer protocols." },
     { id: "headneck", label: "Head & Neck", short: "H&N", color: "#C49A3A", values: ["Head and Neck", "Head & Neck"], icon: "headneck", description: "Head-and-neck systemic therapy and chemoradiation protocols." },
     { id: "net", label: "Neuroendocrine", short: "NET", color: "#3C8D7A", values: ["Neuroendocrine"], icon: "net", description: "Pancreatic and gastroenteropancreatic neuroendocrine tumour protocols." },
@@ -73,9 +73,9 @@
     if (!grid) return;
     grid.innerHTML = TISSUES.map(tissue => {
       const count = matchingCards(tissue).length;
-      return `<button class="tissue-tile${tissue.id === "all" ? " active" : ""}" type="button" data-tissue-id="${escapeHtml(tissue.id)}" style="--tissue-color:${escapeHtml(tissue.color)}" aria-pressed="${tissue.id === "all"}">
+      return `<button class="tissue-tile${tissue.id === "all" ? " active" : ""}${tissue.limited ? " limited" : ""}" type="button" data-tissue-id="${escapeHtml(tissue.id)}" style="--tissue-color:${escapeHtml(tissue.color)}" aria-pressed="${tissue.id === "all"}">
         ${icon(tissue)}
-        <span class="tissue-tile-copy"><strong>${escapeHtml(tissue.short)}</strong><small>${count} regimen${count === 1 ? "" : "s"}</small></span>
+        <span class="tissue-tile-copy"><strong>${escapeHtml(tissue.short)}</strong><small>${count} regimen${count === 1 ? "" : "s"}${tissue.limited ? " · limited" : ""}</small></span>
       </button>`;
     }).join("");
     grid.querySelectorAll("[data-tissue-id]").forEach(button => button.addEventListener("click", () => select(button.dataset.tissueId)));
@@ -212,7 +212,7 @@
     syncFromFilter();
   }
 
-  root.SACTCheckTissueUI = Object.freeze({ version: "0.47.0", tissues: TISSUES, refresh, select, contextualTumourLabel, tissueForGroups });
+  root.SACTCheckTissueUI = Object.freeze({ version: "0.47.2", tissues: TISSUES, refresh, select, contextualTumourLabel, tissueForGroups });
   root.addEventListener?.("sactcheck:protocols-loaded", refresh);
   root.addEventListener?.("sactcheck:local-protocol-added", refresh);
   if (document.readyState === "loading") {

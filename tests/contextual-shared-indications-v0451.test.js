@@ -22,7 +22,7 @@ function loadContextModule() {
 
 const Context = loadContextModule();
 assert(Context, "Protocol context resolver must load");
-assert.strictEqual(Context.version, "0.47.0");
+assert.strictEqual(Context.version, "0.47.2");
 
 const avelumab = readJson("protocols/genitourinary/00535-avelumab-monotherapy.json");
 const cemiplimab = readJson("protocols/gynaecology/00812-cemiplimab-therapy.json");
@@ -68,7 +68,7 @@ for (const [protocol, expectedGroup] of [
 }
 
 const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-assert(indexHtml.includes("js/protocol-context.js?v=0.47.0"));
+assert(indexHtml.includes("js/protocol-context.js?v=0.47.2"));
 assert(indexHtml.indexOf("js/protocol-context.js") < indexHtml.indexOf("js/assessment-engine.js"));
 
 const tissueUi = fs.readFileSync(path.join(ROOT, "js/tissue-ui.js"), "utf8");

@@ -197,7 +197,7 @@
   }
 
   root.SACTCheckProtocolContext = Object.freeze({
-    version: "0.47.0",
+    version: "0.47.2",
     normaliseGroup,
     protocolGroups,
     indicationGroups,

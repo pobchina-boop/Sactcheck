@@ -16,7 +16,8 @@ assert(ui.indexOf('id="jsonBloodInputGrid"') < ui.indexOf('id="jsonTreatmentCont
 assert(ui.includes('BLOOD_FIELD_PRIORITIES'), 'Blood threshold priority logic missing');
 assert(ui.includes('compact-assessment-input'), 'Compact optional input controls missing');
 assert(ui.includes('Not assessed'), 'Compact controls must expose a Not assessed state');
-assert(ui.includes('coverage-gap-details'), 'Unassessed result domains must collapse into a clickable summary');
+assert(ui.includes('coverage-gap-strip'), 'Unassessed result domains must render as a compact summary strip');
+assert(ui.includes('Partial assessment:'), 'Unassessed result summary must be explicit');
 assert(ui.includes('<form id="jsonAssessmentForm" novalidate>'), 'Form-level browser validation must be disabled');
 assert(!ui.includes(' requiredAttribute'), 'UI should not create required HTML attributes');
 assert(ui.includes('control.required = false'), 'Dynamic inputs must remain non-mandatory');

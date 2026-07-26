@@ -18,6 +18,23 @@
   const VERSION = "1.0.0";
   const DEFAULT_INDEX_URL = "protocols/index.json";
   const DEFAULT_SIDECAR_URL = "data/regimen-card-metadata.json";
+  const PHASED_SCHEDULE_LABELS = Object.freeze({
+    "00260": "AC q21d → paclitaxel q7d",
+    "00278": "DD AC q14d → paclitaxel q14d",
+    "00316": "DD AC q14d → paclitaxel + trastuzumab q14d",
+    "00348": "Carboplatin/paclitaxel phase → DDAC phase",
+    "00432": "AC phase → weekly paclitaxel + trastuzumab",
+    "00433": "DD AC q14d → weekly paclitaxel + trastuzumab",
+    "00485": "DD AC q14d → weekly paclitaxel",
+    "00734": "Weekly carboplatin/paclitaxel → DDAC",
+    "00745": "DD AC q14d → weekly paclitaxel + trastuzumab q21d",
+    "00857": "Pembrolizumab + carboplatin/paclitaxel → AC",
+    "00858": "Pembrolizumab + weekly carboplatin/paclitaxel → AC",
+    "00860": "Pembrolizumab q42d + carboplatin/paclitaxel → DDAC",
+    "00861": "Pembrolizumab q42d + weekly carboplatin/paclitaxel → DDAC",
+    "00676": "Cisplatin chemoradiation → carboplatin/paclitaxel q21d"
+  });
+
   const state = {
     index: null,
     protocols: new Map(),
@@ -37,6 +54,11 @@
 
   function codeFromProtocol(protocol) {
     return Metadata.cleanText(protocol?.metadata?.nccp_regimen_code || protocol?.nccp_regimen_code);
+  }
+
+  function phasedScheduleLabel(protocol) {
+    const code = String(codeFromProtocol(protocol) || "").padStart(5, "0");
+    return PHASED_SCHEDULE_LABELS[code] || null;
   }
 
   function normalisePath(path) {
@@ -169,9 +191,17 @@
     if (tooltip) row.title = tooltip;
     row.replaceChildren();
 
+    const phasedSchedule = phasedScheduleLabel(protocol);
     if (summary.intent) row.appendChild(chip(summary.intent, "intent"));
-    if (summary.duration) row.appendChild(chip(summary.duration, "duration"));
-    if (summary.interval) row.appendChild(chip(summary.interval, "interval"));
+    if (phasedSchedule) {
+      row.appendChild(chip("Phased regimen", "duration"));
+      row.appendChild(chip(phasedSchedule, "interval phase-schedule"));
+      row.dataset.phasedSchedule = "true";
+    } else {
+      if (summary.duration) row.appendChild(chip(summary.duration, "duration"));
+      if (summary.interval) row.appendChild(chip(summary.interval, "interval"));
+      delete row.dataset.phasedSchedule;
+    }
 
     if (!existing) {
       const anchor = card.querySelector(":scope > .validation-row, :scope > .card-actions");
@@ -179,7 +209,7 @@
       else card.appendChild(row);
     }
 
-    const searchable = summary.tokens.join(" ").toLowerCase();
+    const searchable = [...summary.tokens, phasedSchedule].filter(Boolean).join(" ").toLowerCase();
     if (searchable && !String(card.dataset.name || "").toLowerCase().includes(searchable)) {
       card.dataset.name = `${card.dataset.name || ""} ${searchable}`.trim();
     }

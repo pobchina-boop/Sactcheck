@@ -14,7 +14,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const VERSION = "0.45.3";
+  const VERSION = "0.47.2";
   const MAX_ROUTINE_ROWS = 10;
   const DISCLAIMER = "SACTCheck applies encoded NCCP protocol criteria to clinician-entered information. This output does not constitute treatment clearance and does not replace complete clinical assessment, the current official NCCP protocol, prescribing information, local policy or professional judgement. The responsible oncology clinician retains responsibility for the final treatment decision.";
 

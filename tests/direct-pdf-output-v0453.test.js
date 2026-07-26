@@ -19,8 +19,8 @@ delete require.cache[require.resolve(path.join(ROOT, "js/assessment-output.js"))
 const Output = require(path.join(ROOT, "js/assessment-output.js"));
 const Pdf = require(path.join(ROOT, "js/assessment-pdf.js"));
 
-assert.strictEqual(Pdf.version, "0.45.3");
-assert.strictEqual(Output.version, "0.45.3");
+assert.strictEqual(Pdf.version, "0.47.2");
+assert.strictEqual(Output.version, "0.47.2");
 
 const protocol = readJson("protocols/breast/00722-tchp-docetaxel-carboplatin-trastuzumab-pertuzumab.json");
 const result = sandbox.SACTCheckAssessmentEngine.assess(protocol, {
@@ -35,7 +35,7 @@ const model = Output.buildModel({
   tumourGroup: "Breast",
   clinicianDecision: "hold",
   clinicianNote: "Repeat FBC and review before treatment.",
-  appVersion: "0.45.3"
+  appVersion: "0.47.2"
 });
 
 assert(model.allRows.length >= model.rows.length, "The direct PDF model must retain every entered printable row");
@@ -83,8 +83,8 @@ assert(!ui.includes("window.print()"), "The JSON output action must not use the 
 assert(!ui.includes('id="jsonPrintOnePage"'));
 
 const index = read("index.html");
-assert(index.includes("Version 0.47.0 · complete Neuroendocrine and adult tumour-agnostic libraries"));
-assert(index.includes("js/assessment-pdf.js?v=0.47.0"));
+assert(index.includes("v0.47.2 · What changed?"));
+assert(index.includes("js/assessment-pdf.js?v=0.47.2"));
 assert(index.indexOf("js/assessment-output.js") < index.indexOf("js/assessment-pdf.js"));
 assert(index.indexOf("js/assessment-pdf.js") < index.indexOf("js/generic-assessment-ui.js"));
 

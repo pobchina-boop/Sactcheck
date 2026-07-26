@@ -1,3 +1,21 @@
+# Changelog
+
+## v0.47.2 — Regimen search hotfix
+
+- Fixed live library search and Enter-to-jump behaviour.
+- Added normalised oncology aliases including 5-FU/5FU/fluorouracil, FOLFOX variants, leucovorin/folinic acid, CAPOX/XELOX and PLD.
+- Brought matching cards into the immediate viewport and made search global across tumour sites.
+- Added focused search regression tests; no clinical protocol rules changed.
+
+## v0.47.1 — Clinician-Focused Usability Release
+
+- Reconciled the visible library with all 361 enabled canonical protocols.
+- Promoted search, added favourites/recent protocols and strengthened tumour navigation.
+- Simplified regimen cards and added explicit phased schedule labels.
+- Reorganised assessment output around patient-value versus encoded-criterion comparisons.
+- Added non-directive result language, compact coverage disclosure and progressive detail.
+- Preserved direct adaptive PDF generation and passed the complete regression suite.
+
 ## v0.47.0 — Complete Neuroendocrine and Adult Tumour-Agnostic Libraries
 - Completed 3 Neuroendocrine and 2 adult tumour-agnostic regimen families.
 - Added sunitinib 37.5 mg and adult larotrectinib; reconciled everolimus, lutetium-177 oxodotreotide and entrectinib.

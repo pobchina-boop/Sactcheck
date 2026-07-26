@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="SACTCheck">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>SACTCheck v0.47.0 — complete Neuroendocrine and adult tumour-agnostic libraries</title>
+  <title>SACTCheck v0.47.2 — clinician-focused usability release</title>
   <style>
     :root {
       --navy:#12314a; --blue:#176b9b; --blue2:#0f567f; --light:#f3f6f8;
@@ -280,8 +280,10 @@
     @media(max-width:700px){.tissue-type-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tissue-landing-panel{grid-template-columns:1fr}.tissue-landing-icon{display:none}.lab-actual-inputs{grid-template-columns:1fr}}
 
 </style>
-  <link rel="stylesheet" href="css/regimen-card-metadata.css?v=0.47.0">
-  <link rel="stylesheet" href="css/assessment-output.css?v=0.47.0">
+  <link rel="stylesheet" href="css/regimen-card-metadata.css?v=0.47.2">
+  <link rel="stylesheet" href="css/assessment-output.css?v=0.47.2">
+  <link rel="stylesheet" href="css/ux-v0471.css?v=0.47.2">
+  <script src="js/regimen-search.js?v=0.47.2"></script>
 </head>
 <body>
 <header>
@@ -290,12 +292,21 @@
   <p>Regimen-specific NCCP day-ward protocol decision support</p>
 </header>
 <main>
-  <div class="notice"><strong>Demonstration prototype only.</strong> This application does not prescribe, authorise or confirm the safety of treatment. It must not replace the current NCCP regimen, local policy or independent clinical judgement. Do not enter identifiable patient information.</div>
+  <div class="notice prototype-notice" id="prototypeNotice"><p><strong>Demonstration prototype only.</strong> SACTCheck compares clinician-entered information with encoded NCCP criteria; it does not prescribe, authorise or confirm treatment safety. Verify the current NCCP protocol and apply independent clinical judgement. Do not enter identifiable patient information.</p><button class="notice-dismiss" id="dismissPrototypeNotice" type="button" aria-label="Minimise prototype notice">Minimise</button></div>
   <div class="notice mobile-open-note"><strong>iPhone use:</strong> open this application from a normal Safari web address or add it to the Home Screen. The Mail/Files preview may display the interface without running its decision engine.</div>
 
   <div id="libraryScreen" class="screen active">
     <section class="library-only">
-      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Search or browse available NCCP protocols. Select a protocol to begin a structured day-ward assessment.</p></div><div class="toolbar protocol-publisher-actions" style="margin:0"><span class="badge">Version 0.47.0 · complete Neuroendocrine and adult tumour-agnostic libraries</span><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
+      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Find the current NCCP regimen, confirm the indication and open a structured day-ward assessment.</p></div><div class="library-header-actions"><details class="release-summary"><summary>v0.47.2 · What changed?</summary><div class="details-body"><strong>Clinician-focused usability release</strong><p>Fixed regimen-library search, added oncology spelling and punctuation normalisation, and made matching cards appear immediately below the search field while preserving the clinician-focused card and assessment layout.</p></div></details></div></div>
+      <div class="developer-tools" id="developerTools" hidden><strong>Developer tools</strong><div class="toolbar" style="margin:6px 0 0"><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
+
+      <div class="library-search-primary">
+        <label for="regimenSearch">Search the complete regimen library</label>
+        <div class="library-search-wrap"><input id="regimenSearch" type="search" autocomplete="off" placeholder="Regimen, drug, trade name, NCCP number or indication"><button class="btn secondary" type="button" id="clearLibraryFilters">Clear filters</button></div>
+        <p class="search-hint">Results update as you type. Press <kbd>Enter</kbd> to jump to the first match or <kbd>/</kbd> to focus search.</p>
+        <p class="search-result-summary hidden" id="searchResultSummary" aria-live="polite"></p>
+      </div>
+      <div class="quick-access-panel" id="quickAccessPanel" aria-label="Favourite and recently opened protocols"></div>
       <div class="health-dashboard" id="protocolHealthDashboard" aria-label="Protocol health dashboard" style="display:none">
         <div class="health-head">
           <div><h3>Protocol Health Dashboard</h3><p class="subtle">Live summary of library coverage, rule-pack maturity and validation status.</p></div>
@@ -326,13 +337,13 @@
         <div class="tissue-landing-panel" id="tissueLandingPanel" aria-live="polite"></div>
       </div>
 
-      <div class="library-controls">
-        <div><label for="regimenSearch">Search regimen</label><input id="regimenSearch" type="search" placeholder="Search by name, drug, NCCP code or indication"></div>
+      <div class="library-filter-row">
         <div><label for="tumourFilter">Cancer type</label><select id="tumourFilter"><option value="all">All cancer types</option><option value="Gastrointestinal">Gastrointestinal</option><option value="Breast">Breast</option><option value="Gynaecology">Gynaecology</option><option value="Lung">Lung</option><option value="Genitourinary">Genitourinary</option></select></div>
         <div><label for="treatmentFilter">Treatment category</label><select id="treatmentFilter"><option value="all">All treatment categories</option><option value="chemotherapy_combination_sact">Chemotherapy &amp; combination SACT</option><option value="targeted_her2_therapy">Targeted &amp; HER2 therapies</option><option value="immunotherapy">Immunotherapy</option><option value="endocrine_hormonal_therapy">Endocrine (hormonal) therapies</option><option value="bone_modifying_therapy">Bone-modifying therapies</option><option value="supportive_other">Other SACT / supportive therapy</option></select></div>
-        <div><label for="statusFilter">Status</label><select id="statusFilter"><option value="all">All statuses</option><option value="active">Active assessments</option><option value="planned">Catalog / planned</option></select></div>
+        <div><label for="statusFilter">Assessment availability</label><select id="statusFilter"><option value="all">All protocols</option><option value="active">Assessment available</option><option value="planned">Assessment unavailable</option></select></div>
       </div>
-      <p id="catalogCount" class="catalog-count"></p>
+      <p id="catalogCount" class="catalog-count" aria-live="polite"></p>
+      <div id="catalogEmptyState" class="catalog-empty hidden">No regimen matches the current search and filters.</div>
       <div class="library-grid" id="regimenGrid">
         <div class="card regimen-card active-regimen" data-name="weekly paclitaxel paclitaxel 00226 metastatic breast gynaecology lung genitourinary" data-tumour="Breast,Gynaecology,Lung,Genitourinary" data-status="active">
           <span class="category-chip">Breast · Gynaecology · Lung · GU</span>
@@ -1028,23 +1039,63 @@
   function downloadSummary(){if(!latestInput||!latestResult)return;const blob=new Blob([$("summaryText").value],{type:"text/plain;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`SACTCheck_${latestInput.assessmentId||"assessment"}.txt`;a.click();URL.revokeObjectURL(a.href);}
   function showToast(text){const t=$("toast");t.textContent=text;t.style.display="block";setTimeout(()=>t.style.display="none",1800);}
 
-  function filterRegimens(){
-    const q=(value("regimenSearch")||"").toLowerCase().trim();
-    const tumour=value("tumourFilter"), treatment=value("treatmentFilter")||"all", status=value("statusFilter");
+  function filterRegimens(options={}){
+    const q=(value("regimenSearch")||"").trim();
+    const tumour=value("tumourFilter"), treatment=value("treatmentFilter")||"all", status=value("statusFilter")||"all";
     let shown=0;
-    document.querySelectorAll("#regimenGrid .regimen-card").forEach(card=>{
-      const name=(card.dataset.name||"").toLowerCase(), tumours=(card.dataset.tumour||"").split(","), st=card.dataset.status, section=card.dataset.section||"supportive_other";
-      const okQ=!q||name.includes(q),okT=tumour==="all"||tumours.includes(tumour),okC=treatment==="all"||section===treatment,okS=status==="all"||st===status;
-      const visible=okQ&&okT&&okC&&okS;card.style.display=visible?"flex":"none";if(visible)shown++;
+    const visibleCards=[];
+    const cards=[...document.querySelectorAll("#regimenGrid .regimen-card[data-json-protocol-id]")];
+    const searchApi=window.SACTCheckRegimenSearch;
+    cards.forEach(card=>{
+      const tumours=(card.dataset.tumour||"").split(","), st=card.dataset.status, section=card.dataset.section||"supportive_other";
+      const searchable=`${card.dataset.name||""} ${card.textContent||""}`;
+      const okQ=!q||(searchApi?searchApi.matchesText(searchable,q):searchable.toLowerCase().includes(q.toLowerCase()));
+      const okT=Boolean(q)||tumour==="all"||tumours.includes(tumour),okC=treatment==="all"||section===treatment,okS=status==="all"||st===status;
+      const visible=okQ&&okT&&okC&&okS;
+      card.style.display=visible?"flex":"none";
+      card.setAttribute("aria-hidden",String(!visible));
+      if(visible){shown++;visibleCards.push(card)}
     });
     document.querySelectorAll("#regimenGrid .catalogue-section-heading").forEach(heading=>{
       const section=heading.dataset.sectionHeading;
       const anyVisible=[...document.querySelectorAll(`#regimenGrid .regimen-card[data-section="${section}"]`)].some(card=>card.style.display!=="none");
       heading.style.display=anyVisible?"block":"none";
     });
-    $("catalogCount").textContent=`${shown} regimen${shown===1?"":"s"} shown`;
+    const total=cards.length;
+    $("catalogCount").textContent=shown===total?`${total} canonical NCCP regimen${total===1?"":"s"}`:`${shown} of ${total} regimens shown`;
+    $("catalogEmptyState")?.classList.toggle("hidden",shown!==0);
+    const library=$("libraryScreen");
+    library?.classList.toggle("search-active",Boolean(q));
+    const searchSummary=$("searchResultSummary");
+    if(searchSummary){
+      searchSummary.classList.toggle("hidden",!q);
+      searchSummary.textContent=q?(shown?`${shown} matching regimen${shown===1?"":"s"} for “${q}”.`:`No matching regimens for “${q}”. Try a drug name, trade name, acronym or NCCP number.`):"";
+    }
+    if(options.jump){
+      const target=visibleCards[0]||$("catalogEmptyState")||$("catalogCount");
+      target?.scrollIntoView({behavior:"smooth",block:"start"});
+      if(visibleCards[0]){
+        visibleCards[0].focus({preventScroll:true});
+        visibleCards[0].classList.add("search-focus-pulse");
+        setTimeout(()=>visibleCards[0]?.classList.remove("search-focus-pulse"),1000);
+      }
+    }
+    return visibleCards;
   }
-  ["regimenSearch","tumourFilter","treatmentFilter","statusFilter"].forEach(id=>$(id).addEventListener(id==="regimenSearch"?"input":"change",filterRegimens));
+  window.filterRegimens=filterRegimens;
+  ["regimenSearch","tumourFilter","treatmentFilter","statusFilter"].forEach(id=>{
+    const element=$(id);
+    element.addEventListener(id==="regimenSearch"?"input":"change",()=>filterRegimens());
+    if(id==="regimenSearch"){
+      element.addEventListener("search",()=>filterRegimens());
+      element.addEventListener("keydown",event=>{
+        if(event.key==="Enter"){
+          event.preventDefault();
+          filterRegimens({jump:true});
+        }
+      });
+    }
+  });
   bindNavigation();filterRegimens();updateDayOptions();updateLiveRatios();
 </script>
 
@@ -2017,24 +2068,25 @@ function openProtocolPreview(event){
   }
 }
 </script>
-<script src="js/emetogenic-risk.js?v=0.47.0"></script>
-<script src="js/drug-aliases.js?v=0.47.0"></script>
-<script src="js/local-lab-profile.js?v=0.47.0"></script>
-<script src="js/protocol-context.js?v=0.47.0"></script>
-<script src="js/rule-engine.js?v=0.47.0"></script>
-<script src="js/protocol-validator.js?v=0.47.0"></script>
-<script src="js/assessment-engine.js?v=0.47.0"></script>
-<script src="js/ctcae-descriptors.js?v=0.47.0"></script>
-<script src="js/regimen-course-metadata.js?v=0.47.0"></script>
-<script src="js/assessment-output.js?v=0.47.0"></script>
-<script src="js/assessment-pdf.js?v=0.47.0"></script>
-<script src="js/generic-assessment-ui.js?v=0.47.0"></script>
+<script src="js/emetogenic-risk.js?v=0.47.2"></script>
+<script src="js/drug-aliases.js?v=0.47.2"></script>
+<script src="js/local-lab-profile.js?v=0.47.2"></script>
+<script src="js/protocol-context.js?v=0.47.2"></script>
+<script src="js/rule-engine.js?v=0.47.2"></script>
+<script src="js/protocol-validator.js?v=0.47.2"></script>
+<script src="js/assessment-engine.js?v=0.47.2"></script>
+<script src="js/ctcae-descriptors.js?v=0.47.2"></script>
+<script src="js/regimen-course-metadata.js?v=0.47.2"></script>
+<script src="js/assessment-output.js?v=0.47.2"></script>
+<script src="js/assessment-pdf.js?v=0.47.2"></script>
+<script src="js/generic-assessment-ui.js?v=0.47.2"></script>
 <script src="js/folfox-shadow-core.js"></script>
 <script src="js/folfox-shadow-ui.js"></script>
 
-<script src="js/tissue-ui.js?v=0.47.0"></script>
-<script src="js/protocol-loader.js?v=0.47.0"></script>
-<script src="js/regimen-card-metadata.js?v=0.47.0"></script>
-<script src="js/protocol-importer-ui.js?v=0.47.0"></script>
+<script src="js/tissue-ui.js?v=0.47.2"></script>
+<script src="js/protocol-loader.js?v=0.47.2"></script>
+<script src="js/regimen-card-metadata.js?v=0.47.2"></script>
+<script src="js/library-ux.js?v=0.47.2"></script>
+<script src="js/protocol-importer-ui.js?v=0.47.2"></script>
 </body>
 </html>

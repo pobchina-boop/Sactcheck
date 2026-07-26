@@ -30,7 +30,8 @@ assert(loader.includes('isPublishedForAssessment'), 'Publication visibility must
 assert(loader.includes('launchProtocol,'), 'The generic launcher must be available through SACTCheckProtocolLoader.');
 assert(!loader.includes("protocolId === 'nccp-00226"), 'The loader must not contain a paclitaxel-specific launch branch.');
 assert(!loader.includes("protocolId === 'nccp-00588"), 'The loader must not contain an olaparib-specific launch branch.');
-assert(loader.includes('Engine · ${escapeHtml(engine)}'), 'Published cards must display the standardised engine badge.');
+assert(loader.includes('Official NCCP source · Validation pending'), 'Published cards must show one combined source and validation status.');
+assert(!loader.includes('Engine · ${escapeHtml(engine)}'), 'Engine implementation details must not dominate clinician-facing cards.');
 assert(loader.includes('createOfficialPdfLink'), 'Protocol cards must support a prominent official PDF action.');
 assert(loader.includes('Official NCCP PDF'), 'The official source control must be clearly labelled.');
 assert(loader.includes('metadata.source_url'), 'Generated protocol cards must derive the PDF link from protocol metadata.');
@@ -39,6 +40,6 @@ const html = fs.readFileSync('index.html', 'utf8');
 assert(!html.includes('js/paclitaxel-shadow-ui.js'), 'The obsolete paclitaxel shadow launcher must not load.');
 assert(html.includes('id="openPaclitaxel"'), 'The weekly paclitaxel legacy catalogue target must remain available for generic replacement.');
 assert(html.includes('id="openFolfirinoxModified"'), 'The Modified FOLFIRINOX catalogue target must remain available for generic replacement.');
-assert(html.includes('js/protocol-loader.js?v=0.47.0'), 'The main app must load the v0.36.0 release without stale caching.');
+assert(html.includes('js/protocol-loader.js?v=0.47.2'), 'The main app must load the v0.36.0 release without stale caching.');
 
 console.log('Main-app protocol-agnostic launcher tests passed.');

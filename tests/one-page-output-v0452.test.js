@@ -17,7 +17,7 @@ global.SACTCheckRegimenCourseMetadata = CourseMetadata;
 delete require.cache[require.resolve(path.join(ROOT, "js/assessment-output.js"))];
 const Output = require(path.join(ROOT, "js/assessment-output.js"));
 
-assert.strictEqual(Output.version, "0.45.3");
+assert.strictEqual(Output.version, "0.47.2");
 assert.match(Output.disclaimer, /does not constitute treatment clearance/i);
 assert.match(Output.disclaimer, /responsible oncology clinician retains responsibility/i);
 
@@ -32,7 +32,7 @@ const model = Output.buildModel({
   tumourGroup: "Breast",
   clinicianDecision: "hold",
   clinicianNote: "Counts below the encoded threshold; repeat FBC and review.",
-  appVersion: "0.45.3"
+  appVersion: "0.47.2"
 });
 
 assert.strictEqual(model.assessmentId, "OUTPUT-TEST-001");
@@ -62,8 +62,9 @@ assert(ui.includes('id="jsonClinicianDecision"'));
 assert(ui.includes('id="jsonClinicianNote"'));
 assert(ui.includes('id="jsonGeneratePdf"'));
 assert(ui.includes("AssessmentOutput.buildModel"));
-assert(ui.includes("AssessmentOutput.disclaimer"));
-assert(ui.includes('version: "0.45.3"'));
+assert(ui.includes('id="jsonScreenDisclaimer"'));
+assert(ui.includes('Final treatment suitability remains the responsibility'));
+assert(ui.includes('version: "0.47.2"'));
 
 const css = read("css/assessment-output.css");
 assert(css.includes("@page{size:A4 portrait"));
@@ -71,9 +72,9 @@ assert(css.includes("max-height:275mm"));
 assert(css.includes(".print-sheet-footer"));
 
 const index = read("index.html");
-assert(index.includes("Version 0.47.0 · complete Neuroendocrine and adult tumour-agnostic libraries"));
-assert(index.includes("css/assessment-output.css?v=0.47.0"));
-assert(index.includes("js/assessment-output.js?v=0.47.0"));
+assert(index.includes("v0.47.2 · What changed?"));
+assert(index.includes("css/assessment-output.css?v=0.47.2"));
+assert(index.includes("js/assessment-output.js?v=0.47.2"));
 assert(index.indexOf("js/assessment-output.js") < index.indexOf("js/generic-assessment-ui.js"));
 
 console.log(`v0.45.2 one-page clinical output tests passed (${model.rows.length} printable rows; ${result.unassessed.length} unassessed domains).`);

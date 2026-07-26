@@ -198,14 +198,17 @@
     return Boolean(validation.consultant_reviewed && validation.oncology_pharmacy_reviewed && validation.software_tests_completed && validation.clinical_use_authorised);
   }
 
-  function statusBadges({ engine = "JSON", clinicalValidated = false, sourceUrl = null, shadow = false, localPreview = false, ready = true }) {
-    const badges = [
-      `<span class="badge ${engine === "JSON" ? "engine-json" : "engine-legacy"}">Engine · ${escapeHtml(engine)}</span>`,
-      `<span class="badge ${clinicalValidated ? "clinical-validated" : "clinical-pending"}">Clinical · ${clinicalValidated ? "Validated" : "Pending validation"}</span>`,
-      `<span class="badge ${sourceUrl ? "source-current" : "source-missing"}">Source · ${sourceUrl ? "Official NCCP" : "Not linked"}</span>`
-    ];
-    if (!ready) badges.push('<span class="badge source-missing">Engine validation required</span>');
-    if (shadow) badges.push('<span class="badge development">Development · Shadow validation</span>');
+  function statusBadges({ clinicalValidated = false, sourceUrl = null, shadow = false, localPreview = false, ready = true }) {
+    const badges = [];
+    if (sourceUrl && clinicalValidated) {
+      badges.push('<span class="badge protocol-status protocol-status-validated">Official NCCP source · Clinically validated</span>');
+    } else if (sourceUrl) {
+      badges.push('<span class="badge protocol-status protocol-status-pending">Official NCCP source · Validation pending</span>');
+    } else {
+      badges.push('<span class="badge protocol-status protocol-status-source-missing">Source link requires verification</span>');
+    }
+    if (!ready) badges.push('<span class="badge protocol-status protocol-status-source-missing">Assessment unavailable</span>');
+    if (shadow) badges.push('<span class="badge development">Shadow validation</span>');
     if (localPreview) badges.push('<span class="badge development">Local preview</span>');
     return badges.join("");
   }
@@ -236,7 +239,7 @@
       const row = card.querySelector(".validation-row");
       if (row) {
         row.innerHTML = planned
-          ? '<span class="badge engine-legacy">Engine · Catalogue only</span><span class="badge source-missing">Source · Required</span>'
+          ? '<span class="badge protocol-status protocol-status-source-missing">Catalogue only · source required</span>'
           : `${statusBadges({ engine: "Legacy", clinicalValidated: false, sourceUrl: source })}${emetogenicBadge(null)}`;
       }
       const description = [...card.querySelectorAll(":scope > p")].find(p => !p.querySelector("strong"));
@@ -287,6 +290,27 @@
         launchProtocol(button.dataset.protocolId);
       } catch (error) {
         showLoadError(error);
+      }
+    });
+  }
+
+  function enableCardLaunch(card) {
+    if (!card || card.dataset.cardLaunchEnabled === "true") return;
+    const launch = card.querySelector(".json-assessment-launch, .regimen-launch");
+    if (!launch || launch.disabled) return;
+    card.dataset.cardLaunchEnabled = "true";
+    card.tabIndex = 0;
+    card.setAttribute("role", "group");
+    card.setAttribute("aria-label", `${card.querySelector("h2")?.textContent || "Regimen"}. Open protocol assessment.`);
+    const activate = event => {
+      if (event.target.closest("a, button, input, select, textarea, summary, details")) return;
+      launch.click();
+    };
+    card.addEventListener("click", activate);
+    card.addEventListener("keydown", event => {
+      if ((event.key === "Enter" || event.key === " ") && !event.target.closest("a, button, input, select, textarea, summary")) {
+        event.preventDefault();
+        launch.click();
       }
     });
   }
@@ -376,6 +400,7 @@
     }
 
     replaceRuleControl(card, true);
+    enableCardLaunch(card);
 
     return true;
   }
@@ -387,6 +412,12 @@
 
     grid.querySelectorAll(".json-regimen-card").forEach(card => card.remove());
 
+    const legacyTargetCounts = protocols.reduce((counts, record) => {
+      const target = record?.entry?.legacy_card_id;
+      if (target) counts.set(target, (counts.get(target) || 0) + 1);
+      return counts;
+    }, new Map());
+
     protocols.forEach(({ entry = {}, protocol = {} }) => {
       const metadata = protocol.metadata || {};
       const protocolId = getProtocolId(entry, protocol);
@@ -395,7 +426,8 @@
       const migrationMode = entry.mode || metadata.migration?.mode || "catalogue";
       const publishedForAssessment = isPublishedForAssessment(entry, protocol);
       if (!publishedForAssessment) return;
-      if (entry.legacy_card_id && integrateExistingCard(entry, protocol)) return;
+      const legacyTargetIsUnique = entry.legacy_card_id && legacyTargetCounts.get(entry.legacy_card_id) === 1;
+      if (legacyTargetIsUnique && integrateExistingCard(entry, protocol)) return;
       const title = getProtocolTitle(protocol);
       const code = getProtocolCode(protocol);
       const version = metadata.nccp_version || "";
@@ -425,25 +457,24 @@
         <span class="category-chip">${escapeHtml(tumourDisplay)}</span>
         <span class="treatment-chip treatment-chip-${escapeHtml(section)}">${escapeHtml(treatmentClassLabel(protocol))}</span>
         <h2>${escapeHtml(title)}</h2>
-        ${aliasMarkup(protocol)}
-        <p><strong>NCCP ${escapeHtml(code)}${version ? ` · Version ${escapeHtml(version)}` : ""}</strong></p>
-        <p class="regimen-description">${escapeHtml(shorten(indication))}</p>
+        <p class="regimen-code"><strong>NCCP ${escapeHtml(code)}${version ? ` · v${escapeHtml(version)}` : ""}</strong></p>
+        <p class="regimen-description">${escapeHtml(shorten(indication, 190))}</p>
         <div class="validation-row">${statusBadges({
-          engine: "JSON",
           clinicalValidated: isClinicallyValidated(protocol),
           sourceUrl: metadata.source_url,
           shadow: migrationMode === "shadow_validation",
           localPreview,
           ready: assessmentReady
         })}${emetogenicBadge(protocol)}</div>
-        <details>
-          <summary>View encoded protocol summary</summary>
+        <details class="protocol-card-details">
+          <summary>Protocol details</summary>
           <div class="details-body">
-            <p><strong>Repository file:</strong> ${escapeHtml(entry.path || protocol.file_name || "Path not specified")}</p>
-            <p><strong>Encoding status:</strong> ${escapeHtml(protocol.status || "Not specified")}</p>
+            ${aliases.length ? `<p><strong>Common / trade names:</strong> ${aliases.map(escapeHtml).join(" · ")}</p>` : ""}
+            <p><strong>Tumour groups:</strong> ${escapeHtml(tumourDisplay)}</p>
             <p><strong>Rules encoded:</strong> ${totalRules}</p>
-            ${validation.warnings.length ? `<p><strong>Validation warnings:</strong> ${validation.warnings.length}. Use the JSON preview screen for details.</p>` : ""}
-            ${validation.errors.length ? `<p><strong>Validation errors:</strong> ${validation.errors.length}. Publication is blocked.</p>` : ""}
+            <p><strong>Engine:</strong> JSON protocol assessment</p>
+            ${validation.warnings.length ? `<p><strong>Validation warnings:</strong> ${validation.warnings.length}</p>` : ""}
+            ${validation.errors.length ? `<p><strong>Validation errors:</strong> ${validation.errors.length}. Assessment publication is blocked.</p>` : ""}
           </div>
         </details>
         <div class="card-actions">
@@ -455,10 +486,14 @@
 
       const button = card.querySelector(".json-assessment-launch");
       bindProtocolLaunch(button, protocolId, assessmentReady);
+      enableCardLaunch(card);
 
       grid.appendChild(card);
     });
 
+    // The canonical JSON index is the source of truth. Remove legacy catalogue
+    // placeholders that were not uniquely reconciled to a single protocol.
+    grid.querySelectorAll(".regimen-card:not([data-json-protocol-id])").forEach(card => card.remove());
     normaliseRemainingLegacyCards(grid);
     groupCatalogueCards(grid);
 
@@ -538,7 +573,7 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
-    version: "0.45.1",
+    version: "0.47.2",
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,

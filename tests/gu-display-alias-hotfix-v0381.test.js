@@ -15,7 +15,7 @@ aliasContext.globalThis = aliasContext;
 vm.createContext(aliasContext);
 vm.runInContext(fs.readFileSync(path.join(root, 'js', 'drug-aliases.js'), 'utf8'), aliasContext);
 const Aliases = aliasContext.SACTCheckDrugAliases;
-assert.strictEqual(Aliases.version, '0.47.0');
+assert.strictEqual(Aliases.version, '0.47.2');
 
 const abiraterone = loadJson('protocols/genitourinary/00103-abiraterone-prednisolone-mcrpc.json');
 const abirateroneAliases = Aliases.forProtocol(abiraterone);
@@ -52,7 +52,7 @@ tissueContext.globalThis = tissueContext;
 vm.createContext(tissueContext);
 vm.runInContext(fs.readFileSync(path.join(root, 'js', 'tissue-ui.js'), 'utf8'), tissueContext);
 const Tissue = tissueContext.SACTCheckTissueUI;
-assert.strictEqual(Tissue.version, '0.47.0');
+assert.strictEqual(Tissue.version, '0.47.2');
 const gu = Tissue.tissues.find(item => item.id === 'gu');
 const sharedGroups = ['Breast', 'Genitourinary'];
 assert.strictEqual(Tissue.tissueForGroups(sharedGroups, gu).id, 'gu', 'GU selection should override first-listed Breast tissue for a shared regimen.');
@@ -63,8 +63,8 @@ assert.strictEqual(Tissue.tissueForGroups(lungGuGroups, gu).id, 'gu', 'GU select
 assert.strictEqual(Tissue.contextualTumourLabel(lungGuGroups, gu), 'Genitourinary · Also: Lung');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('Version 0.47.0 · complete Neuroendocrine and adult tumour-agnostic libraries'));
-assert(html.includes('js/tissue-ui.js?v=0.47.0'));
-assert(html.includes('js/drug-aliases.js?v=0.47.0'));
+assert(html.includes('v0.47.2 · What changed?'));
+assert(html.includes('js/tissue-ui.js?v=0.47.2'));
+assert(html.includes('js/drug-aliases.js?v=0.47.2'));
 
 console.log('v0.38.1 GU display, title casing and alias precision tests passed.');
