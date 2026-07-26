@@ -1,3 +1,13 @@
+## v0.45.2 — One-page clinical output and safety-language update
+- Added a dedicated one-page A4 assessment summary for printing or saving as PDF.
+- Added non-directive encoded-criteria outcomes: criteria breached/requiring review, partial assessment, or no encoded criterion breached.
+- Added a compact table of entered values, patient results, encoded criteria and result status, with clinically important triggered findings prioritised.
+- Added explicit unassessed-domain disclosure; blank values remain unknown and are never assumed normal.
+- Added separate clinician-decision and concise rationale/override documentation fields.
+- Added a permanent decision-support disclaimer to the screen, one-page PDF and detailed text summary.
+- Retained the detailed electronic assessment and text export for audit and validation use.
+- Added A4 print styling, one-page output tests and visual PDF verification.
+
 ## v0.45.1 — Tissue-specific shared-regimen indication hotfix
 - Added tissue-context resolution for regimens shared across multiple tumour libraries.
 - Regimen-card indication text now follows the active tumour-site filter instead of the protocol's primary indication.

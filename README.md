@@ -2,21 +2,22 @@
 
 ## Current release
 
-**SACTCheck v0.45.1 — Tissue-specific shared-regimen indication hotfix**
+**SACTCheck v0.45.2 — One-page clinical output and safety-language update**
 
-SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This hotfix corrects the display and selection of indications for regimens shared across more than one tumour library.
+SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This release adds a concise, source-traceable one-page clinical summary for printing or saving as PDF while preserving the full detailed assessment for audit and validation.
 
-### v0.45.1 highlights
+### v0.45.2 highlights
 
-- Shared regimen cards display the indication relevant to the active tumour-site filter.
-- The selected tissue context is carried into the assessment screen.
-- The relevant indication is preselected while all encoded indications remain available.
-- Indication options are labelled by tumour group for shared protocols.
-- 134 indications across 37 shared protocol files now carry explicit tumour-group metadata.
-- Unresolved source/index mismatches use a safe verification message rather than an unrelated indication.
+- Dedicated A4 one-page assessment output.
+- Compact entered-value versus encoded-criterion table.
+- Abnormal and review-triggering findings prioritised above routine normal entries.
+- Explicit unassessed-domain disclosure.
+- Clinician decision and concise rationale/override fields kept separate from the calculated result.
+- Permanent decision-support disclaimer on screen, in the PDF and in text exports.
+- Non-directive wording that reports encoded criteria rather than authorising treatment.
 - Complete historical and release-specific regression suite passed.
 
-See `RELEASE_NOTES_v0.45.1.md` and `V0451_CONTEXTUAL_INDICATION_AUDIT.json`.
+See `RELEASE_NOTES_v0.45.2.md` and `VALIDATION_REPORT_v0.45.2.md`.
 
 ## Safety and governance
 

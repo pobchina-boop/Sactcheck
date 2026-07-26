@@ -241,7 +241,7 @@ for (const {data} of all) {
 }
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('Version 0.45.1 · contextual shared-regimen indication hotfix'),'current release badge missing.');
+assert(html.includes('Version 0.45.2 · one-page clinical output and safety-language update'),'current release badge missing.');
 assert(html.includes('js/protocol-loader.js?v=0.45.1'),'current loader cache key missing.');
 assert(html.includes('js/drug-aliases.js?v=0.45.1'),'current alias cache key missing.');
 

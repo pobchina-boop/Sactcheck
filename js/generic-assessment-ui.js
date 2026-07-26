@@ -8,7 +8,9 @@
 
   const Engine = root.SACTCheckAssessmentEngine;
   const LocalLab = root.SACTCheckLocalLab;
+  const AssessmentOutput = root.SACTCheckAssessmentOutput;
   if (!Engine) throw new Error("SACTCheckAssessmentEngine must load before generic-assessment-ui.js.");
+  if (!AssessmentOutput) throw new Error("SACTCheckAssessmentOutput must load before generic-assessment-ui.js.");
 
   let activeProtocol = null;
   let activeProfileId = null;
@@ -135,24 +137,53 @@
           <div class="metric"><span>Completeness</span><strong id="jsonCompleteMetric">—</strong></div>
         </div>
 
+        <div class="decision-support-disclaimer"><strong>Clinical decision support — not treatment clearance.</strong> <span id="jsonScreenDisclaimer"></span></div>
+
         <div id="jsonErrors"></div>
 
+        <div class="result-block one-page-output-block" id="jsonOnePageSection">
+          <div class="section-heading"><div><h2>One-page clinical summary</h2><p class="subtle">A concise print/PDF record containing entered values, encoded criteria, unassessed domains, the clinician decision and NCCP traceability.</p></div><span class="step">A4 output</span></div>
+          <div class="output-documentation-grid">
+            <div>
+              <label for="jsonClinicianDecision">Final clinician decision</label>
+              <select id="jsonClinicianDecision">
+                <option value="">Not documented</option>
+                <option value="proceed">Proceed</option>
+                <option value="hold">Hold or defer</option>
+                <option value="modify">Dose modify</option>
+                <option value="discuss">Discuss with consultant/pharmacy</option>
+                <option value="other">Other</option>
+              </select>
+              <span class="hint">This records the clinician's decision separately from the calculated protocol-criteria result.</span>
+            </div>
+            <div>
+              <label for="jsonClinicianNote">Decision rationale or override</label>
+              <textarea id="jsonClinicianNote" rows="2" maxlength="220" placeholder="Optional concise rationale; do not enter identifiable patient information."></textarea>
+              <span class="hint">Maximum 220 characters to preserve a one-page output.</span>
+            </div>
+          </div>
+          <div id="jsonPrintSummary" class="assessment-output-preview"></div>
+          <div class="toolbar result-actions" style="margin-top:10px">
+            <button type="button" class="btn" id="jsonPrintOnePage">Print / save one-page PDF</button>
+            <button type="button" class="btn secondary" id="jsonCopyOnePage">Copy one-page summary</button>
+          </div>
+        </div>
+
         <div class="result-block">
-          <h2>Assessment findings</h2>
+          <h2>Detailed assessment findings</h2>
           <div id="jsonFindings"></div>
         </div>
 
         <div class="result-block">
-          <h2>Copyable assessment summary</h2>
+          <h2>Detailed copyable assessment summary</h2>
           <textarea id="jsonSummary" class="summary-box" readonly></textarea>
           <div class="toolbar result-actions" style="margin-top:10px">
-            <button type="button" class="btn" id="jsonCopy">Copy summary</button>
-            <button type="button" class="btn secondary" id="jsonDownload">Download text summary</button>
-            <button type="button" class="btn secondary" onclick="window.print()">Print / save as PDF</button>
+            <button type="button" class="btn" id="jsonCopy">Copy detailed summary</button>
+            <button type="button" class="btn secondary" id="jsonDownload">Download detailed text summary</button>
           </div>
         </div>
 
-        <p class="footer-note">This generic screen evaluates the machine-readable JSON rules loaded from the repository. The encoded protocols remain pending formal consultant, oncology-pharmacy and software validation.</p>
+        <p class="footer-note">This screen evaluates machine-readable JSON rules loaded from the repository. Encoded protocols remain pending formal consultant, oncology-pharmacy and software validation.</p>
       </div>
     `;
 
@@ -206,6 +237,11 @@
 
     document.getElementById("jsonCopy").addEventListener("click", copySummary);
     document.getElementById("jsonDownload").addEventListener("click", downloadSummary);
+    document.getElementById("jsonPrintOnePage").addEventListener("click", printOnePageSummary);
+    document.getElementById("jsonCopyOnePage").addEventListener("click", copyOnePageSummary);
+    document.getElementById("jsonClinicianDecision").addEventListener("change", renderOnePageSummary);
+    document.getElementById("jsonClinicianNote").addEventListener("input", renderOnePageSummary);
+    document.getElementById("jsonScreenDisclaimer").textContent = AssessmentOutput.disclaimer;
   }
 
   function showScreen(id) {
@@ -230,6 +266,7 @@
     const profiles = Engine.getProfiles(protocol);
     activeProfileId = profiles[0]?.id || "default";
     latestResult = null;
+    resetOutputDocumentation();
 
     document.getElementById("jsonProfile").innerHTML = profiles
       .map(profile => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.label)}</option>`)
@@ -686,7 +723,72 @@
     const labLines = Object.values(latestLabCalculations).map(calculation => `- ${calculation.display} → decision value ${calculation.decisionDisplay}`);
     if (labLines.length) summary += `\n\nAutomatic local-laboratory calculations (${LocalLab?.read().profileName || "local profile"}):\n${labLines.join("\n")}`;
     document.getElementById("jsonSummary").value = summary;
+    renderOnePageSummary();
     container.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function currentOutputModel() {
+    if (!latestResult || !activeProtocol) return null;
+    return AssessmentOutput.buildModel({
+      result: latestResult,
+      protocol: activeProtocol,
+      assessmentId: latestAssessmentId,
+      tumourGroup: activeTumourGroup,
+      labCalculations: latestLabCalculations,
+      clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
+      clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
+      appVersion: "0.45.2"
+    });
+  }
+
+  function renderOnePageSummary() {
+    const target = document.getElementById("jsonPrintSummary");
+    const model = currentOutputModel();
+    if (!target || !model) return;
+    target.innerHTML = AssessmentOutput.renderHtml(model);
+  }
+
+  function resetOutputDocumentation() {
+    const decision = document.getElementById("jsonClinicianDecision");
+    const note = document.getElementById("jsonClinicianNote");
+    if (decision) decision.value = "";
+    if (note) note.value = "";
+    const preview = document.getElementById("jsonPrintSummary");
+    if (preview) preview.innerHTML = "";
+  }
+
+  async function copyOnePageSummary() {
+    const model = currentOutputModel();
+    if (!model) return;
+    const text = AssessmentOutput.toText(model);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      textarea.remove();
+    }
+    if (typeof root.showToast === "function") root.showToast("One-page summary copied");
+  }
+
+  function printOnePageSummary() {
+    if (!latestResult) return;
+    renderOnePageSummary();
+    document.body.classList.add("json-one-page-print");
+    const previousTitle = document.title;
+    document.title = `SACTCheck_${latestAssessmentId || activeProtocol?.protocol_id || "assessment"}`;
+    const cleanup = () => {
+      document.body.classList.remove("json-one-page-print");
+      document.title = previousTitle;
+    };
+    window.addEventListener("afterprint", cleanup, { once: true });
+    window.setTimeout(() => window.print(), 30);
+    window.setTimeout(cleanup, 30000);
   }
 
   function renderErrors(result) {
@@ -825,6 +927,8 @@
   function hideResult() {
     document.getElementById("jsonResult")?.classList.add("hidden");
     latestResult = null;
+    resetOutputDocumentation();
+    document.body.classList.remove("json-one-page-print");
   }
 
   async function copySummary() {
@@ -869,7 +973,7 @@
   }
 
   root.SACTCheckGenericAssessment = Object.freeze({
-    version: "0.45.1",
+    version: "0.45.2",
     open,
     ensureScreen
   });

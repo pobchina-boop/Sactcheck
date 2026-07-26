@@ -990,8 +990,8 @@
       ...(result.context.indicationLabel ? [`Indication: ${result.context.indicationLabel}`] : []),
       `Assessment time: ${result.context.assessedAt}`,
       "",
-      `Overall encoded action: ${result.status}`,
-      `Recommendation: ${result.recommendation}`,
+      `Encoded criteria result: ${result.status}`,
+      `Decision-support explanation: ${result.recommendation}`,
       `Rule coverage: ${result.assessedRuleCount} of ${result.applicableRuleCount} applicable rules evaluated.`,
       "",
       "Entered values:"
@@ -1023,7 +1023,7 @@
 
     lines.push(
       "",
-      "Prototype decision support only. Confirm the current NCCP regimen, local policy, prescribing review and pharmacy verification. This output does not replace independent clinical judgement."
+      "Clinical decision support - not treatment clearance. SACTCheck applies encoded NCCP protocol criteria to clinician-entered information. This output does not constitute treatment clearance and does not replace complete clinical assessment, the current official NCCP protocol, prescribing information, local policy or professional judgement. The responsible oncology clinician retains responsibility for the final treatment decision."
     );
 
     return lines.join("\n");
@@ -1060,7 +1060,7 @@
   }
 
   return Object.freeze({
-    version: "0.45.1",
+    version: "0.45.2",
     getProfiles,
     getInputDefinitions,
     explicitInputDefinitions,
