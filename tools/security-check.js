@@ -27,11 +27,41 @@ const textExtensions = new Set([".html", ".js", ".css", ".json", ".md", ".txt", 
 const problems = [];
 let scanned = 0;
 
+function inspectFile(absolute, relative, entryName) {
+  let fileDescriptor;
+
+  try {
+    // Open once, then inspect and read through the same descriptor. This avoids
+    // a time-of-check/time-of-use race between separate stat and read calls.
+    fileDescriptor = fs.openSync(absolute, fs.constants.O_RDONLY);
+    const stat = fs.fstatSync(fileDescriptor);
+    if (!stat.isFile()) return;
+
+    if (stat.size > 20 * 1024 * 1024) {
+      problems.push(`${relative}: file exceeds 20 MB`);
+    }
+
+    const isTextFile = textExtensions.has(path.extname(entryName).toLowerCase()) || entryName === ".nojekyll";
+    if (!isTextFile || stat.size > 5 * 1024 * 1024) return;
+
+    const text = fs.readFileSync(fileDescriptor, "utf8");
+    scanned += 1;
+    for (const pattern of secretPatterns) {
+      if (pattern.regex.test(text)) problems.push(`${relative}: possible ${pattern.name}`);
+    }
+  } catch (error) {
+    problems.push(`${relative}: unable to inspect file (${error.message})`);
+  } finally {
+    if (fileDescriptor !== undefined) fs.closeSync(fileDescriptor);
+  }
+}
+
 function walk(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     if (entry.isDirectory() && excludedDirectories.has(entry.name)) continue;
     const absolute = path.join(directory, entry.name);
     const relative = path.relative(root, absolute).replaceAll(path.sep, "/");
+
     if (entry.isDirectory()) {
       walk(absolute);
       continue;
@@ -41,18 +71,8 @@ function walk(directory) {
     if (forbiddenNames.some((pattern) => pattern.test(entry.name))) {
       problems.push(`${relative}: forbidden credential/key filename`);
     }
-    const stat = fs.statSync(absolute);
-    if (stat.size > 20 * 1024 * 1024) {
-      problems.push(`${relative}: file exceeds 20 MB`);
-    }
-    if (!textExtensions.has(path.extname(entry.name).toLowerCase()) && entry.name !== ".nojekyll") continue;
-    if (stat.size > 5 * 1024 * 1024) continue;
 
-    const text = fs.readFileSync(absolute, "utf8");
-    scanned += 1;
-    for (const pattern of secretPatterns) {
-      if (pattern.regex.test(text)) problems.push(`${relative}: possible ${pattern.name}`);
-    }
+    inspectFile(absolute, relative, entry.name);
   }
 }
 
