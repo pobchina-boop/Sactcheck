@@ -6,8 +6,12 @@
   "use strict";
 
   const INDEX_PATH = "protocols/index.json";
+  const LOAD_CONCURRENCY = 8;
+  const FETCH_ATTEMPTS = 4;
+  const RETRYABLE_HTTP_STATUS = new Set([408, 425, 429, 500, 502, 503, 504]);
   const protocolsById = new Map();
   let loadedProtocolRecords = [];
+  let failedProtocolEntries = [];
   const SECTION_ORDER = [
     "chemotherapy_combination_sact",
     "targeted_her2_therapy",
@@ -25,10 +29,60 @@
     supportive_other: "Other SACT / supportive therapy"
   };
 
-  async function fetchJson(path) {
-    const response = await fetch(path, { cache: "no-store" });
-    if (!response.ok) throw new Error(`Could not load ${path}. HTTP ${response.status}`);
-    return response.json();
+  function wait(milliseconds) {
+    return new Promise(resolve => window.setTimeout(resolve, milliseconds));
+  }
+
+  function retryUrl(path, attempt) {
+    if (!attempt) return path;
+    const url = new URL(path, window.location.href);
+    url.searchParams.set("sact_retry", `${Date.now()}-${attempt}`);
+    return url.href;
+  }
+
+  async function fetchJson(path, { attempts = FETCH_ATTEMPTS } = {}) {
+    let lastError = null;
+    for (let attempt = 0; attempt < attempts; attempt += 1) {
+      try {
+        const response = await fetch(retryUrl(path, attempt), { cache: "no-store" });
+        if (response.ok) return response.json();
+
+        const error = new Error(`Could not load ${path}. HTTP ${response.status}`);
+        error.status = response.status;
+        error.path = path;
+        lastError = error;
+        const canRetry = RETRYABLE_HTTP_STATUS.has(response.status) && attempt < attempts - 1;
+        if (!canRetry) throw error;
+      } catch (error) {
+        lastError = error;
+        const status = Number(error?.status || 0);
+        const networkFailure = !status;
+        const canRetry = (networkFailure || RETRYABLE_HTTP_STATUS.has(status)) && attempt < attempts - 1;
+        if (!canRetry) throw error;
+      }
+      const delay = 350 * (2 ** attempt) + Math.floor(Math.random() * 180);
+      await wait(delay);
+    }
+    throw lastError || new Error(`Could not load ${path}.`);
+  }
+
+  async function mapWithConcurrency(items, worker, concurrency = LOAD_CONCURRENCY) {
+    const results = new Array(items.length);
+    let nextIndex = 0;
+    async function runWorker() {
+      while (nextIndex < items.length) {
+        const currentIndex = nextIndex;
+        nextIndex += 1;
+        try {
+          results[currentIndex] = { status: "fulfilled", value: await worker(items[currentIndex], currentIndex) };
+        } catch (reason) {
+          results[currentIndex] = { status: "rejected", reason, item: items[currentIndex] };
+        }
+      }
+    }
+    const workerCount = Math.max(1, Math.min(concurrency, items.length || 1));
+    await Promise.all(Array.from({ length: workerCount }, runWorker));
+    return results;
   }
 
   function asArray(value) {
@@ -508,39 +562,104 @@
     }
   }
 
-  function showLoadError(error) {
-    console.error("Protocol loader failed:", error);
-    const existing = document.getElementById("protocolLoaderWarning");
-    if (existing) existing.remove();
+  function removeLoaderNotice() {
+    document.getElementById("protocolLoaderWarning")?.remove();
+  }
 
+  function loaderNoticeTarget() {
+    return document.querySelector("main") || document.body;
+  }
+
+  function showFatalLoadError(error) {
+    console.error("Protocol loader failed:", error);
+    removeLoaderNotice();
     const warning = document.createElement("div");
     warning.id = "protocolLoaderWarning";
-    warning.style.cssText = "margin:16px;padding:12px;border:1px solid #f1aeb5;border-radius:8px;background:#f8d7da;color:#58151c;font-family:Arial,Helvetica,sans-serif;";
-    warning.textContent = `Protocol loader failed: ${error.message}`;
-    document.body.prepend(warning);
+    warning.className = "protocol-loader-notice protocol-loader-fatal";
+    warning.setAttribute("role", "alert");
+    warning.innerHTML = `<strong>The regimen library could not be loaded.</strong><span>Please check your connection and try again. No assessment data has been entered or transmitted.</span><button class="btn secondary protocol-loader-retry" type="button">Retry loading</button><details><summary>Technical details</summary><code>${escapeHtml(error?.message || String(error))}</code></details>`;
+    warning.querySelector(".protocol-loader-retry")?.addEventListener("click", loadProtocols);
+    loaderNoticeTarget().prepend(warning);
+  }
+
+  function showPartialLoadWarning(failures, loadedCount, totalCount) {
+    removeLoaderNotice();
+    if (!failures.length) return;
+    const warning = document.createElement("div");
+    warning.id = "protocolLoaderWarning";
+    warning.className = "protocol-loader-notice protocol-loader-partial";
+    warning.setAttribute("role", "status");
+    const unavailable = failures.length;
+    warning.innerHTML = `<div><strong>${unavailable} protocol file${unavailable === 1 ? " is" : "s are"} temporarily unavailable.</strong><span>${loadedCount} of ${totalCount} protocols loaded successfully. The available library remains usable; retry before assessing an unavailable regimen.</span></div><button class="btn secondary protocol-loader-retry" type="button">Retry unavailable file${unavailable === 1 ? "" : "s"}</button><details><summary>Technical details</summary><ul>${failures.map(item => `<li><code>${escapeHtml(item.entry?.path || item.entry?.id || "Unknown protocol")}</code> — ${escapeHtml(item.error?.message || String(item.error))}</li>`).join("")}</ul></details>`;
+    warning.querySelector(".protocol-loader-retry")?.addEventListener("click", retryFailedProtocols);
+    loaderNoticeTarget().prepend(warning);
+  }
+
+  function publishProtocolState(protocols, failures, totalCount) {
+    loadedProtocolRecords = protocols;
+    failedProtocolEntries = failures.map(item => item.entry);
+    window.SACTCHECK_PROTOCOLS = loadedProtocolRecords;
+    window.SACTCHECK_PROTOCOLS_BY_ID = protocolsById;
+    window.SACTCHECK_PROTOCOL_LOAD_STATUS = Object.freeze({
+      loaded: protocols.length,
+      unavailable: failures.length,
+      total: totalCount
+    });
+    createProtocolLibrary(loadedProtocolRecords);
+    window.dispatchEvent(new CustomEvent("sactcheck:protocols-loaded", {
+      detail: { protocols, failures, total: totalCount }
+    }));
+    showPartialLoadWarning(failures, protocols.length, totalCount);
+  }
+
+  async function loadProtocolEntries(entries) {
+    const settled = await mapWithConcurrency(entries, async entry => {
+      if (!entry.path) throw new Error(`Protocol ${entry.id || "without an ID"} has no file path.`);
+      const protocol = await fetchJson(entry.path);
+      return { entry, protocol };
+    });
+    return {
+      protocols: settled.filter(result => result.status === "fulfilled").map(result => result.value),
+      failures: settled.filter(result => result.status === "rejected").map(result => ({
+        entry: result.item,
+        error: result.reason
+      }))
+    };
+  }
+
+  async function retryFailedProtocols() {
+    const entries = failedProtocolEntries.slice();
+    if (!entries.length) return;
+    const button = document.querySelector("#protocolLoaderWarning .protocol-loader-retry");
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Retrying…";
+    }
+    const result = await loadProtocolEntries(entries);
+    const successfulIds = new Set(result.protocols.map(record => record.entry?.id || record.protocol?.protocol_id));
+    const retained = loadedProtocolRecords.filter(record => !successfulIds.has(record.entry?.id || record.protocol?.protocol_id));
+    const combined = [...retained, ...result.protocols];
+    const total = combined.length + result.failures.length;
+    publishProtocolState(combined, result.failures, total);
   }
 
   async function loadProtocols() {
+    removeLoaderNotice();
     try {
       await window.SACTCheckEmetogenicRisk?.load();
       const index = await fetchJson(INDEX_PATH);
       if (!Array.isArray(index.protocols)) throw new Error("protocols/index.json does not contain a protocols array.");
 
       const enabledEntries = index.protocols.filter(item => item && item.enabled !== false);
-      const protocols = await Promise.all(enabledEntries.map(async entry => {
-        if (!entry.path) throw new Error(`Protocol ${entry.id || "without an ID"} has no file path.`);
-        const protocol = await fetchJson(entry.path);
-        return { entry, protocol };
-      }));
-
-      loadedProtocolRecords = protocols;
-      window.SACTCHECK_PROTOCOLS = loadedProtocolRecords;
-      window.SACTCHECK_PROTOCOLS_BY_ID = protocolsById;
-      createProtocolLibrary(loadedProtocolRecords);
-      window.dispatchEvent(new CustomEvent("sactcheck:protocols-loaded", { detail: { protocols } }));
-      console.info(`SACTCheck loaded ${protocols.length} JSON protocol${protocols.length === 1 ? "" : "s"}.`);
+      const result = await loadProtocolEntries(enabledEntries);
+      if (!result.protocols.length) {
+        const firstFailure = result.failures[0]?.error || new Error("No protocol files could be loaded.");
+        throw firstFailure;
+      }
+      publishProtocolState(result.protocols, result.failures, enabledEntries.length);
+      console.info(`SACTCheck loaded ${result.protocols.length} of ${enabledEntries.length} JSON protocols with concurrency limited to ${LOAD_CONCURRENCY}.`);
     } catch (error) {
-      showLoadError(error);
+      showFatalLoadError(error);
     }
   }
 
@@ -573,7 +692,7 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
-    version: "0.48.0",
+    version: "0.48.1",
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,

@@ -1,7 +1,7 @@
-/** SACTCheck v0.48.0 feasibility-study presentation layer. */
+/** SACTCheck v0.48.1 feasibility-study presentation layer. */
 (function (root) {
   "use strict";
-  const VERSION = "0.48.0";
+  const VERSION = "0.48.1";
   const HIDE_KEY = "sactcheck:hide-study-welcome:v1";
   let lastFocused = null;
 
@@ -40,6 +40,8 @@
     try { return root.localStorage?.getItem(HIDE_KEY) !== "yes"; } catch (_) { return true; }
   }
   function bind() {
+    const mobileNote = document.getElementById("mobileOpenNote");
+    if (mobileNote) mobileNote.hidden = /^(https?:)$/.test(root.location?.protocol || "");
     document.querySelectorAll("[data-open-study-info]").forEach(button => button.addEventListener("click", openWelcome));
     document.querySelectorAll("[data-close-study-info]").forEach(button => button.addEventListener("click", closeWelcome));
     document.querySelectorAll("[data-focus-regimen-search]").forEach(button => button.addEventListener("click", focusSearch));
