@@ -83,8 +83,8 @@ assert(!ui.includes("window.print()"), "The JSON output action must not use the 
 assert(!ui.includes('id="jsonPrintOnePage"'));
 
 const index = read("index.html");
-assert(index.includes("v0.48.0 · What changed?"));
-assert(index.includes("js/assessment-pdf.js?v=0.48.0"));
+assert(index.includes("v0.48.1 · What changed?"));
+assert(index.includes("js/assessment-pdf.js?v=0.48.1"));
 assert(index.indexOf("js/assessment-output.js") < index.indexOf("js/assessment-pdf.js"));
 assert(index.indexOf("js/assessment-pdf.js") < index.indexOf("js/generic-assessment-ui.js"));
 

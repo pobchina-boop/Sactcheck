@@ -72,9 +72,9 @@ assert(css.includes("max-height:275mm"));
 assert(css.includes(".print-sheet-footer"));
 
 const index = read("index.html");
-assert(index.includes("v0.48.0 · What changed?"));
-assert(index.includes("css/assessment-output.css?v=0.48.0"));
-assert(index.includes("js/assessment-output.js?v=0.48.0"));
+assert(index.includes("v0.48.1 · What changed?"));
+assert(index.includes("css/assessment-output.css?v=0.48.1"));
+assert(index.includes("js/assessment-output.js?v=0.48.1"));
 assert(index.indexOf("js/assessment-output.js") < index.indexOf("js/generic-assessment-ui.js"));
 
 console.log(`v0.45.2 one-page clinical output tests passed (${model.rows.length} printable rows; ${result.unassessed.length} unassessed domains).`);
