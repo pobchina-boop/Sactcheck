@@ -126,4 +126,4 @@ The public repository, Actions logs and public issue tracker must never contain:
 - real treatment records;
 - access tokens or passwords.
 
-Use hypothetical, non-identifiable scenarios only.
+Do not enter patient-identifiable information.

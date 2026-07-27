@@ -29,6 +29,15 @@
     { pattern: /\bnab\s+paclitaxel\b|\babraxane\b/g, replacement: "nabpaclitaxel" },
     { pattern: /\btaxol\b/g, replacement: "paclitaxel" },
     { pattern: /\bxeloda\b/g, replacement: "capecitabine" },
+    { pattern: /\b(?:oral\s+sact|oral\s+anti\s*[- ]?cancer\s+medicines?|oral\s+anticancer\s+medicines?|oam|oacm)\b/g, replacement: "oralanticancermedicine" },
+    { pattern: /\bpalbo\b|\bibrance\b/g, replacement: "palbociclib" },
+    { pattern: /\bribo\b|\bkisqali\b/g, replacement: "ribociclib" },
+    { pattern: /\babema\b|\bverzenios\b/g, replacement: "abemaciclib" },
+    { pattern: /\bolap\b|\blynparza\b/g, replacement: "olaparib" },
+    { pattern: /\bnira\b|\bzejula\b/g, replacement: "niraparib" },
+    { pattern: /\bruca\b|\brubraca\b/g, replacement: "rucaparib" },
+    { pattern: /\btagrisso\b/g, replacement: "osimertinib" },
+    { pattern: /\blonsurf\b/g, replacement: "trifluridinetipiracil" },
     { pattern: /\bpld\b|\bcaelyx\b/g, replacement: "pegylatedliposomaldoxorubicin" },
 
     // Widely used clinician abbreviations.
@@ -340,7 +349,7 @@
   }
 
   return Object.freeze({
-    version: "0.48.3",
+    version: "0.48.4",
     basicNormalise,
     normalise,
     compact,

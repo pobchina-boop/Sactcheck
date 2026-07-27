@@ -6,7 +6,7 @@ const ROOT = path.resolve(__dirname, '..');
 const read = relativePath => fs.readFileSync(path.join(ROOT, relativePath), 'utf8');
 const search = require('../js/regimen-search.js');
 
-assert.strictEqual(search.version, '0.48.3');
+assert.strictEqual(search.version, '0.48.4');
 
 const folfox = 'Modified FOLFOX-6 oxaliplatin fluorouracil folinic acid NCCP 00209 colorectal cancer q14d';
 assert(search.matchesText(folfox, 'FOLFOX'));
@@ -33,9 +33,9 @@ assert(exact.score > content.score, 'Exact regimen title should rank above a gen
 const index = read('index.html');
 const css = read('css/search-v0483.css');
 const ui = read('js/regimen-search-ui.js');
-assert(index.includes('css/search-v0483.css?v=0.48.3'));
-assert(index.includes('js/regimen-search.js?v=0.48.3'));
-assert(index.includes('js/regimen-search-ui.js?v=0.48.3'));
+assert(index.includes('css/search-v0483.css?v=0.48.4'));
+assert(index.includes('js/regimen-search.js?v=0.48.4'));
+assert(index.includes('js/regimen-search-ui.js?v=0.48.4'));
 assert(index.includes('id="searchSuggestions"'));
 assert(index.includes('searchApi.rankCards(cards,q)'));
 assert(index.includes('Best matches are shown first'));
@@ -44,4 +44,4 @@ assert(css.includes('.search-suggestion-button'));
 assert(css.includes('.search-best-match'));
 assert(ui.includes('Ranked by title, drug aliases, NCCP number and indication'));
 
-console.log('v0.48.3 ranked search tests passed: aliases, NCCP normalisation, typo tolerance, ranking and result suggestions verified.');
+console.log('v0.48.4 ranked search tests passed: aliases, NCCP normalisation, typo tolerance, ranking and result suggestions verified.');

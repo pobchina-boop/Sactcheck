@@ -194,18 +194,40 @@
     return classes.slice(0, 2).map(value => String(value).replaceAll("_", " ").replace(/\b\w/g, character => character.toUpperCase())).join(" · ");
   }
 
+  function oralMedicineMetadata(protocol) {
+    return window.SACTCheckOralMedicine?.classify?.(protocol) || {
+      hasOral: false,
+      label: "Oral anti-cancer medicine",
+      searchTerms: ""
+    };
+  }
+
+  function oralMedicineChipMarkup(protocol) {
+    const oral = oralMedicineMetadata(protocol);
+    return oral.hasOral ? `<span class="oral-medicine-chip">${escapeHtml(oral.label)}</span>` : "";
+  }
+
   function applyTreatmentMetadata(card, protocol) {
     const section = getCatalogueSection(protocol);
     const sectionLabel = getCatalogueSectionLabel(protocol);
     card.dataset.section = section;
     card.dataset.sectionLabel = sectionLabel;
+    const oral = oralMedicineMetadata(protocol);
+    card.dataset.oralMedicine = oral.hasOral ? "true" : "false";
     card.querySelector(".treatment-chip")?.remove();
+    card.querySelector(".oral-medicine-chip")?.remove();
     const chip = document.createElement("span");
     chip.className = `treatment-chip treatment-chip-${section}`;
     chip.textContent = treatmentClassLabel(protocol);
     const category = card.querySelector(".category-chip");
     if (category) category.insertAdjacentElement("afterend", chip);
     else card.prepend(chip);
+    if (oral.hasOral) {
+      const oralChip = document.createElement("span");
+      oralChip.className = "oral-medicine-chip";
+      oralChip.textContent = oral.label;
+      chip.insertAdjacentElement("afterend", oralChip);
+    }
   }
 
   function groupCatalogueCards(grid) {
@@ -403,7 +425,8 @@
 
     const sectionLabel = getCatalogueSectionLabel(protocol);
     const classes = asArray(metadata.treatment_class).join(" ");
-    card.dataset.name = [title, aliases.join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, entry.path].join(" ");
+    const oral = oralMedicineMetadata(protocol);
+    card.dataset.name = [title, aliases.join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, oral.searchTerms, entry.path].join(" ");
     card.dataset.tumour = tumourGroups.join(",");
     applyTreatmentMetadata(card, protocol);
   }
@@ -496,7 +519,8 @@
       const section = getCatalogueSection(protocol);
       const sectionLabel = getCatalogueSectionLabel(protocol);
       const classes = asArray(metadata.treatment_class).join(" ");
-      const searchableText = [title, aliases.join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, entry.path].join(" ");
+      const oral = oralMedicineMetadata(protocol);
+      const searchableText = [title, aliases.join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, oral.searchTerms, entry.path].join(" ");
 
       const card = document.createElement("article");
       card.className = `card regimen-card json-regimen-card ${assessmentReady ? "active-regimen" : "planned"}`;
@@ -505,11 +529,13 @@
       card.dataset.status = assessmentReady ? "active" : "planned";
       card.dataset.section = section;
       card.dataset.sectionLabel = sectionLabel;
+      card.dataset.oralMedicine = oral.hasOral ? "true" : "false";
       card.dataset.jsonProtocolId = protocolId;
 
       card.innerHTML = `
         <span class="category-chip">${escapeHtml(tumourDisplay)}</span>
         <span class="treatment-chip treatment-chip-${escapeHtml(section)}">${escapeHtml(treatmentClassLabel(protocol))}</span>
+        ${oralMedicineChipMarkup(protocol)}
         <h2>${escapeHtml(title)}</h2>
         <p class="regimen-code"><strong>NCCP ${escapeHtml(code)}${version ? ` · v${escapeHtml(version)}` : ""}</strong></p>
         <p class="regimen-description">${escapeHtml(shorten(indication, 190))}</p>
@@ -692,7 +718,7 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
-    version: "0.48.3",
+    version: "0.48.4",
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,

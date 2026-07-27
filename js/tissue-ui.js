@@ -86,7 +86,11 @@
     if (!panel) return;
     const cards = matchingCards(tissue);
     const sections = countSections(cards);
-    const sectionButtons = Object.entries(SECTION_LABELS).map(([id, label]) => {
+    const oralCount = cards.filter(card => card.dataset.oralMedicine === "true").length;
+    const oralButton = oralCount
+      ? `<button class="tissue-section-chip" type="button" data-treatment-section="oral_anti_cancer_medicines"><strong>Oral anti-cancer medicines</strong><span>${oralCount}</span></button>`
+      : "";
+    const sectionButtons = oralButton + Object.entries(SECTION_LABELS).map(([id, label]) => {
       const count = sections[id] || 0;
       if (!count) return "";
       return `<button class="tissue-section-chip" type="button" data-treatment-section="${escapeHtml(id)}"><strong>${escapeHtml(label)}</strong><span>${count}</span></button>`;

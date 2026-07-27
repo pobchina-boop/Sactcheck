@@ -21,7 +21,7 @@ assert(!search.matchesText(folfox, 'pembrolizumab'), 'Unrelated drug must not ma
 
 const index = read('index.html');
 const css = read('css/ux-v0471.css');
-assert(index.includes('js/regimen-search.js?v=0.48.3'), 'Search normalisation module is not loaded');
+assert(index.includes('js/regimen-search.js?v=0.48.4'), 'Search normalisation module is not loaded');
 assert(index.includes('id="searchResultSummary"'), 'Live search result summary is missing');
 assert(index.includes('searchApi.rankCards(cards,q)'), 'Library filter does not use ranked normalised search');
 assert(index.includes('event.key==="Enter"'), 'Enter-to-jump search behaviour is missing');

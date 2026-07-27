@@ -1,10 +1,10 @@
-# SACTCheck hypothetical-scenario feasibility feedback form
+# SACTCheck structured-scenario feasibility feedback form
 
 ## Participant context
 - Clinical role
 - Oncology experience (years)
 - Current practice area / tumour group
-- Number of hypothetical scenarios completed
+- Number of structured scenarios completed
 
 ## Feasibility measures
 1. I could find the intended regimen quickly. — 1 strongly disagree to 5 strongly agree

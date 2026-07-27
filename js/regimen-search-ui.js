@@ -1,4 +1,4 @@
-/** SACTCheck v0.48.3 ranked regimen-search presentation. */
+/** SACTCheck v0.48.4 ranked regimen-search presentation. */
 (function (root) {
   "use strict";
 
@@ -74,5 +74,5 @@
     panel.appendChild(list);
   }
 
-  root.SACTCheckSearchUI = Object.freeze({ version: "0.48.3", update, focusCard });
+  root.SACTCheckSearchUI = Object.freeze({ version: "0.48.4", update, focusCard });
 })(typeof globalThis !== "undefined" ? globalThis : this);

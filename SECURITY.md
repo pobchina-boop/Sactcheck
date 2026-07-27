@@ -12,7 +12,7 @@ Include:
 
 - the affected SACTCheck version;
 - the relevant URL or file;
-- reproducible steps using hypothetical, non-identifiable information;
+- reproducible steps using de-identified example information;
 - the expected and observed behaviour;
 - the potential impact;
 - any suggested mitigation.
@@ -25,4 +25,4 @@ A suspected clinical-rule or NCCP-source discrepancy is not normally a software-
 
 ## Data boundary
 
-SACTCheck is designed for clinician-entered hypothetical or non-identifiable assessment information during feasibility evaluation. Credentials, secrets and identifiable health information must never be committed to this repository or entered into public issue reports.
+SACTCheck is designed to operate without patient-identifiable information during feasibility evaluation. Credentials, secrets and identifiable health information must never be committed to this repository or entered into public issue reports.

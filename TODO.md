@@ -34,7 +34,7 @@
 
 ## Feasibility study release follow-up — explainer video
 
-- Record a 60–120 second screen-capture walkthrough using a hypothetical, non-identifiable scenario.
+- Record a 60–120 second screen-capture walkthrough using a structured scenario without patient-identifiable information.
 - Suggested flow: search a common regimen → confirm indication → enter one value for partial assessment → add a triggering value → review the result and NCCP basis → generate the concise PDF.
 - Embed the final MP4 or unlisted hosted video on the v0.48.0 landing page using click-to-play, no autoplay and a mobile-responsive player.
 - Add captions/transcript and retain the study-use boundary beside the video.
