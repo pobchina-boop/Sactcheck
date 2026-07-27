@@ -165,8 +165,8 @@ assert.strictEqual(inducerRule.action.type, 'consultant_review', 'Relugolix dose
 assert(/240 mg/.test(inducerRule.explanation), 'Relugolix combined-inducer pathway lacks the encoded 240 mg instruction.');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('v0.48.2 · What changed?'), 'v0.38.0 release badge is missing.');
-assert(html.includes('js/drug-aliases.js?v=0.48.2'), 'v0.38.0 alias cache key is missing.');
+assert(html.includes('v0.48.3 · What changed?'), 'v0.38.0 release badge is missing.');
+assert(html.includes('js/drug-aliases.js?v=0.48.3'), 'v0.38.0 alias cache key is missing.');
 assert.strictEqual(Aliases.version, '0.48.0');
 
 console.log(`v0.38.0 prostate library tests passed: 26 fully encoded NCCP prostate protocols and ${auditedFields} independently assessed rule inputs.`);

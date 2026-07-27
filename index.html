@@ -13,7 +13,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
   <link rel="icon" type="image/svg+xml" href="assets/branding/sactcheck-mark.svg">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>SACTCheck v0.48.2 — CTCAE haematology education update</title>
+  <title>SACTCheck v0.48.3 — ranked regimen search</title>
   <style>
     :root {
       --navy:#12314a; --blue:#176b9b; --blue2:#0f567f; --light:#f3f6f8;
@@ -288,12 +288,14 @@
     @media(max-width:700px){.tissue-type-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tissue-landing-panel{grid-template-columns:1fr}.tissue-landing-icon{display:none}.lab-actual-inputs{grid-template-columns:1fr}}
 
 </style>
-  <link rel="stylesheet" href="css/regimen-card-metadata.css?v=0.48.2">
-  <link rel="stylesheet" href="css/assessment-output.css?v=0.48.2">
-  <link rel="stylesheet" href="css/ux-v0471.css?v=0.48.2">
-  <link rel="stylesheet" href="css/study-release-v0480.css?v=0.48.2">
-  <link rel="stylesheet" href="css/stability-v0481.css?v=0.48.2">
-  <script src="js/regimen-search.js?v=0.48.2"></script>
+  <link rel="stylesheet" href="css/regimen-card-metadata.css?v=0.48.3">
+  <link rel="stylesheet" href="css/assessment-output.css?v=0.48.3">
+  <link rel="stylesheet" href="css/ux-v0471.css?v=0.48.3">
+  <link rel="stylesheet" href="css/search-v0483.css?v=0.48.3">
+  <link rel="stylesheet" href="css/study-release-v0480.css?v=0.48.3">
+  <link rel="stylesheet" href="css/stability-v0481.css?v=0.48.3">
+  <script src="js/regimen-search.js?v=0.48.3"></script>
+  <script src="js/regimen-search-ui.js?v=0.48.3" defer></script>
 </head>
 <body>
 <header class="app-header">
@@ -308,7 +310,7 @@
     </a>
     <div class="header-study-meta">
       <span class="study-build-badge">Feasibility study build</span>
-      <span class="header-version">v0.48.2</span>
+      <span class="header-version">v0.48.3</span>
       <button class="btn secondary header-info-button" type="button" data-open-study-info>Study information</button>
     </div>
   </div>
@@ -372,7 +374,7 @@
     </section>
 
     <section class="library-only">
-      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Find the current NCCP regimen, confirm the tissue-specific indication and open a structured day-ward assessment.</p></div><div class="library-header-actions"><details class="release-summary"><summary>v0.48.2 · What changed?</summary><div class="details-body"><strong>CTCAE haematology education update</strong><p>Adds exact named-event CTCAE v6.0 grading for ANC, platelets, haemoglobin, WBC, fever and febrile neutropenia, automatic educational grades for entered laboratory values, and explicit v5/v6 version cautions. Encoded NCCP treatment rules are unchanged.</p></div></details></div></div>
+      <div class="section-heading"><div><h2>Regimen library</h2><p class="subtle">Find the current NCCP regimen, confirm the tissue-specific indication and open a structured day-ward assessment.</p></div><div class="library-header-actions"><details class="release-summary"><summary>v0.48.3 · What changed?</summary><div class="details-body"><strong>Ranked oncology search update</strong><p>Adds best-match ranking, wider oncology aliases, NCCP-number normalisation, conservative typo tolerance and clickable result suggestions. Protocol JSON and encoded clinical rules are unchanged.</p></div></details></div></div>
       <div class="developer-tools" id="developerTools" hidden><strong>Developer tools</strong><div class="toolbar" style="margin:6px 0 0"><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
 
       <div class="library-search-primary">
@@ -380,6 +382,7 @@
         <div class="library-search-wrap"><input id="regimenSearch" type="search" autocomplete="off" placeholder="Regimen, drug, trade name, NCCP number or indication"><button class="btn secondary" type="button" id="clearLibraryFilters">Clear filters</button></div>
         <p class="search-hint">Results update as you type. Press <kbd>Enter</kbd> to jump to the first match or <kbd>/</kbd> to focus search.</p>
         <p class="search-result-summary hidden" id="searchResultSummary" aria-live="polite"></p>
+        <div class="search-suggestions hidden" id="searchSuggestions" role="listbox" aria-label="Ranked regimen search suggestions"></div>
       </div>
       <div class="quick-access-panel" id="quickAccessPanel" aria-label="Favourite and recently opened protocols"></div>
       <div class="health-dashboard" id="protocolHealthDashboard" aria-label="Protocol health dashboard" style="display:none">
@@ -960,7 +963,7 @@
 
 </main>
 <footer class="study-footer">
-  SACTCheck v0.48.2 · Feasibility evaluation build · <a href="docs/STUDY_QUICK_START_v0.48.0.html" target="_blank" rel="noopener">Quick-start guide</a> · Do not enter identifiable patient information.
+  SACTCheck v0.48.3 · Feasibility evaluation build · <a href="docs/STUDY_QUICK_START_v0.48.0.html" target="_blank" rel="noopener">Quick-start guide</a> · Do not enter identifiable patient information.
 </footer>
 <div class="study-modal" id="studyWelcomeModal" role="dialog" aria-modal="true" aria-labelledby="studyWelcomeTitle" hidden>
   <div class="study-modal-backdrop" aria-hidden="true"></div>
@@ -1143,26 +1146,60 @@
   function downloadSummary(){if(!latestInput||!latestResult)return;const blob=new Blob([$("summaryText").value],{type:"text/plain;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`SACTCheck_${latestInput.assessmentId||"assessment"}.txt`;a.click();URL.revokeObjectURL(a.href);}
   function showToast(text){const t=$("toast");t.textContent=text;t.style.display="block";setTimeout(()=>t.style.display="none",1800);}
 
+  function clearSearchDecoration(card){
+    card.style.removeProperty("--search-rank");
+    card.classList.remove("search-ranked","search-best-match");
+    card.querySelector(".search-match-context")?.remove();
+  }
+  function decorateSearchMatch(card,result,rank){
+    clearSearchDecoration(card);
+    card.classList.add("search-ranked");
+    card.style.setProperty("--search-rank",String(rank));
+    if(rank===1) card.classList.add("search-best-match");
+    const context=document.createElement("div");
+    context.className="search-match-context";
+    const rankBadge=document.createElement("span");
+    rankBadge.className="search-match-rank";
+    rankBadge.textContent=rank===1?"Best match":`Match ${rank}`;
+    const reason=document.createElement("span");
+    reason.className="search-match-reason";
+    reason.textContent=result?.reason||"Search match";
+    context.append(rankBadge,reason);
+    card.querySelector("h2")?.insertAdjacentElement("afterend",context);
+  }
   function filterRegimens(options={}){
     const q=(value("regimenSearch")||"").trim();
     const tumour=value("tumourFilter"), treatment=value("treatmentFilter")||"all", status=value("statusFilter")||"all";
     let shown=0;
     const visibleCards=[];
+    const visibleResults=[];
     const cards=[...document.querySelectorAll("#regimenGrid .regimen-card[data-json-protocol-id]")];
     const searchApi=window.SACTCheckRegimenSearch;
+    const ranked=q&&searchApi?.rankCards?searchApi.rankCards(cards,q):[];
+    const rankedMap=new Map(ranked.map((result,index)=>[result.card,{...result,rank:index+1}]));
     cards.forEach(card=>{
       const tumours=(card.dataset.tumour||"").split(","), st=card.dataset.status, section=card.dataset.section||"supportive_other";
       const searchable=`${card.dataset.name||""} ${card.textContent||""}`;
-      const okQ=!q||(searchApi?searchApi.matchesText(searchable,q):searchable.toLowerCase().includes(q.toLowerCase()));
+      const searchResult=q?(rankedMap.get(card)||(searchApi?.matchesText(searchable,q)?{card,score:1,reason:"Regimen content match",rank:9999}:null)):null;
+      const okQ=!q||Boolean(searchResult);
       const okT=Boolean(q)||tumour==="all"||tumours.includes(tumour),okC=treatment==="all"||section===treatment,okS=status==="all"||st===status;
       const visible=okQ&&okT&&okC&&okS;
       card.style.display=visible?"flex":"none";
       card.setAttribute("aria-hidden",String(!visible));
+      if(q&&visible&&searchResult){
+        decorateSearchMatch(card,searchResult,shown+1);
+        visibleResults.push(searchResult);
+      }else clearSearchDecoration(card);
       if(visible){shown++;visibleCards.push(card)}
     });
+    if(q){
+      visibleResults.sort((a,b)=>(b.score||0)-(a.score||0));
+      visibleResults.forEach((result,index)=>decorateSearchMatch(result.card,result,index+1));
+      visibleCards.sort((a,b)=>(rankedMap.get(a)?.rank||9999)-(rankedMap.get(b)?.rank||9999));
+    }
     document.querySelectorAll("#regimenGrid .catalogue-section-heading").forEach(heading=>{
       const section=heading.dataset.sectionHeading;
-      const anyVisible=[...document.querySelectorAll(`#regimenGrid .regimen-card[data-section="${section}"]`)].some(card=>card.style.display!=="none");
+      const anyVisible=!q&&[...document.querySelectorAll(`#regimenGrid .regimen-card[data-section="${section}"]`)].some(card=>card.style.display!=="none");
       heading.style.display=anyVisible?"block":"none";
     });
     const total=cards.length;
@@ -1173,16 +1210,14 @@
     const searchSummary=$("searchResultSummary");
     if(searchSummary){
       searchSummary.classList.toggle("hidden",!q);
-      searchSummary.textContent=q?(shown?`${shown} matching regimen${shown===1?"":"s"} for “${q}”.`:`No matching regimens for “${q}”. Try a drug name, trade name, acronym or NCCP number.`):"";
+      const fuzzyCount=visibleResults.filter(result=>result.fuzzy).length;
+      searchSummary.innerHTML=q?(shown?`<strong>${shown}</strong> matching regimen${shown===1?"":"s"} for “${q}”. Best matches are shown first${fuzzyCount?`, including ${fuzzyCount} close-spelling match${fuzzyCount===1?"":"es"}`:""}.`:`No direct regimen match for “${q}”. Try a generic drug, brand name, acronym, indication or NCCP number.`):"";
     }
+    window.SACTCheckSearchUI?.update?.(q,visibleResults,cards);
     if(options.jump){
       const target=visibleCards[0]||$("catalogEmptyState")||$("catalogCount");
       target?.scrollIntoView({behavior:"smooth",block:"start"});
-      if(visibleCards[0]){
-        visibleCards[0].focus({preventScroll:true});
-        visibleCards[0].classList.add("search-focus-pulse");
-        setTimeout(()=>visibleCards[0]?.classList.remove("search-focus-pulse"),1000);
-      }
+      if(visibleCards[0]) window.SACTCheckSearchUI?.focusCard?.(visibleCards[0]);
     }
     return visibleCards;
   }
@@ -1196,6 +1231,9 @@
         if(event.key==="Enter"){
           event.preventDefault();
           filterRegimens({jump:true});
+        }else if(event.key==="Escape"&&element.value){
+          element.value="";
+          filterRegimens();
         }
       });
     }
@@ -2172,26 +2210,26 @@ function openProtocolPreview(event){
   }
 }
 </script>
-<script src="js/emetogenic-risk.js?v=0.48.2"></script>
-<script src="js/drug-aliases.js?v=0.48.2"></script>
-<script src="js/local-lab-profile.js?v=0.48.2"></script>
-<script src="js/protocol-context.js?v=0.48.2"></script>
-<script src="js/rule-engine.js?v=0.48.2"></script>
-<script src="js/protocol-validator.js?v=0.48.2"></script>
-<script src="js/assessment-engine.js?v=0.48.2"></script>
-<script src="js/ctcae-descriptors.js?v=0.48.2"></script>
-<script src="js/regimen-course-metadata.js?v=0.48.2"></script>
-<script src="js/assessment-output.js?v=0.48.2"></script>
-<script src="js/assessment-pdf.js?v=0.48.2"></script>
-<script src="js/generic-assessment-ui.js?v=0.48.2"></script>
+<script src="js/emetogenic-risk.js?v=0.48.3"></script>
+<script src="js/drug-aliases.js?v=0.48.3"></script>
+<script src="js/local-lab-profile.js?v=0.48.3"></script>
+<script src="js/protocol-context.js?v=0.48.3"></script>
+<script src="js/rule-engine.js?v=0.48.3"></script>
+<script src="js/protocol-validator.js?v=0.48.3"></script>
+<script src="js/assessment-engine.js?v=0.48.3"></script>
+<script src="js/ctcae-descriptors.js?v=0.48.3"></script>
+<script src="js/regimen-course-metadata.js?v=0.48.3"></script>
+<script src="js/assessment-output.js?v=0.48.3"></script>
+<script src="js/assessment-pdf.js?v=0.48.3"></script>
+<script src="js/generic-assessment-ui.js?v=0.48.3"></script>
 <script src="js/folfox-shadow-core.js"></script>
 <script src="js/folfox-shadow-ui.js"></script>
 
-<script src="js/tissue-ui.js?v=0.48.2"></script>
-<script src="js/protocol-loader.js?v=0.48.2"></script>
-<script src="js/regimen-card-metadata.js?v=0.48.2"></script>
-<script src="js/library-ux.js?v=0.48.2"></script>
-<script src="js/study-release.js?v=0.48.2"></script>
-<script src="js/protocol-importer-ui.js?v=0.48.2"></script>
+<script src="js/tissue-ui.js?v=0.48.3"></script>
+<script src="js/protocol-loader.js?v=0.48.3"></script>
+<script src="js/regimen-card-metadata.js?v=0.48.3"></script>
+<script src="js/library-ux.js?v=0.48.3"></script>
+<script src="js/study-release.js?v=0.48.3"></script>
+<script src="js/protocol-importer-ui.js?v=0.48.3"></script>
 </body>
 </html>

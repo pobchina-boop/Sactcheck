@@ -9,7 +9,7 @@ vm.createContext(context);
 vm.runInContext(fs.readFileSync(path.join(root, 'js', 'ctcae-descriptors.js'), 'utf8'), context);
 const lib = context.window.SACTCheckCTCAE;
 assert(lib, 'CTCAE descriptor library did not initialise');
-assert(lib.version.includes('0.48.2'));
+assert(lib.version.includes('0.48.3'));
 assert(lib.sourceUrlV6.endsWith('/ctcae-v6.pdf'));
 
 const composite = {
@@ -75,9 +75,9 @@ assert(ui.includes('Show ${escapeHtml(guide.comparison.version)}'));
 assert(ui.includes('Open the ${escapeHtml(guide.sourceLabel)} source'), 'Source label must be version-aware');
 
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(index.includes('SACTCheck v0.48.2 — CTCAE haematology education update'));
-assert(index.includes('js/ctcae-descriptors.js?v=0.48.2'));
+assert(index.includes('SACTCheck v0.48.3 — ranked regimen search'));
+assert(index.includes('js/ctcae-descriptors.js?v=0.48.3'));
 assert(index.includes('ctcae-calculated-grade'));
-assert(fs.existsSync(path.join(root, 'CTCAE_HAEMATOLOGY_SOURCE_REGISTER_v0.48.2.md')));
+assert(fs.existsSync(path.join(root, 'CTCAE_HAEMATOLOGY_SOURCE_REGISTER_v0.48.3.md')));
 
-console.log('v0.48.2 CTCAE haematology tests passed: exact v6 grading, v5 comparisons and educational auto-grading verified.');
+console.log('v0.48.3 CTCAE haematology tests passed: exact v6 grading, v5 comparisons and educational auto-grading verified.');

@@ -778,7 +778,7 @@
 
 
   root.SACTCheckCTCAE = Object.freeze({
-    version: "0.48.2 / controlled CTCAE v6.0 haematology education",
+    version: "0.48.3 / controlled CTCAE v6.0 haematology education",
     sourceUrl: SOURCE_URL_V6,
     sourceUrlV5: SOURCE_URL_V5,
     sourceUrlV6: SOURCE_URL_V6,
