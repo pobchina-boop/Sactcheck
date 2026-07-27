@@ -68,7 +68,7 @@ for (const [protocol, expectedGroup] of [
 }
 
 const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-assert(indexHtml.includes("js/protocol-context.js?v=0.48.1"));
+assert(indexHtml.includes("js/protocol-context.js?v=0.48.2"));
 assert(indexHtml.indexOf("js/protocol-context.js") < indexHtml.indexOf("js/assessment-engine.js"));
 
 const tissueUi = fs.readFileSync(path.join(ROOT, "js/tissue-ui.js"), "utf8");

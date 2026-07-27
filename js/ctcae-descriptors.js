@@ -1,14 +1,21 @@
 /**
- * CTCAE v5.0 grading support for SACTCheck.
+ * Controlled CTCAE grading support for SACTCheck.
  *
- * The library provides toxicity-specific, practical grading summaries beside
- * grade controls. It does not infer causality and it does not replace use of
- * the named CTCAE term, the current NCCP protocol or senior clinical review.
+ * Non-haematological descriptors remain aligned to the controlled CTCAE v5.0
+ * implementation already encoded in SACTCheck. The haematology education layer
+ * uses the current CTCAE v6.0 named-event criteria, while displaying explicit
+ * version cautions where v6.0 changed clinically important thresholds.
+ *
+ * This library is educational and explanatory. It does not infer causality,
+ * change an NCCP treatment rule, or replace the current protocol and clinician
+ * judgement.
  */
 (function (root) {
   "use strict";
 
-  const SOURCE_URL = "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf";
+  const SOURCE_URL_V5 = "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf";
+  const SOURCE_URL_V6 = "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v6.pdf";
+  const SOURCE_URL = SOURCE_URL_V5;
 
   const GENERIC = Object.freeze({
     0: "No adverse event.",
@@ -19,8 +26,143 @@
     5: "Death related to the adverse event."
   });
 
+
+  const V6_HEMATOLOGY = Object.freeze({
+    neutrophil_count_decreased: Object.freeze({
+      0: "ANC ≥1.5 ×10⁹/L: no CTCAE v6.0 neutrophil-count-decreased grade.",
+      1: "ANC <1.5 to 1.0 ×10⁹/L.",
+      2: "ANC <1.0 to 0.5 ×10⁹/L.",
+      3: "ANC <0.5 to 0.1 ×10⁹/L.",
+      4: "ANC <0.1 ×10⁹/L.",
+      5: "Grade 5 is not defined for this laboratory term."
+    }),
+    thrombocytopenia: Object.freeze({
+      0: "Platelet count at or above the local lower limit of normal: no thrombocytopenia grade.",
+      1: "Platelets below the local lower limit of normal to 75 ×10⁹/L.",
+      2: "Platelets <75 to 50 ×10⁹/L.",
+      3: "Platelets <50 to 10 ×10⁹/L, or platelet transfusion indicated.",
+      4: "Platelets <10 ×10⁹/L, or life-threatening consequences requiring urgent intervention.",
+      5: "Death related to thrombocytopenia."
+    }),
+    anemia: Object.freeze({
+      0: "Haemoglobin at or above the local lower limit of normal: no anaemia grade.",
+      1: "Haemoglobin below the local lower limit of normal to 100 g/L (10.0 g/dL).",
+      2: "Haemoglobin <100 to 80 g/L (<10.0 to 8.0 g/dL).",
+      3: "Haemoglobin <80 g/L (<8.0 g/dL), or transfusion indicated.",
+      4: "Life-threatening consequences; urgent intervention indicated.",
+      5: "Death related to anaemia."
+    }),
+    white_blood_cell_decreased: Object.freeze({
+      0: "WBC at or above the local lower limit of normal: no white-blood-cell-decreased grade.",
+      1: "WBC below the local lower limit of normal to 3.0 ×10⁹/L.",
+      2: "WBC <3.0 to 2.0 ×10⁹/L.",
+      3: "WBC <2.0 to 1.0 ×10⁹/L.",
+      4: "WBC <1.0 ×10⁹/L.",
+      5: "Grade 5 is not defined for this laboratory term."
+    }),
+    lymphopenia: Object.freeze({
+      0: "No lymphopenia.",
+      1: "Lymphopenia present.",
+      2: "Grade 2 is not defined in CTCAE v6.0 for the lymphopenia term.",
+      3: "Grade 3 is not defined in CTCAE v6.0 for the lymphopenia term.",
+      4: "Grade 4 is not defined in CTCAE v6.0 for the lymphopenia term.",
+      5: "Grade 5 is not defined in CTCAE v6.0 for the lymphopenia term."
+    }),
+    febrile_neutropenia: Object.freeze({
+      0: "No febrile neutropenia.",
+      1: "Grade 1 is not defined for febrile neutropenia.",
+      2: "Grade 2 is not defined for febrile neutropenia.",
+      3: "ANC <1.0 ×10⁹/L with a single temperature >38.3°C, or temperature ≥38.0°C sustained for more than 1 hour.",
+      4: "Life-threatening consequences; urgent intervention indicated.",
+      5: "Death related to febrile neutropenia."
+    }),
+    fever: Object.freeze({
+      0: "Temperature below 38.0°C: no CTCAE fever grade.",
+      1: "38.0 to 39.0°C.",
+      2: ">39.0 to 40.0°C.",
+      3: ">40.0°C for 24 hours or less.",
+      4: ">40.0°C for more than 24 hours.",
+      5: "Death related to fever."
+    })
+  });
+
+  const V5_HEMATOLOGY = Object.freeze({
+    neutrophil_count_decreased: Object.freeze({
+      0: "ANC at or above the local lower limit of normal.",
+      1: "ANC below the local lower limit of normal to 1.5 ×10⁹/L.",
+      2: "ANC <1.5 to 1.0 ×10⁹/L.",
+      3: "ANC <1.0 to 0.5 ×10⁹/L.",
+      4: "ANC <0.5 ×10⁹/L.",
+      5: "Grade 5 is not defined for this laboratory term."
+    }),
+    thrombocytopenia: Object.freeze({
+      0: "Platelets at or above the local lower limit of normal.",
+      1: "Platelets below the local lower limit of normal to 75 ×10⁹/L.",
+      2: "Platelets <75 to 50 ×10⁹/L.",
+      3: "Platelets <50 to 25 ×10⁹/L.",
+      4: "Platelets <25 ×10⁹/L.",
+      5: "Grade 5 is not defined for this laboratory term."
+    }),
+    anemia: Object.freeze({
+      0: "Haemoglobin at or above the local lower limit of normal.",
+      1: "Haemoglobin below the local lower limit of normal to 100 g/L (10.0 g/dL).",
+      2: "Haemoglobin <100 to 80 g/L (<10.0 to 8.0 g/dL).",
+      3: "Haemoglobin <80 g/L (<8.0 g/dL), or transfusion indicated.",
+      4: "Life-threatening consequences; urgent intervention indicated.",
+      5: "Death related to anaemia."
+    }),
+    white_blood_cell_decreased: Object.freeze({
+      0: "WBC at or above the local lower limit of normal.",
+      1: "WBC below the local lower limit of normal to 3.0 ×10⁹/L.",
+      2: "WBC <3.0 to 2.0 ×10⁹/L.",
+      3: "WBC <2.0 to 1.0 ×10⁹/L.",
+      4: "WBC <1.0 ×10⁹/L.",
+      5: "Grade 5 is not defined for this laboratory term."
+    }),
+    lymphopenia: Object.freeze({
+      0: "Lymphocytes at or above the local lower limit of normal.",
+      1: "Lymphocytes below the local lower limit of normal to 0.8 ×10⁹/L.",
+      2: "Lymphocytes <0.8 to 0.5 ×10⁹/L.",
+      3: "Lymphocytes <0.5 to 0.2 ×10⁹/L.",
+      4: "Lymphocytes <0.2 ×10⁹/L.",
+      5: "Grade 5 is not defined for this laboratory term."
+    }),
+    febrile_neutropenia: V6_HEMATOLOGY.febrile_neutropenia,
+    fever: V6_HEMATOLOGY.fever
+  });
+
+  const HEMATOLOGY_CATEGORIES = new Set([
+    "neutrophil_count_decreased",
+    "thrombocytopenia",
+    "anemia",
+    "white_blood_cell_decreased",
+    "lymphopenia",
+    "febrile_neutropenia",
+    "fever",
+    "neutropenia_with_fever"
+  ]);
+
+  const TERM_LABELS = Object.freeze({
+    neutrophil_count_decreased: "Neutrophil count decreased",
+    thrombocytopenia: "Thrombocytopenia (platelet count decreased)",
+    anemia: "Anaemia",
+    white_blood_cell_decreased: "White blood cell decreased",
+    lymphopenia: "Lymphopenia",
+    febrile_neutropenia: "Febrile neutropenia",
+    fever: "Fever",
+    neutropenia_with_fever: "Neutrophil count decreased, fever and febrile neutropenia"
+  });
+
   const SETS = Object.freeze({
     generic: GENERIC,
+    neutrophil_count_decreased: V6_HEMATOLOGY.neutrophil_count_decreased,
+    thrombocytopenia: V6_HEMATOLOGY.thrombocytopenia,
+    anemia: V6_HEMATOLOGY.anemia,
+    white_blood_cell_decreased: V6_HEMATOLOGY.white_blood_cell_decreased,
+    lymphopenia: V6_HEMATOLOGY.lymphopenia,
+    febrile_neutropenia: V6_HEMATOLOGY.febrile_neutropenia,
+    fever: V6_HEMATOLOGY.fever,
+    neutropenia_with_fever: V6_HEMATOLOGY.neutrophil_count_decreased,
     neuropathy: Object.freeze({
       0: "No peripheral sensory or motor neuropathy.",
       1: "Asymptomatic; clinical or diagnostic observations only. CTCAE v5.0 grades symptomatic paraesthesia separately when that is the more accurate term.",
@@ -320,6 +462,14 @@
   });
 
   const DEFAULT_GUIDANCE = Object.freeze({
+    neutrophil_count_decreased: "Use the measured ANC in ×10⁹/L. Grade the named CTCAE term separately from any NCCP treatment threshold, and check the CTCAE version because v6.0 changed the ANC grade bands.",
+    thrombocytopenia: "Use the measured platelet count in ×10⁹/L and record whether platelet transfusion or urgent intervention is indicated. CTCAE v6.0 changed the severe thrombocytopenia bands compared with v5.0.",
+    anemia: "Use the measured haemoglobin, confirm whether the value is in g/L or g/dL, and record whether transfusion or urgent intervention is indicated.",
+    white_blood_cell_decreased: "Use the measured total WBC in ×10⁹/L and the local lower limit of normal for the Grade 1 boundary.",
+    lymphopenia: "Use the named lymphopenia term. CTCAE v6.0 no longer retains the numeric Grade 1–4 lymphocyte bands used in v5.0; do not silently convert between versions.",
+    febrile_neutropenia: "Confirm the ANC and temperature criteria. Immediately assess for sepsis, organ dysfunction and the need for urgent IV antimicrobials.",
+    fever: "Use the highest measured temperature and duration. Fever grading is separate from febrile neutropenia grading.",
+    neutropenia_with_fever: "This protocol wording combines separate concepts. Grade neutrophil count decreased and fever individually, and also determine whether the formal febrile-neutropenia definition is met.",
     generic: "Identify the actual adverse event first, then use that toxicity-specific CTCAE term. Generic severity anchors are not a substitute for the named criterion.",
     neuropathy: "Assess sensory and motor symptoms, reflexes, gait and dexterity, and whether instrumental or self-care activities are limited. Separate transient cold sensitivity from persistent functional neuropathy.",
     diarrhoea: "Count stools per day above the patient's baseline. Assess ostomy output, continence, hydration, fever, abdominal pain, sepsis and whether hospital care is indicated.",
@@ -367,6 +517,18 @@
   function categoryFor(definition) {
     if (definition?.ctcae_category && SETS[definition.ctcae_category]) return definition.ctcae_category;
     const text = normalise(definition);
+
+    // Exact haematology terms are resolved before broad infection/thrombosis
+    // patterns so composite fields do not fall back to generic descriptors.
+    if (/grade\s*4.*neutrop.*fever|neutrop.*grade\s*(?:>=|≥)?\s*2.*fever|neutropenia.*fever/.test(text)) return "neutropenia_with_fever";
+    if (/febrile neutropenia/.test(text)) return "febrile_neutropenia";
+    if (/absolute neutrophil|\banc\b|neutrophil count decreased|neutropenia/.test(text)) return "neutrophil_count_decreased";
+    if (/platelet|thrombocytopen/.test(text)) return "thrombocytopenia";
+    if (/haemoglobin|hemoglobin|\bhb\b|anaemia|anemia/.test(text)) return "anemia";
+    if (/white blood cell|\bwbc\b|leukopen|leucopen/.test(text)) return "white_blood_cell_decreased";
+    if (/lymphocyte|lymphopen/.test(text)) return "lymphopenia";
+    if (/\bfever\b|temperature/.test(text)) return "fever";
+
     if (/(mucositis|stomatitis).*(diarrhoea|diarrhea|colitis)|(diarrhoea|diarrhea|colitis).*(mucositis|stomatitis)/.test(text)) return "mucositis_or_diarrhoea";
     if (/non[-_ ]?ha?em|non[-_ ]?hemat|non[-_ ]?haemat/.test(text)) return "other_nonhaematological";
     if (/neuropathy|neurotoxicity/.test(text)) return "neuropathy";
@@ -386,8 +548,7 @@
     if (/hand.?foot skin reaction|hfsr/.test(text)) return "hfsr";
     if (/palmar|plantar|ppe|hand.?foot/.test(text)) return "ppe";
     if (/fistula/.test(text)) return "fistula";
-    if (/thrombo/.test(text)) return "thromboembolism";
-    if (/febrile neutropenia/.test(text)) return "febrile_neutropenia";
+    if (/thromboembol|thrombosis|thrombotic event/.test(text)) return "thromboembolism";
     if (/magnesium/.test(text)) return "hypomagnesaemia";
     if (/electrolyte/.test(text)) return "electrolyte";
     if (/bilirubin/.test(text)) return "hepatic_bilirubin";
@@ -413,12 +574,33 @@
     return match ? Number(match[1]) : null;
   }
 
+  function explicitVersion(definition) {
+    return String(definition?.ctcae_version || "").trim();
+  }
+
+  function setFor(definition, category) {
+    if (explicitVersion(definition) === "5.0" && V5_HEMATOLOGY[category]) return V5_HEMATOLOGY[category];
+    if (category === "neutropenia_with_fever") return V6_HEMATOLOGY.neutrophil_count_decreased;
+    return SETS[category] || GENERIC;
+  }
+
+  function versionFor(definition, category) {
+    if (explicitVersion(definition)) return `CTCAE v${explicitVersion(definition)}`;
+    if (HEMATOLOGY_CATEGORIES.has(category)) return "CTCAE v6.0";
+    return "CTCAE v5.0";
+  }
+
+  function sourceFor(definition, category) {
+    if (definition?.ctcae_source_url) return definition.ctcae_source_url;
+    return HEMATOLOGY_CATEGORIES.has(category) && explicitVersion(definition) !== "5.0" ? SOURCE_URL_V6 : SOURCE_URL_V5;
+  }
+
   function descriptor(definition, option) {
     if (option?.description) return String(option.description);
     const grade = numericGrade(option?.ctcae_grade ?? option?.value, option?.label);
     if (grade === null) return "";
     const category = categoryFor(definition);
-    return SETS[category]?.[grade] || GENERIC[grade] || "";
+    return setFor(definition, category)?.[grade] || GENERIC[grade] || "";
   }
 
   function optionLabel(definition, option) {
@@ -428,10 +610,147 @@
     return `${base} — ${description}`;
   }
 
-  function guide(definition) {
-    const hasCtcae = definition?.ctcae_version || /grade|ctcae/i.test(normalise(definition));
-    if (!hasCtcae) return null;
+  function gradeRows(set, maxGrade = 4) {
+    return Array.from({ length: maxGrade + 1 }, (_, grade) => ({
+      grade,
+      label: `Grade ${grade}`,
+      description: set?.[grade] || "Not defined."
+    }));
+  }
+
+  function versionNote(category, definition) {
+    if (explicitVersion(definition) === "5.0") return "This field is explicitly tied to CTCAE v5.0 metadata in the encoded protocol. The current NCI release is v6.0, but SACTCheck will not silently reinterpret a source rule against a different CTCAE version.";
+    if (category === "neutrophil_count_decreased" || category === "neutropenia_with_fever") return "Version caution: CTCAE v6.0 changed the ANC bands. Grade 4 is now ANC <0.1 ×10⁹/L; in CTCAE v5.0, Grade 4 was ANC <0.5 ×10⁹/L. The educational grade must not silently redefine an NCCP action written against an earlier version.";
+    if (category === "thrombocytopenia") return "Version caution: CTCAE v6.0 changed severe thrombocytopenia grading. Grade 3 now extends to <10 ×10⁹/L (or transfusion indicated), and Grade 4 is <10 ×10⁹/L or life-threatening consequences; CTCAE v5.0 used <25 ×10⁹/L for Grade 4.";
+    if (category === "lymphopenia") return "Version caution: CTCAE v6.0 records lymphopenia as Grade 1 'present' and does not retain the numeric Grade 2–4 bands used in CTCAE v5.0.";
+    if (HEMATOLOGY_CATEGORIES.has(category)) return "CTCAE v6.0 is the current NCI reference. This educational panel does not alter the encoded NCCP treatment rule or substitute for protocol-version review.";
+    return "";
+  }
+
+  function comparisonFor(category, definition) {
+    if (explicitVersion(definition) === "5.0") return null;
+    if (!["neutrophil_count_decreased", "thrombocytopenia", "lymphopenia", "neutropenia_with_fever"].includes(category)) return null;
+    const mapped = category === "neutropenia_with_fever" ? "neutrophil_count_decreased" : category;
+    return {
+      version: "CTCAE v5.0 comparison",
+      term: TERM_LABELS[mapped],
+      sourceUrl: SOURCE_URL_V5,
+      grades: gradeRows(V5_HEMATOLOGY[mapped])
+    };
+  }
+
+  function relatedFor(category) {
+    if (category !== "neutropenia_with_fever") return [];
+    return [
+      {
+        version: "CTCAE v6.0",
+        term: TERM_LABELS.fever,
+        grades: gradeRows(V6_HEMATOLOGY.fever),
+        guidance: DEFAULT_GUIDANCE.fever
+      },
+      {
+        version: "CTCAE v6.0",
+        term: TERM_LABELS.febrile_neutropenia,
+        grades: gradeRows(V6_HEMATOLOGY.febrile_neutropenia),
+        guidance: DEFAULT_GUIDANCE.febrile_neutropenia
+      }
+    ];
+  }
+
+  function isCalculableCategory(category) {
+    return ["neutrophil_count_decreased", "thrombocytopenia", "anemia", "white_blood_cell_decreased", "fever"].includes(category);
+  }
+
+  function gradeForValue(definition, rawValue) {
+    if (rawValue === undefined || rawValue === null || rawValue === "") return null;
+    let value = Number(rawValue);
+    if (!Number.isFinite(value) || value < 0) return null;
     const category = categoryFor(definition);
+    if (!isCalculableCategory(category)) return null;
+    const version = versionFor(definition, category);
+    const unit = String(definition?.unit || definition?.label || "").toLowerCase();
+    if (category === "anemia" && /g\/l/.test(unit) && !/g\/dl/.test(unit)) value /= 10;
+
+    let grade = null;
+    let indeterminateReason = "";
+    if (category === "neutrophil_count_decreased") {
+      if (explicitVersion(definition) === "5.0") {
+        if (value < 0.5) grade = 4;
+        else if (value < 1.0) grade = 3;
+        else if (value < 1.5) grade = 2;
+        else indeterminateReason = "A Grade 1 boundary depends on the local lower limit of normal.";
+      } else {
+        if (value < 0.1) grade = 4;
+        else if (value < 0.5) grade = 3;
+        else if (value < 1.0) grade = 2;
+        else if (value < 1.5) grade = 1;
+        else grade = 0;
+      }
+    } else if (category === "thrombocytopenia") {
+      if (explicitVersion(definition) === "5.0") {
+        if (value < 25) grade = 4;
+        else if (value < 50) grade = 3;
+        else if (value < 75) grade = 2;
+        else indeterminateReason = "A Grade 1 boundary depends on the local lower limit of normal.";
+      } else {
+        if (value < 10) grade = 4;
+        else if (value < 50) grade = 3;
+        else if (value < 75) grade = 2;
+        else indeterminateReason = "A Grade 1 boundary depends on the local lower limit of normal.";
+      }
+    } else if (category === "anemia") {
+      if (value < 8.0) grade = 3;
+      else if (value < 10.0) grade = 2;
+      else indeterminateReason = "A Grade 1 boundary depends on the local lower limit of normal.";
+    } else if (category === "white_blood_cell_decreased") {
+      if (value < 1.0) grade = 4;
+      else if (value < 2.0) grade = 3;
+      else if (value < 3.0) grade = 2;
+      else indeterminateReason = "A Grade 1 boundary depends on the local lower limit of normal.";
+    } else if (category === "fever") {
+      if (value < 38.0) grade = 0;
+      else if (value <= 39.0) grade = 1;
+      else if (value <= 40.0) grade = 2;
+      else indeterminateReason = "Temperature >40.0°C is Grade 3 when present for 24 hours or less and Grade 4 when present for more than 24 hours; duration is required.";
+    }
+
+    if (indeterminateReason) {
+      return {
+        category,
+        version,
+        grade: null,
+        label: `${version} educational grade requires additional context`,
+        description: indeterminateReason
+      };
+    }
+    const set = setFor(definition, category);
+    const clinicalQualifier = category === "thrombocytopenia"
+      ? " Value-based grade only: platelet transfusion or life-threatening consequences may assign a higher final CTCAE grade."
+      : category === "anemia"
+        ? " Value-based grade only: transfusion or life-threatening consequences may assign a higher final CTCAE grade."
+        : "";
+    return {
+      category,
+      version,
+      grade,
+      label: `${version} educational value-based grade: Grade ${grade}`,
+      description: `${set?.[grade] || ""}${clinicalQualifier}`
+    };
+  }
+
+  function supportsHaematologyGuide(definition, category) {
+    if (!HEMATOLOGY_CATEGORIES.has(category)) return false;
+    const text = normalise(definition);
+    if (category === "neutropenia_with_fever" || category === "febrile_neutropenia" || category === "fever") return /grade|febrile|fever|temperature/.test(text);
+    if (definition?.type !== "number") return /grade|ctcae/.test(text);
+    if (/duration|days?|weeks?|occurrence|episodes?|previous cycle|event occurrence/.test(text)) return false;
+    return true;
+  }
+
+  function guide(definition) {
+    const category = categoryFor(definition);
+    const hasCtcae = definition?.ctcae_version || /grade|ctcae/i.test(normalise(definition)) || supportsHaematologyGuide(definition, category);
+    if (!hasCtcae) return null;
     const options = Array.isArray(definition?.options) && definition.options.length
       ? definition.options
       : [0, 1, 2, 3, 4].map(value => ({ value, label: `Grade ${value}` }));
@@ -443,23 +762,33 @@
       }))
       .filter(item => item.grade !== null && item.grade >= 0 && item.grade <= 4);
     return {
-      version: definition?.ctcae_version ? `CTCAE v${definition.ctcae_version}` : "CTCAE v5.0",
+      version: versionFor(definition, category),
+      term: TERM_LABELS[category] || definition?.label || "Named adverse event",
       category,
       guidance: definition?.assessment_guidance || DEFAULT_GUIDANCE[category] || DEFAULT_GUIDANCE.generic,
-      sourceUrl: definition?.ctcae_source_url || SOURCE_URL,
-      grades
+      sourceUrl: sourceFor(definition, category),
+      sourceLabel: versionFor(definition, category),
+      grades,
+      note: versionNote(category, definition),
+      comparison: comparisonFor(category, definition),
+      related: relatedFor(category),
+      calculable: isCalculableCategory(category)
     };
   }
 
+
   root.SACTCheckCTCAE = Object.freeze({
-    version: "0.37.2 / CTCAE v5.0 grading support",
-    sourceUrl: SOURCE_URL,
+    version: "0.48.2 / controlled CTCAE v6.0 haematology education",
+    sourceUrl: SOURCE_URL_V6,
+    sourceUrlV5: SOURCE_URL_V5,
+    sourceUrlV6: SOURCE_URL_V6,
     generic: GENERIC,
     sets: SETS,
     guidance: DEFAULT_GUIDANCE,
     categoryFor,
     descriptor,
     optionLabel,
+    gradeForValue,
     guide
   });
 })(typeof window !== "undefined" ? window : globalThis);
