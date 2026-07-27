@@ -1,7 +1,7 @@
-/** SACTCheck v0.48.2 feasibility-study presentation layer. */
+/** SACTCheck v0.48.1 feasibility-study presentation layer. */
 (function (root) {
   "use strict";
-  const VERSION = "0.48.2";
+  const VERSION = "0.48.1";
   const HIDE_KEY = "sactcheck:hide-study-welcome:v1";
   let lastFocused = null;
 

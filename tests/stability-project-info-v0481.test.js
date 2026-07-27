@@ -11,9 +11,9 @@ const index = read("index.html");
 const loader = read("js/protocol-loader.js");
 const css = read("css/stability-v0481.css");
 
-assert.strictEqual(pkg.version, "0.48.2");
-assert(index.includes("SACTCheck v0.48.2 — CTCAE haematology education update"));
-assert(index.includes('css/stability-v0481.css?v=0.48.2'));
+assert.strictEqual(pkg.version, "0.48.1");
+assert(index.includes("SACTCheck v0.48.1 — stable feasibility study release"));
+assert(index.includes('css/stability-v0481.css?v=0.48.1'));
 assert(index.includes('id="aboutSactcheckTitle"'));
 assert(index.includes("What SACTCheck is, and why it is being developed"));
 assert(index.includes("Why it was created"));
@@ -32,8 +32,8 @@ assert(loader.includes("retryFailedProtocols"));
 assert(loader.includes("temporarily unavailable"));
 assert(loader.includes("The available library remains usable"));
 assert(!loader.includes("await Promise.all(enabledEntries.map"), "All protocol files must not be fetched simultaneously");
-assert(loader.includes('version: "0.48.2"'));
-assert(exists("RELEASE_NOTES_v0.48.2.md"));
-assert(exists("GITHUB_COMMIT_v0.48.2.txt"));
+assert(loader.includes('version: "0.48.1"'));
+assert(exists("RELEASE_NOTES_v0.48.1.md"));
+assert(exists("GITHUB_COMMIT_v0.48.1.txt"));
 
-console.log("v0.48.2 stability tests passed: protocol loading is concurrency-limited, transient errors retry safely and the opening page explains the project.");
+console.log("v0.48.1 stability tests passed: protocol loading is concurrency-limited, transient errors retry safely and the opening page explains the project.");

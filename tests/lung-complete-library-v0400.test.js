@@ -241,8 +241,8 @@ for (const {data} of all) {
 }
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('v0.48.2 · What changed?'),'current release badge missing.');
-assert(html.includes('js/protocol-loader.js?v=0.48.2'),'current loader cache key missing.');
-assert(html.includes('js/drug-aliases.js?v=0.48.2'),'current alias cache key missing.');
+assert(html.includes('v0.48.1 · What changed?'),'current release badge missing.');
+assert(html.includes('js/protocol-loader.js?v=0.48.1'),'current loader cache key missing.');
+assert(html.includes('js/drug-aliases.js?v=0.48.1'),'current alias cache key missing.');
 
 console.log(`v0.40.0 Lung library tests passed: 59 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);
