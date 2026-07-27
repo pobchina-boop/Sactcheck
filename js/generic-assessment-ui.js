@@ -513,18 +513,40 @@
     return `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="number" type="number" placeholder="Not assessed"${minimum}${maximum} step="${escapeHtml(definition.step ?? "any")}"${disabledAttribute}>`;
   }
 
-  function renderCtcaeGuide(definition) {
-    const guide = root.SACTCheckCTCAE?.guide(definition);
-    if (!guide) return "";
-    const grades = guide.grades.map(item => `
+  function renderGradeRows(grades) {
+    return (grades || []).map(item => `
       <li><strong>Grade ${escapeHtml(item.grade)}</strong><span>${escapeHtml(item.description)}</span></li>`).join("");
+  }
+
+  function renderCtcaeGuide(definition, providedGuide) {
+    const guide = providedGuide || root.SACTCheckCTCAE?.guide(definition);
+    if (!guide) return "";
+    const openAttribute = /grade|ctcae/i.test(`${definition?.id || ""} ${definition?.label || ""}`) ? " open" : "";
+    const related = (guide.related || []).map(item => `
+      <section class="ctcae-related-term">
+        <h4>${escapeHtml(item.version)} · ${escapeHtml(item.term)}</h4>
+        ${item.guidance ? `<p><strong>How to assess:</strong> ${escapeHtml(item.guidance)}</p>` : ""}
+        <ol class="ctcae-grade-list">${renderGradeRows(item.grades)}</ol>
+      </section>`).join("");
+    const comparison = guide.comparison ? `
+      <details class="ctcae-version-comparison">
+        <summary>Show ${escapeHtml(guide.comparison.version)}</summary>
+        <div class="ctcae-version-comparison-body">
+          <p><strong>${escapeHtml(guide.comparison.term)}</strong></p>
+          <ol class="ctcae-grade-list">${renderGradeRows(guide.comparison.grades)}</ol>
+          <p class="subtle"><a href="${escapeHtml(guide.comparison.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the CTCAE v5.0 source</a>.</p>
+        </div>
+      </details>` : "";
     return `
-      <details class="ctcae-guide" data-ctcae-guide="${escapeHtml(definition.id)}" open>
-        <summary>${escapeHtml(guide.version)} grading and how to assess</summary>
+      <details class="ctcae-guide" data-ctcae-guide="${escapeHtml(definition.id)}"${openAttribute}>
+        <summary>${escapeHtml(guide.version)} grading — ${escapeHtml(guide.term)}</summary>
         <div class="ctcae-guide-body">
           <p><strong>How to assess:</strong> ${escapeHtml(guide.guidance)}</p>
-          <ol class="ctcae-grade-list">${grades}</ol>
-          <p class="subtle">Use the named CTCAE adverse-event term. <a href="${escapeHtml(guide.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the CTCAE v5.0 source</a>.</p>
+          ${guide.note ? `<p class="ctcae-version-note"><strong>Version note:</strong> ${escapeHtml(guide.note)}</p>` : ""}
+          <ol class="ctcae-grade-list">${renderGradeRows(guide.grades)}</ol>
+          ${related}
+          ${comparison}
+          <p class="subtle">Use the exact named CTCAE adverse-event term. <a href="${escapeHtml(guide.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the ${escapeHtml(guide.sourceLabel)} source</a>.</p>
         </div>
       </details>`;
   }
@@ -543,7 +565,11 @@
     if (definition.id === "free_t4_pmol_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("free_t4")));
     if (definition.assessment_guidance && !root.SACTCheckCTCAE?.guide(definition)) hints.push(escapeHtml(definition.assessment_guidance));
     hints.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
-    const ctcaeGuide = renderCtcaeGuide(definition);
+    const ctcaeDefinitionGuide = root.SACTCheckCTCAE?.guide(definition);
+    const ctcaeGuide = renderCtcaeGuide(definition, ctcaeDefinitionGuide);
+    const ctcaeCalculated = ctcaeDefinitionGuide?.calculable
+      ? `<div class="ctcae-calculated-grade" data-ctcae-calculated="${escapeHtml(definition.id)}" aria-live="polite">Enter a value to calculate the educational CTCAE grade.</div>`
+      : "";
 
     if (options.compact) {
       return `
@@ -553,6 +579,7 @@
             ${labAdapter ? "" : `<label class="sr-only" for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}</label>`}
             ${control}
             <span class="hint" data-input-hint>${hints.join(" ")}</span>
+            ${ctcaeCalculated}
             ${ctcaeGuide}
           </div>
         </details>`;
@@ -563,11 +590,29 @@
         <label${labelFor}>${escapeHtml(displayLabel)}${unit}</label>
         ${control}
         <span class="hint" data-input-hint>${hints.join(" ")}</span>
+        ${ctcaeCalculated}
         ${ctcaeGuide}
       </div>`;
   }
 
+  function updateCtcaeCalculatedGrade(control, definition) {
+    const inputWrapper = control?.closest("[data-input-wrapper]");
+    const preview = inputWrapper?.querySelector(`[data-ctcae-calculated="${cssEscape(definition?.id || "")}"]`);
+    if (!preview || !definition) return;
+    const result = root.SACTCheckCTCAE?.gradeForValue(definition, control.value);
+    if (!result) {
+      preview.textContent = "Enter a value to calculate the educational CTCAE grade.";
+      preview.classList.remove("assessed", "grade-3", "grade-4");
+      return;
+    }
+    preview.textContent = `${result.label}. ${result.description}`;
+    preview.classList.add("assessed");
+    preview.classList.toggle("grade-3", result.grade === 3);
+    preview.classList.toggle("grade-4", result.grade === 4);
+  }
+
   function updateCompactInputState(control, definition) {
+    updateCtcaeCalculatedGrade(control, definition);
     const wrapper = control?.closest(".compact-assessment-input");
     const state = wrapper?.querySelector("[data-input-state]");
     if (!wrapper || !state) return;
