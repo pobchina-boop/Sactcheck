@@ -208,8 +208,8 @@ assert(!tumourGroups(breast00688).includes('Gastrointestinal'), 'Breast NCCP 006
 for (const code of ['00924', '00925', '00926']) assert(byCode(code), `${code} current GI regimen is missing.`);
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('v0.48.1 · What changed?'), 'v0.39.0 release badge is missing.');
-assert(html.includes('js/protocol-loader.js?v=0.48.1'), 'v0.39.0 cache key is missing.');
-assert(html.includes('js/drug-aliases.js?v=0.48.1'), 'v0.39.0 alias cache key is missing.');
+assert(html.includes('v0.48.2 · What changed?'), 'v0.39.0 release badge is missing.');
+assert(html.includes('js/protocol-loader.js?v=0.48.2'), 'v0.39.0 cache key is missing.');
+assert(html.includes('js/drug-aliases.js?v=0.48.2'), 'v0.39.0 alias cache key is missing.');
 
 console.log(`v0.39.0 GI library tests passed: 93 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);
