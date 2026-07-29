@@ -2,22 +2,20 @@
 
 ## Current release
 
-**SACTCheck v0.45.3 - Direct adaptive clinical PDF generation**
+**SACTCheck v0.50.2 — Clinical Copy Refinement**
 
-SACTCheck is a clinician-facing NCCP protocol-driven SACT pre-assessment prototype. This release replaces browser printing with a direct standard-PDF output that normally fits on one A4 page and expands automatically only when the entered assessment requires more space.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with structured comparisons against NCCP regimen criteria. v0.50.2 implements consultant feedback on readability and removes duplicated Haematology navigation from the Solid Tumour library.
 
-### v0.45.3 highlights
+### v0.50.2 highlights
 
-- Direct **Generate PDF** action with no browser print dialogue.
-- Standard downloadable A4 PDF that can be opened, stored or printed normally.
-- One-page output by default for routine assessments.
-- Automatic continuation pages for exhaustive input without clipping or omitted entered values.
-- Repeated table headings, page numbering and source-verification footers.
-- Permanent decision-support disclaimer and explicit unassessed-domain disclosure.
-- Local offline PDF generation with no external data transmission.
-- Complete historical and release-specific regression suite passed.
+- Haematology appears only in the dedicated Haematology portal.
+- Solid Tumour counts, favourites and recent protocols exclude Haematology regimens.
+- The large patient information card has been removed.
+- Generic assessment outputs use shorter clinical wording.
+- No protocol rule, threshold, source link or treatment encoding changed.
+- Complete historical and release specific regression suite passed.
 
-See `RELEASE_NOTES_v0.45.3.md` and `VALIDATION_REPORT_v0.45.3.md`.
+See `RELEASE_NOTES_v0.50.2.md` and `VALIDATION_REPORT_v0.50.2.md`.
 
 ## Safety and governance
 

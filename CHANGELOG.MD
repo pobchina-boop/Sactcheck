@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.50.2 — NCCP Protocol Link Reliability
+
+- Changed JSON generated official NCCP protocol links from forced new tab behaviour to normal same tab navigation.
+- Added no referrer handling for direct HSE PDF requests.
+- Added regression coverage for all 15 Haematology source URLs and both card and assessment screen links.
+- No clinical logic or protocol encoding changes.
+
+## v0.50.1 — Clinical Copy Refinement
+
+- Removed Haematology from Solid Tumour tumour site navigation.
+- Corrected Solid Tumour counts and quick access so Haematology protocols remain within the dedicated Haematology portal.
+- Removed the large patient information card from the opening study panel.
+- Replaced technical generic result wording with shorter clinical language following consultant feedback.
+- Updated prominent interface copy to avoid unnecessary hyphenated phrasing.
+- Preserved all 376 protocol encodings and clinical rules unchanged.
+
 ## v0.48.0 — Feasibility Study Release
 
 - Added the SACTCheck shield, protocol-document and check-mark visual identity.

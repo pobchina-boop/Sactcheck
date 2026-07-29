@@ -1,4 +1,4 @@
-/** SACTCheck v0.50.1 — Haematology portal controller. */
+/** SACTCheck v0.50.2 — Haematology portal controller. */
 (() => {
   "use strict";
   const STORAGE_KEY = "sactcheck.library-domain.v0500";
@@ -80,5 +80,5 @@
   window.addEventListener("sactcheck:protocols-loaded", () => window.filterRegimens?.());
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initialise);
   else initialise();
-  window.SACTCheckHaematoOncology = Object.freeze({ version: "0.50.1", setDomain, setRoute });
+  window.SACTCheckHaematoOncology = Object.freeze({ version: "0.50.2", setDomain, setRoute });
 })();

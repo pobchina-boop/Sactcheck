@@ -42,7 +42,7 @@
       <div class="toolbar spread">
         <div class="toolbar" style="margin:0">
           <a href="#libraryScreen" class="btn secondary" id="jsonBackLibrary" role="button">← Regimen library</a>
-          <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
+          <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" rel="external" referrerpolicy="no-referrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
           <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Supportive medicines</a>
         </div>
         <span class="badge engine-json">JSON engine v${escapeHtml(Engine.version)}</span>
@@ -151,7 +151,7 @@
         <div class="result-action-bar result-actions">
           <button type="button" class="btn" id="jsonGeneratePdf">Generate PDF</button>
           <button type="button" class="btn secondary" id="jsonCopyOnePage">Copy concise summary</button>
-          <a class="btn secondary official-pdf-link hidden" id="jsonResultOfficialPdf" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📄</span> Open NCCP protocol</a>
+          <a class="btn secondary official-pdf-link hidden" id="jsonResultOfficialPdf" rel="external" referrerpolicy="no-referrer"><span aria-hidden="true">📄</span> Open NCCP protocol</a>
           <span class="pdf-estimate" id="jsonPdfPageEstimate">A4 PDF</span>
         </div>
 
