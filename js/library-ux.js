@@ -47,7 +47,7 @@
     const id = protocolId(card);
     if (!id) return;
     const recent = read(RECENTS_KEY).filter(item => item?.id && item.id !== id);
-    recent.unshift({ id, title: cardTitle(card), tumour: card.dataset.tumour || "" });
+    recent.unshift({ id, title: cardTitle(card), tumour: card.dataset.tumour || "", domain: card.dataset.libraryDomain || "solid" });
     write(RECENTS_KEY, recent.slice(0, MAX_RECENTS));
     renderQuickAccess();
   }
@@ -107,14 +107,23 @@
     return button;
   }
 
+  function currentDomain() {
+    return document.body?.dataset?.libraryDomain === "haem" ? "haem" : "solid";
+  }
+
+  function cardMatchesDomain(card, domain = currentDomain()) {
+    return Boolean(card) && (card.dataset.libraryDomain === "haem" ? "haem" : "solid") === domain;
+  }
+
   function renderQuickAccess() {
     const panel = document.getElementById("quickAccessPanel");
     if (!panel) return;
+    const domain = currentDomain();
     const favourites = read(FAVOURITES_KEY).map(id => {
       const card = findCard(id);
-      return card ? { id, title: cardTitle(card) } : null;
+      return cardMatchesDomain(card, domain) ? { id, title: cardTitle(card) } : null;
     }).filter(Boolean);
-    const recents = read(RECENTS_KEY).filter(item => findCard(item.id)).slice(0, MAX_RECENTS);
+    const recents = read(RECENTS_KEY).filter(item => cardMatchesDomain(findCard(item.id), domain)).slice(0, MAX_RECENTS);
     panel.replaceChildren();
 
     const groups = [
@@ -185,6 +194,7 @@
 
   root.SACTCheckLibraryUX = Object.freeze({ version: "0.48.0", refresh, openProtocol });
   root.addEventListener?.("sactcheck:protocols-loaded", refresh);
+  root.addEventListener?.("sactcheck:library-domain-changed", renderQuickAccess);
   document.addEventListener("sactcheck:regimen-card-metadata-rendered", refresh);
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {

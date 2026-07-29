@@ -1,4 +1,4 @@
-/** SACTCheck v0.50.0 — Haematology portal controller. */
+/** SACTCheck v0.50.1 — Haematology portal controller. */
 (() => {
   "use strict";
   const STORAGE_KEY = "sactcheck.library-domain.v0500";
@@ -12,10 +12,21 @@
     const search = $("regimenSearch");
     if (heading) heading.textContent = haem ? "Haematology SACT library" : "Solid Tumour SACT library";
     if (subheading) subheading.textContent = haem
-      ? "Browse the plasma-cell disorder foundation and open a source-linked structured assessment."
-      : "Find the current NCCP regimen, confirm the tissue-specific indication and open a structured day-ward assessment.";
-    if (searchLabel) searchLabel.textContent = haem ? "Search the haematology library" : "Search the complete solid-tumour library";
+      ? "Browse the plasma cell library and open a structured assessment linked to the official NCCP source."
+      : "Find the current NCCP regimen, confirm the tissue specific indication and open a structured day ward assessment.";
+    if (searchLabel) searchLabel.textContent = haem ? "Search the haematology library" : "Search the complete solid tumour library";
     if (search) search.placeholder = haem ? "Regimen, drug, NCCP number or myeloma indication" : "Regimen, drug, trade name, NCCP number or indication";
+  }
+
+  function configureTumourOptions(domain) {
+    const tumour = $("tumourFilter");
+    if (!tumour) return;
+    [...tumour.options].forEach(option => {
+      if (option.value !== "Haematology") return;
+      const show = domain === "haem";
+      option.hidden = !show;
+      option.disabled = !show;
+    });
   }
 
   function resetFiltersForDomain(domain) {
@@ -38,9 +49,11 @@
       button.setAttribute("aria-pressed", String(button.dataset.haemRouteChoice === (document.body.dataset.haemRoute || "all")));
     });
     updateCopy(domain);
+    configureTumourOptions(domain);
     if (reset) resetFiltersForDomain(domain);
     try { localStorage.setItem(STORAGE_KEY, domain); } catch (_) {}
     window.filterRegimens?.();
+    window.dispatchEvent(new CustomEvent("sactcheck:library-domain-changed", { detail: { domain } }));
   }
 
   function setRoute(route) {
@@ -67,5 +80,5 @@
   window.addEventListener("sactcheck:protocols-loaded", () => window.filterRegimens?.());
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initialise);
   else initialise();
-  window.SACTCheckHaematoOncology = Object.freeze({ version: "0.50.0", setDomain, setRoute });
+  window.SACTCheckHaematoOncology = Object.freeze({ version: "0.50.1", setDomain, setRoute });
 })();

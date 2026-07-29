@@ -10,7 +10,7 @@ const protocolIndex = JSON.parse(read("protocols/index.json"));
 
 assert(pkg.version.localeCompare("0.48.0", undefined, { numeric: true }) >= 0);
 assert.strictEqual(protocolIndex.protocol_count, 376);
-assert(index.includes("SACTCheck v0.50.0 — Multiple Myeloma Core"));
+assert(index.includes("SACTCheck v0.50.1 — Clinical Copy Refinement"));
 assert(index.includes('class="app-header"'));
 assert(index.includes('assets/branding/sactcheck-mark.svg'));
 assert(index.includes('class="study-hero library-only"'));
@@ -20,7 +20,7 @@ assert(index.includes('docs/STUDY_QUICK_START_v0.48.0.html'));
 assert(index.includes('css/study-release-v0480.css?v=0.48.4'));
 assert(index.includes('js/study-release.js?v=0.48.4'));
 assert(!index.includes("Demonstration prototype only."));
-assert(index.includes("Do not enter patient-identifiable information."));
+assert(index.includes("Do not enter identifying patient information."));
 
 for (const file of [
   "assets/branding/sactcheck-mark.svg",

@@ -1,0 +1,35 @@
+const assert = require("assert");
+const fs = require("fs");
+const path = require("path");
+const ROOT = path.resolve(__dirname, "..");
+const read = file => fs.readFileSync(path.join(ROOT, file), "utf8");
+
+const index = read("index.html");
+const tissue = read("js/tissue-ui.js");
+const haem = read("js/haemato-oncology.js");
+const library = read("js/library-ux.js");
+const assessment = read("js/generic-assessment-ui.js");
+const pkg = JSON.parse(read("package.json"));
+
+assert.strictEqual(pkg.version, "0.50.1");
+assert(index.includes("SACTCheck v0.50.1 — Clinical Copy Refinement"));
+assert(index.includes("v0.50.1 · What changed?"));
+assert(!index.includes("No patient-identifiable information required"));
+assert(!index.includes("No patient identifiable information required"));
+assert(index.includes("Do not enter identifying patient information."));
+assert(!tissue.includes('id: "haem"'));
+assert(tissue.includes('filter(card => card.dataset.libraryDomain !== "haem")'));
+assert(haem.includes('option.hidden = !show'));
+assert(haem.includes('sactcheck:library-domain-changed'));
+assert(library.includes('cardMatchesDomain'));
+assert(library.includes('sactcheck:library-domain-changed'));
+assert(assessment.includes('title: "Treatment criteria not met"'));
+assert(assessment.includes('One or more values entered fall outside the protocol treatment criteria.'));
+assert(assessment.includes('title: "Dose modification indicated"'));
+assert(assessment.includes('title: action === "proceed" ? "Treatment criteria met"'));
+assert(!assessment.includes('Encoded treatment criteria not met'));
+assert(index.includes('js/generic-assessment-ui.js?v=0.50.1'));
+assert(index.includes('js/tissue-ui.js?v=0.50.1'));
+assert(index.includes('js/library-ux.js?v=0.50.1'));
+assert(index.includes('js/haemato-oncology.js?v=0.50.1'));
+console.log("✓ v0.50.1 solid library separation, privacy card removal and concise assessment copy verified");

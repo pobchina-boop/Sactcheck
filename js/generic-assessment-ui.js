@@ -760,15 +760,15 @@
       return { title: "Assessment incomplete", detail: result.recommendation };
     }
     if (["dose_reduce", "dose_reduce_one_level", "dose_reduce_two_levels", "delay_then_dose_reduce", "withhold_then_reduce"].includes(action)) {
-      return { title: "Dose-modification criteria identified", detail: "One or more entered values triggered an encoded dose-modification pathway. Review the comparison below and the current NCCP protocol before the final clinical decision." };
+      return { title: "Dose modification indicated", detail: "One or more values entered meet the protocol criteria for dose modification." };
     }
     if (["consultant_review", "partial_context_required"].includes(action)) {
-      return { title: "Additional clinical review required", detail: result.recommendation };
+      return { title: "Clinical review required", detail: result.recommendation };
     }
     if (["proceed", "proceed_with_caution"].includes(action)) {
-      return { title: "No encoded criteria breached in assessed domains", detail: action === "proceed" ? "No restrictive encoded rule was triggered by the information entered. This is not treatment clearance." : "No restrictive rule was triggered in the assessed domains; unassessed domains remain unknown." };
+      return { title: action === "proceed" ? "Treatment criteria met" : "No treatment criteria breached", detail: action === "proceed" ? "No value entered falls outside the protocol treatment criteria." : "No value entered falls outside the protocol criteria. Unassessed fields remain unknown." };
     }
-    return { title: "Encoded treatment criteria not met", detail: "One or more entered values triggered a restrictive encoded protocol pathway. Review the key comparison and current NCCP source before the final treatment decision." };
+    return { title: "Treatment criteria not met", detail: "One or more values entered fall outside the protocol treatment criteria." };
   }
 
   function renderPriorityFindings(result) {

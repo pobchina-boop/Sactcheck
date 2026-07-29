@@ -55,17 +55,18 @@ const cytotoxicDefinitions = Engine.getInputDefinitions(cytotoxic, Engine.getPro
 assert(!cytotoxicDefinitions.some(item => item.ui_section === 'immunotherapy_bloods'), 'Non-immunotherapy protocols must not display endocrine screening fields.');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('v0.50.0 · What changed?'));
+assert(html.includes('v0.50.1 · What changed?'));
 assert(html.includes('id="tissueTypeGrid"'));
 assert(html.includes('id="tissueLandingPanel"'));
 assert(html.includes('js/local-lab-profile.js?v=0.48.4'));
-assert(html.includes('js/tissue-ui.js?v=0.48.4'));
+assert(html.includes('js/tissue-ui.js?v=0.50.1'));
 const genericUi = fs.readFileSync(path.join(root, 'js/generic-assessment-ui.js'), 'utf8');
 assert(genericUi.includes('id="jsonImmunotherapyBloodSection"'));
 assert(genericUi.includes('id="jsonLabProfilePanel"'));
 
 const tissueUi = fs.readFileSync(path.join(root, 'js/tissue-ui.js'), 'utf8');
-for (const expected of ['Gastrointestinal', 'Breast', 'Lung', 'Gynaecology', 'Genitourinary', 'Neuro-oncology', 'Sarcoma', 'Haematology', 'Skin / Melanoma', 'Head & Neck']) {
+for (const expected of ['Gastrointestinal', 'Breast', 'Lung', 'Gynaecology', 'Genitourinary', 'Neuro-oncology', 'Sarcoma', 'Skin / Melanoma', 'Head & Neck']) {
   assert(tissueUi.includes(expected), `Tissue UI is missing ${expected}.`);
 }
+assert(!tissueUi.includes('id: "haem"'), 'Haematology must be excluded from Solid Tumour tissue navigation.');
 console.log(`v0.37.2 tissue/lab UI tests passed; ${mappedDefinitions} ULN definitions use automatic actual-result adapters.`);
