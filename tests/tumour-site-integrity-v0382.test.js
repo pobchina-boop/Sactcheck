@@ -55,8 +55,8 @@ vm.runInContext(fs.readFileSync(path.join(root, 'js', 'tissue-ui.js'), 'utf8'), 
 assert.strictEqual(tissueContext.SACTCheckTissueUI.version, '0.48.0');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('v0.50.2 · What changed?'));
-assert(html.includes('js/tissue-ui.js?v=0.50.2'));
-assert(html.includes('js/protocol-loader.js?v=0.50.2'));
+assert(html.includes('v0.50.3 · What changed?'));
+assert(html.includes('js/tissue-ui.js?v=0.50.3'));
+assert(html.includes('js/protocol-loader.js?v=0.50.3'));
 
 console.log('v0.38.2 tumour-site metadata integrity tests passed.');

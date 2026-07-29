@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.50.3 — Regimen Card Clarity
+
+- Replaced the split homepage protocol count with a single total of 376.
+- Added visible regimen component rows for structured combinations and recognised acronyms.
+- Standardised Haematology cycle chips to qXd card formatting.
+- Added conservative source-linked causative-agent attribution to CTCAE/toxicity labels across the full library.
+- No clinical decision logic changed.
+
 ## v0.50.2 — NCCP Protocol Link Reliability
 
 - Changed JSON generated official NCCP protocol links from forced new tab behaviour to normal same tab navigation.

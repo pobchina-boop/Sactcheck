@@ -9,7 +9,7 @@ ids.forEach(id=>{const e=index.protocols.find(x=>x.id===id);assert.ok(e,`Missing
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 assert.ok(html.includes("Multiple Myeloma core library"));
 assert.ok(html.includes("data-haem-route-choice=\"oral_only\""));
-assert.ok(html.includes("361 + 15"));
+assert.ok(html.includes("<strong>376</strong>"));
 const css=fs.readFileSync(path.join(root,"css/haemato-oncology-v0490.css"),"utf8");
 ["#8b0d1e","#5c0712","#b5162b","#d42a3f","#fff6f7"].forEach(c=>assert.ok(css.toLowerCase().includes(c)));
 console.log("✓ v0.50.0 blood-red visual system and ten-protocol myeloma expansion verified");

@@ -127,6 +127,16 @@
     return text.length <= maximumLength ? text : `${text.slice(0, maximumLength - 1).trim()}…`;
   }
 
+  function componentNames(protocol) {
+    return window.SACTCheckRegimenComponents?.cardComponents?.(protocol) || [];
+  }
+
+  function componentMarkup(protocol) {
+    const names = componentNames(protocol);
+    if (!names.length) return "";
+    return `<p class="regimen-components"><strong>Components:</strong> <span class="regimen-components-list">${names.map(escapeHtml).join(" · ")}</span></p>`;
+  }
+
   function getProtocolTitle(protocol) {
     return normaliseDisplayText(protocol?.metadata?.short_title || protocol?.metadata?.title || protocol?.file_name || "Unnamed protocol");
   }
@@ -420,16 +430,21 @@
     if (heading) heading.textContent = title;
 
     card.querySelector(".regimen-aliases")?.remove();
+    card.querySelector(".regimen-components")?.remove();
     if (aliases.length && heading) {
       heading.insertAdjacentHTML("afterend", aliasMarkup(protocol));
     }
+    const componentAnchor = card.querySelector(".regimen-aliases") || heading;
+    if (componentAnchor && componentNames(protocol).length) {
+      componentAnchor.insertAdjacentHTML("afterend", componentMarkup(protocol));
+    }
 
-    const codeLine = [...card.querySelectorAll(":scope > p:not(.regimen-aliases)")].find(item => item.querySelector("strong"));
+    const codeLine = [...card.querySelectorAll(":scope > p:not(.regimen-aliases):not(.regimen-components)")].find(item => item.querySelector("strong"));
     if (codeLine) {
       codeLine.innerHTML = `<strong>NCCP ${escapeHtml(code)}${version ? ` · Version ${escapeHtml(version)}` : ""}</strong>`;
     }
 
-    const description = [...card.querySelectorAll(":scope > p:not(.regimen-aliases)")].find(item => !item.querySelector("strong"));
+    const description = [...card.querySelectorAll(":scope > p:not(.regimen-aliases):not(.regimen-components)")].find(item => !item.querySelector("strong"));
     if (description) {
       description.textContent = shorten(indication);
       description.classList.add("regimen-description");
@@ -438,7 +453,7 @@
     const sectionLabel = getCatalogueSectionLabel(protocol);
     const classes = asArray(metadata.treatment_class).join(" ");
     const oral = oralMedicineMetadata(protocol);
-    card.dataset.name = [title, aliases.join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, oral.searchTerms, entry.path].join(" ");
+    card.dataset.name = [title, aliases.join(" "), componentNames(protocol).join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, oral.searchTerms, entry.path].join(" ");
     card.dataset.tumour = tumourGroups.join(",");
     applyTreatmentMetadata(card, protocol);
   }
@@ -532,7 +547,7 @@
       const sectionLabel = getCatalogueSectionLabel(protocol);
       const classes = asArray(metadata.treatment_class).join(" ");
       const oral = oralMedicineMetadata(protocol);
-      const searchableText = [title, aliases.join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, oral.searchTerms, entry.path].join(" ");
+      const searchableText = [title, aliases.join(" "), componentNames(protocol).join(" "), code, version, tumourDisplay, getSearchableIndication(protocol), sectionLabel, classes, oral.searchTerms, entry.path].join(" ");
 
       const card = document.createElement("article");
       card.className = `card regimen-card json-regimen-card ${assessmentReady ? "active-regimen" : "planned"}`;
@@ -551,6 +566,7 @@
         <span class="treatment-chip treatment-chip-${escapeHtml(section)}">${escapeHtml(treatmentClassLabel(protocol))}</span>
         ${oralMedicineChipMarkup(protocol)}
         <h2>${escapeHtml(title)}</h2>
+        ${componentMarkup(protocol)}
         <p class="regimen-code"><strong>NCCP ${escapeHtml(code)}${version ? ` · v${escapeHtml(version)}` : ""}</strong></p>
         <p class="regimen-description">${escapeHtml(shorten(indication, 190))}</p>
         <div class="validation-row">${statusBadges({
@@ -732,7 +748,7 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
-    version: "0.50.2",
+    version: "0.50.3",
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,

@@ -116,7 +116,10 @@
       value.cycleDays,
       value.interval_days,
       value.intervalDays,
-      value.repeat_every_days
+      value.repeat_every_days,
+      value.cycle?.length_days,
+      value.cycle?.cycle_length_days,
+      value.cycle?.cycle_days
     );
     if (days) return days;
     const weeks = firstFinite(value.cycle_length_weeks, value.interval_weeks, value.repeat_every_weeks);
@@ -135,8 +138,8 @@
     if (!value || typeof value !== "object") return null;
 
     const type = cleanText(value.duration_type || value.durationType || value.type).toLowerCase();
-    const plannedCycles = firstFinite(value.planned_cycles, value.plannedCycles, value.number_of_cycles, value.cycle_count);
-    const maximumCycles = firstFinite(value.maximum_cycles, value.maximumCycles, value.max_cycles, value.maxCycles);
+    const plannedCycles = firstFinite(value.planned_cycles, value.plannedCycles, value.number_of_cycles, value.cycle_count, value.cycle?.planned_cycles, value.cycle?.cycles);
+    const maximumCycles = firstFinite(value.maximum_cycles, value.maximumCycles, value.max_cycles, value.maxCycles, value.cycle?.maximum_cycles, value.cycle?.max_cycles);
     const durationText = cleanText(value.duration_text || value.durationText || value.text || value.planned_duration);
 
     if (maximumCycles) {
@@ -367,14 +370,20 @@
         .join(". ");
       const relevantPhases = phases.filter(phase => phaseAppliesToIndication(phase, indicationId));
 
-      const cycleLengths = unique([
+      const directCycleLengths = unique([
         cycleLengthFromObject(indication),
         ...relevantPhases.map(cycleLengthFromObject),
-        cycleLengthFromObject(treatment),
+        cycleLengthFromObject(treatment)
+      ].filter(Boolean));
+      const fallbackCycleLengths = unique([
         cycleLengthFromObject(metadata),
         cycleLengthFromText(specificText),
         cycleLengthFromText(baseText)
       ].filter(Boolean));
+      // Treatment and phase schedule metadata is authoritative. Title or
+      // metadata text is only used when no direct schedule is present, so a
+      // phrase such as “weekly therapy” cannot override a 28-day cycle.
+      const cycleLengths = directCycleLengths.length ? directCycleLengths : fallbackCycleLengths;
 
       const indicationDuration = durationFromStructuredObject(indication) || durationFromText(specificText);
       const treatmentDuration = durationFromStructuredObject(treatment)

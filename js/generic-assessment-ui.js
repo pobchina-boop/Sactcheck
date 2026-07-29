@@ -269,6 +269,7 @@
 
   function open(protocol, context = {}) {
     ensureScreen();
+    protocol = root.SACTCheckToxicityAttribution?.decorate?.(protocol) || protocol;
     activeProtocol = protocol;
     activeTumourGroup = root.SACTCheckProtocolContext?.normaliseGroup?.(context.tumourGroup || "all") || context.tumourGroup || "all";
     const validation = Engine.validateProtocol(protocol);
