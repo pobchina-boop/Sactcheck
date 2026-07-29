@@ -1,0 +1,15 @@
+const assert=require("assert");
+const fs=require("fs");
+const path=require("path");
+const root=path.join(__dirname,"..");
+const index=JSON.parse(fs.readFileSync(path.join(root,"protocols/index.json"),"utf8"));
+const ids=["nccp-00273-v3", "nccp-00299-v3a", "nccp-00604-v2d", "nccp-00609-v4", "nccp-00695-v2", "nccp-00218-v3", "nccp-00245-v4a", "nccp-00601-v3", "nccp-00780-v2", "nccp-00854-v4"];
+assert.equal(index.protocols.length,376,"v0.50.0 should publish 376 protocols");
+ids.forEach(id=>{const e=index.protocols.find(x=>x.id===id);assert.ok(e,`Missing ${id}`);const p=JSON.parse(fs.readFileSync(path.join(root,e.path),"utf8"));assert.equal(p.metadata.tumour_group,"Haematology");assert.equal(p.metadata.sactcheck_version,"0.50.0");assert.deepEqual(p.required_inputs,[]);assert.ok(Object.keys(p.input_definitions).length>=10);assert.ok(p.rule_engine.rules.length>=5);assert.ok(p.metadata.source_url.startsWith("https://healthservice.hse.ie/"));});
+const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
+assert.ok(html.includes("Multiple Myeloma core library"));
+assert.ok(html.includes("data-haem-route-choice=\"oral_only\""));
+assert.ok(html.includes("361 + 15"));
+const css=fs.readFileSync(path.join(root,"css/haemato-oncology-v0490.css"),"utf8");
+["#8b0d1e","#5c0712","#b5162b","#d42a3f","#fff6f7"].forEach(c=>assert.ok(css.toLowerCase().includes(c)));
+console.log("✓ v0.50.0 blood-red visual system and ten-protocol myeloma expansion verified");

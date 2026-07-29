@@ -1,0 +1,862 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00273-v3",
+  "file_name": "00273-cybord-21-day.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00273",
+    "nccp_version": "3",
+    "tumour_group": "Haematology",
+    "tumour_groups": [
+      "Haematology"
+    ],
+    "title": "Cyclophosphamide, Bortezomib and Dexamethasone (CyBorD) — 21 day",
+    "short_title": "CyBorD — 21 day",
+    "indication": "Treatment of newly diagnosed symptomatic or relapsed/refractory multiple myeloma.",
+    "source_url": "https://healthservice.hse.ie/documents/6930/273_v3_Bortezomib_CycloDex.pdf",
+    "published_date": "2017-04-05",
+    "review_date": "2026-11-01",
+    "source_checked_date": "2026-07-29",
+    "source_status": "current_official_catalogue_source",
+    "catalogue_section": "haem_plasma_cell_disorders",
+    "catalogue_section_label": "Plasma-cell disorders",
+    "haemato_oncology_family": "plasma_cell_disorders",
+    "route_classification": "mixed_oral_parenteral",
+    "treatment_class": [
+      "alkylating_agent",
+      "proteasome_inhibitor",
+      "mixed_oral_parenteral_sact"
+    ],
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "sactcheck_version": "0.50.0",
+    "validation": {
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "software_tests_completed": true,
+      "clinical_use_authorised": false,
+      "scenario_shadow_validation_completed": false
+    },
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Any one relevant value may be assessed. Missing values remain explicitly unassessed and are never assumed normal.",
+    "sactcheck_encoding_version": "0.50.0",
+    "aliases": [
+      "CyBorD",
+      "VCD"
+    ]
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment must remain under the responsible Consultant Haematologist and authorised prescribing pathway.",
+    "dose_modification_note": "The encoded output presents source-linked protocol criteria; it does not prescribe, authorise treatment or replace pharmacy verification.",
+    "independent_validation_status": "Pending Consultant Haematologist and haematology-pharmacy validation.",
+    "disclaimer": "Technical decision-support prototype. Confirm the current official NCCP protocol and apply independent clinical judgement."
+  },
+  "treatment": {
+    "cycle": {
+      "length_days": 21
+    },
+    "components": [
+      {
+        "drug": "Bortezomib",
+        "route": "SC",
+        "dose": "1.3 mg/m²",
+        "days": [
+          1,
+          4,
+          8,
+          11
+        ]
+      },
+      {
+        "drug": "Cyclophosphamide",
+        "route": "PO",
+        "dose": "300 mg/m² once daily",
+        "days": [
+          1,
+          8,
+          15
+        ]
+      },
+      {
+        "drug": "Dexamethasone",
+        "route": "PO",
+        "dose": "40 mg once daily",
+        "days": [
+          1,
+          4,
+          8,
+          11
+        ]
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_phase": {
+      "label": "Assessment context",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Baseline / before first treatment"
+        },
+        {
+          "value": "cycle_start",
+          "label": "Start of a new cycle"
+        },
+        {
+          "value": "treatment_day",
+          "label": "Scheduled treatment day"
+        },
+        {
+          "value": "recovery_review",
+          "label": "Review after treatment interruption"
+        }
+      ],
+      "demo_value": "cycle_start",
+      "section": "Treatment context"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2.0,
+      "section": "Blood counts",
+      "unit": "×10⁹/L",
+      "max": 20
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 150,
+      "section": "Blood counts",
+      "unit": "×10⁹/L",
+      "max": 1000
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine-clearance band",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "gt20",
+          "label": "CrCl >20 mL/min",
+          "decision_value": 30
+        },
+        {
+          "value": "10_20",
+          "label": "CrCl 10–20 mL/min",
+          "decision_value": 15
+        },
+        {
+          "value": "lt10",
+          "label": "CrCl <10 mL/min",
+          "decision_value": 5
+        }
+      ],
+      "demo_value": "gt20",
+      "section": "Renal function",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "method": "CrCl band specified by the current NCCP regimen source"
+      }
+    },
+    "haemodialysis": {
+      "label": "Patient receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Renal function"
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 1.0,
+      "section": "Hepatic function",
+      "unit": "× ULN",
+      "max": 20
+    },
+    "protocol_hypersensitivity": {
+      "label": "Protocol-listed hypersensitivity present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Eligibility and exclusions"
+    },
+    "pregnancy": {
+      "label": "Pregnancy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Eligibility and exclusions"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Eligibility and exclusions"
+    },
+    "other_non_haematological_toxicity_grade": {
+      "label": "Other treatment-related non-haematological toxicity",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate; limiting instrumental activities where applicable",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe; limiting self-care or medically significant",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening; urgent intervention indicated",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "section": "Other toxicity",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Select the highest current grade and confirm the functional effect and any protocol-specific features."
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate; limiting instrumental activities where applicable",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe; limiting self-care or medically significant",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening; urgent intervention indicated",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "section": "Neurological toxicity",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "assessment_guidance": "Select the highest current grade and confirm the functional effect and any protocol-specific features."
+    },
+    "neuropathic_pain": {
+      "label": "Neuropathic pain present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Neurological toxicity"
+    },
+    "severe_autonomic_neuropathy": {
+      "label": "Severe autonomic neuropathy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Neurological toxicity"
+    },
+    "new_or_worsening_pulmonary_symptoms": {
+      "label": "New or worsening pulmonary symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Pulmonary safety"
+    },
+    "pres_suspected": {
+      "label": "Posterior reversible encephalopathy syndrome suspected",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Neurological toxicity"
+    },
+    "haematological_toxicity_grade": {
+      "label": "Current haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate; limiting instrumental activities where applicable",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe; limiting self-care or medically significant",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening; urgent intervention indicated",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "section": "Blood counts",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "cytopenia",
+      "assessment_guidance": "Select the highest current grade and confirm the functional effect and any protocol-specific features."
+    },
+    "grade3_haematological_occurrence": {
+      "label": "Grade 3 haematological toxicity occurrence",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No Grade 3 event"
+        },
+        {
+          "value": "first",
+          "label": "First occurrence"
+        },
+        {
+          "value": "second",
+          "label": "Second occurrence"
+        },
+        {
+          "value": "third_or_later",
+          "label": "Third or later occurrence"
+        }
+      ],
+      "demo_value": "none",
+      "section": "Blood counts"
+    }
+  },
+  "required_inputs": [],
+  "assessment_profiles": [
+    {
+      "id": "partial_assessment",
+      "label": "Partial or complete protocol assessment",
+      "required_inputs": []
+    }
+  ],
+  "indications": [
+    {
+      "indication_id": "newly_diagnosed_symptomatic_mm",
+      "description": "Treatment of newly diagnosed symptomatic multiple myeloma.",
+      "reimbursement_codes": [
+        "00273a"
+      ],
+      "tumour_groups": [
+        "Haematology"
+      ]
+    },
+    {
+      "indication_id": "relapsed_refractory_mm",
+      "description": "Treatment of relapsed/refractory multiple myeloma.",
+      "reimbursement_codes": [
+        "00273b"
+      ],
+      "tumour_groups": [
+        "Haematology"
+      ]
+    }
+  ],
+  "rule_engine": {
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "rules": [
+      {
+        "rule_id": "273_EXCLUSIONS",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "Whole regimen"
+          ],
+          "recommendation": "Do not initiate; obtain Consultant Haematologist review."
+        },
+        "source": {
+          "page": 2,
+          "section": "Eligibility and exclusions"
+        },
+        "explanation": "A protocol-listed exclusion has been recorded.",
+        "any": [
+          {
+            "field": "protocol_hypersensitivity",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      {
+        "rule_id": "273_CYCLE_START_COUNTS",
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "Bortezomib",
+            "Cyclophosphamide"
+          ],
+          "recommendation": "Delay until recovery, check FBC weekly and reduce bortezomib to 1.0 mg/m² when restarting."
+        },
+        "source": {
+          "page": 3,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "Before a new cycle, ANC below 0.5 ×10⁹/L or platelets below 30 ×10⁹/L triggers delay and reduced restart.",
+        "all": [
+          {
+            "field": "assessment_phase",
+            "operator": "==",
+            "value": "cycle_start"
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 0.5
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 30
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "273_TREATMENT_DAY_COUNTS",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Bortezomib",
+            "Cyclophosphamide"
+          ],
+          "recommendation": "Omit cyclophosphamide on day 15, withhold bortezomib until recovery and restart bortezomib at the next lower dose level."
+        },
+        "source": {
+          "page": 3,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "During a cycle, ANC below 0.5 ×10⁹/L or platelets below 30 ×10⁹/L triggers component-specific interruption.",
+        "all": [
+          {
+            "field": "assessment_phase",
+            "operator": "==",
+            "value": "treatment_day"
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 0.5
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 30
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "273_COUNTS_OK",
+        "action": {
+          "type": "proceed",
+          "components": [
+            "Bortezomib",
+            "Cyclophosphamide"
+          ],
+          "recommendation": "Entered counts meet the encoded cycle-start thresholds, subject to all other criteria."
+        },
+        "source": {
+          "page": 3,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "ANC at least 0.5 ×10⁹/L and platelets at least 30 ×10⁹/L meet the source cycle-start thresholds.",
+        "all": [
+          {
+            "field": "assessment_phase",
+            "operator": "==",
+            "value": "cycle_start"
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 30
+          }
+        ]
+      },
+      {
+        "rule_id": "273_CYCLO_RENAL_10_20",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Cyclophosphamide"
+          ],
+          "recommendation": "Use 75% cyclophosphamide dose."
+        },
+        "source": {
+          "page": 3,
+          "section": "Renal impairment"
+        },
+        "explanation": "CrCl 10–20 mL/min requires 75% cyclophosphamide dosing.",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<=",
+            "value": 20
+          }
+        ]
+      },
+      {
+        "rule_id": "273_CYCLO_RENAL_LT10",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Cyclophosphamide"
+          ],
+          "recommendation": "Use 50% cyclophosphamide dose and obtain Consultant review."
+        },
+        "source": {
+          "page": 3,
+          "section": "Renal impairment"
+        },
+        "explanation": "CrCl below 10 mL/min requires 50% cyclophosphamide dosing.",
+        "field": "crcl_ml_min",
+        "operator": "<",
+        "value": 10
+      },
+      {
+        "rule_id": "273_HEPATIC_BORTEZOMIB",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Use the protocol hepatic-impairment starting-dose pathway (0.7 mg/m² initially)."
+        },
+        "source": {
+          "page": 4,
+          "section": "Hepatic impairment"
+        },
+        "explanation": "Bilirubin above 1.5 × ULN triggers the reduced bortezomib starting-dose pathway.",
+        "field": "bilirubin_ratio_uln",
+        "operator": ">",
+        "value": 1.5
+      },
+      {
+        "rule_id": "273_DIALYSIS_BORTEZOMIB",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "No renal dose adjustment is required; administer after haemodialysis."
+        },
+        "source": {
+          "page": 4,
+          "section": "Renal impairment"
+        },
+        "explanation": "The source specifies post-dialysis timing for bortezomib.",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "273_NEURO_G1PAIN_G2",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Reduce bortezomib to 1.0 mg/m² or use the source weekly schedule."
+        },
+        "source": {
+          "page": 5,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 1 neuropathy with pain or Grade 2 requires dose/schedule modification.",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "neuropathy_grade",
+                "operator": "==",
+                "value": 1
+              },
+              {
+                "field": "neuropathic_pain",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "neuropathy_grade",
+                "operator": "==",
+                "value": 2
+              },
+              {
+                "field": "neuropathic_pain",
+                "operator": "==",
+                "value": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "273_NEURO_G2PAIN_G3",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold until recovery, then restart at 0.7 mg/m² once weekly."
+        },
+        "source": {
+          "page": 5,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 2 neuropathy with pain or Grade 3 requires withholding and reduced weekly restart.",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "neuropathy_grade",
+                "operator": "==",
+                "value": 2
+              },
+              {
+                "field": "neuropathic_pain",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "rule_id": "273_NEURO_G4",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Discontinue bortezomib."
+        },
+        "source": {
+          "page": 5,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 4 or severe autonomic neuropathy requires discontinuation.",
+        "any": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 4
+          },
+          {
+            "field": "severe_autonomic_neuropathy",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      {
+        "rule_id": "273_PULMONARY",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold bortezomib and obtain prompt diagnostic evaluation."
+        },
+        "source": {
+          "page": 5,
+          "section": "Other toxicities"
+        },
+        "explanation": "New or worsening pulmonary symptoms require bortezomib interruption and evaluation.",
+        "field": "new_or_worsening_pulmonary_symptoms",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "273_PRES",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Discontinue bortezomib and arrange urgent assessment."
+        },
+        "source": {
+          "page": 5,
+          "section": "Other toxicities"
+        },
+        "explanation": "Suspected PRES requires discontinuation.",
+        "field": "pres_suspected",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "273_OTHER_G3",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold until toxicity resolves, then use the next lower bortezomib dose level."
+        },
+        "source": {
+          "page": 5,
+          "section": "Other toxicities"
+        },
+        "explanation": "Grade 3 or greater non-haematological toxicity requires interruption and reduced restart.",
+        "field": "other_non_haematological_toxicity_grade",
+        "operator": ">=",
+        "value": 3
+      },
+      {
+        "rule_id": "273_NEURO_OK",
+        "action": {
+          "type": "proceed",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "No bortezomib neuropathy modification is triggered by the entered grade alone."
+        },
+        "source": {
+          "page": 5,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 0–1 neuropathy without pain does not require a dose modification in the source table.",
+        "all": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "<=",
+            "value": 1
+          },
+          {
+            "field": "neuropathic_pain",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "severe_autonomic_neuropathy",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      }
+    ]
+  },
+  "output_templates": {
+    "summary": "SACTCheck haematology assessment — {{protocol_title}}. Entered domains are assessed; missing domains remain unassessed.",
+    "safety_boundary": "Confirm the current NCCP protocol, prescribing plan, local policy and haematology-pharmacy verification before treatment."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "variable",
+    "local_reconciliation_required": true,
+    "mapping_source": "NCCP Supportive Care: Antiemetic Medicines for Inclusion in NCIS — Haematology regimens V5a (2026)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7179/NCCP_Antiemetics_in_NCISHaem-Onc.pdf",
+    "mapping_basis": "Haematology supportive-care classification requires independent haematology-pharmacy validation; use the current NCCP protocol and locally approved supportive-care policy.",
+    "mapping_confidence": "pending_specialist_validation",
+    "validation_status": "source_linked_pending_haematology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general"
+  }
+}

@@ -51,13 +51,13 @@ assert.strictEqual(new Set(codes).size,25,'Sarcoma deck contains duplicate NCCP 
 assert.strictEqual(new Set(sarcoma.map(({data})=>data.protocol_id)).size,25,'Sarcoma deck contains duplicate protocol IDs.');
 
 const index=JSON.parse(fs.readFileSync(path.join(root,'protocols','index.json'),'utf8'));
-assert.strictEqual(index.protocol_count, 366,'Complete protocol index must contain 270 protocols.');
-assert.strictEqual(index.protocols.length, 366,'Complete protocol index array must contain 270 entries.');
-assert.strictEqual(new Set(index.protocols.map(item=>item.id)).size, 366,'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 376,'Complete protocol index must contain 270 protocols.');
+assert.strictEqual(index.protocols.length, 376,'Complete protocol index array must contain 270 entries.');
+assert.strictEqual(new Set(index.protocols.map(item=>item.id)).size, 376,'Protocol index contains duplicate IDs.');
 
 const riskMap=JSON.parse(fs.readFileSync(path.join(root,'data','emetogenic-risk-map.json'),'utf8'));
 assert.strictEqual(riskMap.release,'0.48.0');
-assert.strictEqual(Object.keys(riskMap.protocols||{}).length,366,'Supportive-care map must cover all protocols.');
+assert.strictEqual(Object.keys(riskMap.protocols||{}).length,376,'Supportive-care map must cover all protocols.');
 
 const ctcaeContext={window:{}};vm.createContext(ctcaeContext);
 vm.runInContext(fs.readFileSync(path.join(root,'js','ctcae-descriptors.js'),'utf8'),ctcaeContext);
@@ -182,8 +182,8 @@ const aliases={'00511':'DTIC','00500':'Adriamycin','00228':'Halaven','00335':'Gl
 for(const [code,alias] of Object.entries(aliases))assert(Aliases.forProtocol(byCode(code)).includes(alias),`${code} is not searchable by ${alias}.`);
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('v0.49.0 · What changed?'),'v0.41.1 release badge missing.');
-assert(html.includes('js/protocol-loader.js?v=0.49.0'),'v0.41.1 loader cache key missing.');
+assert(html.includes('v0.50.0 · What changed?'),'v0.41.1 release badge missing.');
+assert(html.includes('js/protocol-loader.js?v=0.50.0'),'v0.41.1 loader cache key missing.');
 assert(html.includes('js/drug-aliases.js?v=0.48.4'),'v0.41.1 alias cache key missing.');
 const tissueUi=fs.readFileSync(path.join(root,'js','tissue-ui.js'),'utf8');
 assert(tissueUi.includes('label: "Sarcoma"'),'Sarcoma tissue UI label missing.');

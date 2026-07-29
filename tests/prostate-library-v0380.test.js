@@ -59,13 +59,13 @@ assert.deepStrictEqual(codes, expectedCodes, 'The encoded prostate deck does not
 assert.strictEqual(prostate.length, 26, 'Expected 26 distinct fully encoded prostate regimen protocols.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root, 'protocols', 'index.json'), 'utf8'));
-assert.strictEqual(index.protocol_count, 366, 'The protocol index must contain 210 distinct regimen protocols.');
-assert.strictEqual(index.protocols.length, 366, 'The protocol index array must contain 210 entries.');
-assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 366, 'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 376, 'The protocol index must contain 210 distinct regimen protocols.');
+assert.strictEqual(index.protocols.length, 376, 'The protocol index array must contain 210 entries.');
+assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 376, 'Protocol index contains duplicate IDs.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
 assert.strictEqual(riskMap.release, '0.48.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 366, 'Central supportive-care map must cover the entire indexed library.');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 376, 'Central supportive-care map must cover the entire indexed library.');
 
 for (const { file, data } of prostate) {
   const code = String(data.metadata.nccp_regimen_code);
@@ -165,7 +165,7 @@ assert.strictEqual(inducerRule.action.type, 'consultant_review', 'Relugolix dose
 assert(/240 mg/.test(inducerRule.explanation), 'Relugolix combined-inducer pathway lacks the encoded 240 mg instruction.');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('v0.49.0 · What changed?'), 'v0.38.0 release badge is missing.');
+assert(html.includes('v0.50.0 · What changed?'), 'v0.38.0 release badge is missing.');
 assert(html.includes('js/drug-aliases.js?v=0.48.4'), 'v0.38.0 alias cache key is missing.');
 assert.strictEqual(Aliases.version, '0.48.0');
 

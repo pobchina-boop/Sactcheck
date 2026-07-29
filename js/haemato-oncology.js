@@ -1,7 +1,7 @@
-/** SACTCheck v0.49.0 — Haematology portal controller. */
+/** SACTCheck v0.50.0 — Haematology portal controller. */
 (() => {
   "use strict";
-  const STORAGE_KEY = "sactcheck.library-domain.v0490";
+  const STORAGE_KEY = "sactcheck.library-domain.v0500";
   const $ = id => document.getElementById(id);
 
   function updateCopy(domain) {
@@ -44,7 +44,7 @@
   }
 
   function setRoute(route) {
-    const allowed = new Set(["all", "mixed_oral_parenteral", "parenteral_only"]);
+    const allowed = new Set(["all", "oral_only", "mixed_oral_parenteral", "parenteral_only"]);
     document.body.dataset.haemRoute = allowed.has(route) ? route : "all";
     document.querySelectorAll("[data-haem-route-choice]").forEach(button => {
       button.setAttribute("aria-pressed", String(button.dataset.haemRouteChoice === document.body.dataset.haemRoute));
@@ -67,5 +67,5 @@
   window.addEventListener("sactcheck:protocols-loaded", () => window.filterRegimens?.());
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initialise);
   else initialise();
-  window.SACTCheckHaematoOncology = Object.freeze({ version: "0.49.0", setDomain, setRoute });
+  window.SACTCheckHaematoOncology = Object.freeze({ version: "0.50.0", setDomain, setRoute });
 })();

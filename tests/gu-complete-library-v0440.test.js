@@ -12,13 +12,13 @@ const newlyAdded=new Set(['00104','00282','00326','00333','00337','00338','00450
 function read(f){return JSON.parse(fs.readFileSync(path.join(root,f),'utf8'));}
 function groups(d){const m=d.metadata||{},o=[];if(typeof m.tumour_group==='string')o.push(m.tumour_group);for(const v of m.tumour_groups||[])if(!o.includes(v))o.push(v);return o;}
 function demo(d){if(d.demo_value!==undefined&&d.demo_value!==null)return String(d.demo_value);if(d.type==='select')return String(d.options?.[0]?.value??'');if(d.type==='boolean')return 'false';if(d.type==='number')return String(Number.isFinite(Number(d.min))?d.min:0);return 'test';}
-const index=read('protocols/index.json');assert.strictEqual(index.protocol_count, 366);assert.strictEqual(index.protocols.length, 366);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size, 366);
+const index=read('protocols/index.json');assert.strictEqual(index.protocol_count, 376);assert.strictEqual(index.protocols.length, 376);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size, 376);
 const protocols=index.protocols.map(entry=>({entry,data:read(entry.path)}));
 const gu=protocols.filter(x=>groups(x.data).includes('Genitourinary'));
 const codes=gu.map(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')).sort();
 assert.deepStrictEqual(codes,expected);assert.strictEqual(gu.length,67);assert.strictEqual(new Set(codes).size,67);
-const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.48.0');assert.strictEqual(Object.keys(risk.protocols||{}).length,366);
-const cardSidecar=read('data/regimen-card-metadata.json');assert.strictEqual(cardSidecar.protocol_count,366);
+const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.48.0');assert.strictEqual(Object.keys(risk.protocols||{}).length,376);
+const cardSidecar=read('data/regimen-card-metadata.json');assert.strictEqual(cardSidecar.protocol_count,376);
 let inputs=0,rules=0,newCount=0,cardContexts=0;
 for(const {entry,data} of gu){
  const m=data.metadata||{},code=String(m.nccp_regimen_code).padStart(5,'0');
@@ -49,5 +49,5 @@ assert.strictEqual(by('00564').treatment.cycle_length_days,28);assert(/days 1–
 const ctx={console};ctx.globalThis=ctx;vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(root,'js/rule-engine.js'),'utf8'),ctx);vm.runInContext(fs.readFileSync(path.join(root,'js/assessment-engine.js'),'utf8'),ctx);const Engine=ctx.SACTCheckAssessmentEngine,RuleEngine=ctx.SACTCheckRuleEngine;let audited=0;
 for(const {data} of gu){const profileId=Engine.getProfiles(data)[0]?.id||'default',defs=Engine.getInputDefinitions(data,profileId,{}),fields=new Set((data.rule_engine?.rules||[]).flatMap(r=>RuleEngine.collectConditionFields(RuleEngine.conditionFromRule(r)))),candidates=defs.filter(d=>d.visible!==false&&fields.has(d.id)&&demo(d)!=='');assert(candidates.length>0,`${data.protocol_id} no auditable inputs`);for(const d of candidates){const result=Engine.assess(data,{[d.id]:demo(d)},{profileId});assert(result.findings.length>0,`${data.protocol_id}/${d.id} no finding`);assert(!/insufficient data/i.test(String(result.status||'')));audited++;}}
 assert(audited>=500,`single-entry checks ${audited}`);
-const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('v0.49.0 · What changed?'));assert(html.includes('js/protocol-loader.js?v=0.49.0'));
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('v0.50.0 · What changed?'));assert(html.includes('js/protocol-loader.js?v=0.50.0'));
 console.log(`v0.44.0 GU tests passed: ${gu.length} protocols, 21 new, ${inputs} inputs, ${rules} rules, ${audited} single-entry checks.`);

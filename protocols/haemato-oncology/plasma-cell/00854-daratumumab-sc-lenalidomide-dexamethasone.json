@@ -1,0 +1,710 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00854-v4",
+  "file_name": "00854-daratumumab-sc-lenalidomide-dexamethasone.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00854",
+    "nccp_version": "4",
+    "tumour_group": "Haematology",
+    "tumour_groups": [
+      "Haematology"
+    ],
+    "title": "Daratumumab SC, Lenalidomide and Dexamethasone",
+    "short_title": "Dara-SC + Rd",
+    "indication": "Newly diagnosed multiple myeloma in adults ineligible for autologous stem-cell transplant.",
+    "source_url": "https://healthservice.hse.ie/documents/6794/854_DaraSCLenDex.pdf",
+    "published_date": "2024-06-01",
+    "review_date": "2030-09-24",
+    "source_checked_date": "2026-07-29",
+    "source_status": "current_official_catalogue_source",
+    "catalogue_section": "haem_plasma_cell_disorders",
+    "catalogue_section_label": "Plasma-cell disorders",
+    "haemato_oncology_family": "plasma_cell_disorders",
+    "route_classification": "mixed_oral_parenteral",
+    "treatment_class": [
+      "oral_sact",
+      "anti_cd38_monoclonal_antibody",
+      "immunomodulatory_drug",
+      "mixed_oral_parenteral_sact"
+    ],
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "sactcheck_version": "0.50.0",
+    "validation": {
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "software_tests_completed": true,
+      "clinical_use_authorised": false,
+      "scenario_shadow_validation_completed": false
+    },
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Any one relevant value may be assessed. Missing values remain explicitly unassessed and are never assumed normal.",
+    "sactcheck_encoding_version": "0.50.0",
+    "aliases": [
+      "D-Rd",
+      "Dara-Rd"
+    ]
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment must remain under the responsible Consultant Haematologist and authorised prescribing pathway.",
+    "dose_modification_note": "The encoded output presents source-linked protocol criteria; it does not prescribe, authorise treatment or replace pharmacy verification.",
+    "independent_validation_status": "Pending Consultant Haematologist and haematology-pharmacy validation.",
+    "disclaimer": "Technical decision-support prototype. Confirm the current official NCCP protocol and apply independent clinical judgement."
+  },
+  "treatment": {
+    "cycle": {
+      "length_days": 28
+    },
+    "components": [
+      {
+        "drug": "Daratumumab",
+        "route": "SC",
+        "dose": "1800 mg",
+        "days": "Phase-dependent protocol schedule"
+      },
+      {
+        "drug": "Lenalidomide",
+        "route": "PO",
+        "dose": "25 mg once daily",
+        "days": "1–21"
+      },
+      {
+        "drug": "Dexamethasone",
+        "route": "PO/IV",
+        "dose": "Protocol schedule",
+        "days": "Weekly/administration-day schedule"
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_phase": {
+      "label": "Assessment context",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Baseline / before first treatment"
+        },
+        {
+          "value": "cycle_start",
+          "label": "Start of a new cycle"
+        },
+        {
+          "value": "treatment_day",
+          "label": "Scheduled treatment day"
+        },
+        {
+          "value": "recovery_review",
+          "label": "Review after treatment interruption"
+        }
+      ],
+      "demo_value": "cycle_start",
+      "section": "Treatment context"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2.0,
+      "section": "Blood counts",
+      "unit": "×10⁹/L",
+      "max": 20
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 150,
+      "section": "Blood counts",
+      "unit": "×10⁹/L",
+      "max": 1000
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine-clearance band",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "gt50",
+          "label": "CrCl >50 mL/min",
+          "decision_value": 60
+        },
+        {
+          "value": "30_50",
+          "label": "CrCl 30–50 mL/min",
+          "decision_value": 40
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30 mL/min, not receiving dialysis",
+          "decision_value": 20
+        }
+      ],
+      "demo_value": "gt50",
+      "section": "Renal function",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "method": "CrCl band specified by the current NCCP regimen source"
+      }
+    },
+    "haemodialysis": {
+      "label": "Patient receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Renal function"
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 1.0,
+      "section": "Hepatic function",
+      "unit": "× ULN",
+      "max": 20
+    },
+    "protocol_hypersensitivity": {
+      "label": "Protocol-listed hypersensitivity present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Eligibility and exclusions"
+    },
+    "pregnancy": {
+      "label": "Pregnancy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Eligibility and exclusions"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Eligibility and exclusions"
+    },
+    "other_non_haematological_toxicity_grade": {
+      "label": "Other treatment-related non-haematological toxicity",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate; limiting instrumental activities where applicable",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe; limiting self-care or medically significant",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening; urgent intervention indicated",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "section": "Other toxicity",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Select the highest current grade and confirm the functional effect and any protocol-specific features."
+    },
+    "pregnancy_prevention_programme_compliant": {
+      "label": "Pregnancy Prevention Programme requirements satisfied",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "section": "Eligibility and exclusions"
+    },
+    "thromboembolic_event": {
+      "label": "Current thromboembolic event",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Thrombosis"
+    },
+    "severe_skin_reaction_or_angioedema": {
+      "label": "Severe allergic skin reaction or angioedema",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Other toxicity"
+    },
+    "severe_uncontrolled_asthma_or_obstructive_airways_disease": {
+      "label": "Severe uncontrolled asthma or obstructive airways disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Eligibility and exclusions"
+    },
+    "transfusion_laboratory_informed_and_group_save_completed": {
+      "label": "Transfusion laboratory informed and pre-treatment Group and Save completed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "section": "Daratumumab safety"
+    },
+    "haematological_toxicity_requiring_recovery": {
+      "label": "Haematological toxicity currently requires recovery before treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Blood counts"
+    },
+    "bleeding": {
+      "label": "Clinically significant bleeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Blood counts"
+    },
+    "major_irr_history": {
+      "label": "Previous major daratumumab administration-related reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Daratumumab safety"
+    }
+  },
+  "required_inputs": [],
+  "assessment_profiles": [
+    {
+      "id": "partial_assessment",
+      "label": "Partial or complete protocol assessment",
+      "required_inputs": []
+    }
+  ],
+  "indications": [
+    {
+      "indication_id": "newly_diagnosed_asct_ineligible_mm",
+      "description": "Newly diagnosed multiple myeloma in adults ineligible for autologous stem-cell transplant.",
+      "reimbursement_codes": [
+        "00854a"
+      ],
+      "tumour_groups": [
+        "Haematology"
+      ]
+    }
+  ],
+  "rule_engine": {
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "rules": [
+      {
+        "rule_id": "854_EXCLUSIONS",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "Whole regimen"
+          ],
+          "recommendation": "Do not initiate; obtain Consultant Haematologist review."
+        },
+        "source": {
+          "page": 2,
+          "section": "Eligibility and exclusions"
+        },
+        "explanation": "A protocol-listed exclusion has been recorded.",
+        "any": [
+          {
+            "field": "protocol_hypersensitivity",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "pregnancy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "breastfeeding",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "pregnancy_prevention_programme_compliant",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "severe_uncontrolled_asthma_or_obstructive_airways_disease",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      {
+        "rule_id": "854_TRANSFUSION_PREPARATION",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "Daratumumab"
+          ],
+          "recommendation": "Complete transfusion-laboratory notification and pre-treatment Group and Save before treatment."
+        },
+        "source": {
+          "page": 2,
+          "section": "Baseline tests"
+        },
+        "explanation": "Daratumumab interferes with compatibility testing; the source requires the transfusion laboratory to be informed and a pre-treatment sample obtained.",
+        "field": "transfusion_laboratory_informed_and_group_save_completed",
+        "operator": "==",
+        "value": false
+      },
+      {
+        "rule_id": "854_MAJOR_IRR",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "Daratumumab"
+          ],
+          "recommendation": "Review the administration and pre/post-medication plan before the next dose."
+        },
+        "source": {
+          "page": 3,
+          "section": "Pre- and post-injection medications"
+        },
+        "explanation": "A previous major administration-related reaction requires individualised Consultant review.",
+        "field": "major_irr_history",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "854_DARA_HAEM_TOX",
+        "action": {
+          "type": "delay",
+          "components": [
+            "Daratumumab"
+          ],
+          "recommendation": "Delay daratumumab until blood-count recovery; consider transfusion or growth-factor support as clinically indicated."
+        },
+        "source": {
+          "page": 4,
+          "section": "Dose modifications"
+        },
+        "explanation": "The source permits dose delay, not dose reduction, for haematological toxicity.",
+        "field": "haematological_toxicity_requiring_recovery",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "854_DARA_NO_RENAL_REDUCTION",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "Daratumumab"
+          ],
+          "recommendation": "No daratumumab dose adjustment is required for renal impairment; assess the complete regimen and patient context."
+        },
+        "source": {
+          "page": 4,
+          "section": "Renal impairment"
+        },
+        "explanation": "Population pharmacokinetic analysis does not require a daratumumab renal dose adjustment.",
+        "field": "crcl_ml_min",
+        "operator": "<",
+        "value": 50
+      },
+      {
+        "rule_id": "854_DARA_NO_HEPATIC_REDUCTION",
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "Daratumumab"
+          ],
+          "recommendation": "No daratumumab dose adjustment is specified for hepatic impairment; assess the complete regimen and patient context."
+        },
+        "source": {
+          "page": 4,
+          "section": "Hepatic impairment"
+        },
+        "explanation": "The source does not specify a daratumumab hepatic dose adjustment.",
+        "field": "bilirubin_ratio_uln",
+        "operator": ">",
+        "value": 1.0
+      },
+      {
+        "rule_id": "854_LEN_START_COUNTS",
+        "action": {
+          "type": "delay",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Do not start lenalidomide; repeat counts and follow the protocol recovery pathway."
+        },
+        "source": {
+          "page": 4,
+          "section": "Dose modifications"
+        },
+        "explanation": "Lenalidomide must not start if ANC is below 1.0 ×10⁹/L or platelets are below 75 ×10⁹/L.",
+        "all": [
+          {
+            "field": "assessment_phase",
+            "operator": "==",
+            "value": "cycle_start"
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.0
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 75
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "854_LEN_SEVERE_COUNTS",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Interrupt lenalidomide and restart using the source occurrence/recovery dose-reduction pathway."
+        },
+        "source": {
+          "page": 5,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "ANC below 0.5 ×10⁹/L or platelets below 30 ×10⁹/L triggers interruption.",
+        "any": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 0.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 30
+          }
+        ]
+      },
+      {
+        "rule_id": "854_LEN_RENAL_30_50",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Use lenalidomide 10 mg once daily."
+        },
+        "source": {
+          "page": 6,
+          "section": "Renal impairment"
+        },
+        "explanation": "CrCl 30–50 mL/min requires the protocol reduced starting dose.",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<=",
+            "value": 50
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      {
+        "rule_id": "854_LEN_RENAL_LT30",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Use the protocol severe renal-impairment dose and verify the current product-specific schedule."
+        },
+        "source": {
+          "page": 6,
+          "section": "Renal impairment"
+        },
+        "explanation": "CrCl below 30 mL/min requires a reduced lenalidomide schedule.",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 30
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      {
+        "rule_id": "854_LEN_DIALYSIS",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Use the protocol dialysis dose and administer after dialysis."
+        },
+        "source": {
+          "page": 6,
+          "section": "Renal impairment"
+        },
+        "explanation": "Haemodialysis requires reduced lenalidomide dosing after dialysis.",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "854_LEN_OTHER_G3",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Interrupt lenalidomide; restart at the next lower dose when toxicity has resolved to Grade 2 or less."
+        },
+        "source": {
+          "page": 4,
+          "section": "Dose modifications"
+        },
+        "explanation": "Grade 3–4 non-haematological toxicity related to lenalidomide requires interruption and reduced restart.",
+        "field": "other_non_haematological_toxicity_grade",
+        "operator": ">=",
+        "value": 3
+      },
+      {
+        "rule_id": "854_LEN_VTE",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Withhold lenalidomide, treat the thromboembolic event and reassess benefit/risk before restart."
+        },
+        "source": {
+          "page": 6,
+          "section": "Other toxicities"
+        },
+        "explanation": "The source requires treatment interruption and standard anticoagulant management for thromboembolism.",
+        "field": "thromboembolic_event",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "854_LEN_ALLERGY",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Discontinue lenalidomide and obtain urgent clinical review."
+        },
+        "source": {
+          "page": 6,
+          "section": "Other toxicities"
+        },
+        "explanation": "Severe allergic skin reaction or angioedema requires permanent cessation.",
+        "field": "severe_skin_reaction_or_angioedema",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "854_LEN_COUNTS_OK",
+        "action": {
+          "type": "proceed",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Entered cycle-start counts meet the protocol starting thresholds, subject to all other criteria."
+        },
+        "source": {
+          "page": 4,
+          "section": "Dose modifications"
+        },
+        "explanation": "ANC at least 1.0 ×10⁹/L and platelets at least 75 ×10⁹/L meet the encoded start thresholds.",
+        "all": [
+          {
+            "field": "assessment_phase",
+            "operator": "==",
+            "value": "cycle_start"
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.0
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": ">=",
+            "value": 75
+          }
+        ]
+      }
+    ]
+  },
+  "output_templates": {
+    "summary": "SACTCheck haematology assessment — {{protocol_title}}. Entered domains are assessed; missing domains remain unassessed.",
+    "safety_boundary": "Confirm the current NCCP protocol, prescribing plan, local policy and haematology-pharmacy verification before treatment."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "variable",
+    "local_reconciliation_required": true,
+    "mapping_source": "NCCP Supportive Care: Antiemetic Medicines for Inclusion in NCIS — Haematology regimens V5a (2026)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7179/NCCP_Antiemetics_in_NCISHaem-Onc.pdf",
+    "mapping_basis": "Haematology supportive-care classification requires independent haematology-pharmacy validation; use the current NCCP protocol and locally approved supportive-care policy.",
+    "mapping_confidence": "pending_specialist_validation",
+    "validation_status": "source_linked_pending_haematology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general"
+  }
+}
