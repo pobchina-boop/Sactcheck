@@ -1,4 +1,4 @@
-# Haemato-Oncology independent review brief — v0.49.0
+# Haematology independent review brief — v0.49.0
 
 Please review each source-linked encoding for:
 

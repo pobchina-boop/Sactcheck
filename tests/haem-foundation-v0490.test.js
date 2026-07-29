@@ -11,7 +11,7 @@ assert.strictEqual(index.protocol_count,366);
 const entries=ids.map(id=>{const hit=index.protocols.filter(item=>item.id===id);assert.strictEqual(hit.length,1,`${id} catalogue duplication/missing`);return hit[0];});
 let inputs=0,rules=0;
 for(const entry of entries){
-  assert.strictEqual(entry.tumour_group,"Haemato-Oncology");
+  assert.strictEqual(entry.tumour_group,"Haematology");
   const protocol=JSON.parse(fs.readFileSync(path.join(root,entry.path),"utf8"));
   const validation=Validator.validate(protocol,{strict:true});
   assert.strictEqual(validation.valid,true,Validator.formatIssues(validation).join("\n"));

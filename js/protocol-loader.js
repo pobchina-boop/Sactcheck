@@ -217,7 +217,7 @@
     const oral = oralMedicineMetadata(protocol);
     card.dataset.oralMedicine = oral.hasOral ? "true" : "false";
     const tumourGroups = asArray(protocol?.metadata?.tumour_groups || protocol?.metadata?.tumour_group).flatMap(value => String(value).split(",")).map(value => value.trim());
-    card.dataset.libraryDomain = tumourGroups.includes("Haemato-Oncology") ? "haem" : "solid";
+    card.dataset.libraryDomain = (tumourGroups.includes("Haematology") || tumourGroups.includes("Haemato-Oncology")) ? "haem" : "solid";
     card.dataset.routeClassification = protocol?.metadata?.route_classification || "parenteral_only";
     card.querySelector(".treatment-chip")?.remove();
     card.querySelector(".oral-medicine-chip")?.remove();
@@ -542,7 +542,7 @@
       card.dataset.section = section;
       card.dataset.sectionLabel = sectionLabel;
       card.dataset.oralMedicine = oral.hasOral ? "true" : "false";
-      card.dataset.libraryDomain = tumourGroups.includes("Haemato-Oncology") ? "haem" : "solid";
+      card.dataset.libraryDomain = (tumourGroups.includes("Haematology") || tumourGroups.includes("Haemato-Oncology")) ? "haem" : "solid";
       card.dataset.routeClassification = metadata.route_classification || "parenteral_only";
       card.dataset.jsonProtocolId = protocolId;
 

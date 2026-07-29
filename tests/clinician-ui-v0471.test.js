@@ -20,7 +20,7 @@ const enabled = rows.filter(row => row.enabled !== false);
 assert.strictEqual(enabled.length, 366, 'The clinician catalogue must expose all 366 canonical protocols');
 assert(index.includes('v0.49.0 · What changed?'), 'Compact release summary is missing');
 assert(index.includes('Search the complete regimen library'), 'Primary regimen search is missing');
-assert(read('js/haemato-oncology.js').includes('Search the haemato-oncology library'), 'Haemato-oncology search mode is missing');
+assert(read('js/haemato-oncology.js').includes('Search the haematology library'), 'Haemato-oncology search mode is missing');
 assert(index.includes('id="quickAccessPanel"'), 'Favourite/recent quick access panel is missing');
 assert(index.includes('id="developerTools" hidden'), 'Developer controls must be hidden during normal clinical use');
 assert(index.includes('id="catalogEmptyState"'), 'Empty search result state is missing');
@@ -39,7 +39,7 @@ assert(libraryUx.includes('sactcheck:recent-protocols:v1'), 'Recent protocol per
 assert(libraryUx.includes('new URLSearchParams(root.location?.search || "").has("debug")'), 'Developer mode must require an explicit debug query');
 assert(libraryUx.includes('dismissPrototypeNotice'), 'Prototype banner minimisation is missing');
 
-assert(tissueUi.includes('Haematology — limited coverage'), 'Incomplete haemato-oncology coverage must be labelled clearly');
+assert(tissueUi.includes('Haematology — limited coverage'), 'Incomplete haematology coverage must be labelled clearly');
 assert(tissueUi.includes('· limited'), 'Limited tissue tile state is missing');
 
 assert(cardMetadata.includes('PHASED_SCHEDULE_LABELS'), 'Explicit phased schedule metadata is missing');

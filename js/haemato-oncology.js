@@ -1,4 +1,4 @@
-/** SACTCheck v0.49.0 — Haemato-Oncology portal controller. */
+/** SACTCheck v0.49.0 — Haematology portal controller. */
 (() => {
   "use strict";
   const STORAGE_KEY = "sactcheck.library-domain.v0490";
@@ -10,11 +10,11 @@
     const subheading = $("librarySubheading");
     const searchLabel = document.querySelector('label[for="regimenSearch"]');
     const search = $("regimenSearch");
-    if (heading) heading.textContent = haem ? "Haemato-Oncology SACT library" : "Solid Tumour SACT library";
+    if (heading) heading.textContent = haem ? "Haematology SACT library" : "Solid Tumour SACT library";
     if (subheading) subheading.textContent = haem
       ? "Browse the plasma-cell disorder foundation and open a source-linked structured assessment."
       : "Find the current NCCP regimen, confirm the tissue-specific indication and open a structured day-ward assessment.";
-    if (searchLabel) searchLabel.textContent = haem ? "Search the haemato-oncology library" : "Search the complete solid-tumour library";
+    if (searchLabel) searchLabel.textContent = haem ? "Search the haematology library" : "Search the complete solid-tumour library";
     if (search) search.placeholder = haem ? "Regimen, drug, NCCP number or myeloma indication" : "Regimen, drug, trade name, NCCP number or indication";
   }
 
@@ -22,7 +22,7 @@
     const tumour = $("tumourFilter");
     const treatment = $("treatmentFilter");
     const search = $("regimenSearch");
-    if (tumour) tumour.value = domain === "haem" ? "Haemato-Oncology" : "all";
+    if (tumour) tumour.value = domain === "haem" ? "Haematology" : "all";
     if (treatment) treatment.value = "all";
     if (search) search.value = "";
   }

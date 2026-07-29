@@ -2,7 +2,7 @@
 
 ## Release identity
 
-- Release: **v0.49.0 — Haemato-Oncology Foundation**
+- Release: **v0.49.0 — Haematology Foundation**
 - Build type: **complete repository drag-and-drop release**
 - Starting baseline: clean committed **v0.48.4** repository supplied by the product owner
 - Build date: **29 July 2026**
@@ -11,7 +11,7 @@
 
 - Canonical protocols: **366**
 - Existing solid-tumour protocols: **361**
-- New haemato-oncology protocols: **5**
+- New haematology protocols: **5**
 - Original solid-tumour protocol JSON files changed: **0**
 - Original solid-tumour protocol JSON files missing: **0**
 
@@ -36,13 +36,13 @@ Encoded haem foundation totals:
 
 ## Integration checks
 
-- Separate Solid Tumour and Haemato-Oncology library domains integrated into the main application
-- Burgundy haemato-oncology visual identity integrated
+- Separate Solid Tumour and Haematology library domains integrated into the main application
+- Burgundy haematology visual identity integrated
 - Plasma-cell disorders family navigation integrated
 - Route classification integrated for parenteral-only and mixed oral/parenteral regimens
 - Five haem protocols included in the main canonical protocol catalogue
 - Search, official source links, partial assessment and shared decision-engine pathways retained
-- Supportive-care classification explicitly marked for specialist haemato-oncology pharmacy review rather than inferred
+- Supportive-care classification explicitly marked for specialist haematology pharmacy review rather than inferred
 
 ## Automated testing
 
@@ -64,4 +64,4 @@ Focused haem test result:
 
 ## Clinical governance boundary
 
-The five haemato-oncology encodings remain preliminary technical prototypes. They require independent review by a Consultant Haematologist and haematology pharmacist before clinical use. SACTCheck v0.49.0 must not be used as an autonomous treatment-clearance system.
+The five haematology encodings remain preliminary technical prototypes. They require independent review by a Consultant Haematologist and haematology pharmacist before clinical use. SACTCheck v0.49.0 must not be used as an autonomous treatment-clearance system.

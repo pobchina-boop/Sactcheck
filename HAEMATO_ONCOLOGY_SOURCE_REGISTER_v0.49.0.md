@@ -1,4 +1,4 @@
-# Haemato-Oncology source register — v0.49.0
+# Haematology source register — v0.49.0
 
 Source check completed: **29 July 2026**.
 

@@ -12,7 +12,7 @@ const loader = read("js/protocol-loader.js");
 const css = read("css/stability-v0481.css");
 
 assert.strictEqual(pkg.version, "0.49.0");
-assert(index.includes("SACTCheck v0.49.0 — Haemato-Oncology Foundation"));
+assert(index.includes("SACTCheck v0.49.0 — Haematology Foundation"));
 assert(index.includes('css/stability-v0481.css?v=0.48.4'));
 assert(index.includes('id="aboutSactcheckTitle"'));
 assert(index.includes("What SACTCheck is, and why it is being developed"));
