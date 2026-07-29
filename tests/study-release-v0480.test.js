@@ -9,8 +9,8 @@ const pkg = JSON.parse(read("package.json"));
 const protocolIndex = JSON.parse(read("protocols/index.json"));
 
 assert(pkg.version.localeCompare("0.48.0", undefined, { numeric: true }) >= 0);
-assert.strictEqual(protocolIndex.protocol_count, 361);
-assert(index.includes("SACTCheck v0.48.4 — oral anti-cancer service filter"));
+assert.strictEqual(protocolIndex.protocol_count, 366);
+assert(index.includes("SACTCheck v0.49.0 — Haemato-Oncology Foundation"));
 assert(index.includes('class="app-header"'));
 assert(index.includes('assets/branding/sactcheck-mark.svg'));
 assert(index.includes('class="study-hero library-only"'));

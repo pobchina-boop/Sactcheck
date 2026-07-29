@@ -1,0 +1,864 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00643-v3",
+  "file_name": "00643-rvd-28-day.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00643",
+    "nccp_version": "3",
+    "tumour_group": "Haemato-Oncology",
+    "tumour_groups": [
+      "Haemato-Oncology"
+    ],
+    "title": "Bortezomib, Lenalidomide and dexamethasone (RVD) Therapy – 28 day",
+    "short_title": "RVD — 28 day",
+    "indication": "Treatment of myeloma.",
+    "source_url": "https://healthservice.hse.ie/documents/6762/643_v3_BortezomibLenDex_28_day.pdf",
+    "published_date": "2021-03-01",
+    "review_date": "2029-05-13",
+    "source_checked_date": "2026-07-29",
+    "source_status": "current_official_catalogue_source",
+    "catalogue_section": "haem_plasma_cell_disorders",
+    "catalogue_section_label": "Plasma-cell disorders",
+    "haemato_oncology_family": "plasma_cell_disorders",
+    "route_classification": "mixed_oral_parenteral",
+    "treatment_class": [
+      "oral_sact",
+      "proteasome_inhibitor",
+      "immunomodulatory_drug",
+      "mixed_oral_parenteral_sact"
+    ],
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "sactcheck_version": "0.49.0",
+    "validation": {
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "software_tests_completed": true,
+      "clinical_use_authorised": false,
+      "scenario_shadow_validation_completed": false
+    },
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Any one relevant value may be assessed. Missing values remain explicitly unassessed and are never assumed normal.",
+    "sactcheck_encoding_version": "0.49.0"
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment must remain under the responsible Consultant Haematologist and authorised prescribing pathway.",
+    "dose_modification_note": "The encoded output presents source-linked protocol criteria; it does not prescribe, authorise treatment or replace pharmacy verification.",
+    "independent_validation_status": "Pending Consultant Haematologist and haematology-pharmacy validation.",
+    "disclaimer": "Technical decision-support prototype. Confirm the current official NCCP protocol and apply independent clinical judgement."
+  },
+  "treatment": {
+    "cycle": {
+      "length_days": 28
+    },
+    "components": [
+      {
+        "drug": "Bortezomib",
+        "route": "SC",
+        "dose": "1.3 mg/m²",
+        "days": [
+          1,
+          8,
+          15,
+          22
+        ]
+      },
+      {
+        "drug": "Lenalidomide",
+        "route": "PO",
+        "dose": "25 mg",
+        "days": "1–21"
+      },
+      {
+        "drug": "Dexamethasone",
+        "route": "PO",
+        "role": "supportive_or_regimen_corticosteroid",
+        "days": [
+          1,
+          8,
+          15,
+          22
+        ]
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_phase": {
+      "label": "Assessment context",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Baseline"
+        },
+        {
+          "value": "cycle_start",
+          "label": "Cycle start"
+        },
+        {
+          "value": "treatment_day",
+          "label": "Treatment day"
+        }
+      ],
+      "demo_value": "cycle_start",
+      "section": "Treatment context"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2,
+      "section": "Blood counts",
+      "unit": "×10⁹/L",
+      "max": 20
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 150,
+      "section": "Blood counts",
+      "unit": "×10⁹/L",
+      "max": 1000
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine-clearance band",
+      "type": "select",
+      "required": false,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "method": "CrCl band as used in the current NCCP regimen source"
+      },
+      "options": [
+        {
+          "value": "gt50",
+          "label": "CrCl >50 mL/min",
+          "decision_value": 51
+        },
+        {
+          "value": "30_50",
+          "label": "CrCl 30–50 mL/min",
+          "decision_value": 40
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30 mL/min (not on dialysis)",
+          "decision_value": 20
+        }
+      ],
+      "demo_value": "gt50",
+      "section": "Renal function"
+    },
+    "haemodialysis": {
+      "label": "Patient receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Renal function"
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 1,
+      "section": "Hepatic function",
+      "unit": "× ULN",
+      "max": 20
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "section": "Neurological toxicity",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Confirm whether neuropathic pain or severe autonomic neuropathy is present because the bortezomib pathway depends on these features."
+    },
+    "neuropathic_pain": {
+      "label": "Neuropathic pain present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Neurological toxicity"
+    },
+    "severe_autonomic_neuropathy": {
+      "label": "Severe autonomic neuropathy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Neurological toxicity"
+    },
+    "other_non_haematological_toxicity_grade": {
+      "label": "Other non-haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "section": "Other toxicity",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Identify the exact non-haematological adverse event and apply that event's own CTCAE v5.0 criterion. This general grade selector is a screening aid for the protocol's dose-modification threshold."
+    },
+    "new_or_worsening_pulmonary_symptoms": {
+      "label": "New or worsening pulmonary symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Other toxicity"
+    },
+    "pres_suspected": {
+      "label": "PRES suspected or diagnosed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Other toxicity"
+    },
+    "protocol_hypersensitivity": {
+      "label": "Relevant protocol-component hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Protocol exclusions"
+    },
+    "pregnancy_or_breastfeeding": {
+      "label": "Pregnancy or breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Protocol exclusions"
+    },
+    "pregnancy_prevention_programme_compliant": {
+      "label": "Able to comply with pregnancy prevention programme",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "section": "Protocol exclusions"
+    },
+    "thromboembolic_event": {
+      "label": "New thromboembolic event",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Other toxicity"
+    },
+    "skin_reaction": {
+      "label": "Skin/allergic reaction",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "non_allergic_rash",
+          "label": "Non-allergic rash"
+        },
+        {
+          "value": "allergic_rash_or_angioedema",
+          "label": "Allergic rash or angioedema"
+        }
+      ],
+      "demo_value": "none",
+      "section": "Other toxicity"
+    }
+  },
+  "required_inputs": [],
+  "assessment_profiles": [
+    {
+      "id": "partial_assessment",
+      "label": "Partial or complete protocol assessment",
+      "required_inputs": []
+    }
+  ],
+  "rule_engine": {
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "643_EXCLUSIONS",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "Whole regimen"
+          ],
+          "recommendation": "Do not initiate; obtain Consultant review."
+        },
+        "source": {
+          "page": 3,
+          "section": "Exclusions"
+        },
+        "explanation": "A relevant hypersensitivity, pregnancy/breastfeeding status, or inability to comply with pregnancy-prevention requirements triggers the protocol exclusion pathway.",
+        "any": [
+          {
+            "field": "protocol_hypersensitivity",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "pregnancy_or_breastfeeding",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "pregnancy_prevention_programme_compliant",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      {
+        "rule_id": "643_BASELINE_ELIGIBILITY",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "Whole regimen"
+          ],
+          "recommendation": "Do not initiate under the encoded protocol criteria."
+        },
+        "source": {
+          "page": 3,
+          "section": "Exclusions"
+        },
+        "explanation": "Baseline ANC below 1.0 ×10⁹/L or Grade 2 or greater neuropathy does not meet the encoded baseline criteria.",
+        "all": [
+          {
+            "field": "assessment_phase",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.0
+              },
+              {
+                "field": "neuropathy_grade",
+                "operator": ">=",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "643_LENALIDOMIDE_CYCLE_START_COUNTS",
+        "action": {
+          "type": "delay",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Delay lenalidomide and reassess counts."
+        },
+        "source": {
+          "page": 4,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "Lenalidomide should not start when ANC is below 1.0 or platelets are below 75 ×10⁹/L.",
+        "all": [
+          {
+            "field": "assessment_phase",
+            "operator": "==",
+            "value": "cycle_start"
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.0
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 75
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "643_BORTEZOMIB_LOW_COUNTS",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold bortezomib until recovery and follow the source restart pathway."
+        },
+        "source": {
+          "page": 4,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "Bortezomib count criteria are not met when ANC is below 0.5 or platelets are below 25 ×10⁹/L.",
+        "any": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 0.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 25
+          }
+        ]
+      },
+      {
+        "rule_id": "643_LENALIDOMIDE_SEVERE_COUNTS",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Interrupt lenalidomide and use the occurrence/recovery pathway in the source."
+        },
+        "source": {
+          "page": 4,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "ANC below 0.5 or platelets below 30 ×10⁹/L triggers lenalidomide interruption and protocol-directed reduced restart.",
+        "any": [
+          {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 0.5
+          },
+          {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 30
+          }
+        ]
+      },
+      {
+        "rule_id": "643_RENAL_30_50",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Use 10 mg once daily."
+        },
+        "source": {
+          "page": 5,
+          "section": "Renal impairment"
+        },
+        "explanation": "CrCl 30–50 mL/min requires a lenalidomide starting dose of 10 mg once daily.",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<=",
+            "value": 50
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      {
+        "rule_id": "643_RENAL_BELOW30_NON_DIALYSIS",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Use 15 mg every other day as specified by the protocol."
+        },
+        "source": {
+          "page": 5,
+          "section": "Renal impairment"
+        },
+        "explanation": "CrCl below 30 mL/min without dialysis requires alternate-day lenalidomide dosing.",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 30
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      {
+        "rule_id": "643_RENAL_DIALYSIS",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Lenalidomide",
+            "Bortezomib"
+          ],
+          "recommendation": "Use lenalidomide 5 mg once daily after dialysis and administer bortezomib after dialysis."
+        },
+        "source": {
+          "page": 5,
+          "section": "Renal impairment"
+        },
+        "explanation": "Haemodialysis requires reduced lenalidomide dosing and administration after dialysis; bortezomib should also follow post-dialysis timing.",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "643_HEPATIC_BORTEZOMIB",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Start bortezomib at 0.7 mg/m² and adjust according to tolerance."
+        },
+        "source": {
+          "page": 5,
+          "section": "Hepatic impairment"
+        },
+        "explanation": "Bilirubin above 1.5 × ULN requires the reduced hepatic bortezomib starting-dose pathway.",
+        "field": "bilirubin_ratio_uln",
+        "operator": ">",
+        "value": 1.5
+      },
+      {
+        "rule_id": "643_NEUROPATHY_G1_PAIN_OR_G2",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Reduce to 1.0 mg/m² or weekly administration."
+        },
+        "source": {
+          "page": 6,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 1 neuropathy with pain or Grade 2 without pain requires bortezomib dose/schedule modification.",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "neuropathy_grade",
+                "operator": "==",
+                "value": 1
+              },
+              {
+                "field": "neuropathic_pain",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "neuropathy_grade",
+                "operator": "==",
+                "value": 2
+              },
+              {
+                "field": "neuropathic_pain",
+                "operator": "==",
+                "value": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "643_NEUROPATHY_G2_PAIN_OR_G3",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold and then restart at 0.7 mg/m² weekly after recovery."
+        },
+        "source": {
+          "page": 6,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 2 neuropathy with pain or Grade 3 requires withholding and reduced weekly restart after recovery.",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "neuropathy_grade",
+                "operator": "==",
+                "value": 2
+              },
+              {
+                "field": "neuropathic_pain",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "rule_id": "643_NEUROPATHY_G4_AUTONOMIC",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Discontinue bortezomib."
+        },
+        "source": {
+          "page": 6,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 4 or severe autonomic neuropathy requires discontinuation of bortezomib.",
+        "any": [
+          {
+            "field": "neuropathy_grade",
+            "operator": "==",
+            "value": 4
+          },
+          {
+            "field": "severe_autonomic_neuropathy",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      {
+        "rule_id": "643_GRADE3_NONHAEM",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Whole regimen"
+          ],
+          "recommendation": "Withhold and obtain Consultant review before reduced-dose restart."
+        },
+        "source": {
+          "page": 6,
+          "section": "Non-haematological toxicity"
+        },
+        "explanation": "Grade 3 or greater non-haematological toxicity requires withholding the implicated component(s) and source-directed restart.",
+        "field": "other_non_haematological_toxicity_grade",
+        "operator": ">=",
+        "value": 3
+      },
+      {
+        "rule_id": "643_PULMONARY_SYMPTOMS",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold and investigate."
+        },
+        "source": {
+          "page": 6,
+          "section": "Pulmonary toxicity"
+        },
+        "explanation": "New or worsening pulmonary symptoms require withholding bortezomib and diagnostic evaluation.",
+        "field": "new_or_worsening_pulmonary_symptoms",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "643_PRES",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Discontinue and manage urgently."
+        },
+        "source": {
+          "page": 6,
+          "section": "PRES"
+        },
+        "explanation": "PRES requires discontinuation of bortezomib.",
+        "field": "pres_suspected",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "643_THROMBOEMBOLISM",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Withhold lenalidomide; consider restart only after Consultant benefit–risk review."
+        },
+        "source": {
+          "page": 7,
+          "section": "Thromboembolic events"
+        },
+        "explanation": "A thromboembolic event requires withholding lenalidomide and initiation of appropriate anticoagulation assessment.",
+        "field": "thromboembolic_event",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "643_NON_ALLERGIC_RASH",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Withhold or modify only as directed after clinical assessment."
+        },
+        "source": {
+          "page": 7,
+          "section": "Skin reactions"
+        },
+        "explanation": "A non-allergic rash requires interruption/assessment according to severity and clinical context.",
+        "field": "skin_reaction",
+        "operator": "==",
+        "value": "non_allergic_rash"
+      },
+      {
+        "rule_id": "643_ALLERGIC_RASH_ANGIOEDEMA",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "Lenalidomide"
+          ],
+          "recommendation": "Permanently discontinue lenalidomide and manage urgently."
+        },
+        "source": {
+          "page": 7,
+          "section": "Allergic reactions"
+        },
+        "explanation": "Allergic rash or angioedema requires permanent discontinuation of lenalidomide.",
+        "field": "skin_reaction",
+        "operator": "==",
+        "value": "allergic_rash_or_angioedema"
+      }
+    ]
+  },
+  "output_templates": {
+    "summary": "SACTCheck haemato-oncology assessment — {{protocol_title}}. Entered domains are assessed; missing domains remain unassessed.",
+    "safety_boundary": "Confirm the current NCCP protocol, prescribing plan, local policy and haematology-pharmacy verification before treatment."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "variable",
+    "local_reconciliation_required": true,
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Haemato-oncology supportive-care classification requires independent haematology-pharmacy validation; apply the current regimen source and locally approved supportive-care policy.",
+    "mapping_confidence": "pending_specialist_validation",
+    "validation_status": "source_linked_pending_haematology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general"
+  },
+  "indications": [
+    {
+      "indication_id": "myeloma",
+      "description": "Treatment of myeloma.",
+      "reimbursement_codes": [
+        "00643a"
+      ],
+      "tumour_groups": [
+        "Haemato-Oncology"
+      ]
+    }
+  ]
+}

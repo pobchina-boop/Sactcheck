@@ -112,13 +112,13 @@ assert.strictEqual(new Set(codes).size, 59, 'The Lung deck contains duplicate NC
 assert.strictEqual(new Set(lung.map(({ data }) => data.protocol_id)).size, 59, 'The Lung deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root,'protocols','index.json'),'utf8'));
-assert.strictEqual(index.protocol_count, 361, 'Complete protocol index must contain 270 protocols.');
-assert.strictEqual(index.protocols.length, 361, 'Complete protocol index array must contain 270 entries.');
-assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 361, 'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 366, 'Complete protocol index must contain 270 protocols.');
+assert.strictEqual(index.protocols.length, 366, 'Complete protocol index array must contain 270 entries.');
+assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 366, 'Protocol index contains duplicate IDs.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root,'data','emetogenic-risk-map.json'),'utf8'));
 assert.strictEqual(riskMap.release, '0.48.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 361, 'Supportive-care map must cover all protocols.');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 366, 'Supportive-care map must cover all protocols.');
 
 const ctcaeContext = { window: {} };
 vm.createContext(ctcaeContext);
@@ -241,8 +241,8 @@ for (const {data} of all) {
 }
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('v0.48.4 · What changed?'),'current release badge missing.');
-assert(html.includes('js/protocol-loader.js?v=0.48.4'),'current loader cache key missing.');
+assert(html.includes('v0.49.0 · What changed?'),'current release badge missing.');
+assert(html.includes('js/protocol-loader.js?v=0.49.0'),'current loader cache key missing.');
 assert(html.includes('js/drug-aliases.js?v=0.48.4'),'current alias cache key missing.');
 
 console.log(`v0.40.0 Lung library tests passed: 59 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);

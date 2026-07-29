@@ -23,7 +23,7 @@ const index = read('index.html');
 const css = read('css/ux-v0471.css');
 assert(index.includes('js/regimen-search.js?v=0.48.4'), 'Search normalisation module is not loaded');
 assert(index.includes('id="searchResultSummary"'), 'Live search result summary is missing');
-assert(index.includes('searchApi.rankCards(cards,q)'), 'Library filter does not use ranked normalised search');
+assert(index.includes('searchApi.rankCards(domainCards,q)'), 'Library filter does not use ranked normalised search');
 assert(index.includes('event.key==="Enter"'), 'Enter-to-jump search behaviour is missing');
 assert(index.includes('filterRegimens({jump:true})'), 'Enter key does not jump to the first match');
 assert(index.includes('const okT=Boolean(q)||tumour==="all"'), 'Global search must not be trapped by the current tumour tile');

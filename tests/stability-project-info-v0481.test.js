@@ -11,8 +11,8 @@ const index = read("index.html");
 const loader = read("js/protocol-loader.js");
 const css = read("css/stability-v0481.css");
 
-assert.strictEqual(pkg.version, "0.48.4");
-assert(index.includes("SACTCheck v0.48.4 — oral anti-cancer service filter"));
+assert.strictEqual(pkg.version, "0.49.0");
+assert(index.includes("SACTCheck v0.49.0 — Haemato-Oncology Foundation"));
 assert(index.includes('css/stability-v0481.css?v=0.48.4'));
 assert(index.includes('id="aboutSactcheckTitle"'));
 assert(index.includes("What SACTCheck is, and why it is being developed"));
@@ -32,7 +32,7 @@ assert(loader.includes("retryFailedProtocols"));
 assert(loader.includes("temporarily unavailable"));
 assert(loader.includes("The available library remains usable"));
 assert(!loader.includes("await Promise.all(enabledEntries.map"), "All protocol files must not be fetched simultaneously");
-assert(loader.includes('version: "0.48.4"'));
+assert(loader.includes('version: "0.49.0"'));
 assert(exists("RELEASE_NOTES_v0.48.4.md"));
 assert(exists("GITHUB_COMMIT_v0.48.4.txt"));
 

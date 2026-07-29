@@ -13,6 +13,7 @@
   let loadedProtocolRecords = [];
   let failedProtocolEntries = [];
   const SECTION_ORDER = [
+    "haem_plasma_cell_disorders",
     "chemotherapy_combination_sact",
     "targeted_her2_therapy",
     "immunotherapy",
@@ -21,6 +22,7 @@
     "supportive_other"
   ];
   const SECTION_LABELS = {
+    haem_plasma_cell_disorders: "Plasma-cell disorders",
     chemotherapy_combination_sact: "Chemotherapy & combination SACT",
     targeted_her2_therapy: "Targeted & HER2 therapies",
     immunotherapy: "Immunotherapy",
@@ -214,6 +216,9 @@
     card.dataset.sectionLabel = sectionLabel;
     const oral = oralMedicineMetadata(protocol);
     card.dataset.oralMedicine = oral.hasOral ? "true" : "false";
+    const tumourGroups = asArray(protocol?.metadata?.tumour_groups || protocol?.metadata?.tumour_group).flatMap(value => String(value).split(",")).map(value => value.trim());
+    card.dataset.libraryDomain = tumourGroups.includes("Haemato-Oncology") ? "haem" : "solid";
+    card.dataset.routeClassification = protocol?.metadata?.route_classification || "parenteral_only";
     card.querySelector(".treatment-chip")?.remove();
     card.querySelector(".oral-medicine-chip")?.remove();
     const chip = document.createElement("span");
@@ -287,6 +292,13 @@
     if (shadow) badges.push('<span class="badge development">Shadow validation</span>');
     if (localPreview) badges.push('<span class="badge development">Local preview</span>');
     return badges.join("");
+  }
+
+  function sourceReviewBadge(protocol) {
+    const status = String(protocol?.metadata?.source_status || "");
+    if (!status.includes("review_date_passed")) return "";
+    const reviewDate = protocol?.metadata?.review_date || "the stated review date";
+    return `<span class="badge protocol-status haem-source-review-due">Official source linked · review date ${escapeHtml(reviewDate)} passed</span>`;
   }
 
   function emetogenicBadge(protocol) {
@@ -473,7 +485,7 @@
         sourceUrl: protocol?.metadata?.source_url,
         shadow: entry.mode === "shadow_validation",
         ready: assessmentReady
-      })}${emetogenicBadge(protocol)}`;
+      })}${sourceReviewBadge(protocol)}${emetogenicBadge(protocol)}`;
     }
 
     replaceRuleControl(card, true);
@@ -530,6 +542,8 @@
       card.dataset.section = section;
       card.dataset.sectionLabel = sectionLabel;
       card.dataset.oralMedicine = oral.hasOral ? "true" : "false";
+      card.dataset.libraryDomain = tumourGroups.includes("Haemato-Oncology") ? "haem" : "solid";
+      card.dataset.routeClassification = metadata.route_classification || "parenteral_only";
       card.dataset.jsonProtocolId = protocolId;
 
       card.innerHTML = `
@@ -545,7 +559,7 @@
           shadow: migrationMode === "shadow_validation",
           localPreview,
           ready: assessmentReady
-        })}${emetogenicBadge(protocol)}</div>
+        })}${sourceReviewBadge(protocol)}${emetogenicBadge(protocol)}</div>
         <details class="protocol-card-details">
           <summary>Protocol details</summary>
           <div class="details-body">
@@ -718,7 +732,7 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
-    version: "0.48.4",
+    version: "0.49.0",
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,

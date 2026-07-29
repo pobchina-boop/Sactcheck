@@ -37,7 +37,7 @@ assert(index.includes('css/search-v0483.css?v=0.48.4'));
 assert(index.includes('js/regimen-search.js?v=0.48.4'));
 assert(index.includes('js/regimen-search-ui.js?v=0.48.4'));
 assert(index.includes('id="searchSuggestions"'));
-assert(index.includes('searchApi.rankCards(cards,q)'));
+assert(index.includes('searchApi.rankCards(domainCards,q)'));
 assert(index.includes('Best matches are shown first'));
 assert(index.includes('event.key==="Escape"'));
 assert(css.includes('.search-suggestion-button'));

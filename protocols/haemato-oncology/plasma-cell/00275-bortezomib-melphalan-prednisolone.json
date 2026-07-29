@@ -1,0 +1,740 @@
+{
+  "schema_version": "2.0.0",
+  "protocol_id": "nccp-00275-v3",
+  "file_name": "00275-bortezomib-melphalan-prednisolone.json",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "metadata": {
+    "nccp_regimen_code": "00275",
+    "nccp_version": "3",
+    "tumour_group": "Haemato-Oncology",
+    "tumour_groups": [
+      "Haemato-Oncology"
+    ],
+    "title": "Bortezomib, Melphalan and Prednisolone Therapy",
+    "short_title": "Bortezomib + melphalan + prednisolone",
+    "indication": "Treatment of adult patients with previously untreated multiple myeloma who are not eligible for high-dose chemotherapy with haematopoietic stem cell transplantation.",
+    "source_url": "https://healthservice.hse.ie/documents/6928/275_v3_bortezomibmelphpred.pdf",
+    "published_date": "2016-08-08",
+    "review_date": "2026-03-08",
+    "source_checked_date": "2026-07-29",
+    "source_status": "official_catalogue_source_review_date_passed",
+    "catalogue_section": "haem_plasma_cell_disorders",
+    "catalogue_section_label": "Plasma-cell disorders",
+    "haemato_oncology_family": "plasma_cell_disorders",
+    "route_classification": "mixed_oral_parenteral",
+    "treatment_class": [
+      "oral_sact",
+      "alkylating_agent",
+      "proteasome_inhibitor",
+      "mixed_oral_parenteral_sact"
+    ],
+    "catalog": {
+      "enabled": true
+    },
+    "migration": {
+      "mode": "live_json",
+      "switch_to_generic_assessment": true
+    },
+    "sactcheck_version": "0.49.0",
+    "validation": {
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "software_tests_completed": true,
+      "clinical_use_authorised": false,
+      "scenario_shadow_validation_completed": false
+    },
+    "partial_assessment_supported": true,
+    "partial_assessment_note": "Any one relevant value may be assessed. Missing values remain explicitly unassessed and are never assumed normal.",
+    "sactcheck_encoding_version": "0.49.0"
+  },
+  "clinical_governance": {
+    "prescriptive_authority": "Treatment must remain under the responsible Consultant Haematologist and authorised prescribing pathway.",
+    "dose_modification_note": "The encoded output presents source-linked protocol criteria; it does not prescribe, authorise treatment or replace pharmacy verification.",
+    "independent_validation_status": "Pending Consultant Haematologist and haematology-pharmacy validation.",
+    "disclaimer": "Technical decision-support prototype. Confirm the current official NCCP protocol and apply independent clinical judgement."
+  },
+  "treatment": {
+    "cycle": {
+      "length_days": 42,
+      "planned_cycles": 9
+    },
+    "components": [
+      {
+        "drug": "Bortezomib",
+        "route": "SC",
+        "dose": "1.3 mg/m²",
+        "schedule": "Cycles 1–4 twice weekly in treatment weeks; cycles 5–9 weekly in treatment weeks"
+      },
+      {
+        "drug": "Melphalan",
+        "route": "PO",
+        "days": "1–4"
+      },
+      {
+        "drug": "Prednisolone",
+        "route": "PO",
+        "role": "supportive_or_regimen_corticosteroid",
+        "days": "1–4"
+      }
+    ]
+  },
+  "input_definitions": {
+    "assessment_phase": {
+      "label": "Assessment context",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "cycle_start",
+          "label": "Start of a new cycle"
+        },
+        {
+          "value": "later_bortezomib_day",
+          "label": "Later bortezomib dosing day"
+        }
+      ],
+      "demo_value": "cycle_start",
+      "section": "Treatment context"
+    },
+    "anc_x10e9_l": {
+      "label": "ANC",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2,
+      "section": "Blood counts",
+      "unit": "×10⁹/L",
+      "max": 20
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 150,
+      "section": "Blood counts",
+      "unit": "×10⁹/L",
+      "max": 1000
+    },
+    "previous_cycle_thrombocytopenia_with_bleeding": {
+      "label": "Previous-cycle thrombocytopenia with bleeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Previous-cycle haematological toxicity"
+    },
+    "previous_cycle_prolonged_grade4_cytopenia": {
+      "label": "Previous cycle prolonged Grade 4 cytopenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Treatment history"
+    },
+    "bortezomib_doses_withheld_this_cycle": {
+      "label": "Bortezomib doses withheld this cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "section": "Treatment history",
+      "unit": "doses",
+      "max": 8
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine-clearance band",
+      "type": "select",
+      "required": false,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "method": "CrCl band as used in the current NCCP regimen source"
+      },
+      "options": [
+        {
+          "value": "gt50",
+          "label": "CrCl >50 mL/min",
+          "decision_value": 51
+        },
+        {
+          "value": "20_50",
+          "label": "CrCl 20–50 mL/min",
+          "decision_value": 30
+        },
+        {
+          "value": "10_19",
+          "label": "CrCl 10–19 mL/min",
+          "decision_value": 15
+        },
+        {
+          "value": "lt10",
+          "label": "CrCl <10 mL/min",
+          "decision_value": 5
+        }
+      ],
+      "demo_value": "gt50",
+      "section": "Renal function"
+    },
+    "haemodialysis": {
+      "label": "Patient receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Renal function"
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 1,
+      "section": "Hepatic function",
+      "unit": "× ULN",
+      "max": 20
+    },
+    "neuropathy_state": {
+      "label": "Bortezomib neuropathy pathway",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No actionable neuropathy"
+        },
+        {
+          "value": "grade1_pain_or_grade2",
+          "label": "Grade 1 with pain or Grade 2"
+        },
+        {
+          "value": "grade2_pain_or_grade3",
+          "label": "Grade 2 with pain or Grade 3"
+        },
+        {
+          "value": "grade4_or_severe_autonomic",
+          "label": "Grade 4 or severe autonomic neuropathy"
+        }
+      ],
+      "demo_value": "none",
+      "section": "Neurological toxicity"
+    },
+    "other_non_haematological_toxicity_grade": {
+      "label": "Other non-haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "section": "Other toxicity",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Identify the exact non-haematological adverse event and apply that event's own CTCAE v5.0 criterion. This general grade selector is a screening aid for the protocol's dose-modification threshold."
+    },
+    "new_or_worsening_pulmonary_symptoms": {
+      "label": "New or worsening pulmonary symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Other toxicity"
+    },
+    "pres_suspected": {
+      "label": "PRES suspected or diagnosed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Other toxicity"
+    },
+    "protocol_exclusion_present": {
+      "label": "Relevant protocol exclusion present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "section": "Protocol exclusions",
+      "help": "Includes relevant hypersensitivity or acute diffuse infiltrative pulmonary/pericardial disease."
+    },
+    "current_melphalan_dose_percent": {
+      "label": "Current melphalan dose level",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 100,
+          "label": "100%"
+        },
+        {
+          "value": 75,
+          "label": "75%"
+        },
+        {
+          "value": 50,
+          "label": "50%"
+        }
+      ],
+      "demo_value": 100,
+      "section": "Treatment context"
+    }
+  },
+  "required_inputs": [],
+  "assessment_profiles": [
+    {
+      "id": "partial_assessment",
+      "label": "Partial or complete protocol assessment",
+      "required_inputs": []
+    }
+  ],
+  "rule_engine": {
+    "conflict_policy": "most_restrictive_action_wins",
+    "missing_data_policy": "report_unassessed_coverage_gap",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "withhold",
+      "delay_then_dose_reduce",
+      "delay",
+      "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "proceed_with_caution",
+      "proceed"
+    ],
+    "rules": [
+      {
+        "rule_id": "275_PROTOCOL_EXCLUSION",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "Whole regimen"
+          ],
+          "recommendation": "Do not initiate under this protocol."
+        },
+        "source": {
+          "page": 2,
+          "section": "Exclusions"
+        },
+        "explanation": "A relevant protocol exclusion is present.",
+        "field": "protocol_exclusion_present",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "275_CYCLE_START_COUNTS",
+        "action": {
+          "type": "delay",
+          "components": [
+            "Whole regimen"
+          ],
+          "recommendation": "Delay the cycle until recovery."
+        },
+        "source": {
+          "page": 3,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "A new cycle requires ANC at least 1.0 ×10⁹/L and platelets at least 70 ×10⁹/L.",
+        "all": [
+          {
+            "field": "assessment_phase",
+            "operator": "==",
+            "value": "cycle_start"
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.0
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 70
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "275_LATER_BORTEZOMIB_DAY_COUNTS",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold bortezomib and reassess."
+        },
+        "source": {
+          "page": 3,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "On a later bortezomib dosing day, ANC at or below 0.75 or platelets at or below 30 ×10⁹/L requires withholding bortezomib.",
+        "all": [
+          {
+            "field": "assessment_phase",
+            "operator": "==",
+            "value": "later_bortezomib_day"
+          },
+          {
+            "any": [
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<=",
+                "value": 0.75
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<=",
+                "value": 30
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "275_MELPHALAN_PREVIOUS_SEVERE_CYTOPENIA",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Melphalan"
+          ],
+          "recommendation": "Consider reducing melphalan by 25%."
+        },
+        "source": {
+          "page": 3,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "The previous-cycle prolonged Grade 4 cytopenia or thrombocytopenia-with-bleeding pathway requires melphalan dose reduction in the next cycle.",
+        "any": [
+          {
+            "field": "previous_cycle_prolonged_grade4_cytopenia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "previous_cycle_thrombocytopenia_with_bleeding",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      {
+        "rule_id": "275_MULTIPLE_BORTEZOMIB_OMISSIONS",
+        "action": {
+          "type": "dose_reduce_one_level",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Reduce by one dose level for subsequent treatment."
+        },
+        "source": {
+          "page": 3,
+          "section": "Haematological toxicity"
+        },
+        "explanation": "If two or more bortezomib doses are withheld during a cycle, reduce bortezomib by one dose level.",
+        "field": "bortezomib_doses_withheld_this_cycle",
+        "operator": ">=",
+        "value": 2
+      },
+      {
+        "rule_id": "275_MELPHALAN_CRCL20_50",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Melphalan"
+          ],
+          "recommendation": "Use 75% of the protocol melphalan dose."
+        },
+        "source": {
+          "page": 4,
+          "section": "Renal impairment"
+        },
+        "explanation": "CrCl 20–50 mL/min requires 75% melphalan dosing.",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 20
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<=",
+            "value": 50
+          }
+        ]
+      },
+      {
+        "rule_id": "275_MELPHALAN_CRCL10_19",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Melphalan"
+          ],
+          "recommendation": "Use 75% of the protocol melphalan dose."
+        },
+        "source": {
+          "page": 4,
+          "section": "Renal impairment"
+        },
+        "explanation": "CrCl 10–19 mL/min requires 75% melphalan dosing.",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 20
+          }
+        ]
+      },
+      {
+        "rule_id": "275_MELPHALAN_CRCL_BELOW10",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Melphalan"
+          ],
+          "recommendation": "Use 50% of the protocol melphalan dose."
+        },
+        "source": {
+          "page": 4,
+          "section": "Renal impairment"
+        },
+        "explanation": "CrCl below 10 mL/min requires 50% melphalan dosing.",
+        "field": "crcl_ml_min",
+        "operator": "<",
+        "value": 10
+      },
+      {
+        "rule_id": "275_BORTEZOMIB_CRCL_BELOW20",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Consultant and pharmacy review are required."
+        },
+        "source": {
+          "page": 4,
+          "section": "Renal impairment"
+        },
+        "explanation": "The bortezomib dose is uncertain in severe non-dialysis renal impairment below CrCl 20 mL/min.",
+        "all": [
+          {
+            "field": "crcl_ml_min",
+            "operator": "<",
+            "value": 20
+          },
+          {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      {
+        "rule_id": "275_HAEMODIALYSIS_TIMING",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Confirm post-dialysis timing."
+        },
+        "source": {
+          "page": 4,
+          "section": "Renal impairment"
+        },
+        "explanation": "Bortezomib should be administered after haemodialysis.",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "275_HEPATIC_BORTEZOMIB",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Start at 0.7 mg/m² and adjust according to tolerance."
+        },
+        "source": {
+          "page": 4,
+          "section": "Hepatic impairment"
+        },
+        "explanation": "Bilirubin above 1.5 × ULN requires the reduced hepatic bortezomib starting-dose pathway.",
+        "field": "bilirubin_ratio_uln",
+        "operator": ">",
+        "value": 1.5
+      },
+      {
+        "rule_id": "275_NEUROPATHY_MODIFY",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Reduce to 1.0 mg/m² or weekly administration."
+        },
+        "source": {
+          "page": 5,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 1 neuropathy with pain or Grade 2 requires dose/schedule modification.",
+        "field": "neuropathy_state",
+        "operator": "==",
+        "value": "grade1_pain_or_grade2"
+      },
+      {
+        "rule_id": "275_NEUROPATHY_WITHHOLD",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold, then restart at 0.7 mg/m² weekly after recovery."
+        },
+        "source": {
+          "page": 5,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 2 with pain or Grade 3 requires withholding and reduced weekly restart after recovery.",
+        "field": "neuropathy_state",
+        "operator": "==",
+        "value": "grade2_pain_or_grade3"
+      },
+      {
+        "rule_id": "275_NEUROPATHY_DISCONTINUE",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Discontinue bortezomib."
+        },
+        "source": {
+          "page": 5,
+          "section": "Peripheral neuropathy"
+        },
+        "explanation": "Grade 4 or severe autonomic neuropathy requires discontinuation.",
+        "field": "neuropathy_state",
+        "operator": "==",
+        "value": "grade4_or_severe_autonomic"
+      },
+      {
+        "rule_id": "275_GRADE3_NONHAEM",
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold until recovery, then use the source reduction pathway."
+        },
+        "source": {
+          "page": 5,
+          "section": "Non-haematological toxicity"
+        },
+        "explanation": "Grade 3 or greater non-haematological toxicity requires withholding and reduced-dose restart.",
+        "field": "other_non_haematological_toxicity_grade",
+        "operator": ">=",
+        "value": 3
+      },
+      {
+        "rule_id": "275_PULMONARY_SYMPTOMS",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Withhold and investigate."
+        },
+        "source": {
+          "page": 5,
+          "section": "Pulmonary toxicity"
+        },
+        "explanation": "New or worsening pulmonary symptoms require withholding and diagnostic evaluation.",
+        "field": "new_or_worsening_pulmonary_symptoms",
+        "operator": "==",
+        "value": true
+      },
+      {
+        "rule_id": "275_PRES",
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "Bortezomib"
+          ],
+          "recommendation": "Discontinue and manage urgently."
+        },
+        "source": {
+          "page": 5,
+          "section": "PRES"
+        },
+        "explanation": "PRES requires discontinuation.",
+        "field": "pres_suspected",
+        "operator": "==",
+        "value": true
+      }
+    ]
+  },
+  "output_templates": {
+    "summary": "SACTCheck haemato-oncology assessment — {{protocol_title}}. Entered domains are assessed; missing domains remain unassessed.",
+    "safety_boundary": "Confirm the current NCCP protocol, prescribing plan, local policy and haematology-pharmacy verification before treatment."
+  },
+  "supportive_care": {
+    "emetogenic_risk": "variable",
+    "local_reconciliation_required": true,
+    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_basis": "Haemato-oncology supportive-care classification requires independent haematology-pharmacy validation; apply the current regimen source and locally approved supportive-care policy.",
+    "mapping_confidence": "pending_specialist_validation",
+    "validation_status": "source_linked_pending_haematology_pharmacy_validation",
+    "breakthrough_profile_id": "nccp-breakthrough-general"
+  },
+  "indications": [
+    {
+      "indication_id": "untreated_transplant_ineligible_multiple_myeloma",
+      "description": "Treatment of adult patients with previously untreated multiple myeloma who are not eligible for high-dose chemotherapy with haematopoietic stem cell transplantation.",
+      "reimbursement_codes": [
+        "00275a"
+      ],
+      "tumour_groups": [
+        "Haemato-Oncology"
+      ]
+    }
+  ]
+}
