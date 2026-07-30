@@ -18,7 +18,7 @@ const rows = Array.isArray(protocolIndex) ? protocolIndex : protocolIndex.protoc
 const enabled = rows.filter(row => row.enabled !== false);
 
 assert.strictEqual(enabled.length, 376, 'The clinician catalogue must expose all 376 canonical protocols');
-assert(index.includes('v0.52.0 · What changed?'), 'Compact release summary is missing');
+assert(index.includes('v0.52.1 · What changed?'), 'Compact release summary is missing');
 assert(index.includes('Search the complete regimen library'), 'Primary regimen search is missing');
 assert(read('js/haemato-oncology.js').includes('Search the haematology library'), 'Haemato-oncology search mode is missing');
 assert(index.includes('id="quickAccessPanel"'), 'Favourite/recent quick access panel is missing');

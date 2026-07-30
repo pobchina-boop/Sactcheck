@@ -63,7 +63,7 @@ assert.strictEqual(Tissue.tissueForGroups(lungGuGroups, gu).id, 'gu', 'GU select
 assert.strictEqual(Tissue.contextualTumourLabel(lungGuGroups, gu), 'Genitourinary · Also: Lung');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('v0.52.0 · What changed?'));
+assert(html.includes('v0.52.1 · What changed?'));
 assert(html.includes('js/tissue-ui.js?v=0.51.0'));
 assert(html.includes('js/drug-aliases.js?v=0.48.4'));
 
