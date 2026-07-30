@@ -1,3 +1,10 @@
+## v0.52.5 — Dose Action Navigation — 30 July 2026
+
+- Fixes the assessment-result dose review control when the protocol has an encoded component dose action but no complete structured schedule.
+- Opens an action-only embedded panel containing the governing component action, trigger, protocol dose outcome and source reference.
+- Uses “Review dose action” when no complete schedule is available and retains “Review dose & schedule” when structured schedule data exist.
+- Makes no changes to clinical protocol JSON files, thresholds or dose calculations.
+
 ## v0.52.4 — Compact Clinical Inputs & Phase Naming — 30 July 2026
 
 - Removed blank-state “Not assessed” labels from input controls.

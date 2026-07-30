@@ -11,9 +11,9 @@ const library = read("js/library-ux.js");
 const assessment = read("js/generic-assessment-ui.js");
 const pkg = JSON.parse(read("package.json"));
 
-assert.strictEqual(pkg.version, "0.52.4");
-assert(index.includes("SACTCheck v0.52.4 — Compact Clinical Inputs &amp; Phase Naming"));
-assert(index.includes("v0.52.4 · What changed?"));
+assert.strictEqual(pkg.version, "0.52.5");
+assert(index.includes("SACTCheck v0.52.5 — Dose Action Navigation"));
+assert(index.includes("v0.52.5 · What changed?"));
 assert(!index.includes("No patient-identifiable information required"));
 assert(!index.includes("No patient identifiable information required"));
 assert(index.includes("Do not enter identifying patient information."));
@@ -28,7 +28,7 @@ assert(assessment.includes('One or more values entered fall outside the protocol
 assert(assessment.includes('title: "Dose modification indicated"'));
 assert(assessment.includes('title: action === "proceed" ? "Treatment criteria met"'));
 assert(!assessment.includes('Encoded treatment criteria not met'));
-assert(index.includes('js/generic-assessment-ui.js?v=0.52.4'));
+assert(index.includes('js/generic-assessment-ui.js?v=0.52.5'));
 assert(index.includes('js/tissue-ui.js?v=0.51.0'));
 assert(index.includes('js/library-ux.js?v=0.51.0'));
 assert(index.includes('js/haemato-oncology.js?v=0.51.0'));

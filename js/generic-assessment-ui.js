@@ -1057,7 +1057,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.52.4"
+      appVersion: "0.52.5"
     });
   }
 
@@ -1295,7 +1295,7 @@
   }
 
   root.SACTCheckAssessmentFieldClassification = Object.freeze({
-    version: "0.52.4",
+    version: "0.52.5",
     laboratoryDomain,
     isEcogDefinition,
     isExplicitNonLaboratoryCriterion,

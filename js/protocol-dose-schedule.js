@@ -13,7 +13,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const VERSION = "0.52.4";
+  const VERSION = "0.52.5";
   let activeProtocol = null;
   let activeModel = null;
   let activeAssessment = null;
@@ -725,9 +725,11 @@
     }
     const affected = modification.rows.map(row => row.component).slice(0, 3).join(", ");
     const extra = modification.rows.length > 3 ? ` and ${modification.rows.length - 3} more` : "";
+    const hasStructuredSchedule = hasData(activeProtocol);
+    const reviewLabel = hasStructuredSchedule ? "Review dose & schedule" : "Review dose action";
     prompt.innerHTML = `
       <div><strong>${escapeHtml(modification.title)}</strong><p>${escapeHtml(affected + extra)}. Review the component-specific protocol action before prescribing.</p></div>
-      <button type="button" class="btn" id="jsonReviewDoseModification">Review dose &amp; schedule</button>`;
+      <button type="button" class="btn" id="jsonReviewDoseModification">${escapeHtml(reviewLabel)}</button>`;
     prompt.classList.remove("hidden");
     document.getElementById("jsonReviewDoseModification")?.addEventListener("click", () => open(activeProtocol));
   }
@@ -737,13 +739,13 @@
     const button = typeof document !== "undefined" ? document.getElementById("jsonDoseScheduleButton") : null;
     if (!panel || !button || !activeModel) return;
 
-    if (!hasData(activeProtocol)) {
-      button.classList.add("hidden");
+    const hasStructuredSchedule = hasData(activeProtocol);
+    const hasAssessmentDoseAction = Boolean(activeModificationModel?.rows?.length);
+    button.classList.toggle("hidden", !hasStructuredSchedule);
+    if (!hasStructuredSchedule && !hasAssessmentDoseAction) {
       panel.classList.add("hidden");
       return;
     }
-
-    button.classList.remove("hidden");
     const phase = activeModel.phases[selectedPhaseIndex] || activeModel.phases[0] || null;
     const days = phase ? allDays(phase) : [];
     if (selectedDay !== "all" && !days.includes(selectedDay)) selectedDay = "all";
@@ -773,6 +775,7 @@
       </div>` : ""}
 
       ${phase?.summary ? `<p class="dose-schedule-summary">${escapeHtml(phase.summary)}</p>` : ""}
+      ${!hasStructuredSchedule && hasAssessmentDoseAction ? `<p class="dose-schedule-summary">A structured regimen schedule is not yet available in SACTCheck for this protocol. The applicable encoded protocol dose action is shown below.</p>` : ""}
       ${renderScheduleTable(phase)}
       ${renderDoseLevels(activeModel)}
       ${renderModificationTable(activeModificationModel)}

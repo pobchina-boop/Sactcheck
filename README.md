@@ -2,21 +2,18 @@
 
 ## Current release
 
-**SACTCheck v0.52.4 — Compact Clinical Inputs & Phase Naming**
+**SACTCheck v0.52.5 — Dose Action Navigation**
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.52.4 tightens the laboratory and organ-function workflow, removes blank-state “Not assessed” labels and presents the active phase first on sequential regimen cards while retaining the integrated dose-modification engine.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.52.5 connects assessment-result dose prompts reliably to the embedded protocol dose workspace, including protocols with an encoded dose action but no complete structured schedule.
 
-### v0.52.4 highlights
+### v0.52.5 highlights
 
-- Groups haematology, renal, hepatic and other regimen-relevant laboratory inputs near the top of the assessment.
-- Keeps CTCAE and clinical toxicity inputs in a separate section.
-- Reuses entered values across the assessment and Dose & Schedule engines.
-- Supports percentage bands, fixed dose levels, explicit replacement doses, hold/delay, omit and discontinuation pathways.
-- Resolves the governing action separately for each component and retains all triggered rules for transparency.
-- Displays protocol-level modified doses without calculating a patient-specific final prescription.
-- Preserves all 381 clinical protocol JSON files unchanged from v0.52.1.
+- Result prompts now open the embedded dose workspace reliably.
+- Protocols with an encoded dose action but no complete structured schedule show an action-only review panel.
+- The prompt label distinguishes “Review dose & schedule” from “Review dose action”.
+- Existing compact laboratory inputs, phase naming and dose calculations are unchanged.
 
-See `RELEASE_NOTES_v0.52.4.md` and `VALIDATION_REPORT_v0.52.4.md`.
+See `RELEASE_NOTES_v0.52.5.md` and `VALIDATION_REPORT_v0.52.5.md`.
 
 ## Safety and governance
 

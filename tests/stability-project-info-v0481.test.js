@@ -11,8 +11,8 @@ const index = read("index.html");
 const loader = read("js/protocol-loader.js");
 const css = read("css/stability-v0481.css");
 
-assert.strictEqual(pkg.version, "0.52.4");
-assert(index.includes("SACTCheck v0.52.4 — Compact Clinical Inputs &amp; Phase Naming"));
+assert.strictEqual(pkg.version, "0.52.5");
+assert(index.includes("SACTCheck v0.52.5 — Dose Action Navigation"));
 assert(index.includes('css/stability-v0481.css?v=0.48.4'));
 assert(index.includes('id="aboutSactcheckTitle"'));
 assert(index.includes("What SACTCheck is, and why it is being developed"));
