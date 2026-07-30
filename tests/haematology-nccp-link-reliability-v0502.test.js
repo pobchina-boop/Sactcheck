@@ -11,8 +11,8 @@ const catalogue = JSON.parse(fs.readFileSync(path.join(root, "protocols", "index
 const rows = Array.isArray(catalogue) ? catalogue : catalogue.protocols;
 const haemRows = rows.filter(row => row.enabled !== false && /protocols\/haemato-oncology\/plasma-cell\//.test(row.path));
 
-assert.strictEqual(pkg.version, "0.50.3");
-assert(index.includes("SACTCheck v0.50.3 — Regimen Card Clarity"));
+assert.strictEqual(pkg.version, "0.51.0");
+assert(index.includes("SACTCheck v0.51.0 — Solid Tumour Reconciliation"));
 assert.strictEqual(haemRows.length, 15, "Expected 15 active Haematology protocols");
 
 for (const row of haemRows) {
@@ -30,4 +30,4 @@ assert(!ui.includes('id="jsonResultOfficialPdf" target="_blank"'));
 assert(ui.includes('id="jsonOfficialPdf" rel="external" referrerpolicy="no-referrer"'));
 assert(ui.includes('id="jsonResultOfficialPdf" rel="external" referrerpolicy="no-referrer"'));
 
-console.log("v0.50.3 Haematology NCCP link reliability tests passed: 15 direct official PDF links, same tab navigation enabled.");
+console.log("v0.51.0 Haematology NCCP link reliability tests passed: 15 direct official PDF links, same tab navigation enabled.");

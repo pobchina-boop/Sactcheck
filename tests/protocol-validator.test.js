@@ -35,7 +35,8 @@ for (const entry of INDEX.protocols) {
     });
     const demoInputs = Object.fromEntries(definitions.map(definition => [definition.id, definition.demo_value]));
     const result = Engine.assess(protocol, demoInputs, { profileId: profile.id });
-    assert.equal(result.complete, true, `${entry.path}/${profile.id} demo assessment should be complete`);
+    assert.deepEqual(result.errors || [], [], `${entry.path}/${profile.id} demo assessment should not return errors`);
+    assert.ok(Array.isArray(result.findings), `${entry.path}/${profile.id} demo assessment should return findings`);
   }
   console.log(`✓ ${entry.path}: validates and generates complete assessment forms`);
 }

@@ -2,21 +2,23 @@
 
 ## Current release
 
-**SACTCheck v0.50.2 — Clinical Copy Refinement**
+**SACTCheck v0.51.0 — Solid Tumour Reconciliation**
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with structured comparisons against NCCP regimen criteria. v0.50.2 implements consultant feedback on readability and removes duplicated Haematology navigation from the Solid Tumour library.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with structured comparisons against NCCP regimen criteria. v0.51.0 establishes a reproducible reconciliation baseline for the 361 indexed Solid Tumour protocols while leaving the 15 Haematology protocol files unchanged.
 
-### v0.50.2 highlights
+### v0.51.0 highlights
 
-- Haematology appears only in the dedicated Haematology portal.
-- Solid Tumour counts, favourites and recent protocols exclude Haematology regimens.
-- The large patient information card has been removed.
-- Generic assessment outputs use shorter clinical wording.
-- No protocol rule, threshold, source link or treatment encoding changed.
-- Complete historical and release specific regression suite passed.
+- Reconciles 361 unique Solid Tumour protocol files within the 376 protocol catalogue.
+- Checks duplicate IDs, NCCP codes, paths, official source URLs and orphan protocol files.
+- Replaces 12 non-specific source-version labels with explicit versions from current official NCCP PDFs.
+- Corrects the official PDF addresses for NCCP 00206 and 00376.
+- Standardises optional single-value assessment across all 361 Solid Tumour protocols.
+- Retains formerly required form fields as visible treatment context while removing mandatory launch blocking.
+- Adds repeatable JSON, CSV and Markdown reconciliation reports.
+- Preserves all encoded clinical rules, treatment structures and Haematology protocol JSON files unchanged.
 
-See `RELEASE_NOTES_v0.50.2.md` and `VALIDATION_REPORT_v0.50.2.md`.
+See `RELEASE_NOTES_v0.51.0.md`, `VALIDATION_REPORT_v0.51.0.md` and `SOLID_TUMOUR_RECONCILIATION_v0.51.0.md`.
 
 ## Safety and governance
 
-SACTCheck is clinical decision support only and is not an autonomous prescribing system. The release is technically encoded and regression-tested, but rule-level clinical content remains pending independent consultant and oncology-pharmacy validation. Always verify decisions against the current official NCCP regimen and local policy.
+SACTCheck is clinical decision support only and is not an autonomous prescribing system. Structural reconciliation and automated regression testing do not constitute independent clinical validation. Always verify decisions against the current official NCCP regimen, local policy and clinical judgement.

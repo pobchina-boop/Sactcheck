@@ -9,13 +9,13 @@ const Attribution = require(path.join(root, "js/toxicity-attribution.js"));
 const Course = require(path.join(root, "js/regimen-course-metadata.js"));
 const catalogue = require(path.join(root, "protocols/index.json"));
 
-assert.strictEqual(pkg.version, "0.50.3");
-assert(index.includes("SACTCheck v0.50.3 — Regimen Card Clarity"));
+assert.strictEqual(pkg.version, "0.51.0");
+assert(index.includes("SACTCheck v0.51.0 — Solid Tumour Reconciliation"));
 assert(index.includes('<strong>376</strong><span>protocols across Solid Tumour and Haematology</span>'));
 assert(!index.includes("361 + 15"));
-assert(index.includes("js/regimen-components.js?v=0.50.3"));
-assert(index.includes("js/toxicity-attribution.js?v=0.50.3"));
-assert(index.includes("css/regimen-components-v0503.css?v=0.50.3"));
+assert(index.includes("js/regimen-components.js?v=0.51.0"));
+assert(index.includes("js/toxicity-attribution.js?v=0.51.0"));
+assert(index.includes("css/regimen-components-v0503.css?v=0.51.0"));
 
 const cybord = require(path.join(root, "protocols/haemato-oncology/plasma-cell/00299-modified-weekly-cybord.json"));
 assert.deepStrictEqual(Components.cardComponents(cybord), ["Bortezomib", "Cyclophosphamide", "Dexamethasone"]);
@@ -54,4 +54,4 @@ const decorated = Attribution.decorate(docetaxel);
 assert.strictEqual(decorated.input_definitions.neuropathy_grade.label, "Peripheral neuropathy grade (Docetaxel)");
 assert.strictEqual(decorated.input_definitions.hypersensitivity_grade.label, "Infusion/hypersensitivity reaction grade");
 
-console.log(`v0.50.3 card clarity tests passed: ${allHaem.length} Haematology cycles standardised, ${attributedFields} toxicity labels attributed across ${attributedProtocols} protocols.`);
+console.log(`v0.51.0 card clarity tests passed: ${allHaem.length} Haematology cycles standardised, ${attributedFields} toxicity labels attributed across ${attributedProtocols} protocols.`);

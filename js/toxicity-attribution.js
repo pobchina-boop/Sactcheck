@@ -12,7 +12,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const VERSION = "0.50.3";
+  const VERSION = "0.51.0";
   const GENERIC_COMPONENTS = new Set([
     "all", "both", "regimen", "whole regimen", "both drugs", "all drugs",
     "all components", "all cytotoxic components", "all active components",

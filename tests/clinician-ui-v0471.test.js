@@ -18,14 +18,14 @@ const rows = Array.isArray(protocolIndex) ? protocolIndex : protocolIndex.protoc
 const enabled = rows.filter(row => row.enabled !== false);
 
 assert.strictEqual(enabled.length, 376, 'The clinician catalogue must expose all 376 canonical protocols');
-assert(index.includes('v0.50.3 · What changed?'), 'Compact release summary is missing');
+assert(index.includes('v0.51.0 · What changed?'), 'Compact release summary is missing');
 assert(index.includes('Search the complete regimen library'), 'Primary regimen search is missing');
 assert(read('js/haemato-oncology.js').includes('Search the haematology library'), 'Haemato-oncology search mode is missing');
 assert(index.includes('id="quickAccessPanel"'), 'Favourite/recent quick access panel is missing');
 assert(index.includes('id="developerTools" hidden'), 'Developer controls must be hidden during normal clinical use');
 assert(index.includes('id="catalogEmptyState"'), 'Empty search result state is missing');
 assert(/css\/ux-v0471\.css\?v=0\.48\.\d+/.test(index), 'Usability stylesheet is not loaded');
-assert(index.includes('js/library-ux.js?v=0.50.3'), 'Library usability module is not loaded');
+assert(index.includes('js/library-ux.js?v=0.51.0'), 'Library usability module is not loaded');
 assert(index.includes('canonical NCCP regimen'), 'Visible catalogue count must use canonical protocol terminology');
 
 assert(loader.includes('legacyTargetCounts'), 'Duplicate legacy-card reconciliation is missing');

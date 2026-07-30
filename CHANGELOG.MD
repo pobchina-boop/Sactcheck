@@ -1,3 +1,12 @@
+## v0.51.0 — Solid Tumour Reconciliation
+
+- Reconciled all 361 indexed solid tumour protocols against the current published NCCP tumour-group catalogue structure.
+- Removed forced launch requirements across the solid tumour library so any entered value can produce a partial assessment and omitted domains remain unassessed.
+- Replaced 12 non-specific `current` source-version labels with explicit NCCP PDF versions and corrected two superseded PDF addresses.
+- Added reproducible duplicate, path, source, version, metadata and single-value audit tooling.
+- Removed the stale unindexed `protocols/protocols/` legacy copy from the release.
+- No treatment thresholds, dose modification conditions or rule recommendations were intentionally changed.
+
 # Changelog
 
 ## v0.50.3 — Regimen Card Clarity
