@@ -35,6 +35,6 @@ for(const d of [...net,...ta].map(x=>x.data)){
  for(const def of candidates){const result=Engine.assess(d,{[def.id]:demo(def)},{profileId});assert(result.findings.length>0,`${d.protocol_id}/${def.id}`);audited++;}
 }
 assert(audited>=50,`single-entry checks ${audited}`);
-const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('v0.52.1 · What changed?'));assert(html.includes('js/tissue-ui.js?v=0.51.0'));assert(html.includes('js/protocol-context.js?v=0.48.4'));
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert(html.includes('v0.52.2 · What changed?'));assert(html.includes('js/tissue-ui.js?v=0.51.0'));assert(html.includes('js/protocol-context.js?v=0.48.4'));
 const tissue=fs.readFileSync(path.join(root,'js/tissue-ui.js'),'utf8');assert(tissue.includes('label: "Neuroendocrine"'));assert(tissue.includes('label: "Tumour Agnostic"'));
 console.log(`v0.47.0 NET/TA tests passed: ${net.length} NET, ${ta.length} tumour-agnostic, ${audited} single-entry checks.`);

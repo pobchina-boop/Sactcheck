@@ -1,3 +1,13 @@
+## v0.52.2 — Integrated Laboratory & Dose Modification — 30 July 2026
+
+- Consolidated regimen-relevant haematology, renal, hepatic and other laboratory inputs near the top of the assessment engine.
+- Separated laboratory inputs from CTCAE/clinical toxicities and other treatment criteria.
+- Linked entered assessment values to the embedded Protocol Dose & Schedule engine.
+- Added component-specific resolution of percentage bands, fixed dose levels, explicit replacement doses, hold/delay, omit, discontinue and contraindication outcomes.
+- Added transparent protocol-dose derivation while stopping short of BSA, weight-based or patient-specific final-dose calculation.
+- Preserved all clinical protocol JSON files unchanged from v0.52.1.
+- Passed the complete security, publishing, historical regression, Pages-build and deployable-site validation pipeline.
+
 ## v0.51.0 — Solid Tumour Reconciliation
 
 - Reconciled all 361 indexed solid tumour protocols against the current published NCCP tumour-group catalogue structure.

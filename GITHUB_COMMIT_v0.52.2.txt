@@ -1,0 +1,30 @@
+Commit summary
+
+Integrate laboratory assessment with component-specific protocol dose modifications (v0.52.2)
+
+Commit description
+
+Introduces SACTCheck v0.52.2 with a consolidated laboratory assessment workflow and an integrated protocol-level dose-modification engine.
+
+Changes include:
+
+- Replaces the narrow Blood thresholds area with a Bloods and organ function section near the top of the opened regimen engine
+- Groups regimen-relevant inputs into Haematology, Renal, Hepatic, Other protocol bloods and Immunotherapy endocrine domains
+- Keeps bilirubin, ALT and AST actual-result entry with automatic ULN calculation
+- Separates CTCAE and other clinical toxicity inputs into a dedicated Clinical toxicities section
+- Separates pregnancy, hypersensitivity, DPD status and other non-laboratory criteria into Other treatment criteria
+- Reuses the same entered laboratory and toxicity values across the assessment and Dose & Schedule engines
+- Adds a clear Protocol dose modification applies prompt when an entered value activates an encoded dose pathway
+- Supports percentage bands, fixed dose levels, explicit replacement doses, absolute reductions, hold/delay, omit, discontinue and contraindication outcomes
+- Resolves the governing action separately for each regimen component unless the encoded rule applies to the whole regimen
+- Retains all simultaneously triggered rules while clearly identifying the most restrictive governing action
+- Calculates the resulting protocol dose in mg/m², mg/kg, mg or AUC where the standard protocol dose is structured
+- Preserves missing inputs as unassessed and never implies that standard dosing is suitable from incomplete data
+
+Focused regression tests verify AC haematological, renal and hepatic dose pathways, simultaneous component-specific actions, FOLFOX oxaliplatin dose-level selection and missing-data behaviour.
+
+This release performs protocol-level dose derivation only. It does not calculate BSA, creatinine clearance, carboplatin dose using the Calvert formula, weight-based final dose, dose banding, vial rounding or a patient-specific final dose. It contains no ONCOassist link.
+
+All 381 clinical protocol JSON files remain byte-for-byte unchanged from v0.52.1. No clinical thresholds, rule conditions or recommendations were changed.
+
+The full security, protocol-publishing, historical regression, Pages-build and deployable-site validation pipeline passed. Independent Consultant Oncology and oncology-pharmacy validation remains required.

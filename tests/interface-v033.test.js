@@ -11,8 +11,8 @@ const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-r
 const protocolIndex = JSON.parse(fs.readFileSync(path.join(root, 'protocols', 'index.json'), 'utf8'));
 const rows = Array.isArray(protocolIndex) ? protocolIndex : protocolIndex.protocols;
 
-assert(ui.includes('id="jsonBloodInputGrid"'), 'Blood threshold grid missing');
-assert(ui.indexOf('id="jsonBloodInputGrid"') < ui.indexOf('id="jsonTreatmentContextSection"'), 'Blood thresholds must appear before treatment context');
+assert(ui.includes('id="jsonHaematologyInputGrid"'), 'Haematology laboratory grid missing');
+assert(ui.indexOf('id="jsonHaematologyInputGrid"') < ui.indexOf('id="jsonTreatmentContextSection"'), 'Laboratory inputs must appear before treatment context');
 assert(ui.includes('BLOOD_FIELD_PRIORITIES'), 'Blood threshold priority logic missing');
 assert(ui.includes('compact-assessment-input'), 'Compact optional input controls missing');
 assert(ui.includes('Not assessed'), 'Compact controls must expose a Not assessed state');

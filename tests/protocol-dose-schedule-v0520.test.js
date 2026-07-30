@@ -10,12 +10,12 @@ const genericUi = fs.readFileSync(path.join(root, 'js/generic-assessment-ui.js')
 const doseSource = fs.readFileSync(path.join(root, 'js/protocol-dose-schedule.js'), 'utf8');
 const doseCss = fs.readFileSync(path.join(root, 'css/protocol-dose-schedule.css'), 'utf8');
 
-assert.strictEqual(pkg.version, '0.52.1');
-assert(html.includes('<title>SACTCheck v0.52.1 — Dose &amp; Schedule Clarity</title>'));
-assert(html.includes('<span class="header-version">v0.52.1</span>'));
-assert(html.includes('css/protocol-dose-schedule.css?v=0.52.1'));
-assert(html.includes('js/protocol-dose-schedule.js?v=0.52.1'));
-assert(html.indexOf('js/protocol-dose-schedule.js?v=0.52.1') < html.indexOf('js/generic-assessment-ui.js?v=0.52.1'));
+assert.strictEqual(pkg.version, '0.52.2');
+assert(html.includes('<title>SACTCheck v0.52.2 — Integrated Laboratory &amp; Dose Modification</title>'));
+assert(html.includes('<span class="header-version">v0.52.2</span>'));
+assert(html.includes('css/protocol-dose-schedule.css?v=0.52.2'));
+assert(html.includes('js/protocol-dose-schedule.js?v=0.52.2'));
+assert(html.indexOf('js/protocol-dose-schedule.js?v=0.52.2') < html.indexOf('js/generic-assessment-ui.js?v=0.52.2'));
 assert(genericUi.includes('id="jsonDoseScheduleButton"'));
 assert(genericUi.includes('id="jsonDoseSchedulePanel"'));
 assert(genericUi.includes('SACTCheckProtocolDoseSchedule?.prepare'));
@@ -27,8 +27,8 @@ context.globalThis = context;
 vm.createContext(context);
 vm.runInContext(doseSource, context);
 assert(context.SACTCheckProtocolDoseSchedule);
-assert.strictEqual(context.SACTCheckProtocolDoseSchedule.version, '0.52.1');
+assert.strictEqual(context.SACTCheckProtocolDoseSchedule.version, '0.52.2');
 assert(!/<input[^>]+type=["']number/i.test(doseSource));
 assert(!/oncoassist/i.test(doseSource));
 
-console.log('v0.52.0 Dose & Schedule integration baseline retained under the v0.52.1 clarity correction.');
+console.log('v0.52.0 Dose & Schedule integration baseline retained under the v0.52.2 integrated engine.');

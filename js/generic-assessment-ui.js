@@ -71,10 +71,35 @@
       <section id="jsonDoseSchedulePanel" class="dose-schedule-panel hidden" aria-live="polite"></section>
 
       <form id="jsonAssessmentForm" novalidate>
-        <section class="blood-threshold-section">
-          <div class="section-heading"><div><h2>Blood thresholds</h2><p class="subtle">Enter any available blood result. These are deliberately placed first for rapid day-ward checks.</p></div><span class="step" id="jsonBloodInputCount">—</span></div>
-          <div id="jsonBloodInputGrid" class="grid blood-input-grid"></div>
-          <p class="subtle" id="jsonNoBloodInputs">This regimen has no encoded blood-count input.</p>
+        <section class="blood-threshold-section laboratory-organ-section">
+          <div class="section-heading"><div><h2>Bloods and organ function</h2><p class="subtle">Enter any available regimen-relevant result once. The same values drive treatment criteria and protocol dose-modification pathways.</p></div><span class="step" id="jsonBloodInputCount">—</span></div>
+          <p class="subtle" id="jsonNoBloodInputs">This regimen has no encoded laboratory or organ-function input.</p>
+
+          <div class="laboratory-domain hidden" id="jsonHaematologyDomain">
+            <div class="laboratory-domain-heading"><h3>Haematology</h3><span id="jsonHaematologyCount">—</span></div>
+            <div id="jsonHaematologyInputGrid" class="grid blood-input-grid"></div>
+          </div>
+
+          <div class="laboratory-domain hidden" id="jsonRenalDomain">
+            <div class="laboratory-domain-heading"><h3>Renal</h3><span id="jsonRenalCount">—</span></div>
+            <div id="jsonRenalInputGrid" class="grid blood-input-grid"></div>
+          </div>
+
+          <div class="laboratory-domain hidden" id="jsonHepaticDomain">
+            <div class="laboratory-domain-heading"><h3>Hepatic</h3><span id="jsonHepaticCount">—</span></div>
+            <div id="jsonHepaticInputGrid" class="grid blood-input-grid"></div>
+          </div>
+
+          <div class="laboratory-domain hidden" id="jsonOtherLaboratoryDomain">
+            <div class="laboratory-domain-heading"><h3>Other protocol bloods</h3><span id="jsonOtherLaboratoryCount">—</span></div>
+            <div id="jsonOtherLaboratoryInputGrid" class="grid blood-input-grid"></div>
+          </div>
+
+          <div class="laboratory-domain immunotherapy-laboratory-domain hidden" id="jsonImmunotherapyBloodSection">
+            <div class="laboratory-domain-heading"><div><h3>Immunotherapy endocrine bloods</h3><p class="subtle">Optional screening or symptom-triggered inputs only.</p></div><span id="jsonImmunotherapyBloodCount">—</span></div>
+            <div id="jsonImmunotherapyBloodGrid" class="grid blood-input-grid"></div>
+          </div>
+
           <details id="jsonLabProfilePanel" class="lab-profile-details hidden">
             <summary>Local laboratory profile · automatic ×ULN calculation</summary>
             <div class="details-body">
@@ -89,14 +114,14 @@
           </details>
         </section>
 
-        <section id="jsonImmunotherapyBloodSection" class="immunotherapy-blood-section hidden">
-          <div class="section-heading"><div><h2>Optional immunotherapy bloods</h2><p class="subtle">Endocrine screening and symptom-triggered results only. These fields never block an assessment.</p></div><span class="step" id="jsonImmunotherapyBloodCount">—</span></div>
-          <div id="jsonImmunotherapyBloodGrid" class="grid blood-input-grid"></div>
+        <section id="jsonToxicitySection">
+          <div class="section-heading"><div><h2>Clinical toxicities</h2><p class="subtle">CTCAE and regimen-specific clinical toxicity grades are kept separate from laboratory results.</p></div><span class="step" id="jsonToxicityCount">—</span></div>
+          <div id="jsonToxicityInputGrid" class="compact-input-list"></div>
         </section>
 
-        <section>
-          <div class="section-heading"><h2>Other clinical inputs</h2><span class="step" id="jsonInputCount">—</span></div>
-          <p class="subtle">All fields are optional. Tap a compact row to assess that domain; omitted domains remain explicitly unassessed.</p>
+        <section id="jsonOtherCriteriaSection">
+          <div class="section-heading"><h2>Other treatment criteria</h2><span class="step" id="jsonInputCount">—</span></div>
+          <p class="subtle">Eligibility, hypersensitivity, pregnancy, infection and other non-laboratory criteria. Omitted fields remain explicitly unassessed.</p>
           <div id="jsonInputGrid" class="compact-input-list"></div>
         </section>
 
@@ -145,6 +170,7 @@
 
         <div class="decision-support-disclaimer compact"><strong>Decision support — not treatment clearance.</strong> <span id="jsonScreenDisclaimer"></span></div>
         <div id="jsonErrors"></div>
+        <div id="jsonDoseModificationPrompt" class="dose-modification-prompt hidden" aria-live="polite"></div>
 
         <div class="result-block priority-findings-block">
           <div class="section-heading"><div><h2>Key protocol comparison</h2><p class="subtle">Entered value, applicable encoded criterion and result.</p></div><span class="step" id="jsonPriorityCount">—</span></div>
@@ -231,12 +257,10 @@
       runAssessment();
     });
 
-    [document.getElementById("jsonBloodInputGrid"), document.getElementById("jsonImmunotherapyBloodGrid"), document.getElementById("jsonTreatmentContextGrid"), document.getElementById("jsonInputGrid")]
-      .filter(Boolean)
-      .forEach(grid => {
-        grid.addEventListener("change", updateConditionalInputs);
-        grid.addEventListener("input", updateConditionalInputs);
-      });
+    document.querySelectorAll(INPUT_GRID_SELECTOR).forEach(grid => {
+      grid.addEventListener("change", updateConditionalInputs);
+      grid.addEventListener("input", updateConditionalInputs);
+    });
 
     ["jsonLabAltUln", "jsonLabAstUln", "jsonLabBilirubinUln"].forEach(id => {
       document.getElementById(id)?.addEventListener("change", saveLabProfile);
@@ -434,14 +458,57 @@
     { pattern: /^(wbc|wbc_x10e9_l|white_cell_count|white_cell_count_x10e9_l)$/, priority: 40 }
   ];
 
+  const INPUT_GRID_SELECTOR = [
+    "#jsonHaematologyInputGrid",
+    "#jsonRenalInputGrid",
+    "#jsonHepaticInputGrid",
+    "#jsonOtherLaboratoryInputGrid",
+    "#jsonImmunotherapyBloodGrid",
+    "#jsonToxicityInputGrid",
+    "#jsonTreatmentContextGrid",
+    "#jsonInputGrid"
+  ].join(", ");
+
+  function inputControlSelector(controlSelector) {
+    return INPUT_GRID_SELECTOR.split(", ").map(selector => `${selector} ${controlSelector}`).join(", ");
+  }
+
   function bloodFieldPriority(definition) {
     const id = String(definition?.id || "").toLowerCase();
     const match = BLOOD_FIELD_PRIORITIES.find(item => item.pattern.test(id));
     return match?.priority ?? null;
   }
 
+  function definitionSearchText(definition) {
+    return `${definition?.id || ""} ${definition?.label || ""} ${definition?.unit || ""}`.toLowerCase();
+  }
+
+  function laboratoryDomain(definition) {
+    if (!definition || isTreatmentContext(definition)) return null;
+    if (isImmunotherapyBlood(definition)) return "immunotherapy";
+    const text = definitionSearchText(definition);
+    if (bloodFieldPriority(definition) !== null || /(anc|neutroph|platelet|haemoglobin|hemoglobin|white cell|wbc|lymphocyte|monocyte)/i.test(text)) return "haematology";
+    if (/(crcl|creatinine clearance|egfr|gfr|creatinine|renal|kidney|dialysis|haemodialysis)/i.test(text)) return "renal";
+    if (LocalLab?.adapterFor(definition) || /(bilirubin|alt|ast|transamin|hepatic|liver|child[ -]?pugh|alkaline phosphatase|alp)/i.test(text)) return "hepatic";
+    if (/(sodium|potassium|magnesium|calcium|phosphate|albumin|glucose|ketone|cortisol|tsh|free t4|acth|ldh|troponin|amylase|lipase|uric acid)/i.test(text)) return "other";
+    return null;
+  }
+
   function isBloodThreshold(definition) {
-    return definition?.ui_section === "blood_thresholds" || bloodFieldPriority(definition) !== null;
+    return laboratoryDomain(definition) !== null;
+  }
+
+  function isCtcaeToxicity(definition) {
+    if (!definition || laboratoryDomain(definition) !== null) return false;
+    if (root.SACTCheckCTCAE?.guide(definition)) return true;
+    const text = definitionSearchText(definition);
+    return Boolean(definition.ctcae_version || definition.ctcae_category || definition.assessment_guidance && /grade|activities of daily living|toxicit/i.test(definition.assessment_guidance) || /(?:toxicity|neuropathy|diarrhoea|diarrhea|mucositis|stomatitis|rash|hand[ -]?foot|pneumonitis|colitis|hepatitis|nephritis|arthralgia|myalgia|fatigue|nausea|vomiting).*grade|grade.*(?:toxicity|neuropathy|diarrhoea|diarrhea|mucositis|stomatitis|rash|hand[ -]?foot)/i.test(text));
+  }
+
+  function laboratorySort(a, b) {
+    const priority = (bloodFieldPriority(a) ?? 999) - (bloodFieldPriority(b) ?? 999);
+    if (priority) return priority;
+    return String(a.label || a.id).localeCompare(String(b.label || b.id));
   }
 
   function applyPreferredIndication() {
@@ -453,31 +520,56 @@
     }
   }
 
+  function setLaboratoryDomain(domain, definitions) {
+    const config = {
+      haematology: ["jsonHaematologyDomain", "jsonHaematologyInputGrid", "jsonHaematologyCount"],
+      renal: ["jsonRenalDomain", "jsonRenalInputGrid", "jsonRenalCount"],
+      hepatic: ["jsonHepaticDomain", "jsonHepaticInputGrid", "jsonHepaticCount"],
+      other: ["jsonOtherLaboratoryDomain", "jsonOtherLaboratoryInputGrid", "jsonOtherLaboratoryCount"],
+      immunotherapy: ["jsonImmunotherapyBloodSection", "jsonImmunotherapyBloodGrid", "jsonImmunotherapyBloodCount"]
+    }[domain];
+    if (!config) return;
+    const [sectionId, gridId, countId] = config;
+    const visible = definitions.filter(definition => definition.visible !== false);
+    document.getElementById(gridId).innerHTML = definitions.map(definition => renderInput(definition, { compact: false, blood: true, immunotherapy: domain === "immunotherapy" })).join("");
+    document.getElementById(sectionId).classList.toggle("hidden", visible.length === 0);
+    document.getElementById(countId).textContent = `${visible.length} field${visible.length === 1 ? "" : "s"}`;
+  }
+
   function renderInputs(rawInputs = {}) {
     if (!activeProtocol) return;
     const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, rawInputs);
     const contextDefinitions = definitions.filter(isTreatmentContext);
-    const immunotherapyDefinitions = definitions.filter(isImmunotherapyBlood);
-    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition) && !isImmunotherapyBlood(definition));
-    const bloodDefinitions = clinicalDefinitions
-      .filter(isBloodThreshold)
-      .sort((a, b) => (bloodFieldPriority(a) ?? 999) - (bloodFieldPriority(b) ?? 999));
-    const additionalDefinitions = clinicalDefinitions.filter(definition => !isBloodThreshold(definition));
+    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition));
+    const laboratoryDefinitions = clinicalDefinitions.filter(definition => laboratoryDomain(definition) !== null);
+    const toxicityDefinitions = clinicalDefinitions.filter(isCtcaeToxicity);
+    const additionalDefinitions = clinicalDefinitions.filter(definition => laboratoryDomain(definition) === null && !isCtcaeToxicity(definition));
 
-    document.getElementById("jsonBloodInputGrid").innerHTML = bloodDefinitions.map(definition => renderInput(definition, { compact: false, blood: true })).join("");
-    document.getElementById("jsonImmunotherapyBloodGrid").innerHTML = immunotherapyDefinitions.map(definition => renderInput(definition, { compact: false, immunotherapy: true })).join("");
+    const grouped = {
+      haematology: laboratoryDefinitions.filter(definition => laboratoryDomain(definition) === "haematology").sort(laboratorySort),
+      renal: laboratoryDefinitions.filter(definition => laboratoryDomain(definition) === "renal").sort(laboratorySort),
+      hepatic: laboratoryDefinitions.filter(definition => laboratoryDomain(definition) === "hepatic").sort(laboratorySort),
+      other: laboratoryDefinitions.filter(definition => laboratoryDomain(definition) === "other").sort(laboratorySort),
+      immunotherapy: laboratoryDefinitions.filter(definition => laboratoryDomain(definition) === "immunotherapy").sort(laboratorySort)
+    };
+
+    Object.entries(grouped).forEach(([domain, items]) => setLaboratoryDomain(domain, items));
+    document.getElementById("jsonToxicityInputGrid").innerHTML = toxicityDefinitions.map(definition => renderInput(definition, { compact: true, toxicity: true })).join("");
     document.getElementById("jsonInputGrid").innerHTML = additionalDefinitions.map(definition => renderInput(definition, { compact: true })).join("");
     document.getElementById("jsonTreatmentContextGrid").innerHTML = contextDefinitions.map(definition => renderInput(definition, { compact: true, context: true })).join("");
     applyPreferredIndication();
 
-    document.getElementById("jsonNoBloodInputs").classList.toggle("hidden", bloodDefinitions.length > 0);
-    document.getElementById("jsonInputGrid").classList.toggle("hidden", additionalDefinitions.length === 0);
-    document.getElementById("jsonTreatmentContextSection").classList.toggle("hidden", contextDefinitions.length === 0);
-    document.getElementById("jsonImmunotherapyBloodSection").classList.toggle("hidden", immunotherapyDefinitions.length === 0);
-    document.getElementById("jsonImmunotherapyBloodCount").textContent = `${immunotherapyDefinitions.length} optional field${immunotherapyDefinitions.length === 1 ? "" : "s"}`;
+    const visibleLabs = laboratoryDefinitions.filter(definition => definition.visible !== false);
+    const visibleToxicities = toxicityDefinitions.filter(definition => definition.visible !== false);
+    const visibleAdditional = additionalDefinitions.filter(definition => definition.visible !== false);
+    document.getElementById("jsonNoBloodInputs").classList.toggle("hidden", visibleLabs.length > 0);
+    document.getElementById("jsonToxicitySection").classList.toggle("hidden", visibleToxicities.length === 0);
+    document.getElementById("jsonOtherCriteriaSection").classList.toggle("hidden", visibleAdditional.length === 0);
+    document.getElementById("jsonTreatmentContextSection").classList.toggle("hidden", contextDefinitions.filter(definition => definition.visible !== false).length === 0);
     document.getElementById("jsonLabProfilePanel").classList.toggle("hidden", !definitions.some(definition => LocalLab?.adapterFor(definition)));
     populateLabProfileControls();
-    document.getElementById("jsonBloodInputCount").textContent = `${bloodDefinitions.filter(definition => definition.visible !== false).length} prioritised field${bloodDefinitions.length === 1 ? "" : "s"}`;
+    document.getElementById("jsonBloodInputCount").textContent = `${visibleLabs.length} relevant field${visibleLabs.length === 1 ? "" : "s"}`;
+    document.getElementById("jsonToxicityCount").textContent = `${visibleToxicities.length} optional field${visibleToxicities.length === 1 ? "" : "s"}`;
     document.getElementById("jsonContextCount").textContent = `${contextDefinitions.filter(definition => definition.visible !== false).length} optional field${contextDefinitions.length === 1 ? "" : "s"}`;
     updateInputCount(additionalDefinitions);
     refreshCompactInputStates(definitions);
@@ -644,7 +736,7 @@
 
   function refreshCompactInputStates(definitions) {
     const byId = new Map((definitions || Engine.getInputDefinitions(activeProtocol, activeProfileId, collectRawInputs(true))).map(definition => [definition.id, definition]));
-    document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonBloodInputGrid [data-lab-target], #jsonImmunotherapyBloodGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field], #jsonInputGrid [data-lab-target]").forEach(control => {
+    document.querySelectorAll(inputControlSelector("[data-field], [data-lab-target]")).forEach(control => {
       updateCompactInputState(control, byId.get(control.dataset.field || control.dataset.labTarget));
     });
     refreshLabPreviews();
@@ -682,8 +774,34 @@
       controls.forEach(control => updateCompactInputState(control, definition));
     });
 
-    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition) && !isImmunotherapyBlood(definition));
-    updateInputCount(clinicalDefinitions.filter(definition => !isBloodThreshold(definition)));
+    const contextDefinitions = definitions.filter(isTreatmentContext);
+    const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition));
+    const laboratoryDefinitions = clinicalDefinitions.filter(definition => laboratoryDomain(definition) !== null);
+    const toxicityDefinitions = clinicalDefinitions.filter(isCtcaeToxicity);
+    const additionalDefinitions = clinicalDefinitions.filter(definition => laboratoryDomain(definition) === null && !isCtcaeToxicity(definition));
+    const groupMap = {
+      haematology: ["jsonHaematologyDomain", "jsonHaematologyCount"],
+      renal: ["jsonRenalDomain", "jsonRenalCount"],
+      hepatic: ["jsonHepaticDomain", "jsonHepaticCount"],
+      other: ["jsonOtherLaboratoryDomain", "jsonOtherLaboratoryCount"],
+      immunotherapy: ["jsonImmunotherapyBloodSection", "jsonImmunotherapyBloodCount"]
+    };
+    Object.entries(groupMap).forEach(([domain, ids]) => {
+      const count = laboratoryDefinitions.filter(definition => laboratoryDomain(definition) === domain && definition.visible !== false).length;
+      document.getElementById(ids[0])?.classList.toggle("hidden", count === 0);
+      const label = document.getElementById(ids[1]);
+      if (label) label.textContent = `${count} field${count === 1 ? "" : "s"}`;
+    });
+    const visibleLabs = laboratoryDefinitions.filter(definition => definition.visible !== false).length;
+    const visibleToxicities = toxicityDefinitions.filter(definition => definition.visible !== false).length;
+    const visibleAdditional = additionalDefinitions.filter(definition => definition.visible !== false).length;
+    document.getElementById("jsonNoBloodInputs")?.classList.toggle("hidden", visibleLabs > 0);
+    document.getElementById("jsonBloodInputCount").textContent = `${visibleLabs} relevant field${visibleLabs === 1 ? "" : "s"}`;
+    document.getElementById("jsonToxicitySection")?.classList.toggle("hidden", visibleToxicities === 0);
+    document.getElementById("jsonToxicityCount").textContent = `${visibleToxicities} optional field${visibleToxicities === 1 ? "" : "s"}`;
+    document.getElementById("jsonOtherCriteriaSection")?.classList.toggle("hidden", visibleAdditional === 0);
+    document.getElementById("jsonTreatmentContextSection")?.classList.toggle("hidden", contextDefinitions.filter(definition => definition.visible !== false).length === 0);
+    updateInputCount(additionalDefinitions);
     refreshLabPreviews();
     hideResult();
   }
@@ -710,7 +828,7 @@
     for (let pass = 0; pass < 3; pass += 1) {
       const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, collectRawInputs(true));
       const byId = new Map(definitions.map(definition => [definition.id, definition]));
-      document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonImmunotherapyBloodGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
+      document.querySelectorAll(inputControlSelector("[data-field]")).forEach(element => {
         const definition = byId.get(element.dataset.field);
         if (!definition || definition.visible === false) return;
         const value = fallbackDemoValue(definition);
@@ -732,7 +850,7 @@
   function collectRawInputs(includeDisabled = false) {
     const inputs = {};
     latestLabCalculations = {};
-    document.querySelectorAll("#jsonBloodInputGrid [data-field], #jsonImmunotherapyBloodGrid [data-field], #jsonTreatmentContextGrid [data-field], #jsonInputGrid [data-field]").forEach(element => {
+    document.querySelectorAll(inputControlSelector("[data-field]")).forEach(element => {
       if (!includeDisabled && element.disabled) return;
       inputs[element.dataset.field] = element.value;
     });
@@ -802,6 +920,7 @@
     if (!activeProtocol) return;
     latestAssessmentId = document.getElementById("jsonAssessmentId").value.trim();
     latestResult = Engine.assess(activeProtocol, collectRawInputs(), { profileId: activeProfileId });
+    root.SACTCheckProtocolDoseSchedule?.updateAssessment?.(latestResult);
     renderResult(latestResult);
   }
 
@@ -848,7 +967,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.48.0"
+      appVersion: "0.52.2"
     });
   }
 
@@ -1040,6 +1159,7 @@
   function hideResult() {
     document.getElementById("jsonResult")?.classList.add("hidden");
     latestResult = null;
+    root.SACTCheckProtocolDoseSchedule?.updateAssessment?.(null);
     resetOutputDocumentation();
   }
 

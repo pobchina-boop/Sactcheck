@@ -10,7 +10,7 @@ const protocolIndex = JSON.parse(read("protocols/index.json"));
 
 assert(pkg.version.localeCompare("0.48.0", undefined, { numeric: true }) >= 0);
 assert.strictEqual(protocolIndex.protocol_count, 376);
-assert(index.includes("SACTCheck v0.52.1 — Dose &amp; Schedule Clarity"));
+assert(index.includes("SACTCheck v0.52.2 — Integrated Laboratory &amp; Dose Modification"));
 assert(index.includes('class="app-header"'));
 assert(index.includes('assets/branding/sactcheck-mark.svg'));
 assert(index.includes('class="study-hero library-only"'));
