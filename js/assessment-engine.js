@@ -129,7 +129,7 @@
   }
 
   function getProtocolTitle(protocol) {
-    return normaliseDisplayText(protocol?.metadata?.short_title || protocol?.metadata?.title || protocol?.file_name || "Unnamed protocol");
+    return normaliseDisplayText(globalThis.SACTCheckRegimenDisplayTitle?.forProtocol?.(protocol) || protocol?.metadata?.short_title || protocol?.metadata?.title || protocol?.file_name || "Unnamed protocol");
   }
 
   function getProtocolCode(protocol) {

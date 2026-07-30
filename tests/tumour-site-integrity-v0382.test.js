@@ -55,7 +55,7 @@ vm.runInContext(fs.readFileSync(path.join(root, 'js', 'tissue-ui.js'), 'utf8'), 
 assert.strictEqual(tissueContext.SACTCheckTissueUI.version, '0.48.0');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(html.includes('v0.52.3 · What changed?'));
+assert(html.includes('v0.52.4 · What changed?'));
 assert(html.includes('js/tissue-ui.js?v=0.51.0'));
 assert(html.includes('js/protocol-loader.js?v=0.51.0'));
 

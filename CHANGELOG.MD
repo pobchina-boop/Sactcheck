@@ -1,3 +1,11 @@
+## v0.52.4 — Compact Clinical Inputs & Phase Naming — 30 July 2026
+
+- Removed blank-state “Not assessed” labels from input controls.
+- Consolidated laboratory and organ-function fields into a responsive compact grid.
+- Reduced CTCAE and repeated optionality clutter in laboratory cards.
+- Added phase-first display titles for nine sequential breast regimens.
+- Preserved all clinical protocol JSON and dose-modification logic unchanged.
+
 ## v0.52.3 — Input Classification & ECOG Guidance — 30 July 2026
 
 - Corrected a substring-matching defect that could classify “Pregnant” and “ECOG performance status” as haematology because both contain the letters “anc”.

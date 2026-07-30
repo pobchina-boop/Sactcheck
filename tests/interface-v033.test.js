@@ -15,7 +15,7 @@ assert(ui.includes('id="jsonHaematologyInputGrid"'), 'Haematology laboratory gri
 assert(ui.indexOf('id="jsonHaematologyInputGrid"') < ui.indexOf('id="jsonTreatmentContextSection"'), 'Laboratory inputs must appear before treatment context');
 assert(ui.includes('BLOOD_FIELD_PRIORITIES'), 'Blood threshold priority logic missing');
 assert(ui.includes('compact-assessment-input'), 'Compact optional input controls missing');
-assert(ui.includes('Not assessed'), 'Compact controls must expose a Not assessed state');
+assert(ui.includes('Blank fields remain unassessed'), 'Input guidance must preserve explicit missing-data safety without using Not assessed as an input default');
 assert(ui.includes('coverage-gap-strip'), 'Unassessed result domains must render as a compact summary strip');
 assert(ui.includes('Partial assessment:'), 'Unassessed result summary must be explicit');
 assert(ui.includes('<form id="jsonAssessmentForm" novalidate>'), 'Form-level browser validation must be disabled');

@@ -2,11 +2,11 @@
 
 ## Current release
 
-**SACTCheck v0.52.3 — Input Classification & ECOG Guidance**
+**SACTCheck v0.52.4 — Compact Clinical Inputs & Phase Naming**
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.52.3 corrects the laboratory-input classifier, keeps performance status and reproductive criteria in the appropriate clinical section, and adds dedicated ECOG functional-status guidance while retaining the integrated dose-modification engine.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.52.4 tightens the laboratory and organ-function workflow, removes blank-state “Not assessed” labels and presents the active phase first on sequential regimen cards while retaining the integrated dose-modification engine.
 
-### v0.52.3 highlights
+### v0.52.4 highlights
 
 - Groups haematology, renal, hepatic and other regimen-relevant laboratory inputs near the top of the assessment.
 - Keeps CTCAE and clinical toxicity inputs in a separate section.
@@ -16,7 +16,7 @@ SACTCheck provides separate Solid Tumour and Haematology SACT libraries with det
 - Displays protocol-level modified doses without calculating a patient-specific final prescription.
 - Preserves all 381 clinical protocol JSON files unchanged from v0.52.1.
 
-See `RELEASE_NOTES_v0.52.3.md` and `VALIDATION_REPORT_v0.52.3.md`.
+See `RELEASE_NOTES_v0.52.4.md` and `VALIDATION_REPORT_v0.52.4.md`.
 
 ## Safety and governance
 

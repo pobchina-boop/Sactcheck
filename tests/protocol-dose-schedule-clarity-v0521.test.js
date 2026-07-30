@@ -15,7 +15,7 @@ vm.runInContext(source, context);
 const DoseSchedule = context.SACTCheckProtocolDoseSchedule;
 
 assert(DoseSchedule);
-assert.strictEqual(DoseSchedule.version, '0.52.3');
+assert.strictEqual(DoseSchedule.version, '0.52.4');
 assert(!source.includes('Protocol dose modification pathways'));
 assert(!source.includes('normaliseModificationRules'));
 assert(!source.includes('modificationRules'));
@@ -68,4 +68,4 @@ const olaparib = require(path.join(root, 'protocols/shared/00588-olaparib-tablet
 const olaparibModel = DoseSchedule.buildModel(olaparib);
 assert.strictEqual(olaparibModel.doseLevels[0].levels[0].dose, '300 mg twice daily');
 
-console.log(`v0.52.1 clarity guarantees retained in v0.52.3: ${usefulCoverage} useful protocols, ${scheduleCoverage} complete schedules and ${doseLevelCoverage} genuine dose-level tables.`);
+console.log(`v0.52.1 clarity guarantees retained in v0.52.4: ${usefulCoverage} useful protocols, ${scheduleCoverage} complete schedules and ${doseLevelCoverage} genuine dose-level tables.`);

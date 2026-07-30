@@ -122,9 +122,10 @@
 
       <form id="jsonAssessmentForm" novalidate>
         <section class="blood-threshold-section laboratory-organ-section">
-          <div class="section-heading"><div><h2>Bloods and organ function</h2><p class="subtle">Enter any available regimen-relevant result once. The same values drive treatment criteria and protocol dose-modification pathways.</p></div><span class="step" id="jsonBloodInputCount">—</span></div>
+          <div class="section-heading"><div><h2>Bloods and organ function</h2><p class="subtle">Enter any available result. Blank fields remain unassessed and the same values drive treatment criteria and protocol dose modifications.</p></div><span class="step" id="jsonBloodInputCount">—</span></div>
           <p class="subtle" id="jsonNoBloodInputs">This regimen has no encoded laboratory or organ-function input.</p>
 
+          <div class="laboratory-domains-grid" id="jsonLaboratoryDomainsGrid">
           <div class="laboratory-domain hidden" id="jsonHaematologyDomain">
             <div class="laboratory-domain-heading"><h3>Haematology</h3><span id="jsonHaematologyCount">—</span></div>
             <div id="jsonHaematologyInputGrid" class="grid blood-input-grid"></div>
@@ -148,6 +149,8 @@
           <div class="laboratory-domain immunotherapy-laboratory-domain hidden" id="jsonImmunotherapyBloodSection">
             <div class="laboratory-domain-heading"><div><h3>Immunotherapy endocrine bloods</h3><p class="subtle">Optional screening or symptom-triggered inputs only.</p></div><span id="jsonImmunotherapyBloodCount">—</span></div>
             <div id="jsonImmunotherapyBloodGrid" class="grid blood-input-grid"></div>
+          </div>
+
           </div>
 
           <details id="jsonLabProfilePanel" class="lab-profile-details hidden">
@@ -519,6 +522,14 @@
     "#jsonInputGrid"
   ].join(", ");
 
+  const LABORATORY_DOMAIN_LABELS = Object.freeze({
+    haematology: "Haematology",
+    renal: "Renal",
+    hepatic: "Hepatic",
+    other: "Other bloods",
+    immunotherapy: "Immunotherapy"
+  });
+
   function inputControlSelector(controlSelector) {
     return INPUT_GRID_SELECTOR.split(", ").map(selector => `${selector} ${controlSelector}`).join(", ");
   }
@@ -581,7 +592,7 @@
     if (!config) return;
     const [sectionId, gridId, countId] = config;
     const visible = definitions.filter(definition => definition.visible !== false);
-    document.getElementById(gridId).innerHTML = definitions.map(definition => renderInput(definition, { compact: false, blood: true, immunotherapy: domain === "immunotherapy" })).join("");
+    document.getElementById(gridId).innerHTML = definitions.map(definition => renderInput(definition, { compact: false, blood: true, domain, domainLabel: LABORATORY_DOMAIN_LABELS[domain], immunotherapy: domain === "immunotherapy" })).join("");
     document.getElementById(sectionId).classList.toggle("hidden", visible.length === 0);
     document.getElementById(countId).textContent = `${visible.length} field${visible.length === 1 ? "" : "s"}`;
   }
@@ -639,13 +650,13 @@
       const settings = LocalLab.read();
       return `<div class="lab-actual-inputs" data-lab-control-group="${escapeHtml(definition.id)}">${labAdapter.analytes.map(analyte => {
         const upper = settings[analyte.setting];
-        return `<div><label for="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}">${escapeHtml(analyte.label)} <span class="subtle">(${escapeHtml(analyte.unit)})</span></label><input id="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}" data-lab-target="${escapeHtml(definition.id)}" data-lab-analyte="${escapeHtml(analyte.id)}" data-type="number" type="number" min="0" step="0.1" placeholder="Not assessed"${disabledAttribute}><span class="hint">Local ULN ${escapeHtml(upper)} ${escapeHtml(analyte.unit)}.</span></div>`;
-      }).join("")}<div class="lab-calculation-preview" data-lab-preview="${escapeHtml(definition.id)}">Enter an actual result; ×ULN is calculated automatically.</div></div>`;
+        return `<div class="lab-value-pair"><label for="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}">${escapeHtml(analyte.label)}</label><div class="lab-inline-control"><input id="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}" data-lab-target="${escapeHtml(definition.id)}" data-lab-analyte="${escapeHtml(analyte.id)}" data-type="number" type="number" min="0" step="0.1" placeholder="Enter value"${disabledAttribute}><span class="lab-inline-unit">${escapeHtml(analyte.unit)}</span></div><span class="hint">ULN ${escapeHtml(upper)} ${escapeHtml(analyte.unit)}</span></div>`;
+      }).join("")}<div class="lab-calculation-preview hidden" data-lab-preview="${escapeHtml(definition.id)}" aria-live="polite"></div></div>`;
     }
     if (definition.type === "boolean") {
       return `
         <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="boolean"${disabledAttribute}>
-          <option value="">Not assessed</option>
+          <option value="">Select…</option>
           <option value="false">No</option>
           <option value="true">Yes</option>
         </select>`;
@@ -653,16 +664,16 @@
     if (definition.type === "select") {
       return `
         <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="select"${disabledAttribute}>
-          <option value="">Not assessed</option>
+          <option value="">Select…</option>
           ${(definition.options || []).map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(isEcogDefinition(definition) ? ecogOptionLabel(option) : (root.SACTCheckCTCAE?.optionLabel(definition, option) || option.label))}</option>`).join("")}
         </select>`;
     }
     if (definition.type === "text") {
-      return `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="text" type="text" placeholder="Not assessed"${disabledAttribute}>`;
+      return `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="text" type="text" placeholder="Enter value"${disabledAttribute}>`;
     }
     const minimum = definition.min !== undefined ? ` min="${escapeHtml(definition.min)}"` : "";
     const maximum = definition.max !== undefined ? ` max="${escapeHtml(definition.max)}"` : "";
-    return `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="number" type="number" placeholder="Not assessed"${minimum}${maximum} step="${escapeHtml(definition.step ?? "any")}"${disabledAttribute}>`;
+    return `<input id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="number" type="number" placeholder="Enter value"${minimum}${maximum} step="${escapeHtml(definition.step ?? "any")}"${disabledAttribute}>`;
   }
 
   function renderGradeRows(grades) {
@@ -670,10 +681,10 @@
       <li><strong>Grade ${escapeHtml(item.grade)}</strong><span>${escapeHtml(item.description)}</span></li>`).join("");
   }
 
-  function renderCtcaeGuide(definition, providedGuide) {
+  function renderCtcaeGuide(definition, providedGuide, options = {}) {
     const guide = providedGuide || root.SACTCheckCTCAE?.guide(definition);
     if (!guide) return "";
-    const openAttribute = /grade|ctcae/i.test(`${definition?.id || ""} ${definition?.label || ""}`) ? " open" : "";
+    const openAttribute = options.defaultOpen ? " open" : "";
     const related = (guide.related || []).map(item => `
       <section class="ctcae-related-term">
         <h4>${escapeHtml(item.version)} · ${escapeHtml(item.term)}</h4>
@@ -691,7 +702,7 @@
       </details>` : "";
     return `
       <details class="ctcae-guide" data-ctcae-guide="${escapeHtml(definition.id)}"${openAttribute}>
-        <summary>${escapeHtml(guide.version)} grading — ${escapeHtml(guide.term)}</summary>
+        <summary>${options.compactSummary ? "CTCAE guide" : `${escapeHtml(guide.version)} grading — ${escapeHtml(guide.term)}`}</summary>
         <div class="ctcae-guide-body">
           <p><strong>How to assess:</strong> ${escapeHtml(guide.guidance)}</p>
           ${guide.note ? `<p class="ctcae-version-note"><strong>Version note:</strong> ${escapeHtml(guide.note)}</p>` : ""}
@@ -703,32 +714,49 @@
       </details>`;
   }
 
+  function normaliseUnitText(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[⁰]/g, "0").replace(/[¹]/g, "1").replace(/[²]/g, "2").replace(/[³]/g, "3")
+      .replace(/[⁴]/g, "4").replace(/[⁵]/g, "5").replace(/[⁶]/g, "6").replace(/[⁷]/g, "7")
+      .replace(/[⁸]/g, "8").replace(/[⁹]/g, "9")
+      .replace(/\^/g, "")
+      .replace(/\s+/g, "")
+      .replace(/[()]/g, "");
+  }
+
+  function displayUnit(definition, displayLabel, labAdapter) {
+    if (labAdapter || !definition?.unit) return "";
+    const labelToken = normaliseUnitText(displayLabel);
+    const unitToken = normaliseUnitText(definition.unit);
+    return unitToken && labelToken.includes(unitToken) ? "" : ` <span class="subtle">(${escapeHtml(definition.unit)})</span>`;
+  }
+
   function renderInput(definition, options = {}) {
     const wrapperClass = definition.visible === false ? "hidden" : "";
     const labAdapter = LocalLab?.adapterFor(definition);
     const control = buildControl(definition);
     const displayLabel = labAdapter ? `${labAdapter.title} · automatic ×ULN` : definition.label;
-    const unit = !labAdapter && definition.unit ? ` <span class="subtle">(${escapeHtml(definition.unit)})</span>` : "";
+    const unit = displayUnit(definition, displayLabel, labAdapter);
     const labelFor = labAdapter ? "" : ` for="jsonInput_${escapeHtml(definition.id)}"`;
     const hints = [];
-    if (definition.help) hints.push(escapeHtml(definition.help));
-    if (labAdapter) hints.push("Enter the actual laboratory result; the configured local ULN is applied automatically to the encoded protocol rule.");
+    if (definition.help && !options.blood) hints.push(escapeHtml(definition.help));
     if (definition.id === "tsh_miu_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("tsh")));
     if (definition.id === "free_t4_pmol_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("free_t4")));
     if (isEcogDefinition(definition)) hints.push("Select the clinician-assessed ECOG functional status. This is not a CTCAE grade.");
-    if (definition.assessment_guidance && !isEcogDefinition(definition) && !root.SACTCheckCTCAE?.guide(definition)) hints.push(escapeHtml(definition.assessment_guidance));
-    hints.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
+    if (definition.assessment_guidance && !options.blood && !isEcogDefinition(definition) && !root.SACTCheckCTCAE?.guide(definition)) hints.push(escapeHtml(definition.assessment_guidance));
+    if (!options.blood) hints.push("Blank fields remain unassessed.");
     const ctcaeDefinitionGuide = isEcogDefinition(definition) ? null : root.SACTCheckCTCAE?.guide(definition);
-    const ctcaeGuide = renderCtcaeGuide(definition, ctcaeDefinitionGuide);
+    const ctcaeGuide = renderCtcaeGuide(definition, ctcaeDefinitionGuide, { defaultOpen: Boolean(options.toxicity), compactSummary: Boolean(options.blood) });
     const ecogGuide = renderEcogGuide(definition);
     const ctcaeCalculated = ctcaeDefinitionGuide?.calculable
-      ? `<div class="ctcae-calculated-grade" data-ctcae-calculated="${escapeHtml(definition.id)}" aria-live="polite">Enter a value to calculate the educational CTCAE grade.</div>`
+      ? `<div class="ctcae-calculated-grade hidden" data-ctcae-calculated="${escapeHtml(definition.id)}" aria-live="polite"></div>`
       : "";
 
     if (options.compact) {
       return `
         <details class="compact-assessment-input ${wrapperClass}" data-input-wrapper="${escapeHtml(definition.id)}">
-          <summary><span>${escapeHtml(displayLabel)}${unit}</span><span class="compact-input-state" data-input-state>Not assessed</span></summary>
+          <summary><span>${escapeHtml(displayLabel)}${unit}</span><span class="compact-input-state hidden" data-input-state></span></summary>
           <div class="compact-input-body">
             ${labAdapter ? "" : `<label class="sr-only" for="jsonInput_${escapeHtml(definition.id)}">${escapeHtml(definition.label)}</label>`}
             ${control}
@@ -741,10 +769,11 @@
     }
 
     return `
-      <div class="blood-input-card ${wrapperClass}" data-input-wrapper="${escapeHtml(definition.id)}">
+      <div class="blood-input-card laboratory-input-card ${wrapperClass}" data-input-wrapper="${escapeHtml(definition.id)}" data-laboratory-domain="${escapeHtml(options.domain || "")}">
+        ${options.domainLabel ? `<span class="laboratory-domain-chip">${escapeHtml(options.domainLabel)}</span>` : ""}
         <label${labelFor}>${escapeHtml(displayLabel)}${unit}</label>
         ${control}
-        <span class="hint" data-input-hint>${hints.join(" ")}</span>
+        ${hints.length ? `<span class="hint" data-input-hint>${hints.join(" ")}</span>` : `<span class="hint hidden" data-input-hint></span>`}
         ${ctcaeCalculated}
         ${ctcaeGuide}
         ${ecogGuide}
@@ -757,11 +786,13 @@
     if (!preview || !definition) return;
     const result = root.SACTCheckCTCAE?.gradeForValue(definition, control.value);
     if (!result) {
-      preview.textContent = "Enter a value to calculate the educational CTCAE grade.";
+      preview.textContent = "";
+      preview.classList.add("hidden");
       preview.classList.remove("assessed", "grade-3", "grade-4");
       return;
     }
     preview.textContent = `${result.label}. ${result.description}`;
+    preview.classList.remove("hidden");
     preview.classList.add("assessed");
     preview.classList.toggle("grade-3", result.grade === 3);
     preview.classList.toggle("grade-4", result.grade === 4);
@@ -775,16 +806,18 @@
     const target = control.dataset.labTarget;
     if (target && LocalLab) {
       const calculation = calculateLabTarget(target);
-      state.textContent = calculation?.decisionDisplay || "Not assessed";
+      state.textContent = calculation?.decisionDisplay || "";
+      state.classList.toggle("hidden", !calculation);
       wrapper.classList.toggle("assessed", Boolean(calculation));
       return;
     }
-    let label = "Not assessed";
+    let label = "";
     if (control.value !== "") {
       if (control.tagName === "SELECT") label = control.options[control.selectedIndex]?.text || control.value;
       else label = `${control.value}${definition?.unit ? ` ${definition.unit}` : ""}`;
     }
     state.textContent = label;
+    state.classList.toggle("hidden", !label);
     wrapper.classList.toggle("assessed", control.value !== "");
   }
 
@@ -817,14 +850,15 @@
       const hint = wrapper.querySelector("[data-input-hint]");
       if (hint) {
         const parts = [];
-        if (definition.help) parts.push(definition.help);
-        if (LocalLab?.adapterFor(definition)) parts.push("Enter the actual laboratory result; the configured local ULN is applied automatically to the encoded protocol rule.");
+        const isLab = laboratoryDomain(definition) !== null;
+        if (definition.help && !isLab) parts.push(definition.help);
         if (definition.id === "tsh_miu_l" && LocalLab) parts.push(LocalLab.referenceText("tsh"));
         if (definition.id === "free_t4_pmol_l" && LocalLab) parts.push(LocalLab.referenceText("free_t4"));
         if (isEcogDefinition(definition)) parts.push("Select the clinician-assessed ECOG functional status. This is not a CTCAE grade.");
-        if (definition.assessment_guidance && !isEcogDefinition(definition) && !root.SACTCheckCTCAE?.guide(definition)) parts.push(definition.assessment_guidance);
-        parts.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
+        if (definition.assessment_guidance && !isLab && !isEcogDefinition(definition) && !root.SACTCheckCTCAE?.guide(definition)) parts.push(definition.assessment_guidance);
+        if (!isLab) parts.push("Blank fields remain unassessed.");
         hint.textContent = parts.join(" ");
+        hint.classList.toggle("hidden", parts.length === 0);
       }
       controls.forEach(control => updateCompactInputState(control, definition));
     });
@@ -932,7 +966,8 @@
   function refreshLabPreviews() {
     document.querySelectorAll("[data-lab-preview]").forEach(preview => {
       const calculation = calculateLabTarget(preview.dataset.labPreview);
-      preview.textContent = calculation?.display || "Enter an actual result; ×ULN is calculated automatically.";
+      preview.textContent = calculation?.display || "";
+      preview.classList.toggle("hidden", !calculation);
       preview.classList.toggle("assessed", Boolean(calculation));
     });
   }
@@ -1022,7 +1057,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.52.3"
+      appVersion: "0.52.4"
     });
   }
 
@@ -1260,7 +1295,7 @@
   }
 
   root.SACTCheckAssessmentFieldClassification = Object.freeze({
-    version: "0.52.3",
+    version: "0.52.4",
     laboratoryDomain,
     isEcogDefinition,
     isExplicitNonLaboratoryCriterion,
