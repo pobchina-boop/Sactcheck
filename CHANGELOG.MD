@@ -1,3 +1,11 @@
+## v0.52.3 — Input Classification & ECOG Guidance — 30 July 2026
+
+- Corrected a substring-matching defect that could classify “Pregnant” and “ECOG performance status” as haematology because both contain the letters “anc”.
+- Moves pregnancy, breastfeeding and ECOG performance status to Other treatment criteria.
+- Adds dedicated ECOG 0–5 functional-status descriptions and removes incorrect CTCAE generic severity descriptions from ECOG options.
+- Adds library-wide regression checks for non-laboratory field classification.
+- Preserves all clinical protocol JSON files and the v0.52.2 integrated dose-modification engine unchanged.
+
 ## v0.52.2 — Integrated Laboratory & Dose Modification — 30 July 2026
 
 - Consolidated regimen-relevant haematology, renal, hepatic and other laboratory inputs near the top of the assessment engine.

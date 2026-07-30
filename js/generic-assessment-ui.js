@@ -30,6 +30,56 @@
       .replaceAll("'", "&#039;");
   }
 
+  const ECOG_LEVELS = Object.freeze({
+    0: "Fully active; no restriction in usual pre-illness activity.",
+    1: "Ambulatory; limited only in strenuous activity and able to do light or sedentary work.",
+    2: "Ambulatory and independent in self-care; unable to work and out of bed or chair for more than half of waking hours.",
+    3: "Capable of limited self-care; in bed or a chair for more than half of waking hours.",
+    4: "Completely disabled; unable to perform self-care and fully confined to bed or a chair.",
+    5: "Death; not an active treatment-assessment state."
+  });
+
+  function isEcogDefinition(definition) {
+    const id = String(definition?.id || "").toLowerCase();
+    const label = String(definition?.label || "").toLowerCase();
+    return /(^|_)ecog($|_)/.test(id) || /\becog\b/.test(label) || /\bperformance status\b/.test(label);
+  }
+
+  function isExplicitNonLaboratoryCriterion(definition) {
+    if (!definition) return false;
+    if (isEcogDefinition(definition)) return true;
+    const text = definitionSearchText(definition);
+    return /\b(?:pregnan(?:t|cy)|breastfeed(?:ing)?|hypersensitiv(?:e|ity)|allerg(?:y|ic)|dpd|brivudine|consent|contraception|fertility)\b/i.test(text);
+  }
+
+  function ecogOptionLabel(option) {
+    const value = Number(option?.value);
+    if (!Number.isInteger(value) || !(value in ECOG_LEVELS)) return String(option?.label ?? option?.value ?? "");
+    const short = {
+      0: "Fully active",
+      1: "Ambulatory; strenuous activity restricted",
+      2: "Self-care independent; unable to work",
+      3: "Limited self-care; bed/chair >50%",
+      4: "Completely disabled; bed/chair bound",
+      5: "Death"
+    }[value];
+    return `${value} — ${short}`;
+  }
+
+  function renderEcogGuide(definition) {
+    if (!isEcogDefinition(definition)) return "";
+    return `
+      <details class="ecog-guide" open>
+        <summary>ECOG performance status guide</summary>
+        <div class="ctcae-guide-body">
+          <p><strong>How to assess:</strong> Select the clinician-assessed functional status. ECOG performance status is not a CTCAE adverse-event grade.</p>
+          <ol class="ctcae-grade-list">${Object.entries(ECOG_LEVELS).map(([level, description]) => `
+            <li><strong>ECOG ${escapeHtml(level)}</strong><span>${escapeHtml(description)}</span></li>`).join("")}</ol>
+          <p class="subtle">Source: ECOG-ACRIN Performance Status Scale. ECOG 5 is shown for completeness and is not an active SACT assessment state.</p>
+        </div>
+      </details>`;
+  }
+
   function ensureScreen() {
     if (document.getElementById("jsonAssessmentScreen")) return;
     const main = document.querySelector("main");
@@ -484,13 +534,13 @@
   }
 
   function laboratoryDomain(definition) {
-    if (!definition || isTreatmentContext(definition)) return null;
+    if (!definition || isTreatmentContext(definition) || isExplicitNonLaboratoryCriterion(definition)) return null;
     if (isImmunotherapyBlood(definition)) return "immunotherapy";
     const text = definitionSearchText(definition);
-    if (bloodFieldPriority(definition) !== null || /(anc|neutroph|platelet|haemoglobin|hemoglobin|white cell|wbc|lymphocyte|monocyte)/i.test(text)) return "haematology";
-    if (/(crcl|creatinine clearance|egfr|gfr|creatinine|renal|kidney|dialysis|haemodialysis)/i.test(text)) return "renal";
-    if (LocalLab?.adapterFor(definition) || /(bilirubin|alt|ast|transamin|hepatic|liver|child[ -]?pugh|alkaline phosphatase|alp)/i.test(text)) return "hepatic";
-    if (/(sodium|potassium|magnesium|calcium|phosphate|albumin|glucose|ketone|cortisol|tsh|free t4|acth|ldh|troponin|amylase|lipase|uric acid)/i.test(text)) return "other";
+    if (bloodFieldPriority(definition) !== null || /\b(?:anc|neutrophils?|platelets?|haemoglobin|hemoglobin|wbc|lymphocytes?|monocytes?)\b|white[ _-]?cell/i.test(text)) return "haematology";
+    if (/\b(?:crcl|egfr|gfr|creatinine|renal|kidney|dialysis|haemodialysis)\b|creatinine clearance/i.test(text)) return "renal";
+    if (LocalLab?.adapterFor(definition) || /\b(?:bilirubin|alt|ast|hepatic|liver|alp)\b|transamin|child[ -]?pugh|alkaline phosphatase/i.test(text)) return "hepatic";
+    if (/\b(?:sodium|potassium|magnesium|calcium|phosphate|albumin|glucose|ketones?|cortisol|tsh|acth|ldh|troponin|amylase|lipase)\b|free t4|uric acid/i.test(text)) return "other";
     return null;
   }
 
@@ -499,7 +549,7 @@
   }
 
   function isCtcaeToxicity(definition) {
-    if (!definition || laboratoryDomain(definition) !== null) return false;
+    if (!definition || isEcogDefinition(definition) || laboratoryDomain(definition) !== null) return false;
     if (root.SACTCheckCTCAE?.guide(definition)) return true;
     const text = definitionSearchText(definition);
     return Boolean(definition.ctcae_version || definition.ctcae_category || definition.assessment_guidance && /grade|activities of daily living|toxicit/i.test(definition.assessment_guidance) || /(?:toxicity|neuropathy|diarrhoea|diarrhea|mucositis|stomatitis|rash|hand[ -]?foot|pneumonitis|colitis|hepatitis|nephritis|arthralgia|myalgia|fatigue|nausea|vomiting).*grade|grade.*(?:toxicity|neuropathy|diarrhoea|diarrhea|mucositis|stomatitis|rash|hand[ -]?foot)/i.test(text));
@@ -604,7 +654,7 @@
       return `
         <select id="jsonInput_${escapeHtml(definition.id)}" data-field="${escapeHtml(definition.id)}" data-type="select"${disabledAttribute}>
           <option value="">Not assessed</option>
-          ${(definition.options || []).map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(root.SACTCheckCTCAE?.optionLabel(definition, option) || option.label)}</option>`).join("")}
+          ${(definition.options || []).map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(isEcogDefinition(definition) ? ecogOptionLabel(option) : (root.SACTCheckCTCAE?.optionLabel(definition, option) || option.label))}</option>`).join("")}
         </select>`;
     }
     if (definition.type === "text") {
@@ -665,10 +715,12 @@
     if (labAdapter) hints.push("Enter the actual laboratory result; the configured local ULN is applied automatically to the encoded protocol rule.");
     if (definition.id === "tsh_miu_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("tsh")));
     if (definition.id === "free_t4_pmol_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("free_t4")));
-    if (definition.assessment_guidance && !root.SACTCheckCTCAE?.guide(definition)) hints.push(escapeHtml(definition.assessment_guidance));
+    if (isEcogDefinition(definition)) hints.push("Select the clinician-assessed ECOG functional status. This is not a CTCAE grade.");
+    if (definition.assessment_guidance && !isEcogDefinition(definition) && !root.SACTCheckCTCAE?.guide(definition)) hints.push(escapeHtml(definition.assessment_guidance));
     hints.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
-    const ctcaeDefinitionGuide = root.SACTCheckCTCAE?.guide(definition);
+    const ctcaeDefinitionGuide = isEcogDefinition(definition) ? null : root.SACTCheckCTCAE?.guide(definition);
     const ctcaeGuide = renderCtcaeGuide(definition, ctcaeDefinitionGuide);
+    const ecogGuide = renderEcogGuide(definition);
     const ctcaeCalculated = ctcaeDefinitionGuide?.calculable
       ? `<div class="ctcae-calculated-grade" data-ctcae-calculated="${escapeHtml(definition.id)}" aria-live="polite">Enter a value to calculate the educational CTCAE grade.</div>`
       : "";
@@ -683,6 +735,7 @@
             <span class="hint" data-input-hint>${hints.join(" ")}</span>
             ${ctcaeCalculated}
             ${ctcaeGuide}
+            ${ecogGuide}
           </div>
         </details>`;
     }
@@ -694,6 +747,7 @@
         <span class="hint" data-input-hint>${hints.join(" ")}</span>
         ${ctcaeCalculated}
         ${ctcaeGuide}
+        ${ecogGuide}
       </div>`;
   }
 
@@ -767,7 +821,8 @@
         if (LocalLab?.adapterFor(definition)) parts.push("Enter the actual laboratory result; the configured local ULN is applied automatically to the encoded protocol rule.");
         if (definition.id === "tsh_miu_l" && LocalLab) parts.push(LocalLab.referenceText("tsh"));
         if (definition.id === "free_t4_pmol_l" && LocalLab) parts.push(LocalLab.referenceText("free_t4"));
-        if (definition.assessment_guidance && !root.SACTCheckCTCAE?.guide(definition)) parts.push(definition.assessment_guidance);
+        if (isEcogDefinition(definition)) parts.push("Select the clinician-assessed ECOG functional status. This is not a CTCAE grade.");
+        if (definition.assessment_guidance && !isEcogDefinition(definition) && !root.SACTCheckCTCAE?.guide(definition)) parts.push(definition.assessment_guidance);
         parts.push("Optional. Leaving this blank will not block assessment and will not be treated as normal.");
         hint.textContent = parts.join(" ");
       }
@@ -967,7 +1022,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.52.2"
+      appVersion: "0.52.3"
     });
   }
 
@@ -1203,6 +1258,15 @@
       .replace(/_/g, " ")
       .replace(/\b\w/g, character => character.toUpperCase());
   }
+
+  root.SACTCheckAssessmentFieldClassification = Object.freeze({
+    version: "0.52.3",
+    laboratoryDomain,
+    isEcogDefinition,
+    isExplicitNonLaboratoryCriterion,
+    ecogOptionLabel,
+    ecogLevels: ECOG_LEVELS
+  });
 
   root.SACTCheckGenericAssessment = Object.freeze({
     version: "0.48.0",

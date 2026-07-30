@@ -514,6 +514,11 @@
     return `${definition?.id || ""} ${definition?.label || ""}`.toLowerCase();
   }
 
+  function isEcogDefinition(definition) {
+    const text = normalise(definition);
+    return /(^|[_\s])ecog(?:$|[_\s])/.test(text) || /\bperformance status\b/.test(text);
+  }
+
   function categoryFor(definition) {
     if (definition?.ctcae_category && SETS[definition.ctcae_category]) return definition.ctcae_category;
     const text = normalise(definition);
@@ -596,6 +601,7 @@
   }
 
   function descriptor(definition, option) {
+    if (isEcogDefinition(definition)) return "";
     if (option?.description) return String(option.description);
     const grade = numericGrade(option?.ctcae_grade ?? option?.value, option?.label);
     if (grade === null) return "";
@@ -605,6 +611,7 @@
 
   function optionLabel(definition, option) {
     const base = option?.label ?? option?.value ?? "";
+    if (isEcogDefinition(definition)) return String(base);
     const description = descriptor(definition, option);
     if (!description || String(base).includes("—")) return String(base);
     return `${base} — ${description}`;
@@ -748,6 +755,7 @@
   }
 
   function guide(definition) {
+    if (isEcogDefinition(definition)) return null;
     const category = categoryFor(definition);
     const hasCtcae = definition?.ctcae_version || /grade|ctcae/i.test(normalise(definition)) || supportsHaematologyGuide(definition, category);
     if (!hasCtcae) return null;

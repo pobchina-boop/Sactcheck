@@ -11,8 +11,8 @@ const catalogue = JSON.parse(fs.readFileSync(path.join(root, "protocols", "index
 const rows = Array.isArray(catalogue) ? catalogue : catalogue.protocols;
 const haemRows = rows.filter(row => row.enabled !== false && /protocols\/haemato-oncology\/plasma-cell\//.test(row.path));
 
-assert.strictEqual(pkg.version, "0.52.2");
-assert(index.includes("SACTCheck v0.52.2 — Integrated Laboratory &amp; Dose Modification"));
+assert.strictEqual(pkg.version, "0.52.3");
+assert(index.includes("SACTCheck v0.52.3 — Input Classification &amp; ECOG Guidance"));
 assert.strictEqual(haemRows.length, 15, "Expected 15 active Haematology protocols");
 
 for (const row of haemRows) {
