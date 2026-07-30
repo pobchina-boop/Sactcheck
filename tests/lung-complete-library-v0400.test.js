@@ -241,7 +241,7 @@ for (const {data} of all) {
 }
 
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert(html.includes('v0.51.0 · What changed?'),'current release badge missing.');
+assert(html.includes('v0.52.0 · What changed?'),'current release badge missing.');
 assert(html.includes('js/protocol-loader.js?v=0.51.0'),'current loader cache key missing.');
 assert(html.includes('js/drug-aliases.js?v=0.48.4'),'current alias cache key missing.');
 

@@ -43,6 +43,7 @@
         <div class="toolbar" style="margin:0">
           <a href="#libraryScreen" class="btn secondary" id="jsonBackLibrary" role="button">← Regimen library</a>
           <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" rel="external" referrerpolicy="no-referrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
+          <button class="btn secondary hidden" type="button" id="jsonDoseScheduleButton"><span aria-hidden="true">📅</span> Dose &amp; Schedule</button>
           <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Supportive medicines</a>
         </div>
         <span class="badge engine-json">JSON engine v${escapeHtml(Engine.version)}</span>
@@ -66,6 +67,8 @@
           <p class="subtle"><strong>Safety design:</strong> enter any clinically relevant value and run the assessment. Independent rules are evaluated immediately; omitted domains remain explicitly unassessed and are never assumed normal. A single normal value cannot clear the whole regimen.</p>
         </div>
       </details>
+
+      <section id="jsonDoseSchedulePanel" class="dose-schedule-panel hidden" aria-live="polite"></section>
 
       <form id="jsonAssessmentForm" novalidate>
         <section class="blood-threshold-section">
@@ -210,6 +213,10 @@
       document.body.classList.remove("json-assessment-open");
       showScreen("libraryScreen");
       history.replaceState(null, "", "#libraryScreen");
+    });
+
+    document.getElementById("jsonDoseScheduleButton")?.addEventListener("click", () => {
+      root.SACTCheckProtocolDoseSchedule?.open?.(activeProtocol);
     });
 
     document.getElementById("jsonProfile").addEventListener("change", event => {
@@ -372,6 +379,8 @@
       supportiveSummary.innerHTML = detailRows.join("");
       supportiveSummary.className = `supportive-care-summary ${risk.className}`;
     }
+
+    root.SACTCheckProtocolDoseSchedule?.prepare?.(protocol);
 
     const officialPdf = document.getElementById("jsonOfficialPdf");
     const resultOfficialPdf = document.getElementById("jsonResultOfficialPdf");

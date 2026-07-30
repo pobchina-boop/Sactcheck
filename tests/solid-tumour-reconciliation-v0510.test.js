@@ -5,7 +5,8 @@ const vm = require('vm');
 const { execFileSync } = require('child_process');
 
 const root = path.resolve(__dirname, '..');
-const RELEASE = '0.51.0';
+const APP_RELEASE = '0.52.0';
+const RECONCILIATION_RELEASE = '0.51.0';
 const CHECK_DATE = '2026-07-29';
 const HSE_HOSTS = new Set(['healthservice.hse.ie', 'assets.hse.ie', 'www.hse.ie']);
 
@@ -74,10 +75,10 @@ const pkg = readJson('package.json');
 const catalogue = readJson('protocols/index.json');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
-assert.equal(pkg.version, RELEASE, 'package.json version is not v0.51.0.');
-assert(html.includes('<title>SACTCheck v0.51.0 — Solid Tumour Reconciliation</title>'), 'Current release title is missing.');
-assert(html.includes('<span class="header-version">v0.51.0</span>'), 'Current header version is missing.');
-assert(html.includes('v0.51.0 · What changed?'), 'Current release summary is missing.');
+assert.equal(pkg.version, APP_RELEASE, 'package.json version is not v0.52.0.');
+assert(html.includes('<title>SACTCheck v0.52.0 — Protocol Dose &amp; Schedule</title>'), 'Current release title is missing.');
+assert(html.includes('<span class="header-version">v0.52.0</span>'), 'Current header version is missing.');
+assert(html.includes('v0.52.0 · What changed?'), 'Current release summary is missing.');
 assert(html.includes('js/protocol-loader.js?v=0.51.0'), 'Protocol-loader cache key is stale.');
 assert.equal(catalogue.protocols.length, 376, 'Expected 376 indexed protocols.');
 assert.equal(catalogue.protocol_count, 376, 'Catalogue protocol_count is not 376.');
@@ -123,7 +124,7 @@ for (const { entry, protocol } of solid) {
   }
   assert.equal(metadata.partial_assessment_supported, true, `${protocolCode}: partial-assessment flag is missing.`);
   assert(/entered value is assessed independently/i.test(metadata.partial_assessment_policy || ''), `${protocolCode}: partial-assessment policy is missing.`);
-  assert.equal(metadata.catalogue_reconciliation?.release, RELEASE, `${protocolCode}: reconciliation release metadata is missing.`);
+  assert.equal(metadata.catalogue_reconciliation?.release, RECONCILIATION_RELEASE, `${protocolCode}: reconciliation release metadata is missing.`);
   assert.equal(metadata.catalogue_reconciliation?.checked_date, CHECK_DATE, `${protocolCode}: reconciliation date metadata is missing.`);
   assert.equal(metadata.catalogue_reconciliation?.clinical_use_authorised, false, `${protocolCode}: reconciliation must not authorise clinical use.`);
   assert.notEqual(metadata.validation?.clinical_use_authorised, true, `${protocolCode}: protocol is incorrectly marked authorised.`);
