@@ -11,11 +11,11 @@ const doseCss = fs.readFileSync(path.join(root, 'css/protocol-dose-schedule.css'
 const Dose = require(path.join(root, 'js/protocol-dose-schedule.js'));
 const Engine = require(path.join(root, 'js/assessment-engine.js'));
 
-assert.strictEqual(pkg.version, '0.52.5');
-assert.strictEqual(Dose.version, '0.52.5');
-assert(html.includes('SACTCheck v0.52.5 — Dose Action Navigation'));
-assert(html.includes('js/protocol-dose-schedule.js?v=0.52.5'));
-assert(html.includes('js/generic-assessment-ui.js?v=0.52.5'));
+assert.strictEqual(pkg.version, '0.53.0');
+assert.strictEqual(Dose.version, '0.53.0');
+assert(html.includes('SACTCheck v0.53.0 — Immunotherapy Visual Safety'));
+assert(html.includes('js/protocol-dose-schedule.js?v=0.53.0'));
+assert(html.includes('js/generic-assessment-ui.js?v=0.53.0'));
 
 // Laboratory and clinical-toxicity separation.
 [
@@ -27,7 +27,7 @@ assert(html.includes('js/generic-assessment-ui.js?v=0.52.5'));
   'Clinical toxicities',
   'Other treatment criteria',
   'jsonDoseModificationPrompt'
-].forEach(text => assert(uiSource.includes(text), `Missing v0.52.5 interface marker: ${text}`));
+].forEach(text => assert(uiSource.includes(text), `Missing v0.53.0 interface marker: ${text}`));
 assert(uiSource.includes('laboratoryDomain(definition)'));
 assert(uiSource.includes('isCtcaeToxicity(definition)'));
 assert(uiSource.includes('SACTCheckProtocolDoseSchedule?.updateAssessment'));
@@ -84,4 +84,4 @@ result = Engine.assess(ac, {}, {});
 modification = Dose.buildModificationModel(ac, result, acModel);
 assert.strictEqual(modification.rows.length, 0, 'Blank values must not imply a dose modification or standard-dose suitability.');
 
-console.log('v0.52.5 integrated laboratory and protocol dose-modification tests passed.');
+console.log('v0.53.0 integrated laboratory and protocol dose-modification tests passed.');

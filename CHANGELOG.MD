@@ -1,3 +1,12 @@
+## v0.53.0 — Immunotherapy Visual Safety — 31 July 2026
+
+- Adds an original organ-system immune-toxicity map inside supported ICI regimen assessment engines.
+- Links nine visual domains to existing symptoms, laboratory inputs and deterministic assessment findings.
+- Adds transparent No data, Data entered, Review/withhold and Urgent/stop tile states.
+- Adds direct NCCP, ESMO, SITC and agent-specific EMA source links.
+- Adds repeatable audit and regression coverage for 49 ICI protocols.
+- Makes no changes to clinical protocol JSON files, NCCP thresholds, assessment rules or dose calculations.
+
 ## v0.52.5 — Dose Action Navigation — 30 July 2026
 
 - Fixes the assessment-result dose review control when the protocol has an encoded component dose action but no complete structured schedule.

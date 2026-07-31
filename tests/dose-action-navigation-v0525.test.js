@@ -9,10 +9,10 @@ const source = fs.readFileSync(path.join(root, 'js/protocol-dose-schedule.js'), 
 const Dose = require(path.join(root, 'js/protocol-dose-schedule.js'));
 const Engine = require(path.join(root, 'js/assessment-engine.js'));
 
-assert.strictEqual(pkg.version, '0.52.5');
-assert.strictEqual(Dose.version, '0.52.5');
-assert(html.includes('SACTCheck v0.52.5 — Dose Action Navigation'));
-assert(html.includes('js/protocol-dose-schedule.js?v=0.52.5'));
+assert.strictEqual(pkg.version, '0.53.0');
+assert.strictEqual(Dose.version, '0.53.0');
+assert(html.includes('SACTCheck v0.53.0 — Immunotherapy Visual Safety'));
+assert(html.includes('js/protocol-dose-schedule.js?v=0.53.0'));
 assert(source.includes('const hasAssessmentDoseAction = Boolean(activeModificationModel?.rows?.length);'));
 assert(source.includes('Review dose action'));
 assert(source.includes('A structured regimen schedule is not yet available in SACTCheck for this protocol.'));
@@ -71,4 +71,4 @@ assert(panel.innerHTML.includes('A structured regimen schedule is not yet availa
 assert.strictEqual(headerButton.classList.contains('hidden'), true, 'Header schedule button should remain hidden without actual schedule data.');
 
 delete global.document;
-console.log('v0.52.5 dose-action prompt navigation tests passed.');
+console.log('v0.53.0 dose-action prompt navigation tests passed.');

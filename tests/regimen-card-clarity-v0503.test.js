@@ -9,8 +9,8 @@ const Attribution = require(path.join(root, "js/toxicity-attribution.js"));
 const Course = require(path.join(root, "js/regimen-course-metadata.js"));
 const catalogue = require(path.join(root, "protocols/index.json"));
 
-assert.strictEqual(pkg.version, "0.52.5");
-assert(index.includes("SACTCheck v0.52.5 — Dose Action Navigation"));
+assert.strictEqual(pkg.version, "0.53.0");
+assert(index.includes("SACTCheck v0.53.0 — Immunotherapy Visual Safety"));
 assert(index.includes('<strong>376</strong><span>protocols across Solid Tumour and Haematology</span>'));
 assert(!index.includes("361 + 15"));
 assert(index.includes("js/regimen-components.js?v=0.51.0"));

@@ -12,7 +12,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const VERSION = "0.52.5";
+  const VERSION = "0.53.0";
   const PHASE_FIRST_TITLES = Object.freeze({
     "00260": "Weekly paclitaxel (post AC)",
     "00278": "Paclitaxel q14d (post dose-dense AC)",

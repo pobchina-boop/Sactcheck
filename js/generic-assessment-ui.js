@@ -94,6 +94,7 @@
           <a href="#libraryScreen" class="btn secondary" id="jsonBackLibrary" role="button">← Regimen library</a>
           <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" rel="external" referrerpolicy="no-referrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
           <button class="btn secondary hidden" type="button" id="jsonDoseScheduleButton"><span aria-hidden="true">📅</span> Dose &amp; Schedule</button>
+          <button class="btn secondary hidden" type="button" id="jsonImmuneSafetyButton"><span aria-hidden="true">◉</span> Immune safety</button>
           <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Supportive medicines</a>
         </div>
         <span class="badge engine-json">JSON engine v${escapeHtml(Engine.version)}</span>
@@ -117,6 +118,8 @@
           <p class="subtle"><strong>Safety design:</strong> enter any clinically relevant value and run the assessment. Independent rules are evaluated immediately; omitted domains remain explicitly unassessed and are never assumed normal. A single normal value cannot clear the whole regimen.</p>
         </div>
       </details>
+
+      <section id="jsonImmuneSafetyPanel" class="immune-safety-panel hidden" aria-live="polite"></section>
 
       <section id="jsonDoseSchedulePanel" class="dose-schedule-panel hidden" aria-live="polite"></section>
 
@@ -296,6 +299,10 @@
 
     document.getElementById("jsonDoseScheduleButton")?.addEventListener("click", () => {
       root.SACTCheckProtocolDoseSchedule?.open?.(activeProtocol);
+    });
+
+    document.getElementById("jsonImmuneSafetyButton")?.addEventListener("click", () => {
+      root.SACTCheckImmunotherapySafety?.open?.(activeProtocol);
     });
 
     document.getElementById("jsonProfile").addEventListener("change", event => {
@@ -634,6 +641,7 @@
     document.getElementById("jsonContextCount").textContent = `${contextDefinitions.filter(definition => definition.visible !== false).length} optional field${contextDefinitions.length === 1 ? "" : "s"}`;
     updateInputCount(additionalDefinitions);
     refreshCompactInputStates(definitions);
+    root.SACTCheckImmunotherapySafety?.prepare?.(activeProtocol, definitions, collectRawInputs(true));
   }
 
   function updateInputCount(definitions) {
@@ -892,6 +900,7 @@
     document.getElementById("jsonTreatmentContextSection")?.classList.toggle("hidden", contextDefinitions.filter(definition => definition.visible !== false).length === 0);
     updateInputCount(additionalDefinitions);
     refreshLabPreviews();
+    root.SACTCheckImmunotherapySafety?.updateInputs?.(activeProtocol, definitions, rawInputs);
     hideResult();
   }
 
@@ -1009,8 +1018,10 @@
   function runAssessment() {
     if (!activeProtocol) return;
     latestAssessmentId = document.getElementById("jsonAssessmentId").value.trim();
-    latestResult = Engine.assess(activeProtocol, collectRawInputs(), { profileId: activeProfileId });
+    const rawInputs = collectRawInputs();
+    latestResult = Engine.assess(activeProtocol, rawInputs, { profileId: activeProfileId });
     root.SACTCheckProtocolDoseSchedule?.updateAssessment?.(latestResult);
+    root.SACTCheckImmunotherapySafety?.updateAssessment?.(latestResult, rawInputs);
     renderResult(latestResult);
   }
 
@@ -1057,7 +1068,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.52.5"
+      appVersion: "0.53.0"
     });
   }
 
@@ -1250,6 +1261,7 @@
     document.getElementById("jsonResult")?.classList.add("hidden");
     latestResult = null;
     root.SACTCheckProtocolDoseSchedule?.updateAssessment?.(null);
+    root.SACTCheckImmunotherapySafety?.updateAssessment?.(null, collectRawInputs(true));
     resetOutputDocumentation();
   }
 
@@ -1295,7 +1307,7 @@
   }
 
   root.SACTCheckAssessmentFieldClassification = Object.freeze({
-    version: "0.52.5",
+    version: "0.53.0",
     laboratoryDomain,
     isEcogDefinition,
     isExplicitNonLaboratoryCriterion,

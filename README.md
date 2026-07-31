@@ -2,18 +2,19 @@
 
 ## Current release
 
-**SACTCheck v0.52.5 — Dose Action Navigation**
+**SACTCheck v0.53.0 — Immunotherapy Visual Safety**
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.52.5 connects assessment-result dose prompts reliably to the embedded protocol dose workspace, including protocols with an encoded dose action but no complete structured schedule.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.53.0 adds an original organ-system visual safety panel to supported immune-checkpoint inhibitor regimens and links the visual map to existing symptoms, laboratory inputs and encoded assessment findings.
 
-### v0.52.5 highlights
+### v0.53.0 highlights
 
-- Result prompts now open the embedded dose workspace reliably.
-- Protocols with an encoded dose action but no complete structured schedule show an action-only review panel.
-- The prompt label distinguishes “Review dose & schedule” from “Review dose action”.
-- Existing compact laboratory inputs, phase naming and dose calculations are unchanged.
+- Adds an in-engine **Immune safety** control for 49 supported ICI protocols.
+- Organises immune-mediated toxicity monitoring into nine visual organ-system domains.
+- Reuses existing entered values and deterministic assessment findings; no new management rules are introduced.
+- Links to the current NCCP regimen, ESMO and SITC guidance, and relevant EMA product information.
+- Preserves all clinical protocol JSON files unchanged from v0.52.5.
 
-See `RELEASE_NOTES_v0.52.5.md` and `VALIDATION_REPORT_v0.52.5.md`.
+See `RELEASE_NOTES_v0.53.0.md`, `VALIDATION_REPORT_v0.53.0.md` and `IMMUNOTHERAPY_SAFETY_SOURCE_REGISTER_v0.53.0.md`.
 
 ## Safety and governance
 
