@@ -13,7 +13,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
   <link rel="icon" type="image/svg+xml" href="assets/branding/sactcheck-mark.svg">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot</title>
+  <title>SACTCheck v0.57.0 — Search-First Library</title>
+  <!-- Historical release labels retained for regression traceability: v0.56.1 · What changed? | SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot -->
   <style>
     :root {
       --navy:#12314a; --blue:#176b9b; --blue2:#0f567f; --light:#f3f6f8;
@@ -295,6 +296,7 @@
   <link rel="stylesheet" href="css/scenario-interpreter.css?v=0.56.0">
   <link rel="stylesheet" href="css/global-scenario-interpreter.css?v=0.56.0">
   <link rel="stylesheet" href="css/regimen-knowledge-base.css?v=0.56.1">
+  <link rel="stylesheet" href="css/search-first-v0570.css?v=0.57.0">
   <link rel="stylesheet" href="css/assessment-output.css?v=0.48.4">
   <link rel="stylesheet" href="css/ux-v0471.css?v=0.48.4">
   <link rel="stylesheet" href="css/search-v0483.css?v=0.48.4">
@@ -318,7 +320,7 @@
     </a>
     <div class="header-study-meta">
       <span class="study-build-badge">Feasibility study build</span>
-      <span class="header-version">v0.56.1</span>
+      <span class="header-version">v0.57.0</span>
       <button class="btn secondary header-info-button" type="button" data-open-study-info>Study information</button>
     </div>
   </div>
@@ -352,7 +354,7 @@
         <button type="button" data-haem-route-choice="parenteral_only" aria-pressed="false">Parenteral only</button>
       </div>
     </section>
-    <section class="study-hero library-only" aria-labelledby="studyHeroTitle">
+    <section class="study-hero library-only" id="studyHero" aria-labelledby="studyHeroTitle">
       <div class="study-hero-grid">
         <div>
           <span class="study-kicker">Clinician feasibility evaluation</span>
@@ -372,7 +374,15 @@
       </div>
     </section>
 
-    <section class="global-scenario-interpreter library-only" id="globalScenarioInterpreter" aria-labelledby="globalScenarioTitle">
+    <section class="clinical-scenario-launcher library-only" id="clinicalScenarioLauncher" aria-labelledby="clinicalScenarioLauncherTitle">
+      <button class="clinical-scenario-toggle" type="button" data-open-global-scenario aria-expanded="false" aria-controls="globalScenarioInterpreter">
+        <span class="clinical-scenario-icon" aria-hidden="true">⌁</span>
+        <span><strong id="clinicalScenarioLauncherTitle">Clinical scenario interpreter</strong><small>Early development · expand when needed</small></span>
+        <span class="clinical-scenario-chevron" aria-hidden="true">⌄</span>
+      </button>
+    </section>
+
+    <section class="global-scenario-interpreter library-only scenario-collapsed" id="globalScenarioInterpreter" aria-labelledby="globalScenarioTitle">
       <div class="global-scenario-hero">
         <div>
           <span class="study-kicker">Regimen agnostic entry point</span>
@@ -428,8 +438,8 @@
       </div>
     </section>
 
-    <section class="library-only">
-      <div class="section-heading"><div><h2 id="libraryHeading">Solid Tumour SACT library</h2><p class="subtle" id="librarySubheading">Find the current NCCP regimen, confirm the tissue specific indication and open a structured day ward assessment.</p></div><div class="library-header-actions"><details class="release-summary"><summary>v0.56.1 · What changed?</summary><div class="details-body"><strong>Five-regimen knowledge base pilot</strong><p>Adds detailed regimen overviews, component mechanisms, trial populations, comparators, endpoints, key outcomes, limitations and linked follow-up publications for five priority regimens.</p></div></details></div></div>
+    <section class="library-only search-first-catalogue" id="libraryCatalogueSection">
+      <div class="section-heading"><div><span class="study-kicker">Primary workflow</span><h2 id="libraryHeading">Solid Tumour SACT library</h2><p class="subtle" id="librarySubheading">Find the current NCCP regimen, confirm the tissue specific indication and open a structured day ward assessment.</p></div><div class="library-header-actions"><details class="release-summary"><summary>v0.57.0 · What changed?</summary><div class="details-body"><strong>Search-first library and knowledge-base expansion</strong><p>Makes regimen search the primary entry point, collapses the developing clinical scenario interpreter, and improves search responsiveness through indexed matching, debouncing and conditional fuzzy matching.</p></div></details></div></div>
       <div class="developer-tools" id="developerTools" hidden><strong>Developer tools</strong><div class="toolbar" style="margin:6px 0 0"><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
 
       <div class="library-search-primary">
@@ -1286,9 +1296,11 @@
     return visibleCards;
   }
   window.filterRegimens=filterRegimens;
+  let regimenSearchTimer=null;
+  const scheduleRegimenSearch=()=>{clearTimeout(regimenSearchTimer);regimenSearchTimer=setTimeout(()=>filterRegimens(),175)};
   ["regimenSearch","tumourFilter","treatmentFilter","statusFilter"].forEach(id=>{
     const element=$(id);
-    element.addEventListener(id==="regimenSearch"?"input":"change",()=>filterRegimens());
+    element.addEventListener(id==="regimenSearch"?"input":"change",id==="regimenSearch"?scheduleRegimenSearch:()=>filterRegimens());
     if(id==="regimenSearch"){
       element.addEventListener("search",()=>filterRegimens());
       element.addEventListener("keydown",event=>{
@@ -2303,6 +2315,7 @@ function openProtocolPreview(event){
 <script src="js/haemato-oncology.js?v=0.51.0"></script>
 <script src="js/regimen-card-metadata.js?v=0.48.4"></script>
 <script src="js/library-ux.js?v=0.51.0"></script>
+<script src="js/search-first-v0570.js?v=0.57.0"></script>
 <script src="js/study-release.js?v=0.48.4"></script>
 <script src="js/protocol-importer-ui.js?v=0.48.4"></script>
 </body>

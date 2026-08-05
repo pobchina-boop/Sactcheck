@@ -123,6 +123,8 @@
     return card?.querySelector?.(selector)?.textContent?.trim() || "";
   }
 
+  const documentCache = typeof WeakMap !== "undefined" ? new WeakMap() : null;
+
   function buildDocument(cardOrText) {
     if (typeof cardOrText === "string") {
       const text = String(cardOrText || "");
@@ -143,16 +145,14 @@
       };
     }
 
+    if (documentCache && cardOrText && typeof cardOrText === "object" && documentCache.has(cardOrText)) return documentCache.get(cardOrText);
     const dataName = cardOrText?.dataset?.name || "";
     const title = textFrom(cardOrText, "h2");
     const code = textFrom(cardOrText, ".regimen-code") || (cardOrText?.textContent || "").match(/NCCP\s*\d+/i)?.[0] || "";
     const text = cardOrText?.textContent || "";
     const combined = `${title} ${dataName} ${code} ${text}`;
-    return {
-      title,
-      dataName,
-      code,
-      text,
+    const document = {
+      title, dataName, code, text,
       titleRawNorm: basicNormalise(title),
       dataRawNorm: basicNormalise(dataName),
       titleNorm: normalise(title),
@@ -163,6 +163,9 @@
       allCompact: compact(combined),
       codes: extractNccpCodes(combined)
     };
+    document.words = document.allNorm.split(" ").filter(Boolean);
+    if (documentCache && cardOrText && typeof cardOrText === "object") documentCache.set(cardOrText, document);
+    return document;
   }
 
   function buildHaystack(cardOrText) {
@@ -212,7 +215,7 @@
     return best;
   }
 
-  function scoreDocument(document, query) {
+  function scoreDocument(document, query, options = {}) {
     const rawQuery = String(query || "").trim();
     if (!rawQuery) return { score: 1, reason: "All regimens", fuzzy: false };
 
@@ -267,7 +270,7 @@
       score += 55;
     }
 
-    const words = document.allNorm.split(" ").filter(Boolean);
+    const words = document.words || document.allNorm.split(" ").filter(Boolean);
     for (const token of tokens) {
       if (document.titleNorm.split(" ").includes(token)) {
         score += 38;
@@ -293,7 +296,7 @@
         score += 12;
         continue;
       }
-      const approximate = fuzzyTokenMatch(token, words);
+      const approximate = options.allowFuzzy === false ? null : fuzzyTokenMatch(token, words);
       if (approximate) {
         score += Math.max(4, 10 - approximate.distance * 3);
         fuzzy = true;
@@ -325,10 +328,14 @@
   }
 
   function rankCards(cards, query) {
-    return [...(cards || [])]
-      .map((card, originalIndex) => ({ ...scoreCard(card, query), originalIndex }))
-      .filter(result => result.score > 0)
-      .sort((a, b) => b.score - a.score || a.originalIndex - b.originalIndex || buildDocument(a.card).title.localeCompare(buildDocument(b.card).title));
+    const source = [...(cards || [])];
+    const direct = source
+      .map((card, originalIndex) => ({ card, ...scoreDocument(buildDocument(card), query, { allowFuzzy: false }), originalIndex }))
+      .filter(result => result.score > 0);
+    const ranked = direct.length ? direct : source
+      .map((card, originalIndex) => ({ card, ...scoreDocument(buildDocument(card), query, { allowFuzzy: true }), originalIndex }))
+      .filter(result => result.score > 0);
+    return ranked.sort((a, b) => b.score - a.score || a.originalIndex - b.originalIndex || buildDocument(a.card).title.localeCompare(buildDocument(b.card).title));
   }
 
   function closestTitles(cards, query, limit = 4) {
@@ -350,6 +357,7 @@
 
   return Object.freeze({
     version: "0.48.4",
+    performanceVersion: "0.57.0",
     basicNormalise,
     normalise,
     compact,
