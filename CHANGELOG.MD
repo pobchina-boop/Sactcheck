@@ -1,15 +1,12 @@
-# v0.56.0 — Clinical Scenario and Regimen Information — 5 August 2026
+# v0.56.1 — Five-Regimen Knowledge Base Pilot
 
-- Refined the Clinical scenario interpreter with conservative typo recognition and transparent correction wording.
-- Added medication-only and incomplete-scenario handling with grouped possible protocols rather than a blank result.
-- Added candidate systolic blood pressure, diastolic blood pressure and temperature extraction before regimen selection, explicitly marked not assessed.
-- Prevented isolated clinical numbers from being interpreted as NCCP regimen codes.
-- Added clear warnings where the selected regimen has no matching structured numeric field.
-- Added a Regimen info visual link to every regimen card and within the opened assessment engine.
-- Added 24 AI-assisted draft drug class and mechanism profiles.
-- Added 18 pilot primary-publication evidence mappings with stable PubMed links, limitations and review status.
-- Kept evidence content separate from deterministic protocol assessment.
-- Changed no clinical protocol JSON, NCCP threshold, assessment rule, dose level or calculation.
+- Added detailed regimen information pages for NCCP 00382, 00568, 00655, 00857 and 00624.
+- Added regimen overview, treatment setting, component rationale, schedule context and key orientation points.
+- Expanded principal evidence mappings with population, intervention, comparator, endpoint, selected findings, limitations, DOI links and follow-up publications.
+- Added RECOURSE, KEYNOTE-189, PACIFIC, KEYNOTE-522 and CALYPSO detailed page content.
+- Corrected root knowledge-base asset references and added focused structural regression coverage.
+- Kept the current NCCP protocol as the operational treatment source.
+- Preserved all clinical protocol JSON files and deterministic rules unchanged.
 
 # v0.55.0 — Global Clinical Scenario Interpreter
 

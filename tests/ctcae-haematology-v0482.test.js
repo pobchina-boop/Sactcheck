@@ -75,7 +75,7 @@ assert(ui.includes('Show ${escapeHtml(guide.comparison.version)}'));
 assert(ui.includes('Open the ${escapeHtml(guide.sourceLabel)} source'), 'Source label must be version-aware');
 
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(index.includes('SACTCheck v0.56.0 — Clinical scenario interpreter and regimen information'));
+assert(index.includes('SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot'));
 assert(index.includes('js/ctcae-descriptors.js?v=0.48.4'));
 assert(index.includes('ctcae-calculated-grade'));
 assert(fs.existsSync(path.join(root, 'CTCAE_HAEMATOLOGY_SOURCE_REGISTER_v0.48.4.md')));

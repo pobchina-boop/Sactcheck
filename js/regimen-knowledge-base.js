@@ -11,8 +11,8 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (root) {
   "use strict";
 
-  const VERSION = "0.56.0";
-  const DATA_URL = "data/regimen-knowledge-base-v0560.json";
+  const VERSION = "0.56.1";
+  const DATA_URL = "data/regimen-knowledge-base-v0561.json";
   let data = null;
   let loadingPromise = null;
   let activeProtocol = null;
@@ -106,6 +106,11 @@
     });
   }
 
+  function regimenProfileForProtocol(protocol, payload = data) {
+    const id = String(protocol?.protocol_id || "");
+    return (payload?.regimen_profiles || []).find(item => String(item.protocol_id || "") === id) || null;
+  }
+
   function ensurePanel() {
     if (typeof document === "undefined") return null;
     let overlay = document.getElementById("regimenInformationOverlay");
@@ -134,17 +139,30 @@
     return overlay;
   }
 
+  function reviewMarkup(status, reviewedDate) {
+    const parts = [status, reviewedDate ? `Last reviewed ${reviewedDate}` : ""].filter(Boolean);
+    return parts.length ? `<span class="regimen-review-state">${escapeHtml(parts.join(" · "))}</span>` : "";
+  }
+
   function drugMarkup(profile) {
+    const source = profile.source_url ? `<a class="regimen-source-link" href="${escapeHtml(profile.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(profile.source_label || "Open medicine source")}</a>` : "";
     return `<article class="regimen-drug-card">
       <div class="regimen-drug-head"><h4>${escapeHtml(profile.name)}</h4><span>${escapeHtml(profile.drug_type || "Drug component")}</span></div>
       ${profile.drug_class ? `<p><strong>Class:</strong> ${escapeHtml(profile.drug_class)}</p>` : ""}
       ${profile.mechanism ? `<p><strong>Mechanism:</strong> ${escapeHtml(profile.mechanism)}</p>` : ""}
-      <p class="regimen-review-state">${escapeHtml(profile.review_status || "Clinical review pending")}</p>
+      <div class="regimen-card-foot">${source}${reviewMarkup(profile.review_status, profile.last_reviewed)}</div>
     </article>`;
   }
 
+  function publicationLink(item, label) {
+    if (!item?.url) return "";
+    return `<a class="btn secondary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label || item.label || "Open publication")}</a>`;
+  }
+
   function evidenceMarkup(record) {
-    const link = record.publication_url ? `<a class="btn secondary" href="${escapeHtml(record.publication_url)}" target="_blank" rel="noopener noreferrer">Open publication</a>` : "";
+    const primary = publicationLink({ url: record.publication_url }, "Open primary publication");
+    const doi = record.doi_url ? `<a class="btn secondary" href="${escapeHtml(record.doi_url)}" target="_blank" rel="noopener noreferrer">Open DOI</a>` : "";
+    const followUps = asArray(record.supporting_publications);
     return `<article class="regimen-evidence-card">
       <div class="regimen-evidence-head">
         <div><span class="regimen-evidence-acronym">${escapeHtml(record.trial_acronym || "Supporting evidence")}</span><h4>${escapeHtml(record.publication_title || "Publication")}</h4></div>
@@ -153,12 +171,34 @@
       <dl class="regimen-evidence-grid">
         ${record.evidence_context ? `<div><dt>Clinical context</dt><dd>${escapeHtml(record.evidence_context)}</dd></div>` : ""}
         ${record.study_design ? `<div><dt>Study design</dt><dd>${escapeHtml(record.study_design)}</dd></div>` : ""}
+        ${record.trial_population ? `<div><dt>Population</dt><dd>${escapeHtml(record.trial_population)}</dd></div>` : ""}
+        ${record.intervention ? `<div><dt>Intervention</dt><dd>${escapeHtml(record.intervention)}</dd></div>` : ""}
+        ${record.comparator ? `<div><dt>Comparator</dt><dd>${escapeHtml(record.comparator)}</dd></div>` : ""}
+        ${record.primary_endpoint ? `<div><dt>Primary endpoint</dt><dd>${escapeHtml(record.primary_endpoint)}</dd></div>` : ""}
         ${record.relevance_summary ? `<div><dt>Relevance</dt><dd>${escapeHtml(record.relevance_summary)}</dd></div>` : ""}
-        ${record.limitations ? `<div><dt>Limitations</dt><dd>${escapeHtml(record.limitations)}</dd></div>` : ""}
         ${record.match_type ? `<div><dt>Evidence mapping</dt><dd>${escapeHtml(record.match_type)}</dd></div>` : ""}
       </dl>
-      <div class="regimen-evidence-actions">${link}<span class="regimen-review-state">${escapeHtml(record.review_status || "Clinical review pending")}</span></div>
+      ${asArray(record.key_findings).length ? `<div class="regimen-key-findings"><h5>Key findings</h5><ul>${asArray(record.key_findings).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>` : ""}
+      ${record.limitations ? `<div class="regimen-evidence-limitation"><strong>Important limitations</strong><p>${escapeHtml(record.limitations)}</p></div>` : ""}
+      <div class="regimen-evidence-actions">${primary}${doi}${reviewMarkup(record.review_status, record.last_reviewed)}</div>
+      ${followUps.length ? `<div class="regimen-follow-up-publications"><h5>Additional trial publications</h5>${followUps.map(item => `<div><div><strong>${escapeHtml(item.label || "Follow-up")}</strong><span>${escapeHtml([item.journal, item.year].filter(Boolean).join(" · "))}</span><p>${escapeHtml(item.title || "")}</p></div><div class="regimen-follow-up-actions">${publicationLink(item, "Open PubMed")}${item.doi_url ? `<a class="btn secondary" href="${escapeHtml(item.doi_url)}" target="_blank" rel="noopener noreferrer">Open DOI</a>` : ""}</div></div>`).join("")}</div>` : ""}
     </article>`;
+  }
+
+  function overviewMarkup(profile) {
+    if (!profile) return "";
+    return `<section class="regimen-information-section regimen-overview-section">
+      <div class="regimen-information-section-head"><div><span>01</span><h3>Regimen at a glance</h3></div><p>Concise context for the exact protocol opened.</p></div>
+      <div class="regimen-overview-grid">
+        <article><h4>Role</h4><p>${escapeHtml(profile.regimen_role || "")}</p></article>
+        <article><h4>Treatment setting</h4><p>${escapeHtml(profile.treatment_setting || "")}</p></article>
+        <article class="wide"><h4>Overview</h4><p>${escapeHtml(profile.clinical_summary || "")}</p></article>
+        <article class="wide"><h4>How the components work together</h4><p>${escapeHtml(profile.component_rationale || "")}</p></article>
+        <article class="wide"><h4>Schedule context</h4><p>${escapeHtml(profile.schedule_context || "")}</p></article>
+      </div>
+      ${asArray(profile.key_points).length ? `<div class="regimen-key-point-tags">${asArray(profile.key_points).map(item => `<span>${escapeHtml(item)}</span>`).join("")}</div>` : ""}
+      <div class="regimen-overview-review">${reviewMarkup(profile.review_status, profile.last_reviewed)}</div>
+    </section>`;
   }
 
   function render(protocol, payload) {
@@ -169,8 +209,11 @@
     const components = componentNames(protocol);
     const profiles = profilesForProtocol(protocol, payload);
     const evidence = evidenceForProtocol(protocol, payload);
+    const regimenProfile = regimenProfileForProtocol(protocol, payload);
     const official = metadata.source_url ? `<a class="btn" href="${escapeHtml(metadata.source_url)}" target="_blank" rel="noopener noreferrer">Open official NCCP protocol</a>` : "";
     const missingComponents = components.filter(component => !profileForComponent(component, payload?.drug_profiles || []));
+    const componentSectionNumber = regimenProfile ? "02" : "01";
+    const evidenceSectionNumber = regimenProfile ? "03" : "02";
 
     target.innerHTML = `
       <section class="regimen-information-hero">
@@ -180,21 +223,23 @@
         <div class="regimen-information-actions">${official}</div>
       </section>
 
+      ${overviewMarkup(regimenProfile)}
+
       <section class="regimen-information-section">
-        <div class="regimen-information-section-head"><div><span>01</span><h3>Regimen components</h3></div><p>Educational summaries do not alter the encoded protocol assessment.</p></div>
+        <div class="regimen-information-section-head"><div><span>${componentSectionNumber}</span><h3>Regimen components</h3></div><p>Drug class and mechanism summaries are educational and do not alter the encoded assessment.</p></div>
         ${components.length ? `<div class="regimen-component-tags">${components.map(item => `<span>${escapeHtml(item)}</span>`).join("")}</div>` : '<p class="regimen-info-empty">No structured component list is available for this regimen.</p>'}
         ${profiles.length ? `<div class="regimen-drug-grid">${profiles.map(drugMarkup).join("")}</div>` : '<p class="regimen-info-empty">Drug class and mechanism summaries have not yet been mapped for this regimen.</p>'}
         ${missingComponents.length ? `<p class="regimen-info-note"><strong>Not yet mapped:</strong> ${escapeHtml(missingComponents.join(" · "))}</p>` : ""}
       </section>
 
       <section class="regimen-information-section">
-        <div class="regimen-information-section-head"><div><span>02</span><h3>Evidence supporting this regimen and indication</h3></div><p>Primary publications provide context. The current NCCP protocol remains the operational source.</p></div>
-        ${evidence.length ? `<div class="regimen-evidence-list">${evidence.map(evidenceMarkup).join("")}</div>` : '<div class="regimen-info-empty"><strong>No reviewed evidence mapping is available yet.</strong><p>The official NCCP protocol remains available above. Evidence records are being added in a clinically reviewed pilot.</p></div>'}
+        <div class="regimen-information-section-head"><div><span>${evidenceSectionNumber}</span><h3>Evidence supporting this regimen and indication</h3></div><p>Primary publications provide context. The current NCCP protocol remains the operational source.</p></div>
+        ${evidence.length ? `<div class="regimen-evidence-list">${evidence.map(evidenceMarkup).join("")}</div>` : '<div class="regimen-info-empty"><strong>No evidence mapping is available yet.</strong><p>The official NCCP protocol remains available above. Evidence records are being added in controlled batches.</p></div>'}
       </section>
 
       <aside class="regimen-information-boundary">
         <strong>Decision support and educational boundary</strong>
-        <p>This page explains drug classes, mechanisms and selected supporting publications. It does not determine eligibility, diagnose toxicity, prescribe treatment or change the deterministic SACTCheck result. AI-assisted draft summaries require consultant and oncology-pharmacy review.</p>
+        <p>This page explains drug classes, mechanisms and selected supporting publications. It does not determine eligibility, diagnose toxicity, prescribe treatment or change the deterministic SACTCheck result. Draft content should be clinically reviewed before approval.</p>
       </aside>`;
   }
 
@@ -263,6 +308,7 @@
     prepare,
     profilesForProtocol,
     evidenceForProtocol,
+    regimenProfileForProtocol,
     get activeProtocol() { return activeProtocol; }
   });
 });

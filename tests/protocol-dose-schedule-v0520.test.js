@@ -10,12 +10,12 @@ const genericUi = fs.readFileSync(path.join(root, 'js/generic-assessment-ui.js')
 const doseSource = fs.readFileSync(path.join(root, 'js/protocol-dose-schedule.js'), 'utf8');
 const doseCss = fs.readFileSync(path.join(root, 'css/protocol-dose-schedule.css'), 'utf8');
 
-assert.strictEqual(pkg.version, '0.56.0');
-assert(html.includes('<title>SACTCheck v0.56.0 — Clinical scenario interpreter and regimen information</title>'));
-assert(html.includes('<span class="header-version">v0.56.0</span>'));
+assert.strictEqual(pkg.version, '0.56.1');
+assert(html.includes('<title>SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot</title>'));
+assert(html.includes('<span class="header-version">v0.56.1</span>'));
 assert(html.includes('css/protocol-dose-schedule.css?v=0.55.0'));
 assert(html.includes('js/protocol-dose-schedule.js?v=0.55.0'));
-assert(html.indexOf('js/protocol-dose-schedule.js?v=0.55.0') < html.indexOf('js/generic-assessment-ui.js?v=0.56.0'));
+assert(html.indexOf('js/protocol-dose-schedule.js?v=0.55.0') < html.indexOf('js/generic-assessment-ui.js?v=0.56.1'));
 assert(genericUi.includes('id="jsonDoseScheduleButton"'));
 assert(genericUi.includes('id="jsonDoseSchedulePanel"'));
 assert(genericUi.includes('SACTCheckProtocolDoseSchedule?.prepare'));

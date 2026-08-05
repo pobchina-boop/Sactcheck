@@ -43,7 +43,7 @@ assert.strictEqual(Engine.assess(p275,{previous_cycle_thrombocytopenia_with_blee
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 assert(html.includes('data-library-domain-choice="haem"'));
 assert(html.includes('js/haemato-oncology.js?v=0.51.0'));
-assert(html.includes('js/protocol-loader.js?v=0.56.0'));
+assert(html.includes('js/protocol-loader.js?v=0.56.1'));
 const loader=fs.readFileSync(path.join(root,"js/protocol-loader.js"),"utf8");
 assert(loader.includes('haem_plasma_cell_disorders'));
 assert(loader.includes('dataset.libraryDomain'));

@@ -4,10 +4,10 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const knowledge = require(path.join(root, 'js', 'regimen-knowledge-base.js'));
-const data = JSON.parse(fs.readFileSync(path.join(root, 'data', 'regimen-knowledge-base-v0560.json'), 'utf8'));
+const data = JSON.parse(fs.readFileSync(path.join(root, 'data', 'regimen-knowledge-base-v0561.json'), 'utf8'));
 
-assert.strictEqual(knowledge.version, '0.56.0');
-assert.strictEqual(data.release, '0.56.0');
+assert.strictEqual(knowledge.version, '0.56.1');
+assert.strictEqual(data.release, '0.56.1');
 assert.ok(data.drug_profiles.length >= 20, 'Insufficient drug mechanism pilot coverage.');
 assert.ok(data.evidence_records.length >= 15, 'Insufficient evidence pilot coverage.');
 
@@ -47,11 +47,13 @@ assert.ok(loader.includes('data-regimen-info-protocol'));
 assert.ok(loader.includes('Regimen info'));
 assert.ok(ui.includes('jsonRegimenInfoButton'));
 assert.ok(ui.includes('SACTCheckRegimenKnowledgeBase?.open'));
-assert.ok(index.includes('css/regimen-knowledge-base.css?v=0.56.0'));
-assert.ok(index.includes('js/regimen-knowledge-base.js?v=0.56.0'));
+assert.ok(index.includes('css/regimen-knowledge-base.css?v=0.56.1'));
+assert.ok(index.includes('js/regimen-knowledge-base.js?v=0.56.1'));
 assert.ok(moduleSource.includes('Evidence supporting this regimen and indication'));
 assert.ok(moduleSource.includes('The current NCCP protocol remains the operational source'));
-assert.ok(moduleSource.includes('AI-assisted draft summaries require consultant and oncology-pharmacy review'));
+assert.ok(moduleSource.includes('Draft content should be clinically reviewed before approval'));
+assert.ok(!moduleSource.includes('AI-assisted'));
+assert.ok(!JSON.stringify(data).includes('AI-assisted'));
 assert.ok(!moduleSource.includes('changes the deterministic'));
 
-console.log(`v0.56.0 regimen information tests passed: ${data.drug_profiles.length} drug profiles and ${data.evidence_records.length} evidence mappings.`);
+console.log(`v0.56.1 regimen information compatibility tests passed: ${data.drug_profiles.length} drug profiles and ${data.evidence_records.length} evidence mappings.`);

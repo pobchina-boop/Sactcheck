@@ -11,11 +11,11 @@ const doseCss = fs.readFileSync(path.join(root, 'css/protocol-dose-schedule.css'
 const Dose = require(path.join(root, 'js/protocol-dose-schedule.js'));
 const Engine = require(path.join(root, 'js/assessment-engine.js'));
 
-assert.strictEqual(pkg.version, '0.56.0');
+assert.strictEqual(pkg.version, '0.56.1');
 assert.strictEqual(Dose.version, '0.55.0');
-assert(html.includes('SACTCheck v0.56.0 — Clinical scenario interpreter and regimen information'));
+assert(html.includes('SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot'));
 assert(html.includes('js/protocol-dose-schedule.js?v=0.55.0'));
-assert(html.includes('js/generic-assessment-ui.js?v=0.56.0'));
+assert(html.includes('js/generic-assessment-ui.js?v=0.56.1'));
 
 // Laboratory and clinical-toxicity separation.
 [
