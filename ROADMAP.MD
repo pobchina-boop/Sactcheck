@@ -14,6 +14,8 @@
 - Explainable findings and documentation output
 - Modified FOLFOX-6 legacy-versus-JSON shadow validation
 - Regression tests for protocol publication, conditional inputs, weekly paclitaxel and FOLFOX comparison
+- In-regimen constrained scenario interpreter with clinician-confirmed structured extraction
+- Global regimen-agnostic scenario entry with exact protocol confirmation before assessment
 
 ## Current target: validate protocol independence
 
@@ -44,3 +46,10 @@
 
 ## ECOG context placeholder
 - Central placeholder added in v0.31.0. Future implementation should distinguish baseline eligibility from optional ongoing-cycle context and must never block partial/single-value assessments when ECOG is absent.
+
+## Constrained AI progression
+
+- Completed: local in-regimen structured scenario extraction.
+- Completed: global local catalogue matching with exact regimen confirmation.
+- Next: expand tested clinical vocabulary and ambiguity scenarios without changing the deterministic decision layer.
+- Later: consider a secure authenticated hosted language-model explanation service only after governance, data-protection, logging and separate clinical validation requirements are defined.

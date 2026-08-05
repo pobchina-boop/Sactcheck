@@ -95,6 +95,7 @@
           <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" rel="external" referrerpolicy="no-referrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
           <button class="btn secondary hidden" type="button" id="jsonDoseScheduleButton"><span aria-hidden="true">📅</span> Dose &amp; Schedule</button>
           <button class="btn secondary hidden" type="button" id="jsonImmuneSafetyButton"><span aria-hidden="true">◉</span> Immune safety</button>
+          <button class="btn secondary hidden" type="button" id="jsonScenarioInterpreterButton"><span aria-hidden="true">✦</span> Scenario interpreter</button>
           <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Supportive medicines</a>
         </div>
         <span class="badge engine-json">JSON engine v${escapeHtml(Engine.version)}</span>
@@ -122,6 +123,8 @@
       <section id="jsonImmuneSafetyPanel" class="immune-safety-panel hidden" aria-live="polite"></section>
 
       <section id="jsonDoseSchedulePanel" class="dose-schedule-panel hidden" aria-live="polite"></section>
+
+      <section id="jsonScenarioInterpreterPanel" class="scenario-interpreter-panel hidden" aria-live="polite"></section>
 
       <form id="jsonAssessmentForm" novalidate>
         <section class="blood-threshold-section laboratory-organ-section">
@@ -303,6 +306,10 @@
 
     document.getElementById("jsonImmuneSafetyButton")?.addEventListener("click", () => {
       root.SACTCheckImmunotherapySafety?.open?.(activeProtocol);
+    });
+
+    document.getElementById("jsonScenarioInterpreterButton")?.addEventListener("click", () => {
+      root.SACTCheckScenarioInterpreter?.open?.(activeProtocol);
     });
 
     document.getElementById("jsonProfile").addEventListener("change", event => {
@@ -642,6 +649,7 @@
     updateInputCount(additionalDefinitions);
     refreshCompactInputStates(definitions);
     root.SACTCheckImmunotherapySafety?.prepare?.(activeProtocol, definitions, collectRawInputs(true));
+    root.SACTCheckScenarioInterpreter?.prepare?.(activeProtocol, definitions, { apply: applyScenarioValues });
   }
 
   function updateInputCount(definitions) {
@@ -945,6 +953,28 @@
     hideResult();
   }
 
+  function applyScenarioValues(items = [], options = {}) {
+    if (!activeProtocol || !Array.isArray(items) || !items.length) return;
+    items.forEach(item => {
+      const selector = item.labAnalyte
+        ? `[data-lab-target="${cssEscape(item.fieldId)}"][data-lab-analyte="${cssEscape(item.labAnalyte)}"]`
+        : `[data-field="${cssEscape(item.fieldId)}"]`;
+      const control = document.querySelector(selector);
+      if (!control || control.disabled) return;
+      control.value = String(item.value ?? "");
+      control.dispatchEvent(new Event("input", { bubbles: true }));
+      control.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    updateConditionalInputs();
+    refreshCompactInputStates();
+    hideResult();
+    if (options.assess) {
+      window.setTimeout(() => runAssessment(), 0);
+    } else if (typeof root.showToast === "function") {
+      root.showToast("Confirmed scenario values applied");
+    }
+  }
+
   function collectRawInputs(includeDisabled = false) {
     const inputs = {};
     latestLabCalculations = {};
@@ -1068,7 +1098,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.53.0"
+      appVersion: "0.55.0"
     });
   }
 
@@ -1307,7 +1337,7 @@
   }
 
   root.SACTCheckAssessmentFieldClassification = Object.freeze({
-    version: "0.53.0",
+    version: "0.55.0",
     laboratoryDomain,
     isEcogDefinition,
     isExplicitNonLaboratoryCriterion,

@@ -10,11 +10,11 @@ const css = fs.readFileSync(path.join(root, 'css/immunotherapy-safety.css'), 'ut
 const Safety = require(path.join(root, 'js/immunotherapy-safety.js'));
 const Engine = require(path.join(root, 'js/assessment-engine.js'));
 
-assert.strictEqual(pkg.version, '0.53.0');
-assert.strictEqual(Safety.version, '0.53.0');
-assert(html.includes('SACTCheck v0.53.0 — Immunotherapy Visual Safety'));
-assert(html.includes('css/immunotherapy-safety.css?v=0.53.0'));
-assert(html.includes('js/immunotherapy-safety.js?v=0.53.0'));
+assert.strictEqual(pkg.version, '0.55.0');
+assert.strictEqual(Safety.version, '0.55.0');
+assert(html.includes('SACTCheck v0.55.0 — Global Clinical Scenario Interpreter'));
+assert(html.includes('css/immunotherapy-safety.css?v=0.55.0'));
+assert(html.includes('js/immunotherapy-safety.js?v=0.55.0'));
 assert(ui.includes('jsonImmuneSafetyButton'));
 assert(ui.includes('jsonImmuneSafetyPanel'));
 assert(ui.includes('SACTCheckImmunotherapySafety?.updateAssessment'));
@@ -51,4 +51,4 @@ const criticalResult = Engine.assess(pembro, { pneumonitis_grade: '4' }, { profi
 const criticalModel = Safety.buildModel(pembro, definitions, { pneumonitis_grade: '4' }, criticalResult);
 assert.strictEqual(criticalModel.domains.find(domain => domain.id === 'lung').status.level, 'critical');
 
-console.log('v0.53.0 immunotherapy visual safety tests passed.');
+console.log('v0.55.0 immunotherapy visual safety tests passed.');

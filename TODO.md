@@ -39,3 +39,11 @@
 - Embed the final MP4 or unlisted hosted video on the v0.48.0 landing page using click-to-play, no autoplay and a mobile-responsive player.
 - Add captions/transcript and retain the study-use boundary beside the video.
 - Do not display an unfinished video placeholder in the distributed study build.
+
+## Global clinical scenario interpreter validation
+
+- Test common scenarios across each tumour group using generic names, trade names and regimen acronyms.
+- Add deliberate ambiguous and incorrect-regimen scenarios and verify exact selection is always required.
+- Validate identifier blocking and confirm no scenario text leaves the browser.
+- Review the matching vocabulary with oncology pharmacy and Consultant Oncology reviewers.
+- Do not introduce treatment prompts or autonomous protocol decisions into the interpreter layer.

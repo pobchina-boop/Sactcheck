@@ -10,11 +10,11 @@ const uiSource = fs.readFileSync(path.join(root, "js", "generic-assessment-ui.js
 const css = fs.readFileSync(path.join(root, "css", "protocol-dose-schedule.css"), "utf8");
 const Titles = require(path.join(root, "js", "regimen-display-title.js"));
 
-assert.strictEqual(pkg.version, "0.53.0");
-assert(html.includes("SACTCheck v0.53.0 — Immunotherapy Visual Safety"));
-assert(html.includes("js/regimen-display-title.js?v=0.53.0"));
-assert(html.includes("js/generic-assessment-ui.js?v=0.53.0"));
-assert(html.includes("css/protocol-dose-schedule.css?v=0.53.0"));
+assert.strictEqual(pkg.version, "0.55.0");
+assert(html.includes("SACTCheck v0.55.0 — Global Clinical Scenario Interpreter"));
+assert(html.includes("js/regimen-display-title.js?v=0.55.0"));
+assert(html.includes("js/generic-assessment-ui.js?v=0.55.0"));
+assert(html.includes("css/protocol-dose-schedule.css?v=0.55.0"));
 
 assert(!uiSource.includes('placeholder="Not assessed"'), "Empty inputs must not display Not assessed.");
 assert(!uiSource.includes('<option value="">Not assessed</option>'), "Blank selectors must not display Not assessed.");
@@ -49,4 +49,4 @@ assert.strictEqual(Titles.forProtocol(ac), "Weekly paclitaxel (post AC)");
 const acTh = require(path.join(root, "protocols", "breast", "00432-ac-weekly-paclitaxel-trastuzumab.json"));
 assert.strictEqual(Titles.forProtocol(acTh), "Weekly paclitaxel + trastuzumab (post AC)");
 
-console.log("v0.53.0 compact clinical-input and phase-first title tests passed.");
+console.log("v0.55.0 compact clinical-input and phase-first title tests passed.");

@@ -13,7 +13,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const VERSION = "0.53.0";
+  const VERSION = "0.55.0";
   const ESMO_URL = "https://www.esmo.org/guidelines/esmo-clinical-practice-guideline-management-of-toxicities-from-immunotherapy";
   const SITC_URL = "https://www.sitcancer.org/research/cancer-immunotherapy-guidelines/irae/immune-checkpoint-inhibitor-related-adverse-events";
   const KNOWN_AGENTS = ["pembrolizumab", "nivolumab", "atezolizumab", "durvalumab", "avelumab", "ipilimumab", "cemiplimab", "dostarlimab", "relatlimab", "tislelizumab", "tremelimumab", "serplulimab"];
@@ -93,8 +93,8 @@
     const findings = linkedFindings(domain, result);
     const level = findings.reduce((max, finding) => Math.max(max, actionLevel(finding.actionType)), 0);
     const entered = fields.some(field => hasValue(inputs?.[field.id]));
-    if (level >= 3) return { level: "critical", label: "Urgent / stop pathway", findings, fields, entered };
-    if (level === 2) return { level: "review", label: "Review / withhold pathway", findings, fields, entered };
+    if (level >= 3) return { level: "critical", label: "Urgent clinical review", findings, fields, entered };
+    if (level === 2) return { level: "review", label: "Review pathway", findings, fields, entered };
     if (entered) return { level: "entered", label: "Data entered", findings, fields, entered };
     return { level: "unassessed", label: "No data entered", findings, fields, entered };
   }
@@ -117,15 +117,19 @@
   function statusSummary(model) {
     const critical = model.domains.filter(item => item.status.level === "critical").length;
     const review = model.domains.filter(item => item.status.level === "review").length;
-    if (critical) return `<div class="immune-safety-alert critical"><strong>${critical} organ-system urgent or discontinuation pathway${critical === 1 ? "" : "s"} triggered.</strong><span>Review the encoded findings and current NCCP protocol immediately.</span></div>`;
-    if (review) return `<div class="immune-safety-alert review"><strong>${review} organ-system review or withholding pathway${review === 1 ? "" : "s"} triggered.</strong><span>Open the relevant tile and review the encoded action.</span></div>`;
+    if (critical) return `<div class="immune-safety-alert critical"><strong>${critical} urgent clinical review signal${critical === 1 ? "" : "s"} triggered.</strong><span>Review the encoded findings, current NCCP protocol and local toxicity pathway.</span></div>`;
+    if (review) return `<div class="immune-safety-alert review"><strong>${review} review signal${review === 1 ? "" : "s"} triggered.</strong><span>Open the relevant tile and review the encoded protocol signal.</span></div>`;
     return `<div class="immune-safety-alert neutral"><strong>Visual monitoring map</strong><span>Blank domains remain unassessed. A coloured tile reflects entered data or an encoded assessment finding, not treatment clearance.</span></div>`;
+  }
+  function navigationLabel(domain) {
+    const labels = { lung: "Go to lung symptoms", gi: "Go to bowel toxicity", liver: "Go to liver tests", endocrine: "Go to endocrine tests", renal: "Go to renal tests", skin: "Go to rash inputs", neuro: "Go to neurological inputs", cardiac: "Go to cardiac or muscle inputs", infusion: "Go to infusion inputs" };
+    return labels[domain.id] || "Go to relevant input";
   }
   function renderDetail(domain) {
     const status = domain.status;
     const inputs = status.fields.length ? status.fields.map(field => `<span class="immune-input-chip">${escapeHtml(field.label || field.id)}</span>`).join("") : '<span class="subtle">No structured input for this domain in the selected regimen.</span>';
     const findings = status.findings.length ? status.findings.map(finding => `<div class="immune-finding ${statusClass(actionLevel(finding.actionType) >= 3 ? "critical" : "review")}"><strong>${escapeHtml(finding.displayTitle || finding.ruleId || domain.label)}</strong><span>${escapeHtml(finding.action?.recommendation || finding.explanation || "Review the encoded protocol pathway.")}</span>${finding.sourceText ? `<small>${escapeHtml(finding.sourceText)}</small>` : ""}</div>`).join("") : '<p class="subtle">No restrictive encoded finding is currently triggered for this organ system.</p>';
-    const focus = status.fields[0]?.id ? `<button type="button" class="btn secondary immune-focus-input" data-field-id="${escapeHtml(status.fields[0].id)}">Go to relevant input</button>` : "";
+    const focus = status.fields[0]?.id ? `<button type="button" class="btn secondary immune-focus-input" data-field-id="${escapeHtml(status.fields[0].id)}">${escapeHtml(navigationLabel(domain))}</button>` : `<p class="subtle">No dedicated input in this regimen.</p>`;
     return `<div class="immune-detail-grid"><div><h3>Ask and examine</h3><p>${escapeHtml(domain.prompt)}</p><h3>Common linked checks</h3><ul>${domain.checks.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div><div><h3>Inputs available in this regimen</h3><div class="immune-input-chips">${inputs}</div>${focus}</div><div class="immune-findings-column"><h3>Current encoded pathway</h3>${findings}</div></div>`;
   }
   function render() {
@@ -135,7 +139,7 @@
     if (!model.supported) { panel.classList.add("hidden"); return; }
     if (!model.domains.some(item => item.id === activeDomain)) activeDomain = model.activeDomain;
     const selected = model.domains.find(item => item.id === activeDomain) || model.domains[0];
-    panel.innerHTML = `<div class="immune-safety-head"><div><span class="immune-eyebrow">Immune checkpoint inhibitor safety</span><h2>Immune-mediated toxicity map</h2><p>${escapeHtml(model.protocolTitle)}${model.agents.length ? ` · ${escapeHtml(model.agents.join(" + "))}` : ""}</p></div><button type="button" class="btn secondary immune-close">Close</button></div>${statusSummary(model)}<div class="immune-legend"><span><i class="immune-dot unassessed"></i>No data</span><span><i class="immune-dot entered"></i>Data entered</span><span><i class="immune-dot review"></i>Review / withhold</span><span><i class="immune-dot critical"></i>Urgent / stop</span></div><div class="immune-organ-grid">${model.domains.map(domain => `<button type="button" class="immune-organ-tile ${statusClass(domain.status.level)}${domain.id === selected.id ? " active" : ""}" data-domain="${domain.id}"><span class="immune-organ-icon">${domain.icon}</span><span class="immune-organ-copy"><strong>${escapeHtml(domain.label)}</strong><small>${escapeHtml(domain.status.label)}</small></span></button>`).join("")}</div><section class="immune-domain-detail"><div class="immune-domain-title"><span class="immune-organ-icon large">${selected.icon}</span><div><h2>${escapeHtml(selected.label)}</h2><p>${escapeHtml(selected.prompt)}</p></div></div>${renderDetail(selected)}</section><details class="immune-source-details"><summary>Official sources and scope</summary><div class="details-body"><p>This original visual panel is a navigation aid. It does not add new management rules; treatment actions come from the current encoded NCCP regimen and must be checked against local immune-toxicity pathways.</p><div class="immune-source-links">${model.sources.map(source => `<a href="${escapeHtml(source.url)}"${source.sameTab ? "" : ' target="_blank" rel="noopener noreferrer"'}>${escapeHtml(source.label)}</a>`).join("")}</div></div></details>`;
+    panel.innerHTML = `<div class="immune-safety-head"><div><span class="immune-eyebrow">Immune checkpoint inhibitor safety</span><h2>Immunotherapy toxicity map</h2><p>${escapeHtml(model.protocolTitle)}${model.agents.length ? ` · ${escapeHtml(model.agents.join(" + "))}` : ""}</p></div><button type="button" class="btn secondary immune-close">Close</button></div>${statusSummary(model)}<div class="immune-legend"><span><i class="immune-dot unassessed"></i>No data</span><span><i class="immune-dot entered"></i>Data entered</span><span><i class="immune-dot review"></i>Review pathway</span><span><i class="immune-dot critical"></i>Urgent clinical review</span></div><div class="immune-organ-grid">${model.domains.map(domain => `<button type="button" class="immune-organ-tile ${statusClass(domain.status.level)}${domain.id === selected.id ? " active" : ""}" data-domain="${domain.id}"><span class="immune-organ-icon">${domain.icon}</span><span class="immune-organ-copy"><strong>${escapeHtml(domain.label)}</strong><small>${escapeHtml(domain.status.label)}</small></span></button>`).join("")}</div><section class="immune-domain-detail"><div class="immune-domain-title"><span class="immune-organ-icon large">${selected.icon}</span><div><h2>${escapeHtml(selected.label)}</h2><p>${escapeHtml(selected.prompt)}</p></div></div>${renderDetail(selected)}</section><details class="immune-source-details"><summary>Official sources and scope</summary><div class="details-body"><p>This original visual panel is a navigation aid. It does not add new management rules; treatment actions come from the current encoded NCCP regimen and must be checked against local immune-toxicity pathways.</p><div class="immune-source-links">${model.sources.map(source => `<a href="${escapeHtml(source.url)}"${source.sameTab ? "" : ' target="_blank" rel="noopener noreferrer"'}>${escapeHtml(source.label)}</a>`).join("")}</div></div></details>`;
     bindPanel(panel);
   }
   function bindPanel(panel) {
@@ -151,11 +155,19 @@
   }
   function focusField(fieldId) {
     if (typeof document === "undefined" || !fieldId) return;
-    const escaped = root.CSS?.escape ? root.CSS.escape(fieldId) : fieldId.replace(/[^a-zA-Z0-9_-]/g, "\\$&");
+    const escaped = root.CSS?.escape ? root.CSS.escape(fieldId) : fieldId.replace(/[^a-zA-Z0-9_-]/g, "\$&");
     const control = document.querySelector(`[data-field="${escaped}"], [data-lab-target="${escaped}"]`);
     const wrapper = control?.closest("[data-input-wrapper]") || control;
-    wrapper?.scrollIntoView?.({ behavior: "smooth", block: "center" });
-    control?.focus?.();
+    if (!control || !wrapper) return;
+    close();
+    const details = wrapper.matches?.("details") ? wrapper : wrapper.closest?.("details.compact-assessment-input");
+    if (details) details.open = true;
+    window.setTimeout(() => {
+      wrapper.classList.add("immune-input-highlight");
+      wrapper.scrollIntoView?.({ behavior: "smooth", block: "center" });
+      try { control.focus?.({ preventScroll: true }); } catch (error) { control.focus?.(); }
+      window.setTimeout(() => wrapper.classList.remove("immune-input-highlight"), 1800);
+    }, 40);
   }
   function prepare(protocol, definitions = [], inputs = {}) {
     activeProtocol = protocol; activeDefinitions = definitions; activeInputs = inputs || {}; activeResult = null;

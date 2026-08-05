@@ -13,7 +13,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const VERSION = "0.53.0";
+  const VERSION = "0.55.0";
   let activeProtocol = null;
   let activeModel = null;
   let activeAssessment = null;

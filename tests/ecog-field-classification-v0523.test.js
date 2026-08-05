@@ -9,11 +9,11 @@ const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const uiSource = fs.readFileSync(path.join(root, 'js', 'generic-assessment-ui.js'), 'utf8');
 const ctcaeSource = fs.readFileSync(path.join(root, 'js', 'ctcae-descriptors.js'), 'utf8');
 
-assert.strictEqual(pkg.version, '0.53.0');
-assert(html.includes('SACTCheck v0.53.0 — Immunotherapy Visual Safety'));
-assert(html.includes('v0.53.0 · What changed?'));
-assert(html.includes('js/generic-assessment-ui.js?v=0.53.0'));
-assert(html.includes('js/protocol-dose-schedule.js?v=0.53.0'));
+assert.strictEqual(pkg.version, '0.55.0');
+assert(html.includes('SACTCheck v0.55.0 — Global Clinical Scenario Interpreter'));
+assert(html.includes('v0.55.0 · What changed?'));
+assert(html.includes('js/generic-assessment-ui.js?v=0.55.0'));
+assert(html.includes('js/protocol-dose-schedule.js?v=0.55.0'));
 assert(uiSource.includes('ECOG performance status is not a CTCAE adverse-event grade'));
 assert(uiSource.includes('Other treatment criteria'));
 
@@ -37,7 +37,7 @@ vm.runInContext(uiSource, context, { filename: 'generic-assessment-ui.js' });
 const Classification = context.SACTCheckAssessmentFieldClassification;
 const CTCAE = context.SACTCheckCTCAE;
 assert(Classification, 'Field-classification helper was not exported.');
-assert.strictEqual(Classification.version, '0.53.0');
+assert.strictEqual(Classification.version, '0.55.0');
 
 const pregnancy = { id: 'pregnancy', label: 'Pregnant', type: 'boolean' };
 const breastfeeding = { id: 'breastfeeding', label: 'Breastfeeding', type: 'boolean' };
@@ -87,4 +87,4 @@ for (const entry of index.protocols) {
 assert(scanned > 5000, `Expected a library-wide input scan; saw ${scanned}.`);
 assert(protectedCount > 100, `Expected substantial ECOG/reproductive criteria coverage; saw ${protectedCount}.`);
 
-console.log(`v0.53.0 input-classification and ECOG tests passed across ${scanned} input definitions; ${protectedCount} ECOG/reproductive fields protected from laboratory classification.`);
+console.log(`v0.55.0 input-classification and ECOG tests passed across ${scanned} input definitions; ${protectedCount} ECOG/reproductive fields protected from laboratory classification.`);

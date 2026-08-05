@@ -13,7 +13,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
   <link rel="icon" type="image/svg+xml" href="assets/branding/sactcheck-mark.svg">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>SACTCheck v0.53.0 — Immunotherapy Visual Safety</title>
+  <title>SACTCheck v0.55.0 — Global Clinical Scenario Interpreter</title>
   <style>
     :root {
       --navy:#12314a; --blue:#176b9b; --blue2:#0f567f; --light:#f3f6f8;
@@ -290,8 +290,10 @@
 </style>
   <link rel="stylesheet" href="css/regimen-card-metadata.css?v=0.48.4">
   <link rel="stylesheet" href="css/regimen-components-v0503.css?v=0.51.0">
-  <link rel="stylesheet" href="css/protocol-dose-schedule.css?v=0.53.0">
-  <link rel="stylesheet" href="css/immunotherapy-safety.css?v=0.53.0">
+  <link rel="stylesheet" href="css/protocol-dose-schedule.css?v=0.55.0">
+  <link rel="stylesheet" href="css/immunotherapy-safety.css?v=0.55.0">
+  <link rel="stylesheet" href="css/scenario-interpreter.css?v=0.55.0">
+  <link rel="stylesheet" href="css/global-scenario-interpreter.css?v=0.55.0">
   <link rel="stylesheet" href="css/assessment-output.css?v=0.48.4">
   <link rel="stylesheet" href="css/ux-v0471.css?v=0.48.4">
   <link rel="stylesheet" href="css/search-v0483.css?v=0.48.4">
@@ -315,7 +317,7 @@
     </a>
     <div class="header-study-meta">
       <span class="study-build-badge">Feasibility study build</span>
-      <span class="header-version">v0.53.0</span>
+      <span class="header-version">v0.55.0</span>
       <button class="btn secondary header-info-button" type="button" data-open-study-info>Study information</button>
     </div>
   </div>
@@ -357,6 +359,7 @@
           <p>Search the adult solid tumour or Haematology library, enter the relevant clinical information and compare it with the protocol criteria. The official NCCP source remains available throughout.</p>
           <div class="study-hero-actions">
             <button class="btn" type="button" data-focus-regimen-search>Search regimens</button>
+            <button class="btn secondary" type="button" data-open-global-scenario>Use a clinical scenario</button>
             <button class="btn secondary" type="button" data-open-study-info>How to use SACTCheck</button>
             <a class="btn secondary" href="docs/STUDY_QUICK_START_v0.48.0.html" target="_blank" rel="noopener">Quick start guide</a>
           </div>
@@ -366,6 +369,29 @@
           <div class="study-stat"><strong>NCCP</strong><span>protocol criteria from the official source</span></div>
         </div>
       </div>
+    </section>
+
+    <section class="global-scenario-interpreter library-only" id="globalScenarioInterpreter" aria-labelledby="globalScenarioTitle">
+      <div class="global-scenario-hero">
+        <div>
+          <span class="study-kicker">Regimen agnostic entry point</span>
+          <h2 id="globalScenarioTitle">Clinical scenario interpreter</h2>
+          <p>Describe a de-identified oncology scenario in ordinary clinical language. SACTCheck will identify possible NCCP regimens for you to confirm before opening the structured protocol assessment.</p>
+        </div>
+        <div class="global-scenario-boundary"><strong>Decision support boundary</strong>This tool only searches and structures the local SACTCheck catalogue. It does not diagnose, prescribe, clear treatment or produce a protocol result before the exact regimen is selected.</div>
+      </div>
+      <div class="global-scenario-form">
+        <label for="globalScenarioText">Clinical scenario</label>
+        <textarea id="globalScenarioText" rows="4" placeholder="Example: Metastatic CRC on Lonsurf and Avastin, ANC 0.3, afebrile and due to restart tomorrow."></textarea>
+        <span class="hint"><strong>Do not enter patient identifiers.</strong> The text remains in this browser and is not sent to an external AI service.</span>
+        <div class="global-scenario-toolbar">
+          <button class="btn" type="button" data-global-scenario-find>Find matching regimen</button>
+          <button class="btn secondary" type="button" data-global-scenario-clear>Clear</button>
+          <span class="global-scenario-status" data-global-scenario-status aria-live="polite">Loading regimen catalogue…</span>
+        </div>
+      </div>
+      <div class="global-scenario-results" data-global-scenario-results aria-live="polite"><p class="subtle">No scenario interpreted yet.</p></div>
+      <details class="scenario-scope"><summary>How the global interpreter works</summary><div class="details-body"><p>It identifies possible disease and regimen terms, ranks matching protocols and requires you to select the exact NCCP regimen. The existing in-regimen interpreter then extracts candidate clinical values for confirmation. Only confirmed values are passed to the deterministic SACTCheck engine.</p></div></details>
     </section>
 
     <section class="about-sactcheck library-only" aria-labelledby="aboutSactcheckTitle">
@@ -402,7 +428,7 @@
     </section>
 
     <section class="library-only">
-      <div class="section-heading"><div><h2 id="libraryHeading">Solid Tumour SACT library</h2><p class="subtle" id="librarySubheading">Find the current NCCP regimen, confirm the tissue specific indication and open a structured day ward assessment.</p></div><div class="library-header-actions"><details class="release-summary"><summary>v0.53.0 · What changed?</summary><div class="details-body"><strong>Immunotherapy visual safety panel</strong><p>Adds an original organ-system map to immune-checkpoint inhibitor regimens, linking symptoms, regimen inputs, blood tests and existing encoded irAE actions.</p></div></details></div></div>
+      <div class="section-heading"><div><h2 id="libraryHeading">Solid Tumour SACT library</h2><p class="subtle" id="librarySubheading">Find the current NCCP regimen, confirm the tissue specific indication and open a structured day ward assessment.</p></div><div class="library-header-actions"><details class="release-summary"><summary>v0.55.0 · What changed?</summary><div class="details-body"><strong>Global clinical scenario interpreter</strong><p>Starts from a de-identified scenario, identifies possible NCCP regimens and requires exact regimen confirmation before reusing the v0.54.0 structured extraction and deterministic assessment workflow.</p></div></details></div></div>
       <div class="developer-tools" id="developerTools" hidden><strong>Developer tools</strong><div class="toolbar" style="margin:6px 0 0"><button class="btn secondary" type="button" id="openProtocolImporter" onclick="openProtocolPreview(event)">Preview protocol JSON</button></div></div>
 
       <div class="library-search-primary">
@@ -2250,7 +2276,7 @@ function openProtocolPreview(event){
 <script src="js/emetogenic-risk.js?v=0.48.4"></script>
 <script src="js/drug-aliases.js?v=0.48.4"></script>
 <script src="js/regimen-components.js?v=0.51.0"></script>
-<script src="js/regimen-display-title.js?v=0.53.0"></script>
+<script src="js/regimen-display-title.js?v=0.55.0"></script>
 <script src="js/local-lab-profile.js?v=0.48.4"></script>
 <script src="js/protocol-context.js?v=0.48.4"></script>
 <script src="js/rule-engine.js?v=0.48.4"></script>
@@ -2261,15 +2287,17 @@ function openProtocolPreview(event){
 <script src="js/regimen-course-metadata.js?v=0.48.4"></script>
 <script src="js/assessment-output.js?v=0.48.4"></script>
 <script src="js/assessment-pdf.js?v=0.48.4"></script>
-<script src="js/protocol-dose-schedule.js?v=0.53.0"></script>
-<script src="js/immunotherapy-safety.js?v=0.53.0"></script>
-<script src="js/generic-assessment-ui.js?v=0.53.0"></script>
+<script src="js/protocol-dose-schedule.js?v=0.55.0"></script>
+<script src="js/immunotherapy-safety.js?v=0.55.0"></script>
+<script src="js/scenario-interpreter.js?v=0.55.0"></script>
+<script src="js/generic-assessment-ui.js?v=0.55.0"></script>
 <script src="js/folfox-shadow-core.js"></script>
 <script src="js/folfox-shadow-ui.js"></script>
 
 <script src="js/tissue-ui.js?v=0.51.0"></script>
 <script src="js/oral-medicine.js?v=0.48.4"></script>
 <script src="js/protocol-loader.js?v=0.51.0"></script>
+<script src="js/global-scenario-interpreter.js?v=0.55.0"></script>
 <script src="js/haemato-oncology.js?v=0.51.0"></script>
 <script src="js/regimen-card-metadata.js?v=0.48.4"></script>
 <script src="js/library-ux.js?v=0.51.0"></script>

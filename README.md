@@ -2,19 +2,20 @@
 
 ## Current release
 
-**SACTCheck v0.53.0 — Immunotherapy Visual Safety**
+**SACTCheck v0.55.0 — Global Clinical Scenario Interpreter**
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.53.0 adds an original organ-system visual safety panel to supported immune-checkpoint inhibitor regimens and links the visual map to existing symptoms, laboratory inputs and encoded assessment findings.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.55.0 adds a standalone, browser-only Clinical scenario interpreter that begins with a de-identified free-text scenario, identifies possible NCCP protocols and requires exact regimen confirmation before reusing the constrained in-regimen extraction and deterministic assessment workflow.
 
-### v0.53.0 highlights
+### v0.55.0 highlights
 
-- Adds an in-engine **Immune safety** control for 49 supported ICI protocols.
-- Organises immune-mediated toxicity monitoring into nine visual organ-system domains.
-- Reuses existing entered values and deterministic assessment findings; no new management rules are introduced.
-- Links to the current NCCP regimen, ESMO and SITC guidance, and relevant EMA product information.
-- Preserves all clinical protocol JSON files unchanged from v0.52.5.
+- Adds a regimen-agnostic Clinical scenario interpreter to the main library screen.
+- Ranks possible NCCP protocols using controlled local disease, regimen, drug, trade-name, acronym and NCCP-number matching.
+- Shows unmatched medicines when no single candidate protocol contains every named component.
+- Requires exact regimen selection before candidate clinical values are extracted or assessed.
+- Includes all v0.54.0 functionality, including the in-regimen Scenario interpreter and Immunotherapy toxicity map refinements.
+- Preserves all 382 clinical protocol JSON files unchanged from v0.54.0.
 
-See `RELEASE_NOTES_v0.53.0.md`, `VALIDATION_REPORT_v0.53.0.md` and `IMMUNOTHERAPY_SAFETY_SOURCE_REGISTER_v0.53.0.md`.
+See `RELEASE_NOTES_v0.55.0.md`, `VALIDATION_REPORT_v0.55.0.md` and `GLOBAL_SCENARIO_INTERPRETER_GOVERNANCE_v0.55.0.md`.
 
 ## Safety and governance
 

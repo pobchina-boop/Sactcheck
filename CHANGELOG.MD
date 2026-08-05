@@ -1,3 +1,20 @@
+# v0.55.0 — Global Clinical Scenario Interpreter
+
+- Added a standalone Clinical scenario interpreter to the main library screen.
+- Added local catalogue matching for disease, regimen, drug, trade-name, acronym and NCCP-number language.
+- Added explicit ambiguity handling and unmatched-medicine warnings before protocol selection.
+- Reused the v0.54.0 in-regimen confirmation workflow only after the clinician selects the exact protocol.
+- Included every v0.54.0 feature in the cumulative package.
+- Changed no clinical protocol JSON, threshold, recommendation or dose calculation.
+
+# v0.54.0 — Constrained Scenario Interpreter
+
+- Added local, clinician-confirmed extraction of structured regimen inputs from de-identified free text.
+- Kept the deterministic protocol engine as the sole decision layer.
+- Added privacy and regimen-context warnings.
+- Refined the Immunotherapy toxicity map heading and organ-specific input navigation.
+- Changed no clinical protocol JSON, threshold, recommendation or dose calculation.
+
 ## v0.53.0 — Immunotherapy Visual Safety — 31 July 2026
 
 - Adds an original organ-system immune-toxicity map inside supported ICI regimen assessment engines.
