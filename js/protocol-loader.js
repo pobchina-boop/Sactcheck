@@ -378,6 +378,16 @@
     return link;
   }
 
+  function createRegimenInfoButton(protocolId) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn secondary regimen-info-link";
+    button.dataset.regimenInfoProtocol = protocolId;
+    button.setAttribute("aria-label", "Open regimen information and supporting evidence");
+    button.innerHTML = '<span aria-hidden="true">◈</span> Regimen info';
+    return button;
+  }
+
   function bindProtocolLaunch(button, protocolId, assessmentReady) {
     button.dataset.protocolId = protocolId;
     button.dataset.protocolEngine = "json";
@@ -484,6 +494,8 @@
 
     const actions = replacement.closest(".card-actions");
     actions?.querySelector(".official-pdf-link")?.remove();
+    actions?.querySelector(".regimen-info-link")?.remove();
+    actions?.appendChild(createRegimenInfoButton(protocolId));
     const officialPdfLink = createOfficialPdfLink(protocol);
     if (officialPdfLink) actions?.appendChild(officialPdfLink);
 
@@ -591,6 +603,7 @@
           <button class="btn json-assessment-launch" type="button" ${assessmentReady ? "" : "disabled"}>
             ${assessmentReady ? "Open protocol assessment" : "Assessment unavailable"}
           </button>
+          <button class="btn secondary regimen-info-link" type="button" data-regimen-info-protocol="${escapeHtml(protocolId)}" aria-label="Open regimen information and supporting evidence"><span aria-hidden="true">◈</span> Regimen info</button>
           ${metadata.source_url ? `<a class="btn secondary official-pdf-link" href="${escapeHtml(metadata.source_url)}" rel="external" referrerpolicy="no-referrer" aria-label="Open the official NCCP protocol PDF"><span aria-hidden="true">📄</span> Official NCCP PDF</a>` : ""}
         </div>`;
 

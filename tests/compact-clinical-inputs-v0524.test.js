@@ -10,10 +10,10 @@ const uiSource = fs.readFileSync(path.join(root, "js", "generic-assessment-ui.js
 const css = fs.readFileSync(path.join(root, "css", "protocol-dose-schedule.css"), "utf8");
 const Titles = require(path.join(root, "js", "regimen-display-title.js"));
 
-assert.strictEqual(pkg.version, "0.55.0");
-assert(html.includes("SACTCheck v0.55.0 — Global Clinical Scenario Interpreter"));
+assert.strictEqual(pkg.version, "0.56.0");
+assert(html.includes("SACTCheck v0.56.0 — Clinical scenario interpreter and regimen information"));
 assert(html.includes("js/regimen-display-title.js?v=0.55.0"));
-assert(html.includes("js/generic-assessment-ui.js?v=0.55.0"));
+assert(html.includes("js/generic-assessment-ui.js?v=0.56.0"));
 assert(html.includes("css/protocol-dose-schedule.css?v=0.55.0"));
 
 assert(!uiSource.includes('placeholder="Not assessed"'), "Empty inputs must not display Not assessed.");

@@ -1,3 +1,16 @@
+# v0.56.0 — Clinical Scenario and Regimen Information — 5 August 2026
+
+- Refined the Clinical scenario interpreter with conservative typo recognition and transparent correction wording.
+- Added medication-only and incomplete-scenario handling with grouped possible protocols rather than a blank result.
+- Added candidate systolic blood pressure, diastolic blood pressure and temperature extraction before regimen selection, explicitly marked not assessed.
+- Prevented isolated clinical numbers from being interpreted as NCCP regimen codes.
+- Added clear warnings where the selected regimen has no matching structured numeric field.
+- Added a Regimen info visual link to every regimen card and within the opened assessment engine.
+- Added 24 AI-assisted draft drug class and mechanism profiles.
+- Added 18 pilot primary-publication evidence mappings with stable PubMed links, limitations and review status.
+- Kept evidence content separate from deterministic protocol assessment.
+- Changed no clinical protocol JSON, NCCP threshold, assessment rule, dose level or calculation.
+
 # v0.55.0 — Global Clinical Scenario Interpreter
 
 - Added a standalone Clinical scenario interpreter to the main library screen.

@@ -23,8 +23,8 @@ assert.ok(parsed.warnings.some(item => /patient-identifiable information/i.test(
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const ui = fs.readFileSync(path.join(root, 'js', 'generic-assessment-ui.js'), 'utf8');
 const immune = fs.readFileSync(path.join(root, 'js', 'immunotherapy-safety.js'), 'utf8');
-assert.ok(index.includes('js/scenario-interpreter.js?v=0.55.0'));
-assert.ok(index.includes('css/scenario-interpreter.css?v=0.55.0'));
+assert.ok(/js\/scenario-interpreter\.js\?v=0\.(?:55|56)\.0/.test(index));
+assert.ok(/css\/scenario-interpreter\.css\?v=0\.(?:55|56)\.0/.test(index));
 assert.ok(ui.includes('jsonScenarioInterpreterButton'));
 assert.ok(ui.includes('jsonScenarioInterpreterPanel'));
 assert.ok(ui.includes('applyScenarioValues'));

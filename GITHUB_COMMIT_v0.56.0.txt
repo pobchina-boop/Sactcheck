@@ -1,0 +1,39 @@
+Commit summary:
+Refine the Clinical scenario interpreter and add regimen evidence pages (v0.56.0)
+
+Commit description:
+Introduces SACTCheck v0.56.0 as a cumulative update containing all v0.55.0 and v0.54.0 functionality.
+
+Clinical scenario interpreter changes:
+- Keeps the exact function name Clinical scenario interpreter
+- Adds conservative typo-tolerant recognition for selected long drug and regimen aliases
+- Transparently shows corrections such as bevicizumab to bevacizumab
+- Supports medication-only and incomplete scenarios without returning a blank result
+- Groups possible protocols by tumour group when the medicine is used across several NCCP regimens
+- Extracts candidate clinical values before regimen selection and labels them not assessed yet
+- Adds systolic blood pressure, diastolic blood pressure and temperature preview extraction
+- Prevents isolated clinical numbers from being misinterpreted as NCCP regimen codes
+- Adds explicit no-match, multiple-match and unmatched-medicine states
+- Requires exact protocol selection before structured transfer or deterministic assessment
+- States when a selected protocol has no structured numeric field for a recognised value
+- Does not convert numeric blood pressure into a Boolean hypertension answer or treatment action
+
+Regimen information and evidence changes:
+- Adds a visual Regimen info link to every published regimen card
+- Adds Regimen info access within the opened assessment engine
+- Opens a dedicated regimen information page with NCCP code, version, indication and components
+- Adds 24 AI-assisted draft drug profiles covering drug type, class and mechanism of action
+- Adds 18 pilot evidence mappings with trial acronym, publication details, clinical context, relevance, limitations and stable PubMed links
+- Keeps the official NCCP protocol prominent as the operational source
+- Displays review status and a clear empty state where evidence has not yet been mapped
+- Separates educational evidence content from deterministic assessment rules
+
+Safety and integrity:
+- No scenario text is sent to an external AI service
+- No API key is embedded
+- No diagnosis, prescribing instruction, treatment clearance or autonomous dose decision is generated
+- AI-assisted evidence summaries remain pending Consultant Oncology and oncology-pharmacy review
+- All protocol JSON files remain byte-for-byte unchanged from v0.55.0
+- No NCCP threshold, rule, recommendation, dose level or patient-specific dose calculation was changed
+- Full security, protocol publishing, historical regression, focused v0.56.0, GitHub Pages and deployable-site validation passed
+- No nested protocols/protocols directory is included

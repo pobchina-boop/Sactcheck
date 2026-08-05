@@ -43,16 +43,16 @@ const definitions = Object.entries(lonsurf.input_definitions).map(([id, definiti
 scenarioInterpreter.prepare(lonsurf, definitions, {});
 const parsed = scenarioInterpreter.parse('ANC 0.3, cycle 3, current dose 30 mg/m2 twice daily.');
 assert.strictEqual(parsed.extractions.find(item => item.fieldId === 'anc_x10e9_l').value, '0.3');
-assert.strictEqual(scenarioInterpreter.version, '0.55.0');
+assert.ok(['0.55.0', '0.56.0'].includes(scenarioInterpreter.version));
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const globalSource = fs.readFileSync(path.join(root, 'js', 'global-scenario-interpreter.js'), 'utf8');
 assert.ok(html.includes('id="globalScenarioInterpreter"'));
 assert.ok(html.includes('Clinical scenario interpreter'));
 assert.ok(html.includes('Regimen agnostic entry point'));
-assert.ok(html.includes('js/global-scenario-interpreter.js?v=0.55.0'));
-assert.ok(html.includes('css/global-scenario-interpreter.css?v=0.55.0'));
-assert.ok(html.includes('js/scenario-interpreter.js?v=0.55.0'));
+assert.ok(/js\/global-scenario-interpreter\.js\?v=0\.(?:55|56)\.0/.test(html));
+assert.ok(/css\/global-scenario-interpreter\.css\?v=0\.(?:55|56)\.0/.test(html));
+assert.ok(/js\/scenario-interpreter\.js\?v=0\.(?:55|56)\.0/.test(html));
 assert.ok(globalSource.includes('Select this regimen and continue'));
 assert.ok(globalSource.includes('No protocol assessment is produced at this stage.'));
 assert.ok(globalSource.includes('draftText: scenarioText()'));

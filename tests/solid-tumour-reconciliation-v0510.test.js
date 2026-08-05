@@ -5,7 +5,7 @@ const vm = require('vm');
 const { execFileSync } = require('child_process');
 
 const root = path.resolve(__dirname, '..');
-const APP_RELEASE = '0.55.0';
+const APP_RELEASE = '0.56.0';
 const RECONCILIATION_RELEASE = '0.51.0';
 const CHECK_DATE = '2026-07-29';
 const HSE_HOSTS = new Set(['healthservice.hse.ie', 'assets.hse.ie', 'www.hse.ie']);
@@ -75,11 +75,11 @@ const pkg = readJson('package.json');
 const catalogue = readJson('protocols/index.json');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
-assert.equal(pkg.version, APP_RELEASE, 'package.json version is not v0.55.0.');
-assert(html.includes('<title>SACTCheck v0.55.0 — Global Clinical Scenario Interpreter</title>'), 'Current release title is missing.');
-assert(html.includes('<span class="header-version">v0.55.0</span>'), 'Current header version is missing.');
-assert(html.includes('v0.55.0 · What changed?'), 'Current release summary is missing.');
-assert(html.includes('js/protocol-loader.js?v=0.51.0'), 'Protocol-loader cache key is stale.');
+assert.equal(pkg.version, APP_RELEASE, 'package.json version is not v0.56.0.');
+assert(html.includes('<title>SACTCheck v0.56.0 — Clinical scenario interpreter and regimen information</title>'), 'Current release title is missing.');
+assert(html.includes('<span class="header-version">v0.56.0</span>'), 'Current header version is missing.');
+assert(html.includes('v0.56.0 · What changed?'), 'Current release summary is missing.');
+assert(html.includes('js/protocol-loader.js?v=0.56.0'), 'Protocol-loader cache key is stale.');
 assert.equal(catalogue.protocols.length, 376, 'Expected 376 indexed protocols.');
 assert.equal(catalogue.protocol_count, 376, 'Catalogue protocol_count is not 376.');
 

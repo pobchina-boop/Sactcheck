@@ -95,7 +95,8 @@
           <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" rel="external" referrerpolicy="no-referrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
           <button class="btn secondary hidden" type="button" id="jsonDoseScheduleButton"><span aria-hidden="true">📅</span> Dose &amp; Schedule</button>
           <button class="btn secondary hidden" type="button" id="jsonImmuneSafetyButton"><span aria-hidden="true">◉</span> Immune safety</button>
-          <button class="btn secondary hidden" type="button" id="jsonScenarioInterpreterButton"><span aria-hidden="true">✦</span> Scenario interpreter</button>
+          <button class="btn secondary hidden" type="button" id="jsonScenarioInterpreterButton"><span aria-hidden="true">✦</span> Clinical scenario interpreter</button>
+          <button class="btn secondary hidden" type="button" id="jsonRegimenInfoButton"><span aria-hidden="true">◈</span> Regimen info</button>
           <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Supportive medicines</a>
         </div>
         <span class="badge engine-json">JSON engine v${escapeHtml(Engine.version)}</span>
@@ -312,6 +313,10 @@
       root.SACTCheckScenarioInterpreter?.open?.(activeProtocol);
     });
 
+    document.getElementById("jsonRegimenInfoButton")?.addEventListener("click", () => {
+      root.SACTCheckRegimenKnowledgeBase?.open?.(activeProtocol);
+    });
+
     document.getElementById("jsonProfile").addEventListener("change", event => {
       activeProfileId = event.target.value;
       renderProtocolInformation(activeProtocol);
@@ -472,6 +477,7 @@
     }
 
     root.SACTCheckProtocolDoseSchedule?.prepare?.(protocol);
+    root.SACTCheckRegimenKnowledgeBase?.prepare?.(protocol);
 
     const officialPdf = document.getElementById("jsonOfficialPdf");
     const resultOfficialPdf = document.getElementById("jsonResultOfficialPdf");
@@ -1098,7 +1104,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.55.0"
+      appVersion: "0.56.0"
     });
   }
 
@@ -1337,7 +1343,7 @@
   }
 
   root.SACTCheckAssessmentFieldClassification = Object.freeze({
-    version: "0.55.0",
+    version: "0.56.0",
     laboratoryDomain,
     isEcogDefinition,
     isExplicitNonLaboratoryCriterion,

@@ -10,9 +10,9 @@ const css = fs.readFileSync(path.join(root, 'css/immunotherapy-safety.css'), 'ut
 const Safety = require(path.join(root, 'js/immunotherapy-safety.js'));
 const Engine = require(path.join(root, 'js/assessment-engine.js'));
 
-assert.strictEqual(pkg.version, '0.55.0');
+assert.strictEqual(pkg.version, '0.56.0');
 assert.strictEqual(Safety.version, '0.55.0');
-assert(html.includes('SACTCheck v0.55.0 — Global Clinical Scenario Interpreter'));
+assert(html.includes('SACTCheck v0.56.0 — Clinical scenario interpreter and regimen information'));
 assert(html.includes('css/immunotherapy-safety.css?v=0.55.0'));
 assert(html.includes('js/immunotherapy-safety.js?v=0.55.0'));
 assert(ui.includes('jsonImmuneSafetyButton'));

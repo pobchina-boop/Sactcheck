@@ -13,7 +13,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (root) {
   "use strict";
 
-  const VERSION = "0.55.0";
+  const VERSION = "0.56.0";
   let activeProtocol = null;
   let activeDefinitions = [];
   let callbacks = {};
@@ -231,6 +231,63 @@
     if (unmatched.length) warnings.push(`Scenario mentions ${unmatched.join(", ")}, which may not match the opened regimen. Confirm the regimen before assessment.`);
   }
 
+  function previewScenario(textValue) {
+    const text = normalise(textValue);
+    const values = [];
+    const seen = new Set();
+    function add(key, label, value, unit, evidence) {
+      if (value === null || value === undefined || !Number.isFinite(Number(value)) || seen.has(key)) return;
+      seen.add(key);
+      values.push({ key, label, value: Number(value), unit: unit || "", displayValue: `${Number(value)}${unit ? ` ${unit}` : ""}`, evidence: evidence || "" });
+    }
+
+    const bpPair = text.match(/\b(?:bp|blood pressure)\s*(?:is|was|=|:)?\s*(\d{2,3})\s*\/\s*(\d{2,3})\b/i);
+    if (bpPair) {
+      add("systolic_bp", "Systolic blood pressure", bpPair[1], "mmHg", bpPair[0]);
+      add("diastolic_bp", "Diastolic blood pressure", bpPair[2], "mmHg", bpPair[0]);
+    }
+    const systolic = text.match(/\b(?:systolic(?:\s+blood\s+pressure)?|sbp)\s*(?:is|was|=|:)?\s*(\d{2,3})\b/i);
+    if (systolic) add("systolic_bp", "Systolic blood pressure", systolic[1], "mmHg", systolic[0]);
+    const diastolic = text.match(/\b(?:diastolic(?:\s+blood\s+pressure)?|dbp)\s*(?:is|was|=|:)?\s*(\d{2,3})\b/i);
+    if (diastolic) add("diastolic_bp", "Diastolic blood pressure", diastolic[1], "mmHg", diastolic[0]);
+    const temperature = text.match(/\b(?:temperature|temp)\s*(?:is|was|=|:)?\s*(\d{2}(?:\.\d+)?)\s*(?:°?c|celsius)?\b/i);
+    if (temperature) add("temperature", "Temperature", temperature[1], "°C", temperature[0]);
+
+    SEMANTIC_PATTERNS.forEach(pattern => {
+      const number = matchNumber(text, FIELD_ALIASES[pattern.key] || [pattern.key]);
+      if (number !== null && Number.isFinite(number)) add(pattern.key, FIELD_ALIASES[pattern.key]?.[0] || pattern.key, number, pattern.unit, `${FIELD_ALIASES[pattern.key]?.[0] || pattern.key} ${number}`);
+    });
+
+    return { values, warnings: detectIdentifiersPreview(textValue) };
+  }
+
+  function detectIdentifiersPreview(text) {
+    return (/\b(?:mrn|medical record|hospital number|dob|date of birth|pps|email|phone|mobile)\b/i.test(text) || /\b\d{7,}\b/.test(text))
+      ? ["Possible patient-identifiable information detected. Remove names, record numbers, dates of birth and contact details before continuing."]
+      : [];
+  }
+
+  function warnForRecognisedUnmappedValues(textValue) {
+    const preview = previewScenario(textValue);
+    preview.values.filter(item => ["systolic_bp", "diastolic_bp", "temperature"].includes(item.key)).forEach(item => {
+      const fieldPattern = item.key === "systolic_bp" ? /systolic|sbp|blood_pressure_systolic/i
+        : item.key === "diastolic_bp" ? /diastolic|dbp|blood_pressure_diastolic/i
+          : /temperature|(^|_)temp($|_)/i;
+      const definition = activeDefinitions.find(candidate => fieldPattern.test(`${candidate.id || ""} ${candidate.label || ""}`) && candidate.type !== "boolean");
+      if (definition) {
+        addExtraction({
+          fieldId: definition.id,
+          label: definition.label,
+          value: String(item.value),
+          displayValue: item.displayValue,
+          evidence: item.evidence
+        });
+        return;
+      }
+      warnings.push(`${item.label} ${item.displayValue} was recognised, but this selected protocol has no structured numeric ${item.key === "temperature" ? "temperature" : "blood pressure"} field. Review the protocol criteria manually; no treatment action has been generated.`);
+    });
+  }
+
   function parse(textValue) {
     extractions = [];
     warnings = [];
@@ -239,6 +296,7 @@
     detectIdentifiers(text);
     detectRegimenContext(text);
     parseSemanticNumbers(text);
+    warnForRecognisedUnmappedValues(textValue);
     parseBooleanFields(text);
     if (/\b(?:afebrile|no fever|not febrile)\b/i.test(text) && activeDefinitions.some(item => /febrile_neutropenia/i.test(item.id || ""))) {
       warnings.push("Current fever status was noted but was not mapped to the protocol's febrile-neutropenia history field. That field remains unassessed unless the scenario explicitly states whether febrile neutropenia occurred.");
@@ -274,7 +332,7 @@
     if (!target.dataset.scenarioInitialised) {
       target.innerHTML = `
         <div class="scenario-interpreter-head">
-          <div><span class="scenario-eyebrow">Constrained scenario interpreter</span><h2>Describe the clinical scenario</h2><p>Local extraction only. Confirm the structured values before the deterministic protocol assessment runs.</p></div>
+          <div><span class="scenario-eyebrow">Clinical scenario interpreter</span><h2>Describe the clinical scenario</h2><p>Local extraction only. Confirm the structured values before the deterministic protocol assessment runs.</p></div>
           <button type="button" class="btn secondary" data-scenario-close>Close</button>
         </div>
         <div class="scenario-privacy"><strong>Do not enter patient identifiers.</strong><span>The text is processed only in this browser and is not sent to an external AI service.</span></div>
@@ -376,5 +434,5 @@
     panel()?.classList.add("hidden");
   }
 
-  return Object.freeze({ version: VERSION, parse, prepare, open, close, setDraft });
+  return Object.freeze({ version: VERSION, parse, preview: previewScenario, prepare, open, close, setDraft });
 });

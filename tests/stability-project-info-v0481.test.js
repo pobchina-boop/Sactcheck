@@ -11,8 +11,8 @@ const index = read("index.html");
 const loader = read("js/protocol-loader.js");
 const css = read("css/stability-v0481.css");
 
-assert.strictEqual(pkg.version, "0.55.0");
-assert(index.includes("SACTCheck v0.55.0 — Global Clinical Scenario Interpreter"));
+assert.strictEqual(pkg.version, "0.56.0");
+assert(index.includes("SACTCheck v0.56.0 — Clinical scenario interpreter and regimen information"));
 assert(index.includes('css/stability-v0481.css?v=0.48.4'));
 assert(index.includes('id="aboutSactcheckTitle"'));
 assert(index.includes("What SACTCheck is, and why it is being developed"));

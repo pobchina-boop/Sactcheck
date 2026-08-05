@@ -10,7 +10,7 @@ const protocolIndex = JSON.parse(read("protocols/index.json"));
 
 assert(pkg.version.localeCompare("0.48.0", undefined, { numeric: true }) >= 0);
 assert.strictEqual(protocolIndex.protocol_count, 376);
-assert(index.includes("SACTCheck v0.55.0 — Global Clinical Scenario Interpreter"));
+assert(index.includes("SACTCheck v0.56.0 — Clinical scenario interpreter and regimen information"));
 assert(index.includes('class="app-header"'));
 assert(index.includes('assets/branding/sactcheck-mark.svg'));
 assert(index.includes('class="study-hero library-only"'));

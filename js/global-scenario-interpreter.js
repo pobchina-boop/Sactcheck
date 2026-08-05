@@ -13,8 +13,8 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (root) {
   "use strict";
 
-  const VERSION = "0.55.0";
-  const MAX_MATCHES = 6;
+  const VERSION = "0.56.0";
+  const MAX_MATCHES = 12;
   let latestMatches = [];
   let latestWarnings = [];
 
@@ -107,8 +107,37 @@
     return needle && text.includes(` ${needle} `) || (needle.length > 4 && text.includes(needle));
   }
 
+  function levenshtein(a, b) {
+    const left = String(a || "");
+    const right = String(b || "");
+    const rows = Array.from({ length: left.length + 1 }, (_, index) => [index]);
+    for (let column = 0; column <= right.length; column += 1) rows[0][column] = column;
+    for (let row = 1; row <= left.length; row += 1) {
+      for (let column = 1; column <= right.length; column += 1) {
+        const cost = left[row - 1] === right[column - 1] ? 0 : 1;
+        rows[row][column] = Math.min(rows[row - 1][column] + 1, rows[row][column - 1] + 1, rows[row - 1][column - 1] + cost);
+      }
+    }
+    return rows[left.length][right.length];
+  }
+
   function detectGroups(text, groups) {
-    return groups.filter(group => group.phrases.some(phrase => includesPhrase(text, phrase)));
+    const words = normalise(text).trim().split(/\s+/).filter(Boolean);
+    const detected = [];
+    groups.forEach(group => {
+      const exact = group.phrases.find(phrase => includesPhrase(text, phrase));
+      if (exact) {
+        detected.push({ ...group, matchedPhrase: exact, fuzzy: false });
+        return;
+      }
+      const fuzzyCandidate = group.phrases
+        .filter(phrase => /^[a-z]+$/i.test(phrase) && phrase.length >= 7)
+        .flatMap(phrase => words.map(word => ({ phrase, word, distance: levenshtein(word, normalise(phrase).trim()) })))
+        .filter(item => item.word.length >= 7 && item.distance <= (item.phrase.length >= 11 ? 2 : 1))
+        .sort((a, b) => a.distance - b.distance)[0];
+      if (fuzzyCandidate) detected.push({ ...group, matchedPhrase: fuzzyCandidate.phrase, observedPhrase: fuzzyCandidate.word, fuzzy: true });
+    });
+    return detected;
   }
 
   function detectIdentifiers(text) {
@@ -180,14 +209,20 @@
     const text = normalise(textValue);
     const diseases = detectGroups(text, DISEASE_GROUPS);
     const regimens = detectGroups(text, REGIMEN_GROUPS);
-    const codes = [...text.matchAll(/\b(?:nccp\s*)?0*(\d{3,5})\b/gi)].map(match => match[1]);
+    const codes = [...text.matchAll(/\bnccp\s*0*(\d{3,5})\b/gi)].map(match => match[1]);
+    const preview = root.SACTCheckScenarioInterpreter?.preview?.(textValue) || { values: [], warnings: [] };
+    const corrections = [...diseases, ...regimens]
+      .filter(item => item.fuzzy)
+      .map(item => `Interpreted “${item.observedPhrase}” as ${item.label}.`);
     return {
       text,
       diseases,
       regimens,
       codes: [...new Set(codes)],
       tokens: scenarioTokens(textValue),
-      warnings: detectIdentifiers(textValue)
+      candidateValues: preview.values || [],
+      corrections,
+      warnings: [...new Set([...detectIdentifiers(textValue), ...(preview.warnings || [])])]
     };
   }
 
@@ -256,7 +291,8 @@
 
     results.sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
     const filtered = results.filter(item => item.score >= (analysis.regimens.length ? 18 : 12));
-    return { analysis, matches: filtered.slice(0, MAX_MATCHES) };
+    const limit = analysis.regimens.length && !analysis.diseases.length ? MAX_MATCHES : 6;
+    return { analysis, matches: filtered.slice(0, limit) };
   }
 
   function panel() {
@@ -279,8 +315,26 @@
       ...analysis.diseases.map(item => `<span>${escapeHtml(item.label)}</span>`),
       ...analysis.regimens.map(item => `<span>${escapeHtml(item.label)}</span>`)
     ];
-    if (!chips.length) return "";
-    return `<div class="global-scenario-context"><strong>Detected context</strong><div>${chips.join("")}</div></div>`;
+    const detected = chips.length ? `<div class="global-scenario-context"><strong>Detected context</strong><div>${chips.join("")}</div></div>` : "";
+    const corrections = analysis.corrections?.length
+      ? `<div class="global-scenario-corrections">${analysis.corrections.map(item => `<p>${escapeHtml(item)}</p>`).join("")}</div>`
+      : "";
+    const candidates = analysis.candidateValues?.length
+      ? `<div class="global-scenario-candidate-values"><strong>Candidate clinical information — not assessed yet</strong><div>${analysis.candidateValues.map(item => `<span><b>${escapeHtml(item.label)}</b>${escapeHtml(item.displayValue)}</span>`).join("")}</div><p>Potentially important clinical information was entered. Select the exact regimen to review its encoded protocol pathway.</p></div>`
+      : "";
+    return `${corrections}${detected}${candidates}`;
+  }
+
+  function groupedMatchMarkup(result, ambiguous) {
+    const medicationOnly = result.analysis.regimens.length > 0 && result.analysis.diseases.length === 0;
+    if (!medicationOnly) return `<div class="global-scenario-match-list">${result.matches.map((match, index) => matchMarkup(match, index, ambiguous)).join("")}</div>`;
+    const groups = new Map();
+    result.matches.forEach((match, index) => {
+      const label = match.tumourGroups[0] || "Other protocols";
+      if (!groups.has(label)) groups.set(label, []);
+      groups.get(label).push({ match, index });
+    });
+    return `<div class="global-scenario-grouped-matches">${[...groups.entries()].map(([label, items]) => `<section><h3>${escapeHtml(label)}</h3><div class="global-scenario-match-list">${items.map(item => matchMarkup(item.match, item.index, true)).join("")}</div></section>`).join("")}</div>`;
   }
 
   function matchMarkup(match, index, ambiguous) {
@@ -312,7 +366,7 @@
     const context = contextMarkup(result.analysis);
 
     if (!result.matches.length) {
-      target.innerHTML = `${warningHtml}${context}<div class="global-scenario-empty"><strong>No reliable protocol match was identified.</strong><p>Use the regimen library search and select the exact protocol manually. No clinical assessment has been generated.</p><button type="button" class="btn secondary" data-global-manual-search>Search the regimen library</button></div>`;
+      target.innerHTML = `${warningHtml}${context}<div class="global-scenario-empty"><strong>No reliable regimen match was identified.</strong><p>Add the tumour type, combination medicines or NCCP number, or select the exact protocol manually. Candidate clinical values remain unassessed.</p><button type="button" class="btn secondary" data-global-manual-search>Search the regimen library</button></div>`;
       setStatus("Exact regimen selection is required before assessment.", "warn");
       return;
     }
@@ -324,8 +378,11 @@
       : ambiguous
         ? "Several possible protocols were identified. Select the exact regimen."
         : "Select and confirm the exact regimen before structured extraction.";
-    target.innerHTML = `${warningHtml}${context}<div class="global-scenario-result-head"><strong>${escapeHtml(heading)}</strong><p>No protocol assessment is produced at this stage.</p></div><div class="global-scenario-match-list">${result.matches.map((match, index) => matchMarkup(match, index, ambiguous)).join("")}</div><button type="button" class="btn ghost" data-global-manual-search>Choose a different regimen from the library</button>`;
-    setStatus(`${result.matches.length} possible protocol match${result.matches.length === 1 ? "" : "es"}.`, ambiguous ? "warn" : "good");
+    target.innerHTML = `${warningHtml}${context}<div class="global-scenario-result-head"><strong>${escapeHtml(heading)}</strong><p>No protocol assessment is produced at this stage.</p></div>${groupedMatchMarkup(result, ambiguous)}<button type="button" class="btn ghost" data-global-manual-search>Choose a different regimen from the library</button>`;
+    const statusMessage = result.analysis.regimens.length && !result.analysis.diseases.length
+      ? `${result.matches.length} possible protocols across multiple disease groups. Add the tumour type or select the exact regimen.`
+      : `${result.matches.length} possible protocol match${result.matches.length === 1 ? "" : "es"}.`;
+    setStatus(statusMessage, ambiguous || result.matches.length > 1 ? "warn" : "good");
   }
 
   function findMatches() {
@@ -458,6 +515,7 @@
   return Object.freeze({
     version: VERSION,
     analyseScenario,
+    levenshtein,
     matchProtocols,
     findMatches,
     selectProtocol,
