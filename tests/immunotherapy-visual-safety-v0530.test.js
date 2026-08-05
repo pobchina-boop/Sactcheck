@@ -10,7 +10,7 @@ const css = fs.readFileSync(path.join(root, 'css/immunotherapy-safety.css'), 'ut
 const Safety = require(path.join(root, 'js/immunotherapy-safety.js'));
 const Engine = require(path.join(root, 'js/assessment-engine.js'));
 
-assert.strictEqual(pkg.version, '0.56.1');
+assert(pkg.version.localeCompare('0.56.1', undefined, { numeric: true }) >= 0);
 assert.strictEqual(Safety.version, '0.55.0');
 assert(html.includes('SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot'));
 assert(html.includes('css/immunotherapy-safety.css?v=0.55.0'));

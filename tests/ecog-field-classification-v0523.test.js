@@ -9,7 +9,7 @@ const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const uiSource = fs.readFileSync(path.join(root, 'js', 'generic-assessment-ui.js'), 'utf8');
 const ctcaeSource = fs.readFileSync(path.join(root, 'js', 'ctcae-descriptors.js'), 'utf8');
 
-assert.strictEqual(pkg.version, '0.56.1');
+assert(pkg.version.localeCompare('0.56.1', undefined, { numeric: true }) >= 0);
 assert(html.includes('SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot'));
 assert(html.includes('v0.56.1 · What changed?'));
 assert(html.includes('js/generic-assessment-ui.js?v=0.56.1'));

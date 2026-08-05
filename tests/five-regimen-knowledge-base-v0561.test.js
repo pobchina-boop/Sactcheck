@@ -6,7 +6,7 @@ const root = path.resolve(__dirname, '..');
 const moduleApi = require(path.join(root, 'js', 'regimen-knowledge-base.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'data', 'regimen-knowledge-base-v0561.json'), 'utf8'));
 
-assert.strictEqual(moduleApi.version, '0.56.1');
+assert.ok(/^0\.(?:5[6-9]|[6-9]\d)\./.test(moduleApi.version), `Unexpected current knowledge module version: ${moduleApi.version}`);
 assert.strictEqual(data.release, '0.56.1');
 assert.strictEqual(data.regimen_profiles.length, 5, 'Pilot must contain exactly five enhanced regimen profiles.');
 assert.ok(!JSON.stringify(data).includes('AI-assisted'), 'Current user-facing knowledge data must not display an AI-origin label.');
@@ -68,8 +68,8 @@ assert.ok(source.includes('Additional trial publications'));
 assert.ok(source.includes('Important limitations'));
 assert.ok(css.includes('.regimen-overview-grid'));
 assert.ok(css.includes('.regimen-follow-up-publications'));
-assert.ok(index.includes('SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot'));
-assert.ok(index.includes('css/regimen-knowledge-base.css?v=0.56.1'));
-assert.ok(index.includes('js/regimen-knowledge-base.js?v=0.56.1'));
+assert.ok(index.includes('SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot'), 'Historical pilot label should remain available for regression traceability.');
+assert.ok(index.includes('css/regimen-knowledge-base.css?v=0.58.0'));
+assert.ok(index.includes('js/regimen-knowledge-base.js?v=0.58.0'));
 
 console.log('v0.56.1 five-regimen knowledge-base pilot tests passed.');

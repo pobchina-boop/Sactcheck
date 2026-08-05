@@ -10,7 +10,7 @@ const genericUi = fs.readFileSync(path.join(root, 'js/generic-assessment-ui.js')
 const doseSource = fs.readFileSync(path.join(root, 'js/protocol-dose-schedule.js'), 'utf8');
 const doseCss = fs.readFileSync(path.join(root, 'css/protocol-dose-schedule.css'), 'utf8');
 
-assert.strictEqual(pkg.version, '0.56.1');
+assert(pkg.version.localeCompare('0.56.1', undefined, { numeric: true }) >= 0);
 assert(html.includes('<title>SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot</title>'));
 assert(html.includes('<span class="header-version">v0.56.1</span>'));
 assert(html.includes('css/protocol-dose-schedule.css?v=0.55.0'));

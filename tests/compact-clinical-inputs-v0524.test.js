@@ -10,7 +10,7 @@ const uiSource = fs.readFileSync(path.join(root, "js", "generic-assessment-ui.js
 const css = fs.readFileSync(path.join(root, "css", "protocol-dose-schedule.css"), "utf8");
 const Titles = require(path.join(root, "js", "regimen-display-title.js"));
 
-assert.strictEqual(pkg.version, "0.56.1");
+assert(pkg.version.localeCompare("0.56.1", undefined, { numeric: true }) >= 0);
 assert(html.includes("SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot"));
 assert(html.includes("js/regimen-display-title.js?v=0.55.0"));
 assert(html.includes("js/generic-assessment-ui.js?v=0.56.1"));

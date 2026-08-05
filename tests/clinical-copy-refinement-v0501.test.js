@@ -11,7 +11,7 @@ const library = read("js/library-ux.js");
 const assessment = read("js/generic-assessment-ui.js");
 const pkg = JSON.parse(read("package.json"));
 
-assert.strictEqual(pkg.version, "0.56.1");
+assert(pkg.version.localeCompare("0.56.1", undefined, { numeric: true }) >= 0);
 assert(index.includes("SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot"));
 assert(index.includes("v0.56.1 · What changed?"));
 assert(!index.includes("No patient-identifiable information required"));

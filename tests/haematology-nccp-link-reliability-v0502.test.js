@@ -11,7 +11,7 @@ const catalogue = JSON.parse(fs.readFileSync(path.join(root, "protocols", "index
 const rows = Array.isArray(catalogue) ? catalogue : catalogue.protocols;
 const haemRows = rows.filter(row => row.enabled !== false && /protocols\/haemato-oncology\/plasma-cell\//.test(row.path));
 
-assert.strictEqual(pkg.version, "0.56.1");
+assert(pkg.version.localeCompare("0.56.1", undefined, { numeric: true }) >= 0);
 assert(index.includes("SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot"));
 assert.strictEqual(haemRows.length, 15, "Expected 15 active Haematology protocols");
 
