@@ -304,6 +304,15 @@
     return badges.join("");
   }
 
+
+  function encodingMaturityBadge(protocol) {
+    const maturity = protocol?.metadata?.encoding_maturity;
+    if (!maturity?.label) return "";
+    const validated = Boolean(maturity.clinical_use_authorised && maturity.consultant_reviewed && maturity.oncology_pharmacy_reviewed);
+    const cssClass = validated ? "protocol-status-validated" : "protocol-status-pending";
+    return `<span class="badge protocol-status ${cssClass} encoding-maturity">${escapeHtml(maturity.label)}</span>`;
+  }
+
   function sourceReviewBadge(protocol) {
     const status = String(protocol?.metadata?.source_status || "");
     if (!status.includes("review_date_passed")) return "";
@@ -512,7 +521,7 @@
         sourceUrl: protocol?.metadata?.source_url,
         shadow: entry.mode === "shadow_validation",
         ready: assessmentReady
-      })}${sourceReviewBadge(protocol)}${emetogenicBadge(protocol)}`;
+      })}${encodingMaturityBadge(protocol)}${sourceReviewBadge(protocol)}${emetogenicBadge(protocol)}`;
     }
 
     replaceRuleControl(card, true);
@@ -587,13 +596,14 @@
           shadow: migrationMode === "shadow_validation",
           localPreview,
           ready: assessmentReady
-        })}${sourceReviewBadge(protocol)}${emetogenicBadge(protocol)}</div>
+        })}${encodingMaturityBadge(protocol)}${sourceReviewBadge(protocol)}${emetogenicBadge(protocol)}</div>
         <details class="protocol-card-details">
           <summary>Protocol details</summary>
           <div class="details-body">
             ${aliases.length ? `<p><strong>Common / trade names:</strong> ${aliases.map(escapeHtml).join(" · ")}</p>` : ""}
             <p><strong>Tumour groups:</strong> ${escapeHtml(tumourDisplay)}</p>
             <p><strong>Rules encoded:</strong> ${totalRules}</p>
+            ${metadata.encoding_maturity?.label ? `<p><strong>Encoding maturity:</strong> ${escapeHtml(metadata.encoding_maturity.label)}</p>` : ""}
             <p><strong>Engine:</strong> JSON protocol assessment</p>
             ${validation.warnings.length ? `<p><strong>Validation warnings:</strong> ${validation.warnings.length}</p>` : ""}
             ${validation.errors.length ? `<p><strong>Validation errors:</strong> ${validation.errors.length}. Assessment publication is blocked.</p>` : ""}

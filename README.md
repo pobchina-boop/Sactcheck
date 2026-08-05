@@ -2,20 +2,20 @@
 
 ## Current release
 
-**SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot**
+**SACTCheck v0.58.1 — Organ-Function Rule Reconciliation**
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.56.1 expands the Regimen info framework into five detailed, source-linked regimen pages while retaining the cumulative Clinical scenario interpreter and immunotherapy-safety functionality from v0.56.0, v0.55.0 and v0.54.0.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.58.1 is a clinical data-integrity release built on the v0.58.0 ten-regimen knowledge base and the v0.57.0 search-first interface.
 
-### v0.56.1 highlights
+### v0.58.1 highlights
 
-- Adds five detailed regimen overview and evidence pages across gastrointestinal, lung, breast and gynaecological oncology.
-- Adds trial population, intervention, comparator, endpoint, selected numerical findings, limitations, PubMed and DOI links.
-- Retains 24 reusable drug profiles and 18 protocol evidence mappings.
-- Corrects source `index.html` knowledge-base references so the function does not depend on an existing `_site` build.
-- Preserves the exact name **Clinical scenario interpreter**.
-- Changes no clinical protocol JSON, threshold, recommendation or dose calculation.
+- Reconciles NCCP 00450 and 00451 mitomycin plus 5-fluorouracil chemoradiation against the current official v4c source protocols.
+- Adds optional CrCl, bilirubin, AST, renal-impairment and hepatic-impairment inputs with independent partial assessment.
+- Corrects the platelet treatment-delay threshold to include platelet counts from 50–99 ×10⁹/L and retains the separate <50 ×10⁹/L dose-reduction pathway.
+- Adds component-specific fluorouracil and mitomycin renal/hepatic actions and fluorouracil diarrhoea/mucositis modifications.
+- Adds a library-wide organ-function rule-coverage audit and visibly reclassifies protocols whose organ-function rules remain incomplete.
+- Preserves the search-first interface and the cumulative ten-regimen knowledge base.
 
-See `RELEASE_NOTES_v0.56.1.md`, `VALIDATION_REPORT_v0.56.1.md`, `FIVE_REGIMEN_EVIDENCE_SOURCE_REGISTER_v0.56.1.md` and `REGIMEN_INFORMATION_EVIDENCE_GOVERNANCE_v0.56.1.md`.
+See `RELEASE_NOTES_v0.58.1.md`, `VALIDATION_REPORT_v0.58.1.md`, `V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.md` and `V0581_PROTOCOL_JSON_HASHES.json`.
 
 ## Safety and governance
 

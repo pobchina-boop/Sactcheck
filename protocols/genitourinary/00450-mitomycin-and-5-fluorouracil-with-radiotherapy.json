@@ -15,8 +15,8 @@
     "indication": "Muscle-invasive bladder cancer treated with definitive chemoradiation.",
     "source_url": "https://healthservice.hse.ie/documents/6482/450_v4c_Mitomycin_and_5-FU_5__RT.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.44.0",
-    "source_checked_date": "2026-07-25",
+    "sactcheck_encoding_version": "0.58.1",
+    "source_checked_date": "2026-08-05",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "genitourinary_subgroups": [
@@ -66,11 +66,12 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -84,6 +85,14 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
+    },
+    "encoding_maturity": {
+      "level": "rule_level_source_reconciled",
+      "label": "Rule-level source reconciled · clinical/pharmacy validation pending",
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
     }
   },
   "clinical_governance": {
@@ -158,24 +167,6 @@
       ],
       "demo_value": "1"
     },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN"
-    },
     "non_haematological_toxicity_grade": {
       "label": "Other clinically relevant non-haematological toxicity grade",
       "type": "select",
@@ -218,48 +209,6 @@
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact."
     },
-    "hypersensitivity_grade": {
-      "label": "Infusion or hypersensitivity reaction grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction; interruption not indicated."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Therapy/interruption indicated with prompt response."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged or recurrent reaction; hospitalisation indicated."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact."
-    },
     "anc": {
       "label": "ANC",
       "type": "number",
@@ -292,6 +241,230 @@
       "type": "boolean",
       "required": false,
       "demo_value": false
+    },
+    "hypersensitivity": {
+      "label": "Known hypersensitivity to a regimen component",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal/adequate"
+        },
+        {
+          "value": "partial",
+          "label": "Partial DPD deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete DPD deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Not known"
+        }
+      ],
+      "demo_value": "normal"
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "mucositis_grade": {
+      "label": "Oral mucositis/stomatitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (CrCl)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 80,
+      "unit": "mL/min",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "The NCCP mitomycin pathway uses CrCl thresholds at 10 mL/min and a high-dose caution range of 10–60 mL/min."
+      }
+    },
+    "renal_impairment_severity": {
+      "label": "Clinical renal impairment category for fluorouracil",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No clinically significant renal impairment"
+        },
+        {
+          "value": "mild",
+          "label": "Mild renal impairment"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate renal impairment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe renal impairment"
+        },
+        {
+          "value": "unknown",
+          "label": "Severity not established"
+        }
+      ],
+      "demo_value": "none",
+      "help": "The NCCP source advises considering fluorouracil dose reduction only in severe renal impairment and cautions that renal impairment can affect uracil-based DPD phenotyping."
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 12,
+      "unit": "µmol/L"
+    },
+    "ast_uln_multiple": {
+      "label": "AST actual result (×ULN calculated automatically)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "unit": "×ULN",
+      "derived_actual_field": "ast_u_l"
+    },
+    "ast_u_l": {
+      "label": "AST actual result",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 42,
+      "unit": "U/L",
+      "visible": false,
+      "derived_from_lab_target": "ast_uln_multiple"
+    },
+    "hepatic_impairment_severity": {
+      "label": "Clinical hepatic impairment category for fluorouracil",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No clinically significant hepatic impairment"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate hepatic impairment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe hepatic impairment"
+        },
+        {
+          "value": "unknown",
+          "label": "Severity not established"
+        }
+      ],
+      "demo_value": "none",
+      "help": "Use the clinically established hepatic impairment category in addition to the absolute bilirubin and AST thresholds in the NCCP table."
     }
   },
   "required_inputs": [],
@@ -367,69 +540,6 @@
         "explanation": "Grade 3 or worse non-haematological toxicity requires interruption and source-specific review."
       },
       {
-        "id": "HSR_G3",
-        "priority": 10,
-        "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC <1.0 ×10⁹/L: withhold and apply the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "ANC <1.0 ×10⁹/L: withhold and apply the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets <75 ×10⁹/L: withhold and apply the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Platelets <75 ×10⁹/L: withhold and apply the regimen-specific haematology pathway."
-      },
-      {
         "id": "FN",
         "priority": 10,
         "when": {
@@ -449,6 +559,548 @@
           "page": "Dose modifications / treatment assessment"
         },
         "explanation": "Febrile neutropenia requires acute management, treatment interruption and subsequent dose/G-CSF review."
+      },
+      {
+        "id": "HYPERSENSITIVITY_EXCLUSION",
+        "priority": 10,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Known hypersensitivity to fluorouracil, mitomycin or an excipient is an exclusion."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Known hypersensitivity to fluorouracil, mitomycin or an excipient is an exclusion."
+      },
+      {
+        "id": "PREGNANCY_OR_BREASTFEEDING",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "pregnancy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "breastfeeding",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Pregnancy or breastfeeding triggers the NCCP exclusion pathway."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Pregnancy or breastfeeding triggers the NCCP exclusion pathway."
+      },
+      {
+        "id": "DPD_COMPLETE_DEFICIENCY",
+        "priority": 10,
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "complete"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Known complete DPD deficiency is a contraindication to fluorouracil."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Known complete DPD deficiency is a contraindication to fluorouracil."
+      },
+      {
+        "id": "DPD_PARTIAL_DEFICIENCY",
+        "priority": 8,
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "partial"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
+      },
+      {
+        "id": "DPD_UNKNOWN",
+        "priority": 7,
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "unknown"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Confirm DPD status before first fluorouracil treatment unless previously tested."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Confirm DPD status before first fluorouracil treatment unless previously tested."
+      },
+      {
+        "id": "ANC_LT_0_5",
+        "priority": 10,
+        "when": {
+          "field": "anc",
+          "operator": "<",
+          "value": 0.5
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "whole_regimen",
+            "fluorouracil"
+          ],
+          "message": "ANC <0.5 ×10⁹/L: delay until recovery and consider reducing subsequent fluorouracil by 25%."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "ANC <0.5 ×10⁹/L: delay until recovery and consider reducing subsequent fluorouracil by 25%."
+      },
+      {
+        "id": "ANC_0_5_TO_LT_1",
+        "priority": 9,
+        "when": {
+          "field": "anc",
+          "operator": "<",
+          "value": 1
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "ANC 0.5–0.99 ×10⁹/L: delay treatment until recovery."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "ANC 0.5–0.99 ×10⁹/L: delay treatment until recovery."
+      },
+      {
+        "id": "PLATELETS_LT_50",
+        "priority": 10,
+        "when": {
+          "field": "platelets",
+          "operator": "<",
+          "value": 50
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "whole_regimen",
+            "fluorouracil"
+          ],
+          "message": "Platelets <50 ×10⁹/L: delay until recovery and consider reducing subsequent fluorouracil by 25%."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Platelets <50 ×10⁹/L: delay until recovery and consider reducing subsequent fluorouracil by 25%."
+      },
+      {
+        "id": "PLATELETS_50_TO_99",
+        "priority": 9,
+        "when": {
+          "field": "platelets",
+          "operator": "<",
+          "value": 100
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Platelets 50–99 ×10⁹/L: delay treatment until recovery."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Platelets 50–99 ×10⁹/L: delay treatment until recovery."
+      },
+      {
+        "id": "5FU_SEVERE_RENAL_IMPAIRMENT",
+        "priority": 8,
+        "when": {
+          "field": "renal_impairment_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Severe renal impairment: consider fluorouracil dose reduction; agree any modification with the Consultant and oncology pharmacy."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Severe renal impairment: consider fluorouracil dose reduction; agree any modification with the Consultant and oncology pharmacy."
+      },
+      {
+        "id": "RENAL_DPD_PHENOTYPE_CAUTION",
+        "priority": 7,
+        "when": {
+          "field": "renal_impairment_severity",
+          "operator": "in",
+          "value": [
+            "moderate",
+            "severe"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Moderate or severe renal impairment can elevate blood uracil and confound DPD phenotyping; review the DPD testing method and consider genotype testing."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Moderate or severe renal impairment can elevate blood uracil and confound DPD phenotyping; review the DPD testing method and consider genotype testing."
+      },
+      {
+        "id": "MITOMYCIN_CRCL_LT_10",
+        "priority": 9,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 10
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "mitomycin"
+          ],
+          "message": "CrCl <10 mL/min: use 75% of the mitomycin dose in the encoded NCCP pathway."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "CrCl <10 mL/min: use 75% of the mitomycin dose in the encoded NCCP pathway."
+      },
+      {
+        "id": "MITOMYCIN_CRCL_EQ_10_BOUNDARY",
+        "priority": 8,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": 10
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "mitomycin"
+          ],
+          "message": "CrCl exactly 10 mL/min is not explicitly allocated by the NCCP table (<10 versus >10); obtain Consultant/pharmacy review."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "CrCl exactly 10 mL/min is not explicitly allocated by the NCCP table (<10 versus >10); obtain Consultant/pharmacy review."
+      },
+      {
+        "id": "MITOMYCIN_HIGH_DOSE_CRCL_10_TO_60",
+        "priority": 8,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "between_inclusive",
+          "value": [
+            10,
+            60
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "mitomycin"
+          ],
+          "message": "This regimen uses mitomycin 12 mg/m². With CrCl 10–60 mL/min, the NCCP source advises considering a dose reduction for high-dose mitomycin."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "This regimen uses mitomycin 12 mg/m². With CrCl 10–60 mL/min, the NCCP source advises considering a dose reduction for high-dose mitomycin."
+      },
+      {
+        "id": "5FU_BILIRUBIN_GT_85",
+        "priority": 10,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 85
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Bilirubin >85 µmol/L triggers the fluorouracil contraindication in the NCCP table."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Bilirubin >85 µmol/L triggers the fluorouracil contraindication in the NCCP table."
+      },
+      {
+        "id": "5FU_BILIRUBIN_EQ_85_BOUNDARY",
+        "priority": 8,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": "==",
+          "value": 85
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Bilirubin exactly 85 µmol/L is not explicitly allocated by the NCCP table (<85 versus >85); obtain Consultant/pharmacy review."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Bilirubin exactly 85 µmol/L is not explicitly allocated by the NCCP table (<85 versus >85); obtain Consultant/pharmacy review."
+      },
+      {
+        "id": "5FU_AST_GT_180",
+        "priority": 10,
+        "when": {
+          "field": "ast_u_l",
+          "operator": ">",
+          "value": 180
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "AST >180 U/L triggers the fluorouracil contraindication in the NCCP table."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "AST >180 U/L triggers the fluorouracil contraindication in the NCCP table."
+      },
+      {
+        "id": "5FU_AST_EQ_180_BOUNDARY",
+        "priority": 8,
+        "when": {
+          "field": "ast_u_l",
+          "operator": "==",
+          "value": 180
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "AST exactly 180 U/L is not explicitly allocated by the NCCP table (<180 versus >180); obtain Consultant/pharmacy review."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "AST exactly 180 U/L is not explicitly allocated by the NCCP table (<180 versus >180); obtain Consultant/pharmacy review."
+      },
+      {
+        "id": "5FU_MODERATE_HEPATIC_IMPAIRMENT",
+        "priority": 8,
+        "when": {
+          "field": "hepatic_impairment_severity",
+          "operator": "==",
+          "value": "moderate"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; subsequent escalation requires absence of toxicity and Consultant review."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; subsequent escalation requires absence of toxicity and Consultant review."
+      },
+      {
+        "id": "5FU_SEVERE_HEPATIC_IMPAIRMENT",
+        "priority": 9,
+        "when": {
+          "field": "hepatic_impairment_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; subsequent escalation requires absence of toxicity and Consultant review."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; subsequent escalation requires absence of toxicity and Consultant review."
+      },
+      {
+        "id": "MITOMYCIN_AST_GT_2_ULN",
+        "priority": 8,
+        "when": {
+          "field": "ast_uln_multiple",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "mitomycin"
+          ],
+          "message": "AST >2 ×ULN: mitomycin dose reduction is not automatically required, but the NCCP source specifies a clinical decision."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "AST >2 ×ULN: mitomycin dose reduction is not automatically required, but the NCCP source specifies a clinical decision."
+      },
+      {
+        "id": "DIARRHOEA_GRADE_3_PLUS",
+        "priority": 9,
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Grade 3 or worse diarrhoea: delay until resolved to grade 1 or less and reduce subsequent fluorouracil by 50%."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Grade 3 or worse diarrhoea: delay until resolved to grade 1 or less and reduce subsequent fluorouracil by 50%."
+      },
+      {
+        "id": "DIARRHOEA_GRADE_2",
+        "priority": 8,
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Grade 2 diarrhoea: delay fluorouracil until resolved to grade 1 or less."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Grade 2 diarrhoea: delay fluorouracil until resolved to grade 1 or less."
+      },
+      {
+        "id": "MUCOSITIS_GRADE_3_PLUS",
+        "priority": 9,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Grade 3 or worse mucositis: delay until resolved to grade 1 or less and reduce subsequent fluorouracil by 50%."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Grade 3 or worse mucositis: delay until resolved to grade 1 or less and reduce subsequent fluorouracil by 50%."
+      },
+      {
+        "id": "MUCOSITIS_GRADE_2",
+        "priority": 8,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Grade 2 mucositis: delay fluorouracil until resolved to grade 1 or less."
+        },
+        "source": {
+          "document": "NCCP 00450 Version 4c",
+          "page": "2–3 of 5; haematological, renal/hepatic and non-haematological dose-modification tables"
+        },
+        "explanation": "Grade 2 mucositis: delay fluorouracil until resolved to grade 1 or less."
       }
     ]
   },
@@ -471,5 +1123,15 @@
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
     "supportive_medications_label": "CUH low-risk prescription sheet (2021; pharmacy reconciliation required)"
-  }
+  },
+  "dose_modifications": [
+    "Source-reconciled component-specific haematological, renal, hepatic, DPD and diarrhoea/mucositis pathways are encoded as independently actionable rules.",
+    "Absolute bilirubin and AST thresholds are retained for fluorouracil; AST ×ULN is calculated from the local laboratory profile for the mitomycin hepatic review pathway.",
+    "The current official NCCP PDF remains the prescribing source and all dose modifications require Consultant review."
+  ],
+  "monitoring": [
+    "FBC, renal profile and liver profile at baseline",
+    "FBC, renal profile and liver profile weekly throughout treatment",
+    "DPD testing before first fluorouracil unless previously tested; interpret uracil phenotype cautiously in moderate/severe renal impairment"
+  ]
 }

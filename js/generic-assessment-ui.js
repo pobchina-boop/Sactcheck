@@ -422,7 +422,7 @@
       ? `${activeTumourGroup}${displayedTumours.length > 1 ? " (shared protocol)" : ""}`
       : (displayedTumours.join(" · ") || "Uncategorised");
     document.getElementById("jsonProtocolTumour").textContent = contextualTumour;
-    document.getElementById("jsonProtocolStatus").textContent = humanise(protocol.status || "not specified");
+    document.getElementById("jsonProtocolStatus").textContent = metadata.encoding_maturity?.label || humanise(protocol.status || "not specified");
     const deterministicRules = asArray(protocol.rule_engine?.rules).length;
     const iraeReferenceRules = asArray(protocol.pembrolizumab_irae_rules?.rules).length;
     document.getElementById("jsonProtocolRuleCount").textContent = iraeReferenceRules
@@ -993,6 +993,14 @@
       const calculation = calculateLabTarget(target);
       if (calculation) {
         inputs[target] = String(calculation.ratio);
+        const rawDefinitions = activeProtocol?.input_definitions || {};
+        const targetDefinition = Array.isArray(rawDefinitions)
+          ? rawDefinitions.find(definition => definition?.id === target)
+          : rawDefinitions[target];
+        const derivedActualField = targetDefinition?.derived_actual_field;
+        if (derivedActualField && calculation.highestPart?.actual !== undefined) {
+          inputs[derivedActualField] = String(calculation.highestPart.actual);
+        }
         latestLabCalculations[target] = calculation;
       }
     });
@@ -1104,7 +1112,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.56.1"
+      appVersion: "0.58.1"
     });
   }
 
@@ -1343,7 +1351,7 @@
   }
 
   root.SACTCheckAssessmentFieldClassification = Object.freeze({
-    version: "0.56.1",
+    version: "0.58.1",
     laboratoryDomain,
     isEcogDefinition,
     isExplicitNonLaboratoryCriterion,

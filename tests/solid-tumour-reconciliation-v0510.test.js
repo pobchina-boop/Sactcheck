@@ -131,8 +131,8 @@ for (const { entry, protocol } of solid) {
   inputCount += Object.keys(protocol.input_definitions || {}).length;
   ruleCount += (protocol.rule_engine?.rules || []).length;
 }
-assert.equal(inputCount, 5879, 'Solid Tumour input count changed unexpectedly.');
-assert.equal(ruleCount, 5577, 'Solid Tumour rule count changed unexpectedly.');
+assert.equal(inputCount, 5895, 'Solid Tumour input count changed unexpectedly.');
+assert.equal(ruleCount, 5615, 'Solid Tumour rule count changed unexpectedly.');
 
 const expectedSourceResolutions = {
   '00200': { version: '8', published: '2014-02-10', review: '2021-07-21', url: 'https://healthservice.hse.ie/documents/6330/200_Trastuzumab_21days_Ubeecpc.pdf' },
