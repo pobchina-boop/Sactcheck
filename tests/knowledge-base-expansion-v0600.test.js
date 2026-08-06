@@ -92,12 +92,12 @@ const source = fs.readFileSync(path.join(root, 'js', 'regimen-knowledge-base.js'
 const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 assert.ok(pkg.version.localeCompare('0.60.0', undefined, { numeric: true }) >= 0);
-assert.ok(/const VERSION = "0\.60\.[03]"/.test(source));
-assert.ok(/data\/regimen-knowledge-base-v0(?:600|603)\.json/.test(source));
+assert.ok(/const VERSION = "0\.(?:60\.[03]|61\.0)"/.test(source));
+assert.ok(/data\/regimen-knowledge-base-v0(?:600|603|610)\.json/.test(source));
 assert.ok(indexHtml.includes('SACTCheck v0.60.0 — Fifteen-Regimen Knowledge Base'));
 assert.ok(indexHtml.includes('v0.60.0 · What changed?'));
-assert.ok(indexHtml.includes('css/regimen-knowledge-base.css?v=0.60.0'));
-assert.ok(/js\/regimen-knowledge-base\.js\?v=0\.60\.[03]/.test(indexHtml));
+assert.ok(/css\/regimen-knowledge-base\.css\?v=0\.(?:60\.[03]|61\.0)/.test(indexHtml));
+assert.ok(/js\/regimen-knowledge-base\.js\?v=0\.(?:60\.[03]|61\.0)/.test(indexHtml));
 assert.ok(indexHtml.includes('sacituzumab govitecan'));
 assert.ok(indexHtml.includes('durvalumab–gemcitabine–cisplatin'));
 

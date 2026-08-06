@@ -12,8 +12,8 @@ const integrity = JSON.parse(read('V0602_PROTOCOL_JSON_HASHES.json'));
 
 assert.ok(pkg.version.localeCompare('0.60.2', undefined, { numeric: true }) >= 0);
 assert.ok(html.includes('SACTCheck v0.60.2 — Landing Hero Position Fix'), 'Historical v0.60.2 release label should remain traceable.');
-assert.ok(/css\/landing-page-v0602\.css\?v=0\.60\.[23]/.test(html));
-assert.ok(/js\/search-first-v0570\.js\?v=0\.60\.[23]/.test(html));
+assert.ok(/css\/landing-page-v0602\.css\?v=0\.(?:60\.[23]|61\.0)/.test(html));
+assert.ok(/js\/search-first-v0570\.js\?v=0\.(?:60\.[23]|61\.0)/.test(html));
 const libraryStart = html.indexOf('<div id="libraryScreen" class="screen active">');
 const hero = html.indexOf('id="studyHero"', libraryStart);
 const portal = html.indexOf('id="portalSwitcher"', libraryStart);

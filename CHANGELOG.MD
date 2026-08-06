@@ -1,4 +1,15 @@
-# v0.60.3 — Hero Position Fix and SUNLIGHT Evidence
+# v0.61.0 — Three-Regimen Expansion and Evidence-Completeness Audit — 6 August 2026
+
+- Expands the structured knowledge base from 15 to 18 profiles.
+- Adds XELOX/CAPOX, weekly paclitaxel and trastuzumab deruxtecan.
+- Increases principal evidence mappings from 22 to 42 records.
+- Adds visible evidence-relationship labels and a per-profile evidence-completeness audit.
+- Audits all fifteen earlier profiles and closes material multi-indication and mature-follow-up gaps.
+- Preserves RECOURSE and SUNLIGHT with distinct monotherapy and contextual-combination boundaries.
+- Leaves all 382 protocol JSON files and all deterministic clinical logic unchanged.
+- Independent consultant oncology and oncology-pharmacy review remains pending.
+
+# v0.60.3 — Hero Position Fix and SUNLIGHT Evidence — 6 August 2026
 
 - Preserves the corrected hero-first landing layout introduced in v0.60.2.
 - Adds the phase 3 SUNLIGHT trial to the Lonsurf knowledge page as contextual evidence for trifluridine/tipiracil plus bevacizumab.

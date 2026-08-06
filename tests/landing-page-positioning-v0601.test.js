@@ -11,7 +11,7 @@ const integrity = JSON.parse(read('V0601_PROTOCOL_JSON_HASHES.json'));
 
 assert.ok(pkg.version.localeCompare('0.60.1', undefined, { numeric: true }) >= 0);
 assert.ok(read('CHANGELOG.MD').includes('v0.60.1 — Mission-Led Landing Page'), 'Historical release label should remain in the changelog trace.');
-assert.ok(/css\/landing-page-v0602\.css\?v=0\.60\.[123]/.test(html));
+assert.ok(/css\/landing-page-v0602\.css\?v=0\.(?:60\.[123]|61\.0)/.test(html));
 assert.ok(html.includes('Clearer regimen assessment at the point of care'));
 assert.ok(html.includes('Why it exists:'));
 assert.ok(html.includes('Find. Assess. Explain. Verify.'));

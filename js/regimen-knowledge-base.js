@@ -11,8 +11,8 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (root) {
   "use strict";
 
-  const VERSION = "0.60.3";
-  const DATA_URL = "data/regimen-knowledge-base-v0603.json";
+  const VERSION = "0.61.0";
+  const DATA_URL = "data/regimen-knowledge-base-v0610.json";
   let data = null;
   let loadingPromise = null;
   let activeProtocol = null;
@@ -169,7 +169,7 @@
     const followUps = asArray(record.supporting_publications);
     return `<article class="regimen-evidence-card">
       <div class="regimen-evidence-head">
-        <div><span class="regimen-evidence-acronym">${escapeHtml(record.trial_acronym || "Supporting evidence")}</span><h4>${escapeHtml(record.publication_title || "Publication")}</h4></div>
+        <div><span class="regimen-evidence-acronym">${escapeHtml(record.trial_acronym || "Supporting evidence")}</span>${record.evidence_relationship ? `<span class="regimen-evidence-relationship">${escapeHtml(record.evidence_relationship)}</span>` : ""}<h4>${escapeHtml(record.publication_title || "Publication")}</h4></div>
         <span>${escapeHtml([record.journal, record.year].filter(Boolean).join(" · "))}</span>
       </div>
       <dl class="regimen-evidence-grid">
@@ -276,6 +276,21 @@
     </section>`;
   }
 
+  function evidenceAuditMarkup(profile, number) {
+    const audit = profile?.evidence_audit;
+    if (!audit) return "";
+    return `<section class="regimen-information-section regimen-evidence-audit-section">
+      ${sectionHeadMarkup(number, "Evidence completeness audit", "A structured indication-by-indication check; not a systematic review.")}
+      <div class="regimen-evidence-audit-status"><strong>${escapeHtml(audit.status || "Audited")}</strong><span>Sources checked ${escapeHtml(profile.source_checked_date || "")}</span></div>
+      <div class="regimen-module-grid">
+        ${listCardMarkup("Encoded indications reviewed", audit.indications_reviewed, "regimen-module-primary")}
+        ${textCardMarkup("Coverage summary", audit.coverage_summary)}
+        ${textCardMarkup("Later, add-on and sequencing search", audit.later_or_add_on_search)}
+        ${listCardMarkup("Remaining limitations or uncertainties", audit.remaining_uncertainties, "regimen-module-caution")}
+      </div>
+    </section>`;
+  }
+
   function render(protocol, payload) {
     const overlay = ensurePanel();
     const target = overlay?.querySelector("[data-regimen-info-content]");
@@ -295,6 +310,7 @@
     const supportiveCare = regimenProfile?.supportive_care ? supportiveCareMarkup(regimenProfile, nextSection()) : "";
     const monitoring = regimenProfile?.monitoring_and_toxicity ? monitoringMarkup(regimenProfile, nextSection()) : "";
     const administration = regimenProfile?.administration ? administrationMarkup(regimenProfile, nextSection()) : "";
+    const evidenceAudit = regimenProfile?.evidence_audit ? evidenceAuditMarkup(regimenProfile, nextSection()) : "";
     const componentSectionNumber = nextSection();
     const evidenceSectionNumber = nextSection();
 
@@ -311,6 +327,7 @@
       ${supportiveCare}
       ${monitoring}
       ${administration}
+      ${evidenceAudit}
 
       <section class="regimen-information-section">
         ${sectionHeadMarkup(componentSectionNumber, "Regimen components", "Drug class and mechanism summaries are educational and do not alter the encoded assessment.")}

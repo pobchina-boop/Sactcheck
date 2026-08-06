@@ -7,15 +7,15 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const pkg = JSON.parse(read('package.json'));
 const moduleApi = require(path.join(root, 'js', 'regimen-knowledge-base.js'));
-const data = JSON.parse(read('data/regimen-knowledge-base-v0603.json'));
+const data = JSON.parse(read('data/regimen-knowledge-base-v0610.json'));
 const integrity = JSON.parse(read('V0603_PROTOCOL_JSON_HASHES.json'));
 const html = read('index.html');
 
-assert.strictEqual(pkg.version, '0.60.3');
-assert.strictEqual(moduleApi.version, '0.60.3');
-assert.strictEqual(data.release, '0.60.3');
-assert.strictEqual(data.regimen_profiles.length, 15, 'This release enriches evidence and must not add a new regimen profile.');
-assert.strictEqual(data.evidence_records.length, 22, 'SUNLIGHT should increase the evidence record count from 21 to 22.');
+assert.ok(pkg.version.localeCompare('0.60.3', undefined, { numeric: true }) >= 0);
+assert.ok(moduleApi.version.localeCompare('0.60.3', undefined, { numeric: true }) >= 0);
+assert.ok(data.release.localeCompare('0.60.3', undefined, { numeric: true }) >= 0);
+assert.ok(data.regimen_profiles.length >= 15, 'SUNLIGHT must remain available in cumulative knowledge-base releases.');
+assert.ok(data.evidence_records.length >= 22, 'SUNLIGHT and subsequent evidence mappings must remain available.');
 
 const lonsurfProfile = data.regimen_profiles.find(item => item.protocol_id === 'nccp-00382-v3');
 assert.ok(lonsurfProfile, 'Lonsurf regimen profile is missing.');
@@ -41,12 +41,12 @@ assert.ok(/oncology-pharmacy/i.test(sunlight.review_status));
 
 const recourse = data.evidence_records.find(item => item.protocol_id === 'nccp-00382-v3' && item.trial_acronym === 'RECOURSE');
 assert.ok(recourse, 'Existing RECOURSE evidence must be preserved alongside SUNLIGHT.');
-assert.ok(html.includes('SACTCheck v0.60.3 — Hero Position Fix and SUNLIGHT Evidence'));
-assert.ok(html.includes('v0.60.3 · What changed?'));
-assert.ok(html.includes('js/regimen-knowledge-base.js?v=0.60.3'));
+assert.ok(html.includes('SACTCheck v0.61.0 — Evidence-Complete Knowledge Base Expansion'));
+assert.ok(html.includes('v0.61.0 · What changed?'));
+assert.ok(html.includes('js/regimen-knowledge-base.js?v=0.61.0'));
 
 assert.strictEqual(integrity.baseline_release, '0.60.2');
-assert.strictEqual(integrity.current_release, '0.60.3');
+assert.ok(integrity.current_release.localeCompare('0.60.3', undefined, { numeric: true }) >= 0);
 assert.strictEqual(integrity.protocol_json_count, 382);
 assert.strictEqual(integrity.changed_from_v0602_count, 0);
 for (const [relative, expected] of Object.entries(integrity.hashes)) {
