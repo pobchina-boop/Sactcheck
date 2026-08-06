@@ -2,20 +2,21 @@
 
 ## Current release
 
-**SACTCheck v0.58.1 — Organ-Function Rule Reconciliation**
+**SACTCheck v0.59.0 — Library-Wide Organ-Function Reconciliation**
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.58.1 is a clinical data-integrity release built on the v0.58.0 ten-regimen knowledge base and the v0.57.0 search-first interface.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.59.0 completes the organ-function remediation programme started in v0.58.1 while preserving the v0.57.0 search-first interface and cumulative ten-regimen knowledge base.
 
-### v0.58.1 highlights
+### v0.59.0 highlights
 
-- Reconciles NCCP 00450 and 00451 mitomycin plus 5-fluorouracil chemoradiation against the current official v4c source protocols.
-- Adds optional CrCl, bilirubin, AST, renal-impairment and hepatic-impairment inputs with independent partial assessment.
-- Corrects the platelet treatment-delay threshold to include platelet counts from 50–99 ×10⁹/L and retains the separate <50 ×10⁹/L dose-reduction pathway.
-- Adds component-specific fluorouracil and mitomycin renal/hepatic actions and fluorouracil diarrhoea/mucositis modifications.
-- Adds a library-wide organ-function rule-coverage audit and visibly reclassifies protocols whose organ-function rules remain incomplete.
-- Preserves the search-first interface and the cumulative ten-regimen knowledge base.
+- Reconciles all 74 records previously marked partially rule-encoded for renal/hepatic coverage.
+- Adds structured component-specific organ-function pathways to 70 protocols.
+- Explicitly documents four mapped protocols with no prescriptive organ-function dose-adjustment table rather than inventing cutoffs.
+- Adds 299 executable renal/hepatic rules while preserving optional single-value partial assessment.
+- Adds a 74-record source register, reconciliation audit and SHA-256 protocol integrity register.
+- Verifies through the production assessment engine that all 299 new rules can be triggered.
+- Leaves independent consultant oncology and oncology-pharmacy validation pending and keeps clinical-use authorisation false.
 
-See `RELEASE_NOTES_v0.58.1.md`, `VALIDATION_REPORT_v0.58.1.md`, `V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.md` and `V0581_PROTOCOL_JSON_HASHES.json`.
+See `RELEASE_NOTES_v0.59.0.md`, `VALIDATION_REPORT_v0.59.0.md`, `V0590_ORGAN_FUNCTION_SOURCE_REGISTER.md`, `V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.md` and `V0590_PROTOCOL_JSON_HASHES.json`.
 
 ## Safety and governance
 

@@ -11,7 +11,7 @@
     "indication": "Unresectable/metastatic GIST after imatinib failure or intolerance.",
     "source_url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.45.1",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "sarcoma_subgroup": "gist",
@@ -42,7 +42,7 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required",
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -76,7 +76,7 @@
         "reviewed": false
       }
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -90,18 +90,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+      "source_version": "2",
+      "components": [
+        "sunitinib"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding includes NCCP 00719 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding includes NCCP 00719 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -341,6 +358,56 @@
       "ctcae_category": "other_nonhaematological",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Use quantified urine protein where indicated; assess nephrotic syndrome and renal function."
+    },
+    "sunitinib_renal_band": {
+      "label": "Renal status for sunitinib",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "non_dialysis",
+          "label": "Mild, moderate or severe renal impairment (not dialysis)",
+          "decision_value": 0
+        },
+        {
+          "value": "dialysis",
+          "label": "End-stage renal disease on haemodialysis",
+          "decision_value": 1
+        }
+      ],
+      "demo_value": "non_dialysis",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "child_pugh_class": {
+      "label": "Child–Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No hepatic impairment"
+        },
+        {
+          "value": "A",
+          "label": "Child–Pugh A"
+        },
+        {
+          "value": "B",
+          "label": "Child–Pugh B"
+        },
+        {
+          "value": "C",
+          "label": "Child–Pugh C"
+        }
+      ],
+      "demo_value": "none",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -697,6 +764,28 @@
           "page": "Dose modification section"
         },
         "explanation": "Severe proteinuria requires interruption and quantified renal assessment."
+      },
+      {
+        "id": "OF590_00719_SUNITINIB_CHILD_C",
+        "priority": 20,
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Child–Pugh C: sunitinib is not recommended.",
+          "recommendation": "Child–Pugh C: sunitinib is not recommended."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Child–Pugh C: sunitinib is not recommended."
       }
     ]
   },

@@ -96,7 +96,7 @@ for (const { file, data } of gi) {
   const metadata = data.metadata || {};
   assert(!/placeholder|draft/i.test(String(data.status || '')), `${code} remains a placeholder or draft.`);
   assert.strictEqual(data.status, 'encoded_prototype_pending_clinical_and_pharmacy_validation', `${code} lacks active encoded-prototype status.`);
-  assert(['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
+  assert(['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
   assert.strictEqual(metadata.partial_assessment_supported, true, `${code} does not declare single-entry support.`);
   assert(/^https:\/\/healthservice\.hse\.ie\/documents\//.test(metadata.source_url || ''), `${code} does not link directly to an official HSE/NCCP source PDF.`);
   assert(metadata.gi_subgroup, `${code} lacks a GI subgroup.`);

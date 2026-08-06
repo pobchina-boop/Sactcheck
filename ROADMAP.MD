@@ -2,6 +2,20 @@
 
 ## Completed platform milestones
 
+### v0.59.0 organ-function milestone
+
+- Completed reconciliation of the 74 protocols marked partial in v0.58.1.
+- Added 299 executable component-specific renal/hepatic rules across 70 protocols.
+- Recorded four source-reviewed no-prescriptive-adjustment pathways without inventing cutoffs.
+- Added full source, audit and hash registers plus universal new-rule execution testing.
+
+### Immediate next priority
+
+- Resume knowledge-base expansion in controlled five-regimen batches.
+- Conduct consultant oncology and oncology-pharmacy review of the v0.59.0 organ-function source register.
+- Add protocol-version surveillance and “What changed?” comparison as a later controlled milestone.
+
+
 - Protocol folder structure and generated catalogue
 - Standalone rule engine
 - Standalone assessment engine
@@ -17,14 +31,14 @@
 - In-regimen constrained scenario interpreter with clinician-confirmed structured extraction
 - Global regimen-agnostic scenario entry with exact protocol confirmation before assessment
 
-## Current target: validate protocol independence
+## Current target: clinical review and knowledge-base expansion
 
-1. Install and smoke-test v0.17 through Live Server.
-2. Confirm conditional required fields behave correctly and optional omissions remain explicit coverage gaps.
-3. Complete consultant and oncology-pharmacy review of the weekly-paclitaxel JSON.
-4. Add one contrasting multi-agent or immunotherapy regimen using only the schema 2.x JSON workflow.
-5. Add protocol-owned regression scenarios so each JSON can carry its own boundary tests.
-6. Document source review, reviewer identity, approval status and threshold-boundary evidence for every encoded protocol.
+1. Review the v0.59.0 74-record source register with consultant oncology and oncology pharmacy.
+2. Record reviewer identity, review date, source-version confirmation and any protocol-specific amendments.
+3. Continue the regimen knowledge base in five-regimen vertical batches.
+4. Retain independent single-value assessment and explicit unassessed-domain output in every new encoding.
+5. Develop the NCCP protocol-version tracker and clinically focused “What changed?” view after the current source register is reviewed.
+6. Plan prospective usability and decision-time evaluation under the agreed feasibility-study pathway.
 
 ## FOLFOX migration milestone
 

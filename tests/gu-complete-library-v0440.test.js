@@ -34,7 +34,7 @@ for(const {entry,data} of gu){
  const card=m.regimen_card;assert(card&&Array.isArray(card.contexts)&&card.contexts.length,`${code} card context`);cardContexts+=card.contexts.length;
  assert(card.contexts.some(c=>c.cycle_length_days>0),`${code} cycle interval`);
  const side=cardSidecar.protocols.find(x=>x.id===data.protocol_id);assert(side,`${code} sidecar`);
- if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/genitourinary/'),`${code} new file path`);assert(['0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.58.1'].includes(m.sactcheck_encoding_version),`${code} encoding version`);}
+ if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/genitourinary/'),`${code} new file path`);assert(['0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.58.1','0.59.0'].includes(m.sactcheck_encoding_version),`${code} encoding version`);}
 }
 assert.strictEqual(newCount,21);assert(inputs>=650);assert(rules>=600);assert(cardContexts>=67);
 const by=c=>gu.find(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')===c).data;

@@ -69,7 +69,7 @@ for(const {data} of sarcoma){
  const code=String(data.metadata.nccp_regimen_code).padStart(5,'0');const m=data.metadata||{};
  assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} is not an active encoded prototype.`);
  assert(!/placeholder|draft/i.test(String(data.status||'')),`${code} remains a placeholder/draft.`);
- assert(['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
+ assert(['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
  assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
  assert(/^https:\/\/(healthservice\.hse\.ie\/documents\/|www\.hse\.ie\/eng\/services\/list\/5\/cancer\/profinfo\/chemoprotocols\/)/.test(m.source_url||''),`${code} lacks an official HSE/NCCP PDF link.`);
  assert(m.sarcoma_subgroup,`${code} lacks Sarcoma subgroup.`);

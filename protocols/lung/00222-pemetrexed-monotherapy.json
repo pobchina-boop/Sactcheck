@@ -12,7 +12,7 @@
     "indication": "Maintenance or second-line non-squamous NSCLC.",
     "source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.40.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "lung_subgroup": "maintenance_later_line_nsclc",
@@ -40,7 +40,7 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required",
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -49,7 +49,7 @@
     "source_title_exact": "PEMEtrexed Monotherapy",
     "display_title_normalised": true,
     "display_title_normalisation_version": "0.41.1",
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -63,18 +63,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+      "source_version": "5",
+      "components": [
+        "pemetrexed"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00222 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00222 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -209,26 +226,31 @@
       "options": [
         {
           "value": "ge45",
-          "label": "CrCl ≥45 mL/min"
+          "label": "CrCl ≥45 mL/min",
+          "decision_value": "ge45"
         },
         {
           "value": "30_44",
-          "label": "CrCl 30–44 mL/min"
+          "label": "CrCl 30–44 mL/min",
+          "decision_value": "30_44"
         },
         {
           "value": "lt30",
-          "label": "CrCl <30 mL/min"
+          "label": "CrCl <30 mL/min",
+          "decision_value": "lt30"
         },
         {
           "value": "dialysis",
-          "label": "Dialysis"
+          "label": "Dialysis",
+          "decision_value": "dialysis"
         }
       ],
       "demo_value": "ge45",
       "renal_input": {
         "mode": "protocol_specific_band",
         "exact_value_required": false
-      }
+      },
+      "always_show": true
     },
     "folic_acid_b12_given": {
       "label": "Folic acid and vitamin B12 supplementation in place",
@@ -283,6 +305,14 @@
       "ctcae_category": "mucositis",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Inspect oral mucosa and assess pain, diet modification and ability to maintain oral intake."
+    },
+    "pemetrexed_severe_hepatic": {
+      "label": "Severe hepatic impairment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -597,6 +627,54 @@
           "page": "eligibility, exclusions or dose-modification section"
         },
         "explanation": "Grade 3 or worse mucositis requires withholding and dose-modification review."
+      },
+      {
+        "id": "OF590_00222_PEME_LT45",
+        "priority": 20,
+        "when": {
+          "field": "pemetrexed_renal_band",
+          "operator": "in",
+          "value": [
+            "30_44",
+            "lt30",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "CrCl <45 mL/min or dialysis: pemetrexed is not recommended.",
+          "recommendation": "CrCl <45 mL/min or dialysis: pemetrexed is not recommended."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <45 mL/min or dialysis: pemetrexed is not recommended."
+      },
+      {
+        "id": "OF590_00222_PEME_HEP_SEV",
+        "priority": 20,
+        "when": {
+          "field": "pemetrexed_severe_hepatic",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Severe hepatic impairment: pemetrexed is not recommended in the routine source pathway.",
+          "recommendation": "Severe hepatic impairment: pemetrexed is not recommended in the routine source pathway."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Severe hepatic impairment: pemetrexed is not recommended in the routine source pathway."
       }
     ]
   },

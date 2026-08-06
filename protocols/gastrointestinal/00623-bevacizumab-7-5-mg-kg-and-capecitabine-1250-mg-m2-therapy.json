@@ -12,7 +12,7 @@
     "indication": "Metastatic or unresectable colorectal cancer when irinotecan- or oxaliplatin-combination chemotherapy is unsuitable.",
     "source_url": "https://healthservice.hse.ie/documents/6686/623_v3a_Bevacizumab_Capecitabine.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -48,9 +48,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required"
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -64,18 +64,36 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6686/623_v3a_Bevacizumab_Capecitabine.pdf",
+      "source_version": "3a",
+      "components": [
+        "capecitabine",
+        "bevacizumab"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00623 Version 3a. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00623 Version 3a. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -431,6 +449,62 @@
       "type": "boolean",
       "required": false,
       "demo_value": false
+    },
+    "capecitabine_renal_band": {
+      "label": "Renal function for capecitabine",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge51",
+          "label": "CrCl ≥51 mL/min",
+          "decision_value": "ge51"
+        },
+        {
+          "value": "30_50",
+          "label": "CrCl 30–50 mL/min",
+          "decision_value": "30_50"
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30 mL/min",
+          "decision_value": "lt30"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis",
+          "decision_value": "dialysis"
+        }
+      ],
+      "demo_value": "ge51",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "capecitabine_bilirubin_uln": {
+      "label": "Bilirubin for capecitabine",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 0.8,
+      "ui_section": "labs",
+      "always_show": true,
+      "unit": "×ULN"
+    },
+    "capecitabine_alt_ast_uln": {
+      "label": "ALT or AST for capecitabine",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 1,
+      "ui_section": "labs",
+      "always_show": true,
+      "unit": "×ULN"
     }
   },
   "required_inputs": [],
@@ -859,6 +933,89 @@
           "page": "dose-modification section"
         },
         "explanation": "Gastrointestinal perforation or fistula triggers permanent discontinuation of anti-VEGF therapy."
+      },
+      {
+        "id": "OF590_00623_CAPE_RENAL_30_50",
+        "priority": 20,
+        "when": {
+          "field": "capecitabine_renal_band",
+          "operator": "==",
+          "value": "30_50"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "message": "CrCl 30–50 mL/min: administer 75% of the capecitabine dose.",
+          "recommendation": "CrCl 30–50 mL/min: administer 75% of the capecitabine dose.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl 30–50 mL/min: administer 75% of the capecitabine dose."
+      },
+      {
+        "id": "OF590_00623_CAPE_RENAL_LT30",
+        "priority": 20,
+        "when": {
+          "field": "capecitabine_renal_band",
+          "operator": "in",
+          "value": [
+            "lt30",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "message": "CrCl <30 mL/min or dialysis: capecitabine is not recommended.",
+          "recommendation": "CrCl <30 mL/min or dialysis: capecitabine is not recommended."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <30 mL/min or dialysis: capecitabine is not recommended."
+      },
+      {
+        "id": "OF590_00623_CAPE_HEPATIC_HOLD",
+        "priority": 20,
+        "when": {
+          "any": [
+            {
+              "field": "capecitabine_bilirubin_uln",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "field": "capecitabine_alt_ast_uln",
+              "operator": ">",
+              "value": 2.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "message": "Bilirubin >3 ×ULN or ALT/AST >2.5 ×ULN: withhold capecitabine and reassess according to the source pathway.",
+          "recommendation": "Bilirubin >3 ×ULN or ALT/AST >2.5 ×ULN: withhold capecitabine and reassess according to the source pathway."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin >3 ×ULN or ALT/AST >2.5 ×ULN: withhold capecitabine and reassess according to the source pathway."
       }
     ]
   },

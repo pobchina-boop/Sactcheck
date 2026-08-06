@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const root = path.resolve(__dirname, '..');
 const moduleApi = require(path.join(root, 'js', 'regimen-knowledge-base.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'data', 'regimen-knowledge-base-v0580.json'), 'utf8'));
-const integrity = JSON.parse(fs.readFileSync(path.join(root, 'V0581_PROTOCOL_JSON_HASHES.json'), 'utf8'));
+const integrity = JSON.parse(fs.readFileSync(path.join(root, 'V0590_PROTOCOL_JSON_HASHES.json'), 'utf8'));
 
 assert.strictEqual(moduleApi.version, '0.58.0');
 assert.strictEqual(data.schema_version, '1.2');
@@ -73,10 +73,9 @@ for (const [protocolId, [trial, pmid]] of expected) {
 }
 
 assert.strictEqual(integrity.protocol_json_count, 382);
-assert.strictEqual(integrity.current_release, '0.58.1');
-assert.strictEqual(integrity.unchanged_from_baseline, false, 'v0.58.1 intentionally reconciles protocol maturity and organ-function rules.');
-assert.ok(integrity.changed_from_v0580_count >= 2);
-assert.deepStrictEqual(protocolHashes, integrity.hashes, 'Current protocol JSON hashes do not match the v0.58.1 integrity register.');
+assert.strictEqual(integrity.current_release, '0.59.0');
+assert.strictEqual(integrity.changed_from_v0581_count, 74);
+assert.deepStrictEqual(protocolHashes, integrity.hashes, 'Current protocol JSON hashes do not match the v0.59.0 integrity register.');
 
 const source = fs.readFileSync(path.join(root, 'js', 'regimen-knowledge-base.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'css', 'regimen-knowledge-base.css'), 'utf8');

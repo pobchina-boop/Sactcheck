@@ -12,7 +12,7 @@
     "indication": "Unresectable or metastatic hepatocellular carcinoma not suitable for regional therapy.",
     "source_url": "https://healthservice.hse.ie/documents/6342/386_v4_DOXO_60mgm2.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "hepatobiliary",
@@ -45,9 +45,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required"
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -61,18 +61,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6342/386_v4_DOXO_60mgm2.pdf",
+      "source_version": "4",
+      "components": [
+        "doxorubicin"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00386 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00386 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -214,6 +231,61 @@
       "type": "boolean",
       "required": false,
       "demo_value": false
+    },
+    "doxorubicin_renal_band": {
+      "label": "Renal status for doxorubicin",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "gt10",
+          "label": "CrCl >10 mL/min",
+          "decision_value": "gt10"
+        },
+        {
+          "value": "le10",
+          "label": "CrCl ≤10 mL/min",
+          "decision_value": "le10"
+        },
+        {
+          "value": "dialysis",
+          "label": "Haemodialysis",
+          "decision_value": "dialysis"
+        }
+      ],
+      "demo_value": "gt10",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "doxorubicin_bilirubin_band": {
+      "label": "Bilirubin for doxorubicin",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "lt20",
+          "label": "<20 µmol/L"
+        },
+        {
+          "value": "20_50",
+          "label": "20–50 µmol/L"
+        },
+        {
+          "value": "51_86",
+          "label": "51–86 µmol/L"
+        },
+        {
+          "value": "gt86",
+          "label": ">86 µmol/L / Child–Pugh C"
+        }
+      ],
+      "demo_value": "lt20",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -444,6 +516,109 @@
           "page": "dose-modification section"
         },
         "explanation": "Symptomatic cardiac dysfunction requires treatment interruption and urgent assessment."
+      },
+      {
+        "id": "OF590_00386_DOX_DIALYSIS",
+        "priority": 20,
+        "when": {
+          "field": "doxorubicin_renal_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Haemodialysis: consider 75% of the doxorubicin dose.",
+          "recommendation": "Haemodialysis: consider 75% of the doxorubicin dose.",
+          "component_changes": {
+            "doxorubicin": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Haemodialysis: consider 75% of the doxorubicin dose."
+      },
+      {
+        "id": "OF590_00386_DOX_BILI_20_50",
+        "priority": 20,
+        "when": {
+          "field": "doxorubicin_bilirubin_band",
+          "operator": "==",
+          "value": "20_50"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Bilirubin 20–50 µmol/L: administer 50% of the doxorubicin dose.",
+          "recommendation": "Bilirubin 20–50 µmol/L: administer 50% of the doxorubicin dose.",
+          "component_changes": {
+            "doxorubicin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin 20–50 µmol/L: administer 50% of the doxorubicin dose."
+      },
+      {
+        "id": "OF590_00386_DOX_BILI_51_86",
+        "priority": 20,
+        "when": {
+          "field": "doxorubicin_bilirubin_band",
+          "operator": "==",
+          "value": "51_86"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Bilirubin 51–86 µmol/L: administer 25% of the doxorubicin dose.",
+          "recommendation": "Bilirubin 51–86 µmol/L: administer 25% of the doxorubicin dose.",
+          "component_changes": {
+            "doxorubicin": {
+              "dose_percent_of_original": 25
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin 51–86 µmol/L: administer 25% of the doxorubicin dose."
+      },
+      {
+        "id": "OF590_00386_DOX_BILI_GT86",
+        "priority": 20,
+        "when": {
+          "field": "doxorubicin_bilirubin_band",
+          "operator": "==",
+          "value": "gt86"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Bilirubin >86 µmol/L or Child–Pugh C: doxorubicin is not recommended.",
+          "recommendation": "Bilirubin >86 µmol/L or Child–Pugh C: doxorubicin is not recommended."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin >86 µmol/L or Child–Pugh C: doxorubicin is not recommended."
       }
     ]
   },

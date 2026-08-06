@@ -12,7 +12,7 @@
     "indication": "Hepatocellular carcinoma.",
     "source_url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "hepatobiliary",
@@ -49,7 +49,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required"
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
     },
     "tumour_groups": [
       "Gastrointestinal",
@@ -87,7 +87,7 @@
     "head_neck_subgroups": [
       "thyroid"
     ],
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -101,18 +101,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf",
+      "source_version": "4",
+      "components": [
+        "sorafenib"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding includes NCCP 00294 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding includes NCCP 00294 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -330,6 +347,66 @@
       "ctcae_version": "5.0",
       "ctcae_category": "other_nonhaematological",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "sorafenib_renal_band": {
+      "label": "Renal function for sorafenib",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge40",
+          "label": "CrCl ≥40 mL/min",
+          "decision_value": "ge40"
+        },
+        {
+          "value": "20_39",
+          "label": "CrCl 20–39 mL/min",
+          "decision_value": "20_39"
+        },
+        {
+          "value": "lt20",
+          "label": "CrCl <20 mL/min",
+          "decision_value": "lt20"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis",
+          "decision_value": "dialysis"
+        }
+      ],
+      "demo_value": "ge40",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "child_pugh_class": {
+      "label": "Child–Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No hepatic impairment"
+        },
+        {
+          "value": "A",
+          "label": "Child–Pugh A"
+        },
+        {
+          "value": "B",
+          "label": "Child–Pugh B"
+        },
+        {
+          "value": "C",
+          "label": "Child–Pugh C"
+        }
+      ],
+      "demo_value": "none",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -611,6 +688,75 @@
           "page": "dose-modification section"
         },
         "explanation": "Bilirubin >3 ×ULN requires interruption and hepatic toxicity review."
+      },
+      {
+        "id": "OF590_00294_SORA_20_39",
+        "priority": 20,
+        "when": {
+          "field": "sorafenib_renal_band",
+          "operator": "==",
+          "value": "20_39"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "CrCl 20–39 mL/min: start sorafenib at 200 mg twice daily and escalate if tolerated.",
+          "recommendation": "CrCl 20–39 mL/min: start sorafenib at 200 mg twice daily and escalate if tolerated."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl 20–39 mL/min: start sorafenib at 200 mg twice daily and escalate if tolerated."
+      },
+      {
+        "id": "OF590_00294_SORA_LT20",
+        "priority": 20,
+        "when": {
+          "field": "sorafenib_renal_band",
+          "operator": "in",
+          "value": [
+            "lt20",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "CrCl <20 mL/min or dialysis: start sorafenib at 200 mg once daily and escalate only if tolerated.",
+          "recommendation": "CrCl <20 mL/min or dialysis: start sorafenib at 200 mg once daily and escalate only if tolerated."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <20 mL/min or dialysis: start sorafenib at 200 mg once daily and escalate only if tolerated."
+      },
+      {
+        "id": "OF590_00294_SORA_CHILD_C",
+        "priority": 20,
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Child–Pugh C: start sorafenib at 200 mg once daily and escalate only after specialist review.",
+          "recommendation": "Child–Pugh C: start sorafenib at 200 mg once daily and escalate only after specialist review."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Child–Pugh C: start sorafenib at 200 mg once daily and escalate only after specialist review."
       }
     ]
   },

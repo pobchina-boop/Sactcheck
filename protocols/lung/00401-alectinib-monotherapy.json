@@ -12,7 +12,7 @@
     "indication": "ALK-positive advanced NSCLC, including first-line, post-crizotinib and adjuvant indications.",
     "source_url": "https://healthservice.hse.ie/documents/6910/401_V6_Alectinib.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.40.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "lung_subgroup": "targeted_alk",
@@ -40,13 +40,13 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required",
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -60,18 +60,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6910/401_V6_Alectinib.pdf",
+      "source_version": "6",
+      "components": [
+        "alectinib"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00401 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00401 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -266,7 +283,8 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "×ULN"
+      "unit": "×ULN",
+      "always_show": true
     },
     "bilirubin_uln_multiple": {
       "label": "Bilirubin result (actual value entered; ×ULN calculated automatically)",
@@ -275,7 +293,8 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "×ULN"
+      "unit": "×ULN",
+      "always_show": true
     },
     "bradycardia_symptomatic": {
       "label": "Symptomatic bradycardia",
@@ -300,6 +319,61 @@
       "step": 0.1,
       "demo_value": 1,
       "unit": "×ULN"
+    },
+    "targeted_renal_band": {
+      "label": "Renal function for this targeted therapy",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge30",
+          "label": "CrCl ≥30",
+          "decision_value": 0
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30",
+          "decision_value": 1
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis",
+          "decision_value": 2
+        }
+      ],
+      "demo_value": "ge30",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "targeted_hepatic_band": {
+      "label": "Hepatic function for this targeted therapy",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "A",
+          "label": "Child A"
+        },
+        {
+          "value": "B",
+          "label": "Child B"
+        },
+        {
+          "value": "C",
+          "label": "Child C"
+        }
+      ],
+      "demo_value": "none",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -551,6 +625,95 @@
           "page": "eligibility, exclusions or dose-modification section"
         },
         "explanation": "CK >5 ×ULN requires interruption and myotoxicity review."
+      },
+      {
+        "id": "OF590_00401_ALEC_CHILD_C",
+        "priority": 20,
+        "when": {
+          "field": "targeted_hepatic_band",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "alectinib"
+          ],
+          "message": "Child–Pugh C: administer 75% of the standard alectinib dose (450 mg twice daily).",
+          "recommendation": "Child–Pugh C: administer 75% of the standard alectinib dose (450 mg twice daily).",
+          "component_changes": {
+            "alectinib": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Child–Pugh C: administer 75% of the standard alectinib dose (450 mg twice daily)."
+      },
+      {
+        "id": "OF590_00401_ALEC_LFT_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "alectinib"
+          ],
+          "message": "ALT/AST >5 ×ULN with bilirubin ≤2 ×ULN: withhold alectinib and restart at a reduced dose after recovery.",
+          "recommendation": "ALT/AST >5 ×ULN with bilirubin ≤2 ×ULN: withhold alectinib and restart at a reduced dose after recovery."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "ALT/AST >5 ×ULN with bilirubin ≤2 ×ULN: withhold alectinib and restart at a reduced dose after recovery."
+      },
+      {
+        "id": "OF590_00401_ALEC_LFT_STOP",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "alectinib"
+          ],
+          "message": "ALT/AST >3 ×ULN with bilirubin >2 ×ULN: permanently discontinue alectinib unless another cause is established.",
+          "recommendation": "ALT/AST >3 ×ULN with bilirubin >2 ×ULN: permanently discontinue alectinib unless another cause is established."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "ALT/AST >3 ×ULN with bilirubin >2 ×ULN: permanently discontinue alectinib unless another cause is established."
       }
     ]
   },

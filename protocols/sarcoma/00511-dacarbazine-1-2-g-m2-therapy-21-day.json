@@ -11,7 +11,7 @@
     "indication": "Metastatic soft tissue sarcoma.",
     "source_url": "https://healthservice.hse.ie/documents/6741/511_V2_Dacarbazine.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.41.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "sarcoma_subgroup": "soft_tissue_sarcoma",
@@ -39,14 +39,14 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required",
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
     "tumour_group": "Sarcoma",
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -60,18 +60,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6741/511_V2_Dacarbazine.pdf",
+      "source_version": "2",
+      "components": [
+        "dacarbazine"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00511 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00511 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -244,30 +261,59 @@
       "options": [
         {
           "value": "gt60",
-          "label": "CrCl >60 mL/min"
+          "label": "CrCl >60 mL/min",
+          "decision_value": "gt60"
         },
         {
           "value": "45_60",
-          "label": "CrCl 45–60 mL/min"
+          "label": "CrCl 45–60 mL/min",
+          "decision_value": "45_60"
         },
         {
           "value": "30_44",
-          "label": "CrCl 30–44 mL/min"
+          "label": "CrCl 30–44 mL/min",
+          "decision_value": "30_44"
         },
         {
           "value": "lt30",
-          "label": "CrCl <30 mL/min"
+          "label": "CrCl <30 mL/min",
+          "decision_value": "lt30"
         },
         {
           "value": "dialysis",
-          "label": "Dialysis"
+          "label": "Dialysis",
+          "decision_value": "dialysis"
         }
       ],
       "demo_value": "gt60",
+      "ui_section": "labs",
+      "always_show": true,
       "renal_input": {
         "mode": "protocol_specific_band",
         "exact_value_required": false
       }
+    },
+    "dacarbazine_hepatic_status": {
+      "label": "Hepatic status for dacarbazine",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No significant hepatic impairment"
+        },
+        {
+          "value": "impaired",
+          "label": "Hepatic impairment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe liver disease"
+        }
+      ],
+      "demo_value": "none",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -603,6 +649,134 @@
           "page": "Dose modification section"
         },
         "explanation": "Grade ≥3 non-haematological toxicity: withhold until recovery and review dose modification."
+      },
+      {
+        "id": "OF590_00511_DTIC_45_60",
+        "priority": 20,
+        "when": {
+          "field": "dacarbazine_renal_band",
+          "operator": "==",
+          "value": "45_60"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "dacarbazine"
+          ],
+          "message": "CrCl 45–60 mL/min: administer 80% of the dacarbazine dose.",
+          "recommendation": "CrCl 45–60 mL/min: administer 80% of the dacarbazine dose.",
+          "component_changes": {
+            "dacarbazine": {
+              "dose_percent_of_original": 80
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl 45–60 mL/min: administer 80% of the dacarbazine dose."
+      },
+      {
+        "id": "OF590_00511_DTIC_30_44",
+        "priority": 20,
+        "when": {
+          "field": "dacarbazine_renal_band",
+          "operator": "==",
+          "value": "30_44"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "dacarbazine"
+          ],
+          "message": "CrCl 30–44 mL/min: administer 75% of the dacarbazine dose.",
+          "recommendation": "CrCl 30–44 mL/min: administer 75% of the dacarbazine dose.",
+          "component_changes": {
+            "dacarbazine": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl 30–44 mL/min: administer 75% of the dacarbazine dose."
+      },
+      {
+        "id": "OF590_00511_DTIC_LT30",
+        "priority": 20,
+        "when": {
+          "field": "dacarbazine_renal_band",
+          "operator": "in",
+          "value": [
+            "lt30",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "dacarbazine"
+          ],
+          "message": "CrCl <30 mL/min or dialysis: use approximately 70% of the dacarbazine dose only after specialist review.",
+          "recommendation": "CrCl <30 mL/min or dialysis: use approximately 70% of the dacarbazine dose only after specialist review.",
+          "component_changes": {
+            "dacarbazine": {
+              "dose_percent_of_original": 70
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <30 mL/min or dialysis: use approximately 70% of the dacarbazine dose only after specialist review."
+      },
+      {
+        "id": "OF590_00511_DTIC_HEPATIC",
+        "priority": 20,
+        "when": {
+          "field": "dacarbazine_hepatic_status",
+          "operator": "==",
+          "value": "impaired"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dacarbazine"
+          ],
+          "message": "Hepatic impairment: dacarbazine is potentially hepatotoxic; consider dose reduction and close monitoring.",
+          "recommendation": "Hepatic impairment: dacarbazine is potentially hepatotoxic; consider dose reduction and close monitoring."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Hepatic impairment: dacarbazine is potentially hepatotoxic; consider dose reduction and close monitoring."
+      },
+      {
+        "id": "OF590_00511_DTIC_SEVERE_HEPATIC",
+        "priority": 20,
+        "when": {
+          "field": "dacarbazine_hepatic_status",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "dacarbazine"
+          ],
+          "message": "Severe liver disease is outside the routine dacarbazine pathway.",
+          "recommendation": "Severe liver disease is outside the routine dacarbazine pathway."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Severe liver disease is outside the routine dacarbazine pathway."
       }
     ]
   },

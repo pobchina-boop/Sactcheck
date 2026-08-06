@@ -11,7 +11,7 @@
     "indication": "Unresectable/metastatic KIT-positive GIST or adjuvant treatment after resection when relapse risk is significant.",
     "source_url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.41.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "sarcoma_subgroup": "gist",
@@ -40,14 +40,14 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required",
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
     "tumour_group": "Sarcoma",
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -61,18 +61,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+      "source_version": "4",
+      "components": [
+        "imatinib"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00335 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00335 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -141,7 +158,8 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "×ULN"
+      "unit": "×ULN",
+      "always_show": true
     },
     "bilirubin_uln_multiple": {
       "label": "Bilirubin result (enter actual result; ×ULN calculated automatically)",
@@ -150,7 +168,8 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "×ULN"
+      "unit": "×ULN",
+      "always_show": true
     },
     "diarrhoea_grade": {
       "label": "Diarrhoea grade",
@@ -449,6 +468,30 @@
         }
       ],
       "demo_value": 0
+    },
+    "imatinib_renal_status": {
+      "label": "Renal status for imatinib",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "normal_or_impaired",
+          "label": "Normal renal function or renal impairment",
+          "decision_value": 0
+        },
+        {
+          "value": "dialysis",
+          "label": "Haemodialysis",
+          "decision_value": 1
+        }
+      ],
+      "demo_value": "normal_or_impaired",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
     }
   },
   "required_inputs": [],
@@ -721,6 +764,37 @@
           "page": "Dose modification section"
         },
         "explanation": "Recurrent non-haematological toxicity: resume at a lower imatinib dose after recovery."
+      },
+      {
+        "id": "OF590_00335_IMATINIB_LFT_HOLD",
+        "priority": 20,
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Bilirubin >3 ×ULN or transaminases >5 ×ULN: withhold imatinib; resume at the source-reduced dose only after recovery below the specified thresholds.",
+          "recommendation": "Bilirubin >3 ×ULN or transaminases >5 ×ULN: withhold imatinib; resume at the source-reduced dose only after recovery below the specified thresholds."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin >3 ×ULN or transaminases >5 ×ULN: withhold imatinib; resume at the source-reduced dose only after recovery below the specified thresholds."
       }
     ]
   },

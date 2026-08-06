@@ -12,7 +12,7 @@
     "indication": "Advanced gastric cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "upper_gi",
@@ -47,9 +47,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required"
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -63,18 +63,36 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
+      "source_version": "5",
+      "components": [
+        "cisplatin",
+        "teysuno"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00235 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00235 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -360,22 +378,33 @@
       "options": [
         {
           "value": "ge60",
-          "label": "≥60 mL/min"
+          "label": "CrCl ≥60 mL/min",
+          "decision_value": "ge60"
         },
         {
-          "value": "45_59",
-          "label": "45–59 mL/min"
+          "value": "50_59",
+          "label": "CrCl 50–59 mL/min",
+          "decision_value": "50_59"
         },
         {
-          "value": "lt45",
-          "label": "<45 mL/min"
+          "value": "40_49",
+          "label": "CrCl 40–49 mL/min",
+          "decision_value": "40_49"
+        },
+        {
+          "value": "lt40",
+          "label": "CrCl <40 mL/min",
+          "decision_value": "lt40"
         },
         {
           "value": "dialysis",
-          "label": "Haemodialysis"
+          "label": "Dialysis",
+          "decision_value": "dialysis"
         }
       ],
       "demo_value": "ge60",
+      "ui_section": "labs",
+      "always_show": true,
       "renal_input": {
         "mode": "protocol_specific_band",
         "exact_value_required": false
@@ -464,6 +493,40 @@
       "ctcae_version": "5.0",
       "ctcae_category": "neuropathy",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "teysuno_renal_band": {
+      "label": "Renal function for Teysuno (S-1)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "gt50",
+          "label": "CrCl >50 mL/min",
+          "decision_value": "gt50"
+        },
+        {
+          "value": "30_50",
+          "label": "CrCl 30–50 mL/min",
+          "decision_value": "30_50"
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30 mL/min",
+          "decision_value": "lt30"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis",
+          "decision_value": "dialysis"
+        }
+      ],
+      "demo_value": "gt50",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
     }
   },
   "required_inputs": [],
@@ -862,6 +925,166 @@
           "page": "dose-modification section"
         },
         "explanation": "Grade 2 or worse hearing toxicity requires cisplatin-specific review."
+      },
+      {
+        "id": "OF590_00235_CIS_50_59",
+        "priority": 20,
+        "when": {
+          "field": "cisplatin_crcl_band",
+          "operator": "==",
+          "value": "50_59"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl 50–59 mL/min: administer 75% of the cisplatin dose.",
+          "recommendation": "CrCl 50–59 mL/min: administer 75% of the cisplatin dose.",
+          "component_changes": {
+            "cisplatin": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl 50–59 mL/min: administer 75% of the cisplatin dose."
+      },
+      {
+        "id": "OF590_00235_CIS_40_49",
+        "priority": 20,
+        "when": {
+          "field": "cisplatin_crcl_band",
+          "operator": "==",
+          "value": "40_49"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl 40–49 mL/min: administer 50% of the cisplatin dose.",
+          "recommendation": "CrCl 40–49 mL/min: administer 50% of the cisplatin dose.",
+          "component_changes": {
+            "cisplatin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl 40–49 mL/min: administer 50% of the cisplatin dose."
+      },
+      {
+        "id": "OF590_00235_CIS_LT40",
+        "priority": 20,
+        "when": {
+          "field": "cisplatin_crcl_band",
+          "operator": "==",
+          "value": "lt40"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl <40 mL/min: cisplatin is not recommended in the routine source pathway.",
+          "recommendation": "CrCl <40 mL/min: cisplatin is not recommended in the routine source pathway."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <40 mL/min: cisplatin is not recommended in the routine source pathway."
+      },
+      {
+        "id": "OF590_00235_CIS_DIALYSIS",
+        "priority": 20,
+        "when": {
+          "field": "cisplatin_crcl_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Haemodialysis: a 50% cisplatin dose may be considered only with specialist dialysis timing and pharmacy review.",
+          "recommendation": "Haemodialysis: a 50% cisplatin dose may be considered only with specialist dialysis timing and pharmacy review.",
+          "component_changes": {
+            "cisplatin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Haemodialysis: a 50% cisplatin dose may be considered only with specialist dialysis timing and pharmacy review."
+      },
+      {
+        "id": "OF590_00235_TEYSUNO_30_50",
+        "priority": 20,
+        "when": {
+          "field": "teysuno_renal_band",
+          "operator": "==",
+          "value": "30_50"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "teysuno"
+          ],
+          "message": "CrCl 30–50 mL/min: administer 80% of the Teysuno dose.",
+          "recommendation": "CrCl 30–50 mL/min: administer 80% of the Teysuno dose.",
+          "component_changes": {
+            "teysuno": {
+              "dose_percent_of_original": 80
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl 30–50 mL/min: administer 80% of the Teysuno dose."
+      },
+      {
+        "id": "OF590_00235_TEYSUNO_LT30",
+        "priority": 20,
+        "when": {
+          "field": "teysuno_renal_band",
+          "operator": "in",
+          "value": [
+            "lt30",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "teysuno"
+          ],
+          "message": "CrCl <30 mL/min or dialysis: administer 40% of the Teysuno dose only with specialist review.",
+          "recommendation": "CrCl <30 mL/min or dialysis: administer 40% of the Teysuno dose only with specialist review.",
+          "component_changes": {
+            "teysuno": {
+              "dose_percent_of_original": 40
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <30 mL/min or dialysis: administer 40% of the Teysuno dose only with specialist review."
       }
     ]
   },

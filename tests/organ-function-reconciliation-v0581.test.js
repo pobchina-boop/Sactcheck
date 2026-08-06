@@ -9,7 +9,7 @@ const pkg = require(path.join(root, 'package.json'));
 const p451 = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 const p450 = require(path.join(root, 'protocols/genitourinary/00450-mitomycin-and-5-fluorouracil-with-radiotherapy.json'));
 
-assert.strictEqual(pkg.version, '0.58.1');
+assert(pkg.version.localeCompare('0.58.1', undefined, { numeric: true }) >= 0);
 
 for (const protocol of [p451, p450]) {
   const defs = protocol.input_definitions;
@@ -61,9 +61,9 @@ const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 assert.ok(ui.includes('derivedActualField'));
 assert.ok(ui.includes('calculation.highestPart.actual'));
 assert.ok(loader.includes('encodingMaturityBadge'));
-assert.ok(html.includes('SACTCheck v0.58.1 — Organ-Function Rule Reconciliation'));
-assert.ok(html.includes('js/generic-assessment-ui.js?v=0.58.1'));
-assert.ok(html.includes('js/protocol-loader.js?v=0.58.1'));
+assert.ok(html.includes('SACTCheck v0.59.0 — Library-Wide Organ-Function Reconciliation'));
+assert.ok(html.includes('js/generic-assessment-ui.js?v=0.59.0'));
+assert.ok(html.includes('js/protocol-loader.js?v=0.59.0'));
 
 execFileSync(process.execPath, [path.join(root, 'tools/audit-organ-function-rule-coverage.js'), '--fail-on-mismatch'], { cwd: root, stdio: 'pipe' });
 const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.json'), 'utf8'));
@@ -71,6 +71,6 @@ assert.strictEqual(audit.summary.protocols_with_rule_level_claim_mismatch, 0);
 assert.strictEqual(audit.summary.protocols_scanned, 381);
 
 const partial = audit.records.filter(record => record.encoding_maturity === 'partial_rule_encoding');
-assert.ok(partial.length >= 70, 'Protocols with incomplete organ-function rule coverage should be visibly classified as partial rather than overstated.');
+assert.strictEqual(partial.length, 0, 'v0.59.0 should reconcile all records previously marked partial.');
 
 console.log('v0.58.1 organ-function reconciliation tests passed.');

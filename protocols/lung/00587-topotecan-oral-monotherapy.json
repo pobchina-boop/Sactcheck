@@ -12,7 +12,7 @@
     "indication": "Relapsed SCLC when retreatment with first-line therapy is not appropriate.",
     "source_url": "https://healthservice.hse.ie/documents/6886/587_V2_Topotecan_PO.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.40.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "lung_subgroup": "sclc",
@@ -40,13 +40,13 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required",
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -60,18 +60,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6886/587_V2_Topotecan_PO.pdf",
+      "source_version": "2",
+      "components": [
+        "topotecan"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00587 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00587 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -206,19 +223,23 @@
       "options": [
         {
           "value": "ge40",
-          "label": "CrCl ≥40 mL/min"
+          "label": "CrCl ≥40 mL/min",
+          "decision_value": "ge40"
         },
         {
           "value": "20_39",
-          "label": "CrCl 20–39 mL/min"
+          "label": "CrCl 20–39 mL/min",
+          "decision_value": "20_39"
         },
         {
           "value": "lt20",
-          "label": "CrCl <20 mL/min"
+          "label": "CrCl <20 mL/min",
+          "decision_value": "lt20"
         },
         {
           "value": "dialysis",
-          "label": "Dialysis"
+          "label": "Dialysis",
+          "decision_value": "dialysis"
         }
       ],
       "demo_value": "ge40",
@@ -226,6 +247,58 @@
         "mode": "protocol_specific_band",
         "exact_value_required": false
       }
+    },
+    "topotecan_oral_renal_band": {
+      "label": "Renal function for oral topotecan",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge50",
+          "label": "CrCl ≥50 mL/min",
+          "decision_value": "ge50"
+        },
+        {
+          "value": "30_49",
+          "label": "CrCl 30–49 mL/min",
+          "decision_value": "30_49"
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30 mL/min",
+          "decision_value": "lt30"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis",
+          "decision_value": "dialysis"
+        }
+      ],
+      "demo_value": "ge50",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "hepatic_impairment_evidence": {
+      "label": "Hepatic function for oral topotecan",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No significant hepatic impairment"
+        },
+        {
+          "value": "impaired",
+          "label": "Hepatic impairment present"
+        }
+      ],
+      "demo_value": "none",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -477,6 +550,80 @@
           "page": "eligibility, exclusions or dose-modification section"
         },
         "explanation": "Dialysis requires specialist pharmacy review."
+      },
+      {
+        "id": "OF590_00587_TOPO_ORAL_30_49",
+        "priority": 20,
+        "when": {
+          "field": "topotecan_oral_renal_band",
+          "operator": "==",
+          "value": "30_49"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "topotecan"
+          ],
+          "message": "CrCl 30–49 mL/min: administer approximately 83% of the standard oral topotecan dose (1.9 mg/m²/day in the NCCP table).",
+          "recommendation": "CrCl 30–49 mL/min: administer approximately 83% of the standard oral topotecan dose (1.9 mg/m²/day in the NCCP table).",
+          "component_changes": {
+            "topotecan": {
+              "dose_percent_of_original": 83
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl 30–49 mL/min: administer approximately 83% of the standard oral topotecan dose (1.9 mg/m²/day in the NCCP table)."
+      },
+      {
+        "id": "OF590_00587_TOPO_ORAL_LT30",
+        "priority": 20,
+        "when": {
+          "field": "topotecan_oral_renal_band",
+          "operator": "in",
+          "value": [
+            "lt30",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "topotecan"
+          ],
+          "message": "CrCl <30 mL/min or dialysis: evidence is insufficient for routine oral topotecan dosing; Consultant/pharmacy review is required.",
+          "recommendation": "CrCl <30 mL/min or dialysis: evidence is insufficient for routine oral topotecan dosing; Consultant/pharmacy review is required."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <30 mL/min or dialysis: evidence is insufficient for routine oral topotecan dosing; Consultant/pharmacy review is required."
+      },
+      {
+        "id": "OF590_00587_TOPO_ORAL_HEPATIC",
+        "priority": 20,
+        "when": {
+          "field": "hepatic_impairment_evidence",
+          "operator": "==",
+          "value": "impaired"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "topotecan"
+          ],
+          "message": "Hepatic impairment: the source provides insufficient dose-adjustment data for oral topotecan; obtain specialist review.",
+          "recommendation": "Hepatic impairment: the source provides insufficient dose-adjustment data for oral topotecan; obtain specialist review."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Hepatic impairment: the source provides insufficient dose-adjustment data for oral topotecan; obtain specialist review."
       }
     ]
   },

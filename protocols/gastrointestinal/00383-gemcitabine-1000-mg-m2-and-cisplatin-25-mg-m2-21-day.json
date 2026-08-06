@@ -12,7 +12,7 @@
     "indication": "Locally advanced or metastatic pancreatic or biliary tree carcinoma.",
     "source_url": "https://healthservice.hse.ie/documents/6339/383_v8_GemCis25.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "pancreatic_hepatobiliary",
@@ -47,9 +47,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required"
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -63,18 +63,36 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6339/383_v8_GemCis25.pdf",
+      "source_version": "8",
+      "components": [
+        "gemcitabine",
+        "cisplatin"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00383 Version 8. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00383 Version 8. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -210,22 +228,28 @@
       "options": [
         {
           "value": "ge60",
-          "label": "≥60 mL/min"
+          "label": "CrCl ≥60 mL/min",
+          "decision_value": "ge60"
         },
         {
           "value": "45_59",
-          "label": "45–59 mL/min"
+          "label": "CrCl 45–59 mL/min",
+          "decision_value": "45_59"
         },
         {
           "value": "lt45",
-          "label": "<45 mL/min"
+          "label": "CrCl <45 mL/min",
+          "decision_value": "lt45"
         },
         {
           "value": "dialysis",
-          "label": "Haemodialysis"
+          "label": "Dialysis",
+          "decision_value": "dialysis"
         }
       ],
       "demo_value": "ge60",
+      "ui_section": "labs",
+      "always_show": true,
       "renal_input": {
         "mode": "protocol_specific_band",
         "exact_value_required": false
@@ -334,6 +358,53 @@
         }
       ],
       "demo_value": "day1"
+    },
+    "gemcitabine_renal_band": {
+      "label": "Renal function for gemcitabine",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge30",
+          "label": "CrCl ≥30 mL/min",
+          "decision_value": "ge30"
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30 mL/min",
+          "decision_value": "lt30"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis",
+          "decision_value": "dialysis"
+        }
+      ],
+      "demo_value": "ge30",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "gemcitabine_bilirubin_band": {
+      "label": "Bilirubin for gemcitabine",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "lt27",
+          "label": "<27 µmol/L"
+        },
+        {
+          "value": "ge27",
+          "label": "≥27 µmol/L"
+        }
+      ],
+      "demo_value": "lt27",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -648,6 +719,129 @@
           "page": "dose-modification section"
         },
         "explanation": "Platelets <50 ×10⁹/L trigger omission/withholding of the within-cycle gemcitabine dose."
+      },
+      {
+        "id": "OF590_00383_GEM_RENAL_LT30",
+        "priority": 20,
+        "when": {
+          "field": "gemcitabine_renal_band",
+          "operator": "in",
+          "value": [
+            "lt30",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "message": "CrCl <30 mL/min or dialysis: consider a gemcitabine dose reduction and agree the starting dose with the Consultant and oncology pharmacy.",
+          "recommendation": "CrCl <30 mL/min or dialysis: consider a gemcitabine dose reduction and agree the starting dose with the Consultant and oncology pharmacy."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <30 mL/min or dialysis: consider a gemcitabine dose reduction and agree the starting dose with the Consultant and oncology pharmacy."
+      },
+      {
+        "id": "OF590_00383_GEM_BILI_GE27",
+        "priority": 20,
+        "when": {
+          "field": "gemcitabine_bilirubin_band",
+          "operator": "==",
+          "value": "ge27"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "gemcitabine"
+          ],
+          "message": "Bilirubin ≥27 µmol/L: start gemcitabine at 800 mg/m² and escalate only if tolerated.",
+          "recommendation": "Bilirubin ≥27 µmol/L: start gemcitabine at 800 mg/m² and escalate only if tolerated."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin ≥27 µmol/L: start gemcitabine at 800 mg/m² and escalate only if tolerated."
+      },
+      {
+        "id": "OF590_00383_CIS_45_59",
+        "priority": 20,
+        "when": {
+          "field": "cisplatin_crcl_band",
+          "operator": "==",
+          "value": "45_59"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl 45–59 mL/min: administer 75% of the cisplatin dose.",
+          "recommendation": "CrCl 45–59 mL/min: administer 75% of the cisplatin dose.",
+          "component_changes": {
+            "cisplatin": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl 45–59 mL/min: administer 75% of the cisplatin dose."
+      },
+      {
+        "id": "OF590_00383_CIS_LT45",
+        "priority": 20,
+        "when": {
+          "field": "cisplatin_crcl_band",
+          "operator": "==",
+          "value": "lt45"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl <45 mL/min: hold/omit cisplatin or use the source alternative after Consultant review.",
+          "recommendation": "CrCl <45 mL/min: hold/omit cisplatin or use the source alternative after Consultant review."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <45 mL/min: hold/omit cisplatin or use the source alternative after Consultant review."
+      },
+      {
+        "id": "OF590_00383_CIS_DIALYSIS",
+        "priority": 20,
+        "when": {
+          "field": "cisplatin_crcl_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Haemodialysis: a 50% cisplatin dose may be considered only with specialist dialysis timing and pharmacy review.",
+          "recommendation": "Haemodialysis: a 50% cisplatin dose may be considered only with specialist dialysis timing and pharmacy review.",
+          "component_changes": {
+            "cisplatin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Haemodialysis: a 50% cisplatin dose may be considered only with specialist dialysis timing and pharmacy review."
       }
     ]
   },

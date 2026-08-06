@@ -12,7 +12,7 @@
     "indication": "Second-line RAS wild-type metastatic colorectal cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6785/330_v6_Cetuximab_7days_irinotecan_14_day.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -48,9 +48,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required"
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -64,18 +64,36 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6785/330_v6_Cetuximab_7days_irinotecan_14_day.pdf",
+      "source_version": "6",
+      "components": [
+        "irinotecan",
+        "cetuximab"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00330 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00330 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -317,6 +335,41 @@
       "step": 0.01,
       "demo_value": 0.8,
       "unit": "mmol/L"
+    },
+    "irinotecan_renal_band": {
+      "label": "Renal status for irinotecan",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "not_dialysis",
+          "label": "Not receiving dialysis",
+          "decision_value": "not_dialysis"
+        },
+        {
+          "value": "dialysis",
+          "label": "Haemodialysis",
+          "decision_value": "dialysis"
+        }
+      ],
+      "demo_value": "not_dialysis",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "irinotecan_bilirubin_uln": {
+      "label": "Bilirubin for irinotecan",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 0.8,
+      "ui_section": "labs",
+      "always_show": true,
+      "unit": "×ULN"
     }
   },
   "required_inputs": [],
@@ -631,6 +684,81 @@
           "page": "dose-modification section"
         },
         "explanation": "Severe hypomagnesaemia requires correction and treatment review before further anti-EGFR therapy."
+      },
+      {
+        "id": "OF590_00330_IRINO_DIALYSIS",
+        "priority": 20,
+        "when": {
+          "field": "irinotecan_renal_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "message": "Haemodialysis: irinotecan dosing is not routinely established; use only after Consultant/pharmacy review.",
+          "recommendation": "Haemodialysis: irinotecan dosing is not routinely established; use only after Consultant/pharmacy review."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Haemodialysis: irinotecan dosing is not routinely established; use only after Consultant/pharmacy review."
+      },
+      {
+        "id": "OF590_00330_IRINO_BILI_1_5_3",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "irinotecan_bilirubin_uln",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "irinotecan_bilirubin_uln",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan"
+          ],
+          "message": "Bilirubin >1.5 to 3 ×ULN: use the source-reduced irinotecan dose (200 mg/m² for the 3-weekly monotherapy table).",
+          "recommendation": "Bilirubin >1.5 to 3 ×ULN: use the source-reduced irinotecan dose (200 mg/m² for the 3-weekly monotherapy table)."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin >1.5 to 3 ×ULN: use the source-reduced irinotecan dose (200 mg/m² for the 3-weekly monotherapy table)."
+      },
+      {
+        "id": "OF590_00330_IRINO_BILI_GT3",
+        "priority": 20,
+        "when": {
+          "field": "irinotecan_bilirubin_uln",
+          "operator": ">",
+          "value": 3
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "irinotecan"
+          ],
+          "message": "Bilirubin >3 ×ULN: discontinue/do not administer irinotecan.",
+          "recommendation": "Bilirubin >3 ×ULN: discontinue/do not administer irinotecan."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin >3 ×ULN: discontinue/do not administer irinotecan."
       }
     ]
   },

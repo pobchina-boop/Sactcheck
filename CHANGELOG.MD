@@ -1,3 +1,14 @@
+# v0.59.0 — Library-Wide Organ-Function Reconciliation — 5 August 2026
+
+- Completed the v0.58.1 organ-function remediation programme across all 74 records previously marked partially rule-encoded.
+- Added structured component-specific renal/hepatic rules to 70 protocols and explicit no-prescriptive-adjustment resolutions to four protocols.
+- Added 299 executable `OF590_` rules covering source-specific CrCl/GFR bands, dialysis, bilirubin, transaminases, Child–Pugh class and treatment-emergent organ toxicity pathways.
+- Preserved optional single-value partial assessment and explicit unassessed-domain output.
+- Added a 74-record source register, library-wide audit, SHA-256 integrity register and rule-trigger regression coverage.
+- Verified 74 intentional protocol JSON changes with no protocol additions or removals.
+- Updated application versioning, documentation and deployment artefacts while preserving the search-first interface and ten-regimen knowledge base.
+- Independent consultant oncology and oncology-pharmacy validation remains pending.
+
 # v0.56.1 — Five-Regimen Knowledge Base Pilot
 
 - Added detailed regimen information pages for NCCP 00382, 00568, 00655, 00857 and 00624.

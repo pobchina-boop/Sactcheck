@@ -12,7 +12,7 @@
     "indication": "Previously treated FGFR2-fusion/rearranged locally advanced or metastatic cholangiocarcinoma.",
     "source_url": "https://healthservice.hse.ie/documents/6647/889_v1a_Pemigatinib.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "hepatobiliary",
@@ -45,9 +45,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required"
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -61,18 +61,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6647/889_v1a_Pemigatinib.pdf",
+      "source_version": "1a",
+      "components": [
+        "pemigatinib"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00889 Version 1a. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00889 Version 1a. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -202,6 +219,57 @@
       "step": 0.01,
       "demo_value": 1.1,
       "unit": "mmol/L"
+    },
+    "targeted_renal_band": {
+      "label": "Renal function for this targeted therapy",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge30",
+          "label": "CrCl ≥30",
+          "decision_value": "ge30"
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30",
+          "decision_value": "lt30"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis",
+          "decision_value": "dialysis"
+        }
+      ],
+      "demo_value": "ge30",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "targeted_hepatic_band": {
+      "label": "Hepatic function for this targeted therapy",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "A_B",
+          "label": "Child A/B"
+        },
+        {
+          "value": "C",
+          "label": "Child C"
+        }
+      ],
+      "demo_value": "none",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -390,6 +458,50 @@
           "page": "dose-modification section"
         },
         "explanation": "Severe hyperphosphataemia requires interruption and phosphate-lowering management."
+      },
+      {
+        "id": "OF590_00889_PEMI_RENAL",
+        "priority": 20,
+        "when": {
+          "field": "targeted_renal_band",
+          "operator": "==",
+          "value": "lt30"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pemigatinib"
+          ],
+          "message": "CrCl <30 mL/min: reduce pemigatinib by one dose level (13.5→9 mg; 9→4.5 mg).",
+          "recommendation": "CrCl <30 mL/min: reduce pemigatinib by one dose level (13.5→9 mg; 9→4.5 mg)."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <30 mL/min: reduce pemigatinib by one dose level (13.5→9 mg; 9→4.5 mg)."
+      },
+      {
+        "id": "OF590_00889_PEMI_CHILD_C",
+        "priority": 20,
+        "when": {
+          "field": "targeted_hepatic_band",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pemigatinib"
+          ],
+          "message": "Child–Pugh C: reduce pemigatinib by one dose level (13.5→9 mg; 9→4.5 mg).",
+          "recommendation": "Child–Pugh C: reduce pemigatinib by one dose level (13.5→9 mg; 9→4.5 mg)."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Child–Pugh C: reduce pemigatinib by one dose level (13.5→9 mg; 9→4.5 mg)."
       }
     ]
   },

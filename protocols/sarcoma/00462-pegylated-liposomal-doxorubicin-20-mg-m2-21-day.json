@@ -11,7 +11,7 @@
     "indication": "AIDS-related Kaposi sarcoma with low CD4 count and extensive mucocutaneous or visceral disease.",
     "source_url": "https://healthservice.hse.ie/documents/6735/462_v4_PegylatedLiposomalDOX_20mgm2_21_days.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.41.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "sarcoma_subgroup": "kaposi_sarcoma",
@@ -39,7 +39,7 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required",
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -49,7 +49,7 @@
     "source_title_exact": "Pegylated Liposomal DOXOrubicin 20 mg/m² – 21 day",
     "display_title_normalised": true,
     "display_title_normalisation_version": "0.41.1",
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -63,18 +63,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6735/462_v4_PegylatedLiposomalDOX_20mgm2_21_days.pdf",
+      "source_version": "4",
+      "components": [
+        "pegylated_liposomal_doxorubicin"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00462 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00462 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -392,6 +409,32 @@
       "step": 1,
       "demo_value": 0,
       "unit": "percentage points"
+    },
+    "pld_bilirubin_band": {
+      "label": "Bilirubin for pegylated liposomal doxorubicin",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "lt20",
+          "label": "<20 µmol/L"
+        },
+        {
+          "value": "20_50",
+          "label": "20–50 µmol/L"
+        },
+        {
+          "value": "51_86",
+          "label": "51–86 µmol/L"
+        },
+        {
+          "value": "gt86",
+          "label": ">86 µmol/L"
+        }
+      ],
+      "demo_value": "lt20",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -706,6 +749,82 @@
           "page": "Dose modification section"
         },
         "explanation": "Cardiac symptoms require withholding and cardiac assessment."
+      },
+      {
+        "id": "OF590_00462_PLD_BILI_20_50",
+        "priority": 20,
+        "when": {
+          "field": "pld_bilirubin_band",
+          "operator": "==",
+          "value": "20_50"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pegylated_liposomal_doxorubicin"
+          ],
+          "message": "Bilirubin 20–50 µmol/L: administer 75% of the pegylated liposomal doxorubicin dose.",
+          "recommendation": "Bilirubin 20–50 µmol/L: administer 75% of the pegylated liposomal doxorubicin dose.",
+          "component_changes": {
+            "pegylated_liposomal_doxorubicin": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin 20–50 µmol/L: administer 75% of the pegylated liposomal doxorubicin dose."
+      },
+      {
+        "id": "OF590_00462_PLD_BILI_51_86",
+        "priority": 20,
+        "when": {
+          "field": "pld_bilirubin_band",
+          "operator": "==",
+          "value": "51_86"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pegylated_liposomal_doxorubicin"
+          ],
+          "message": "Bilirubin 51–86 µmol/L: administer 50% of the pegylated liposomal doxorubicin dose.",
+          "recommendation": "Bilirubin 51–86 µmol/L: administer 50% of the pegylated liposomal doxorubicin dose.",
+          "component_changes": {
+            "pegylated_liposomal_doxorubicin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin 51–86 µmol/L: administer 50% of the pegylated liposomal doxorubicin dose."
+      },
+      {
+        "id": "OF590_00462_PLD_BILI_GT86",
+        "priority": 20,
+        "when": {
+          "field": "pld_bilirubin_band",
+          "operator": "==",
+          "value": "gt86"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pegylated_liposomal_doxorubicin"
+          ],
+          "message": "Bilirubin >86 µmol/L: pegylated liposomal doxorubicin is not recommended.",
+          "recommendation": "Bilirubin >86 µmol/L: pegylated liposomal doxorubicin is not recommended."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin >86 µmol/L: pegylated liposomal doxorubicin is not recommended."
       }
     ]
   },

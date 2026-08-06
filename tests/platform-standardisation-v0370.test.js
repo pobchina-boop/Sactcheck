@@ -109,7 +109,7 @@ for (const { file, data } of protocols) {
 
   assert(validSections.has(metadata.catalogue_section), `${code} has invalid catalogue section ${metadata.catalogue_section}`);
   assert(Array.isArray(metadata.treatment_class) && metadata.treatment_class.length, `${code} lacks treatment_class metadata`);
-  assert(['0.37.0', '0.38.0', '0.38.2', '0.39.0', '0.40.0', '0.41.0', '0.41.1', '0.42.0', '0.43.0', '0.44.0', '0.45.0', '0.45.1', '0.46.0','0.47.0','0.49.0','0.50.0','0.58.1'].includes(metadata.sactcheck_encoding_version), `${code} has unsupported SACTCheck encoding version ${metadata.sactcheck_encoding_version}`);
+  assert(['0.37.0', '0.38.0', '0.38.2', '0.39.0', '0.40.0', '0.41.0', '0.41.1', '0.42.0', '0.43.0', '0.44.0', '0.45.0', '0.45.1', '0.46.0','0.47.0','0.49.0','0.50.0','0.58.1','0.59.0'].includes(metadata.sactcheck_encoding_version), `${code} has unsupported SACTCheck encoding version ${metadata.sactcheck_encoding_version}`);
   if (metadata.catalogue_section === 'supportive_other') {
     assert.equal(code, '00257', `${code} remains incorrectly unclassified as supportive/other`);
     assert(metadata.treatment_class.includes('radiopharmaceutical'), 'Radium-223 must be classified as a specialist radiopharmaceutical.');
@@ -173,6 +173,7 @@ for (const { file, data } of protocols) {
 
     const renalText = `${field} ${def?.label || ''}`.toLowerCase();
     if (!/crcl|creatinine clearance|\bgfr\b|egfr/.test(renalText)) continue;
+    if (!['number', 'select'].includes(def.type)) continue;
     const comparisons = collectComparisons(rules, field).filter(value => Number.isFinite(Number(value)));
     if (!comparisons.length) continue;
     const mode = def.renal_input?.mode;

@@ -12,7 +12,7 @@
     "indication": "Adenocarcinoma NSCLC after first-line chemotherapy.",
     "source_url": "https://healthservice.hse.ie/documents/6913/372_Nintedanib_therapy.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.40.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "lung_subgroup": "later_line_nsclc",
@@ -43,7 +43,7 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required",
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -52,7 +52,7 @@
     "source_title_exact": "Nintedanib Therapy with DOCEtaxel",
     "display_title_normalised": true,
     "display_title_normalisation_version": "0.41.1",
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -66,18 +66,36 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6913/372_Nintedanib_therapy.pdf",
+      "source_version": "6",
+      "components": [
+        "nintedanib",
+        "docetaxel"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00372 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00372 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -213,7 +231,8 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "×ULN"
+      "unit": "×ULN",
+      "always_show": true
     },
     "alt_ast_uln_multiple": {
       "label": "ALT / AST results (actual values entered; highest ×ULN calculated automatically)",
@@ -222,7 +241,8 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
-      "unit": "×ULN"
+      "unit": "×ULN",
+      "always_show": true
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
@@ -397,6 +417,85 @@
       "type": "boolean",
       "required": false,
       "demo_value": false
+    },
+    "nintedanib_renal_band": {
+      "label": "Renal function for nintedanib",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "gt30",
+          "label": "CrCl >30 mL/min",
+          "decision_value": "gt30"
+        },
+        {
+          "value": "le30",
+          "label": "CrCl ≤30 mL/min",
+          "decision_value": "le30"
+        }
+      ],
+      "demo_value": "gt30",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      }
+    },
+    "nintedanib_child_pugh": {
+      "label": "Child–Pugh class for nintedanib",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "A",
+          "label": "Child A"
+        },
+        {
+          "value": "B_C",
+          "label": "Child B or C"
+        }
+      ],
+      "demo_value": "none",
+      "ui_section": "labs",
+      "always_show": true
+    },
+    "alp_uln_multiple": {
+      "label": "ALP",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 1,
+      "ui_section": "labs",
+      "always_show": true,
+      "unit": "×ULN"
+    },
+    "docetaxel_hepatic_band": {
+      "label": "Hepatic function for docetaxel",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "normal",
+          "label": "No source-defined hepatic reduction"
+        },
+        {
+          "value": "reduce75",
+          "label": "ALP >2.5 ×ULN with AST/ALT >1.5 ×ULN"
+        },
+        {
+          "value": "stop",
+          "label": "ALP >6 ×ULN and/or AST/ALT >3.5 ×ULN with bilirubin >ULN"
+        }
+      ],
+      "demo_value": "normal",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -711,6 +810,166 @@
           "page": "eligibility, exclusions or dose-modification section"
         },
         "explanation": "Clinically significant bleeding or thrombosis requires interruption and specialist review."
+      },
+      {
+        "id": "OF590_00372_NINT_RENAL",
+        "priority": 20,
+        "when": {
+          "field": "nintedanib_renal_band",
+          "operator": "==",
+          "value": "le30"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nintedanib"
+          ],
+          "message": "CrCl ≤30 mL/min: nintedanib has not been studied; specialist review is required.",
+          "recommendation": "CrCl ≤30 mL/min: nintedanib has not been studied; specialist review is required."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl ≤30 mL/min: nintedanib has not been studied; specialist review is required."
+      },
+      {
+        "id": "OF590_00372_NINT_HEP",
+        "priority": 20,
+        "when": {
+          "field": "nintedanib_child_pugh",
+          "operator": "==",
+          "value": "B_C"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "nintedanib"
+          ],
+          "message": "Child–Pugh B or C: nintedanib is not recommended.",
+          "recommendation": "Child–Pugh B or C: nintedanib is not recommended."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Child–Pugh B or C: nintedanib is not recommended."
+      },
+      {
+        "id": "OF590_00372_NINT_LFT_STOP",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "alp_uln_multiple",
+              "operator": "<",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nintedanib"
+          ],
+          "message": "ALT/AST >3 ×ULN with bilirubin ≥2 ×ULN and ALP <2 ×ULN: permanently discontinue nintedanib.",
+          "recommendation": "ALT/AST >3 ×ULN with bilirubin ≥2 ×ULN and ALP <2 ×ULN: permanently discontinue nintedanib."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "ALT/AST >3 ×ULN with bilirubin ≥2 ×ULN and ALP <2 ×ULN: permanently discontinue nintedanib."
+      },
+      {
+        "id": "OF590_00372_NINT_LFT_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">=",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nintedanib"
+          ],
+          "message": "ALT/AST >2.5–5 ×ULN with bilirubin ≥1.5 ×ULN: withhold nintedanib and resume at a reduced dose after recovery.",
+          "recommendation": "ALT/AST >2.5–5 ×ULN with bilirubin ≥1.5 ×ULN: withhold nintedanib and resume at a reduced dose after recovery."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "ALT/AST >2.5–5 ×ULN with bilirubin ≥1.5 ×ULN: withhold nintedanib and resume at a reduced dose after recovery."
+      },
+      {
+        "id": "OF590_00372_DOC_HEP_75",
+        "priority": 20,
+        "when": {
+          "field": "docetaxel_hepatic_band",
+          "operator": "==",
+          "value": "reduce75"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Source hepatic pattern: administer docetaxel at 75 mg/m² (or the corresponding source-reduced level).",
+          "recommendation": "Source hepatic pattern: administer docetaxel at 75 mg/m² (or the corresponding source-reduced level)."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Source hepatic pattern: administer docetaxel at 75 mg/m² (or the corresponding source-reduced level)."
+      },
+      {
+        "id": "OF590_00372_DOC_HEP_STOP",
+        "priority": 20,
+        "when": {
+          "field": "docetaxel_hepatic_band",
+          "operator": "==",
+          "value": "stop"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Severe source-defined hepatic dysfunction: stop docetaxel unless the Consultant determines treatment is strictly indicated.",
+          "recommendation": "Severe source-defined hepatic dysfunction: stop docetaxel unless the Consultant determines treatment is strictly indicated."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Severe source-defined hepatic dysfunction: stop docetaxel unless the Consultant determines treatment is strictly indicated."
       }
     ]
   },

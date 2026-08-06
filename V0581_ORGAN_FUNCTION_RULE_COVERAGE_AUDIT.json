@@ -456,7 +456,7 @@
       "protocol_id": "nccp-00205-v8",
       "path": "protocols/breast/00205-pegylated-liposomal-doxorubicin.json",
       "title": "Pegylated Liposomal Doxorubicin 50 mg/m² – 28 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -468,7 +468,8 @@
       "inputs": {
         "renal": [],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "pld_bilirubin_band"
         ]
       },
       "rules": {
@@ -476,7 +477,10 @@
         "hepatic": [
           "PLD_BILI_GT4_3",
           "PLD_BILI_GT2_5",
-          "PLD_BILI_GT1"
+          "PLD_BILI_GT1",
+          "OF590_00205_PLD_BILI_20_50",
+          "OF590_00205_PLD_BILI_51_86",
+          "OF590_00205_PLD_BILI_GT86"
         ]
       },
       "mismatches": []
@@ -515,7 +519,7 @@
       "protocol_id": "nccp-00207-v5",
       "path": "protocols/gastrointestinal/00207-cetuximab-therapy-7-days.json",
       "title": "Cetuximab Therapy – 7 days",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -575,7 +579,7 @@
       "protocol_id": "nccp-00210-v9b",
       "path": "protocols/gastrointestinal/00210-folfox-4-therapy-14-day.json",
       "title": "FOLFOX-4 Therapy – 14 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -586,16 +590,29 @@
       },
       "inputs": {
         "renal": [
-          "oxaliplatin_renal_band"
+          "oxaliplatin_renal_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
         "renal": [
           "OXALIPLATIN_SEVERE_RENAL",
-          "OXALIPLATIN_DIALYSIS"
+          "OXALIPLATIN_DIALYSIS",
+          "OF590_00210_OXALI_LT30",
+          "OF590_00210_OXALI_DIALYSIS",
+          "OF590_00210_5FU_RENAL_SEVERE"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00210_5FU_BILI_GT85",
+          "OF590_00210_5FU_AST_GT180",
+          "OF590_00210_5FU_HEP_MOD",
+          "OF590_00210_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -636,7 +653,7 @@
       "protocol_id": "nccp-00213-v7",
       "path": "protocols/gastrointestinal/00213-irinotecan-monotherapy-21-day.json",
       "title": "Irinotecan Monotherapy – 21 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -646,15 +663,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "irinotecan_renal_band"
+        ],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "irinotecan_bilirubin_uln"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00213_IRINO_DIALYSIS"
+        ],
         "hepatic": [
-          "IRINOTECAN_BILIRUBIN_OVER_3ULN"
+          "IRINOTECAN_BILIRUBIN_OVER_3ULN",
+          "OF590_00213_IRINO_BILI_1_5_3",
+          "OF590_00213_IRINO_BILI_GT3"
         ]
       },
       "mismatches": []
@@ -664,7 +688,7 @@
       "protocol_id": "nccp-00214-v8",
       "path": "protocols/shared/00214-bevacizumab-7-5-mg-kg-21-days.json",
       "title": "Bevacizumab 7.5 mg/kg – 21 days",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -827,7 +851,7 @@
       "protocol_id": "nccp-00219-v6",
       "path": "protocols/lung/00219-erlotinib-monotherapy.json",
       "title": "Erlotinib Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -837,16 +861,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00219_ERLO_RENAL"
+        ],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00219_ERLO_HEP"
         ]
       },
       "mismatches": []
@@ -856,7 +886,7 @@
       "protocol_id": "nccp-00220-v5",
       "path": "protocols/lung/00220-gefitinib-monotherapy.json",
       "title": "Gefitinib Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -866,16 +896,20 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00220_GEF_HEP_BC"
         ]
       },
       "mismatches": []
@@ -885,7 +919,7 @@
       "protocol_id": "nccp-00221-v5",
       "path": "protocols/lung/00221-afatinib-monotherapy.json",
       "title": "Afatinib Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -895,16 +929,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00221_AFA_LT15"
+        ],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00221_AFA_CHILD_C"
         ]
       },
       "mismatches": []
@@ -914,7 +954,7 @@
       "protocol_id": "nccp-00222-v5",
       "path": "protocols/lung/00222-pemetrexed-monotherapy.json",
       "title": "Pemetrexed Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -927,15 +967,20 @@
         "renal": [
           "pemetrexed_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "pemetrexed_severe_hepatic"
+        ]
       },
       "rules": {
         "renal": [
           "PEME_RENAL_30_44",
           "PEME_RENAL_LT30",
-          "PEME_DIALYSIS"
+          "PEME_DIALYSIS",
+          "OF590_00222_PEME_LT45"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00222_PEME_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -944,7 +989,7 @@
       "protocol_id": "nccp-00225-v6",
       "path": "protocols/gastrointestinal/00225-panitumumab-6-mg-kg-therapy.json",
       "title": "Panitumumab 6 mg/kg Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1167,7 +1212,7 @@
       "protocol_id": "nccp-00235-v5",
       "path": "protocols/gastrointestinal/00235-teysuno-s-1-and-cisplatin-28-day.json",
       "title": "Teysuno (S-1) and Cisplatin – 28 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1178,7 +1223,8 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "teysuno_renal_band"
         ],
         "hepatic": []
       },
@@ -1186,7 +1232,13 @@
         "renal": [
           "CISPLATIN_CRCL_45_59",
           "CISPLATIN_CRCL_LT45",
-          "CISPLATIN_DIALYSIS"
+          "CISPLATIN_DIALYSIS",
+          "OF590_00235_CIS_50_59",
+          "OF590_00235_CIS_40_49",
+          "OF590_00235_CIS_LT40",
+          "OF590_00235_CIS_DIALYSIS",
+          "OF590_00235_TEYSUNO_30_50",
+          "OF590_00235_TEYSUNO_LT30"
         ],
         "hepatic": []
       },
@@ -1293,7 +1345,7 @@
       "protocol_id": "nccp-00239-v8",
       "path": "protocols/gastrointestinal/00239-eox-epirubicin-oxaliplatin-and-capecitabine-therapy.json",
       "title": "EOX: Epirubicin, Oxaliplatin and Capecitabine Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1304,16 +1356,31 @@
       },
       "inputs": {
         "renal": [
-          "oxaliplatin_renal_band"
+          "oxaliplatin_renal_band",
+          "capecitabine_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln",
+          "epirubicin_bilirubin_umol_l",
+          "epirubicin_ast_uln"
+        ]
       },
       "rules": {
         "renal": [
           "OXALIPLATIN_SEVERE_RENAL",
-          "OXALIPLATIN_DIALYSIS"
+          "OXALIPLATIN_DIALYSIS",
+          "OF590_00239_OXALI_LT30",
+          "OF590_00239_OXALI_DIALYSIS",
+          "OF590_00239_CAPE_RENAL_30_50",
+          "OF590_00239_CAPE_RENAL_LT30"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00239_CAPE_HEPATIC_HOLD",
+          "OF590_00239_EPI_REDUCE50",
+          "OF590_00239_EPI_REDUCE25",
+          "OF590_00239_EPI_NOT_RECOMMENDED"
+        ]
       },
       "mismatches": []
     },
@@ -1322,7 +1389,7 @@
       "protocol_id": "nccp-00240-v8",
       "path": "protocols/gastrointestinal/00240-ecf-epirubicin-cisplatin-and-5-fluorouracil-therapy.json",
       "title": "ECF: Epirubicin, Cisplatin and 5-Fluorouracil Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1333,17 +1400,36 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment",
+          "epirubicin_bilirubin_umol_l",
+          "epirubicin_ast_uln"
+        ]
       },
       "rules": {
         "renal": [
           "CISPLATIN_CRCL_45_59",
           "CISPLATIN_CRCL_LT45",
-          "CISPLATIN_DIALYSIS"
+          "CISPLATIN_DIALYSIS",
+          "OF590_00240_5FU_RENAL_SEVERE",
+          "OF590_00240_CIS_45_59",
+          "OF590_00240_CIS_LT45",
+          "OF590_00240_CIS_DIALYSIS"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00240_5FU_BILI_GT85",
+          "OF590_00240_5FU_AST_GT180",
+          "OF590_00240_5FU_HEP_MOD",
+          "OF590_00240_5FU_HEP_SEV",
+          "OF590_00240_EPI_REDUCE50",
+          "OF590_00240_EPI_REDUCE25",
+          "OF590_00240_EPI_OMIT"
+        ]
       },
       "mismatches": []
     },
@@ -1385,7 +1471,7 @@
       "protocol_id": "nccp-00243-v7",
       "path": "protocols/lung/00243-crizotinib-monotherapy.json",
       "title": "Crizotinib Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1395,16 +1481,23 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00243_CRIZ_RENAL"
+        ],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00243_CRIZ_HEP_MOD",
+          "OF590_00243_CRIZ_HEP_SEV"
         ]
       },
       "mismatches": []
@@ -2431,7 +2524,7 @@
       "protocol_id": "nccp-00283-v6",
       "path": "protocols/gastrointestinal/00283-gemcitabine-1000-mg-m2-monotherapy-56-day.json",
       "title": "Gemcitabine 1000 mg/m² Monotherapy – 56 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -2441,12 +2534,20 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "gemcitabine_renal_band"
+        ],
+        "hepatic": [
+          "gemcitabine_bilirubin_band"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00283_GEM_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00283_GEM_BILI_GE27"
+        ]
       },
       "mismatches": []
     },
@@ -2455,7 +2556,7 @@
       "protocol_id": "nccp-00284-v5",
       "path": "protocols/shared/00284-gemcitabine-1000-mg-m2-monotherapy-28-day.json",
       "title": "Gemcitabine 1000 mg/m² Monotherapy – 28 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -2465,12 +2566,20 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "gemcitabine_renal_band"
+        ],
+        "hepatic": [
+          "gemcitabine_bilirubin_band"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00284_GEM_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00284_GEM_BILI_GE27"
+        ]
       },
       "mismatches": []
     },
@@ -2503,7 +2612,7 @@
       "protocol_id": "nccp-00294-v4",
       "path": "protocols/gastrointestinal/00294-sorafenib-therapy.json",
       "title": "Sorafenib Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -2513,17 +2622,24 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "sorafenib_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "child_pugh_class"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00294_SORA_20_39",
+          "OF590_00294_SORA_LT20"
+        ],
         "hepatic": [
           "ORAL_TARGETED_LFT_REVIEW",
-          "ORAL_TARGETED_BILIRUBIN_REVIEW"
+          "ORAL_TARGETED_BILIRUBIN_REVIEW",
+          "OF590_00294_SORA_CHILD_C"
         ]
       },
       "mismatches": []
@@ -2867,7 +2983,7 @@
       "protocol_id": "nccp-00311-v4",
       "path": "protocols/shared/00311-topotecan-monotherapy-5-day.json",
       "title": "Topotecan Monotherapy – 5 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -2880,15 +2996,21 @@
         "renal": [
           "topotecan_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "topotecan_bilirubin_band"
+        ]
       },
       "rules": {
         "renal": [
           "TOPO_RENAL_20_39",
           "TOPO_RENAL_LT20",
-          "TOPO_DIALYSIS"
+          "TOPO_DIALYSIS",
+          "OF590_00311_TOPO_IV_20_39",
+          "OF590_00311_TOPO_IV_LT20"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00311_TOPO_IV_BILI_GT171"
+        ]
       },
       "mismatches": []
     },
@@ -3097,7 +3219,7 @@
       "protocol_id": "nccp-00318-v6",
       "path": "protocols/lung/00318-pemetrexed-and-carboplatin-therapy.json",
       "title": "Pemetrexed and Carboplatin Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3111,7 +3233,9 @@
           "gfr_crcl_ml_min",
           "pemetrexed_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "pemetrexed_severe_hepatic"
+        ]
       },
       "rules": {
         "renal": [
@@ -3119,9 +3243,14 @@
           "CARBO_GFR_20_30",
           "PEME_RENAL_30_44",
           "PEME_RENAL_LT30",
-          "PEME_DIALYSIS"
+          "PEME_DIALYSIS",
+          "OF590_00318_PEME_LT45",
+          "OF590_00318_CARBO_LE20",
+          "OF590_00318_CARBO_21_30"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00318_PEME_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -3167,7 +3296,7 @@
       "protocol_id": "nccp-00320-v6",
       "path": "protocols/shared/00320-everolimus-monotherapy.json",
       "title": "Everolimus Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3180,14 +3309,18 @@
         "renal": [],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "child_pugh_class"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
           "ORAL_TARGETED_LFT_REVIEW",
-          "ORAL_TARGETED_BILIRUBIN_REVIEW"
+          "ORAL_TARGETED_BILIRUBIN_REVIEW",
+          "OF590_00320_EVEROLIMUS_CHILD_A",
+          "OF590_00320_EVEROLIMUS_CHILD_B",
+          "OF590_00320_EVEROLIMUS_CHILD_C"
         ]
       },
       "mismatches": []
@@ -3343,7 +3476,7 @@
       "protocol_id": "nccp-00325-v6",
       "path": "protocols/shared/00325-sunitinib-50-mg-therapy-42-day.json",
       "title": "Sunitinib 50 mg Therapy – 42 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3353,10 +3486,13 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "sunitinib_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "child_pugh_class"
         ]
       },
       "rules": {
@@ -3364,7 +3500,8 @@
         "hepatic": [
           "TKI_LIVER_3",
           "TKI_LIVER_5",
-          "TKI_BILI"
+          "TKI_BILI",
+          "OF590_00325_SUNITINIB_CHILD_C"
         ]
       },
       "mismatches": []
@@ -3429,7 +3566,7 @@
       "protocol_id": "nccp-00328-v7",
       "path": "protocols/gastrointestinal/00328-cetuximab-7-day-and-folfiri-14-day-therapy.json",
       "title": "Cetuximab (7 day) and FOLFIRI (14 day) Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3439,15 +3576,31 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "irinotecan_renal_band",
+          "fluorouracil_renal_impairment"
+        ],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "irinotecan_bilirubin_uln",
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00328_IRINO_DIALYSIS",
+          "OF590_00328_5FU_RENAL_SEVERE"
+        ],
         "hepatic": [
-          "IRINOTECAN_BILIRUBIN_OVER_3ULN"
+          "IRINOTECAN_BILIRUBIN_OVER_3ULN",
+          "OF590_00328_IRINO_BILI_1_5_3",
+          "OF590_00328_IRINO_BILI_GT3",
+          "OF590_00328_5FU_BILI_GT85",
+          "OF590_00328_5FU_AST_GT180",
+          "OF590_00328_5FU_HEP_MOD",
+          "OF590_00328_5FU_HEP_SEV"
         ]
       },
       "mismatches": []
@@ -3500,7 +3653,7 @@
       "protocol_id": "nccp-00330-v6",
       "path": "protocols/gastrointestinal/00330-cetuximab-7-day-and-irinotecan-14-day-therapy.json",
       "title": "Cetuximab (7 day) and Irinotecan (14 day) Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3510,15 +3663,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "irinotecan_renal_band"
+        ],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "irinotecan_bilirubin_uln"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00330_IRINO_DIALYSIS"
+        ],
         "hepatic": [
-          "IRINOTECAN_BILIRUBIN_OVER_3ULN"
+          "IRINOTECAN_BILIRUBIN_OVER_3ULN",
+          "OF590_00330_IRINO_BILI_1_5_3",
+          "OF590_00330_IRINO_BILI_GT3"
         ]
       },
       "mismatches": []
@@ -3528,7 +3688,7 @@
       "protocol_id": "nccp-00331-v7",
       "path": "protocols/gastrointestinal/00331-cetuximab-14-day-and-irinotecan-14-day-therapy.json",
       "title": "Cetuximab (14 day) and Irinotecan (14 day) Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3538,15 +3698,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "irinotecan_renal_band"
+        ],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "irinotecan_bilirubin_uln"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00331_IRINO_DIALYSIS"
+        ],
         "hepatic": [
-          "IRINOTECAN_BILIRUBIN_OVER_3ULN"
+          "IRINOTECAN_BILIRUBIN_OVER_3ULN",
+          "OF590_00331_IRINO_BILI_1_5_3",
+          "OF590_00331_IRINO_BILI_GT3"
         ]
       },
       "mismatches": []
@@ -3652,7 +3819,7 @@
       "protocol_id": "nccp-00335-v4",
       "path": "protocols/sarcoma/00335-imatinib-therapy-gist.json",
       "title": "Imatinib Therapy – GIST",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3662,7 +3829,9 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "imatinib_renal_status"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple"
@@ -3672,7 +3841,8 @@
         "renal": [],
         "hepatic": [
           "IMAT_BILI_GT3",
-          "IMAT_TRANS_GT5"
+          "IMAT_TRANS_GT5",
+          "OF590_00335_IMATINIB_LFT_HOLD"
         ]
       },
       "mismatches": []
@@ -3785,7 +3955,7 @@
       "protocol_id": "nccp-00340-v4",
       "path": "protocols/lung/00340-ceritinib-monotherapy.json",
       "title": "Ceritinib Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3795,16 +3965,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00340_CERI_RENAL"
+        ],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00340_CERI_CHILD_C"
         ]
       },
       "mismatches": []
@@ -4006,7 +4182,7 @@
       "protocol_id": "nccp-00353-v5",
       "path": "protocols/lung/00353-osimertinib-monotherapy.json",
       "title": "Osimertinib Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4016,16 +4192,20 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00353_OSI_HEP_SEV"
         ]
       },
       "mismatches": []
@@ -4095,7 +4275,7 @@
       "protocol_id": "nccp-00372-v6",
       "path": "protocols/lung/00372-nintedanib-therapy-with-docetaxel.json",
       "title": "Nintedanib Therapy with Docetaxel",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4105,17 +4285,29 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "nintedanib_renal_band"
+        ],
         "hepatic": [
           "bilirubin_uln_multiple",
-          "alt_ast_uln_multiple"
+          "alt_ast_uln_multiple",
+          "nintedanib_child_pugh",
+          "alp_uln_multiple",
+          "docetaxel_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00372_NINT_RENAL"
+        ],
         "hepatic": [
           "DOCETAXEL_BILI_HIGH",
-          "NINT_LFT_3"
+          "NINT_LFT_3",
+          "OF590_00372_NINT_HEP",
+          "OF590_00372_NINT_LFT_STOP",
+          "OF590_00372_NINT_LFT_HOLD",
+          "OF590_00372_DOC_HEP_75",
+          "OF590_00372_DOC_HEP_STOP"
         ]
       },
       "mismatches": []
@@ -4340,7 +4532,7 @@
       "protocol_id": "nccp-00380-v6",
       "path": "protocols/gastrointestinal/00380-ecx-epirubicin-cisplatin-and-capecitabine-therapy.json",
       "title": "ECX: Epirubicin, Cisplatin and Capecitabine Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4351,17 +4543,34 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "capecitabine_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln",
+          "epirubicin_bilirubin_umol_l",
+          "epirubicin_ast_uln"
+        ]
       },
       "rules": {
         "renal": [
           "CISPLATIN_CRCL_45_59",
           "CISPLATIN_CRCL_LT45",
-          "CISPLATIN_DIALYSIS"
+          "CISPLATIN_DIALYSIS",
+          "OF590_00380_CAPE_RENAL_30_50",
+          "OF590_00380_CAPE_RENAL_LT30",
+          "OF590_00380_CIS_50_59",
+          "OF590_00380_CIS_40_49",
+          "OF590_00380_CIS_LT40",
+          "OF590_00380_CIS_DIALYSIS"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00380_CAPE_HEPATIC_HOLD",
+          "OF590_00380_EPI_REDUCE50",
+          "OF590_00380_EPI_REDUCE25",
+          "OF590_00380_EPI_NOT_RECOMMENDED"
+        ]
       },
       "mismatches": []
     },
@@ -4431,7 +4640,7 @@
       "protocol_id": "nccp-00383-v8",
       "path": "protocols/gastrointestinal/00383-gemcitabine-1000-mg-m2-and-cisplatin-25-mg-m2-21-day.json",
       "title": "Gemcitabine 1000 mg/m² and Cisplatin 25 mg/m² – 21 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4442,17 +4651,26 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "gemcitabine_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "gemcitabine_bilirubin_band"
+        ]
       },
       "rules": {
         "renal": [
           "CISPLATIN_CRCL_45_59",
           "CISPLATIN_CRCL_LT45",
-          "CISPLATIN_DIALYSIS"
+          "CISPLATIN_DIALYSIS",
+          "OF590_00383_GEM_RENAL_LT30",
+          "OF590_00383_CIS_45_59",
+          "OF590_00383_CIS_LT45",
+          "OF590_00383_CIS_DIALYSIS"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00383_GEM_BILI_GE27"
+        ]
       },
       "mismatches": []
     },
@@ -4461,7 +4679,7 @@
       "protocol_id": "nccp-00384-v7",
       "path": "protocols/gastrointestinal/00384-gemcitabine-1000-mg-m2-and-capecitabine-650-mg-m2-21-day.json",
       "title": "Gemcitabine 1000 mg/m² and Capecitabine 650 mg/m² – 21 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4471,12 +4689,26 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "gemcitabine_renal_band",
+          "capecitabine_renal_band"
+        ],
+        "hepatic": [
+          "gemcitabine_bilirubin_band",
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00384_GEM_RENAL_LT30",
+          "OF590_00384_CAPE_RENAL_30_50",
+          "OF590_00384_CAPE_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00384_GEM_BILI_GE27",
+          "OF590_00384_CAPE_HEPATIC_HOLD"
+        ]
       },
       "mismatches": []
     },
@@ -4518,7 +4750,7 @@
       "protocol_id": "nccp-00386-v4",
       "path": "protocols/gastrointestinal/00386-doxorubicin-60-mg-m2-therapy.json",
       "title": "Doxorubicin 60 mg/m² Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4528,12 +4760,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "doxorubicin_renal_band"
+        ],
+        "hepatic": [
+          "doxorubicin_bilirubin_band"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00386_DOX_DIALYSIS"
+        ],
+        "hepatic": [
+          "OF590_00386_DOX_BILI_20_50",
+          "OF590_00386_DOX_BILI_51_86",
+          "OF590_00386_DOX_BILI_GT86"
+        ]
       },
       "mismatches": []
     },
@@ -4679,7 +4921,7 @@
       "protocol_id": "nccp-00401-v6",
       "path": "protocols/lung/00401-alectinib-monotherapy.json",
       "title": "Alectinib Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4689,16 +4931,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00401_ALEC_CHILD_C",
+          "OF590_00401_ALEC_LFT_HOLD",
+          "OF590_00401_ALEC_LFT_STOP"
         ]
       },
       "mismatches": []
@@ -4944,7 +5192,7 @@
       "protocol_id": "nccp-00421-v4",
       "path": "protocols/gastrointestinal/00421-5-fluorouracil-continuous-infusion-and-radiotherapy.json",
       "title": "5-Fluorouracil Continuous Infusion and Radiotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4954,12 +5202,25 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "fluorouracil_renal_impairment"
+        ],
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00421_5FU_RENAL_SEVERE"
+        ],
+        "hepatic": [
+          "OF590_00421_5FU_BILI_GT85",
+          "OF590_00421_5FU_AST_GT180",
+          "OF590_00421_5FU_HEP_MOD",
+          "OF590_00421_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -5025,7 +5286,7 @@
       "protocol_id": "nccp-00427-v6",
       "path": "protocols/gastrointestinal/00427-roswell-park-modified-5-fluorouracil-and-folinic-acid.json",
       "title": "Roswell Park Modified 5-Fluorouracil and Folinic Acid",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -5035,12 +5296,25 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "fluorouracil_renal_impairment"
+        ],
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00427_5FU_RENAL_SEVERE"
+        ],
+        "hepatic": [
+          "OF590_00427_5FU_BILI_GT85",
+          "OF590_00427_5FU_AST_GT180",
+          "OF590_00427_5FU_HEP_MOD",
+          "OF590_00427_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -5049,7 +5323,7 @@
       "protocol_id": "nccp-00428-v6",
       "path": "protocols/gastrointestinal/00428-quasar-modified-5-fluorouracil-and-folinic-acid-weekly.json",
       "title": "QUASAR Modified 5-Fluorouracil and Folinic Acid Weekly",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -5059,12 +5333,25 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "fluorouracil_renal_impairment"
+        ],
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00428_5FU_RENAL_SEVERE"
+        ],
+        "hepatic": [
+          "OF590_00428_5FU_BILI_GT85",
+          "OF590_00428_5FU_AST_GT180",
+          "OF590_00428_5FU_HEP_MOD",
+          "OF590_00428_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -5073,7 +5360,7 @@
       "protocol_id": "nccp-00429-v7a",
       "path": "protocols/gastrointestinal/00429-eof-epirubicin-oxaliplatin-and-5-fluorouracil-therapy.json",
       "title": "EOF: Epirubicin, Oxaliplatin and 5-Fluorouracil Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -5084,16 +5371,34 @@
       },
       "inputs": {
         "renal": [
-          "oxaliplatin_renal_band"
+          "oxaliplatin_renal_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment",
+          "epirubicin_bilirubin_umol_l",
+          "epirubicin_ast_uln"
+        ]
       },
       "rules": {
         "renal": [
           "OXALIPLATIN_SEVERE_RENAL",
-          "OXALIPLATIN_DIALYSIS"
+          "OXALIPLATIN_DIALYSIS",
+          "OF590_00429_OXALI_LT30",
+          "OF590_00429_OXALI_DIALYSIS",
+          "OF590_00429_5FU_RENAL_SEVERE"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00429_5FU_BILI_GT85",
+          "OF590_00429_5FU_AST_GT180",
+          "OF590_00429_5FU_HEP_MOD",
+          "OF590_00429_5FU_HEP_SEV",
+          "OF590_00429_EPI_REDUCE50",
+          "OF590_00429_EPI_REDUCE25",
+          "OF590_00429_EPI_NOT_RECOMMENDED"
+        ]
       },
       "mismatches": []
     },
@@ -5641,7 +5946,7 @@
       "protocol_id": "nccp-00460-v4",
       "path": "protocols/gastrointestinal/00460-cisplatin-75-mg-m2-and-5-fluorouracil-chemoradiation-herskovic.json",
       "title": "Cisplatin 75 mg/m² and 5-Fluorouracil Chemoradiation (Herskovic)",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -5652,17 +5957,32 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
         "renal": [
           "CISPLATIN_CRCL_45_59",
           "CISPLATIN_CRCL_LT45",
-          "CISPLATIN_DIALYSIS"
+          "CISPLATIN_DIALYSIS",
+          "OF590_00460_5FU_RENAL_SEVERE",
+          "OF590_00460_CIS_50_59",
+          "OF590_00460_CIS_40_49",
+          "OF590_00460_CIS_LT40",
+          "OF590_00460_CIS_DIALYSIS"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00460_5FU_BILI_GT85",
+          "OF590_00460_5FU_AST_GT180",
+          "OF590_00460_5FU_HEP_MOD",
+          "OF590_00460_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -5703,7 +6023,7 @@
       "protocol_id": "nccp-00462-v4",
       "path": "protocols/sarcoma/00462-pegylated-liposomal-doxorubicin-20-mg-m2-21-day.json",
       "title": "Pegylated Liposomal Doxorubicin 20 mg/m² – 21 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -5715,7 +6035,8 @@
       "inputs": {
         "renal": [],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "pld_bilirubin_band"
         ]
       },
       "rules": {
@@ -5723,7 +6044,10 @@
         "hepatic": [
           "PLD_BILI_GT4_3",
           "PLD_BILI_GT2_5",
-          "PLD_BILI_GT1"
+          "PLD_BILI_GT1",
+          "OF590_00462_PLD_BILI_20_50",
+          "OF590_00462_PLD_BILI_51_86",
+          "OF590_00462_PLD_BILI_GT86"
         ]
       },
       "mismatches": []
@@ -5807,7 +6131,7 @@
       "protocol_id": "nccp-00473-v6",
       "path": "protocols/gastrointestinal/00473-cisplatin-and-capecitabine-adjuvant-chemoradiation-therapy.json",
       "title": "Cisplatin and Capecitabine Adjuvant Chemoradiation Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -5818,17 +6142,29 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "capecitabine_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln"
+        ]
       },
       "rules": {
         "renal": [
           "CISPLATIN_CRCL_45_59",
           "CISPLATIN_CRCL_LT45",
-          "CISPLATIN_DIALYSIS"
+          "CISPLATIN_DIALYSIS",
+          "OF590_00473_CAPE_RENAL_30_50",
+          "OF590_00473_CAPE_RENAL_LT30",
+          "OF590_00473_CIS_50_59",
+          "OF590_00473_CIS_40_49",
+          "OF590_00473_CIS_LT40",
+          "OF590_00473_CIS_DIALYSIS"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00473_CAPE_HEPATIC_HOLD"
+        ]
       },
       "mismatches": []
     },
@@ -6077,7 +6413,7 @@
       "protocol_id": "nccp-00486-v8",
       "path": "protocols/gastrointestinal/00486-flox-therapy.json",
       "title": "FLOX Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6088,16 +6424,29 @@
       },
       "inputs": {
         "renal": [
-          "oxaliplatin_renal_band"
+          "oxaliplatin_renal_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
         "renal": [
           "OXALIPLATIN_SEVERE_RENAL",
-          "OXALIPLATIN_DIALYSIS"
+          "OXALIPLATIN_DIALYSIS",
+          "OF590_00486_OXALI_LT30",
+          "OF590_00486_OXALI_DIALYSIS",
+          "OF590_00486_5FU_RENAL_SEVERE"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00486_5FU_BILI_GT85",
+          "OF590_00486_5FU_AST_GT180",
+          "OF590_00486_5FU_HEP_MOD",
+          "OF590_00486_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -6339,7 +6688,7 @@
       "protocol_id": "nccp-00501-v4",
       "path": "protocols/sarcoma/00501-gemcitabine-and-docetaxel-therapy-21-day.json",
       "title": "Gemcitabine and Docetaxel Therapy – 21 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6349,20 +6698,29 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "gemcitabine_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_actual_umol_l",
-          "alp_uln_multiple"
+          "alp_uln_multiple",
+          "gemcitabine_bilirubin_band",
+          "docetaxel_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00501_GEM_RENAL_LT30"
+        ],
         "hepatic": [
           "DOC_HEPATIC_NOT_REC",
           "DOC_HEPATIC_50",
-          "GEM_BILI_27"
+          "GEM_BILI_27",
+          "OF590_00501_GEM_BILI_GE27",
+          "OF590_00501_DOC_HEP_75",
+          "OF590_00501_DOC_HEP_STOP"
         ]
       },
       "mismatches": []
@@ -6372,7 +6730,7 @@
       "protocol_id": "nccp-00502-v4",
       "path": "protocols/gastrointestinal/00502-trastuzumab-5-fluorouracil-and-cisplatin-therapy-21-day.json",
       "title": "Trastuzumab, 5-Fluorouracil and Cisplatin Therapy – 21 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6383,17 +6741,32 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
         "renal": [
           "CISPLATIN_CRCL_45_59",
           "CISPLATIN_CRCL_LT45",
-          "CISPLATIN_DIALYSIS"
+          "CISPLATIN_DIALYSIS",
+          "OF590_00502_5FU_RENAL_SEVERE",
+          "OF590_00502_CIS_50_59",
+          "OF590_00502_CIS_40_49",
+          "OF590_00502_CIS_LT40",
+          "OF590_00502_CIS_DIALYSIS"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00502_5FU_BILI_GT85",
+          "OF590_00502_5FU_AST_GT180",
+          "OF590_00502_5FU_HEP_MOD",
+          "OF590_00502_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -6436,7 +6809,7 @@
       "protocol_id": "nccp-00505-v5",
       "path": "protocols/gastrointestinal/00505-capecitabine-and-temozolomide-therapy.json",
       "title": "Capecitabine and Temozolomide Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6446,12 +6819,26 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "capecitabine_renal_band",
+          "temozolomide_renal_band"
+        ],
+        "hepatic": [
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln",
+          "temozolomide_hepatic_band"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00505_CAPE_RENAL_30_50",
+          "OF590_00505_CAPE_RENAL_LT30",
+          "OF590_00505_TMZ_RENAL_LOW"
+        ],
+        "hepatic": [
+          "OF590_00505_CAPE_HEPATIC_HOLD",
+          "OF590_00505_TMZ_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -6494,7 +6881,7 @@
       "protocol_id": "nccp-00509-v6",
       "path": "protocols/gastrointestinal/00509-modified-folfox-6-chemoradiation-therapy-14-day.json",
       "title": "Modified FOLFOX-6 Chemoradiation Therapy – 14 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6505,16 +6892,29 @@
       },
       "inputs": {
         "renal": [
-          "oxaliplatin_renal_band"
+          "oxaliplatin_renal_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
         "renal": [
           "OXALIPLATIN_SEVERE_RENAL",
-          "OXALIPLATIN_DIALYSIS"
+          "OXALIPLATIN_DIALYSIS",
+          "OF590_00509_OXALI_LT30",
+          "OF590_00509_OXALI_DIALYSIS",
+          "OF590_00509_5FU_RENAL_SEVERE"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00509_5FU_BILI_GT85",
+          "OF590_00509_5FU_AST_GT180",
+          "OF590_00509_5FU_HEP_MOD",
+          "OF590_00509_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -6523,7 +6923,7 @@
       "protocol_id": "nccp-00511-v2",
       "path": "protocols/sarcoma/00511-dacarbazine-1-2-g-m2-therapy-21-day.json",
       "title": "Dacarbazine 1.2 g/m² Therapy – 21 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6536,16 +6936,24 @@
         "renal": [
           "dacarbazine_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "dacarbazine_hepatic_status"
+        ]
       },
       "rules": {
         "renal": [
           "DAC_CRCL_45_60",
           "DAC_CRCL_30_44",
           "DAC_CRCL_LT30",
-          "DAC_DIALYSIS"
+          "DAC_DIALYSIS",
+          "OF590_00511_DTIC_45_60",
+          "OF590_00511_DTIC_30_44",
+          "OF590_00511_DTIC_LT30"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00511_DTIC_HEPATIC",
+          "OF590_00511_DTIC_SEVERE_HEPATIC"
+        ]
       },
       "mismatches": []
     },
@@ -6719,7 +7127,7 @@
       "protocol_id": "nccp-00521-v3",
       "path": "protocols/gastrointestinal/00521-gemcitabine-1000-mg-m2-and-radiotherapy.json",
       "title": "Gemcitabine 1000 mg/m² and Radiotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6729,12 +7137,20 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "gemcitabine_renal_band"
+        ],
+        "hepatic": [
+          "gemcitabine_bilirubin_band"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00521_GEM_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00521_GEM_BILI_GE27"
+        ]
       },
       "mismatches": []
     },
@@ -6743,7 +7159,7 @@
       "protocol_id": "nccp-00522-v4",
       "path": "protocols/gastrointestinal/00522-gemcitabine-400-mg-m2-and-radiotherapy.json",
       "title": "Gemcitabine 400 mg/m² and Radiotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6753,12 +7169,20 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "gemcitabine_renal_band"
+        ],
+        "hepatic": [
+          "gemcitabine_bilirubin_band"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00522_GEM_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00522_GEM_BILI_GE27"
+        ]
       },
       "mismatches": []
     },
@@ -6767,7 +7191,7 @@
       "protocol_id": "nccp-00523-v5",
       "path": "protocols/gastrointestinal/00523-capecitabine-and-radiotherapy-7-day.json",
       "title": "Capecitabine and Radiotherapy – 7 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6777,12 +7201,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "capecitabine_renal_band"
+        ],
+        "hepatic": [
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00523_CAPE_RENAL_30_50",
+          "OF590_00523_CAPE_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00523_CAPE_HEPATIC_HOLD"
+        ]
       },
       "mismatches": []
     },
@@ -6791,7 +7225,7 @@
       "protocol_id": "nccp-00524-v5",
       "path": "protocols/gastrointestinal/00524-gemcitabine-1000-mg-m2-and-capecitabine-830-mg-m2-28-day.json",
       "title": "Gemcitabine 1000 mg/m² and Capecitabine 830 mg/m² – 28 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6801,12 +7235,26 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "gemcitabine_renal_band",
+          "capecitabine_renal_band"
+        ],
+        "hepatic": [
+          "gemcitabine_bilirubin_band",
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00524_GEM_RENAL_LT30",
+          "OF590_00524_CAPE_RENAL_30_50",
+          "OF590_00524_CAPE_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00524_GEM_BILI_GE27",
+          "OF590_00524_CAPE_HEPATIC_HOLD"
+        ]
       },
       "mismatches": []
     },
@@ -7194,7 +7642,7 @@
       "protocol_id": "nccp-00559-v3",
       "path": "protocols/gastrointestinal/00559-gemcitabine-600-mg-m2-and-radiotherapy.json",
       "title": "Gemcitabine 600 mg/m² and Radiotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7204,12 +7652,20 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "gemcitabine_renal_band"
+        ],
+        "hepatic": [
+          "gemcitabine_bilirubin_band"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00559_GEM_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00559_GEM_BILI_GE27"
+        ]
       },
       "mismatches": []
     },
@@ -7255,7 +7711,7 @@
       "protocol_id": "nccp-00562-v3",
       "path": "protocols/lung/00562-brigatinib-therapy.json",
       "title": "Brigatinib Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7265,16 +7721,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00562_BRIG_RENAL"
+        ],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00562_BRIG_CHILD_C"
         ]
       },
       "mismatches": []
@@ -7338,7 +7800,7 @@
       "protocol_id": "nccp-00565-v3",
       "path": "protocols/lung/00565-dacomitinib-monotherapy.json",
       "title": "Dacomitinib Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7348,16 +7810,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00565_DACO_RENAL_SEV"
+        ],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00565_DACO_CHILD_C"
         ]
       },
       "mismatches": []
@@ -7455,7 +7923,7 @@
       "protocol_id": "nccp-00570-v3",
       "path": "protocols/lung/00570-lorlatinib-therapy.json",
       "title": "Lorlatinib Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7465,16 +7933,23 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00570_LOR_RENAL",
+          "OF590_00570_LOR_DIALYSIS"
+        ],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00570_LOR_HEP"
         ]
       },
       "mismatches": []
@@ -7664,7 +8139,7 @@
       "protocol_id": "nccp-00585-v5b",
       "path": "protocols/gastrointestinal/00585-cetuximab-14-day-and-folfiri-14-day-therapy.json",
       "title": "Cetuximab (14 day) and FOLFIRI (14 day) Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7674,15 +8149,31 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "irinotecan_renal_band",
+          "fluorouracil_renal_impairment"
+        ],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "irinotecan_bilirubin_uln",
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00585_IRINO_DIALYSIS",
+          "OF590_00585_5FU_RENAL_SEVERE"
+        ],
         "hepatic": [
-          "IRINOTECAN_BILIRUBIN_OVER_3ULN"
+          "IRINOTECAN_BILIRUBIN_OVER_3ULN",
+          "OF590_00585_IRINO_BILI_1_5_3",
+          "OF590_00585_IRINO_BILI_GT3",
+          "OF590_00585_5FU_BILI_GT85",
+          "OF590_00585_5FU_AST_GT180",
+          "OF590_00585_5FU_HEP_MOD",
+          "OF590_00585_5FU_HEP_SEV"
         ]
       },
       "mismatches": []
@@ -7692,7 +8183,7 @@
       "protocol_id": "nccp-00586-v3",
       "path": "protocols/gastrointestinal/00586-capecitabine-825-mg-m2-and-radiotherapy-7-day.json",
       "title": "Capecitabine 825 mg/m² and Radiotherapy – 7 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7702,12 +8193,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "capecitabine_renal_band"
+        ],
+        "hepatic": [
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00586_CAPE_RENAL_30_50",
+          "OF590_00586_CAPE_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00586_CAPE_HEPATIC_HOLD"
+        ]
       },
       "mismatches": []
     },
@@ -7716,7 +8217,7 @@
       "protocol_id": "nccp-00587-v2",
       "path": "protocols/lung/00587-topotecan-oral-monotherapy.json",
       "title": "Topotecan Oral Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7727,17 +8228,24 @@
       },
       "inputs": {
         "renal": [
-          "topotecan_renal_band"
+          "topotecan_renal_band",
+          "topotecan_oral_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "hepatic_impairment_evidence"
+        ]
       },
       "rules": {
         "renal": [
           "TOPO_RENAL_20_39",
           "TOPO_RENAL_LT20",
-          "TOPO_DIALYSIS"
+          "TOPO_DIALYSIS",
+          "OF590_00587_TOPO_ORAL_30_49",
+          "OF590_00587_TOPO_ORAL_LT30"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00587_TOPO_ORAL_HEPATIC"
+        ]
       },
       "mismatches": []
     },
@@ -7927,7 +8435,7 @@
       "protocol_id": "nccp-00594-v3b",
       "path": "protocols/gastrointestinal/00594-cisplatin-5-fluorouracil-and-radiation-therapy.json",
       "title": "Cisplatin, 5-Fluorouracil and Radiation Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7938,17 +8446,31 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
         "renal": [
           "CISPLATIN_CRCL_45_59",
           "CISPLATIN_CRCL_LT45",
-          "CISPLATIN_DIALYSIS"
+          "CISPLATIN_DIALYSIS",
+          "OF590_00594_5FU_RENAL_SEVERE",
+          "OF590_00594_CIS_45_59",
+          "OF590_00594_CIS_LT45",
+          "OF590_00594_CIS_DIALYSIS"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00594_5FU_BILI_GT85",
+          "OF590_00594_5FU_AST_GT180",
+          "OF590_00594_5FU_HEP_MOD",
+          "OF590_00594_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -8369,7 +8891,7 @@
       "protocol_id": "nccp-00623-v3a",
       "path": "protocols/gastrointestinal/00623-bevacizumab-7-5-mg-kg-and-capecitabine-1250-mg-m2-therapy.json",
       "title": "Bevacizumab 7.5 mg/kg and Capecitabine 1250 mg/m² Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -8379,12 +8901,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "capecitabine_renal_band"
+        ],
+        "hepatic": [
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00623_CAPE_RENAL_30_50",
+          "OF590_00623_CAPE_RENAL_LT30"
+        ],
+        "hepatic": [
+          "OF590_00623_CAPE_HEPATIC_HOLD"
+        ]
       },
       "mismatches": []
     },
@@ -8460,7 +8992,7 @@
       "protocol_id": "nccp-00642-v2",
       "path": "protocols/gastrointestinal/00642-lutetium-177-oxodotreotide-lutathera-therapy.json",
       "title": "Lutetium-177 Oxodotreotide (Lutathera) Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -8471,17 +9003,28 @@
       },
       "inputs": {
         "renal": [
-          "renal_band"
+          "renal_band",
+          "lutathera_renal_band",
+          "lutathera_renal_toxicity"
         ],
-        "hepatic": []
+        "hepatic": [
+          "lutathera_hepatic_band",
+          "lutathera_hepatic_toxicity"
+        ]
       },
       "rules": {
         "renal": [
           "LUTATHERA_RENAL_30_49",
           "LUTATHERA_RENAL_LT30",
-          "LUTATHERA_DIALYSIS"
+          "LUTATHERA_DIALYSIS",
+          "OF590_00642_LUTA_LT30",
+          "OF590_00642_LUTA_30_39",
+          "OF590_00642_LUTA_RENAL_TOX"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00642_LUTA_HEP_SEV",
+          "OF590_00642_LUTA_HEP_TOX"
+        ]
       },
       "mismatches": []
     },
@@ -8525,7 +9068,7 @@
       "protocol_id": "nccp-00644-v2",
       "path": "protocols/gastrointestinal/00644-lenvatinib-therapy-hcc.json",
       "title": "Lenvatinib Therapy – HCC",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -8535,17 +9078,28 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band",
+          "renal_toxicity_requires_interruption"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band",
+          "hepatic_toxicity_requires_interruption"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00644_LEN_RENAL_LOW",
+          "OF590_00644_LEN_DIALYSIS",
+          "OF590_00644_LEN_RENAL_G3"
+        ],
         "hepatic": [
           "ORAL_TARGETED_LFT_REVIEW",
-          "ORAL_TARGETED_BILIRUBIN_REVIEW"
+          "ORAL_TARGETED_BILIRUBIN_REVIEW",
+          "OF590_00644_LEN_CHILD_C",
+          "OF590_00644_LEN_HEP_G3"
         ]
       },
       "mismatches": []
@@ -8555,7 +9109,7 @@
       "protocol_id": "nccp-00654-v2",
       "path": "protocols/gastrointestinal/00654-irinotecan-150-mg-m2-monotherapy-28-day.json",
       "title": "Irinotecan 150 mg/m² Monotherapy – 28 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -8565,15 +9119,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "irinotecan_renal_band"
+        ],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "irinotecan_bilirubin_uln"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00654_IRINO_DIALYSIS"
+        ],
         "hepatic": [
-          "IRINOTECAN_BILIRUBIN_OVER_3ULN"
+          "IRINOTECAN_BILIRUBIN_OVER_3ULN",
+          "OF590_00654_IRINO_BILI_1_5_3",
+          "OF590_00654_IRINO_BILI_GT3"
         ]
       },
       "mismatches": []
@@ -8798,7 +9359,7 @@
       "protocol_id": "nccp-00680-v2",
       "path": "protocols/sarcoma/00680-high-dose-ifosfamide-therapy-21-day.json",
       "title": "High Dose Ifosfamide Therapy – 21 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -8811,14 +9372,19 @@
         "renal": [
           "ifosfamide_renal_band"
         ],
-        "hepatic": []
+        "hepatic": [
+          "ifosfamide_hepatic_band"
+        ]
       },
       "rules": {
         "renal": [
           "IFO_RENAL_LT50",
-          "IFO_DIALYSIS"
+          "IFO_DIALYSIS",
+          "OF590_00680_IFO_RENAL"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00680_IFO_HEPATIC_SEVERE"
+        ]
       },
       "mismatches": []
     },
@@ -8939,7 +9505,7 @@
       "protocol_id": "nccp-00692-v2",
       "path": "protocols/gastrointestinal/00692-cetuximab-and-folfox-4-therapy.json",
       "title": "Cetuximab and FOLFOX-4 Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -8950,16 +9516,29 @@
       },
       "inputs": {
         "renal": [
-          "oxaliplatin_renal_band"
+          "oxaliplatin_renal_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
         "renal": [
           "OXALIPLATIN_SEVERE_RENAL",
-          "OXALIPLATIN_DIALYSIS"
+          "OXALIPLATIN_DIALYSIS",
+          "OF590_00692_OXALI_LT30",
+          "OF590_00692_OXALI_DIALYSIS",
+          "OF590_00692_5FU_RENAL_SEVERE"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00692_5FU_BILI_GT85",
+          "OF590_00692_5FU_AST_GT180",
+          "OF590_00692_5FU_HEP_MOD",
+          "OF590_00692_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -9062,7 +9641,7 @@
       "protocol_id": "nccp-00702-v2",
       "path": "protocols/lung/00702-entrectinib-monotherapy-adult.json",
       "title": "Entrectinib Monotherapy – Adult",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9072,16 +9651,22 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00702_ENT_RENAL_SEV"
+        ],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00702_ENT_HEP_SEV"
         ]
       },
       "mismatches": []
@@ -9362,7 +9947,7 @@
       "protocol_id": "nccp-00719-v2",
       "path": "protocols/shared/00719-sunitinib-50-mg-therapy-21-day.json",
       "title": "Sunitinib 50 mg Therapy – 21 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9372,10 +9957,13 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "sunitinib_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "child_pugh_class"
         ]
       },
       "rules": {
@@ -9383,7 +9971,8 @@
         "hepatic": [
           "TKI_LIVER_3",
           "TKI_LIVER_5",
-          "TKI_BILI"
+          "TKI_BILI",
+          "OF590_00719_SUNITINIB_CHILD_C"
         ]
       },
       "mismatches": []
@@ -9493,7 +10082,7 @@
       "protocol_id": "nccp-00727-v2b",
       "path": "protocols/gastrointestinal/00727-mitomycin-and-capecitabine-chemoradiation-therapy.json",
       "title": "Mitomycin and Capecitabine Chemoradiation Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9503,12 +10092,27 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "capecitabine_renal_band",
+          "mitomycin_crcl_band"
+        ],
+        "hepatic": [
+          "capecitabine_bilirubin_uln",
+          "capecitabine_alt_ast_uln",
+          "mitomycin_ast_uln"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00727_CAPE_RENAL_30_50",
+          "OF590_00727_CAPE_RENAL_LT30",
+          "OF590_00727_MITO_LT10",
+          "OF590_00727_MITO_EQ10"
+        ],
+        "hepatic": [
+          "OF590_00727_CAPE_HEPATIC_HOLD",
+          "OF590_00727_MITO_AST_GT2"
+        ]
       },
       "mismatches": []
     },
@@ -9556,7 +10160,7 @@
       "protocol_id": "nccp-00732-v2",
       "path": "protocols/gastrointestinal/00732-cetuximab-therapy-14-days.json",
       "title": "Cetuximab Therapy – 14 days",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9580,7 +10184,7 @@
       "protocol_id": "nccp-00733-v2a",
       "path": "protocols/gastrointestinal/00733-cetuximab-and-modified-folfox-6-therapy.json",
       "title": "Cetuximab and modified FOLFOX-6 Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9591,16 +10195,29 @@
       },
       "inputs": {
         "renal": [
-          "oxaliplatin_renal_band"
+          "oxaliplatin_renal_band",
+          "fluorouracil_renal_impairment"
         ],
-        "hepatic": []
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
         "renal": [
           "OXALIPLATIN_SEVERE_RENAL",
-          "OXALIPLATIN_DIALYSIS"
+          "OXALIPLATIN_DIALYSIS",
+          "OF590_00733_OXALI_LT30",
+          "OF590_00733_OXALI_DIALYSIS",
+          "OF590_00733_5FU_RENAL_SEVERE"
         ],
-        "hepatic": []
+        "hepatic": [
+          "OF590_00733_5FU_BILI_GT85",
+          "OF590_00733_5FU_AST_GT180",
+          "OF590_00733_5FU_HEP_MOD",
+          "OF590_00733_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -10418,7 +11035,7 @@
       "protocol_id": "nccp-00791-v2",
       "path": "protocols/gastrointestinal/00791-bevacizumab-5-mg-kg-5-fluorouracil-and-folinic-acid-therapy-14-day.json",
       "title": "Bevacizumab 5 mg/kg, 5-Fluorouracil and Folinic Acid Therapy – 14 day",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -10428,12 +11045,25 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "fluorouracil_renal_impairment"
+        ],
+        "hepatic": [
+          "fluorouracil_bilirubin_umol_l",
+          "fluorouracil_ast_u_l",
+          "fluorouracil_hepatic_impairment"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "OF590_00791_5FU_RENAL_SEVERE"
+        ],
+        "hepatic": [
+          "OF590_00791_5FU_BILI_GT85",
+          "OF590_00791_5FU_AST_GT180",
+          "OF590_00791_5FU_HEP_MOD",
+          "OF590_00791_5FU_HEP_SEV"
+        ]
       },
       "mismatches": []
     },
@@ -10987,7 +11617,7 @@
       "protocol_id": "nccp-00823-v2",
       "path": "protocols/lung/00823-tepotinib-therapy.json",
       "title": "Tepotinib Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -10997,16 +11627,23 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
-          "TARGET_HEPATITIS"
+          "TARGET_HEPATITIS",
+          "OF590_00823_TEPO_CHILD_C",
+          "OF590_00823_TEPO_LFT_STOP",
+          "OF590_00823_TEPO_ALT20",
+          "OF590_00823_TEPO_ALT5"
         ]
       },
       "mismatches": []
@@ -11647,7 +12284,7 @@
       "protocol_id": "nccp-00889-v1a",
       "path": "protocols/gastrointestinal/00889-pemigatinib-therapy.json",
       "title": "Pemigatinib Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -11657,17 +12294,23 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00889_PEMI_RENAL"
+        ],
         "hepatic": [
           "ORAL_TARGETED_LFT_REVIEW",
-          "ORAL_TARGETED_BILIRUBIN_REVIEW"
+          "ORAL_TARGETED_BILIRUBIN_REVIEW",
+          "OF590_00889_PEMI_CHILD_C"
         ]
       },
       "mismatches": []
@@ -11677,7 +12320,7 @@
       "protocol_id": "nccp-00890-v2",
       "path": "protocols/gastrointestinal/00890-fruquintinib-monotherapy.json",
       "title": "Fruquintinib Monotherapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -11687,17 +12330,24 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
           "ORAL_TARGETED_LFT_REVIEW",
-          "ORAL_TARGETED_BILIRUBIN_REVIEW"
+          "ORAL_TARGETED_BILIRUBIN_REVIEW",
+          "OF590_00890_FRUQ_HEP_SEV",
+          "OF590_00890_FRUQ_STOP",
+          "OF590_00890_FRUQ_G4",
+          "OF590_00890_FRUQ_G2_3"
         ]
       },
       "mismatches": []
@@ -11882,7 +12532,7 @@
       "protocol_id": "nccp-00901-v1a",
       "path": "protocols/gastrointestinal/00901-ivosidenib-therapy.json",
       "title": "Ivosidenib Therapy",
-      "encoding_maturity": "partial_rule_encoding",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -11892,17 +12542,23 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "targeted_renal_band"
+        ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "targeted_hepatic_band"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "OF590_00901_IVO_RENAL_LOW"
+        ],
         "hepatic": [
           "ORAL_TARGETED_LFT_REVIEW",
-          "ORAL_TARGETED_BILIRUBIN_REVIEW"
+          "ORAL_TARGETED_BILIRUBIN_REVIEW",
+          "OF590_00901_IVO_CHILD_C"
         ]
       },
       "mismatches": []

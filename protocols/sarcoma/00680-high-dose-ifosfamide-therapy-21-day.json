@@ -11,7 +11,7 @@
     "indication": "Recurrent/primary refractory Ewing sarcoma or relapsed osteosarcoma.",
     "source_url": "https://healthservice.hse.ie/documents/6767/680_v2_Ifosfamide_highdose.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.41.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "sarcoma_subgroup": "relapsed_bone_sarcoma",
@@ -40,14 +40,14 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required",
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
     "tumour_group": "Sarcoma",
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -61,18 +61,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6767/680_v2_Ifosfamide_highdose.pdf",
+      "source_version": "2",
+      "components": [
+        "ifosfamide"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00680 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00680 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -246,18 +263,23 @@
       "options": [
         {
           "value": "ge50",
-          "label": "CrCl ≥50 mL/min"
+          "label": "CrCl ≥50 mL/min",
+          "decision_value": "ge50"
         },
         {
           "value": "lt50",
-          "label": "CrCl <50 mL/min"
+          "label": "CrCl <50 mL/min",
+          "decision_value": "lt50"
         },
         {
           "value": "dialysis",
-          "label": "Dialysis"
+          "label": "Dialysis",
+          "decision_value": "dialysis"
         }
       ],
       "demo_value": "ge50",
+      "ui_section": "labs",
+      "always_show": true,
       "renal_input": {
         "mode": "protocol_specific_band",
         "exact_value_required": false
@@ -317,6 +339,28 @@
       "type": "boolean",
       "required": false,
       "demo_value": false
+    },
+    "ifosfamide_hepatic_band": {
+      "label": "Hepatic function for ifosfamide",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No significant impairment"
+        },
+        {
+          "value": "mild_moderate",
+          "label": "Mild or moderate impairment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe impairment"
+        }
+      ],
+      "demo_value": "none",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -652,6 +696,53 @@
           "page": "Dose modification section"
         },
         "explanation": "Inadequate urine output requires correction before continuing."
+      },
+      {
+        "id": "OF590_00680_IFO_RENAL",
+        "priority": 20,
+        "when": {
+          "field": "ifosfamide_renal_band",
+          "operator": "in",
+          "value": [
+            "lt50",
+            "dialysis"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "CrCl <50 mL/min or dialysis: high-dose ifosfamide requires an individual Consultant and oncology-pharmacy decision.",
+          "recommendation": "CrCl <50 mL/min or dialysis: high-dose ifosfamide requires an individual Consultant and oncology-pharmacy decision."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "CrCl <50 mL/min or dialysis: high-dose ifosfamide requires an individual Consultant and oncology-pharmacy decision."
+      },
+      {
+        "id": "OF590_00680_IFO_HEPATIC_SEVERE",
+        "priority": 20,
+        "when": {
+          "field": "ifosfamide_hepatic_band",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Severe hepatic impairment: high-dose ifosfamide is not routinely recommended; a source-directed reduced dose is a specialist-only decision.",
+          "recommendation": "Severe hepatic impairment: high-dose ifosfamide is not routinely recommended; a source-directed reduced dose is a specialist-only decision."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Severe hepatic impairment: high-dose ifosfamide is not routinely recommended; a source-directed reduced dose is a specialist-only decision."
       }
     ]
   },

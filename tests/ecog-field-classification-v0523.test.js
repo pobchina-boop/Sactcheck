@@ -37,7 +37,7 @@ vm.runInContext(uiSource, context, { filename: 'generic-assessment-ui.js' });
 const Classification = context.SACTCheckAssessmentFieldClassification;
 const CTCAE = context.SACTCheckCTCAE;
 assert(Classification, 'Field-classification helper was not exported.');
-assert.strictEqual(Classification.version, '0.58.1');
+assert.strictEqual(Classification.version, '0.59.0');
 
 const pregnancy = { id: 'pregnancy', label: 'Pregnant', type: 'boolean' };
 const breastfeeding = { id: 'breastfeeding', label: 'Breastfeeding', type: 'boolean' };

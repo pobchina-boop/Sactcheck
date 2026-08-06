@@ -12,7 +12,7 @@
     "indication": "Locally advanced rectal cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6460/421_5-Fluorouracil_and_RT.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.59.0",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "rectal_anal",
@@ -45,9 +45,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "partial_rule_encoding_organ_function_review_required"
+      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -61,18 +61,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "partial_rule_encoding",
-      "label": "Partially rule-encoded · organ-function review required",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
+    },
+    "organ_function_reconciliation": {
+      "release": "0.59.0",
+      "checked_date": "2026-08-05",
+      "source_url": "https://healthservice.hse.ie/documents/6460/421_5-Fluorouracil_and_RT.pdf",
+      "source_version": "4",
+      "components": [
+        "fluorouracil"
+      ],
+      "resolution": "structured_rules",
+      "partial_assessment_supported": true,
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00421 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00421 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -308,6 +325,68 @@
       "ctcae_version": "5.0",
       "ctcae_category": "mucositis",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "fluorouracil_renal_impairment": {
+      "label": "Renal impairment for fluorouracil",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none_mild_moderate",
+          "label": "None, mild or moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe renal impairment"
+        }
+      ],
+      "demo_value": "none_mild_moderate",
+      "ui_section": "labs",
+      "always_show": true
+    },
+    "fluorouracil_bilirubin_umol_l": {
+      "label": "Bilirubin for fluorouracil",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 12,
+      "ui_section": "labs",
+      "always_show": true,
+      "unit": "µmol/L"
+    },
+    "fluorouracil_ast_u_l": {
+      "label": "AST for fluorouracil",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 30,
+      "ui_section": "labs",
+      "always_show": true,
+      "unit": "U/L"
+    },
+    "fluorouracil_hepatic_impairment": {
+      "label": "Clinical hepatic impairment for fluorouracil",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No clinically significant impairment"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate impairment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe impairment"
+        }
+      ],
+      "demo_value": "none",
+      "ui_section": "labs",
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -601,6 +680,116 @@
           "page": "dose-modification section"
         },
         "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
+      },
+      {
+        "id": "OF590_00421_5FU_RENAL_SEVERE",
+        "priority": 20,
+        "when": {
+          "field": "fluorouracil_renal_impairment",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability.",
+          "recommendation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
+      },
+      {
+        "id": "OF590_00421_5FU_BILI_GT85",
+        "priority": 20,
+        "when": {
+          "field": "fluorouracil_bilirubin_umol_l",
+          "operator": ">",
+          "value": 85
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table.",
+          "recommendation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
+      },
+      {
+        "id": "OF590_00421_5FU_AST_GT180",
+        "priority": 20,
+        "when": {
+          "field": "fluorouracil_ast_u_l",
+          "operator": ">",
+          "value": 180
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table.",
+          "recommendation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
+      },
+      {
+        "id": "OF590_00421_5FU_HEP_MOD",
+        "priority": 20,
+        "when": {
+          "field": "fluorouracil_hepatic_impairment",
+          "operator": "==",
+          "value": "moderate"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated.",
+          "recommendation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
+      },
+      {
+        "id": "OF590_00421_5FU_HEP_SEV",
+        "priority": 20,
+        "when": {
+          "field": "fluorouracil_hepatic_impairment",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated.",
+          "recommendation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
+        },
+        "source": {
+          "document": "Current official NCCP regimen",
+          "page": "renal/hepatic dose-modification section"
+        },
+        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
       }
     ]
   },
