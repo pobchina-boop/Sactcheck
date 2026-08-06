@@ -1,3 +1,13 @@
+# v0.60.0 — Fifteen-Regimen Knowledge Base — 6 August 2026
+
+- Expanded the detailed knowledge base from ten to fifteen regimen profiles.
+- Added FOLFIRI, gynaecological carboplatin/paclitaxel, pembrolizumab/paclitaxel/carboplatin, sacituzumab govitecan and durvalumab/gemcitabine/cisplatin profiles.
+- Added or enriched V303, GOG-158, KEYNOTE-407, ASCENT and TOPAZ-1 evidence records with populations, comparators, outcomes, limitations and publication links.
+- Added treatment-intent, patient-selection, supportive-care, monitoring/toxicity and administration modules for all five regimens.
+- Added a reusable sacituzumab-govitecan drug-mechanism profile.
+- Preserved all v0.59.0 organ-function pathways and all 382 protocol JSON files byte-for-byte unchanged.
+- Independent consultant oncology and oncology-pharmacy review remains pending.
+
 # v0.59.0 — Library-Wide Organ-Function Reconciliation — 5 August 2026
 
 - Completed the v0.58.1 organ-function remediation programme across all 74 records previously marked partially rule-encoded.

@@ -2,6 +2,13 @@
 
 ## Completed platform milestones
 
+### v0.60.0 knowledge-base milestone
+
+- Expanded the full vertical knowledge base from ten to fifteen regimens.
+- Added cross-modality profiles spanning gastrointestinal, gynaecological, lung and breast oncology.
+- Added detailed evidence mappings for V303, GOG-158, KEYNOTE-407, ASCENT and TOPAZ-1.
+- Preserved all protocol rules and the v0.59.0 organ-function reconciliation unchanged.
+
 ### v0.59.0 organ-function milestone
 
 - Completed reconciliation of the 74 protocols marked partial in v0.58.1.
@@ -11,7 +18,8 @@
 
 ### Immediate next priority
 
-- Resume knowledge-base expansion in controlled five-regimen batches.
+- Review the fifteen detailed knowledge profiles with consultant oncology and oncology pharmacy.
+- Continue knowledge-base expansion in controlled five-regimen batches.
 - Conduct consultant oncology and oncology-pharmacy review of the v0.59.0 organ-function source register.
 - Add protocol-version surveillance and “What changed?” comparison as a later controlled milestone.
 

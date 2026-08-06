@@ -2,21 +2,21 @@
 
 ## Current release
 
-**SACTCheck v0.59.0 — Library-Wide Organ-Function Reconciliation**
+**SACTCheck v0.60.0 — Fifteen-Regimen Knowledge Base**
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.59.0 completes the organ-function remediation programme started in v0.58.1 while preserving the v0.57.0 search-first interface and cumulative ten-regimen knowledge base.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.60.0 preserves the completed v0.59.0 organ-function reconciliation and expands the detailed source-linked knowledge base from ten to fifteen regimens.
 
-### v0.59.0 highlights
+### v0.60.0 highlights
 
-- Reconciles all 74 records previously marked partially rule-encoded for renal/hepatic coverage.
-- Adds structured component-specific organ-function pathways to 70 protocols.
-- Explicitly documents four mapped protocols with no prescriptive organ-function dose-adjustment table rather than inventing cutoffs.
-- Adds 299 executable renal/hepatic rules while preserving optional single-value partial assessment.
-- Adds a 74-record source register, reconciliation audit and SHA-256 protocol integrity register.
-- Verifies through the production assessment engine that all 299 new rules can be triggered.
-- Leaves independent consultant oncology and oncology-pharmacy validation pending and keeps clinical-use authorisation false.
+- Adds full profiles for FOLFIRI, gynaecological carboplatin/paclitaxel, pembrolizumab/paclitaxel/carboplatin, sacituzumab govitecan and durvalumab/gemcitabine/cisplatin.
+- Adds treatment-intent, patient-selection, supportive-care, monitoring/toxicity and practical-administration modules.
+- Adds or enriches V303, GOG-158, KEYNOTE-407, ASCENT and TOPAZ-1 evidence mappings.
+- Increases the cumulative data set to 15 regimen profiles, 25 medicine profiles and 21 evidence records.
+- Preserves the search-first interface, collapsed Clinical Scenario Interpreter and all v0.59.0 organ-function rules.
+- Leaves all 382 protocol JSON files byte-for-byte unchanged.
+- Keeps all new clinical content in draft status pending independent consultant oncology and oncology-pharmacy review.
 
-See `RELEASE_NOTES_v0.59.0.md`, `VALIDATION_REPORT_v0.59.0.md`, `V0590_ORGAN_FUNCTION_SOURCE_REGISTER.md`, `V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.md` and `V0590_PROTOCOL_JSON_HASHES.json`.
+See `RELEASE_NOTES_v0.60.0.md`, `VALIDATION_REPORT_v0.60.0.md`, `NEXT_FIVE_REGIMEN_SOURCE_REGISTER_v0.60.0.md` and `V0600_PROTOCOL_JSON_HASHES.json`.
 
 ## Safety and governance
 

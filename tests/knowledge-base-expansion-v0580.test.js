@@ -8,7 +8,7 @@ const moduleApi = require(path.join(root, 'js', 'regimen-knowledge-base.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'data', 'regimen-knowledge-base-v0580.json'), 'utf8'));
 const integrity = JSON.parse(fs.readFileSync(path.join(root, 'V0590_PROTOCOL_JSON_HASHES.json'), 'utf8'));
 
-assert.strictEqual(moduleApi.version, '0.58.0');
+assert.ok(Number(moduleApi.version.split('.').slice(0, 2).join('.')) >= 0.58, 'Current knowledge module must remain compatible with v0.58.0 data.');
 assert.strictEqual(data.schema_version, '1.2');
 assert.strictEqual(data.release, '0.58.0');
 assert.strictEqual(data.regimen_profiles.length, 10, 'The cumulative knowledge base must contain ten detailed regimen profiles.');
@@ -80,7 +80,7 @@ assert.deepStrictEqual(protocolHashes, integrity.hashes, 'Current protocol JSON 
 const source = fs.readFileSync(path.join(root, 'js', 'regimen-knowledge-base.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'css', 'regimen-knowledge-base.css'), 'utf8');
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert.ok(source.includes('data/regimen-knowledge-base-v0580.json'));
+assert.ok(source.includes('data/regimen-knowledge-base-v0600.json') || source.includes('data/regimen-knowledge-base-v0580.json'));
 assert.ok(source.includes('Treatment intent and patient selection'));
 assert.ok(source.includes('Supportive care'));
 assert.ok(source.includes('Monitoring and toxicity'));

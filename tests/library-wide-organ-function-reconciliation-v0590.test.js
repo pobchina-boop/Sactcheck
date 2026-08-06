@@ -9,7 +9,7 @@ const pkg = require(path.join(root, 'package.json'));
 const index = require(path.join(root, 'protocols/index.json'));
 const register = require(path.join(root, 'V0590_ORGAN_FUNCTION_SOURCE_REGISTER.json'));
 
-assert.strictEqual(pkg.version, '0.59.0');
+assert.ok(Number(pkg.version.split('.').slice(0, 2).join('.')) >= 0.59, 'Current package must retain the v0.59.0 organ-function release.');
 assert.strictEqual(register.release, '0.59.0');
 assert.strictEqual(register.protocol_count, 74);
 assert.strictEqual(register.structured_rule_records, 70);
