@@ -1,3 +1,10 @@
+# v0.60.1 — Mission-Led Landing Page — 6 August 2026
+
+- Replaces the automatically presented quick-start-first screen with a product introduction explaining what SACTCheck is, why it exists and how its source-linked workflow supports clinicians.
+- Adds a prominent **Launch SACTCheck Engine** call to action, visual Find–Assess–Explain–Verify pathway, mission statement, value cards and advantages section.
+- Retains the three-step quick-start guide as optional secondary guidance.
+- Preserves all v0.60.0 clinical rules, protocol files, organ-function reconciliation and fifteen-regimen knowledge base.
+
 # v0.60.0 — Fifteen-Regimen Knowledge Base — 6 August 2026
 
 - Expanded the detailed knowledge base from ten to fifteen regimen profiles.

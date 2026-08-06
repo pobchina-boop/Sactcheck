@@ -2,6 +2,13 @@
 
 ## Completed platform milestones
 
+### v0.60.1 landing-page milestone
+
+- Reframed the opening experience around the SACTCheck mission, clinical problem and product advantages.
+- Added a visual Find–Assess–Explain–Verify pathway and prominent SACTCheck Engine launch controls.
+- Repositioned the quick-start guide as secondary guidance while preserving the feasibility and clinical-safety boundary.
+- Preserved the v0.60.0 knowledge base and all clinical protocol files unchanged.
+
 ### v0.60.0 knowledge-base milestone
 
 - Expanded the full vertical knowledge base from ten to fifteen regimens.
