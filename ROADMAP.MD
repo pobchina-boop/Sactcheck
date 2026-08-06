@@ -1,6 +1,16 @@
+## Completed: v0.60.3
+- Corrected landing hierarchy retained.
+- SUNLIGHT contextual evidence added for Lonsurf plus bevacizumab.
+
 # SACTCheck Roadmap
 
 ## Completed platform milestones
+
+### v0.60.2 landing-position correction
+
+- Restored the intended hero → library selector → SACTCheck Engine search → scenario interpreter → regimen-card hierarchy.
+- Removed the catalogue-end mission duplication while retaining detailed product rationale in the welcome modal.
+- Preserved all clinical and knowledge-base content unchanged.
 
 ### v0.60.1 landing-page milestone
 

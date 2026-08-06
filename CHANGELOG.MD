@@ -1,3 +1,18 @@
+# v0.60.3 — Hero Position Fix and SUNLIGHT Evidence
+
+- Preserves the corrected hero-first landing layout introduced in v0.60.2.
+- Adds the phase 3 SUNLIGHT trial to the Lonsurf knowledge page as contextual evidence for trifluridine/tipiracil plus bevacizumab.
+- Clearly states that the encoded NCCP 00382 protocol is monotherapy and does not generate a combined bevacizumab assessment pathway.
+- Leaves all 382 protocol JSON files unchanged.
+
+# v0.60.2 — Landing Hero Position Fix — 6 August 2026
+
+- Moves the persistent mission hero from the catalogue end to the top of the library screen.
+- Corrects the runtime layout controller so it no longer moves the regimen catalogue ahead of the hero.
+- Keeps regimen search above the collapsed early-development clinical scenario interpreter.
+- Moves detailed product/evaluation content into an optional section within the welcome modal, removing the duplicate promotional block after the regimen cards.
+- Preserves all clinical logic, organ-function rules, knowledge-base content and 382 protocol JSON files unchanged.
+
 # v0.60.1 — Mission-Led Landing Page — 6 August 2026
 
 - Replaces the automatically presented quick-start-first screen with a product introduction explaining what SACTCheck is, why it exists and how its source-linked workflow supports clinicians.
@@ -36,7 +51,7 @@
 - Kept the current NCCP protocol as the operational treatment source.
 - Preserved all clinical protocol JSON files and deterministic rules unchanged.
 
-# v0.55.0 — Global Clinical Scenario Interpreter
+# v0.55.0 — Global clinical scenario interpreter
 
 - Added a standalone Clinical scenario interpreter to the main library screen.
 - Added local catalogue matching for disease, regimen, drug, trade-name, acronym and NCCP-number language.

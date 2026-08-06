@@ -1,10 +1,11 @@
-/** SACTCheck v0.57.0 search-first page ordering and scenario disclosure. */
+/** SACTCheck v0.60.3 search-first layout guard and scenario disclosure. */
 (function(){
   'use strict';
   function initialise(){
     const catalogue=document.getElementById('libraryCatalogueSection');
     const hero=document.getElementById('studyHero');
-    if(catalogue&&hero&&hero.parentNode) hero.parentNode.insertBefore(catalogue,hero);
+    const library=document.getElementById('libraryScreen');
+    if(library&&hero&&library.firstElementChild!==hero) library.insertBefore(hero,library.firstElementChild);
     const search=document.getElementById('regimenSearch');
     const primary=document.querySelector('.library-search-primary');
     if(primary&&!primary.querySelector('.search-performance-note')){

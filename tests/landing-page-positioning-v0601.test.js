@@ -6,12 +6,12 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const pkg = JSON.parse(read('package.json'));
 const html = read('index.html');
-const css = read('css/landing-page-v0601.css');
+const css = read('css/landing-page-v0602.css');
 const integrity = JSON.parse(read('V0601_PROTOCOL_JSON_HASHES.json'));
 
-assert.strictEqual(pkg.version, '0.60.1');
-assert.ok(html.includes('SACTCheck v0.60.1 — Mission-Led Landing Page'));
-assert.ok(html.includes('css/landing-page-v0601.css?v=0.60.1'));
+assert.ok(pkg.version.localeCompare('0.60.1', undefined, { numeric: true }) >= 0);
+assert.ok(read('CHANGELOG.MD').includes('v0.60.1 — Mission-Led Landing Page'), 'Historical release label should remain in the changelog trace.');
+assert.ok(/css\/landing-page-v0602\.css\?v=0\.60\.[123]/.test(html));
 assert.ok(html.includes('Clearer regimen assessment at the point of care'));
 assert.ok(html.includes('Why it exists:'));
 assert.ok(html.includes('Find. Assess. Explain. Verify.'));

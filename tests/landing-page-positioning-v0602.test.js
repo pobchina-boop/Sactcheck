@@ -1,0 +1,42 @@
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const root = path.resolve(__dirname, '..');
+const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const pkg = JSON.parse(read('package.json'));
+const html = read('index.html');
+const css = read('css/landing-page-v0602.css');
+const layout = read('js/search-first-v0570.js');
+const integrity = JSON.parse(read('V0602_PROTOCOL_JSON_HASHES.json'));
+
+assert.ok(pkg.version.localeCompare('0.60.2', undefined, { numeric: true }) >= 0);
+assert.ok(html.includes('SACTCheck v0.60.2 — Landing Hero Position Fix'), 'Historical v0.60.2 release label should remain traceable.');
+assert.ok(/css\/landing-page-v0602\.css\?v=0\.60\.[23]/.test(html));
+assert.ok(/js\/search-first-v0570\.js\?v=0\.60\.[23]/.test(html));
+const libraryStart = html.indexOf('<div id="libraryScreen" class="screen active">');
+const hero = html.indexOf('id="studyHero"', libraryStart);
+const portal = html.indexOf('id="portalSwitcher"', libraryStart);
+const catalogue = html.indexOf('id="libraryCatalogueSection"', libraryStart);
+const search = html.indexOf('id="regimenSearch"', catalogue);
+const scenario = html.indexOf('id="clinicalScenarioLauncher"', catalogue);
+const cards = html.indexOf('id="regimenGrid"', catalogue);
+assert.ok(libraryStart >= 0 && hero > libraryStart, 'Library screen and hero must exist.');
+assert.ok(hero < portal, 'Persistent mission hero must be the first substantive library section.');
+assert.ok(portal < catalogue, 'Library selector must remain before the engine catalogue.');
+assert.ok(catalogue < search && search < scenario, 'Regimen search must appear before the experimental scenario launcher.');
+assert.ok(scenario < cards, 'Collapsed scenario launcher should remain above regimen cards.');
+assert.ok(!layout.includes('insertBefore(catalogue,hero)'), 'Runtime must not move the catalogue ahead of the hero.');
+assert.ok(layout.includes('library.insertBefore(hero,library.firstElementChild)'), 'Runtime placement guard must keep hero first.');
+assert.ok(html.includes('class="landing-product-details"'), 'Detailed product explanation should be retained as optional modal content.');
+assert.ok(html.indexOf('class="landing-product-details"') > html.indexOf('id="studyWelcomeModal"'), 'Detailed product explanation must no longer sit after the regimen catalogue.');
+assert.ok(css.includes('.landing-product-details'));
+assert.strictEqual(integrity.baseline_release, '0.60.1');
+assert.strictEqual(integrity.current_release, '0.60.2');
+assert.strictEqual(integrity.protocol_json_count, 382);
+assert.strictEqual(integrity.changed_from_v0601_count, 0);
+for (const [relative, expected] of Object.entries(integrity.hashes)) {
+  const actual = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'protocols', relative))).digest('hex');
+  assert.strictEqual(actual, expected, `Protocol JSON changed unexpectedly: ${relative}`);
+}
+console.log('v0.60.2 landing-position tests passed: hero-first layout, search-before-scenario flow, no catalogue-end mission panel and unchanged protocol JSON verified.');
