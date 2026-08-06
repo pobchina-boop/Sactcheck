@@ -1,3 +1,15 @@
+# v0.62.0 — NCCP Change Tracker — 6 August 2026
+
+1. Adds a canonical source register for all 376 enabled protocols.
+2. Adds detection for new protocols, updated sources, silent PDF replacement and removed or moved source candidates.
+3. Adds PDF and extracted text SHA 256 fingerprint capture through a weekly and manual GitHub workflow.
+4. Adds treatment, safety workflow, information and formatting change triage.
+5. Adds a dedicated What is New and What Has Changed dashboard with function and strength explanations for every core feature.
+6. Adds previous and current source comparison, change history fields and per regimen source status.
+7. Adds a mandatory human review gate and pull request based source update workflow.
+8. Leaves all 382 protocol JSON assets and deterministic clinical rules unchanged.
+9. Records that remote source capture remains pending until the first repository workflow run.
+
 # v0.61.0 — Three-Regimen Expansion and Evidence-Completeness Audit — 6 August 2026
 
 - Expands the structured knowledge base from 15 to 18 profiles.

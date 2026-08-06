@@ -1,23 +1,28 @@
-**Current development release: v0.61.0** — eighteen-regimen knowledge base with structured evidence-completeness auditing.
+**Current development release: v0.62.0** — NCCP source change surveillance with a mandatory human review gate.
 
 # SACTCheck
 
 ## Current release
 
-**SACTCheck v0.61.0 — Three-Regimen Expansion and Evidence-Completeness Audit**
+**SACTCheck v0.62.0 — NCCP Change Tracker**
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source-linked comparisons against encoded NCCP regimen criteria. v0.61.0 expands the non-prescriptive regimen knowledge layer while preserving the clinical assessment engine unchanged.
+SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source linked comparisons against encoded NCCP regimen criteria. v0.62.0 adds a version aware source surveillance and review layer while preserving all clinical assessment rules unchanged.
 
-### v0.61.0 highlights
+### v0.62.0 highlights
 
-- Adds detailed profiles for XELOX/CAPOX, weekly paclitaxel and trastuzumab deruxtecan.
-- Expands the knowledge base from 15 to 18 regimens and from 22 to 42 principal evidence records.
-- Audits every existing profile for encoded-indication coverage, mature follow-up, later add-on/combination evidence, sequencing context and important limitations.
-- Adds visible evidence-relationship labels and declared residual uncertainties.
-- Preserves SUNLIGHT as contextual combination evidence without creating an unencoded Lonsurf–bevacizumab assessment pathway.
-- Leaves all 382 clinical protocol JSON files and deterministic decision rules unchanged.
+1. Registers all 376 enabled protocols in a canonical NCCP source register.
+2. Adds detection for new sources, updated sources, silent PDF replacement and removed or moved source candidates.
+3. Adds PDF and extracted text fingerprint capture through a scheduled GitHub workflow.
+4. Adds clinical significance triage for possible treatment, safety workflow, information and formatting changes.
+5. Adds a dedicated What is New and What Has Changed dashboard.
+6. Adds previous and current source comparison and change history fields.
+7. Adds per regimen source status to the generic assessment screen.
+8. Preserves a mandatory human review gate and prohibits automatic clinical rule updates.
+9. Leaves all 382 protocol JSON assets unchanged from v0.61.0.
 
-See `RELEASE_NOTES_v0.61.0.md`, `VALIDATION_REPORT_v0.61.0.md`, `THREE_REGIMEN_EVIDENCE_SOURCE_REGISTER_v0.61.0.md`, `EXISTING_KNOWLEDGE_BASE_EVIDENCE_GAP_AUDIT_v0.61.0.md` and `V0610_PROTOCOL_JSON_HASHES.json`.
+The local baseline is complete. Remote fingerprints are captured by the first repository workflow run because the release preparation environment could not access the NCCP website directly.
+
+See `RELEASE_NOTES_v0.62.0.md`, `VALIDATION_REPORT_v0.62.0.md`, `NCCP_CHANGE_TRACKER_GUIDE_v0.62.0.md`, `NCCP_CHANGE_TRACKER_SOURCE_REGISTER_v0.62.0.md` and `V0620_PROTOCOL_JSON_HASHES.json`.
 
 ## Safety and governance
 

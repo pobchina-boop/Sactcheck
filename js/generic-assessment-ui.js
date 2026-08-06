@@ -113,6 +113,7 @@
             <div class="protocol-item"><span>Encoding status</span><strong id="jsonProtocolStatus">—</strong></div>
             <div class="protocol-item"><span>Rules encoded</span><strong id="jsonProtocolRuleCount">—</strong></div>
             <div class="protocol-item"><span>Clinical validation</span><strong id="jsonProtocolValidation">—</strong></div>
+            <div class="protocol-item"><span>NCCP source status</span><strong id="jsonProtocolTrackerStatus" class="source-currency-inline pending">Loading source status</strong><button class="btn secondary tracker-protocol-button" type="button" id="jsonProtocolTrackerButton" hidden>Open change history</button></div>
             <div class="protocol-item"><span>Emetogenic potential</span><strong id="jsonEmetogenicRisk" class="emetogenic-inline emetogenic-pending">Supportive-care mapping requires review</strong></div>
           </div>
           <p class="subtle" id="jsonProtocolIndication"></p>
@@ -432,6 +433,7 @@
     document.getElementById("jsonProtocolIndication").textContent = root.SACTCheckProtocolContext?.descriptionForTissue?.(
       protocol, activeTumourGroup, { scope: "assessment" }
     ) || metadata.indication || indicationSummary(protocol);
+    root.SACTCheckNccpChangeTracker?.renderProtocolStatus?.(protocol);
 
     const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId }) || {
       level: "pending",

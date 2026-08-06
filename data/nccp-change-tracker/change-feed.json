@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "release": "0.62.0",
+  "generated_at": "2026-08-06T12:59:49.851Z",
+  "scan": {
+    "status": "baseline_ready",
+    "status_label": "Baseline ready",
+    "mode": "encoded_metadata_baseline",
+    "last_completed_at": null,
+    "message": "The local source register is ready. The first GitHub scan will capture remote PDF and extracted text fingerprints.",
+    "remote_comparison_completed": false
+  },
+  "summary": {
+    "tracked_protocols": 376,
+    "registered_source_urls": 376,
+    "source_resolution_required": 0,
+    "changes_requiring_review": 0,
+    "high_priority_changes": 0,
+    "medium_priority_changes": 0,
+    "low_priority_changes": 0,
+    "current_after_remote_check": 0,
+    "awaiting_initial_remote_capture": 376
+  },
+  "changes": [],
+  "features": [
+    {
+      "id": "new_protocol_detection",
+      "title": "New protocol detection",
+      "function": "Identifies an NCCP regimen that appears in a monitored catalogue but is not yet registered in SACTCheck.",
+      "strength": "Makes newly published treatment options visible to the maintenance team instead of relying on occasional manual catalogue review."
+    },
+    {
+      "id": "updated_protocol_detection",
+      "title": "Updated protocol detection",
+      "function": "Flags a registered regimen when its version, source address, PDF fingerprint or extracted text changes.",
+      "strength": "Provides a reproducible signal that an encoded regimen may need reconciliation against a newer source."
+    },
+    {
+      "id": "silent_replacement_detection",
+      "title": "Silent replacement detection",
+      "function": "Detects a changed PDF even when the visible version label and web address remain the same.",
+      "strength": "Reduces the risk that an unnoticed document replacement leaves SACTCheck linked to an outdated interpretation."
+    },
+    {
+      "id": "removed_protocol_detection",
+      "title": "Removed protocol detection",
+      "function": "Identifies a previously registered source that is no longer present in the successfully scanned NCCP catalogue pages.",
+      "strength": "Prompts review of whether a regimen has been retired, moved or temporarily unavailable before its status is changed in SACTCheck."
+    },
+    {
+      "id": "clinical_significance_triage",
+      "title": "Clinical significance triage",
+      "function": "Groups detected text changes into treatment criteria, safety workflow, information or formatting categories.",
+      "strength": "Helps reviewers prioritise possible dose, schedule, eligibility, laboratory and toxicity changes while retaining human confirmation."
+    },
+    {
+      "id": "source_comparison",
+      "title": "Previous and current source comparison",
+      "function": "Stores source fingerprints and text snapshots so changed passages can be shown together for review.",
+      "strength": "Creates a faster and more transparent review pathway than rereading two complete protocol documents without guidance."
+    },
+    {
+      "id": "human_review_gate",
+      "title": "Mandatory human review gate",
+      "function": "Prevents a detected source change from automatically rewriting any clinical rule or treatment action.",
+      "strength": "Keeps clinical interpretation, approval and release control with authorised reviewers."
+    },
+    {
+      "id": "history_and_provenance",
+      "title": "Change history and provenance",
+      "function": "Records the source identity, detection date, review state and SACTCheck release that incorporates an approved change.",
+      "strength": "Provides an auditable maintenance trail for governance, validation and future external review."
+    }
+  ],
+  "safety_gate": {
+    "automatic_rule_updates": false,
+    "required_sequence": [
+      "Detect the source change",
+      "Preserve the previous and current source",
+      "Review and classify the difference",
+      "Update encoded content only after approval",
+      "Run regression tests",
+      "Publish a reviewed SACTCheck release"
+    ]
+  }
+}

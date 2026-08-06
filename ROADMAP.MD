@@ -1,26 +1,31 @@
-## Completed: v0.61.0
+## Completed: v0.62.0
 
-- Added three deeply audited knowledge profiles: XELOX/CAPOX, weekly paclitaxel and trastuzumab deruxtecan.
-- Applied a second-pass evidence-completeness audit to all eighteen profiles.
-- Added evidence-relationship labels and declared residual uncertainties.
-- Closed material gaps in several earlier shared or multi-indication profiles.
-- Preserved all clinical protocol JSON and deterministic assessment logic unchanged.
+1. Added the NCCP Change Tracker foundation across all 376 enabled protocols.
+2. Added a canonical source register and source identity fingerprints.
+3. Added new, updated, silent replacement and removed or moved source detection.
+4. Added a What is New and What Has Changed dashboard.
+5. Added previous and current source comparison and per regimen source status.
+6. Added weekly and manual GitHub surveillance with pull request review.
+7. Preserved a mandatory human review gate and all clinical protocol rules unchanged.
 
 # SACTCheck Roadmap
 
 ## Immediate next priorities
 
-- Obtain consultant oncology and oncology-pharmacy review of the eighteen detailed profiles.
-- Continue knowledge-base expansion in controlled three-regimen evidence-audited batches.
-- Add protocol-version surveillance and a source-linked “What changed?” comparison workflow.
-- Develop reviewer attribution, last-reviewed dates and evidence-status filtering without user-facing AI-origin labels.
+1. Run and review the first repository based remote source capture.
+2. Confirm tracker output against several known historical NCCP version changes.
+3. Add reviewer attribution and decision recording through a controlled interface.
+4. Resume knowledge base expansion in controlled three regimen evidence audited batches.
+5. Obtain consultant oncology and oncology pharmacy review of the eighteen detailed profiles.
 
 ## Completed platform milestones
 
-- v0.60.3: SUNLIGHT contextual evidence and corrected landing hierarchy.
-- v0.60.2: hero-first landing-position correction.
-- v0.60.1: mission-led product introduction.
-- v0.60.0: fifteen-regimen knowledge-base milestone.
-- v0.59.0: library-wide organ-function reconciliation.
-- v0.56.0–v0.57.0: clinical-scenario interpreter and search-first workflow.
-- v0.48.0 onward: feasibility-build interface, source-linked outputs and complete protocol catalogue architecture.
+1. v0.62.0: NCCP Change Tracker foundation and source surveillance workflow.
+2. v0.61.0: eighteen regimen knowledge base and structured evidence completeness audit.
+3. v0.60.3: SUNLIGHT contextual evidence and corrected landing hierarchy.
+4. v0.60.2: hero first landing position correction.
+5. v0.60.1: mission led product introduction.
+6. v0.60.0: fifteen regimen knowledge base milestone.
+7. v0.59.0: library wide organ function reconciliation.
+8. v0.56.0 to v0.57.0: Clinical scenario interpreter and search first workflow.
+9. v0.48.0 onward: feasibility build interface, source linked outputs and complete protocol catalogue architecture.

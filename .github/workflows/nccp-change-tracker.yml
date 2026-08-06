@@ -1,0 +1,79 @@
+name: NCCP Change Tracker
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: nccp-change-tracker
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install PDF text extraction support
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes poppler-utils
+
+      - name: Run NCCP source scan
+        id: scan
+        shell: bash
+        run: |
+          set +e
+          node tools/nccp-change-tracker.js scan --write --concurrency=4
+          scan_code=$?
+          set -e
+          if [ "$scan_code" -ne 0 ] && [ "$scan_code" -ne 2 ]; then
+            exit "$scan_code"
+          fi
+          echo "scan_code=$scan_code" >> "$GITHUB_OUTPUT"
+          cat data/nccp-change-tracker/latest-scan-report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate tracker outputs
+        run: node tests/nccp-change-tracker-v0620.test.js
+
+      - name: Detect generated source changes
+        id: diff
+        shell: bash
+        run: |
+          if git diff --quiet -- data/nccp-change-tracker; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create review branch and pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          branch="nccp-change-scan-$(date -u +%Y%m%d-%H%M%S)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add data/nccp-change-tracker
+          git commit -m "chore(tracker): record NCCP source scan"
+          git push --set-upstream origin "$branch"
+          gh pr create \
+            --title "NCCP source scan requires review" \
+            --body-file data/nccp-change-tracker/latest-scan-report.md \
+            --base "${{ github.event.repository.default_branch }}" \
+            --head "$branch"

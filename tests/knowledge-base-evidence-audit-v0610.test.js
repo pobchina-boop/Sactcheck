@@ -10,7 +10,7 @@ const css = fs.readFileSync(path.join(ROOT, 'css/regimen-knowledge-base.css'), '
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 
 assert.strictEqual(data.release, '0.61.0');
-assert.strictEqual(pkg.version, '0.61.0');
+assert.ok(pkg.version.localeCompare('0.61.0', undefined, { numeric: true }) >= 0);
 assert.strictEqual(data.regimen_profiles.length, 18, 'Expected 18 complete regimen profiles');
 assert(data.evidence_records.length >= 41, 'Expected at least 41 evidence mappings');
 assert(js.includes('regimen-knowledge-base-v0610.json'));
