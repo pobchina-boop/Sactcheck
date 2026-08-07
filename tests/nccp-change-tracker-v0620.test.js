@@ -17,7 +17,7 @@ const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const workflow = fs.readFileSync(path.join(root, ".github", "workflows", "nccp-change-tracker.yml"), "utf8");
 const ui = fs.readFileSync(path.join(root, "js", "nccp-change-tracker.js"), "utf8");
 
-assert.strictEqual(pkg.version, "0.62.0", "package version must be 0.62.0");
+assert.ok(/^0\.62\./.test(pkg.version), "package version must remain within the v0.62 tracker series");
 assert.strictEqual(register.tracked_protocol_count, index.protocols.filter(item => item.enabled !== false).length, "source register must cover every enabled indexed protocol");
 assert.strictEqual(register.records.length, register.tracked_protocol_count, "source register count must match record count");
 assert.ok(register.records.every(record => record.tracking_key && record.protocol_path && record.nccp_regimen_code && record.title), "every source record must have a stable identity");
@@ -69,4 +69,4 @@ if (fs.existsSync(hashFile)) {
   }
 }
 
-console.log(`v0.62.0 NCCP Change Tracker tests passed for ${register.tracked_protocol_count} registered protocols.`);
+console.log(`v0.62 NCCP Change Tracker foundation tests passed for ${register.tracked_protocol_count} registered protocols.`);

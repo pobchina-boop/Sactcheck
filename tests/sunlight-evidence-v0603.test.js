@@ -41,8 +41,8 @@ assert.ok(/oncology-pharmacy/i.test(sunlight.review_status));
 
 const recourse = data.evidence_records.find(item => item.protocol_id === 'nccp-00382-v3' && item.trial_acronym === 'RECOURSE');
 assert.ok(recourse, 'Existing RECOURSE evidence must be preserved alongside SUNLIGHT.');
-assert.ok(html.includes('SACTCheck v0.62.0 — NCCP Change Tracker'));
-assert.ok(html.includes('v0.62.0 · What changed?'));
+assert.ok(/SACTCheck v0\.62\.[0-9]+ — NCCP Change Tracker/.test(html));
+assert.ok(/v0\.62\.[0-9]+ · What changed\?/.test(html));
 assert.ok(html.includes('js/regimen-knowledge-base.js?v=0.61.0'));
 
 assert.strictEqual(integrity.baseline_release, '0.60.2');

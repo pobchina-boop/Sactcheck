@@ -90,10 +90,10 @@
     const summary = changeFeed.summary || {};
     const scanComplete = Boolean(changeFeed.scan?.remote_comparison_completed);
     target.innerHTML = [
-      summaryCard("Registered protocols", summary.tracked_protocols || 0, "blue", "Each protocol has a source identity and local encoding fingerprint."),
-      summaryCard("Changes requiring review", summary.changes_requiring_review || 0, summary.changes_requiring_review ? "red" : "green", summary.changes_requiring_review ? "Detected changes remain blocked from automatic rule updates." : "No reviewed change is waiting in the current feed."),
-      summaryCard(scanComplete ? "Current after remote check" : "Awaiting first remote capture", scanComplete ? (summary.current_after_remote_check || 0) : (summary.awaiting_initial_remote_capture || 0), scanComplete ? "green" : "amber", scanComplete ? "Source fingerprints matched the completed scan." : "The scheduled workflow will capture PDF and extracted text fingerprints."),
-      summaryCard("Source resolution required", summary.source_resolution_required || 0, summary.source_resolution_required ? "amber" : "green", summary.source_resolution_required ? "A source address must be confirmed." : "Every registered protocol has an official source address.")
+      summaryCard("Registered protocols", summary.tracked_protocols || 0, "blue", "Each protocol is linked to an official NCCP source and its encoded version."),
+      summaryCard("Changes requiring review", summary.changes_requiring_review || 0, summary.changes_requiring_review ? "red" : "green", summary.changes_requiring_review ? "Detected changes remain visible until clinical review is completed." : "No detected change is awaiting review."),
+      summaryCard(scanComplete ? "Current after source check" : "Initial source check pending", scanComplete ? (summary.current_after_remote_check || 0) : (summary.awaiting_initial_remote_capture || 0), scanComplete ? "green" : "amber", scanComplete ? "The registered source matched the completed comparison." : "The first source comparison will establish the current review baseline."),
+      summaryCard("Official source link required", summary.source_resolution_required || 0, summary.source_resolution_required ? "amber" : "green", summary.source_resolution_required ? "An official NCCP source link must be confirmed." : "Every registered protocol has an official NCCP source link.")
     ].join("");
   }
 
@@ -107,7 +107,7 @@
     target.className = `tracker-scan-status ${tone}`;
     target.innerHTML = `
       <div class="tracker-status-icon" aria-hidden="true">${complete ? "✓" : "⌁"}</div>
-      <div><span>${escapeHtml(scan.status_label || "Baseline ready")}</span><strong>${escapeHtml(scan.message || "Source surveillance is ready.")}</strong><small>Last completed remote scan: ${escapeHtml(lastChecked)}</small></div>
+      <div><span>${escapeHtml(scan.status_label || "Baseline ready")}</span><strong>${escapeHtml(scan.message || "Source surveillance is ready.")}</strong><small>Last completed source check: ${escapeHtml(lastChecked)}</small></div>
       <div class="tracker-safety-lock"><span aria-hidden="true">▣</span><strong>Human review gate active</strong><small>No detected change can rewrite a clinical rule automatically.</small></div>`;
   }
 
@@ -169,16 +169,16 @@
     const firstScanPending = !changeFeed.scan?.remote_comparison_completed;
     empty.hidden = changes.length > 0;
     empty.innerHTML = firstScanPending
-      ? `<div class="tracker-empty-icon" aria-hidden="true">⌁</div><h3>First remote comparison pending</h3><p>The source register is complete. The GitHub workflow will capture current PDF and extracted text fingerprints before the tracker can declare sources unchanged or changed.</p>`
-      : `<div class="tracker-empty-icon" aria-hidden="true">✓</div><h3>No matching change requires review</h3><p>No change in the selected category is present in the completed scan feed.</p>`;
+      ? `<div class="tracker-empty-icon" aria-hidden="true">⌁</div><h3>Initial source comparison pending</h3><p>The NCCP protocol register is complete. Once the first source comparison is completed, SACTCheck can show which protocols remain current and which require review.</p>`
+      : `<div class="tracker-empty-icon" aria-hidden="true">✓</div><h3>No matching protocol change requires review</h3><p>No change in the selected category is awaiting review.</p>`;
   }
 
   function statusForRecord(record) {
     if (!record) return { label: "Not registered", tone: "warning", note: "This protocol does not have a tracker record." };
-    if (record.remote_capture_status === "captured") return { label: "Remote source captured", tone: "current", note: `Last checked ${record.last_remote_check ? new Date(record.last_remote_check).toLocaleDateString() : "date not available"}.` };
-    if (record.remote_capture_status === "scan_failed") return { label: "Remote scan failed", tone: "warning", note: "Open the official NCCP PDF and verify the source manually." };
-    if (record.source_status === "source_url_missing") return { label: "Source resolution required", tone: "warning", note: "An official source address must be confirmed." };
-    return { label: "Baseline registered", tone: "pending", note: "Awaiting the first scheduled remote fingerprint capture." };
+    if (record.remote_capture_status === "captured") return { label: "Source checked", tone: "current", note: `Last checked ${record.last_remote_check ? new Date(record.last_remote_check).toLocaleDateString() : "date not available"}.` };
+    if (record.remote_capture_status === "scan_failed") return { label: "Source check unsuccessful", tone: "warning", note: "Open the official NCCP PDF and verify the source directly." };
+    if (record.source_status === "source_url_missing") return { label: "Official source link required", tone: "warning", note: "An official NCCP source link must be confirmed." };
+    return { label: "Baseline registered", tone: "pending", note: "The initial source comparison has not yet been completed." };
   }
 
   function renderSourceRegister() {
@@ -258,7 +258,7 @@
     const target = document.getElementById("jsonProtocolTrackerStatus");
     const button = document.getElementById("jsonProtocolTrackerButton");
     if (!target) return;
-    target.textContent = "Loading source status";
+    target.textContent = "Loading protocol source status";
     target.className = "source-currency-inline pending";
     try {
       await loadRegister();
@@ -305,7 +305,7 @@
   else bind();
 
   root.SACTCheckNccpChangeTracker = {
-    version: "0.62.0",
+    version: "0.62.1",
     open,
     load,
     loadFeed,

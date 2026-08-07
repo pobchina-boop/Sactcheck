@@ -1,3 +1,11 @@
+# v0.62.1
+
+1. Rewrites the NCCP Change Tracker interface for a clinician facing presentation.
+2. Removes references to internal hosting, repository automation, source fingerprints and extracted text processing from the visible application.
+3. Replaces technical status terms with source check, review state, clinical significance and reconciliation language.
+4. Simplifies the visible pathway to Detect, Compare, Review and Reconcile.
+5. Preserves the existing source surveillance engine, mandatory human review gate and all clinical protocol content unchanged.
+
 # v0.62.0 — NCCP Change Tracker — 6 August 2026
 
 1. Adds a canonical source register for all 376 enabled protocols.
