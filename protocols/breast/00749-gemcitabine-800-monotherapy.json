@@ -53,7 +53,8 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    }
+    },
+    "source_version_verified": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -136,6 +137,27 @@
         }
       ],
       "always_show": true
+    },
+    "treatment_day": {
+      "label": "Treatment day",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "day1",
+          "label": "Day 1 — start of cycle"
+        },
+        {
+          "value": "day8",
+          "label": "Day 8"
+        },
+        {
+          "value": "day15",
+          "label": "Day 15"
+        }
+      ],
+      "ui_section": "treatment_context",
+      "demo_value": "day1"
     }
   },
   "required_inputs": [],
@@ -157,30 +179,124 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "anc_below_cutoff",
-        "priority": 100,
+        "id": "gem_day1_low_counts",
+        "priority": 115,
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1.0
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<=",
+                  "value": 1.0
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "delay",
-          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "Day 1: NCCP requires ANC >1.0 ×10⁹/L and platelets >100 ×10⁹/L before commencing a new cycle; delay if either criterion is not met."
+        },
+        "source": {
+          "document": "Official NCCP regimen 00749",
+          "page": "Page 3, haematological Table 1"
+        },
+        "explanation": "NCCP specifies strict greater-than count thresholds before a new cycle."
       },
       {
-        "id": "platelets_below_cutoff",
-        "priority": 100,
+        "id": "gem_within_cycle_omit",
+        "priority": 120,
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 100
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "in",
+              "value": [
+                "day8",
+                "day15"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "delay",
-          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "type": "omit",
+          "message": "Day 8/15: ANC <0.5 ×10⁹/L or platelets <50 ×10⁹/L requires omission of gemcitabine; do not restart until ANC >0.5 and platelets >50."
+        },
+        "source": {
+          "document": "Official NCCP regimen 00749",
+          "page": "Page 3, haematological Table 1"
+        },
+        "explanation": "NCCP within-cycle Table 1 specifies omission below these thresholds."
+      },
+      {
+        "id": "gem_within_cycle_75",
+        "priority": 100,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "in",
+              "value": [
+                "day8",
+                "day15"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "between",
+                  "value": [
+                    0.5,
+                    1.0
+                  ]
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "between",
+                  "value": [
+                    50,
+                    100
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Day 8/15: ANC 0.5–1.0 ×10⁹/L or platelets 50–100 ×10⁹/L requires 75% gemcitabine dose according to NCCP."
+        },
+        "source": {
+          "document": "Official NCCP regimen 00749",
+          "page": "Page 3, haematological Table 1"
+        },
+        "explanation": "NCCP within-cycle Table 1 specifies 75% dosing in these count bands."
       }
     ]
   },

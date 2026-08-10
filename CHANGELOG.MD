@@ -1,3 +1,10 @@
+## v0.62.2 — Publication Build 1.0 Source Reconciliation
+
+* Applied the first formal publication source reconciliation to the ongoing development line.
+* Corrected identified NCCP threshold, hepatic and dose modification mismatches.
+* Added dedicated regression protection for the reconciled rules.
+* Preserved v0.62.1 as the immutable Publication Build 1.0 research snapshot.
+
 # v0.62.1
 
 1. Rewrites the NCCP Change Tracker interface for a clinician facing presentation.

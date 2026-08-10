@@ -99,45 +99,6 @@
       "demo_value": 12,
       "always_show": true
     },
-    "haematological_toxicity_grade": {
-      "label": "Haematological toxicity grade",
-      "type": "select",
-      "unit": "CTCAE grade",
-      "required": false,
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "haematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use the specific CTCAE laboratory term and numerical result rather than a generic grade whenever the protocol provides an explicit blood-count threshold.",
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "always_show": true
-    },
     "diarrhoea_grade": {
       "label": "Diarrhoea grade",
       "type": "select",
@@ -256,25 +217,25 @@
       "always_show": true
     },
     "child_pugh_class": {
-      "label": "Child–Pugh class",
+      "label": "Child-Pugh class",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": "A",
-          "label": "A"
+          "label": "Child-Pugh A"
         },
         {
           "value": "B",
-          "label": "B"
+          "label": "Child-Pugh B"
         },
         {
           "value": "C",
-          "label": "C"
+          "label": "Child-Pugh C"
         }
       ],
-      "demo_value": "A",
-      "always_show": true
+      "ui_section": "hepatic",
+      "demo_value": "A"
     }
   },
   "required_inputs": [],
@@ -296,30 +257,26 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "severe_reported_toxicity_review",
-        "priority": 100,
-        "when": {
-          "field": "haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "consultant_review",
-          "message": "Grade 3 or greater toxicity entered. Review the official NCCP regimen and discuss with the treating oncology team before continuing."
-        }
-      },
-      {
-        "id": "severe_hepatic_impairment_review",
-        "priority": 90,
+        "id": "exemestane_hepatic_no_adjustment",
+        "priority": 20,
         "when": {
           "field": "child_pugh_class",
-          "operator": "==",
-          "value": "C"
+          "operator": "in",
+          "value": [
+            "A",
+            "B",
+            "C"
+          ]
         },
         "action": {
-          "type": "consultant_review",
-          "message": "Severe hepatic impairment entered. Review the official NCCP regimen and consultant plan before continuing."
-        }
+          "type": "proceed",
+          "message": "NCCP states no exemestane dose adjustment is needed in hepatic impairment due to the large therapeutic index."
+        },
+        "source": {
+          "document": "Official NCCP regimen 00376",
+          "page": "Page 2, renal and hepatic impairment"
+        },
+        "explanation": "NCCP states no hepatic dose adjustment is needed."
       }
     ]
   },

@@ -53,7 +53,8 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    }
+    },
+    "source_version_verified": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -89,45 +90,6 @@
       "min": 0,
       "step": 0.1,
       "demo_value": 12,
-      "always_show": true
-    },
-    "haematological_toxicity_grade": {
-      "label": "Haematological toxicity grade",
-      "type": "select",
-      "unit": "CTCAE grade",
-      "required": false,
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "haematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use the specific CTCAE laboratory term and numerical result rather than a generic grade whenever the protocol provides an explicit blood-count threshold.",
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
       "always_show": true
     },
     "diarrhoea_grade": {
@@ -288,19 +250,6 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "severe_reported_toxicity_review",
-        "priority": 100,
-        "when": {
-          "field": "haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "consultant_review",
-          "message": "Grade 3 or greater toxicity entered. Review the official NCCP regimen and discuss with the treating oncology team before continuing."
-        }
-      },
-      {
         "id": "severe_hepatic_impairment_review",
         "priority": 90,
         "when": {
@@ -309,9 +258,35 @@
           "value": "C"
         },
         "action": {
-          "type": "consultant_review",
-          "message": "Severe hepatic impairment entered. Review the official NCCP regimen and consultant plan before continuing."
-        }
+          "type": "withhold",
+          "message": "Severe hepatic impairment: NCCP states anastrozole is not recommended. Do not continue without Consultant review."
+        },
+        "source": {
+          "document": "Official NCCP regimen 00254",
+          "page": "Page 2, renal and hepatic impairment table"
+        },
+        "explanation": "Severe hepatic impairment: NCCP states anastrozole is not recommended. Do not continue without Consultant review."
+      },
+      {
+        "id": "anastrozole_child_pugh_a_b_no_adjustment",
+        "priority": 20,
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "in",
+          "value": [
+            "A",
+            "B"
+          ]
+        },
+        "action": {
+          "type": "proceed",
+          "message": "Child-Pugh A/B: NCCP states no anastrozole dose adjustment is needed."
+        },
+        "source": {
+          "document": "Official NCCP regimen 00254",
+          "page": "Page 2, renal and hepatic impairment table"
+        },
+        "explanation": "NCCP states no dose adjustment is needed in mild or moderate hepatic impairment."
       }
     ]
   },

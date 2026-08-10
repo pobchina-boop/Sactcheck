@@ -56,7 +56,8 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    }
+    },
+    "source_version_verified": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -165,25 +166,35 @@
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
-          "value": 1.0
+          "value": 1.5
         },
         "action": {
           "type": "delay",
-          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "ANC below 1.5 ×10⁹/L: delay docetaxel until recovery in accordance with NCCP Table 1; discuss any dose modification with the treating Consultant."
+        },
+        "source": {
+          "document": "Official NCCP regimen 00202",
+          "page": "Page 2, Table 1"
+        },
+        "explanation": "ANC below 1.5 ×10⁹/L: delay docetaxel until recovery in accordance with NCCP Table 1; discuss any dose modification with the treating Consultant."
       },
       {
-        "id": "platelets_below_cutoff",
-        "priority": 100,
+        "id": "docetaxel_febrile_neutropenia_reduce",
+        "priority": 110,
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 100
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
         },
         "action": {
-          "type": "delay",
-          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "type": "dose_reduce",
+          "message": "Febrile neutropenia: NCCP advises docetaxel dose reduction from 100 mg/m² to 75 mg/m² and/or from 75 mg/m² to 60 mg/m²."
+        },
+        "source": {
+          "document": "Official NCCP regimen 00202",
+          "page": "Page 2, Table 1"
+        },
+        "explanation": "NCCP Table 1 specifies dose reduction after febrile neutropenia."
       }
     ]
   },
