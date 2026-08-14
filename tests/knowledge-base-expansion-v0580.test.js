@@ -7,6 +7,7 @@ const root = path.resolve(__dirname, '..');
 const moduleApi = require(path.join(root, 'js', 'regimen-knowledge-base.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'data', 'regimen-knowledge-base-v0580.json'), 'utf8'));
 const integrity = JSON.parse(fs.readFileSync(path.join(root, 'V0590_PROTOCOL_JSON_HASHES.json'), 'utf8'));
+const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 
 assert.ok(Number(moduleApi.version.split('.').slice(0, 2).join('.')) >= 0.58, 'Current knowledge module must remain compatible with v0.58.0 data.');
 assert.strictEqual(data.schema_version, '1.2');
@@ -75,7 +76,7 @@ for (const [protocolId, [trial, pmid]] of expected) {
 assert.strictEqual(integrity.protocol_json_count, 382);
 assert.strictEqual(integrity.current_release, '0.59.0');
 assert.strictEqual(integrity.changed_from_v0581_count, 74);
-// Historical v0.59.0 hash register is retained as a release artefact. Later releases may intentionally change protocol JSON and are protected by their own integrity register.
+if (pkg.version.localeCompare('0.63.1', undefined, { numeric: true }) < 0) assert.deepStrictEqual(protocolHashes, integrity.hashes, 'Current protocol JSON hashes do not match the v0.59.0 integrity register.');
 
 const source = fs.readFileSync(path.join(root, 'js', 'regimen-knowledge-base.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'css', 'regimen-knowledge-base.css'), 'utf8');

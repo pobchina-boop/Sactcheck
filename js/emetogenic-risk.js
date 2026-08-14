@@ -1,7 +1,7 @@
 /**
  * Central emetogenic-risk and supportive-care resolver.
- * Source mappings are based on NCCP SACT antiemetic guidance V6 (2025).
- * Local prescription sheets remain subject to local oncology-pharmacy approval.
+ * Emetogenic risk mappings remain based on the NCCP classification source.
+ * User facing supportive care links resolve to national NCCP antiemetic guidance for the active oncology context.
  */
 (function (root) {
   "use strict";
@@ -81,7 +81,11 @@
       ? phase.script_id
       : supportive.script_id || metadata.supportive_script_id || record.script_id || levelDefinition.default_script_id || null;
     const script = scriptRecord(scriptId);
-    const baseUrl = supportive.supportive_medications_pdf_url || metadata.antiemetic_proforma_url || script.url || null;
+    const tumourContext = String(options.tumourGroup || metadata.tumour_group || "").toLowerCase();
+    const nationalGuidanceUrl = /haem|lymph|myeloma|leuka/.test(tumourContext)
+      ? mapping.source?.haemato_oncology_antiemetic_guidance_url
+      : mapping.source?.medical_oncology_antiemetic_guidance_url;
+    const baseUrl = nationalGuidanceUrl || supportive.supportive_medications_pdf_url || metadata.antiemetic_proforma_url || script.url || null;
     const anchor = metadata.antiemetic_proforma_anchor || null;
     const unresolvedPhase = baseLevel === "phase_dependent" && !phase.phaseResolved;
     const phaseProfiles = phase.phaseProfiles || supportive.phase_profiles || record.phase_profiles || {};
@@ -136,7 +140,7 @@
   }
 
   root.SACTCheckEmetogenicRisk = Object.freeze({
-    version: "0.37.2",
+    version: "0.63.1",
     load,
     get,
     badge,

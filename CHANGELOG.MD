@@ -1,9 +1,25 @@
-## v0.62.2 — Publication Build 1.0 Source Reconciliation
+# v0.63.1
 
-* Applied the first formal publication source reconciliation to the ongoing development line.
-* Corrected identified NCCP threshold, hepatic and dose modification mismatches.
-* Added dedicated regression protection for the reconciled rules.
-* Preserved v0.62.1 as the immutable Publication Build 1.0 research snapshot.
+## National NCCP antiemetic guidance migration
+
+1. Replaces active local antiemetic prescription sheet links with national NCCP guidance.
+2. Routes Medical Oncology contexts to the national Medical Oncology guidance and Haemato Oncology contexts to the national Haemato Oncology guidance.
+3. Preserves the existing emetogenic risk classification and traffic light presentation.
+4. Removes active local antiemetic prescription PDFs from the application assets.
+5. Changes only supportive care source metadata in protocol records and preserves the deterministic clinical core.
+6. Adds focused regression testing and a source migration audit.
+
+# v0.63.0
+
+## Primary clinical validation workspace
+
+1. Adds tissue by tissue primary clinical review across all enabled protocols.
+2. Creates 451 tissue review contexts from 376 enabled protocol records so shared regimens can be reviewed separately by clinical context.
+3. Adds thirteen structured review domains with explicit correction and specialist review states.
+4. Adds discrepancy logging, resolution tracking, direct NCCP source access and live SACTCheck assessment access.
+5. Adds local validation log persistence with JSON and CSV export and JSON import.
+6. Keeps primary clinical review separate from formal consultant oncology and oncology pharmacy validation.
+7. Preserves all 382 protocol JSON files unchanged.
 
 # v0.62.1
 

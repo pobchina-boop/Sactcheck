@@ -143,17 +143,11 @@ assert(html.includes('v0.59.0 · What changed?'));
 assert(html.includes('js/generic-assessment-ui.js?v=0.59.0'));
 assert(html.includes('js/protocol-loader.js?v=0.59.0'));
 
-// The v0.59.0 audit hash register describes the historical v0.59.0 release.
-// Later source-reconciled releases may intentionally change protocol JSON while retaining
-// the v0.59.0 organ-function rules and metadata tested above, so do not compare current
-// protocol file hashes with the historical register on post-v0.59 builds.
-if (pkg.version === '0.59.0') {
-  execFileSync(process.execPath, [path.join(root, 'tools/audit-library-organ-function-v0590.js'), '--fail-on-issue'], { cwd: root, stdio: 'pipe' });
-  const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.json'), 'utf8'));
-  assert.strictEqual(audit.summary.protocols_in_reconciliation_scope, 74);
-  assert.strictEqual(audit.summary.remaining_partial_rule_encoding_records, 0);
-  assert.strictEqual(audit.summary.records_with_audit_issues, 0);
-  assert(audit.summary.total_v0590_rules >= 250);
-}
+execFileSync(process.execPath, [path.join(root, 'tools/audit-library-organ-function-v0590.js'), '--fail-on-issue'], { cwd: root, stdio: 'pipe' });
+const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.json'), 'utf8'));
+assert.strictEqual(audit.summary.protocols_in_reconciliation_scope, 74);
+assert.strictEqual(audit.summary.remaining_partial_rule_encoding_records, 0);
+assert.strictEqual(audit.summary.records_with_audit_issues, 0);
+assert(audit.summary.total_v0590_rules >= 250);
 
 console.log('v0.59.0 library-wide organ-function reconciliation tests passed.');

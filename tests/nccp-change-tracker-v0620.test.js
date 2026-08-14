@@ -17,7 +17,7 @@ const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const workflow = fs.readFileSync(path.join(root, ".github", "workflows", "nccp-change-tracker.yml"), "utf8");
 const ui = fs.readFileSync(path.join(root, "js", "nccp-change-tracker.js"), "utf8");
 
-assert.ok(/^0\.62\./.test(pkg.version), "package version must remain within the v0.62 tracker series");
+assert.ok(Number(pkg.version.split(".")[1]) >= 62, "package version must include or supersede the v0.62 tracker foundation");
 assert.strictEqual(register.tracked_protocol_count, index.protocols.filter(item => item.enabled !== false).length, "source register must cover every enabled indexed protocol");
 assert.strictEqual(register.records.length, register.tracked_protocol_count, "source register count must match record count");
 assert.ok(register.records.every(record => record.tracking_key && record.protocol_path && record.nccp_regimen_code && record.title), "every source record must have a stable identity");
@@ -59,13 +59,13 @@ assert.ok(parsed[0].url.startsWith("https://healthservice.hse.ie/documents/"), "
 assert.strictEqual(Tracker.extractVersion("Version 10a"), "10a", "version parser must support alphanumeric versions");
 
 const hashFile = path.join(root, "V0620_PROTOCOL_JSON_HASHES.json");
-if (fs.existsSync(hashFile)) {
+if (fs.existsSync(hashFile) && pkg.version.localeCompare("0.63.1", undefined, { numeric: true }) < 0) {
   const hashes = JSON.parse(fs.readFileSync(hashFile, "utf8"));
-  if (pkg.version === "0.62.0") assert.strictEqual(hashes.changed_count, 0, "v0.62.0 must not change protocol JSON files");
+  assert.strictEqual(hashes.changed_count, 0, "v0.62.0 must not change protocol JSON files");
   for (const [relative, expected] of Object.entries(hashes.hashes || {})) {
     const file = fs.readFileSync(path.join(root, "protocols", relative));
     const actual = crypto.createHash("sha256").update(file).digest("hex");
-    if (pkg.version === "0.62.0") assert.strictEqual(actual, expected, `protocol JSON fingerprint mismatch: ${relative}`);
+    assert.strictEqual(actual, expected, `protocol JSON fingerprint mismatch: ${relative}`);
   }
 }
 

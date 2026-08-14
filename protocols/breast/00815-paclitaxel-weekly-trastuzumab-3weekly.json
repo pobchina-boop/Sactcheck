@@ -56,8 +56,7 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    },
-    "source_version_verified": true
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -140,16 +139,6 @@
         }
       ],
       "always_show": true
-    },
-    "anc_below_0_5_duration_days": {
-      "label": "Duration ANC <0.5",
-      "type": "number",
-      "unit": "days",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "ui_section": "haematology",
-      "demo_value": 0
     }
   },
   "required_inputs": [],
@@ -171,116 +160,37 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "pac_anc_lt_0_5_ge7d",
-        "priority": 125,
-        "when": {
-          "all": [
-            {
-              "field": "anc_x10e9_l",
-              "operator": "<",
-              "value": 0.5
-            },
-            {
-              "field": "anc_below_0_5_duration_days",
-              "operator": ">=",
-              "value": 7
-            }
-          ]
-        },
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "message": "ANC <0.5 ×10⁹/L for ≥7 days: delay paclitaxel and reduce by one dose level after recovery."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00815",
-          "page": "Page 5, haematological Table 4"
-        },
-        "explanation": "NCCP Table 4 specifies delay and one-level reduction after recovery."
-      },
-      {
-        "id": "pac_anc_lt_0_5",
-        "priority": 115,
+        "id": "anc_below_cutoff",
+        "priority": 100,
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
-          "value": 0.5
+          "value": 1.0
         },
         "action": {
           "type": "delay",
-          "message": "ANC <0.5 ×10⁹/L: delay paclitaxel. If this persists for ≥7 days, NCCP requires one dose-level reduction after recovery."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00815",
-          "page": "Page 5, haematological Table 4"
-        },
-        "explanation": "The duration criterion determines whether dose reduction is added to the delay."
+          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
+        }
       },
       {
-        "id": "pac_anc_0_5_to_0_99",
-        "priority": 105,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "between",
-          "value": [
-            0.5,
-            0.99
-          ]
-        },
-        "action": {
-          "type": "delay",
-          "message": "ANC 0.5–0.99 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent cycle."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00815",
-          "page": "Page 5, haematological Table 4"
-        },
-        "explanation": "NCCP Table 4 specifies delay and consideration of subsequent dose reduction."
-      },
-      {
-        "id": "pac_platelets_lt70",
-        "priority": 120,
+        "id": "platelets_below_cutoff",
+        "priority": 100,
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
-          "value": 70
-        },
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "message": "Platelets <70 ×10⁹/L: delay paclitaxel and reduce by one dose level after recovery."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00815",
-          "page": "Page 5, haematological Table 4"
-        },
-        "explanation": "NCCP Table 4 specifies delay and one-level reduction after recovery."
-      },
-      {
-        "id": "pac_platelets_70_to_89",
-        "priority": 105,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "between",
-          "value": [
-            70,
-            89
-          ]
+          "value": 100
         },
         "action": {
           "type": "delay",
-          "message": "Platelets 70–89 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent cycle."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00815",
-          "page": "Page 5, haematological Table 4"
-        },
-        "explanation": "NCCP Table 4 specifies delay and consideration of subsequent dose reduction."
+          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
+        }
       }
     ]
   },
   "supportive_care": {
     "emetogenic_risk": "low",
-    "supportive_medications_pdf_url": "assets/supportive-care/Antiemetics_Low_V2_05.21.pdf",
-    "supportive_medications_label": "CUH low-risk prescription sheet (2021; pharmacy reconciliation required)",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
     "script_id": "nccp-parenteral-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",

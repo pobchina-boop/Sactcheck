@@ -53,8 +53,7 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    },
-    "source_version_verified": true
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -90,6 +89,45 @@
       "min": 0,
       "step": 0.1,
       "demo_value": 12,
+      "always_show": true
+    },
+    "haematological_toxicity_grade": {
+      "label": "Haematological toxicity grade",
+      "type": "select",
+      "unit": "CTCAE grade",
+      "required": false,
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "haematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Use the specific CTCAE laboratory term and numerical result rather than a generic grade whenever the protocol provides an explicit blood-count threshold.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
       "always_show": true
     },
     "diarrhoea_grade": {
@@ -250,6 +288,19 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
+        "id": "severe_reported_toxicity_review",
+        "priority": 100,
+        "when": {
+          "field": "haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Grade 3 or greater toxicity entered. Review the official NCCP regimen and discuss with the treating oncology team before continuing."
+        }
+      },
+      {
         "id": "severe_hepatic_impairment_review",
         "priority": 90,
         "when": {
@@ -258,117 +309,16 @@
           "value": "C"
         },
         "action": {
-          "type": "dose_reduce",
-          "message": "Child-Pugh C: NCCP recommends everolimus at 25% of the original dose; exemestane requires no hepatic dose adjustment."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00322",
-          "page": "Page 2, renal and hepatic impairment Table 2"
-        },
-        "explanation": "Child-Pugh C: NCCP recommends everolimus at 25% of the original dose; exemestane requires no hepatic dose adjustment."
-      },
-      {
-        "id": "everolimus_counts_severe",
-        "priority": 115,
-        "when": {
-          "any": [
-            {
-              "field": "anc_x10e9_l",
-              "operator": "<",
-              "value": 0.5
-            },
-            {
-              "field": "platelets_x10e9_l",
-              "operator": "<",
-              "value": 50
-            }
-          ]
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "message": "ANC <0.5 ×10⁹/L and/or platelets <50 ×10⁹/L: temporarily interrupt everolimus until recovery, then re-initiate at 5 mg daily."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00322",
-          "page": "Page 2, haematological Table 1"
-        },
-        "explanation": "NCCP Table 1 specifies interruption until ANC ≥1 and platelets ≥75, then re-initiation at 5 mg daily."
-      },
-      {
-        "id": "everolimus_counts_moderate",
-        "priority": 105,
-        "when": {
-          "any": [
-            {
-              "field": "anc_x10e9_l",
-              "operator": "between",
-              "value": [
-                0.5,
-                0.99
-              ]
-            },
-            {
-              "field": "platelets_x10e9_l",
-              "operator": "between",
-              "value": [
-                50,
-                74.9
-              ]
-            }
-          ]
-        },
-        "action": {
-          "type": "withhold",
-          "message": "ANC 0.5–0.99 ×10⁹/L and/or platelets 50–74.9 ×10⁹/L: temporarily interrupt everolimus until recovery, then re-initiate at the same dose."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00322",
-          "page": "Page 2, haematological Table 1"
-        },
-        "explanation": "NCCP Table 1 specifies temporary interruption and same-dose re-initiation after recovery."
-      },
-      {
-        "id": "everolimus_child_pugh_a",
-        "priority": 75,
-        "when": {
-          "field": "child_pugh_class",
-          "operator": "==",
-          "value": "A"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "Child-Pugh A: NCCP recommends everolimus at 75% of the original dose; exemestane requires no hepatic dose adjustment."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00322",
-          "page": "Page 2, renal and hepatic impairment Table 2"
-        },
-        "explanation": "NCCP Table 2 specifies 75% of original everolimus dose in Child-Pugh A."
-      },
-      {
-        "id": "everolimus_child_pugh_b",
-        "priority": 85,
-        "when": {
-          "field": "child_pugh_class",
-          "operator": "==",
-          "value": "B"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "Child-Pugh B: NCCP recommends everolimus at 50% of the original dose; exemestane requires no hepatic dose adjustment."
-        },
-        "source": {
-          "document": "Official NCCP regimen 00322",
-          "page": "Page 2, renal and hepatic impairment Table 2"
-        },
-        "explanation": "NCCP Table 2 specifies 50% of original everolimus dose in Child-Pugh B."
+          "type": "consultant_review",
+          "message": "Severe hepatic impairment entered. Review the official NCCP regimen and consultant plan before continuing."
+        }
       }
     ]
   },
   "supportive_care": {
     "emetogenic_risk": "oral_minimal_low",
-    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "supportive_medications_label": "Oral SACT minimal-low guidance",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
     "script_id": "nccp-oral-minimal-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",

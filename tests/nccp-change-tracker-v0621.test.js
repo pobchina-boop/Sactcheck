@@ -12,7 +12,8 @@ const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const ui = fs.readFileSync(path.join(root, "js", "nccp-change-tracker.js"), "utf8");
 const feed = JSON.parse(fs.readFileSync(path.join(root, "data", "nccp-change-tracker", "change-feed.json"), "utf8"));
 
-assert.ok(Number(pkg.version.split(".").slice(0, 2).join(".")) >= 0.62, "package must retain the v0.62.x change tracker baseline");
+const [major, minor, patch] = pkg.version.split(".").map(Number);
+assert.ok(major === 0 && (minor > 62 || (minor === 62 && patch >= 1)), "package version must include or supersede v0.62.1");
 assert.ok(html.includes("NCCP protocol surveillance and clinical review"), "tracker must open with clinician facing purpose");
 assert.ok(html.includes("Detect</strong>") && html.includes("Compare</strong>") && html.includes("Review</strong>") && html.includes("Reconcile</strong>"), "visible tracker pathway must use Detect, Compare, Review and Reconcile");
 assert.ok(html.includes("NCCP protocol register"), "source register must use clinician facing wording");
@@ -40,11 +41,13 @@ for (const phrase of forbiddenVisiblePhrases) {
   assert.ok(!featureText.includes(phrase.toLowerCase()), `feature explanations must not expose internal phrase: ${phrase}`);
 }
 
+if (pkg.version.localeCompare("0.63.1", undefined, { numeric: true }) < 0) {
 const integrity = JSON.parse(fs.readFileSync(path.join(root, "V0621_PROTOCOL_JSON_HASHES.json"), "utf8"));
-if (pkg.version === "0.62.1") assert.strictEqual(integrity.changed_count, 0, "v0.62.1 must not change protocol JSON files");
+assert.strictEqual(integrity.changed_count, 0, "v0.62.1 must not change protocol JSON files");
 for (const [relative, expected] of Object.entries(integrity.hashes || {})) {
   const actual = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, "protocols", relative))).digest("hex");
-  if (pkg.version === '0.62.1') assert.strictEqual(actual, expected, `protocol JSON changed unexpectedly: ${relative}`);
+  assert.strictEqual(actual, expected, `protocol JSON changed unexpectedly: ${relative}`);
+}
 }
 
 console.log("v0.62.1 clinician facing NCCP Change Tracker copy tests passed.");

@@ -13,12 +13,16 @@ for (const id of ['generic-high-cuh-v2-05-21','generic-moderate-cuh','generic-lo
   if (!map.scripts[id]) throw new Error(`supportive script ${id} missing`);
 }
 for (const level of ['high','moderate','low']) if (!map.levels[level].default_script_id) throw new Error(`${level} default script missing`);
-for (const id of ['generic-high-cuh-v2-05-21','generic-low-cuh-v2-05-21']) {
-  const url = map.scripts[id].url;
-  if (!url || !fs.existsSync(path.join(root, url))) throw new Error(`${id} PDF path broken`);
+for (const id of ['generic-high-cuh-v2-05-21','generic-moderate-cuh','generic-low-cuh-v2-05-21']) {
+  const script = map.scripts[id];
+  if (script.status === 'national_guidance_link') {
+    if (!/^https:\/\//.test(script.url || '')) throw new Error(`${id} national guidance URL missing`);
+  } else if (script.status === 'available_local_document') {
+    if (!script.url || !fs.existsSync(path.join(root, script.url))) throw new Error(`${id} PDF path broken`);
+  } else if (script.status !== 'document_not_supplied') {
+    throw new Error(`${id} supportive script status invalid`);
+  }
 }
-if (!['document_not_supplied','available_local_document'].includes(map.scripts['generic-moderate-cuh'].status)) throw new Error('moderate script status invalid');
-if (map.scripts['generic-moderate-cuh'].status === 'available_local_document') { const url=map.scripts['generic-moderate-cuh'].url; if (!url || !fs.existsSync(path.join(root,url))) throw new Error('moderate supportive PDF path broken'); }
 if (!resolver.includes('supportive.script_id') || !resolver.includes('levelDefinition.default_script_id')) throw new Error('central supportive-care resolution hierarchy missing');
 if (!html.includes('healthPlaceholders') || !html.includes('healthSupportiveMapped')) throw new Error('health dashboard consolidation metrics missing');
 console.log('v0.36.7 technical consolidation tests passed');

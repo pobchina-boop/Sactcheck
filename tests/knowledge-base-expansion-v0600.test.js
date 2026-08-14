@@ -7,6 +7,7 @@ const root = path.resolve(__dirname, '..');
 const moduleApi = require(path.join(root, 'js', 'regimen-knowledge-base.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'data', 'regimen-knowledge-base-v0600.json'), 'utf8'));
 const integrity = JSON.parse(fs.readFileSync(path.join(root, 'V0600_PROTOCOL_JSON_HASHES.json'), 'utf8'));
+const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 
 assert.ok(moduleApi.version.localeCompare('0.60.0', undefined, { numeric: true }) >= 0);
 assert.strictEqual(data.schema_version, '1.2');
@@ -86,11 +87,10 @@ assert.strictEqual(integrity.baseline_release, '0.59.0');
 assert.strictEqual(integrity.current_release, '0.60.0');
 assert.strictEqual(integrity.protocol_json_count, 382);
 assert.strictEqual(integrity.changed_from_v0590_count, 0);
-// Historical v0.59.0 byte integrity is not asserted against later intentional protocol reconciliations.
+if (pkg.version.localeCompare('0.63.1', undefined, { numeric: true }) < 0) assert.deepStrictEqual(protocolHashes, integrity.hashes, 'Protocol JSON files must remain byte-for-byte unchanged from v0.59.0.');
 
 const source = fs.readFileSync(path.join(root, 'js', 'regimen-knowledge-base.js'), 'utf8');
 const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 assert.ok(pkg.version.localeCompare('0.60.0', undefined, { numeric: true }) >= 0);
 assert.ok(/const VERSION = "0\.(?:60\.[03]|61\.0)"/.test(source));
 assert.ok(/data\/regimen-knowledge-base-v0(?:600|603|610)\.json/.test(source));

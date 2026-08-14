@@ -435,7 +435,7 @@
     ) || metadata.indication || indicationSummary(protocol);
     root.SACTCheckNccpChangeTracker?.renderProtocolStatus?.(protocol);
 
-    const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId }) || {
+    const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId, tumourGroup: activeTumourGroup }) || {
       level: "pending",
       label: "Supportive-care mapping requires review",
       className: "emetogenic-pending",
@@ -447,7 +447,7 @@
     riskElement.textContent = risk.label;
     riskElement.className = `emetogenic-inline ${risk.className}`;
     const proformaLink = document.getElementById("jsonAntiemeticProforma");
-    const supportiveUrl = protocol.supportive_care?.supportive_medications_pdf_url || risk.proformaUrl;
+    const supportiveUrl = risk.proformaUrl || protocol.supportive_care?.supportive_medications_pdf_url;
     if (supportiveUrl) {
       proformaLink.href = supportiveUrl;
       const isLocalAsset = !/^https?:/i.test(supportiveUrl);
@@ -470,7 +470,7 @@
         risk.breakthrough?.summary ? `<p><strong>Breakthrough symptoms:</strong> ${escapeHtml(risk.breakthrough.summary)}</p>` : "",
         risk.mappingBasis ? `<p class="subtle"><strong>Mapping basis:</strong> ${escapeHtml(risk.mappingBasis)}</p>` : "",
         risk.sourceUrl && risk.sourceUrl !== supportiveUrl
-          ? `<p><a href="${escapeHtml(risk.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open NCCP antiemetic source</a></p>`
+          ? `<p><a href="${escapeHtml(risk.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open NCCP emetogenic classification source</a></p>`
           : "",
         `<p class="supportive-warning"><strong>Verification:</strong> ${escapeHtml(risk.warning || "Confirm the current NCCP regimen and local oncology-pharmacy policy.")}</p>`
       ];

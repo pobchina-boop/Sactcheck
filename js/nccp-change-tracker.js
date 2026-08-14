@@ -305,7 +305,7 @@
   else bind();
 
   root.SACTCheckNccpChangeTracker = {
-    version: "0.62.2",
+    version: "0.62.1",
     open,
     load,
     loadFeed,

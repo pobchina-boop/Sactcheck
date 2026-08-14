@@ -41,17 +41,19 @@ assert.ok(/oncology-pharmacy/i.test(sunlight.review_status));
 
 const recourse = data.evidence_records.find(item => item.protocol_id === 'nccp-00382-v3' && item.trial_acronym === 'RECOURSE');
 assert.ok(recourse, 'Existing RECOURSE evidence must be preserved alongside SUNLIGHT.');
-assert.ok(/SACTCheck v0\.62\.[0-9]+ — NCCP Change Tracker/.test(html));
-assert.ok(/v0\.62\.[0-9]+ · What changed\?/.test(html));
+assert.ok(/SACTCheck v0\.(?:6[2-9]|[7-9][0-9])\.[0-9]+/.test(html), "application title must include or supersede the v0.62 release series");
+assert.ok(/v0\.(?:6[2-9]|[7-9][0-9])\.[0-9]+ · What changed\?/.test(html), "release summary must include or supersede v0.62");
 assert.ok(html.includes('js/regimen-knowledge-base.js?v=0.61.0'));
 
 assert.strictEqual(integrity.baseline_release, '0.60.2');
 assert.ok(integrity.current_release.localeCompare('0.60.3', undefined, { numeric: true }) >= 0);
 assert.strictEqual(integrity.protocol_json_count, 382);
 assert.strictEqual(integrity.changed_from_v0602_count, 0);
+if (pkg.version.localeCompare('0.63.1', undefined, { numeric: true }) < 0) {
 for (const [relative, expected] of Object.entries(integrity.hashes)) {
   const actual = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'protocols', relative))).digest('hex');
-  if (pkg.version === '0.60.3') assert.strictEqual(actual, expected, `Protocol JSON changed unexpectedly: ${relative}`);
+  assert.strictEqual(actual, expected, `Protocol JSON changed unexpectedly: ${relative}`);
+}
 }
 
 console.log('v0.60.3 SUNLIGHT evidence tests passed: contextual combination evidence added, RECOURSE retained and protocol JSON unchanged.');

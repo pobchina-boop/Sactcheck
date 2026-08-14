@@ -32,8 +32,10 @@ assert.strictEqual(integrity.baseline_release, '0.60.0');
 assert.strictEqual(integrity.current_release, '0.60.1');
 assert.strictEqual(integrity.protocol_json_count, 382);
 assert.strictEqual(integrity.changed_from_v0600_count, 0);
+if (pkg.version.localeCompare('0.63.1', undefined, { numeric: true }) < 0) {
 for (const [relative, expected] of Object.entries(integrity.hashes)) {
   const actual = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'protocols', relative))).digest('hex');
-  if (pkg.version === '0.60.1') assert.strictEqual(actual, expected, `Protocol JSON changed unexpectedly: ${relative}`);
+  assert.strictEqual(actual, expected, `Protocol JSON changed unexpectedly: ${relative}`);
+}
 }
 console.log('v0.60.1 landing-page tests passed: mission-led product introduction, engine CTA, responsive UI and unchanged protocol JSON verified.');

@@ -135,7 +135,12 @@ for (const { file, data } of protocols) {
     assert(supportive.script_id, `${code} lacks supportive-care script mapping`);
     const script = riskMap.scripts?.[supportive.script_id];
     assert(script, `${code} references missing supportive-care script ${supportive.script_id}`);
-    assert.equal(supportive.supportive_medications_pdf_url, script.url, `${code} retains a stale supportive-care URL`);
+    const tumourText = String(metadata.tumour_group || '').toLowerCase();
+    const nationalContextUrl = /haem|lymph|myeloma|leuka/.test(tumourText)
+      ? riskMap.source?.haemato_oncology_antiemetic_guidance_url
+      : riskMap.source?.medical_oncology_antiemetic_guidance_url;
+    const expectedSupportiveUrl = nationalContextUrl || script.url;
+    assert.equal(supportive.supportive_medications_pdf_url, expectedSupportiveUrl, `${code} retains a stale supportive-care URL`);
     assert.equal(supportive.supportive_medications_label, script.label, `${code} retains a stale supportive-care label`);
   }
 
