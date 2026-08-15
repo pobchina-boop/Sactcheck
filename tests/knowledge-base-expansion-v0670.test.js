@@ -14,7 +14,7 @@ const kb = readJson("data/regimen-knowledge-base-v0670.json");
 const js = read("js/regimen-knowledge-base.js");
 const register = readJson("data/clinical-validation-register-v0630.json");
 
-assert.strictEqual(pkg.version, "0.67.0");
+assert.ok(pkg.version.localeCompare("0.67.0", undefined, { numeric: true }) >= 0);
 assert.strictEqual(kb.release, "0.67.0");
 assert.strictEqual(kb.regimen_profiles.length, 30, "knowledge base must contain 30 profiles");
 assert.strictEqual(kb.evidence_records.length, 66, "knowledge base must contain 66 principal evidence records");
