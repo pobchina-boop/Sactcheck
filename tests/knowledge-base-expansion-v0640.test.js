@@ -20,8 +20,8 @@ assert.strictEqual(kb.release, "0.64.0");
 assert.strictEqual(kb.regimen_profiles.length, 21, "knowledge base must contain 21 full regimen profiles");
 assert.strictEqual(kb.evidence_records.length, 45, "knowledge base must contain 45 principal evidence records");
 assert.ok(kb.drug_profiles.some(x => x.id === "ipilimumab"), "ipilimumab drug profile missing");
-assert.ok(/const VERSION = \"0\.(?:64\.0|65\.0|66\.0)\";/.test(js));
-assert.ok(/data\/regimen-knowledge-base-v0(?:640|650|660)\.json/.test(js));
+assert.ok(/const VERSION = \"0\.(?:64\.0|65\.0|66\.0|67\.0)\";/.test(js));
+assert.ok(/data\/regimen-knowledge-base-v0(?:640|650|660|670)\.json/.test(js));
 assert.ok(register.release.localeCompare("0.64.0", undefined, { numeric: true }) >= 0);
 
 const requiredProfiles = {

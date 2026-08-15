@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
 
-  const RELEASE = "0.66.0";
+  const RELEASE = "0.67.0";
   const REGISTER_URL = "data/clinical-validation-register-v0630.json";
   const STORAGE_KEY = "sactcheck_primary_clinical_validation_v1";
 
