@@ -13,14 +13,14 @@ const kb = readJson("data/regimen-knowledge-base-v0650.json");
 const js = read("js/regimen-knowledge-base.js");
 const register = readJson("data/clinical-validation-register-v0630.json");
 
-assert.strictEqual(pkg.version, "0.65.0");
+assert.ok(pkg.version.localeCompare("0.65.0", undefined, { numeric: true }) >= 0);
 assert.strictEqual(kb.release, "0.65.0");
 assert.strictEqual(kb.regimen_profiles.length, 24, "knowledge base must contain 24 profiles");
 assert.strictEqual(kb.evidence_records.length, 50, "knowledge base must contain 50 principal evidence records");
 assert.strictEqual(kb.drug_profiles.length, 30, "knowledge base must contain 30 medicine profiles");
-assert.ok(js.includes('const VERSION = "0.65.0"'));
-assert.ok(js.includes('data/regimen-knowledge-base-v0650.json'));
-assert.strictEqual(register.release, "0.65.0");
+assert.ok(/const VERSION = "0\.(?:6[5-9]|[7-9]\d)\./.test(js), "active knowledge module must be v0.65.0 or later");
+assert.ok(/data\/regimen-knowledge-base-v0(?:650|660|6[7-9]0)\.json/.test(js), "active knowledge data file must be v0.65.0 or later");
+assert.ok(register.release.localeCompare("0.65.0", undefined, { numeric: true }) >= 0);
 
 for (const id of ["nccp-00546-v3", "nccp-00583-v3b", "nccp-00535-v6b"]) {
   const profile = kb.regimen_profiles.find(x => x.protocol_id === id);

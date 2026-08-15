@@ -13,7 +13,7 @@ assert.strictEqual(data.release, '0.61.0');
 assert.ok(pkg.version.localeCompare('0.61.0', undefined, { numeric: true }) >= 0);
 assert.strictEqual(data.regimen_profiles.length, 18, 'Expected 18 complete regimen profiles');
 assert(data.evidence_records.length >= 41, 'Expected at least 41 evidence mappings');
-assert(/regimen-knowledge-base-v0(?:610|640|650)\.json/.test(js));
+assert(/regimen-knowledge-base-v0(?:610|640|650|660)\.json/.test(js));
 assert(js.includes('Evidence completeness audit'));
 assert(js.includes('record.evidence_relationship'));
 assert(css.includes('.regimen-evidence-relationship'));

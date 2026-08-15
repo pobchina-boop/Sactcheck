@@ -1,3 +1,7 @@
+# SACTCheck v0.66.0
+
+Knowledge base expansion adds FLOT, osimertinib and olaparib monotherapy profiles with a two pass evidence audit. Osimertinib evidence is separated across AURA3, FLAURA and ADAURA, with FLAURA2 retained as contextual combination evidence. Olaparib evidence is separated across SOLO1, SOLO2, PROfound, OlympiA and POLO, with PAOLA 1 retained as contextual combination evidence mapped to the separate NCCP combination regimen. No deterministic clinical protocol rule is changed.
+
 ## v0.65.0 — Three profile evidence audited knowledge expansion — 15 August 2026
 
 1. Adds docetaxel plus prednisolone for metastatic castration resistant prostate cancer.
