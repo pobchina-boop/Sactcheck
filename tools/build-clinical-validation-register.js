@@ -7,7 +7,7 @@ const path = require("path");
 const root = path.resolve(__dirname, "..");
 const indexPath = path.join(root, "protocols", "index.json");
 const outPath = path.join(root, "data", "clinical-validation-register-v0630.json");
-const kbPath = path.join(root, "data", "regimen-knowledge-base-v0610.json");
+const kbPath = path.join(root, "data", "regimen-knowledge-base-v0640.json");
 
 function readJson(file) {
   return JSON.parse(fs.readFileSync(file, "utf8"));
@@ -104,7 +104,7 @@ for (const protocol of protocols) {
 
 const output = {
   schema_version: "1.0",
-  release: "0.63.1",
+  release: "0.64.0",
   generated_date: "2026-08-14",
   purpose: "Primary clinical review register for tissue specific manual validation against the current NCCP source.",
   governance: {

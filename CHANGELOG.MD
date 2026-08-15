@@ -1,3 +1,11 @@
+# v0.64.0
+
+* Added three evidence audited regimen knowledge profiles.
+* Added CheckMate 648, CheckMate 067 and CheckMate 204 evidence mappings.
+* Added mature EV 302, CheckMate 649 and CheckMate 067 follow up.
+* Corrected NCCP 00844, 00945 and 00431 emetogenic classifications against NCCP SACT Antiemetic Guidance V6.
+* Preserved all deterministic clinical assessment logic.
+
 # v0.63.1
 
 ## National NCCP antiemetic guidance migration

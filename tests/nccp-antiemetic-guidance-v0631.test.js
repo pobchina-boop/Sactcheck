@@ -20,7 +20,7 @@ const ui = fs.readFileSync(path.join(root, "js", "generic-assessment-ui.js"), "u
 const MED = "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf";
 const HAEM = "https://assets.hse.ie/media/documents/NCCP_Antiemetics_in_NCISHaem-Onc.pdf";
 
-assert.strictEqual(pkg.version, "0.63.1");
+assert.ok(pkg.version.localeCompare("0.63.1", undefined, { numeric: true }) >= 0, "package version must retain v0.63.1 or later functionality");
 assert.strictEqual(riskMap.release, "0.48.0", "emetogenic classification release must remain unchanged");
 assert.strictEqual(riskMap.guidance_link_release, "0.63.1");
 assert.strictEqual(riskMap.source.medical_oncology_antiemetic_guidance_url, MED);
@@ -39,7 +39,19 @@ const currentMapLevels = Object.fromEntries(Object.entries(riskMap.protocols || 
   level: rec.level,
   phase_levels: Object.fromEntries(Object.entries(rec.phase_profiles || {}).map(([k, v]) => [k, v?.level]))
 }]));
-assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
+if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
+  assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
+} else {
+  const allowedCorrections = {
+    "00844": "moderate",
+    "00945": "low",
+    "00431": "low"
+  };
+  for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
+    const expected = allowedCorrections[code] || baseline.level;
+    assert.strictEqual(currentMapLevels[code]?.level, expected, `${code} emetogenic classification differs from the retained baseline or approved v0.64.0 correction`);
+  }
+}
 
 let protocolCount = 0;
 let medicalLinks = 0;
@@ -54,7 +66,15 @@ for (const record of index.protocols || []) {
   const md = protocol.metadata || {};
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
   if (baseline) {
-    assert.strictEqual(sc.emetogenic_risk ?? null, baseline.emetogenic_risk ?? null, `${relative} emetogenic risk changed`);
+    const correctionByPath = {
+      "gastrointestinal/00844-nivolumab-modified-folfox6.json": "moderate",
+      "genitourinary/00945-enfortumab-vedotin-and-pembrolizumab-therapy.json": "low",
+      "skin/00431-nivolumab-1-mg-kg-and-ipilimumab-3-mg-kg-therapy.json": "low"
+    };
+    const expectedRisk = pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
+      ? correctionByPath[relative]
+      : (baseline.emetogenic_risk ?? null);
+    assert.strictEqual(sc.emetogenic_risk ?? null, expectedRisk, `${relative} emetogenic risk changed outside approved source reconciliation`);
     const phaseLevels = Object.fromEntries(Object.entries(sc.phase_profiles || {}).map(([k, v]) => [k, v?.emetogenic_risk ?? v?.level]));
     assert.deepStrictEqual(phaseLevels, baseline.phase_levels || {}, `${relative} phase risk classification changed`);
   }

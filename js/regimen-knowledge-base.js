@@ -11,8 +11,8 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (root) {
   "use strict";
 
-  const VERSION = "0.61.0";
-  const DATA_URL = "data/regimen-knowledge-base-v0610.json";
+  const VERSION = "0.64.0";
+  const DATA_URL = "data/regimen-knowledge-base-v0640.json";
   let data = null;
   let loadingPromise = null;
   let activeProtocol = null;

@@ -92,8 +92,8 @@ if (pkg.version.localeCompare('0.63.1', undefined, { numeric: true }) < 0) asser
 const source = fs.readFileSync(path.join(root, 'js', 'regimen-knowledge-base.js'), 'utf8');
 const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 assert.ok(pkg.version.localeCompare('0.60.0', undefined, { numeric: true }) >= 0);
-assert.ok(/const VERSION = "0\.(?:60\.[03]|61\.0)"/.test(source));
-assert.ok(/data\/regimen-knowledge-base-v0(?:600|603|610)\.json/.test(source));
+assert.ok(/const VERSION = "0\.(?:60\.[03]|61\.0|64\.0)"/.test(source));
+assert.ok(/data\/regimen-knowledge-base-v0(?:600|603|610|640)\.json/.test(source));
 assert.ok(indexHtml.includes('SACTCheck v0.60.0 — Fifteen-Regimen Knowledge Base'));
 assert.ok(indexHtml.includes('v0.60.0 · What changed?'));
 assert.ok(/css\/regimen-knowledge-base\.css\?v=0\.(?:60\.[03]|61\.0)/.test(indexHtml));
