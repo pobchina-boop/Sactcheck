@@ -15,14 +15,14 @@ const risk = readJson("data/emetogenic-risk-map.json");
 const js = read("js/regimen-knowledge-base.js");
 const register = readJson("data/clinical-validation-register-v0630.json");
 
-assert.strictEqual(pkg.version, "0.64.0");
+assert.ok(pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0);
 assert.strictEqual(kb.release, "0.64.0");
 assert.strictEqual(kb.regimen_profiles.length, 21, "knowledge base must contain 21 full regimen profiles");
 assert.strictEqual(kb.evidence_records.length, 45, "knowledge base must contain 45 principal evidence records");
 assert.ok(kb.drug_profiles.some(x => x.id === "ipilimumab"), "ipilimumab drug profile missing");
-assert.ok(js.includes('const VERSION = "0.64.0"'));
-assert.ok(js.includes('data/regimen-knowledge-base-v0640.json'));
-assert.strictEqual(register.release, "0.64.0");
+assert.ok(/const VERSION = \"0\.(?:64\.0|65\.0)\";/.test(js));
+assert.ok(/data\/regimen-knowledge-base-v0(?:640|650)\.json/.test(js));
+assert.ok(register.release.localeCompare("0.64.0", undefined, { numeric: true }) >= 0);
 
 const requiredProfiles = {
   "nccp-00945-v1": ["patient_selection", "supportive_care", "monitoring_and_toxicity", "administration", "evidence_audit"],

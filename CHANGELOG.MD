@@ -1,3 +1,13 @@
+## v0.65.0 — Three profile evidence audited knowledge expansion — 15 August 2026
+
+1. Adds docetaxel plus prednisolone for metastatic castration resistant prostate cancer.
+2. Adds pembrolizumab plus axitinib for first line advanced renal cell carcinoma.
+3. Adds avelumab across the current metastatic Merkel cell carcinoma and urothelial carcinoma maintenance indications.
+4. Expands the principal evidence library from 45 to 50 records and the medicine library from 28 to 30 profiles.
+5. Adds mature follow up and contextual evidence checks to reduce the risk of missing later practice changing studies.
+6. Corrects Avelumab source metadata so urothelial maintenance is identified as 00535b and the current NCCP PDF address is used.
+7. Preserves all deterministic clinical rules, treatment thresholds, dose actions and organ function pathways.
+
 # v0.64.0
 
 * Added three evidence audited regimen knowledge profiles.
