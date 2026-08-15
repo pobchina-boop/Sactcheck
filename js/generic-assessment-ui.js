@@ -226,7 +226,7 @@
           <span id="jsonCoverageMetric">—</span>
           <span class="visually-hidden">Applicable rules: <strong id="jsonApplicableMetric">—</strong></span>
           <span class="visually-hidden">Rules evaluated: <strong id="jsonEvaluatedMetric">—</strong></span>
-          <span class="visually-hidden">Completeness: <strong id="jsonCompleteMetric">—</strong></span>
+          <span class="visually-hidden">Encoded rule coverage: <strong id="jsonCompleteMetric">—</strong></span>
         </div>
 
         <div class="decision-support-disclaimer compact"><strong>Decision support — not treatment clearance.</strong> <span id="jsonScreenDisclaimer"></span></div>
@@ -764,6 +764,8 @@
     const unit = displayUnit(definition, displayLabel, labAdapter);
     const labelFor = labAdapter ? "" : ` for="jsonInput_${escapeHtml(definition.id)}"`;
     const hints = [];
+    const roleLabels = { decision: "Decision input", monitoring: "Monitoring only", context: "Treatment context", documentation: "Documentation" };
+    if (definition.input_role && roleLabels[definition.input_role]) hints.push(`<strong>${roleLabels[definition.input_role]}.</strong>`);
     if (definition.help && !options.blood) hints.push(escapeHtml(definition.help));
     if (definition.id === "tsh_miu_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("tsh")));
     if (definition.id === "free_t4_pmol_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("free_t4")));
@@ -1086,12 +1088,12 @@
     document.getElementById("jsonApplicableMetric").textContent = String(result.applicableRuleCount);
     document.getElementById("jsonEvaluatedMetric").textContent = String(result.assessedRuleCount);
     document.getElementById("jsonCompleteMetric").textContent = !result.complete
-      ? "Incomplete"
+      ? "Encoded rule coverage incomplete"
       : result.coverageComplete === false
-        ? `Core complete · ${result.unassessed?.length || 0} optional gap${(result.unassessed?.length || 0) === 1 ? "" : "s"}`
-        : "Complete";
+        ? `Encoded core complete · ${result.unassessed?.length || 0} optional gap${(result.unassessed?.length || 0) === 1 ? "" : "s"}`
+        : "Encoded rule coverage complete";
     const unassessedCount = result.unassessed?.length || 0;
-    document.getElementById("jsonCoverageMetric").textContent = `${result.assessedRuleCount} of ${result.applicableRuleCount} applicable rules assessed · ${unassessedCount} domain${unassessedCount === 1 ? "" : "s"} unassessed`;
+    document.getElementById("jsonCoverageMetric").textContent = `${result.assessedRuleCount} of ${result.applicableRuleCount} encoded applicable rules assessed · ${unassessedCount} domain${unassessedCount === 1 ? "" : "s"} unassessed`;
 
     renderErrors(result);
     renderPriorityFindings(result);

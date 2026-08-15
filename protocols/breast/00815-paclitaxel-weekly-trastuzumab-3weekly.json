@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00815-v3",
   "file_name": "00815-paclitaxel-weekly-trastuzumab-3weekly.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00815",
     "nccp_version": "3",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.68.0",
     "treatment_setting": [
       "adjuvant"
     ],
@@ -30,7 +30,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -56,7 +56,20 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    }
+    },
+    "source_checked_date": "2026-08-15",
+    "encoding_maturity": {
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.68.0",
+      "reconciled_date": "2026-08-15",
+      "scope_note": "Rebuilt against NCCP 00815 Version 3 with source defined haematology bands, paclitaxel hepatic rules, toxicity actions and trastuzumab cardiac pathways."
+    },
+    "canonical_protocol_id": "nccp-00815-v3"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -67,78 +80,216 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 2,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 2
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 1,
-      "demo_value": 200,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 200
     },
     "hb_g_dl": {
       "label": "Haemoglobin",
       "type": "number",
-      "unit": "g/dL",
       "required": false,
       "min": 0,
       "step": 0.1,
-      "demo_value": 12,
-      "always_show": true
+      "always_show": true,
+      "input_role": "monitoring",
+      "unit": "g/dL",
+      "demo_value": 12
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
     },
     "neuropathy_grade": {
-      "label": "Peripheral neuropathy grade",
+      "label": "Motor or sensory neuropathy grade",
       "type": "select",
-      "unit": "CTCAE grade",
       "required": false,
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "label": "Grade 0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "label": "Grade 1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "label": "Grade 2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
+          "label": "Grade 3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "label": "Grade 4"
         }
       ],
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "neuropathy",
+      "assessment_guidance": "Assess sensory and motor symptoms, gait, dexterity and impact on instrumental or self care activities."
+    },
+    "anc_below_0_5_ge7_days": {
+      "label": "ANC below 0.5 ×10⁹/L for at least 7 days",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "baseline_lvef_percent": {
+      "label": "Pretreatment LVEF",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "%",
+      "demo_value": 60
+    },
+    "current_lvef_percent": {
+      "label": "Current LVEF",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "%",
+      "demo_value": 60
+    },
+    "lvef_drop_points_from_baseline": {
+      "label": "LVEF fall from baseline",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "ejection fraction points",
+      "demo_value": 0
+    },
+    "symptomatic_heart_failure": {
+      "label": "Symptomatic heart failure",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hypersensitivity_grade": {
+      "label": "Hypersensitivity reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "hypersensitivity_anaphylaxis",
+      "assessment_guidance": "Assess timing, symptoms, treatment required, recurrence and any airway or haemodynamic compromise."
+    },
+    "alt_uln_multiple": {
+      "label": "ALT multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "other_nonhaem_toxicity_grade": {
+      "label": "Other non haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Identify the exact adverse event and apply its own CTCAE criteria, intervention requirement and functional impact."
     }
   },
   "required_inputs": [],
@@ -160,30 +311,421 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "anc_below_cutoff",
-        "priority": 100,
+        "id": "PTH815_BASELINE_LVEF_LT50",
+        "when": {
+          "field": "baseline_lvef_percent",
+          "operator": "<",
+          "value": 50
+        },
+        "action": {
+          "type": "withhold",
+          "message": "Pretreatment LVEF below 50% is outside the source eligibility range. Do not clear treatment without Consultant cardiac review.",
+          "components": [
+            "trastuzumab"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Eligibility"
+        },
+        "explanation": "Pretreatment LVEF below 50% is outside the source eligibility range. Do not clear treatment without Consultant cardiac review."
+      },
+      {
+        "id": "PTH815_BASELINE_LVEF_50_54",
+        "when": {
+          "all": [
+            {
+              "field": "baseline_lvef_percent",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 55
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Pretreatment LVEF 50% to below 55%: NCCP notes that clinical judgement should be exercised.",
+          "components": [
+            "trastuzumab"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Eligibility"
+        },
+        "explanation": "Pretreatment LVEF 50% to below 55%: NCCP notes that clinical judgement should be exercised."
+      },
+      {
+        "id": "PTH815_ANC_LT0_5_PROLONGED",
+        "when": {
+          "field": "anc_below_0_5_ge7_days",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "message": "ANC below 0.5 ×10⁹/L for at least 7 days: delay paclitaxel and reduce one dose level after recovery.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 4"
+        },
+        "explanation": "ANC below 0.5 ×10⁹/L for at least 7 days: delay paclitaxel and reduce one dose level after recovery.",
+        "priority": 90
+      },
+      {
+        "id": "PTH815_ANC_LT0_5",
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
-          "value": 1.0
+          "value": 0.5
         },
         "action": {
           "type": "delay",
-          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "ANC below 0.5 ×10⁹/L: delay paclitaxel. If this persists for at least 7 days, reduce one dose level after recovery.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 4"
+        },
+        "explanation": "ANC below 0.5 ×10⁹/L: delay paclitaxel. If this persists for at least 7 days, reduce one dose level after recovery."
       },
       {
-        "id": "platelets_below_cutoff",
-        "priority": 100,
+        "id": "PTH815_ANC_0_5_0_99",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.0
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "message": "ANC 0.5 to 0.99 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent treatment.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 4"
+        },
+        "explanation": "ANC 0.5 to 0.99 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent treatment."
+      },
+      {
+        "id": "PTH815_PLT_LT70",
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
-          "value": 100
+          "value": 70
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "message": "Platelets below 70 ×10⁹/L: delay paclitaxel and reduce one dose level after recovery.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 4"
+        },
+        "explanation": "Platelets below 70 ×10⁹/L: delay paclitaxel and reduce one dose level after recovery."
+      },
+      {
+        "id": "PTH815_PLT_70_89",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 70
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 90
+            }
+          ]
         },
         "action": {
           "type": "delay",
-          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "Platelets 70 to 89 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent treatment.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 4"
+        },
+        "explanation": "Platelets 70 to 89 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent treatment."
+      },
+      {
+        "id": "PTH815_FN",
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Febrile neutropenia: consider G CSF according to the NCCP pathway and review subsequent paclitaxel dosing.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 4"
+        },
+        "explanation": "Febrile neutropenia: consider G CSF according to the NCCP pathway and review subsequent paclitaxel dosing."
+      },
+      {
+        "id": "PTH815_PAC_HEP_75",
+        "when": {
+          "all": [
+            {
+              "field": "alt_uln_multiple",
+              "operator": "<",
+              "value": 10
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.25
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "ALT below 10 × ULN with bilirubin 1.26 to 2 × ULN: use 75% of the original paclitaxel dose.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 5"
+        },
+        "explanation": "ALT below 10 × ULN with bilirubin 1.26 to 2 × ULN: use 75% of the original paclitaxel dose."
+      },
+      {
+        "id": "PTH815_PAC_HEP_50",
+        "when": {
+          "all": [
+            {
+              "field": "alt_uln_multiple",
+              "operator": "<",
+              "value": 10
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "ALT below 10 × ULN with bilirubin 2.01 to 5 × ULN: use 50% of the original paclitaxel dose.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 5"
+        },
+        "explanation": "ALT below 10 × ULN with bilirubin 2.01 to 5 × ULN: use 50% of the original paclitaxel dose."
+      },
+      {
+        "id": "PTH815_PAC_HEP_CI",
+        "when": {
+          "any": [
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">=",
+              "value": 10
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 5
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "message": "ALT at least 10 × ULN or bilirubin above 5 × ULN: paclitaxel is contraindicated in the NCCP table.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 5"
+        },
+        "explanation": "ALT at least 10 × ULN or bilirubin above 5 × ULN: paclitaxel is contraindicated in the NCCP table.",
+        "priority": 98
+      },
+      {
+        "id": "PTH815_NEURO_G2",
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Grade 2 motor or sensory neuropathy: decrease paclitaxel by 10 mg/m².",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 6"
+        },
+        "explanation": "Grade 2 motor or sensory neuropathy: decrease paclitaxel by 10 mg/m²."
+      },
+      {
+        "id": "PTH815_OTHER_NONHAEM_G2",
+        "when": {
+          "field": "other_nonhaem_toxicity_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "message": "Other grade 2 non haematological toxicity: hold until grade 1 or lower, then decrease subsequent paclitaxel doses by 10 mg/m².",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 6"
+        },
+        "explanation": "Other grade 2 non haematological toxicity: hold until grade 1 or lower, then decrease subsequent paclitaxel doses by 10 mg/m²."
+      },
+      {
+        "id": "PTH815_NONHAEM_G3",
+        "when": {
+          "field": "other_nonhaem_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "discontinue",
+          "message": "Grade 3 or worse paclitaxel related non haematological toxicity: discontinue paclitaxel in the encoded NCCP pathway.",
+          "components": [
+            "paclitaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 5, Table 6"
+        },
+        "explanation": "Grade 3 or worse paclitaxel related non haematological toxicity: discontinue paclitaxel in the encoded NCCP pathway.",
+        "priority": 96
+      },
+      {
+        "id": "PTH815_LVEF_WITHHOLD",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_drop_points_from_baseline",
+              "operator": ">=",
+              "value": 10
+            },
+            {
+              "field": "current_lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "message": "LVEF has fallen by at least 10 points from baseline and is below 50%: withhold trastuzumab and repeat LVEF after 3 weeks.",
+          "components": [
+            "trastuzumab"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 6, Table 7"
+        },
+        "explanation": "LVEF has fallen by at least 10 points from baseline and is below 50%: withhold trastuzumab and repeat LVEF after 3 weeks."
+      },
+      {
+        "id": "PTH815_HF",
+        "when": {
+          "field": "symptomatic_heart_failure",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Symptomatic heart failure: consider discontinuation of trastuzumab and refer for cardiology review.",
+          "components": [
+            "trastuzumab"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 6, Table 7"
+        },
+        "explanation": "Symptomatic heart failure: consider discontinuation of trastuzumab and refer for cardiology review."
+      },
+      {
+        "id": "PTH815_HSR_G4",
+        "when": {
+          "field": "hypersensitivity_grade",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "message": "Grade 4 hypersensitivity reaction: discontinue trastuzumab.",
+          "components": [
+            "trastuzumab"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 6, Table 7"
+        },
+        "explanation": "Grade 4 hypersensitivity reaction: discontinue trastuzumab.",
+        "priority": 96
       }
     ]
   },

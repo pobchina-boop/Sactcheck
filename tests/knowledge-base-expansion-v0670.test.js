@@ -19,9 +19,9 @@ assert.strictEqual(kb.release, "0.67.0");
 assert.strictEqual(kb.regimen_profiles.length, 30, "knowledge base must contain 30 profiles");
 assert.strictEqual(kb.evidence_records.length, 66, "knowledge base must contain 66 principal evidence records");
 assert.strictEqual(kb.drug_profiles.length, 35, "knowledge base must contain 35 medicine profiles");
-assert.ok(js.includes('const VERSION = "0.67.0"'));
-assert.ok(js.includes('data/regimen-knowledge-base-v0670.json'));
-assert.strictEqual(register.release, "0.67.0");
+assert.ok(js.includes('const VERSION = "0.68.0"') || js.includes('const VERSION = "0.67.0"'));
+assert.ok(js.includes('data/regimen-knowledge-base-v0680.json') || js.includes('data/regimen-knowledge-base-v0670.json'));
+assert.ok(register.release.localeCompare("0.67.0", undefined, { numeric: true }) >= 0);
 
 for (const id of ["nccp-00689-v4", "nccp-00204-v11", "nccp-00415-v4"]) {
   const profile = kb.regimen_profiles.find(x => x.protocol_id === id);

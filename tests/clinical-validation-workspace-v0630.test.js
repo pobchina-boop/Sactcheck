@@ -16,7 +16,7 @@ const protocolIndex = JSON.parse(fs.readFileSync(path.join(root, "protocols", "i
 assert.ok(pkg.version.localeCompare("0.63.0", undefined, { numeric: true }) >= 0, "package version must be at least 0.63.0");
 assert.strictEqual(register.protocol_count, protocolIndex.protocols.filter(item => item.enabled !== false).length, "validation register must include every enabled protocol");
 assert.strictEqual(register.protocol_count, 376, "expected enabled protocol count must remain 376");
-assert.strictEqual(register.tissue_context_count, 451, "shared protocols must create separate tissue review contexts");
+assert.strictEqual(register.tissue_context_count, 452, "shared protocols must create separate tissue review contexts");
 assert.ok(register.protocols.every(item => item.protocol_id && item.path && item.tumour_groups.length), "every validation record must have protocol identity, path and tissue context");
 assert.ok(register.protocols.every(item => typeof item.rule_count === "number" && typeof item.input_count === "number"), "register must expose encoded rule and input counts");
 assert.ok(register.protocols.some(item => item.tumour_groups.length > 1), "register must retain shared tissue protocols");

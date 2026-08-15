@@ -30,7 +30,9 @@ function copyDirectory(source, destination) {
       const relative = path.relative(source, entry);
       if (!relative) return true;
       const segments = relative.split(path.sep);
-      return !segments.some((segment) => [".git", ".github", "node_modules", "tests", "tools"].includes(segment));
+      if (segments.some((segment) => [".git", ".github", "node_modules", "tests", "tools"].includes(segment))) return false;
+      if (path.basename(source) === "data" && /^regimen-knowledge-base-v\d+\.json$/.test(path.basename(entry)) && path.basename(entry) !== "regimen-knowledge-base-v0680.json") return false;
+      return true;
     }
   });
 }

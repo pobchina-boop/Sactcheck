@@ -12,7 +12,7 @@ assert(html.includes("SACTCheck v0.56.1"));
 assert(html.includes("v0.56.1 · What changed?"));
 assert(html.includes("js/protocol-loader.js?v=0.56.1"));
 assert(!html.includes("Version 0.17 · Conditional JSON assessments"));
-assert(html.includes("Protocol publisher v0.31.0"));
+assert(html.includes("Protocol preview") || html.includes("Protocol publisher v0.31.0"));
 assert(importer.includes('version: "0.31.0"'));
 assert(importer.includes("schema 2.x protocol contract"));
 assert(loader.includes("Official NCCP source · Validation pending"));

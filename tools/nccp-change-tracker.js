@@ -171,7 +171,7 @@ function buildSourceRegister(root = DEFAULT_ROOT, checkedDate = new Date().toISO
   records.sort((a, b) => a.nccp_regimen_code.localeCompare(b.nccp_regimen_code) || a.protocol_path.localeCompare(b.protocol_path));
   return {
     schema_version: "1.0.0",
-    release: "0.62.0",
+    release: "0.62.1",
     generated_at: new Date().toISOString(),
     generated_from: "protocols/index.json and encoded protocol metadata",
     tracked_protocol_count: records.length,
@@ -190,7 +190,7 @@ function trackerFeatureExplanations() {
     {
       id: "updated_protocol_detection",
       title: "Updated protocol detection",
-      function: "Flags a registered regimen when its version, source address, PDF fingerprint or extracted text changes.",
+      function: "Flags a registered regimen when its version, official source address or source content changes.",
       strength: "Provides a reproducible signal that an encoded regimen may need reconciliation against a newer source."
     },
     {
@@ -214,7 +214,7 @@ function trackerFeatureExplanations() {
     {
       id: "source_comparison",
       title: "Previous and current source comparison",
-      function: "Stores source fingerprints and text snapshots so changed passages can be shown together for review.",
+      function: "Preserves the earlier and current source context so changed passages can be shown together for review.",
       strength: "Creates a faster and more transparent review pathway than rereading two complete protocol documents without guidance."
     },
     {
@@ -237,14 +237,14 @@ function buildInitialFeed(register) {
   const missingSource = register.records.length - withSource;
   return {
     schema_version: "1.0.0",
-    release: "0.62.0",
+    release: "0.62.1",
     generated_at: new Date().toISOString(),
     scan: {
       status: "baseline_ready",
       status_label: "Baseline ready",
       mode: "encoded_metadata_baseline",
       last_completed_at: null,
-      message: "The local source register is ready. The first GitHub scan will capture remote PDF and extracted text fingerprints.",
+      message: "The source register is ready. Initial source inspection is pending.",
       remote_comparison_completed: false
     },
     summary: {
@@ -371,7 +371,7 @@ function compareSourceStates(baselineRecords, currentRecords, options = {}) {
     } else if (contentChanged) {
       const formattingOnly = Boolean(previousPdfHash && currentPdfHash && previousPdfHash !== currentPdfHash && previousTextHash && currentTextHash && previousTextHash === currentTextHash);
       const severity = formattingOnly
-        ? { level: "info", label: "Formatting or file change", reason: "The PDF fingerprint changed while the normalised extracted text fingerprint remained the same." }
+        ? { level: "info", label: "Formatting or file change", reason: "The source file changed while the reviewed text content appears unchanged." }
         : severityFromText("silent_replacement", previous.extracted_text || "", currentRecord.extracted_text || "");
       changes.push({
         change_id: makeChangeId("silent_replacement", key, currentPdfHash || currentTextHash || ""),
@@ -442,7 +442,7 @@ async function fetchWithRetry(url, options = {}) {
     try {
       const response = await fetch(url, {
         headers: {
-          "user-agent": "SACTCheck-NCCP-Change-Tracker/0.62.0",
+          "user-agent": "SACTCheck-NCCP-Change-Tracker/0.62.1",
           "accept": options.accept || "*/*"
         },
         redirect: "follow",
@@ -587,7 +587,7 @@ async function runLiveScan(root = DEFAULT_ROOT, options = {}) {
         last_remote_check: scanTime,
         remote_capture_status: "scan_failed",
         source_status: "remote_scan_failed",
-        source_status_label: "Remote scan failed",
+        source_status_label: "Source check unsuccessful",
         scan_error: String(error.message || error)
       };
     }
@@ -699,7 +699,7 @@ async function runLiveScan(root = DEFAULT_ROOT, options = {}) {
   };
   const feed = {
     schema_version: "1.0.0",
-    release: "0.62.0",
+    release: "0.62.1",
     generated_at: scanTime,
     scan: {
       status: summary.remote_scan_failures || summary.catalogue_pages_failed ? "completed_with_warnings" : "completed",
@@ -740,7 +740,7 @@ function renderMarkdownReport(feed) {
     `High priority: ${summary.high_priority_changes || 0}`,
     `Medium priority: ${summary.medium_priority_changes || 0}`,
     `Low priority: ${summary.low_priority_changes || 0}`,
-    `Remote scan failures: ${summary.remote_scan_failures || 0}`,
+    `Source check failures: ${summary.remote_scan_failures || 0}`,
     "",
     "## Safety boundary",
     "",
@@ -778,7 +778,7 @@ function defaultCatalogueConfig(root = DEFAULT_ROOT) {
   ];
   return {
     schema_version: "1.0.0",
-    release: "0.62.0",
+    release: "0.62.1",
     national_catalogue_url: existing.national_catalogue_url || "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/national-sact-regimens/",
     scope_note: existing.scope_note || "The published web catalogue is a surveillance source and is not assumed to contain every national regimen.",
     catalogue_pages: [...solid, ...additional]
@@ -792,7 +792,7 @@ function buildBaselineFiles(root = DEFAULT_ROOT) {
   const config = defaultCatalogueConfig(root);
   const reviewDecisions = {
     schema_version: "1.0.0",
-    release: "0.62.0",
+    release: "0.62.1",
     instructions: "Add a decision only after authorised clinical review. This file never updates protocol rules automatically.",
     decisions: {}
   };

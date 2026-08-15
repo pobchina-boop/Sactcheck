@@ -306,7 +306,7 @@
 
   root.SACTCheckNccpChangeTracker = {
     version: "0.62.1",
-    appVersion: document.querySelector('meta[name="sactcheck-release"]')?.content || "0.67.1",
+    appVersion: document.querySelector('meta[name="sactcheck-release"]')?.content || "0.68.0",
     open,
     load,
     loadFeed,

@@ -81,7 +81,7 @@ if (pkg.version.localeCompare('0.63.1', undefined, { numeric: true }) < 0) asser
 const source = fs.readFileSync(path.join(root, 'js', 'regimen-knowledge-base.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'css', 'regimen-knowledge-base.css'), 'utf8');
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert.ok(/data\/regimen-knowledge-base-v0(?:580|600|603|610|640|650|660|670)\.json/.test(source));
+assert.ok(/data\/regimen-knowledge-base-v0(?:580|600|603|610|640|650|660|670|680)\.json/.test(source));
 assert.ok(source.includes('Treatment intent and patient selection'));
 assert.ok(source.includes('Supportive care'));
 assert.ok(source.includes('Monitoring and toxicity'));

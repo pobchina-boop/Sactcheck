@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00263-vcurrent",
   "file_name": "00263-ec75.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00263",
     "nccp_version": "7",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6368/263_EC75.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.68.0",
     "treatment_setting": [
       "metastatic"
     ],
@@ -30,7 +30,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -65,7 +65,21 @@
     "source_version_verified_date": "2026-07-29",
     "source_version_verification_method": "manual comparison with current official NCCP PDF header and version-control information",
     "legacy_internal_id_retained": true,
-    "legacy_internal_id_note": "Stable internal ID retained to avoid breaking existing bookmarks and catalogue references; display metadata now records the explicit NCCP source version."
+    "legacy_internal_id_note": "Stable internal ID retained to avoid breaking existing bookmarks and catalogue references; display metadata now records the explicit NCCP source version.",
+    "source_checked_date": "2026-08-15",
+    "encoding_maturity": {
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.68.0",
+      "reconciled_date": "2026-08-15",
+      "scope_note": "Rebuilt against current NCCP 00263 source with haematology, epirubicin and cyclophosphamide organ function and cardiac review context."
+    },
+    "canonical_protocol_id": "nccp-00263-v7",
+    "legacy_protocol_id_alias": "nccp-00263-vcurrent"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -76,39 +90,43 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 2,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 2
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 1,
-      "demo_value": 200,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 200
     },
     "hb_g_dl": {
       "label": "Haemoglobin",
       "type": "number",
-      "unit": "g/dL",
       "required": false,
       "min": 0,
       "step": 0.1,
-      "demo_value": 12,
-      "always_show": true
+      "always_show": true,
+      "input_role": "monitoring",
+      "unit": "g/dL",
+      "demo_value": 12
     },
     "febrile_neutropenia": {
-      "label": "Febrile neutropenia",
+      "label": "Febrile neutropenia in prior cycle",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
@@ -147,7 +165,87 @@
           "ctcae_grade": 4
         }
       ],
-      "always_show": true
+      "always_show": true,
+      "input_role": "context"
+    },
+    "crcl_ml_min": {
+      "label": "Renal function band",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "gt20",
+          "label": "CrCl >20 mL/min",
+          "decision_value": "gt20"
+        },
+        {
+          "value": "10_20",
+          "label": "CrCl 10 to 20 mL/min",
+          "decision_value": "10_20"
+        },
+        {
+          "value": "lt10",
+          "label": "CrCl <10 mL/min",
+          "decision_value": "lt10"
+        }
+      ],
+      "demo_value": "gt20",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      },
+      "input_role": "decision"
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "µmol/L",
+      "demo_value": 10
+    },
+    "ast_uln_multiple": {
+      "label": "AST multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "cyclophosphamide_severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment affecting cyclophosphamide",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "clinically_significant_cardiac_symptoms": {
+      "label": "New clinically significant cardiac symptoms",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "lvef_percent": {
+      "label": "LVEF",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "monitoring",
+      "unit": "%",
+      "demo_value": 60
     }
   },
   "required_inputs": [],
@@ -169,21 +267,27 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "anc_below_cutoff",
-        "priority": 100,
+        "id": "EC00263_ANC_LT1",
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
-          "value": 1.0
+          "value": 1
         },
         "action": {
           "type": "delay",
-          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "ANC below 1.0 ×10⁹/L: delay treatment for one week.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Haematological Table 1"
+        },
+        "explanation": "ANC below 1.0 ×10⁹/L: delay treatment for one week."
       },
       {
-        "id": "platelets_below_cutoff",
-        "priority": 100,
+        "id": "EC00263_PLT_LT100",
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
@@ -191,8 +295,264 @@
         },
         "action": {
           "type": "delay",
-          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "Platelets below 100 ×10⁹/L: delay treatment for one week.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Haematological Table 1"
+        },
+        "explanation": "Platelets below 100 ×10⁹/L: delay treatment for one week."
+      },
+      {
+        "id": "EC00263_FN",
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Prior febrile neutropenia: consider reducing to 75% and consider G CSF according to treatment context.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Haematological Table 1"
+        },
+        "explanation": "Prior febrile neutropenia: consider reducing to 75% and consider G CSF according to treatment context."
+      },
+      {
+        "id": "EC00263_EPI_CRCL_LT10",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": "lt10"
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "CrCl below 10 mL/min: epirubicin dose reduction may need to be considered. Clinical decision.",
+          "components": [
+            "epirubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "CrCl below 10 mL/min: epirubicin dose reduction may need to be considered. Clinical decision."
+      },
+      {
+        "id": "EC00263_EPI_BILI_24_51",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 24
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Bilirubin 24 to 51 µmol/L: use 50% of the epirubicin dose.",
+          "components": [
+            "epirubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "Bilirubin 24 to 51 µmol/L: use 50% of the epirubicin dose."
+      },
+      {
+        "id": "EC00263_EPI_BILI_51_85",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 51
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 85
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Bilirubin above 51 to 85 µmol/L: use 25% of the epirubicin dose.",
+          "components": [
+            "epirubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "Bilirubin above 51 to 85 µmol/L: use 25% of the epirubicin dose."
+      },
+      {
+        "id": "EC00263_EPI_BILI_GT85",
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 85
+        },
+        "action": {
+          "type": "omit",
+          "message": "Bilirubin above 85 µmol/L: omit epirubicin.",
+          "components": [
+            "epirubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "Bilirubin above 85 µmol/L: omit epirubicin.",
+        "priority": 90
+      },
+      {
+        "id": "EC00263_EPI_AST_2_5",
+        "when": {
+          "all": [
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "AST 2 to 5 × ULN: use 50% of the epirubicin dose.",
+          "components": [
+            "epirubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "AST 2 to 5 × ULN: use 50% of the epirubicin dose."
+      },
+      {
+        "id": "EC00263_EPI_AST_GT5",
+        "when": {
+          "field": "ast_uln_multiple",
+          "operator": ">",
+          "value": 5
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "AST above 5 × ULN: use 25% of the epirubicin dose.",
+          "components": [
+            "epirubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "AST above 5 × ULN: use 25% of the epirubicin dose."
+      },
+      {
+        "id": "EC00263_CYC_CRCL_LT10",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": "lt10"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "CrCl below 10 mL/min: cyclophosphamide 50% of the original dose.",
+          "components": [
+            "cyclophosphamide"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "CrCl below 10 mL/min: cyclophosphamide 50% of the original dose."
+      },
+      {
+        "id": "EC00263_CYC_CRCL_10_20",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": "10_20"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "CrCl 10 to 20 mL/min: cyclophosphamide 75% of the original dose.",
+          "components": [
+            "cyclophosphamide"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "CrCl 10 to 20 mL/min: cyclophosphamide 75% of the original dose."
+      },
+      {
+        "id": "EC00263_CYC_HEP_SEVERE",
+        "when": {
+          "field": "cyclophosphamide_severe_hepatic_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Severe hepatic impairment affecting cyclophosphamide: clinical decision.",
+          "components": [
+            "cyclophosphamide"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "Severe hepatic impairment affecting cyclophosphamide: clinical decision."
+      },
+      {
+        "id": "EC00263_CARDIAC",
+        "when": {
+          "field": "clinically_significant_cardiac_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "New clinically significant cardiac symptoms require cardiac assessment and Consultant review before further anthracycline treatment.",
+          "components": [
+            "epirubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Tests and cardiac toxicity section"
+        },
+        "explanation": "New clinically significant cardiac symptoms require cardiac assessment and Consultant review before further anthracycline treatment."
       }
     ]
   },

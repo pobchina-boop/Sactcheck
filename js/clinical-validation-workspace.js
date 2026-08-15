@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
 
-  const RELEASE = "0.67.0";
+  const RELEASE = "0.68.0";
   const REGISTER_URL = "data/clinical-validation-register-v0630.json";
   const STORAGE_KEY = "sactcheck_primary_clinical_validation_v1";
 
@@ -332,7 +332,7 @@
         <button class="btn secondary" type="button" id="validationCopySummary">Copy review summary</button>
         <button class="btn ghost" type="button" id="validationCloseRecord">Close review</button>
       </div>
-      <div class="validation-boundary"><strong>Review standard:</strong> compare the complete current NCCP source with the encoded SACTCheck inputs, rules and outputs. Focused interface content is not a substitute for reviewing the source PDF.</div>
+      <div class="validation-boundary"><strong>Review standard:</strong> compare the complete current NCCP source with the encoded SACTCheck inputs, rules and outputs. Focused interface content is not a substitute for reviewing the source PDF. <strong>Do not enter names, MRNs, dates of birth, addresses or other patient identifiers in validation notes.</strong></div>
       <div class="validation-domain-list">
         ${DOMAIN_DEFINITIONS.map((domain, index) => {
           const review = record.domain_reviews?.[domain.id] || { status: "pending", note: "" };
@@ -340,7 +340,7 @@
             <div class="validation-domain-number">${index + 1}</div>
             <div class="validation-domain-body"><h3>${escapeHtml(domain.label)}</h3><p>${escapeHtml(domain.prompt)}</p><small>${escapeHtml(suggestedApplicability(protocol, domain.id))}</small>
               <label>Status<select data-domain-status="${domain.id}">${domainStatusOptions(review.status)}</select></label>
-              <label>Review note<textarea rows="2" maxlength="700" data-domain-note="${domain.id}" placeholder="Record the source comparison, exact threshold or reason for not applicable. Do not enter patient information.">${escapeHtml(review.note || "")}</textarea></label>
+              <label>Review note<textarea rows="2" maxlength="700" data-domain-note="${domain.id}" placeholder="Record the source comparison, exact threshold or reason for not applicable. Do not enter names, MRNs, dates of birth or other patient identifiers.">${escapeHtml(review.note || "")}</textarea></label>
             </div>
           </article>`;
         }).join("")}
@@ -350,7 +350,7 @@
         <div id="validationIssueList">${renderIssues(issues)}</div>
       </section>
       <section class="validation-overall-note">
-        <label for="validationOverallNote">Overall review note<textarea id="validationOverallNote" rows="3" maxlength="1200" placeholder="Summarise the protocol review, unresolved questions and next action. Do not enter patient information.">${escapeHtml(record.overall_note || "")}</textarea></label>
+        <label for="validationOverallNote">Overall review note<textarea id="validationOverallNote" rows="3" maxlength="1200" placeholder="Summarise the protocol review, unresolved questions and next action. Do not enter names, MRNs, dates of birth or other patient identifiers.">${escapeHtml(record.overall_note || "")}</textarea></label>
         <div class="validation-completion-note"><strong>Completion rule:</strong> primary review is complete only when every domain is confirmed or explicitly not applicable and there are no open issues or specialist review requests.</div>
       </section>`;
 
@@ -410,7 +410,7 @@
     if (!title) return;
     const domain = window.prompt(`Domain: ${DOMAIN_DEFINITIONS.map(item => item.id).join(", ")}`, "engine") || "engine";
     const severity = (window.prompt("Severity: low, medium, high or critical", "medium") || "medium").toLowerCase();
-    const note = window.prompt("Describe the source discrepancy and required action. Do not enter patient information.", "") || "";
+    const note = window.prompt("Describe the source discrepancy and required action. Do not enter names, MRNs, dates of birth or other patient identifiers.", "") || "";
     record.issues.push({
       id: `issue_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
       domain: DOMAIN_DEFINITIONS.some(item => item.id === domain) ? domain : "engine",
@@ -497,7 +497,12 @@
     URL.revokeObjectURL(anchor.href);
   }
 
+  function confirmIdentifierFreeExport() {
+    return confirm("Before exporting, confirm that this validation record contains no patient identifiers, including names, MRNs, dates of birth, addresses or other identifiable clinical information.");
+  }
+
   function exportJson() {
+    if (!confirmIdentifierFreeExport()) return;
     const packageData = {
       ...log,
       export_metadata: {
@@ -512,6 +517,7 @@
 
   function csvCell(value) { return `"${String(value ?? "").replaceAll('"', '""')}"`; }
   function exportCsv() {
+    if (!confirmIdentifierFreeExport()) return;
     const rows = [["context_key", "nccp_code", "version", "title", "tissue", "review_status", "progress_percent", "reviewer", "reviewed_date", "open_issues", "overall_note"]];
     for (const context of allContexts()) {
       const record = getRecord(context.protocol, context.tissue, false);
@@ -525,6 +531,7 @@
   }
 
   function exportCurrentTissueCsv() {
+    if (!confirmIdentifierFreeExport()) return;
     const tissue = activeTissue === "all" ? "all_tissues" : activeTissue;
     const contexts = allContexts().filter(context => activeTissue === "all" || context.tissue === activeTissue);
     const rows = [["context_key", "nccp_code", "version", "title", "tissue", "review_status", "progress_percent", "open_issues"]];

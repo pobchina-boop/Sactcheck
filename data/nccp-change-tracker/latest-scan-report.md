@@ -10,7 +10,7 @@ Changes requiring review: 0
 High priority: 0
 Medium priority: 0
 Low priority: 0
-Remote scan failures: 0
+Source check failures: 0
 
 ## Safety boundary
 

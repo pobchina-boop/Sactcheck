@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00423-vcurrent",
   "file_name": "00423-at-doxorubicin-docetaxel.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00423",
     "nccp_version": "5",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.68.0",
     "treatment_setting": [
       "locally_advanced",
       "metastatic"
@@ -31,7 +31,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -66,7 +66,21 @@
     "source_version_verified_date": "2026-07-29",
     "source_version_verification_method": "manual comparison with current official NCCP PDF header and version-control information",
     "legacy_internal_id_retained": true,
-    "legacy_internal_id_note": "Stable internal ID retained to avoid breaking existing bookmarks and catalogue references; display metadata now records the explicit NCCP source version."
+    "legacy_internal_id_note": "Stable internal ID retained to avoid breaking existing bookmarks and catalogue references; display metadata now records the explicit NCCP source version.",
+    "source_checked_date": "2026-08-15",
+    "encoding_maturity": {
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.68.0",
+      "reconciled_date": "2026-08-15",
+      "scope_note": "Rebuilt against NCCP 00423 Version 5 with haematology, cardiac exclusion, doxorubicin and docetaxel organ function and adverse event pathways."
+    },
+    "canonical_protocol_id": "nccp-00423-v5",
+    "legacy_protocol_id_alias": "nccp-00423-vcurrent"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -77,78 +91,237 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 2,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 2
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 1,
-      "demo_value": 200,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 200
     },
     "hb_g_dl": {
       "label": "Haemoglobin",
       "type": "number",
-      "unit": "g/dL",
       "required": false,
       "min": 0,
       "step": 0.1,
-      "demo_value": 12,
-      "always_show": true
+      "always_show": true,
+      "input_role": "monitoring",
+      "unit": "g/dL",
+      "demo_value": 12
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "always_show": true
+      "always_show": true,
+      "input_role": "context"
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
       "type": "select",
-      "unit": "CTCAE grade",
       "required": false,
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "label": "Grade 0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "label": "Grade 1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "label": "Grade 2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
+          "label": "Grade 3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "label": "Grade 4"
         }
       ],
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "neuropathy",
+      "assessment_guidance": "Assess sensory and motor symptoms, gait, dexterity and impact on instrumental or self care activities."
+    },
+    "lvef_percent": {
+      "label": "LVEF",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "%",
+      "demo_value": 60
+    },
+    "renal_impairment_severity": {
+      "label": "Renal impairment severity",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "µmol/L",
+      "demo_value": 10
+    },
+    "ast_uln_multiple": {
+      "label": "AST multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "alp_uln_multiple": {
+      "label": "ALP multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "ast_alt_uln_multiple": {
+      "label": "Highest AST or ALT multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "skin_reaction_grade": {
+      "label": "Skin reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "cutaneous",
+      "assessment_guidance": "Use the most specific CTCAE skin term available and assess body surface area, symptoms, mucosal or systemic involvement and functional impact."
+    },
+    "stomatitis_grade": {
+      "label": "Stomatitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "mucositis",
+      "assessment_guidance": "Assess pain, ulceration, oral intake and nutritional consequences."
     }
   },
   "required_inputs": [],
@@ -170,21 +343,27 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "anc_below_cutoff",
-        "priority": 100,
+        "id": "AT423_ANC_LT1_5",
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
-          "value": 1.0
+          "value": 1.5
         },
         "action": {
           "type": "delay",
-          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "ANC below 1.5 ×10⁹/L: delay treatment for one week.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 1"
+        },
+        "explanation": "ANC below 1.5 ×10⁹/L: delay treatment for one week."
       },
       {
-        "id": "platelets_below_cutoff",
-        "priority": 100,
+        "id": "AT423_PLT_LT100",
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
@@ -192,8 +371,313 @@
         },
         "action": {
           "type": "delay",
-          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "Platelets below 100 ×10⁹/L: delay treatment for one week.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 1"
+        },
+        "explanation": "Platelets below 100 ×10⁹/L: delay treatment for one week."
+      },
+      {
+        "id": "AT423_LVEF_LT50",
+        "when": {
+          "field": "lvef_percent",
+          "operator": "<",
+          "value": 50
+        },
+        "action": {
+          "type": "contraindicated",
+          "message": "LVEF below 50% is an exclusion for this regimen.",
+          "components": [
+            "doxorubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 2, Exclusions"
+        },
+        "explanation": "LVEF below 50% is an exclusion for this regimen.",
+        "priority": 98
+      },
+      {
+        "id": "AT423_DOXO_SEVERE_RENAL",
+        "when": {
+          "field": "renal_impairment_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Severe renal impairment: doxorubicin dosing is a clinical decision.",
+          "components": [
+            "doxorubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Severe renal impairment: doxorubicin dosing is a clinical decision."
+      },
+      {
+        "id": "AT423_DOXO_BILI_20_50",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 20
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Bilirubin 20 to 50 µmol/L: use 50% of the doxorubicin dose.",
+          "components": [
+            "doxorubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Bilirubin 20 to 50 µmol/L: use 50% of the doxorubicin dose."
+      },
+      {
+        "id": "AT423_DOXO_BILI_51_85",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 51
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 85
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Bilirubin 51 to 85 µmol/L: use 25% of the doxorubicin dose.",
+          "components": [
+            "doxorubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Bilirubin 51 to 85 µmol/L: use 25% of the doxorubicin dose."
+      },
+      {
+        "id": "AT423_DOXO_BILI_GT85",
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 85
+        },
+        "action": {
+          "type": "omit",
+          "message": "Bilirubin above 85 µmol/L: omit doxorubicin.",
+          "components": [
+            "doxorubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Bilirubin above 85 µmol/L: omit doxorubicin.",
+        "priority": 90
+      },
+      {
+        "id": "AT423_DOXO_AST_2_3",
+        "when": {
+          "all": [
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "AST 2 to 3 × ULN: use 75% of the doxorubicin dose.",
+          "components": [
+            "doxorubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "AST 2 to 3 × ULN: use 75% of the doxorubicin dose."
+      },
+      {
+        "id": "AT423_DOXO_AST_GT3",
+        "when": {
+          "field": "ast_uln_multiple",
+          "operator": ">",
+          "value": 3
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "AST above 3 × ULN: use 50% of the doxorubicin dose.",
+          "components": [
+            "doxorubicin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "AST above 3 × ULN: use 50% of the doxorubicin dose."
+      },
+      {
+        "id": "AT423_DOC_HEP_75",
+        "when": {
+          "all": [
+            {
+              "field": "alp_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            },
+            {
+              "field": "ast_alt_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "ALP above 2.5 × ULN with AST or ALT above 1.5 × ULN: docetaxel dose 75 mg/m².",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 3"
+        },
+        "explanation": "ALP above 2.5 × ULN with AST or ALT above 1.5 × ULN: docetaxel dose 75 mg/m²."
+      },
+      {
+        "id": "AT423_DOC_HEP_STOP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 6
+                },
+                {
+                  "field": "ast_alt_uln_multiple",
+                  "operator": ">",
+                  "value": 3.5
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "message": "Marked hepatic dysfunction with bilirubin above ULN: stop docetaxel unless strictly indicated and discuss with a Consultant.",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 3"
+        },
+        "explanation": "Marked hepatic dysfunction with bilirubin above ULN: stop docetaxel unless strictly indicated and discuss with a Consultant.",
+        "priority": 96
+      },
+      {
+        "id": "AT423_SKIN_G3",
+        "when": {
+          "field": "skin_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Grade 3 skin reaction: reduce docetaxel to 60 mg/m².",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 4, adverse events"
+        },
+        "explanation": "Grade 3 skin reaction: reduce docetaxel to 60 mg/m²."
+      },
+      {
+        "id": "AT423_NEURO_GT2",
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Peripheral neuropathy above grade 2: reduce docetaxel to 60 mg/m².",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 4, adverse events"
+        },
+        "explanation": "Peripheral neuropathy above grade 2: reduce docetaxel to 60 mg/m²."
+      },
+      {
+        "id": "AT423_STOM_G3",
+        "when": {
+          "field": "stomatitis_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Grade 3 or 4 stomatitis: reduce docetaxel to 60 mg/m².",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 4, adverse events"
+        },
+        "explanation": "Grade 3 or 4 stomatitis: reduce docetaxel to 60 mg/m²."
       }
     ]
   },

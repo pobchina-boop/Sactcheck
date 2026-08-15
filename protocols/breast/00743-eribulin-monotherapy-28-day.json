@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00743-v3",
   "file_name": "00743-eribulin-monotherapy-28-day.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00743",
     "nccp_version": "3",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6623/743_v3_eriBULin_Monotherapy_28_day.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.68.0",
     "treatment_setting": [
       "locally_advanced",
       "metastatic"
@@ -31,7 +31,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -55,7 +55,20 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    }
+    },
+    "source_checked_date": "2026-08-15",
+    "encoding_maturity": {
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.68.0",
+      "reconciled_date": "2026-08-15",
+      "scope_note": "Rebuilt against NCCP 00743 Version 3 with distinct initial eligibility and treatment day thresholds, recurrent toxicity dose levels, renal impairment, haemodialysis, Child Pugh hepatic pathways and non haematological toxicity delay rules."
+    },
+    "canonical_protocol_id": "nccp-00743-v3"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -66,39 +79,43 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 2,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 2
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 1,
-      "demo_value": 200,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 200
     },
     "hb_g_dl": {
       "label": "Haemoglobin",
       "type": "number",
-      "unit": "g/dL",
       "required": false,
       "min": 0,
       "step": 0.1,
-      "demo_value": 12,
-      "always_show": true
+      "always_show": true,
+      "input_role": "monitoring",
+      "unit": "g/dL",
+      "demo_value": 12
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "always_show": true
+      "always_show": true,
+      "input_role": "context"
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
@@ -137,7 +154,181 @@
           "ctcae_grade": 4
         }
       ],
-      "always_show": true
+      "always_show": true,
+      "input_role": "context"
+    },
+    "assessment_phase": {
+      "label": "Assessment phase",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "initial_eligibility",
+          "label": "Initial treatment eligibility"
+        },
+        {
+          "value": "treatment_day",
+          "label": "Day 1 or Day 15 treatment assessment"
+        }
+      ],
+      "always_show": true,
+      "input_role": "context",
+      "demo_value": "initial_eligibility"
+    },
+    "current_eribulin_dose_level": {
+      "label": "Current eribulin dose level",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "1.23",
+          "label": "1.23 mg/m²"
+        },
+        {
+          "value": "0.97",
+          "label": "0.97 mg/m²"
+        },
+        {
+          "value": "0.62",
+          "label": "0.62 mg/m²"
+        }
+      ],
+      "always_show": true,
+      "input_role": "context",
+      "demo_value": "1.23"
+    },
+    "anc_below_0_5_more_than_7_days": {
+      "label": "ANC below 0.5 ×10⁹/L for more than 7 days",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "anc_below_1_with_fever_or_infection": {
+      "label": "ANC below 1.0 ×10⁹/L with fever or infection",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "platelets_below_25": {
+      "label": "Platelet nadir below 25 ×10⁹/L",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "platelet_bleeding_or_transfusion": {
+      "label": "Platelets below 50 ×10⁹/L with haemorrhage or transfusion requirement",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "crcl_ml_min": {
+      "label": "Renal function band",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge50",
+          "label": "CrCl ≥50 mL/min",
+          "decision_value": "ge50"
+        },
+        {
+          "value": "lt50",
+          "label": "CrCl <50 mL/min",
+          "decision_value": "lt50"
+        }
+      ],
+      "demo_value": "ge50",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      },
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "child_pugh_class": {
+      "label": "Child Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No hepatic impairment"
+        },
+        {
+          "value": "A",
+          "label": "Child Pugh A"
+        },
+        {
+          "value": "B",
+          "label": "Child Pugh B"
+        },
+        {
+          "value": "C",
+          "label": "Child Pugh C"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "current_nonhaem_toxicity_grade": {
+      "label": "Current non haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Identify the exact adverse event and apply its own CTCAE criteria, intervention requirement and functional impact."
+    },
+    "previous_cycle_grade34_nonhaem": {
+      "label": "Grade 3 or 4 non haematological toxicity in the previous cycle",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -159,30 +350,414 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "anc_below_cutoff",
-        "priority": 100,
+        "id": "ERI743_INITIAL_ANC_LT1_5",
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1.0
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "initial_eligibility"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
         },
         "action": {
-          "type": "delay",
-          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "type": "withhold",
+          "message": "Initial eligibility ANC below 1.5 ×10⁹/L is outside the NCCP eligibility criterion.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Pages 1 to 2, Eligibility"
+        },
+        "explanation": "Initial eligibility ANC below 1.5 ×10⁹/L is outside the NCCP eligibility criterion.",
+        "priority": 96
       },
       {
-        "id": "platelets_below_cutoff",
-        "priority": 100,
+        "id": "ERI743_INITIAL_PLT_LE100",
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 100
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "initial_eligibility"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<=",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "message": "Initial eligibility platelets at or below 100 ×10⁹/L are outside the NCCP eligibility criterion.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Pages 1 to 2, Eligibility"
+        },
+        "explanation": "Initial eligibility platelets at or below 100 ×10⁹/L are outside the NCCP eligibility criterion.",
+        "priority": 96
+      },
+      {
+        "id": "ERI743_DAY_ANC_LT1",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "treatment_day"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.0
+            }
+          ]
         },
         "action": {
           "type": "delay",
-          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "On Day 1 or Day 15, ANC below 1.0 ×10⁹/L requires delay of eribulin.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 2, Dose modifications"
+        },
+        "explanation": "On Day 1 or Day 15, ANC below 1.0 ×10⁹/L requires delay of eribulin."
+      },
+      {
+        "id": "ERI743_DAY_PLT_LT75",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "treatment_day"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "message": "On Day 1 or Day 15, platelets below 75 ×10⁹/L require delay of eribulin.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 2, Dose modifications"
+        },
+        "explanation": "On Day 1 or Day 15, platelets below 75 ×10⁹/L require delay of eribulin."
+      },
+      {
+        "id": "ERI743_DAY_NONHAEM_G34",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "treatment_day"
+            },
+            {
+              "field": "current_nonhaem_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "message": "Current grade 3 or 4 non haematological toxicity requires delay of eribulin.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 2, Dose modifications"
+        },
+        "explanation": "Current grade 3 or 4 non haematological toxicity requires delay of eribulin."
+      },
+      {
+        "id": "ERI743_TRIGGER_AT_1_23",
+        "when": {
+          "all": [
+            {
+              "field": "current_eribulin_dose_level",
+              "operator": "==",
+              "value": "1.23"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_below_0_5_more_than_7_days",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "anc_below_1_with_fever_or_infection",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "platelets_below_25",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "platelet_bleeding_or_transfusion",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "previous_cycle_grade34_nonhaem",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "A source specified severe toxicity trigger at 1.23 mg/m² requires subsequent eribulin dose reduction to 0.97 mg/m². Do not re escalate after reduction.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Tables 1 and 3"
+        },
+        "explanation": "A source specified severe toxicity trigger at 1.23 mg/m² requires subsequent eribulin dose reduction to 0.97 mg/m². Do not re escalate after reduction.",
+        "priority": 90
+      },
+      {
+        "id": "ERI743_TRIGGER_AT_0_97",
+        "when": {
+          "all": [
+            {
+              "field": "current_eribulin_dose_level",
+              "operator": "==",
+              "value": "0.97"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_below_0_5_more_than_7_days",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "anc_below_1_with_fever_or_infection",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "platelets_below_25",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "platelet_bleeding_or_transfusion",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "previous_cycle_grade34_nonhaem",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Recurrence of a source specified severe toxicity trigger despite 0.97 mg/m² requires subsequent eribulin dose reduction to 0.62 mg/m². Do not re escalate after reduction.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Tables 1 and 3"
+        },
+        "explanation": "Recurrence of a source specified severe toxicity trigger despite 0.97 mg/m² requires subsequent eribulin dose reduction to 0.62 mg/m². Do not re escalate after reduction.",
+        "priority": 91
+      },
+      {
+        "id": "ERI743_TRIGGER_AT_0_62",
+        "when": {
+          "all": [
+            {
+              "field": "current_eribulin_dose_level",
+              "operator": "==",
+              "value": "0.62"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_below_0_5_more_than_7_days",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "anc_below_1_with_fever_or_infection",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "platelets_below_25",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "platelet_bleeding_or_transfusion",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "previous_cycle_grade34_nonhaem",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Recurrence of a source specified severe toxicity trigger despite 0.62 mg/m²: the NCCP pathway advises considering discontinuation.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Tables 1 and 3"
+        },
+        "explanation": "Recurrence of a source specified severe toxicity trigger despite 0.62 mg/m²: the NCCP pathway advises considering discontinuation.",
+        "priority": 92
+      },
+      {
+        "id": "ERI743_CRCL_LT50",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": "lt50"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "CrCl below 50 mL/min: use 80% of the original eribulin dose.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "CrCl below 50 mL/min: use 80% of the original eribulin dose."
+      },
+      {
+        "id": "ERI743_HD",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Haemodialysis: 80% of the original eribulin dose may be considered. Confirm with the Consultant and oncology pharmacy.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Haemodialysis: 80% of the original eribulin dose may be considered. Confirm with the Consultant and oncology pharmacy."
+      },
+      {
+        "id": "ERI743_CP_A",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "A"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Mild hepatic impairment, Child Pugh A: use 80% of the original eribulin dose.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Mild hepatic impairment, Child Pugh A: use 80% of the original eribulin dose."
+      },
+      {
+        "id": "ERI743_CP_B",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "B"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Moderate hepatic impairment, Child Pugh B: use 50% of the original eribulin dose.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Moderate hepatic impairment, Child Pugh B: use 50% of the original eribulin dose."
+      },
+      {
+        "id": "ERI743_CP_C",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "contraindicated",
+          "message": "Severe hepatic impairment, Child Pugh C: eribulin is not recommended in the NCCP source.",
+          "components": [
+            "eribulin"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Severe hepatic impairment, Child Pugh C: eribulin is not recommended in the NCCP source.",
+        "priority": 98
       }
     ]
   },

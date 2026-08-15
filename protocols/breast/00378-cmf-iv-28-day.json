@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00378-v6",
   "file_name": "00378-cmf-iv-28-day.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00378",
     "nccp_version": "6",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6344/378_v6_cycloPHOSphamideIV_Methotrexate_5-FU_CMF.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.68.0",
     "treatment_setting": [
       "adjuvant",
       "metastatic"
@@ -31,7 +31,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -56,7 +56,20 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    }
+    },
+    "source_checked_date": "2026-08-15",
+    "encoding_maturity": {
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.68.0",
+      "reconciled_date": "2026-08-15",
+      "scope_note": "Rebuilt against NCCP 00378 Version 6 with 75% haematology band, DPD testing and component specific renal and hepatic pathways."
+    },
+    "canonical_protocol_id": "nccp-00378-v6"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -67,39 +80,43 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 2,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 2
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 1,
-      "demo_value": 200,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 200
     },
     "hb_g_dl": {
       "label": "Haemoglobin",
       "type": "number",
-      "unit": "g/dL",
       "required": false,
       "min": 0,
       "step": 0.1,
-      "demo_value": 12,
-      "always_show": true
+      "always_show": true,
+      "input_role": "monitoring",
+      "unit": "g/dL",
+      "demo_value": 12
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "always_show": true
+      "always_show": true,
+      "input_role": "context"
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
@@ -138,7 +155,150 @@
           "ctcae_grade": 4
         }
       ],
-      "always_show": true
+      "always_show": true,
+      "input_role": "context"
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "normal",
+          "label": "No deficiency identified"
+        },
+        {
+          "value": "partial",
+          "label": "Partial deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Not confirmed"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": "normal"
+    },
+    "crcl_ml_min": {
+      "label": "Renal function band",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "lt10",
+          "label": "CrCl <10 mL/min",
+          "decision_value": "lt10"
+        },
+        {
+          "value": "10_19",
+          "label": "CrCl 10 to 19 mL/min",
+          "decision_value": "10_19"
+        },
+        {
+          "value": "20_29",
+          "label": "CrCl 20 to 29 mL/min",
+          "decision_value": "20_29"
+        },
+        {
+          "value": "30_49",
+          "label": "CrCl 30 to 49 mL/min",
+          "decision_value": "30_49"
+        },
+        {
+          "value": "50_exact",
+          "label": "CrCl exactly 50 mL/min",
+          "decision_value": "50_exact"
+        },
+        {
+          "value": "gt50",
+          "label": "CrCl >50 mL/min",
+          "decision_value": "gt50"
+        }
+      ],
+      "demo_value": "gt50",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      },
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "µmol/L",
+      "demo_value": 10
+    },
+    "cyclophosphamide_hepatic_severity": {
+      "label": "Cyclophosphamide hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "fluorouracil_hepatic_severity": {
+      "label": "5 Fluorouracil hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": "none"
     }
   },
   "required_inputs": [],
@@ -160,21 +320,56 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "anc_below_cutoff",
-        "priority": 100,
+        "id": "CMF00378_ANC_LT1",
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
-          "value": 1.5
+          "value": 1
         },
         "action": {
           "type": "delay",
-          "message": "ANC below encoded protocol cutoff (1.5 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "ANC below 1.0 ×10⁹/L: delay CMF.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Haematological Table 1"
+        },
+        "explanation": "ANC below 1.0 ×10⁹/L: delay CMF."
       },
       {
-        "id": "platelets_below_cutoff",
-        "priority": 100,
+        "id": "CMF00378_ANC_1_1_49",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "ANC 1.0 to 1.49 ×10⁹/L: use 75% of the CMF dose in the source table.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Haematological Table 1"
+        },
+        "explanation": "ANC 1.0 to 1.49 ×10⁹/L: use 75% of the CMF dose in the source table."
+      },
+      {
+        "id": "CMF00378_PLT_LT70",
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
@@ -182,8 +377,297 @@
         },
         "action": {
           "type": "delay",
-          "message": "Platelets below encoded protocol cutoff (70 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "Platelets below 70 ×10⁹/L: delay CMF.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Haematological Table 1"
+        },
+        "explanation": "Platelets below 70 ×10⁹/L: delay CMF."
+      },
+      {
+        "id": "CMF00378_PLT_70_89",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 70
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 90
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Platelets 70 to 89 ×10⁹/L: use 75% of the CMF dose in the source table.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Haematological Table 1"
+        },
+        "explanation": "Platelets 70 to 89 ×10⁹/L: use 75% of the CMF dose in the source table."
+      },
+      {
+        "id": "CMF00378_DPD_COMPLETE",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "complete"
+        },
+        "action": {
+          "type": "contraindicated",
+          "message": "Complete DPD deficiency: fluorouracil must not be given.",
+          "components": [
+            "fluorouracil"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "DPD section"
+        },
+        "explanation": "Complete DPD deficiency: fluorouracil must not be given.",
+        "priority": 98
+      },
+      {
+        "id": "CMF00378_DPD_PARTIAL",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "partial"
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Partial DPD deficiency: consider a reduced fluorouracil starting dose with careful subsequent titration.",
+          "components": [
+            "fluorouracil"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "DPD section"
+        },
+        "explanation": "Partial DPD deficiency: consider a reduced fluorouracil starting dose with careful subsequent titration."
+      },
+      {
+        "id": "CMF00378_DPD_UNKNOWN",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "unknown"
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "DPD status should be confirmed before first fluorouracil treatment unless previously tested.",
+          "components": [
+            "fluorouracil"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Tests and DPD section"
+        },
+        "explanation": "DPD status should be confirmed before first fluorouracil treatment unless previously tested."
+      },
+      {
+        "id": "CMF00378_MTX_CRCL_LT20",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "in",
+          "value": [
+            "lt10",
+            "10_19"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "CrCl below 20 mL/min: methotrexate is not recommended. If unavoidable, the NCCP source advises specialist consideration including haemodialysis.",
+          "components": [
+            "methotrexate"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "CrCl below 20 mL/min: methotrexate is not recommended. If unavoidable, the NCCP source advises specialist consideration including haemodialysis."
+      },
+      {
+        "id": "CMF00378_MTX_CRCL_20_49",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "in",
+          "value": [
+            "20_29",
+            "30_49"
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "CrCl 20 to below 50 mL/min: use 50% of the original methotrexate dose.",
+          "components": [
+            "methotrexate"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "CrCl 20 to below 50 mL/min: use 50% of the original methotrexate dose."
+      },
+      {
+        "id": "CMF00378_MTX_CRCL_50_BOUNDARY",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": "50_exact"
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "CrCl exactly 50 mL/min lies on overlapping source table boundaries for methotrexate. Confirm dose with oncology pharmacy.",
+          "components": [
+            "methotrexate"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "CrCl exactly 50 mL/min lies on overlapping source table boundaries for methotrexate. Confirm dose with oncology pharmacy."
+      },
+      {
+        "id": "CMF00378_MTX_BILI_GT86",
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 86
+        },
+        "action": {
+          "type": "contraindicated",
+          "message": "Bilirubin above 86 µmol/L: avoid methotrexate.",
+          "components": [
+            "methotrexate"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "Bilirubin above 86 µmol/L: avoid methotrexate.",
+        "priority": 98
+      },
+      {
+        "id": "CMF00378_5FU_HEP_SEVERE",
+        "when": {
+          "field": "fluorouracil_hepatic_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "contraindicated",
+          "message": "Severe hepatic impairment: 5 Fluorouracil is not recommended in the NCCP source.",
+          "components": [
+            "fluorouracil"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "Severe hepatic impairment: 5 Fluorouracil is not recommended in the NCCP source.",
+        "priority": 98
+      },
+      {
+        "id": "CMF00378_DIALYSIS",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Haemodialysis requires component specific review. Methotrexate and cyclophosphamide have source specific recommendations; 5 Fluorouracil does not usually require dose adjustment.",
+          "components": [
+            "whole_regimen"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "Haemodialysis requires component specific review. Methotrexate and cyclophosphamide have source specific recommendations; 5 Fluorouracil does not usually require dose adjustment."
+      },
+      {
+        "id": "CMF00378_CYC_CRCL_LT10",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": "lt10"
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "CrCl below 10 mL/min: intravenous cyclophosphamide is not recommended; if unavoidable consider 50% of the original dose.",
+          "components": [
+            "cyclophosphamide"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "CrCl below 10 mL/min: intravenous cyclophosphamide is not recommended; if unavoidable consider 50% of the original dose."
+      },
+      {
+        "id": "CMF00378_CYC_CRCL_10_29",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "in",
+          "value": [
+            "10_19",
+            "20_29"
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "CrCl 10 to 29 mL/min: consider 75% of the original intravenous cyclophosphamide dose.",
+          "components": [
+            "cyclophosphamide"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "CrCl 10 to 29 mL/min: consider 75% of the original intravenous cyclophosphamide dose."
+      },
+      {
+        "id": "CMF00378_CYC_HEP_SEVERE",
+        "when": {
+          "field": "cyclophosphamide_hepatic_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "contraindicated",
+          "message": "Severe hepatic impairment: intravenous cyclophosphamide is not recommended because of risk of reduced efficacy.",
+          "components": [
+            "cyclophosphamide"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Renal and hepatic Table 2"
+        },
+        "explanation": "Severe hepatic impairment: intravenous cyclophosphamide is not recommended because of risk of reduced efficacy."
       }
     ]
   },

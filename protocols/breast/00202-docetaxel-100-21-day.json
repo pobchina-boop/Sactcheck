@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00202-v7",
   "file_name": "00202-docetaxel-100-21-day.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00202",
     "nccp_version": "7",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6541/202_v7_Docetaxel_100_21_day.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.68.0",
     "treatment_setting": [
       "locally_advanced",
       "metastatic"
@@ -31,7 +31,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -56,7 +56,20 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    }
+    },
+    "source_checked_date": "2026-08-15",
+    "encoding_maturity": {
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.68.0",
+      "reconciled_date": "2026-08-15",
+      "scope_note": "Rebuilt against NCCP 00202 Version 7 with ANC, renal uncertainty, hepatic and adverse event pathways. Platelets remain visible for monitoring but no unsupported platelet dose rule is encoded."
+    },
+    "canonical_protocol_id": "nccp-00202-v7"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -67,78 +80,212 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 2,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 2
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 1,
-      "demo_value": 200,
-      "always_show": true
+      "always_show": true,
+      "input_role": "monitoring",
+      "unit": "×10⁹/L",
+      "demo_value": 200
     },
     "hb_g_dl": {
       "label": "Haemoglobin",
       "type": "number",
-      "unit": "g/dL",
       "required": false,
       "min": 0,
       "step": 0.1,
-      "demo_value": 12,
-      "always_show": true
+      "always_show": true,
+      "input_role": "monitoring",
+      "unit": "g/dL",
+      "demo_value": 12
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
       "type": "select",
-      "unit": "CTCAE grade",
       "required": false,
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "label": "Grade 0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "label": "Grade 1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "label": "Grade 2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
+          "label": "Grade 3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "label": "Grade 4"
         }
       ],
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "neuropathy",
+      "assessment_guidance": "Assess sensory and motor symptoms, gait, dexterity and impact on instrumental or self care activities."
+    },
+    "anc_below_0_5_more_than_7_days": {
+      "label": "ANC below 0.5 ×10⁹/L for more than 7 days",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "renal_impairment_severity": {
+      "label": "Renal impairment severity",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "alp_uln_multiple": {
+      "label": "ALP multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "ast_alt_uln_multiple": {
+      "label": "Highest AST or ALT multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "skin_reaction_grade": {
+      "label": "Skin reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "cutaneous",
+      "assessment_guidance": "Use the most specific CTCAE skin term available and assess body surface area, symptoms, mucosal or systemic involvement and functional impact."
+    },
+    "stomatitis_grade": {
+      "label": "Stomatitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "mucositis",
+      "assessment_guidance": "Assess pain, ulceration, oral intake and nutritional consequences."
     }
   },
   "required_inputs": [],
@@ -160,30 +307,212 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "anc_below_cutoff",
-        "priority": 100,
+        "id": "DOC202_ANC_LT1_5",
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
-          "value": 1.0
+          "value": 1.5
         },
         "action": {
           "type": "delay",
-          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "ANC below 1.5 ×10⁹/L: delay docetaxel until recovery.",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 2, Table 1"
+        },
+        "explanation": "ANC below 1.5 ×10⁹/L: delay docetaxel until recovery."
       },
       {
-        "id": "platelets_below_cutoff",
-        "priority": 100,
+        "id": "DOC202_FN",
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 100
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
         },
         "action": {
-          "type": "delay",
-          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "type": "dose_reduce",
+          "message": "Febrile neutropenia: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable.",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 2, Table 1"
+        },
+        "explanation": "Febrile neutropenia: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable."
+      },
+      {
+        "id": "DOC202_PROLONGED_SEVERE_NEUTROPENIA",
+        "when": {
+          "field": "anc_below_0_5_more_than_7_days",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "ANC below 0.5 ×10⁹/L for more than one week: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable.",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 2, Table 1"
+        },
+        "explanation": "ANC below 0.5 ×10⁹/L for more than one week: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable."
+      },
+      {
+        "id": "DOC202_SEVERE_RENAL",
+        "when": {
+          "field": "renal_impairment_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Severe renal impairment: the NCCP source states that data are unavailable. Review with the Consultant and oncology pharmacy.",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Severe renal impairment: the NCCP source states that data are unavailable. Review with the Consultant and oncology pharmacy."
+      },
+      {
+        "id": "DOC202_HEPATIC_75",
+        "when": {
+          "all": [
+            {
+              "field": "alp_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            },
+            {
+              "field": "ast_alt_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "ALP above 2.5 × ULN with AST or ALT above 1.5 × ULN: use docetaxel 75 mg/m² in the encoded NCCP pathway.",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "ALP above 2.5 × ULN with AST or ALT above 1.5 × ULN: use docetaxel 75 mg/m² in the encoded NCCP pathway."
+      },
+      {
+        "id": "DOC202_HEPATIC_STOP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 6
+                },
+                {
+                  "field": "ast_alt_uln_multiple",
+                  "operator": ">",
+                  "value": 3.5
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "message": "Marked hepatic dysfunction with bilirubin above ULN: stop docetaxel unless strictly indicated and discuss with a Consultant.",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Marked hepatic dysfunction with bilirubin above ULN: stop docetaxel unless strictly indicated and discuss with a Consultant.",
+        "priority": 96
+      },
+      {
+        "id": "DOC202_SKIN_G3",
+        "when": {
+          "field": "skin_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Grade 3 skin reaction: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable.",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 3"
+        },
+        "explanation": "Grade 3 skin reaction: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable."
+      },
+      {
+        "id": "DOC202_NEURO_GT2",
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Peripheral neuropathy above grade 2: decrease docetaxel to 60 mg/m².",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 3"
+        },
+        "explanation": "Peripheral neuropathy above grade 2: decrease docetaxel to 60 mg/m²."
+      },
+      {
+        "id": "DOC202_STOMATITIS_G3",
+        "when": {
+          "field": "stomatitis_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "Grade 3 or 4 stomatitis: decrease docetaxel to 60 mg/m².",
+          "components": [
+            "docetaxel"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 3"
+        },
+        "explanation": "Grade 3 or 4 stomatitis: decrease docetaxel to 60 mg/m²."
       }
     ]
   },

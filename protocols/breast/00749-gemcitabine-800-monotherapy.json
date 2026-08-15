@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00749-v3",
   "file_name": "00749-gemcitabine-800-monotherapy.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00749",
     "nccp_version": "3",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6672/749_v3_Gemcitabine_800_Monotherapy.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.68.0",
     "treatment_setting": [
       "locally_advanced",
       "metastatic"
@@ -31,7 +31,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -53,7 +53,20 @@
       "rule_level_clinical_validation_status": "pending_independent_consultant_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
-    }
+    },
+    "source_checked_date": "2026-08-15",
+    "encoding_maturity": {
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "source_reconciled": true,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.68.0",
+      "reconciled_date": "2026-08-15",
+      "scope_note": "Rebuilt against NCCP 00749 Version 3 with separate initial eligibility, Day 1 and Day 8 or 15 thresholds, severe nadir dose reduction, renal and hepatic pathways and severe non haematological toxicity management."
+    },
+    "canonical_protocol_id": "nccp-00749-v3"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -64,39 +77,43 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 2,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 2
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
-      "unit": "×10⁹/L",
       "required": false,
       "min": 0,
       "step": 1,
-      "demo_value": 200,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "demo_value": 200
     },
     "hb_g_dl": {
       "label": "Haemoglobin",
       "type": "number",
-      "unit": "g/dL",
       "required": false,
       "min": 0,
       "step": 0.1,
-      "demo_value": 12,
-      "always_show": true
+      "always_show": true,
+      "input_role": "monitoring",
+      "unit": "g/dL",
+      "demo_value": 12
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "always_show": true
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
@@ -135,7 +152,170 @@
           "ctcae_grade": 4
         }
       ],
-      "always_show": true
+      "always_show": true,
+      "input_role": "context"
+    },
+    "assessment_phase": {
+      "label": "Assessment phase",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "initial_eligibility",
+          "label": "Initial treatment eligibility"
+        },
+        {
+          "value": "cycle_day_1",
+          "label": "Day 1 of a new cycle"
+        },
+        {
+          "value": "cycle_day_8_15",
+          "label": "Day 8 or Day 15 within cycle"
+        }
+      ],
+      "always_show": true,
+      "input_role": "context",
+      "demo_value": "initial_eligibility"
+    },
+    "creatinine_uln_multiple": {
+      "label": "Creatinine multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "transaminase_uln_multiple": {
+      "label": "Highest transaminase multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "× ULN",
+      "demo_value": 1
+    },
+    "anc_below_0_5_more_than_5_days": {
+      "label": "ANC below 0.5 ×10⁹/L for more than 5 days",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "anc_below_0_1_more_than_3_days": {
+      "label": "ANC below 0.1 ×10⁹/L for more than 3 days",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "platelet_nadir_below_25": {
+      "label": "Platelet nadir below 25 ×10⁹/L",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cycle_delay_more_than_1_week_due_toxicity": {
+      "label": "Cycle delay longer than 1 week due to toxicity",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "crcl_ml_min": {
+      "label": "Renal function band",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "ge30",
+          "label": "CrCl ≥30 mL/min",
+          "decision_value": "ge30"
+        },
+        {
+          "value": "lt30",
+          "label": "CrCl <30 mL/min",
+          "decision_value": "lt30"
+        }
+      ],
+      "demo_value": "ge30",
+      "ui_section": "labs",
+      "always_show": true,
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      },
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bilirubin_umol_l": {
+      "label": "Total bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "µmol/L",
+      "demo_value": 10
+    },
+    "nonhaem_toxicity_grade": {
+      "label": "Non haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "always_show": true,
+      "input_role": "decision",
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "demo_value": 0,
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Identify the exact adverse event and apply its own CTCAE criteria, intervention requirement and functional impact."
+    },
+    "severe_cutaneous_adverse_reaction": {
+      "label": "Severe cutaneous adverse reaction such as SJS, TEN, DRESS or AGEP",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -157,30 +337,455 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "anc_below_cutoff",
-        "priority": 100,
+        "id": "GEM749_INITIAL_ANC_LE1_5",
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1.0
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "initial_eligibility"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<=",
+              "value": 1.5
+            }
+          ]
         },
         "action": {
-          "type": "delay",
-          "message": "ANC below encoded protocol cutoff (1.0 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "type": "withhold",
+          "message": "Initial eligibility requires ANC above 1.5 ×10⁹/L.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Pages 1 to 2, Eligibility"
+        },
+        "explanation": "Initial eligibility requires ANC above 1.5 ×10⁹/L.",
+        "priority": 96
       },
       {
-        "id": "platelets_below_cutoff",
-        "priority": 100,
+        "id": "GEM749_INITIAL_PLT_LE100",
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 100
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "initial_eligibility"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<=",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "message": "Initial eligibility requires platelets above 100 ×10⁹/L.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Pages 1 to 2, Eligibility"
+        },
+        "explanation": "Initial eligibility requires platelets above 100 ×10⁹/L.",
+        "priority": 96
+      },
+      {
+        "id": "GEM749_INITIAL_CREAT_GT1_5ULN",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "initial_eligibility"
+            },
+            {
+              "field": "creatinine_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Initial eligibility describes adequate renal function as creatinine at or below 1.5 × ULN. Review if above this level.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 1, Eligibility"
+        },
+        "explanation": "Initial eligibility describes adequate renal function as creatinine at or below 1.5 × ULN. Review if above this level."
+      },
+      {
+        "id": "GEM749_INITIAL_TRANSAM_GT3ULN",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "initial_eligibility"
+            },
+            {
+              "field": "transaminase_uln_multiple",
+              "operator": ">",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Initial eligibility describes adequate liver function as transaminases at or below 3 × ULN. Review if above this level.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 1, Eligibility"
+        },
+        "explanation": "Initial eligibility describes adequate liver function as transaminases at or below 3 × ULN. Review if above this level."
+      },
+      {
+        "id": "GEM749_D1_ANC_LE1",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "cycle_day_1"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
         },
         "action": {
           "type": "delay",
-          "message": "Platelets below encoded protocol cutoff (100 ×10⁹/L). Review official NCCP regimen and discuss with consultant."
-        }
+          "message": "At the start of a new cycle, ANC must be above 1.0 ×10⁹/L. Delay if at or below this level.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Haematological"
+        },
+        "explanation": "At the start of a new cycle, ANC must be above 1.0 ×10⁹/L. Delay if at or below this level."
+      },
+      {
+        "id": "GEM749_D1_PLT_LE100",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "cycle_day_1"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<=",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "message": "At the start of a new cycle, platelets must be above 100 ×10⁹/L. Delay if at or below this level.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Haematological"
+        },
+        "explanation": "At the start of a new cycle, platelets must be above 100 ×10⁹/L. Delay if at or below this level."
+      },
+      {
+        "id": "GEM749_D8_15_ANC_LT0_5",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "cycle_day_8_15"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 0.5
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "message": "On Day 8 or Day 15, ANC below 0.5 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 1"
+        },
+        "explanation": "On Day 8 or Day 15, ANC below 0.5 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L.",
+        "priority": 94
+      },
+      {
+        "id": "GEM749_D8_15_PLT_LT50",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "cycle_day_8_15"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "message": "On Day 8 or Day 15, platelets below 50 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 1"
+        },
+        "explanation": "On Day 8 or Day 15, platelets below 50 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L.",
+        "priority": 94
+      },
+      {
+        "id": "GEM749_D8_15_ANC_0_5_1",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "cycle_day_8_15"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 1"
+        },
+        "explanation": "On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose."
+      },
+      {
+        "id": "GEM749_D8_15_PLT_50_100",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "cycle_day_8_15"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<=",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 1"
+        },
+        "explanation": "On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose."
+      },
+      {
+        "id": "GEM749_SEVERE_NADIR",
+        "when": {
+          "any": [
+            {
+              "field": "anc_below_0_5_more_than_5_days",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "anc_below_0_1_more_than_3_days",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "platelet_nadir_below_25",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cycle_delay_more_than_1_week_due_toxicity",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "message": "A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 1"
+        },
+        "explanation": "A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles.",
+        "priority": 90
+      },
+      {
+        "id": "GEM749_CRCL_LT30",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": "lt30"
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "message": "CrCl below 30 mL/min: the NCCP source states that no dose adjustment is expected from renal function alone. Continue full clinical review.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "CrCl below 30 mL/min: the NCCP source states that no dose adjustment is expected from renal function alone. Continue full clinical review."
+      },
+      {
+        "id": "GEM749_HD",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Haemodialysis: no dose adjustment is expected, with dialysis started 6 to 12 hours after gemcitabine. Confirm timing with oncology pharmacy.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Haemodialysis: no dose adjustment is expected, with dialysis started 6 to 12 hours after gemcitabine. Confirm timing with oncology pharmacy."
+      },
+      {
+        "id": "GEM749_BILI_GE27",
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">=",
+          "value": 27
+        },
+        "action": {
+          "type": "consultant_review",
+          "message": "Bilirubin at least 27 µmol/L: NCCP permits either an 80% starting dose with increase if tolerated or full dose with active monitoring. Confirm the selected pathway.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 3, Table 2"
+        },
+        "explanation": "Bilirubin at least 27 µmol/L: NCCP permits either an 80% starting dose with increase if tolerated or full dose with active monitoring. Confirm the selected pathway."
+      },
+      {
+        "id": "GEM749_NONHAEM_G4",
+        "when": {
+          "field": "nonhaem_toxicity_grade",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "message": "Grade 4 non haematological toxicity, excluding nausea or vomiting: withhold until recovery to grade 1 or lower; the NCCP table permits resumption at 50% or discontinuation at Consultant discretion.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 4, Table 3"
+        },
+        "explanation": "Grade 4 non haematological toxicity, excluding nausea or vomiting: withhold until recovery to grade 1 or lower; the NCCP table permits resumption at 50% or discontinuation at Consultant discretion.",
+        "priority": 90
+      },
+      {
+        "id": "GEM749_SCAR",
+        "when": {
+          "field": "severe_cutaneous_adverse_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "message": "Severe cutaneous adverse reaction such as SJS, TEN, DRESS or AGEP: discontinue gemcitabine.",
+          "components": [
+            "gemcitabine"
+          ]
+        },
+        "source": {
+          "document": "Current official NCCP regimen PDF",
+          "page": "Page 4, Table 3"
+        },
+        "explanation": "Severe cutaneous adverse reaction such as SJS, TEN, DRESS or AGEP: discontinue gemcitabine.",
+        "priority": 99
       }
     ]
   },
