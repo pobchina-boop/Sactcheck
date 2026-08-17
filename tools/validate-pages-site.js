@@ -7,7 +7,16 @@ const path = require("path");
 const root = path.resolve(__dirname, "..");
 const site = path.join(root, "_site");
 const forbiddenTopLevel = [".git", ".github", "tests", "tools", "node_modules", "package.json", "SECURITY.md"];
-const required = ["index.html", "manifest.webmanifest", "js", "css", "protocols/index.json"];
+const required = [
+  "index.html",
+  "sustainability.html",
+  "manifest.webmanifest",
+  "js",
+  "js/sustainability-module.js",
+  "css",
+  "data/sustainability-regimen-metadata-v0691.json",
+  "protocols/index.json"
+];
 const problems = [];
 
 if (!fs.existsSync(site)) problems.push("_site directory does not exist");

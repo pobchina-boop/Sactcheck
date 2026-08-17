@@ -1,11 +1,11 @@
-/** SACTCheck v0.69.0 library usability + sustainability navigation layer. */
+/** SACTCheck v0.69.1 library usability + sustainability navigation layer. */
 (function (root) {
   "use strict";
 
   const FAVOURITES_KEY = "sactcheck:favourites:v1";
   const RECENTS_KEY = "sactcheck:recent-protocols:v1";
   const MAX_RECENTS = 5;
-  const SUSTAINABILITY_RELEASE = "0.69.0";
+  const SUSTAINABILITY_RELEASE = "0.69.1";
 
   function read(key, fallback = []) {
     try {

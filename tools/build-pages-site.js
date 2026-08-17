@@ -9,6 +9,7 @@ const out = path.join(root, "_site");
 
 const topLevelFiles = [
   "index.html",
+  "sustainability.html",
   "manifest.webmanifest",
   ".nojekyll"
 ];
