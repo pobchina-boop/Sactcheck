@@ -1,10 +1,11 @@
-/** SACTCheck v0.48.0 library usability layer. */
+/** SACTCheck v0.69.0 library usability + sustainability navigation layer. */
 (function (root) {
   "use strict";
 
   const FAVOURITES_KEY = "sactcheck:favourites:v1";
   const RECENTS_KEY = "sactcheck:recent-protocols:v1";
   const MAX_RECENTS = 5;
+  const SUSTAINABILITY_RELEASE = "0.69.0";
 
   function read(key, fallback = []) {
     try {
@@ -76,6 +77,80 @@
     });
   }
 
+  function sustainabilityUrl(card) {
+    const params = new URLSearchParams();
+    if (card) {
+      const values = {
+        regimen: cardTitle(card),
+        protocol: protocolId(card),
+        tumour: card.dataset.tumour || "",
+        domain: card.dataset.libraryDomain || "solid",
+        route: card.dataset.routeClassification || "",
+        category: card.dataset.section || ""
+      };
+      Object.entries(values).forEach(([key, value]) => { if (value) params.set(key, value); });
+    }
+    const query = params.toString();
+    return `sustainability.html${query ? `?${query}` : ""}`;
+  }
+
+  function ensureSustainabilityStyles() {
+    if (document.getElementById("sactcheckSustainabilityNavStyles")) return;
+    const style = document.createElement("style");
+    style.id = "sactcheckSustainabilityNavStyles";
+    style.textContent = `
+      .sustainability-module-button{border-color:#8bb8ad!important;color:#175b50!important;background:#f2faf7!important}
+      .sustainability-module-button:hover{background:#e5f4ef!important}
+      .sustainability-card-button{border-color:#a9c9c1!important;color:#175b50!important;background:#f7fbfa!important}
+      .sustainability-card-button:hover{background:#eaf6f2!important}
+      .sustainability-card-button .sustainability-nav-icon{margin-right:5px}
+      @media(max-width:700px){.sustainability-card-button{flex:1 1 100%!important}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function ensureSustainabilityModuleLaunch() {
+    if (document.querySelector("[data-open-sustainability-module]")) return;
+    const actions = document.querySelector("#studyHero .mission-hero-actions, #studyHero .study-hero-actions");
+    if (!actions) return;
+    const link = document.createElement("a");
+    link.className = "btn secondary sustainability-module-button";
+    link.href = sustainabilityUrl(null);
+    link.dataset.openSustainabilityModule = "true";
+    link.innerHTML = '<span aria-hidden="true">🌍</span><span>Sustainability</span>';
+    link.setAttribute("aria-label", "Open SACTCheck sustainability module");
+    actions.appendChild(link);
+  }
+
+  function decorateSustainabilityButtons() {
+    allCards().forEach(card => {
+      const actions = card.querySelector(".card-actions");
+      if (!actions || actions.querySelector(".sustainability-card-button")) return;
+      const link = document.createElement("a");
+      link.className = "btn secondary sustainability-card-button";
+      link.href = sustainabilityUrl(card);
+      link.innerHTML = '<span class="sustainability-nav-icon" aria-hidden="true">🌍</span><span>Sustainability</span>';
+      link.setAttribute("aria-label", `Open sustainability profile for ${cardTitle(card)}`);
+      actions.appendChild(link);
+    });
+  }
+
+  function applySustainabilityReleaseLabel() {
+    document.title = "SACTCheck v0.69.0 — Sustainability Module";
+    const releaseMeta = document.querySelector('meta[name="sactcheck-release"]');
+    if (releaseMeta) releaseMeta.setAttribute("content", SUSTAINABILITY_RELEASE);
+    document.querySelectorAll(".header-version").forEach(node => { node.textContent = `v${SUSTAINABILITY_RELEASE}`; });
+    const releaseSummary = document.querySelector(".release-summary > summary");
+    if (releaseSummary) releaseSummary.textContent = `v${SUSTAINABILITY_RELEASE} · What changed?`;
+    const releaseBody = document.querySelector(".release-summary .details-body");
+    if (releaseBody) {
+      const strong = releaseBody.querySelector("strong");
+      const paragraph = releaseBody.querySelector("p");
+      if (strong) strong.textContent = "Sustainability module";
+      if (paragraph) paragraph.textContent = "Adds an evidence-linked sustainability workspace covering clinical value, treatment delivery, travel, medicines waste, deprescribing and supportive care. It does not assign unsupported carbon scores or alter NCCP treatment criteria.";
+    }
+  }
+
   function decorateCards() {
     allCards().forEach(card => {
       if (!card.querySelector(".card-favourite-button")) {
@@ -94,6 +169,7 @@
       }
     });
     syncFavouriteButtons();
+    decorateSustainabilityButtons();
   }
 
   function quickButton(item, type) {
@@ -187,12 +263,15 @@
   }
 
   function refresh() {
+    ensureSustainabilityStyles();
+    ensureSustainabilityModuleLaunch();
+    applySustainabilityReleaseLabel();
     decorateCards();
     renderQuickAccess();
     configureDeveloperTools();
   }
 
-  root.SACTCheckLibraryUX = Object.freeze({ version: "0.48.0", refresh, openProtocol });
+  root.SACTCheckLibraryUX = Object.freeze({ version: SUSTAINABILITY_RELEASE, refresh, openProtocol, sustainabilityUrl });
   root.addEventListener?.("sactcheck:protocols-loaded", refresh);
   root.addEventListener?.("sactcheck:library-domain-changed", renderQuickAccess);
   document.addEventListener("sactcheck:regimen-card-metadata-rendered", refresh);
