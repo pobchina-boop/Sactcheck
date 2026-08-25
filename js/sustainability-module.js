@@ -1,7 +1,8 @@
-/** SACTCheck Sustainability module v0.69.1 */
+/** SACTCheck Sustainability module v0.69.1 with v0.70.0 source metadata addendum. */
 (function (root) {
   "use strict";
   const DATA_URL = "data/sustainability-regimen-metadata-v0691.json";
+  const ADDENDUM_URL = "data/sustainability-regimen-metadata-v0700-addendum.json";
   const STATUS_LABEL = {
     catalogue_derived:"Catalogue derived", source_verified:"Source verified",
     locally_verified:"Locally verified", modelled:"Modelled",
@@ -47,6 +48,19 @@
     return pretty(entry.value);
   }
 
+  function mergeAddendum(base, addendum) {
+    if (!base || !addendum) return base;
+    base.profiles = { ...(base.profiles || {}), ...(addendum.profiles || {}) };
+    base.addenda = (base.addenda || []).filter(item => item?.release !== addendum.release);
+    base.addenda.push({
+      release:addendum.release,
+      source_checked_date:addendum.source_checked_date,
+      profile_count:Object.keys(addendum.profiles || {}).length,
+      evidence_boundary:addendum.evidence_boundary || {}
+    });
+    return base;
+  }
+
   function renderMetadata(data, ctx) {
     const host=$("metadataGrid"), summary=$("metadataSummary");
     if (!host) return;
@@ -89,7 +103,17 @@
     try {
       const response=await fetch(DATA_URL,{cache:"no-store"});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      renderMetadata(await response.json(),ctx);
+      const data=await response.json();
+
+      try {
+        const addendumResponse=await fetch(ADDENDUM_URL,{cache:"no-store"});
+        if (!addendumResponse.ok) throw new Error(`HTTP ${addendumResponse.status}`);
+        mergeAddendum(data,await addendumResponse.json());
+      } catch (addendumError) {
+        console.warn("SACTCheck v0.70.0 sustainability addendum could not be loaded; base sustainability module remains available.",addendumError);
+      }
+
+      renderMetadata(data,ctx);
     } catch (error) {
       if ($("metadataSummary")) $("metadataSummary").textContent =
         "Structured sustainability metadata could not be loaded. The clinical regimen assessment is unaffected.";
@@ -97,5 +121,5 @@
     }
   }
   if (document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
-  root.SACTCheckSustainability=Object.freeze({version:"0.69.1"});
+  root.SACTCheckSustainability=Object.freeze({version:"0.69.1",addendumRelease:"0.70.0",mergeAddendum});
 })(typeof globalThis!=="undefined"?globalThis:this);

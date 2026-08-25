@@ -72,8 +72,13 @@ jobs:
           git add data/nccp-change-tracker
           git commit -m "chore(tracker): record NCCP source scan"
           git push --set-upstream origin "$branch"
-          gh pr create \
+
+          if ! gh pr create \
             --title "NCCP source scan requires review" \
             --body-file data/nccp-change-tracker/latest-scan-report.md \
             --base "${{ github.event.repository.default_branch }}" \
-            --head "$branch"
+            --head "$branch"; then
+            echo "::warning::PR creation is blocked by repository settings. The review branch was pushed successfully and can be reviewed manually."
+            echo "### Review branch created" >> "$GITHUB_STEP_SUMMARY"
+            echo "Automated PR creation is blocked by repository settings. Review branch: \`$branch\`" >> "$GITHUB_STEP_SUMMARY"
+          fi

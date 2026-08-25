@@ -1,8 +1,8 @@
-/** SACTCheck v0.69.2 engine-first homepage and progressive disclosure. */
+/** SACTCheck v0.70.0 engine-first homepage, source reconciliation and progressive disclosure. */
 (function(){
   'use strict';
 
-  const ENGINE_FIRST_RELEASE = '0.69.2';
+  const ENGINE_FIRST_RELEASE = '0.70.0';
 
   function ensureEngineFirstStyles(){
     if(document.querySelector('link[data-engine-first-homepage]')) return;
@@ -13,6 +13,15 @@
     document.head.appendChild(link);
   }
 
+  function ensureV0700Reconciliation(){
+    if(document.querySelector('script[data-v0700-source-reconciliation]')) return;
+    const script=document.createElement('script');
+    script.src=`js/source-reconciliation-v0700.js?v=${ENGINE_FIRST_RELEASE}`;
+    script.dataset.v0700SourceReconciliation='true';
+    script.defer=true;
+    document.head.appendChild(script);
+  }
+
   function setText(selector,text){
     const node=document.querySelector(selector);
     if(node) node.textContent=text;
@@ -20,21 +29,21 @@
   }
 
   function applyReleaseLabel(){
-    document.title=`SACTCheck v${ENGINE_FIRST_RELEASE} — Engine-First Homepage`;
+    document.title=`SACTCheck v${ENGINE_FIRST_RELEASE} — Source Reconciliation & Knowledge Expansion`;
     const releaseMeta=document.querySelector('meta[name="sactcheck-release"]');
     if(releaseMeta) releaseMeta.setAttribute('content',ENGINE_FIRST_RELEASE);
     setText('.header-version',`v${ENGINE_FIRST_RELEASE}`);
 
     const releaseSummary=document.querySelector('#releaseSummary summary');
-    if(releaseSummary) releaseSummary.textContent=`v${ENGINE_FIRST_RELEASE} · Engine-first homepage refinement`;
+    if(releaseSummary) releaseSummary.textContent=`v${ENGINE_FIRST_RELEASE} · Source reconciliation & knowledge expansion`;
 
     const releaseDetail=document.querySelector('#releaseSummary .release-detail');
     if(releaseDetail){
       const strong=releaseDetail.querySelector('strong');
-      if(strong) strong.textContent='Engine-first homepage';
+      if(strong) strong.textContent='Three-regimen source reconciliation';
       const textNodes=[...releaseDetail.childNodes].filter(node=>node.nodeType===3);
       if(textNodes.length){
-        textNodes[0].textContent=' The regimen assessment workflow is now the primary above-the-fold action, while source surveillance, validation, evidence and sustainability remain close at hand.';
+        textNodes[0].textContent=' The engine-first homepage is retained while NCCP 00101, 00256 and 00783 receive a transparent source-reconciliation layer, three new evidence profiles are added and supporting governance modules remain one click away.';
       }
     }
 
@@ -286,6 +295,7 @@
 
   function initialise(){
     ensureEngineFirstStyles();
+    ensureV0700Reconciliation();
     document.body.classList.add('engine-first-homepage');
 
     const catalogue=document.getElementById('libraryCatalogueSection');
@@ -317,6 +327,7 @@
   document.addEventListener('sactcheck:regimen-card-metadata-rendered',reassertAfterLibraryRefresh);
 
   ensureEngineFirstStyles();
+  ensureV0700Reconciliation();
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initialise);
   else initialise();
 })();
