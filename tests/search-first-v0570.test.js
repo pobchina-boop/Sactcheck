@@ -19,7 +19,7 @@ assert.ok(!ui.includes("insertBefore(catalogue,hero)"), 'Catalogue must never be
 assert.ok(ui.includes("library.insertBefore(hero,library.firstElementChild)"));
 assert.strictEqual(search.performanceVersion,'0.57.0');
 
-assert.ok(ui.includes("ENGINE_FIRST_RELEASE = '0.70.1'"), 'Engine-first UI release marker must be present.');
+assert.ok(ui.includes("ENGINE_FIRST_RELEASE = '0.70.1'"), 'The cumulative v0.70.1 engine-first layer must remain present beneath the v0.71.0 consent feature.');
 assert.ok(ui.includes("document.body.classList.add('engine-first-homepage')"), 'Homepage must activate the engine-first presentation layer.');
 assert.ok(ui.includes("moveSearchIntoEngine()"), 'The real regimen search must be promoted into the primary hero workflow.');
 assert.ok(ui.includes("createSupportTools()"), 'NCCP tracking, validation, evidence and sustainability must remain accessible as supporting tools.');
@@ -74,7 +74,27 @@ assert.ok(hotfix.includes('trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf'),
 assert.ok(hotfix.includes('NCCP regimen catalogue'),'NCCP catalogue source fallback is missing.');
 assert.ok(hotfix.includes('Source check pending — do not interpret this as zero updates.'),'Tracker pending-state safeguard is missing.');
 
+// v0.71.0 consent builder is loaded through the already-included study-release module,
+// avoiding a risky index.html rewrite.
+const studyRelease=fs.readFileSync(path.join(root,'js','study-release.js'),'utf8');
+const consentBuilder=fs.readFileSync(path.join(root,'js','regimen-consent-builder-v0710.js'),'utf8');
+const consentCss=fs.readFileSync(path.join(root,'css','regimen-consent-builder-v0710.css'),'utf8');
+const consentContent=JSON.parse(fs.readFileSync(path.join(root,'data','consent-content-v0710.json'),'utf8'));
+assert.ok(studyRelease.includes('regimen-consent-builder-v0710.js?v=0.71.0'),'Consent-builder runtime loader is missing.');
+assert.ok(studyRelease.includes('const VERSION = "0.48.4"'),'Historical study-release version must remain stable.');
+assert.ok(consentBuilder.includes('const VERSION="0.71.0"'),'Consent-builder release marker missing.');
+assert.ok(consentBuilder.includes('data-open-regimen-consent'),'Regimen-card consent button hook missing.');
+assert.ok(consentBuilder.includes('Generic chemotherapy'),'Generic chemotherapy consent layer missing.');
+assert.ok(consentBuilder.includes('Immunotherapy / immune-related risks'),'Immunotherapy consent layer missing.');
+assert.ok(consentBuilder.includes('Agent-specific content requiring manual completion'),'Unmapped-agent safety gate missing.');
+assert.ok(consentCss.includes('.consent-print-sheet'),'Printable consent presentation missing.');
+assert.ok(consentCss.includes('@media print'),'Consent print/PDF layout missing.');
+assert.strictEqual(consentContent.release,'0.71.0');
+assert.strictEqual(consentContent.governance.no_autonomous_consent,true);
+assert.ok(Object.keys(consentContent.agent_profiles||{}).length>=50);
+
 require('./source-reconciliation-v0700.test.js');
 require('./source-reconciliation-v0701.test.js');
+require('./regimen-consent-builder-v0710.test.js');
 
-console.log('v0.70.1 engine-first cumulative tests passed: v0.70.0 reconciliation preserved, Lonsurf/ribociclib source-fidelity hotfix present, source fallbacks retained and search behaviour preserved.');
+console.log('v0.71.0 cumulative tests passed: v0.70.0/v0.70.1 clinical reconciliation preserved and regimen-specific consent builder added without modifying protocol JSON.');

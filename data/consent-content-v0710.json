@@ -1,0 +1,2391 @@
+{
+  "schema_version": "1.0",
+  "release": "0.71.0",
+  "source_checked_date": "2026-09-06",
+  "status": "draft_consent_content_pending_clinical_and_oncology_pharmacy_validation",
+  "governance": {
+    "purpose": "Regimen-specific consent discussion support. It does not replace the HSE National Consent Policy, the NCCP consent process, the current NCCP regimen or clinician judgement.",
+    "patient_identifiers": "SACTCheck does not request or persist patient name, MRN, DOB or other direct identifiers. Complete identifiers only in the approved clinical record or on the printed form.",
+    "no_autonomous_consent": true,
+    "clinician_review_required": true,
+    "pharmacy_review_required": true,
+    "current_nccp_source_authoritative": true,
+    "agent_profiles_are_material_risk_prompts_not_exhaustive_smpc_lists": true
+  },
+  "sources": [
+    {
+      "id": "hse_national_consent_policy",
+      "label": "HSE National Consent Policy",
+      "url": "https://healthservice.hse.ie/staff/procedures-guidelines/hse-consent-policy/",
+      "role": "Consent must be voluntary and informed, with understandable information on treatment, benefits, risks, alternatives and what may happen if treatment does not proceed."
+    },
+    {
+      "id": "nccp_sact_consent_resources",
+      "label": "NCCP SACT Guidance and Related Documents",
+      "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/sact-guidance-and-related-documents/",
+      "role": "National SACT resources including the Systemic Anti-Cancer Therapy Patient Consent Form – Medical Oncology."
+    },
+    {
+      "id": "nccp_regimens",
+      "label": "NCCP National SACT Regimens",
+      "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/national-sact-regimens/",
+      "role": "Current regimen-specific NCCP source remains the operational treatment source."
+    }
+  ],
+  "generic_modules": {
+    "cytotoxic_chemotherapy": {
+      "id": "generic_cytotoxic_chemotherapy",
+      "label": "Generic chemotherapy consent",
+      "description": "Common and important risks that may occur with cytotoxic chemotherapy. The exact likelihood and severity vary by regimen and patient.",
+      "risks": [
+        {
+          "id": "marrow_infection",
+          "label": "Bone-marrow suppression and infection",
+          "detail": "White blood cells can fall, increasing infection and neutropenic-sepsis risk. Urgent assessment may be required for fever or acute illness.",
+          "tier": "serious"
+        },
+        {
+          "id": "anaemia_fatigue",
+          "label": "Anaemia and fatigue",
+          "detail": "Red blood cells may fall and tiredness, breathlessness or reduced exercise tolerance can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "platelets_bleeding",
+          "label": "Low platelets and bleeding",
+          "detail": "Platelet counts can fall, increasing bruising or bleeding risk.",
+          "tier": "serious"
+        },
+        {
+          "id": "nausea_vomiting",
+          "label": "Nausea and vomiting",
+          "detail": "Anti-sickness medicines may be needed. Severity depends on the regimen.",
+          "tier": "important"
+        },
+        {
+          "id": "bowel_change",
+          "label": "Diarrhoea or constipation",
+          "detail": "Bowel disturbance can occur and can occasionally become severe or cause dehydration.",
+          "tier": "important"
+        },
+        {
+          "id": "mucositis",
+          "label": "Mouth soreness / mucositis",
+          "detail": "Inflammation or ulceration of the mouth and gastrointestinal lining may occur.",
+          "tier": "important"
+        },
+        {
+          "id": "hair_skin_nails",
+          "label": "Hair, skin or nail changes",
+          "detail": "Hair loss or thinning and skin/nail changes may occur depending on the medicines used.",
+          "tier": "important"
+        },
+        {
+          "id": "allergy_infusion",
+          "label": "Allergic or infusion reactions",
+          "detail": "Reactions can occur during or shortly after administration and can rarely be severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "fertility_pregnancy",
+          "label": "Pregnancy, contraception and fertility",
+          "detail": "Some anti-cancer medicines can harm an unborn baby and may affect fertility. Discuss contraception and fertility preservation where relevant.",
+          "tier": "serious"
+        },
+        {
+          "id": "organ_specific",
+          "label": "Organ-specific toxicity",
+          "detail": "Individual drugs can affect nerves, heart, lungs, kidneys, liver, hearing or other organs. The agent-specific section below lists important regimen-specific risks.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "immune_checkpoint_inhibitor": {
+      "id": "immune_checkpoint_inhibitor",
+      "label": "Generic immunotherapy consent",
+      "description": "Immune-checkpoint inhibitors can cause the immune system to inflame almost any organ. Toxicity may occur during treatment or after treatment has stopped.",
+      "risks": [
+        {
+          "id": "pneumonitis",
+          "label": "Immune-related pneumonitis",
+          "detail": "Inflammation of the lungs can cause new cough, breathlessness or chest symptoms and can be life-threatening.",
+          "tier": "serious"
+        },
+        {
+          "id": "colitis",
+          "label": "Immune-related diarrhoea / colitis",
+          "detail": "Diarrhoea or bowel inflammation can become severe and may rarely lead to perforation.",
+          "tier": "serious"
+        },
+        {
+          "id": "hepatitis",
+          "label": "Immune-related hepatitis",
+          "detail": "Liver inflammation may cause abnormal liver tests and can occasionally be severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "endocrine",
+          "label": "Immune-related endocrinopathies",
+          "detail": "Thyroid, pituitary, adrenal or pancreatic inflammation can occur. Some hormone deficiencies may require long-term replacement.",
+          "tier": "serious"
+        },
+        {
+          "id": "nephritis",
+          "label": "Immune-related nephritis",
+          "detail": "Kidney inflammation can impair renal function and may require treatment interruption and immunosuppression.",
+          "tier": "serious"
+        },
+        {
+          "id": "skin",
+          "label": "Immune-related skin toxicity",
+          "detail": "Rash and itching are common; severe blistering or mucosal reactions are rare but important.",
+          "tier": "serious"
+        },
+        {
+          "id": "infusion",
+          "label": "Infusion-related reaction",
+          "detail": "Infusion reactions can occur and can occasionally be severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "rare_organs",
+          "label": "Less common serious immune toxicity",
+          "detail": "Neurological, cardiac, muscle, eye, blood or other organ inflammation can occur and may be life-threatening.",
+          "tier": "serious"
+        },
+        {
+          "id": "delayed",
+          "label": "Delayed and persistent immune toxicity",
+          "detail": "Immune-related adverse events can begin after treatment stops, and some effects—especially endocrine effects—can persist.",
+          "tier": "serious"
+        },
+        {
+          "id": "management",
+          "label": "Steroids / immunosuppression and treatment interruption",
+          "detail": "Immune toxicity may require corticosteroids or other immunosuppressive treatment, hospital care, hormone replacement, treatment delay or permanent discontinuation.",
+          "tier": "important"
+        }
+      ]
+    }
+  },
+  "agent_profiles": {
+    "pembrolizumab": {
+      "display_name": "Pembrolizumab",
+      "aliases": [
+        "keytruda"
+      ],
+      "category": "immunotherapy",
+      "module": "immune_checkpoint_inhibitor",
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": []
+    },
+    "nivolumab": {
+      "display_name": "Nivolumab",
+      "aliases": [
+        "opdivo"
+      ],
+      "category": "immunotherapy",
+      "module": "immune_checkpoint_inhibitor",
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": []
+    },
+    "atezolizumab": {
+      "display_name": "Atezolizumab",
+      "aliases": [
+        "tecentriq"
+      ],
+      "category": "immunotherapy",
+      "module": "immune_checkpoint_inhibitor",
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": []
+    },
+    "durvalumab": {
+      "display_name": "Durvalumab",
+      "aliases": [
+        "imfinzi"
+      ],
+      "category": "immunotherapy",
+      "module": "immune_checkpoint_inhibitor",
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": []
+    },
+    "ipilimumab": {
+      "display_name": "Ipilimumab",
+      "aliases": [
+        "yervoy"
+      ],
+      "category": "immunotherapy",
+      "module": "immune_checkpoint_inhibitor",
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": []
+    },
+    "tremelimumab": {
+      "display_name": "Tremelimumab",
+      "aliases": [
+        "imjudo"
+      ],
+      "category": "immunotherapy",
+      "module": "immune_checkpoint_inhibitor",
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": []
+    },
+    "cemiplimab": {
+      "display_name": "Cemiplimab",
+      "aliases": [
+        "libtayo"
+      ],
+      "category": "immunotherapy",
+      "module": "immune_checkpoint_inhibitor",
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": []
+    },
+    "avelumab": {
+      "display_name": "Avelumab",
+      "aliases": [
+        "bavencio"
+      ],
+      "category": "immunotherapy",
+      "module": "immune_checkpoint_inhibitor",
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "infusion_reaction",
+          "label": "Infusion reaction",
+          "detail": "Infusion-related reactions are an important avelumab-specific administration risk and may require interruption or discontinuation.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "cisplatin": {
+      "display_name": "Cisplatin",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "renal",
+          "label": "Kidney injury",
+          "detail": "Cisplatin can damage kidney function and commonly requires hydration and electrolyte monitoring.",
+          "tier": "serious"
+        },
+        {
+          "id": "electrolytes",
+          "label": "Electrolyte disturbance",
+          "detail": "Magnesium, potassium and other electrolytes can fall and may need replacement.",
+          "tier": "important"
+        },
+        {
+          "id": "hearing",
+          "label": "Hearing damage / tinnitus",
+          "detail": "Hearing loss or ringing in the ears can occur and may be permanent.",
+          "tier": "serious"
+        },
+        {
+          "id": "neuropathy",
+          "label": "Peripheral neuropathy",
+          "detail": "Numbness, tingling or nerve damage can occur and may persist.",
+          "tier": "important"
+        },
+        {
+          "id": "emesis",
+          "label": "Marked nausea and vomiting",
+          "detail": "Cisplatin has a high emetic potential and requires preventative antiemetic treatment.",
+          "tier": "important"
+        }
+      ]
+    },
+    "carboplatin": {
+      "display_name": "Carboplatin",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Low blood counts, particularly thrombocytopenia and neutropenia, can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "hypersensitivity",
+          "label": "Hypersensitivity reaction",
+          "detail": "Allergic reactions can occur and become more likely with repeated exposure.",
+          "tier": "serious"
+        },
+        {
+          "id": "emesis",
+          "label": "Nausea and vomiting",
+          "detail": "Nausea and vomiting may occur and preventative antiemetics are commonly used.",
+          "tier": "important"
+        }
+      ]
+    },
+    "oxaliplatin": {
+      "display_name": "Oxaliplatin",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "acute_neuropathy",
+          "label": "Acute cold-triggered nerve symptoms",
+          "detail": "Cold-triggered tingling, jaw/throat discomfort or laryngopharyngeal dysaesthesia can occur soon after treatment.",
+          "tier": "important"
+        },
+        {
+          "id": "cumulative_neuropathy",
+          "label": "Cumulative peripheral neuropathy",
+          "detail": "Persistent numbness or tingling can develop with cumulative exposure and can affect function.",
+          "tier": "serious"
+        },
+        {
+          "id": "hypersensitivity",
+          "label": "Hypersensitivity reaction",
+          "detail": "Infusion reactions can occur and may be severe.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "paclitaxel": {
+      "display_name": "Paclitaxel",
+      "aliases": [
+        "taxol"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neuropathy",
+          "label": "Peripheral neuropathy",
+          "detail": "Numbness, tingling or pain in the hands or feet can occur and may persist.",
+          "tier": "important"
+        },
+        {
+          "id": "hypersensitivity",
+          "label": "Infusion hypersensitivity",
+          "detail": "Infusion reactions can occur despite premedication and can rarely be severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "alopecia",
+          "label": "Hair loss",
+          "detail": "Hair loss is common with paclitaxel.",
+          "tier": "important"
+        },
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia and other cytopenias can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "nab_paclitaxel": {
+      "display_name": "Nab-paclitaxel",
+      "aliases": [
+        "nab paclitaxel",
+        "abraxane"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neuropathy",
+          "label": "Peripheral neuropathy",
+          "detail": "Numbness, tingling or pain can occur and may require interruption or dose modification.",
+          "tier": "important"
+        },
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia and other cytopenias can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "alopecia",
+          "label": "Hair loss",
+          "detail": "Hair loss is common.",
+          "tier": "important"
+        }
+      ]
+    },
+    "docetaxel": {
+      "display_name": "Docetaxel",
+      "aliases": [
+        "taxotere"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neutropenia",
+          "label": "Neutropenia / febrile neutropenia",
+          "detail": "Severe neutropenia and infection can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "fluid",
+          "label": "Fluid retention / oedema",
+          "detail": "Fluid retention, swelling or effusions can develop.",
+          "tier": "important"
+        },
+        {
+          "id": "neuropathy",
+          "label": "Peripheral neuropathy",
+          "detail": "Numbness or tingling can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "nails_skin",
+          "label": "Nail and skin changes",
+          "detail": "Nail discolouration/loss and skin reactions can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "hypersensitivity",
+          "label": "Infusion hypersensitivity",
+          "detail": "Infusion reactions can occur and may be severe.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "doxorubicin": {
+      "display_name": "Doxorubicin",
+      "aliases": [
+        "adriamycin"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "cardiac",
+          "label": "Heart-muscle damage / heart failure",
+          "detail": "Anthracyclines can reduce heart function; risk relates partly to cumulative exposure.",
+          "tier": "serious"
+        },
+        {
+          "id": "extravasation",
+          "label": "Severe tissue injury if extravasation occurs",
+          "detail": "Leakage outside the vein can cause significant local tissue damage.",
+          "tier": "serious"
+        },
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia and other cytopenias can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "mucositis",
+          "label": "Mucositis and mouth soreness",
+          "detail": "Inflammation and ulceration of the mouth can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "alopecia",
+          "label": "Hair loss",
+          "detail": "Hair loss is common.",
+          "tier": "important"
+        }
+      ]
+    },
+    "epirubicin": {
+      "display_name": "Epirubicin",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "cardiac",
+          "label": "Heart-muscle damage / heart failure",
+          "detail": "Anthracyclines can reduce heart function; risk relates partly to cumulative exposure.",
+          "tier": "serious"
+        },
+        {
+          "id": "extravasation",
+          "label": "Severe tissue injury if extravasation occurs",
+          "detail": "Leakage outside the vein can cause significant local tissue damage.",
+          "tier": "serious"
+        },
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia and other cytopenias can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "alopecia",
+          "label": "Hair loss",
+          "detail": "Hair loss is common.",
+          "tier": "important"
+        }
+      ]
+    },
+    "cyclophosphamide": {
+      "display_name": "Cyclophosphamide",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Myelosuppression and infection",
+          "detail": "Low blood counts can increase infection and bleeding risk.",
+          "tier": "serious"
+        },
+        {
+          "id": "bladder",
+          "label": "Bladder irritation / haemorrhagic cystitis",
+          "detail": "Cyclophosphamide can irritate the bladder and cause blood in the urine, particularly at higher doses.",
+          "tier": "serious"
+        },
+        {
+          "id": "fertility",
+          "label": "Fertility and gonadal toxicity",
+          "detail": "Fertility may be reduced and premature ovarian/testicular failure can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "secondary",
+          "label": "Second malignancy risk",
+          "detail": "There is a small long-term risk of treatment-related malignancy.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "fluorouracil": {
+      "display_name": "Fluorouracil",
+      "aliases": [
+        "5-fu",
+        "5 fu",
+        "5fu"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "dpd",
+          "label": "Severe toxicity with DPD deficiency",
+          "detail": "Reduced DPD activity can cause profound or life-threatening fluoropyrimidine toxicity.",
+          "tier": "serious"
+        },
+        {
+          "id": "diarrhoea",
+          "label": "Diarrhoea and mucositis",
+          "detail": "Diarrhoea and mouth/gut inflammation can become severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "cardiac",
+          "label": "Cardiac toxicity",
+          "detail": "Chest pain, coronary spasm, rhythm disturbance or other cardiac toxicity can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "hand_foot",
+          "label": "Hand-foot syndrome",
+          "detail": "Redness, soreness or peeling of palms and soles can occur, particularly with prolonged exposure.",
+          "tier": "important"
+        }
+      ]
+    },
+    "capecitabine": {
+      "display_name": "Capecitabine",
+      "aliases": [
+        "xeloda"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "dpd",
+          "label": "Severe toxicity with DPD deficiency",
+          "detail": "Reduced DPD activity can cause profound or life-threatening fluoropyrimidine toxicity.",
+          "tier": "serious"
+        },
+        {
+          "id": "hand_foot",
+          "label": "Hand-foot syndrome",
+          "detail": "Painful redness, swelling or peeling of palms and soles can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "diarrhoea",
+          "label": "Diarrhoea / dehydration",
+          "detail": "Diarrhoea can become severe and cause dehydration or renal deterioration.",
+          "tier": "serious"
+        },
+        {
+          "id": "cardiac",
+          "label": "Cardiac toxicity",
+          "detail": "Chest pain, coronary spasm, rhythm disturbance or other cardiac toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "irinotecan": {
+      "display_name": "Irinotecan",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "early_cholinergic",
+          "label": "Early cholinergic syndrome",
+          "detail": "Cramping, sweating, salivation or early diarrhoea can occur during or shortly after infusion.",
+          "tier": "important"
+        },
+        {
+          "id": "delayed_diarrhoea",
+          "label": "Delayed diarrhoea",
+          "detail": "Delayed diarrhoea can be severe, cause dehydration and require urgent treatment.",
+          "tier": "serious"
+        },
+        {
+          "id": "neutropenia",
+          "label": "Neutropenia / febrile neutropenia",
+          "detail": "Severe neutropenia and infection can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "gemcitabine": {
+      "display_name": "Gemcitabine",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia, thrombocytopenia and anaemia can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "flu",
+          "label": "Flu-like symptoms",
+          "detail": "Fever, aches and fatigue can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "lung",
+          "label": "Pneumonitis / lung toxicity",
+          "detail": "Inflammatory lung toxicity is uncommon but potentially serious.",
+          "tier": "serious"
+        },
+        {
+          "id": "hus",
+          "label": "Haemolytic uraemic syndrome",
+          "detail": "Rare microangiopathic renal toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "pemetrexed": {
+      "display_name": "Pemetrexed",
+      "aliases": [
+        "alimta"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia and other cytopenias can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "mucositis",
+          "label": "Mucositis",
+          "detail": "Mouth or gastrointestinal inflammation can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "rash",
+          "label": "Skin rash",
+          "detail": "Rash can occur; steroid prophylaxis is commonly used.",
+          "tier": "important"
+        },
+        {
+          "id": "renal",
+          "label": "Renal toxicity",
+          "detail": "Kidney function can deteriorate and renal function affects treatment suitability.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "etoposide": {
+      "display_name": "Etoposide",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia and other cytopenias can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "infusion",
+          "label": "Infusion reaction / hypotension",
+          "detail": "Blood pressure can fall with rapid infusion and hypersensitivity can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "secondary",
+          "label": "Treatment-related leukaemia",
+          "detail": "A small delayed risk of therapy-related acute leukaemia exists.",
+          "tier": "serious"
+        },
+        {
+          "id": "alopecia",
+          "label": "Hair loss",
+          "detail": "Hair loss is common.",
+          "tier": "important"
+        }
+      ]
+    },
+    "bleomycin": {
+      "display_name": "Bleomycin",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "lung",
+          "label": "Pulmonary toxicity / fibrosis",
+          "detail": "Bleomycin can cause pneumonitis and potentially irreversible lung fibrosis.",
+          "tier": "serious"
+        },
+        {
+          "id": "fever",
+          "label": "Fever and infusion-type reactions",
+          "detail": "Fever, chills or acute reactions can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "skin",
+          "label": "Skin and nail changes",
+          "detail": "Pigmentation, rash or other skin changes can occur.",
+          "tier": "important"
+        }
+      ]
+    },
+    "vincristine": {
+      "display_name": "Vincristine",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neuropathy",
+          "label": "Peripheral and autonomic neuropathy",
+          "detail": "Numbness, weakness, jaw pain or autonomic nerve effects can occur and may be persistent.",
+          "tier": "serious"
+        },
+        {
+          "id": "ileus",
+          "label": "Constipation / ileus",
+          "detail": "Severe constipation or bowel paralysis can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "siadh",
+          "label": "Hyponatraemia / SIADH",
+          "detail": "Rare sodium disturbance can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "extravasation",
+          "label": "Tissue injury if extravasation occurs",
+          "detail": "Vincristine is a vesicant and can cause significant local tissue injury.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "vinblastine": {
+      "display_name": "Vinblastine",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia and other cytopenias can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "neuropathy",
+          "label": "Neuropathy / constipation",
+          "detail": "Nerve symptoms and constipation can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "extravasation",
+          "label": "Tissue injury if extravasation occurs",
+          "detail": "Vinca alkaloids can cause significant local injury if they leak outside the vein.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "vinorelbine": {
+      "display_name": "Vinorelbine",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neutropenia",
+          "label": "Neutropenia",
+          "detail": "Neutropenia and infection can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "neuropathy",
+          "label": "Neuropathy and constipation",
+          "detail": "Nerve symptoms and constipation can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "vein",
+          "label": "Venous irritation / extravasation",
+          "detail": "Phlebitis or local tissue injury can occur.",
+          "tier": "important"
+        }
+      ]
+    },
+    "ifosfamide": {
+      "display_name": "Ifosfamide",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "encephalopathy",
+          "label": "Encephalopathy",
+          "detail": "Confusion, drowsiness, hallucinations or other neurological toxicity can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "bladder",
+          "label": "Haemorrhagic cystitis",
+          "detail": "Bladder bleeding can occur and preventive mesna/hydration are commonly used.",
+          "tier": "serious"
+        },
+        {
+          "id": "renal",
+          "label": "Renal tubular toxicity",
+          "detail": "Kidney injury, including tubular dysfunction, can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Low blood counts and infection risk can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "dacarbazine": {
+      "display_name": "Dacarbazine",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "emesis",
+          "label": "Nausea and vomiting",
+          "detail": "Dacarbazine can cause significant nausea and vomiting.",
+          "tier": "important"
+        },
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Low blood counts and infection risk can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "hepatic",
+          "label": "Serious liver injury",
+          "detail": "Rare severe hepatic toxicity can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "vein",
+          "label": "Venous irritation",
+          "detail": "Pain or irritation along the infused vein can occur.",
+          "tier": "important"
+        }
+      ]
+    },
+    "temozolomide": {
+      "display_name": "Temozolomide",
+      "aliases": [
+        "temodal"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Myelosuppression / lymphopenia",
+          "detail": "Low blood counts, including lymphopenia, can increase infection risk.",
+          "tier": "serious"
+        },
+        {
+          "id": "infection",
+          "label": "Opportunistic infection",
+          "detail": "Opportunistic infection risk can be increased, particularly with concurrent radiotherapy/steroids.",
+          "tier": "serious"
+        },
+        {
+          "id": "emesis",
+          "label": "Nausea and vomiting",
+          "detail": "Nausea and vomiting can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "secondary",
+          "label": "Treatment-related marrow disorder",
+          "detail": "Rare therapy-related MDS/AML has been reported.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "lomustine": {
+      "display_name": "Lomustine",
+      "aliases": [
+        "ccnu"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "delayed_marrow",
+          "label": "Delayed myelosuppression",
+          "detail": "Blood-count suppression can be delayed and cumulative.",
+          "tier": "serious"
+        },
+        {
+          "id": "emesis",
+          "label": "Nausea and vomiting",
+          "detail": "Nausea and vomiting can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "organ",
+          "label": "Pulmonary, hepatic or renal toxicity",
+          "detail": "Serious organ toxicity is uncommon but possible.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "methotrexate": {
+      "display_name": "Methotrexate",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "mucositis",
+          "label": "Mucositis",
+          "detail": "Mouth and gastrointestinal inflammation can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Low blood counts can increase infection and bleeding risk.",
+          "tier": "serious"
+        },
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Liver injury can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "renal",
+          "label": "Renal toxicity",
+          "detail": "Kidney injury can occur, especially with higher-dose exposure.",
+          "tier": "serious"
+        },
+        {
+          "id": "lung",
+          "label": "Pneumonitis",
+          "detail": "Inflammatory lung toxicity is uncommon but important.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "melphalan": {
+      "display_name": "Melphalan",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Profound myelosuppression",
+          "detail": "Low blood counts and infection/bleeding risk can be severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "mucositis",
+          "label": "Mucositis",
+          "detail": "Mouth and gastrointestinal inflammation can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "fertility",
+          "label": "Infertility / gonadal toxicity",
+          "detail": "Treatment can impair fertility.",
+          "tier": "serious"
+        },
+        {
+          "id": "secondary",
+          "label": "Second malignancy risk",
+          "detail": "There is a delayed risk of therapy-related malignancy.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "topotecan": {
+      "display_name": "Topotecan",
+      "aliases": [],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Severe myelosuppression",
+          "detail": "Neutropenia, thrombocytopenia and anaemia can be significant.",
+          "tier": "serious"
+        },
+        {
+          "id": "gi",
+          "label": "Nausea, vomiting and diarrhoea",
+          "detail": "Gastrointestinal toxicity can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "lung",
+          "label": "Interstitial lung disease",
+          "detail": "Rare serious inflammatory lung toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "eribulin": {
+      "display_name": "Eribulin",
+      "aliases": [
+        "halaven"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neutropenia",
+          "label": "Neutropenia / febrile neutropenia",
+          "detail": "Severe neutropenia and infection can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "neuropathy",
+          "label": "Peripheral neuropathy",
+          "detail": "Numbness, tingling or nerve pain can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "qt",
+          "label": "QT prolongation",
+          "detail": "Cardiac repolarisation effects are uncommon but clinically important in at-risk patients.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "trifluridine_tipiracil": {
+      "display_name": "Trifluridine/tipiracil (Lonsurf)",
+      "aliases": [
+        "trifluridine tipiracil",
+        "lonsurf"
+      ],
+      "category": "cytotoxic",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia, anaemia and thrombocytopenia can occur and can require interruption or dose reduction.",
+          "tier": "serious"
+        },
+        {
+          "id": "fn",
+          "label": "Febrile neutropenia",
+          "detail": "Fever with neutropenia requires urgent assessment.",
+          "tier": "serious"
+        },
+        {
+          "id": "gi",
+          "label": "Nausea, vomiting and diarrhoea",
+          "detail": "Gastrointestinal toxicity can occur and may cause dehydration.",
+          "tier": "important"
+        }
+      ]
+    },
+    "bevacizumab": {
+      "display_name": "Bevacizumab",
+      "aliases": [
+        "avastin"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "hypertension",
+          "label": "Hypertension",
+          "detail": "Blood pressure can rise and may require treatment interruption or antihypertensive therapy.",
+          "tier": "serious"
+        },
+        {
+          "id": "proteinuria",
+          "label": "Proteinuria / renal injury",
+          "detail": "Protein loss in urine can occur and occasionally becomes severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "bleeding",
+          "label": "Bleeding",
+          "detail": "Bleeding can occur and severe haemorrhage is uncommon but serious.",
+          "tier": "serious"
+        },
+        {
+          "id": "thrombosis",
+          "label": "Arterial or venous thromboembolism",
+          "detail": "Blood clots can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "wound",
+          "label": "Impaired wound healing",
+          "detail": "Treatment can impair wound healing and timing around surgery is important.",
+          "tier": "serious"
+        },
+        {
+          "id": "perforation",
+          "label": "Gastrointestinal perforation / fistula",
+          "detail": "Rare bowel perforation or fistula can be life-threatening.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "aflibercept": {
+      "display_name": "Aflibercept",
+      "aliases": [
+        "zaltrap"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "hypertension",
+          "label": "Hypertension",
+          "detail": "Blood pressure can rise and may require treatment.",
+          "tier": "important"
+        },
+        {
+          "id": "proteinuria",
+          "label": "Proteinuria",
+          "detail": "Protein loss in urine can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "bleeding_thrombosis",
+          "label": "Bleeding or thrombosis",
+          "detail": "Serious bleeding or thromboembolic events can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "wound_perforation",
+          "label": "Impaired wound healing / gastrointestinal perforation",
+          "detail": "Rare serious wound-healing complications or perforation can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "cetuximab": {
+      "display_name": "Cetuximab",
+      "aliases": [
+        "erbitux"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "rash",
+          "label": "Acneiform skin rash",
+          "detail": "An acne-like rash and other skin toxicity are common.",
+          "tier": "important"
+        },
+        {
+          "id": "infusion",
+          "label": "Infusion reaction",
+          "detail": "Infusion reactions can be severe, especially with early doses.",
+          "tier": "serious"
+        },
+        {
+          "id": "electrolytes",
+          "label": "Low magnesium / electrolyte disturbance",
+          "detail": "Magnesium and other electrolytes can fall.",
+          "tier": "important"
+        },
+        {
+          "id": "lung",
+          "label": "Interstitial lung disease",
+          "detail": "Rare serious lung toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "panitumumab": {
+      "display_name": "Panitumumab",
+      "aliases": [
+        "vectibix"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "rash",
+          "label": "Acneiform skin rash",
+          "detail": "An acne-like rash and other skin toxicity are common.",
+          "tier": "important"
+        },
+        {
+          "id": "electrolytes",
+          "label": "Low magnesium / electrolyte disturbance",
+          "detail": "Magnesium and other electrolytes can fall.",
+          "tier": "important"
+        },
+        {
+          "id": "diarrhoea",
+          "label": "Diarrhoea",
+          "detail": "Diarrhoea can occur and may become severe.",
+          "tier": "important"
+        },
+        {
+          "id": "lung",
+          "label": "Interstitial lung disease",
+          "detail": "Rare serious lung toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "trastuzumab": {
+      "display_name": "Trastuzumab",
+      "aliases": [
+        "herceptin"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "cardiac",
+          "label": "Reduced heart function / heart failure",
+          "detail": "Trastuzumab can reduce left-ventricular function and occasionally cause symptomatic heart failure.",
+          "tier": "serious"
+        },
+        {
+          "id": "infusion",
+          "label": "Infusion or administration reaction",
+          "detail": "Reactions can occur during administration and are occasionally severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "lung",
+          "label": "Pulmonary toxicity",
+          "detail": "Rare serious pulmonary reactions can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "pertuzumab": {
+      "display_name": "Pertuzumab",
+      "aliases": [
+        "perjeta"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "diarrhoea",
+          "label": "Diarrhoea",
+          "detail": "Diarrhoea is common and can occasionally become severe.",
+          "tier": "important"
+        },
+        {
+          "id": "cardiac",
+          "label": "Reduced heart function",
+          "detail": "Cardiac function can fall, particularly with other HER2-directed therapy.",
+          "tier": "serious"
+        },
+        {
+          "id": "infusion",
+          "label": "Infusion reaction",
+          "detail": "Administration reactions can occur.",
+          "tier": "important"
+        }
+      ]
+    },
+    "trastuzumab_deruxtecan": {
+      "display_name": "Trastuzumab deruxtecan",
+      "aliases": [
+        "enhertu",
+        "t-dxd",
+        "tdxd"
+      ],
+      "category": "antibody_drug_conjugate",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "ild",
+          "label": "Interstitial lung disease / pneumonitis",
+          "detail": "ILD/pneumonitis is a key potentially fatal toxicity and requires prompt assessment of new respiratory symptoms.",
+          "tier": "serious"
+        },
+        {
+          "id": "emesis",
+          "label": "Nausea and vomiting",
+          "detail": "Nausea and vomiting are important treatment toxicities.",
+          "tier": "important"
+        },
+        {
+          "id": "marrow",
+          "label": "Myelosuppression",
+          "detail": "Neutropenia, anaemia and thrombocytopenia can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "cardiac",
+          "label": "Reduced heart function",
+          "detail": "Left-ventricular dysfunction can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "trastuzumab_emtansine": {
+      "display_name": "Trastuzumab emtansine",
+      "aliases": [
+        "kadcyla",
+        "t-dm1",
+        "tdm1"
+      ],
+      "category": "antibody_drug_conjugate",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Liver injury and transaminase elevation can occur and may be severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "platelets",
+          "label": "Thrombocytopenia",
+          "detail": "Platelet counts can fall and increase bleeding risk.",
+          "tier": "serious"
+        },
+        {
+          "id": "neuropathy",
+          "label": "Peripheral neuropathy",
+          "detail": "Nerve symptoms can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "cardiac",
+          "label": "Reduced heart function",
+          "detail": "Left-ventricular dysfunction can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "sacituzumab_govitecan": {
+      "display_name": "Sacituzumab govitecan",
+      "aliases": [
+        "trodelvy"
+      ],
+      "category": "antibody_drug_conjugate",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neutropenia",
+          "label": "Neutropenia / febrile neutropenia",
+          "detail": "Severe neutropenia and febrile neutropenia can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "diarrhoea",
+          "label": "Diarrhoea",
+          "detail": "Diarrhoea can be severe and cause dehydration.",
+          "tier": "serious"
+        },
+        {
+          "id": "emesis",
+          "label": "Nausea and vomiting",
+          "detail": "Nausea and vomiting are common.",
+          "tier": "important"
+        },
+        {
+          "id": "hypersensitivity",
+          "label": "Infusion hypersensitivity",
+          "detail": "Infusion reactions can occur and can rarely be severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "alopecia",
+          "label": "Hair loss",
+          "detail": "Hair loss is common.",
+          "tier": "important"
+        }
+      ]
+    },
+    "enfortumab_vedotin": {
+      "display_name": "Enfortumab vedotin",
+      "aliases": [
+        "padcev"
+      ],
+      "category": "antibody_drug_conjugate",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "skin",
+          "label": "Severe skin reactions",
+          "detail": "Rash is common and rare severe blistering reactions can be life-threatening.",
+          "tier": "serious"
+        },
+        {
+          "id": "neuropathy",
+          "label": "Peripheral neuropathy",
+          "detail": "Nerve damage can occur and may be cumulative.",
+          "tier": "important"
+        },
+        {
+          "id": "hyperglycaemia",
+          "label": "Hyperglycaemia",
+          "detail": "Marked high blood glucose can occur, including severe cases.",
+          "tier": "serious"
+        },
+        {
+          "id": "eye",
+          "label": "Ocular symptoms",
+          "detail": "Dry eye and other ocular symptoms can occur.",
+          "tier": "important"
+        }
+      ]
+    },
+    "abemaciclib": {
+      "display_name": "Abemaciclib",
+      "aliases": [
+        "verzenios"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "diarrhoea",
+          "label": "Diarrhoea",
+          "detail": "Diarrhoea is common and can be severe, particularly early in treatment.",
+          "tier": "important"
+        },
+        {
+          "id": "neutropenia",
+          "label": "Neutropenia",
+          "detail": "Low neutrophils and infection risk can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "vte",
+          "label": "Venous thromboembolism",
+          "detail": "Deep-vein thrombosis or pulmonary embolism can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Liver-enzyme elevations and liver injury can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "ild",
+          "label": "Interstitial lung disease / pneumonitis",
+          "detail": "Rare serious inflammatory lung toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "ribociclib": {
+      "display_name": "Ribociclib",
+      "aliases": [
+        "kisqali"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neutropenia",
+          "label": "Neutropenia",
+          "detail": "Low neutrophils are common and can lead to treatment interruption.",
+          "tier": "serious"
+        },
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Liver-enzyme elevations and clinically important liver injury can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "qt",
+          "label": "QT prolongation / rhythm risk",
+          "detail": "Ribociclib can prolong QTc and requires ECG/electrolyte monitoring in relevant patients.",
+          "tier": "serious"
+        },
+        {
+          "id": "ild",
+          "label": "Interstitial lung disease / pneumonitis",
+          "detail": "Rare serious inflammatory lung toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "palbociclib": {
+      "display_name": "Palbociclib",
+      "aliases": [
+        "ibrance"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neutropenia",
+          "label": "Neutropenia",
+          "detail": "Neutropenia is common and may require interruption or dose reduction.",
+          "tier": "serious"
+        },
+        {
+          "id": "infection",
+          "label": "Infection",
+          "detail": "Infections can occur, particularly when neutropenic.",
+          "tier": "serious"
+        },
+        {
+          "id": "ild",
+          "label": "Interstitial lung disease / pneumonitis",
+          "detail": "Rare serious inflammatory lung toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "olaparib": {
+      "display_name": "Olaparib",
+      "aliases": [
+        "lynparza"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "cytopenia",
+          "label": "Anaemia and other cytopenias",
+          "detail": "Anaemia, neutropenia or thrombocytopenia can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "fatigue_gi",
+          "label": "Fatigue, nausea and gastrointestinal symptoms",
+          "detail": "Fatigue and gastrointestinal side effects are common.",
+          "tier": "important"
+        },
+        {
+          "id": "mds_aml",
+          "label": "MDS / AML",
+          "detail": "Rare serious therapy-related myeloid neoplasms can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "pneumonitis",
+          "label": "Pneumonitis",
+          "detail": "Rare inflammatory lung toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "niraparib": {
+      "display_name": "Niraparib",
+      "aliases": [
+        "zejula"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "cytopenia",
+          "label": "Cytopenias",
+          "detail": "Anaemia, thrombocytopenia and neutropenia can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "hypertension",
+          "label": "Hypertension / cardiovascular effects",
+          "detail": "Blood pressure and heart rate can rise and require monitoring.",
+          "tier": "serious"
+        },
+        {
+          "id": "fatigue_gi",
+          "label": "Fatigue, nausea and gastrointestinal symptoms",
+          "detail": "Fatigue and gastrointestinal symptoms are common.",
+          "tier": "important"
+        },
+        {
+          "id": "mds_aml",
+          "label": "MDS / AML",
+          "detail": "Rare serious therapy-related myeloid neoplasms can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "talazoparib": {
+      "display_name": "Talazoparib",
+      "aliases": [
+        "talzenna"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "cytopenia",
+          "label": "Cytopenias",
+          "detail": "Anaemia, neutropenia and thrombocytopenia can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "fatigue_gi",
+          "label": "Fatigue and gastrointestinal symptoms",
+          "detail": "Fatigue, nausea and appetite disturbance can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "mds_aml",
+          "label": "MDS / AML",
+          "detail": "Rare therapy-related myeloid neoplasms can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "regorafenib": {
+      "display_name": "Regorafenib",
+      "aliases": [
+        "stivarga"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "hand_foot",
+          "label": "Hand-foot skin reaction",
+          "detail": "Painful redness, swelling or blistering of palms and soles can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "liver",
+          "label": "Severe hepatotoxicity",
+          "detail": "Serious liver injury can occur and can be fatal.",
+          "tier": "serious"
+        },
+        {
+          "id": "hypertension",
+          "label": "Hypertension",
+          "detail": "Blood pressure can rise and may require treatment.",
+          "tier": "important"
+        },
+        {
+          "id": "bleeding_perforation",
+          "label": "Bleeding / gastrointestinal perforation",
+          "detail": "Serious bleeding or gastrointestinal perforation can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "cardiac",
+          "label": "Cardiac ischaemia",
+          "detail": "Myocardial ischaemia or infarction can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "lenvatinib": {
+      "display_name": "Lenvatinib",
+      "aliases": [
+        "lenvima"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "hypertension",
+          "label": "Hypertension",
+          "detail": "High blood pressure is common and can be severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "proteinuria",
+          "label": "Proteinuria / renal dysfunction",
+          "detail": "Proteinuria and kidney dysfunction can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "diarrhoea",
+          "label": "Diarrhoea",
+          "detail": "Diarrhoea can occur and may require treatment modification.",
+          "tier": "important"
+        },
+        {
+          "id": "thrombosis_bleeding",
+          "label": "Thromboembolism / bleeding",
+          "detail": "Serious arterial events or bleeding can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "pazopanib": {
+      "display_name": "Pazopanib",
+      "aliases": [
+        "votrient"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Liver injury can be severe and requires monitoring.",
+          "tier": "serious"
+        },
+        {
+          "id": "hypertension",
+          "label": "Hypertension",
+          "detail": "Blood pressure can rise and can be severe.",
+          "tier": "important"
+        },
+        {
+          "id": "gi",
+          "label": "Diarrhoea and gastrointestinal symptoms",
+          "detail": "Diarrhoea and other gastrointestinal symptoms are common.",
+          "tier": "important"
+        },
+        {
+          "id": "vascular",
+          "label": "Bleeding / thrombotic / cardiac events",
+          "detail": "Serious vascular or cardiac complications can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "imatinib": {
+      "display_name": "Imatinib",
+      "aliases": [
+        "glivec",
+        "gleevec"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "oedema",
+          "label": "Fluid retention / oedema",
+          "detail": "Swelling and fluid retention can occur and is occasionally severe.",
+          "tier": "important"
+        },
+        {
+          "id": "cytopenia",
+          "label": "Cytopenias",
+          "detail": "Low blood counts can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Liver injury can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "lapatinib": {
+      "display_name": "Lapatinib",
+      "aliases": [
+        "tyverb",
+        "tykerb"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "diarrhoea",
+          "label": "Diarrhoea",
+          "detail": "Diarrhoea is common and can become severe.",
+          "tier": "important"
+        },
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Serious liver injury can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "cardiac",
+          "label": "Reduced heart function / QT effects",
+          "detail": "Cardiac dysfunction or QT prolongation can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "lung",
+          "label": "Interstitial lung disease",
+          "detail": "Rare serious pulmonary toxicity can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "neratinib": {
+      "display_name": "Neratinib",
+      "aliases": [
+        "nerlynx"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "diarrhoea",
+          "label": "Severe diarrhoea",
+          "detail": "Diarrhoea is very common and can cause dehydration; prophylaxis/early treatment is important.",
+          "tier": "serious"
+        },
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Liver-enzyme elevations and liver injury can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "tucatinib": {
+      "display_name": "Tucatinib",
+      "aliases": [
+        "tukysa"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "diarrhoea",
+          "label": "Diarrhoea",
+          "detail": "Diarrhoea can be severe and cause dehydration.",
+          "tier": "serious"
+        },
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Liver-enzyme elevations can occur and require monitoring.",
+          "tier": "serious"
+        },
+        {
+          "id": "gi",
+          "label": "Nausea / gastrointestinal symptoms",
+          "detail": "Nausea and other gastrointestinal symptoms can occur.",
+          "tier": "important"
+        }
+      ]
+    },
+    "osimertinib": {
+      "display_name": "Osimertinib",
+      "aliases": [
+        "tagrisso"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "ild",
+          "label": "Interstitial lung disease / pneumonitis",
+          "detail": "Rare serious or fatal inflammatory lung toxicity can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "cardiac",
+          "label": "Cardiomyopathy / QT prolongation",
+          "detail": "Reduced heart function and QT prolongation can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "skin_gi",
+          "label": "Rash and diarrhoea",
+          "detail": "Skin rash and diarrhoea are common.",
+          "tier": "important"
+        }
+      ]
+    },
+    "tamoxifen": {
+      "display_name": "Tamoxifen",
+      "aliases": [],
+      "category": "endocrine",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "vte",
+          "label": "Venous thromboembolism",
+          "detail": "Deep-vein thrombosis or pulmonary embolism can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "endometrium",
+          "label": "Endometrial cancer / uterine pathology",
+          "detail": "Tamoxifen increases the risk of endometrial pathology and cancer.",
+          "tier": "serious"
+        },
+        {
+          "id": "vasomotor",
+          "label": "Hot flushes and menopausal symptoms",
+          "detail": "Hot flushes and other endocrine symptoms are common.",
+          "tier": "important"
+        }
+      ]
+    },
+    "abiraterone": {
+      "display_name": "Abiraterone",
+      "aliases": [
+        "zytiga"
+      ],
+      "category": "endocrine_targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "mineralocorticoid",
+          "label": "Hypertension, low potassium and fluid retention",
+          "detail": "Mineralocorticoid excess can cause hypertension, hypokalaemia and oedema.",
+          "tier": "serious"
+        },
+        {
+          "id": "liver",
+          "label": "Hepatotoxicity",
+          "detail": "Liver injury can occur and requires monitoring.",
+          "tier": "serious"
+        },
+        {
+          "id": "cardiac",
+          "label": "Cardiac complications",
+          "detail": "Fluid retention, hypertension or electrolyte disturbance can worsen cardiac disease.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "enzalutamide": {
+      "display_name": "Enzalutamide",
+      "aliases": [
+        "xtandi"
+      ],
+      "category": "endocrine_targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "fatigue_falls",
+          "label": "Fatigue, falls and fractures",
+          "detail": "Fatigue and falls can occur and fracture risk may be increased.",
+          "tier": "important"
+        },
+        {
+          "id": "hypertension",
+          "label": "Hypertension",
+          "detail": "Blood pressure can rise.",
+          "tier": "important"
+        },
+        {
+          "id": "seizure",
+          "label": "Seizure",
+          "detail": "Seizures are uncommon but clinically important.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "rituximab": {
+      "display_name": "Rituximab",
+      "aliases": [
+        "mabthera",
+        "rituxan"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "infusion",
+          "label": "Infusion reaction",
+          "detail": "Infusion reactions are common with early doses and can rarely be severe.",
+          "tier": "serious"
+        },
+        {
+          "id": "infection",
+          "label": "Serious infection / viral reactivation",
+          "detail": "B-cell depletion can increase infection risk; hepatitis B reactivation is an important risk.",
+          "tier": "serious"
+        },
+        {
+          "id": "pml",
+          "label": "Progressive multifocal leukoencephalopathy",
+          "detail": "PML is very rare but serious.",
+          "tier": "serious"
+        },
+        {
+          "id": "cytopenia",
+          "label": "Cytopenias",
+          "detail": "Blood-count suppression can occur.",
+          "tier": "important"
+        }
+      ]
+    },
+    "bortezomib": {
+      "display_name": "Bortezomib",
+      "aliases": [
+        "velcade"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "neuropathy",
+          "label": "Peripheral neuropathy",
+          "detail": "Numbness, tingling or pain can occur and may require dose modification.",
+          "tier": "important"
+        },
+        {
+          "id": "platelets",
+          "label": "Thrombocytopenia",
+          "detail": "Platelet counts can fall and increase bleeding risk.",
+          "tier": "serious"
+        },
+        {
+          "id": "zoster",
+          "label": "Herpes zoster reactivation",
+          "detail": "Shingles/reactivation risk is increased; antiviral prophylaxis is commonly used.",
+          "tier": "important"
+        },
+        {
+          "id": "autonomic",
+          "label": "Orthostatic hypotension / autonomic effects",
+          "detail": "Dizziness or postural blood-pressure falls can occur.",
+          "tier": "important"
+        }
+      ]
+    },
+    "lenalidomide": {
+      "display_name": "Lenalidomide",
+      "aliases": [
+        "revlimid"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "thrombosis",
+          "label": "Venous thromboembolism",
+          "detail": "Blood clots can occur; thromboprophylaxis may be required.",
+          "tier": "serious"
+        },
+        {
+          "id": "cytopenia",
+          "label": "Cytopenias",
+          "detail": "Neutropenia and thrombocytopenia can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "pregnancy",
+          "label": "Severe fetal harm / pregnancy prevention",
+          "detail": "Lenalidomide is highly teratogenic and requires strict pregnancy-prevention measures.",
+          "tier": "serious"
+        },
+        {
+          "id": "rash",
+          "label": "Rash",
+          "detail": "Skin reactions can occur and can rarely be severe.",
+          "tier": "important"
+        }
+      ]
+    },
+    "pomalidomide": {
+      "display_name": "Pomalidomide",
+      "aliases": [
+        "imnovid",
+        "pomalyst"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "thrombosis",
+          "label": "Venous thromboembolism",
+          "detail": "Blood clots can occur; thromboprophylaxis may be required.",
+          "tier": "serious"
+        },
+        {
+          "id": "cytopenia",
+          "label": "Cytopenias",
+          "detail": "Neutropenia and other cytopenias can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "pregnancy",
+          "label": "Severe fetal harm / pregnancy prevention",
+          "detail": "Pomalidomide is highly teratogenic and requires strict pregnancy-prevention measures.",
+          "tier": "serious"
+        },
+        {
+          "id": "infection",
+          "label": "Infection",
+          "detail": "Serious infections can occur.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "daratumumab": {
+      "display_name": "Daratumumab",
+      "aliases": [
+        "darzalex"
+      ],
+      "category": "targeted",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "reaction",
+          "label": "Infusion / injection reaction",
+          "detail": "Administration reactions can occur, especially with early doses.",
+          "tier": "serious"
+        },
+        {
+          "id": "infection",
+          "label": "Infection",
+          "detail": "Respiratory and other infections can occur and can be serious.",
+          "tier": "serious"
+        },
+        {
+          "id": "cytopenia",
+          "label": "Cytopenias",
+          "detail": "Neutropenia and thrombocytopenia can occur.",
+          "tier": "serious"
+        },
+        {
+          "id": "blood_testing",
+          "label": "Interference with blood compatibility testing",
+          "detail": "Daratumumab can interfere with red-cell antibody screening/crossmatching; the transfusion service must be informed.",
+          "tier": "serious"
+        }
+      ]
+    },
+    "dexamethasone": {
+      "display_name": "Dexamethasone",
+      "aliases": [],
+      "category": "corticosteroid",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "glucose",
+          "label": "High blood glucose",
+          "detail": "Steroids can raise blood glucose and may worsen diabetes.",
+          "tier": "important"
+        },
+        {
+          "id": "mood_sleep",
+          "label": "Mood, sleep or psychological effects",
+          "detail": "Insomnia, agitation, mood change or rarely more severe psychiatric effects can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "infection",
+          "label": "Infection risk",
+          "detail": "Steroids suppress immune responses and can increase infection risk.",
+          "tier": "serious"
+        },
+        {
+          "id": "stomach",
+          "label": "Gastrointestinal irritation",
+          "detail": "Dyspepsia and other gastrointestinal effects can occur.",
+          "tier": "important"
+        }
+      ]
+    },
+    "prednisolone": {
+      "display_name": "Prednisolone",
+      "aliases": [
+        "prednisone"
+      ],
+      "category": "corticosteroid",
+      "module": null,
+      "review_status": "draft_pending_clinical_and_oncology_pharmacy_review",
+      "source_basis": "Confirm against the current regimen-specific NCCP source and current medicine product information before formal clinical release.",
+      "risks": [
+        {
+          "id": "glucose",
+          "label": "High blood glucose",
+          "detail": "Steroids can raise blood glucose and may worsen diabetes.",
+          "tier": "important"
+        },
+        {
+          "id": "mood_sleep",
+          "label": "Mood and sleep effects",
+          "detail": "Insomnia, mood change or agitation can occur.",
+          "tier": "important"
+        },
+        {
+          "id": "infection",
+          "label": "Infection risk",
+          "detail": "Steroids suppress immune responses and can increase infection risk.",
+          "tier": "serious"
+        }
+      ]
+    }
+  },
+  "supportive_components_not_counted_as_agent_coverage": [
+    "folinic acid",
+    "leucovorin",
+    "saline",
+    "water for injection",
+    "sodium chloride"
+  ]
+}

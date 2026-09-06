@@ -66,3 +66,20 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
   else bind();
 })(typeof globalThis !== "undefined" ? globalThis : this);
+
+/* v0.71.0: load the regimen-specific consent builder without changing the
+   historical feasibility-study module version or requiring an index.html edit. */
+(function(root){
+  "use strict";
+  if(!root?.document?.createElement||!root.document.head?.appendChild) return;
+  function loadConsentBuilder(){
+    if(root.document.querySelector('script[data-regimen-consent-builder]')) return;
+    const script=root.document.createElement("script");
+    script.src="js/regimen-consent-builder-v0710.js?v=0.71.0";
+    script.defer=true;
+    script.dataset.regimenConsentBuilder="true";
+    root.document.head.appendChild(script);
+  }
+  if(root.document.readyState==="loading") root.document.addEventListener("DOMContentLoaded",loadConsentBuilder,{once:true});
+  else loadConsentBuilder();
+})(typeof globalThis!=="undefined"?globalThis:this);
