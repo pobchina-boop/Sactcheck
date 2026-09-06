@@ -19,7 +19,7 @@ assert.ok(!ui.includes("insertBefore(catalogue,hero)"), 'Catalogue must never be
 assert.ok(ui.includes("library.insertBefore(hero,library.firstElementChild)"));
 assert.strictEqual(search.performanceVersion,'0.57.0');
 
-assert.ok(ui.includes("ENGINE_FIRST_RELEASE = '0.70.0'"), 'Engine-first UI release marker must be present.');
+assert.ok(ui.includes("ENGINE_FIRST_RELEASE = '0.70.1'"), 'Engine-first UI release marker must be present.');
 assert.ok(ui.includes("document.body.classList.add('engine-first-homepage')"), 'Homepage must activate the engine-first presentation layer.');
 assert.ok(ui.includes("moveSearchIntoEngine()"), 'The real regimen search must be promoted into the primary hero workflow.');
 assert.ok(ui.includes("createSupportTools()"), 'NCCP tracking, validation, evidence and sustainability must remain accessible as supporting tools.');
@@ -40,7 +40,7 @@ const sustainabilityModule=fs.readFileSync(path.join(root,'js','sustainability-m
 const sustainabilityAddendum=JSON.parse(fs.readFileSync(path.join(root,'data','sustainability-regimen-metadata-v0700-addendum.json'),'utf8'));
 const trackerWorkflow=fs.readFileSync(path.join(root,'.github','workflows','nccp-change-tracker.yml'),'utf8');
 
-assert.ok(ui.includes('ensureV0700Reconciliation()'), 'v0.70.0 source reconciliation must be loaded by the engine-first runtime.');
+assert.ok(ui.includes('ensureV0700Reconciliation()'), 'v0.70.0 source reconciliation must remain loaded.');
 assert.ok(ui.includes('source-reconciliation-v0700.js'), 'v0.70.0 source reconciliation script path is missing.');
 for(const sentinel of ['CAB_COUNTS_COMBINED','DAY15_AFTER_FULL_INTERMEDIATE','BEV_PROTEIN_2_3','BEV_HTN_UNCONTROLLED_NUMERIC']){
   assert.ok(reconciliation.includes(sentinel), `v0.70.0 reconciliation sentinel ${sentinel} is missing.`);
@@ -60,6 +60,21 @@ assert.ok(Object.keys(sustainabilityAddendum.profiles||{}).length>=3);
 assert.ok(trackerWorkflow.includes('if ! gh pr create'),'Tracker must gracefully handle blocked automatic PR creation.');
 assert.ok(trackerWorkflow.includes('PR creation is blocked by repository settings'),'Tracker fallback warning is missing.');
 
-require('./source-reconciliation-v0700.test.js');
+const hotfix=fs.readFileSync(path.join(root,'js','source-reconciliation-v0701.js'),'utf8');
+assert.ok(ui.includes('ensureV0701Reconciliation()'),'v0.70.1 hotfix loader is missing.');
+assert.ok(ui.includes('source-reconciliation-v0701.js'),'v0.70.1 source-fidelity script path is missing.');
+for(const sentinel of [
+  'LONSURF_NEXT_CYCLE_ANC','LONSURF_DELAY_REDUCE_ANC',
+  'RIBO_HEP_G3','RIBO_HEP_DILI','RIBO_QT_GT500_ADJ_RECUR',
+  'sourceCheckPending'
+]){
+  assert.ok(hotfix.includes(sentinel),`v0.70.1 hotfix sentinel ${sentinel} is missing.`);
+}
+assert.ok(hotfix.includes('trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf'),'Current Lonsurf v4 source URL is missing.');
+assert.ok(hotfix.includes('NCCP regimen catalogue'),'NCCP catalogue source fallback is missing.');
+assert.ok(hotfix.includes('Source check pending — do not interpret this as zero updates.'),'Tracker pending-state safeguard is missing.');
 
-console.log('v0.70.0 engine-first cumulative overlay tests passed: homepage hierarchy preserved, source reconciliation/evidence/sustainability addenda present, tracker fallback retained and search behaviour preserved.');
+require('./source-reconciliation-v0700.test.js');
+require('./source-reconciliation-v0701.test.js');
+
+console.log('v0.70.1 engine-first cumulative tests passed: v0.70.0 reconciliation preserved, Lonsurf/ribociclib source-fidelity hotfix present, source fallbacks retained and search behaviour preserved.');

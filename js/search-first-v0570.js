@@ -1,8 +1,10 @@
-/** SACTCheck v0.70.0 engine-first homepage, source reconciliation and progressive disclosure. */
+/**
+ * SACTCheck v0.70.1 engine-first homepage, cumulative reconciliation and progressive disclosure.
+ */
 (function(){
   'use strict';
 
-  const ENGINE_FIRST_RELEASE = '0.70.0';
+  const ENGINE_FIRST_RELEASE = '0.70.1';
 
   function ensureEngineFirstStyles(){
     if(document.querySelector('link[data-engine-first-homepage]')) return;
@@ -22,6 +24,15 @@
     document.head.appendChild(script);
   }
 
+  function ensureV0701Reconciliation(){
+    if(document.querySelector('script[data-v0701-source-reconciliation]')) return;
+    const script=document.createElement('script');
+    script.src=`js/source-reconciliation-v0701.js?v=${ENGINE_FIRST_RELEASE}`;
+    script.dataset.v0701SourceReconciliation='true';
+    script.defer=true;
+    document.head.appendChild(script);
+  }
+
   function setText(selector,text){
     const node=document.querySelector(selector);
     if(node) node.textContent=text;
@@ -29,21 +40,21 @@
   }
 
   function applyReleaseLabel(){
-    document.title=`SACTCheck v${ENGINE_FIRST_RELEASE} — Source Reconciliation & Knowledge Expansion`;
+    document.title=`SACTCheck v${ENGINE_FIRST_RELEASE} — Source Fidelity Hotfix`;
     const releaseMeta=document.querySelector('meta[name="sactcheck-release"]');
     if(releaseMeta) releaseMeta.setAttribute('content',ENGINE_FIRST_RELEASE);
     setText('.header-version',`v${ENGINE_FIRST_RELEASE}`);
 
     const releaseSummary=document.querySelector('#releaseSummary summary');
-    if(releaseSummary) releaseSummary.textContent=`v${ENGINE_FIRST_RELEASE} · Source reconciliation & knowledge expansion`;
+    if(releaseSummary) releaseSummary.textContent=`v${ENGINE_FIRST_RELEASE} · Lonsurf & ribociclib source fidelity`;
 
     const releaseDetail=document.querySelector('#releaseSummary .release-detail');
     if(releaseDetail){
       const strong=releaseDetail.querySelector('strong');
-      if(strong) strong.textContent='Three-regimen source reconciliation';
+      if(strong) strong.textContent='Focused clinical source-fidelity hotfix';
       const textNodes=[...releaseDetail.childNodes].filter(node=>node.nodeType===3);
       if(textNodes.length){
-        textNodes[0].textContent=' The engine-first homepage is retained while NCCP 00101, 00256 and 00783 receive a transparent source-reconciliation layer, three new evidence profiles are added and supporting governance modules remain one click away.';
+        textNodes[0].textContent=' Lonsurf is reconciled to NCCP v4 with context-specific count thresholds; metastatic and adjuvant ribociclib receive source-faithful hepatic ×ULN, QT and ILD pathways. The current NCCP source remains authoritative.';
       }
     }
 
@@ -233,7 +244,7 @@
     const badge=document.createElement('span');
     badge.className='engine-support-badge';
     badge.dataset.engineTrackerCount='true';
-    badge.textContent='0 updates';
+    badge.textContent='Source check pending';
     tracker.querySelector('.engine-support-text')?.appendChild(badge);
     tracker.addEventListener('click',()=>{
       const source=document.getElementById('nccpUpdateCountBadge')?.closest('button') ||
@@ -270,7 +281,11 @@
 
     const sourceCount=document.getElementById('nccpUpdateCountBadge');
     const syncCount=()=>{
-      const value=(sourceCount?.textContent || '0').trim();
+      const value=(sourceCount?.textContent || '').trim();
+      if(!value || value.toLowerCase()==='pending'){
+        badge.textContent='Source check pending';
+        return;
+      }
       badge.textContent=`${value} update${value==='1'?'':'s'}`;
     };
     syncCount();
@@ -296,6 +311,7 @@
   function initialise(){
     ensureEngineFirstStyles();
     ensureV0700Reconciliation();
+    ensureV0701Reconciliation();
     document.body.classList.add('engine-first-homepage');
 
     const catalogue=document.getElementById('libraryCatalogueSection');
@@ -328,6 +344,7 @@
 
   ensureEngineFirstStyles();
   ensureV0700Reconciliation();
+  ensureV0701Reconciliation();
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initialise);
   else initialise();
 })();
