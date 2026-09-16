@@ -4,34 +4,25 @@
   const VERSION = "0.48.4";
   const HIDE_KEY = "sactcheck:hide-study-welcome:v1";
   let lastFocused = null;
-
   function modal() { return document.getElementById("studyWelcomeModal"); }
   function focusable(panel) {
     return [...panel.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')]
       .filter(item => !item.disabled && item.offsetParent !== null);
   }
   function openWelcome() {
-    const box = modal();
-    if (!box) return;
+    const box = modal(); if (!box) return;
     lastFocused = document.activeElement;
-    box.hidden = false;
-    document.body.classList.add("study-modal-open");
+    box.hidden = false; document.body.classList.add("study-modal-open");
     box.querySelector(".study-modal-close")?.focus();
   }
   function closeWelcome() {
-    const box = modal();
-    if (!box) return;
+    const box = modal(); if (!box) return;
     const neverAgain = document.getElementById("studyWelcomeNeverAgain")?.checked;
-    if (neverAgain) {
-      try { root.localStorage?.setItem(HIDE_KEY, "yes"); } catch (_) {}
-    }
-    box.hidden = true;
-    document.body.classList.remove("study-modal-open");
-    lastFocused?.focus?.();
+    if (neverAgain) { try { root.localStorage?.setItem(HIDE_KEY, "yes"); } catch (_) {} }
+    box.hidden = true; document.body.classList.remove("study-modal-open"); lastFocused?.focus?.();
   }
   function focusSearch() {
-    closeWelcome();
-    root.location.hash = "#libraryScreen";
+    closeWelcome(); root.location.hash = "#libraryScreen";
     const search = document.getElementById("regimenSearch");
     search?.scrollIntoView({ behavior: "smooth", block: "center" });
     root.setTimeout(() => search?.focus(), 250);
@@ -46,9 +37,7 @@
     document.querySelectorAll("[data-close-study-info]").forEach(button => button.addEventListener("click", closeWelcome));
     document.querySelectorAll("[data-focus-regimen-search]").forEach(button => button.addEventListener("click", focusSearch));
     const box = modal();
-    box?.addEventListener("click", event => {
-      if (event.target?.classList?.contains("study-modal-backdrop")) closeWelcome();
-    });
+    box?.addEventListener("click", event => { if (event.target?.classList?.contains("study-modal-backdrop")) closeWelcome(); });
     document.addEventListener("keydown", event => {
       if (box?.hidden !== false) return;
       if (event.key === "Escape") { event.preventDefault(); closeWelcome(); return; }
@@ -67,19 +56,32 @@
   else bind();
 })(typeof globalThis !== "undefined" ? globalThis : this);
 
-/* v0.71.0: load the regimen-specific consent builder without changing the
-   historical feasibility-study module version or requiring an index.html edit. */
+/* v0.71.2a: force the current consent runtime instead of an old cached builder. */
 (function(root){
   "use strict";
+  const CONSENT_RELEASE="0.71.2";
   if(!root?.document?.createElement||!root.document.head?.appendChild) return;
+
   function loadConsentBuilder(){
-    if(root.document.querySelector('script[data-regimen-consent-builder]')) return;
+    const existing=root.document.querySelector('script[data-regimen-consent-builder]');
+    const liveRelease=root.SACTCheckRegimenConsentBuilder?.release;
+
+    if(existing && liveRelease===CONSENT_RELEASE) return;
+
+    if(existing) existing.remove();
+    if(liveRelease && liveRelease!==CONSENT_RELEASE){
+      try{ delete root.SACTCheckRegimenConsentBuilder; }
+      catch(_){ root.SACTCheckRegimenConsentBuilder=undefined; }
+    }
+
     const script=root.document.createElement("script");
-    script.src="js/regimen-consent-builder-v0710.js?v=0.71.0";
+    script.src=`js/regimen-consent-builder-v0710.js?v=${CONSENT_RELEASE}&loader=0712a`;
     script.defer=true;
     script.dataset.regimenConsentBuilder="true";
+    script.dataset.consentRelease=CONSENT_RELEASE;
     root.document.head.appendChild(script);
   }
+
   if(root.document.readyState==="loading") root.document.addEventListener("DOMContentLoaded",loadConsentBuilder,{once:true});
   else loadConsentBuilder();
 })(typeof globalThis!=="undefined"?globalThis:this);

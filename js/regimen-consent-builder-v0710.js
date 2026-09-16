@@ -457,7 +457,16 @@
   }
 
   async function ensurePdfExporter(){
-    if(root?.SACTCheckConsentPdf?.download) return root.SACTCheckConsentPdf;
+    // Never reuse an older consent PDF exporter left in an already-open browser tab.
+    if(root?.SACTCheckConsentPdf?.download && root.SACTCheckConsentPdf?.release===RELEASE){
+      return root.SACTCheckConsentPdf;
+    }
+    if(root?.SACTCheckConsentPdf?.download && root.SACTCheckConsentPdf?.release!==RELEASE){
+      const stale=root.document?.querySelector?.('script[data-consent-pdf-exporter]');
+      stale?.remove?.();
+      try{ delete root.SACTCheckConsentPdf; }catch(_){ root.SACTCheckConsentPdf=undefined; }
+      pdfPromise=null;
+    }
     if(pdfPromise) return pdfPromise;
     if(!root?.document) throw new Error("PDF exporter unavailable outside the browser.");
     pdfPromise=new Promise((resolve,reject)=>{
