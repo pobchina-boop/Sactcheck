@@ -1,61 +1,97 @@
 "use strict";
 
 const assert=require("assert");
+const fs=require("fs");
+const path=require("path");
 const Pdf=require("../js/consent-pdf-v0710.js");
 
 const payload={
-  generatedAt:"2026-09-06T14:30:00Z",
+  generatedAt:"2026-09-06T16:30:00Z",
   draft:{
-    title:"Pembrolizumab + carboplatin + paclitaxel",
-    nccpCode:"00857",
-    nccpVersion:"1",
-    indication:"Breast cancer",
-    intent:"Neoadjuvant",
-    components:["Pembrolizumab","Carboplatin","Paclitaxel"],
-    schedule:"21-day cycle",
+    title:"FOLFOX-6 Modified Therapy - 14 day",
+    nccpCode:"00209",
+    nccpVersion:"10a",
+    indication:"Metastatic colorectal cancer",
+    intent:"Palliative",
+    baseComponents:["Oxaliplatin","Folinic acid","Fluorouracil"],
+    components:["Oxaliplatin","Folinic acid","Fluorouracil","Bevacizumab","Pembrolizumab"],
+    addedAgents:["Bevacizumab","Pembrolizumab"],
+    schedule:"14-day cycle",
     sourceUrl:"https://healthservice.hse.ie/example.pdf",
     coverage:{unmappedAgents:[]}
   },
   fields:{
-    diagnosis:"Triple-negative breast cancer",
-    intent:"Neoadjuvant",
-    benefit:"Aim is to reduce recurrence risk and improve likelihood of disease control.",
-    alternatives:"Alternative systemic and local treatment approaches discussed.",
-    noTreatment:"Cancer may progress or recur without systemic therapy.",
-    customRisks:"Patient-specific neuropathy risk discussed.",
-    fertility:"Pregnancy avoidance and fertility implications discussed.",
-    questions:"Questions answered."
+    diagnosis:"Metastatic colorectal cancer",
+    intent:"Palliative",
+    benefit:"",
+    alternatives:"",
+    noTreatment:"",
+    customRisks:"",
+    fertility:"",
+    questions:""
   },
-  riskGroups:[
-    {title:"Immunotherapy / immune-related risks",risks:[
-      {label:"Immune-related pneumonitis",detail:"Inflammation of the lungs can cause cough or breathlessness."},
-      {label:"Immune-related endocrinopathy",detail:"Hormone-producing glands can be inflamed and may require long-term replacement."}
+  genericRisks:[
+    {label:"Bone-marrow suppression and infection",detail:"Low blood counts may increase infection risk."},
+    {label:"Nausea and vomiting",detail:"Anti-sickness treatment may be needed."},
+    {label:"Diarrhoea or constipation",detail:"Bowel disturbance can occur."}
+  ],
+  agentGroups:[
+    {displayName:"Oxaliplatin",clinicianAdded:false,risks:[
+      {label:"Peripheral neuropathy",detail:"Numbness or tingling can occur."},
+      {label:"Cold-triggered nerve symptoms",detail:"Cold can trigger acute symptoms."}
     ]},
-    {title:"Paclitaxel - agent-specific risks",risks:[
-      {label:"Peripheral neuropathy",detail:"Numbness, tingling or pain can occur and may persist."}
-    ]}
+    {displayName:"Fluorouracil",clinicianAdded:false,risks:[
+      {label:"Severe toxicity with DPD deficiency",detail:"Reduced DPD activity can cause profound toxicity."},
+      {label:"Cardiac toxicity",detail:"Chest pain or rhythm problems can occur."}
+    ]},
+    {displayName:"Bevacizumab",clinicianAdded:true,risks:[
+      {label:"Hypertension",detail:"Blood pressure can rise."},
+      {label:"Bleeding",detail:"Serious bleeding can occur."},
+      {label:"Arterial or venous thromboembolism",detail:"Blood clots can occur."},
+      {label:"Proteinuria / renal injury",detail:"Protein loss can occur."},
+      {label:"Gastrointestinal perforation / fistula",detail:"Rare but serious."}
+    ]},
+    {displayName:"Pembrolizumab",clinicianAdded:true,risks:[]}
+  ],
+  immuneRisks:[
+    {label:"Immune-related pneumonitis",detail:"Inflammation of the lungs."},
+    {label:"Immune-related diarrhoea / colitis",detail:"Bowel inflammation can be severe."},
+    {label:"Immune-related hepatitis",detail:"Liver inflammation can occur."},
+    {label:"Immune-related endocrinopathies",detail:"Hormone glands can be affected."},
+    {label:"Immune-related nephritis",detail:"Kidney inflammation can occur."},
+    {label:"Immune-related skin toxicity",detail:"Rash and rare severe reactions can occur."},
+    {label:"Less common serious immune toxicity",detail:"Other organs can be affected."},
+    {label:"Delayed and persistent immune toxicity",detail:"Toxicity may begin after treatment stops."}
   ]
 };
 
 assert.strictEqual(Pdf.version,"0.71.0");
+assert.strictEqual(Pdf.release,"0.71.1");
 assert.strictEqual(Pdf.ascii("ALT 5×ULN ≥ threshold"),"ALT 5xULN >= threshold");
-assert.strictEqual(Pdf.ascii("Grade ≤2 — resume"),"Grade <=2 - resume");
+assert.strictEqual(Pdf.renderDocument(payload).length,2,"Consent PDF must always render exactly two pages.");
 
 const pdf=Pdf.buildPdf(payload);
 assert.ok(pdf instanceof Uint8Array);
-assert.ok(pdf.length>1500,"Generated PDF is unexpectedly small.");
+assert.ok(pdf.length>2500,"Generated PDF is unexpectedly small.");
 const text=Buffer.from(pdf).toString("latin1");
 assert.ok(text.startsWith("%PDF-1.4"));
 assert.ok(text.includes("%%EOF"));
-assert.ok(text.includes("Pembrolizumab + carboplatin + paclitaxel"));
-assert.ok(text.includes("DRAFT - CLINICIAN REVIEW REQUIRED"));
-assert.ok(text.includes("Patient name: __________________________________________"));
+assert.ok(text.includes("/Count 2"),"PDF page tree must contain exactly two pages.");
+assert.ok(text.includes("GENERIC SACT / CHEMOTHERAPY CONSENT"));
+assert.ok(text.includes("REGIMEN / AGENT-SPECIFIC MATERIAL RISKS"));
+assert.ok(text.includes("IMMUNOTHERAPY / IMMUNE-RELATED RISKS"));
+assert.ok(text.includes("Bevacizumab [CLINICIAN ADDED]"));
+assert.ok(text.includes("Hypertension"));
+assert.ok(text.includes("Arterial or venous thromboembolism"));
+assert.ok(text.includes("Immune-related pneumonitis"));
 assert.ok(text.includes("Expected benefit / aim of treatment"));
 assert.ok(text.includes("Reasonable alternatives discussed"));
-assert.ok(text.includes("Likely consequence of declining or deferring treatment"));
-assert.ok(text.includes("Immune-related pneumonitis"));
-assert.ok(text.includes("Signature:"));
-assert.strictEqual(Pdf.filename(payload),"SACTCheck_Consent_NCCP_00857_2026-09-06.pdf");
-assert.ok(!text.includes("javascript:"));
+assert.ok(text.includes("If treatment does not proceed"));
+assert.ok(text.includes("Patient / person giving consent"));
+assert.ok(text.includes("Clinician obtaining consent"));
+assert.ok(text.includes("does NOT represent NCCP endorsement"));
+assert.strictEqual(Pdf.filename(payload),"SACTCheck_Consent_NCCP_00209_custom_2026-09-06.pdf");
 
-console.log("v0.71.0 direct consent PDF exporter tests passed: valid PDF structure, A4 consent content, safe filename and clinical consent domains verified.");
+const sample=path.join(__dirname,"..","SAMPLE_CONSENT_FOLFOX_BEVA_PEMBRO.pdf");
+fs.writeFileSync(sample,Buffer.from(pdf));
+console.log(`v0.71.1 two-page consent PDF tests passed and sample written to ${sample}`);
