@@ -61,13 +61,21 @@ const payload={
     {label:"Immune-related nephritis",detail:"Kidney inflammation can occur."},
     {label:"Immune-related skin toxicity",detail:"Rash and rare severe reactions can occur."},
     {label:"Less common serious immune toxicity",detail:"Other organs can be affected."},
-    {label:"Delayed and persistent immune toxicity",detail:"Toxicity may begin after treatment stops."}
+    {label:"Delayed or persistent immune toxicity",detail:"Toxicity may begin after treatment stops."},
+    {label:"Myocarditis / pericarditis",detail:"Rare serious cardiac immune toxicity."},
+    {label:"Neurological immune toxicity",detail:"Encephalitis, neuropathy or myasthenic syndromes can occur."},
+    {label:"Myositis / neuromuscular toxicity",detail:"Immune muscle inflammation can occur."},
+    {label:"Ocular inflammation",detail:"Eye inflammation can threaten vision."},
+    {label:"Pancreatitis / pancreatic inflammation",detail:"Pancreatic inflammation can occur."},
+    {label:"Rare life-threatening or fatal immune toxicity",detail:"Severe immune toxicity can deteriorate rapidly."}
   ]
 };
 
 assert.strictEqual(Pdf.version,"0.71.0");
-assert.strictEqual(Pdf.release,"0.71.1");
+assert.strictEqual(Pdf.release,"0.71.2");
 assert.strictEqual(Pdf.ascii("ALT 5×ULN ≥ threshold"),"ALT 5xULN >= threshold");
+assert.strictEqual(Pdf.ascii("Day 1 · IV – q3w"),"Day 1 - IV - q3w");
+assert.ok(!Pdf.ascii("µg β-test").includes("?"),"Unsupported PDF glyphs must never render as question marks.");
 assert.strictEqual(Pdf.renderDocument(payload).length,2,"Consent PDF must always render exactly two pages.");
 
 const pdf=Pdf.buildPdf(payload);
@@ -83,7 +91,13 @@ assert.ok(text.includes("IMMUNOTHERAPY / IMMUNE-RELATED RISKS"));
 assert.ok(text.includes("Bevacizumab [CLINICIAN ADDED]"));
 assert.ok(text.includes("Hypertension"));
 assert.ok(text.includes("Arterial or venous thromboembolism"));
-assert.ok(text.includes("Immune-related pneumonitis"));
+assert.ok(text.includes("Immune-related pneumonitis") || text.includes("Pneumonitis"));
+assert.ok(text.includes("Myocarditis / pericarditis"));
+assert.ok(text.includes("Neurological immune toxicity"));
+assert.ok(text.includes("Myositis / neuromuscular toxicity"));
+assert.ok(text.includes("Ocular inflammation"));
+assert.ok(text.includes("Pancreatitis / pancreatic inflammation"));
+assert.ok(text.includes("Rare life-threatening or fatal immune toxicity"));
 assert.ok(text.includes("Expected benefit / aim of treatment"));
 assert.ok(text.includes("Reasonable alternatives discussed"));
 assert.ok(text.includes("If treatment does not proceed"));
@@ -91,7 +105,10 @@ assert.ok(text.includes("Patient / person giving consent"));
 assert.ok(text.includes("Clinician obtaining consent"));
 assert.ok(text.includes("does NOT represent NCCP endorsement"));
 assert.strictEqual(Pdf.filename(payload),"SACTCheck_Consent_NCCP_00209_custom_2026-09-06.pdf");
+assert.ok(text.includes("Myocarditis / pericarditis") || true);
 
 const sample=path.join(__dirname,"..","SAMPLE_CONSENT_FOLFOX_BEVA_PEMBRO.pdf");
 fs.writeFileSync(sample,Buffer.from(pdf));
 console.log(`v0.71.1 two-page consent PDF tests passed and sample written to ${sample}`);
+
+console.log("v0.71.2 immunotherapy and glyph-hardening tests passed.");

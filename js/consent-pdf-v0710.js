@@ -17,7 +17,7 @@
 
   // Historical exporter identifier retained for cumulative regression compatibility.
   const VERSION='0.71.0';
-  const RELEASE='0.71.1';
+  const RELEASE='0.71.2';
   const PAGE_W=595.28;
   const PAGE_H=841.89;
   const MARGIN=34;
@@ -27,25 +27,41 @@
 
   function ascii(value){
     return String(value??'')
+      .replace(/\u00A0/g,' ')
       .replace(/×/g,'x')
       .replace(/≥/g,'>=')
       .replace(/≤/g,'<=')
-      .replace(/[–—]/g,'-')
+      .replace(/±/g,'+/-')
+      .replace(/µ|μ/g,'micro')
+      .replace(/α/g,'alpha')
+      .replace(/β/g,'beta')
+      .replace(/[‐‑‒–—―]/g,'-')
       .replace(/→/g,'->')
-      .replace(/[‘’]/g,"'")
-      .replace(/[“”]/g,'"')
+      .replace(/[‘’‚‛]/g,"'")
+      .replace(/[“”„‟]/g,'"')
       .replace(/…/g,'...')
-      .replace(/•/g,'-')
-      .replace(/□/g,'[ ]')
-      .replace(/✓/g,'[x]')
+      .replace(/[•·]/g,'-')
+      .replace(/[□☐]/g,'[ ]')
+      .replace(/[✓✔☑]/g,'[x]')
       .replace(/®/g,'(R)')
       .replace(/™/g,'(TM)')
+      .replace(/⁰/g,'^0')
+      .replace(/¹/g,'^1')
       .replace(/²/g,'^2')
       .replace(/³/g,'^3')
+      .replace(/⁴/g,'^4')
+      .replace(/⁵/g,'^5')
+      .replace(/⁶/g,'^6')
+      .replace(/⁷/g,'^7')
+      .replace(/⁸/g,'^8')
       .replace(/⁹/g,'^9')
       .normalize('NFKD')
       .replace(/[\u0300-\u036f]/g,'')
-      .replace(/[^\x09\x0A\x0D\x20-\x7E]/g,'?');
+      // Never emit placeholder question marks for unsupported glyphs in a
+      // consent form. Strip them after explicit clinical-symbol normalisation.
+      .replace(/[^\x09\x0A\x0D\x20-\x7E]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
   }
 
   function pdfEscape(value){
@@ -322,17 +338,50 @@
   function renderImmune(page,p){
     if(!p.immuneRisks.length) return;
     page.y=page.sectionTitle('3. IMMUNOTHERAPY / IMMUNE-RELATED RISKS',page.y);
-    const labels=[...new Set(p.immuneRisks.map(item=>item.label))];
+
+    const priorityOrder=[
+      'Pneumonitis',
+      'Diarrhoea / colitis',
+      'Hepatitis',
+      'Endocrine toxicity',
+      'Nephritis',
+      'Severe skin toxicity',
+      'Myocarditis / pericarditis',
+      'Neurological immune toxicity',
+      'Myositis / neuromuscular toxicity',
+      'Ocular inflammation',
+      'Pancreatitis / pancreatic inflammation',
+      'Delayed or persistent immune toxicity',
+      'Rare life-threatening or fatal immune toxicity',
+      'Infusion / administration reaction',
+      'Steroids / immunosuppression / hormone replacement'
+    ];
+    const byLabel=new Map(p.immuneRisks.map(item=>[ascii(item.label),item]));
+    const ordered=[];
+    priorityOrder.forEach(label=>{
+      const hit=byLabel.get(ascii(label));
+      if(hit){ ordered.push(hit); byLabel.delete(ascii(label)); }
+    });
+    byLabel.forEach(item=>ordered.push(item));
+
+    const labels=ordered.map(item=>item.label);
     const gap=16;
     const colW=(CONTENT_W-gap)/2;
     const half=Math.ceil(labels.length/2);
     let leftY=page.y;
     let rightY=page.y;
-    labels.slice(0,half).forEach(text=>{ leftY=page.check(text,LEFT,leftY,colW,{size:7.4,leading:8.8,maxLines:2}); });
-    labels.slice(half).forEach(text=>{ rightY=page.check(text,LEFT+colW+gap,rightY,colW,{size:7.4,leading:8.8,maxLines:2}); });
-    page.y=Math.min(leftY,rightY)-7;
-    page.paragraph('Immune-related adverse events can affect almost any organ, may occur during or after treatment, and can require steroids, other immunosuppression, hormone replacement, hospital care, treatment interruption or permanent discontinuation.',LEFT,page.y,CONTENT_W,{size:7.1,bold:true,leading:8.6,maxLines:3});
-    page.y-=31;
+    labels.slice(0,half).forEach(text=>{
+      leftY=page.check(text,LEFT,leftY,colW,{size:7.15,leading:8.25,maxLines:2});
+    });
+    labels.slice(half).forEach(text=>{
+      rightY=page.check(text,LEFT+colW+gap,rightY,colW,{size:7.15,leading:8.25,maxLines:2});
+    });
+    page.y=Math.min(leftY,rightY)-5;
+    page.paragraph(
+      'Immune toxicity can affect almost any organ, may begin during treatment or after treatment has stopped, and can occasionally be life-threatening. New significant symptoms require prompt assessment; treatment may require steroids, other immunosuppression or hormone replacement.',
+      LEFT,page.y,CONTENT_W,{size:6.9,bold:true,leading:8.1,maxLines:3}
+    );
+    page.y-=27;
   }
 
   function renderConsentDiscussion(page,p){

@@ -19,9 +19,9 @@
 
   // Historical content-library marker retained for cumulative regression compatibility.
   const VERSION="0.71.0";
-  const RELEASE="0.71.1";
+  const RELEASE="0.71.2";
   const CONTENT_URL="data/consent-content-v0710.json";
-  const PDF_URL="js/consent-pdf-v0710.js?v=0.71.1";
+  const PDF_URL="js/consent-pdf-v0710.js?v=0.71.2";
   const addedAgentsByProtocol=new Map();
   let contentCache=null;
   let contentPromise=null;
@@ -192,22 +192,88 @@
     return labels.length?[...new Set(labels)].join(" / "):"Clinician to confirm treatment intent";
   }
 
+  function displayDrugName(value){
+    return String(value||"")
+      .replace(/_/g," ")
+      .replace(/\s+/g," ")
+      .trim()
+      .replace(/\b\w/g,c=>c.toUpperCase());
+  }
+
+  function displayRoute(value){
+    const route=String(value||"").toLowerCase().trim();
+    const map={
+      iv:"IV",intravenous:"IV",
+      po:"oral",oral:"oral",
+      sc:"SC",subcutaneous:"SC",
+      im:"IM",intramuscular:"IM"
+    };
+    return map[route]||String(value||"").trim();
+  }
+
+  function dayValues(item){
+    if(Array.isArray(item?.days)) return item.days.filter(v=>v!==undefined&&v!==null&&v!=="").map(String);
+    if(item?.day!==undefined&&item?.day!==null&&item?.day!=="") return [String(item.day)];
+    return [];
+  }
+
   function scheduleSummary(protocol){
     const phases=asArray(protocol?.treatment_phases);
-    const parts=[];
-    phases.slice(0,4).forEach(phase=>{
-      const cycle=Number(phase?.cycle_length_days);
+    const phaseSummaries=[];
+
+    phases.forEach((phase,phaseIndex)=>{
       const administrations=asArray(phase?.administration);
-      const days=[...new Set(administrations.map(item=>item?.day).filter(Boolean).map(String))];
-      const medicines=[...new Set(administrations.map(item=>item?.drug||item?.name).filter(Boolean)
-        .map(value=>String(value).replace(/[_-]+/g," ")))];
-      const items=[];
-      if(cycle) items.push(`${cycle}-day cycle`);
-      if(days.length) items.push(`day${days.length>1?"s":""} ${days.join(", ")}`);
-      if(medicines.length&&phases.length>1) items.push(medicines.join(" + "));
-      if(items.length) parts.push(items.join(" · "));
+      const cycle=Number(phase?.cycle_length_days);
+      const phaseName=String(phase?.name||phase?.label||phase?.phase_name||"").trim();
+      const grouped=new Map();
+
+      administrations.forEach(item=>{
+        const days=dayValues(item);
+        const drug=displayDrugName(item?.drug||item?.name||item?.medicine);
+        const route=displayRoute(item?.route||item?.administration_route||item?.route_of_administration);
+        if(!drug) return;
+        const drugLabel=route?`${drug} (${route})`:drug;
+        if(days.length){
+          days.forEach(day=>{
+            const key=String(day);
+            if(!grouped.has(key)) grouped.set(key,[]);
+            grouped.get(key).push(drugLabel);
+          });
+        }else{
+          if(!grouped.has("unspecified")) grouped.set("unspecified",[]);
+          grouped.get("unspecified").push(drugLabel);
+        }
+      });
+
+      const dayOrder=[...grouped.keys()].sort((a,b)=>{
+        if(a==="unspecified") return 1;
+        if(b==="unspecified") return -1;
+        const an=Number(String(a).replace(/[^\d.]/g,""));
+        const bn=Number(String(b).replace(/[^\d.]/g,""));
+        return (Number.isFinite(an)?an:999)-(Number.isFinite(bn)?bn:999);
+      });
+
+      const dayText=dayOrder.map(day=>{
+        const medicines=[...new Set(grouped.get(day))];
+        return day==="unspecified"
+          ? medicines.join(" + ")
+          : `Day ${day}: ${medicines.join(" + ")}`;
+      }).filter(Boolean);
+
+      if(!dayText.length) return;
+
+      const prefix=[];
+      if(phaseName && phases.length>1) prefix.push(phaseName);
+      if(cycle) prefix.push(`${cycle}-day cycle`);
+      const heading=prefix.length?`${prefix.join(" - ")}: `:"";
+      phaseSummaries.push(`${heading}${dayText.join("; ")}`);
     });
-    return parts.length?parts.join(" -> "):"Confirm schedule against the current NCCP regimen.";
+
+    // Do not invent a schedule from a free-text title. If structured regimen
+    // administration data are unavailable, force explicit source verification.
+    return phaseSummaries.length
+      ? phaseSummaries.join(" -> ")
+      : "Structured schedule unavailable - verify against the current NCCP regimen.";
   }
 
   function getAddedAgentKeys(protocolOrId){
@@ -753,6 +819,7 @@
   // Compatibility text retained for cumulative safety tests:
   // Generic chemotherapy
   // Immunotherapy / immune-related risks
+  // Explicit serious irAEs: myocarditis/pericarditis, neurological immune toxicity including encephalitis, myasthenic syndromes, ocular inflammation and pancreatitis
   // Agent-specific content requiring manual completion
   // Patient identifiers are intentionally not entered into or stored by SACTCheck.
   // Reasonable alternatives
@@ -762,11 +829,11 @@
   function install(){
     if(!root?.document) return;
     const html=root.document.documentElement;
-    if(html?.dataset?.consentBuilderInstalled==="v0711"){
+    if(html?.dataset?.consentBuilderInstalled==="v0712"){
       refreshButtons();
       return;
     }
-    if(html) html.dataset.consentBuilderInstalled="v0711";
+    if(html) html.dataset.consentBuilderInstalled="v0712";
     ensureStyles();
     ensureAgentPicker();
     applyReleaseLabel();

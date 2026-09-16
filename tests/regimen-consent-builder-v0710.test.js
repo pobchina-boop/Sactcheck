@@ -48,7 +48,7 @@ for(let i=0;i<40;i++){
 const validation=Builder.validateContent(content);
 assert.ok(validation.valid,validation.errors.join("; "));
 assert.strictEqual(Builder.version,"0.71.0");
-assert.strictEqual(Builder.release,"0.71.1");
+assert.strictEqual(Builder.release,"0.71.2");
 
 const folfox={
   protocol_id:"test-folfox",
@@ -121,3 +121,29 @@ assert.ok(source.includes("Reasonable alternatives"));
 assert.ok(source.includes("If treatment does not proceed"));
 
 console.log("v0.71.1 streamlined consent builder tests passed: direct PDF workflow, trade-name agent search, modular added-agent composition and automatic immunotherapy activation verified.");
+
+
+// v0.71.2: schedule must be generated from structured NCCP-regimen administration data.
+const scheduleProtocol={
+  protocol_id:"structured-schedule",
+  metadata:{title:"Structured schedule",nccp_regimen_code:"99999"},
+  treatment_phases:[{
+    name:"Induction",
+    cycle_length_days:21,
+    administration:[
+      {day:1,drug:"atezolizumab",route:"IV"},
+      {day:1,drug:"bevacizumab",route:"intravenous"},
+      {day:8,drug:"paclitaxel",route:"IV"}
+    ]
+  }]
+};
+const structured=Builder.scheduleSummary(scheduleProtocol);
+assert.ok(structured.includes("21-day cycle"));
+assert.ok(structured.includes("Day 1: Atezolizumab (IV) + Bevacizumab (IV)"));
+assert.ok(structured.includes("Day 8: Paclitaxel (IV)"));
+assert.ok(!structured.includes("?"),"Structured schedule must not contain replacement question marks.");
+
+const noSchedule=Builder.scheduleSummary({protocol_id:"none",metadata:{}});
+assert.strictEqual(noSchedule,"Structured schedule unavailable - verify against the current NCCP regimen.");
+
+console.log("v0.71.2 schedule hardening tests passed.");
