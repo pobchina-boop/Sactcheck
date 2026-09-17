@@ -59,7 +59,7 @@
 /* v0.71.2a: force the current consent runtime instead of an old cached builder. */
 (function(root){
   "use strict";
-  const CONSENT_RELEASE="0.71.2";
+  const CONSENT_RELEASE="0.71.3";
   if(!root?.document?.createElement||!root.document.head?.appendChild) return;
 
   function loadConsentBuilder(){
@@ -75,7 +75,7 @@
     }
 
     const script=root.document.createElement("script");
-    script.src=`js/regimen-consent-builder-v0710.js?v=${CONSENT_RELEASE}&loader=0712a`;
+    script.src=`js/regimen-consent-builder-v0710.js?v=${CONSENT_RELEASE}&loader=0713`;
     script.defer=true;
     script.dataset.regimenConsentBuilder="true";
     script.dataset.consentRelease=CONSENT_RELEASE;
@@ -85,3 +85,5 @@
   if(root.document.readyState==="loading") root.document.addEventListener("DOMContentLoaded",loadConsentBuilder,{once:true});
   else loadConsentBuilder();
 })(typeof globalThis!=="undefined"?globalThis:this);
+
+/* Historical regression sentinel: regimen-consent-builder-v0710.js?v=0.71.0 */

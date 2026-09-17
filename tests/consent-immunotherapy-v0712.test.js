@@ -28,3 +28,11 @@ assert.ok(/myasthen/i.test(neuro.detail));
 const cardiac=risks.find(item=>item.label==="Myocarditis / pericarditis");
 assert.ok(/life-threatening/i.test(cardiac.detail));
 console.log("v0.71.2 consent-content immunotherapy audit tests passed.");
+
+const atezo=content.agent_profiles.atezolizumab;
+assert.strictEqual(atezo.immune_core_frequency_estimates.nephritis.display,"0.2%*");
+assert.strictEqual(atezo.immune_core_frequency_estimates.skin.display,"0.6%*");
+assert.ok(atezo.rare_immune_events.some(item=>item.label==="Myocarditis" && item.frequency==="<0.1%*"));
+assert.ok(atezo.rare_immune_events.some(item=>item.label==="Meningoencephalitis" && item.frequency==="0.4%*"));
+assert.ok(atezo.immune_frequency_source.url.includes("medicines.org.uk/emc/product/8442/smpc"));
+console.log("v0.71.3 atezolizumab frequency-evidence metadata tests passed.");

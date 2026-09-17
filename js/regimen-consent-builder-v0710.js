@@ -19,9 +19,9 @@
 
   // Historical content-library marker retained for cumulative regression compatibility.
   const VERSION="0.71.0";
-  const RELEASE="0.71.2";
+  const RELEASE="0.71.3";
   const CONTENT_URL="data/consent-content-v0710.json";
-  const PDF_URL="js/consent-pdf-v0710.js?v=0.71.2";
+  const PDF_URL="js/consent-pdf-v0710.js?v=0.71.3";
   const addedAgentsByProtocol=new Map();
   let contentCache=null;
   let contentPromise=null;
@@ -166,6 +166,64 @@
       detail:risk.detail,
       tier:risk.tier||"important",
       ...extra
+    };
+  }
+
+  const IMMUNE_CORE_IDS=Object.freeze(["pneumonitis","colitis","hepatitis","endocrine","nephritis","skin"]);
+  const IMMUNE_ADDITIONAL_KEEP=Object.freeze(["delayed","management","rare_fatal"]);
+
+  function immuneRiskById(content,id){
+    return asArray(content?.generic_modules?.immune_checkpoint_inhibitor?.risks).find(r=>r?.id===id)||null;
+  }
+
+  function immuneCoreRisksForAgent(item,content){
+    if(item?.profile?.module!=="immune_checkpoint_inhibitor") return [];
+    const estimates=item.profile?.immune_core_frequency_estimates||{};
+    return IMMUNE_CORE_IDS.map(id=>{
+      const risk=immuneRiskById(content,id);
+      if(!risk) return null;
+      const freq=estimates[id]?.display||"";
+      return normaliseRisk(risk,`agent:${item.key}:immune-core`,{
+        group:item.profile.display_name,
+        agentKey:item.key,
+        immuneCore:true,
+        frequency:freq
+      });
+    }).filter(Boolean);
+  }
+
+  function additionalImmuneRisks(classification,content){
+    const mappedIci=classification.mappedAgents.filter(item=>item.profile?.module==="immune_checkpoint_inhibitor");
+    const base=asArray(content?.generic_modules?.immune_checkpoint_inhibitor?.risks)
+      .filter(r=>!IMMUNE_CORE_IDS.includes(r.id) && IMMUNE_ADDITIONAL_KEEP.includes(r.id))
+      .map(r=>normaliseRisk(r,"immune",{group:"Immunotherapy"}));
+
+    if(mappedIci.length!==1) return {risks:[
+      ...asArray(content?.generic_modules?.immune_checkpoint_inhibitor?.risks)
+        .filter(r=>!IMMUNE_CORE_IDS.includes(r.id))
+        .map(r=>normaliseRisk(r,"immune",{group:"Immunotherapy"}))
+    ],frequencySource:null};
+
+    const item=mappedIci[0];
+    const events=asArray(item.profile?.rare_immune_events);
+    if(!events.length) return {risks:[
+      ...asArray(content?.generic_modules?.immune_checkpoint_inhibitor?.risks)
+        .filter(r=>!IMMUNE_CORE_IDS.includes(r.id))
+        .map(r=>normaliseRisk(r,"immune",{group:"Immunotherapy"}))
+    ],frequencySource:null};
+
+    const specific=events.map(event=>({
+      id:`immune:rare:${item.key}:${event.id}`,
+      label:event.label,
+      detail:event.detail||"",
+      tier:"serious",
+      frequency:event.frequency||"",
+      agentKey:item.key,
+      evidenceSpecific:true
+    }));
+    return {
+      risks:[...specific,...base],
+      frequencySource:item.profile?.immune_frequency_source||null
     };
   }
 
@@ -366,24 +424,29 @@
       ? asArray(content?.generic_modules?.cytotoxic_chemotherapy?.risks)
           .map(r=>normaliseRisk(r,"chemo",{group:"Generic chemotherapy"}))
       : [];
-    const immunotherapy=includeImmunotherapy
-      ? asArray(content?.generic_modules?.immune_checkpoint_inhibitor?.risks)
-          .map(r=>normaliseRisk(r,"immune",{group:"Immunotherapy"}))
-      : [];
+    const immuneAdditional=includeImmunotherapy
+      ? additionalImmuneRisks(classification,content)
+      : {risks:[],frequencySource:null};
+    const immunotherapy=immuneAdditional.risks;
 
-    const agentGroups=includeAgents?classification.mappedAgents.map(item=>({
-      key:item.key,
-      component:item.component,
-      displayName:item.profile.display_name,
-      module:item.profile.module||null,
-      clinicianAdded:Boolean(item.clinicianAdded),
-      reviewStatus:item.profile.review_status,
-      sourceBasis:item.profile.source_basis,
-      risks:asArray(item.profile.risks).map(r=>normaliseRisk(r,`agent:${item.key}`,{
+    const agentGroups=includeAgents?classification.mappedAgents.map(item=>{
+      const profileRisks=asArray(item.profile.risks).map(r=>normaliseRisk(r,`agent:${item.key}`,{
         group:item.profile.display_name,
         agentKey:item.key
-      }))
-    })):[];
+      }));
+      const coreImmune=immuneCoreRisksForAgent(item,content);
+      return {
+        key:item.key,
+        component:item.component,
+        displayName:item.profile.display_name,
+        module:item.profile.module||null,
+        category:item.profile.category||null,
+        clinicianAdded:Boolean(item.clinicianAdded),
+        reviewStatus:item.profile.review_status,
+        sourceBasis:item.profile.source_basis,
+        risks:[...coreImmune,...profileRisks]
+      };
+    }):[];
 
     const metadata=protocol.metadata||{};
     const addedAgents=agentGroups.filter(group=>group.clinicianAdded).map(group=>group.displayName);
@@ -413,6 +476,7 @@
       classification,
       genericChemo,
       immunotherapy,
+      immuneFrequencySource:immuneAdditional.frequencySource,
       agentGroups,
       coverage:{
         mapped:classification.mappedAgents.length,
@@ -527,24 +591,53 @@
       riskGroups,
       genericRisks:draft.genericChemo,
       agentGroups:draft.agentGroups,
-      immuneRisks:draft.immunotherapy
+      immuneRisks:draft.immunotherapy,
+      immuneFrequencySource:draft.immuneFrequencySource
     };
   }
 
-  async function generateConsentPdf(protocol){
+  function openPdfPlaceholder(){
+    if(!root?.open) return null;
+    const viewer=root.open("about:blank","_blank");
+    if(!viewer) return null;
+    try{
+      viewer.document.title="Preparing SACTCheck consent PDF";
+      viewer.document.body.innerHTML=
+        '<div style="font-family:Arial,sans-serif;padding:32px;color:#12314a">'+
+        '<h2 style="margin:0 0 8px">Preparing consent PDF...</h2>'+
+        '<p style="color:#5a6875">The PDF will open here when ready. You can then print or download it using your browser PDF controls.</p>'+
+        '</div>';
+    }catch(_){}
+    return viewer;
+  }
+
+  async function generateConsentPdf(protocol,viewerWindow=null){
     if(!protocol) return null;
     try{
       const [content,pdf]=await Promise.all([loadContent(),ensurePdfExporter()]);
       const addedKeys=getAddedAgentKeys(protocol);
       const payload=makePdfPayload(protocol,content,addedKeys);
-      const result=pdf.download(payload);
+      const result=pdf.openInViewer(payload,viewerWindow);
       const suffix=payload.draft.addedAgents.length
         ? ` with ${payload.draft.addedAgents.length} clinician-added agent${payload.draft.addedAgents.length===1?"":"s"}`
         : "";
-      root.showToast?.(`Two-page consent PDF generated${suffix}`);
+      if(result?.blocked){
+        root.showToast?.("Consent PDF popup was blocked");
+        root.alert?.("Your browser blocked the PDF viewer tab. Allow pop-ups for SACTCheck and try again.");
+      }else{
+        root.showToast?.(`Two-page consent PDF opened${suffix}`);
+      }
       return result;
     }catch(error){
       console.error("SACTCheck consent PDF generation failed",error);
+      try{
+        if(viewerWindow && !viewerWindow.closed){
+          viewerWindow.document.body.innerHTML=
+            '<div style="font-family:Arial,sans-serif;padding:32px;color:#7a1f1f">'+
+            '<h2>Consent PDF could not be generated</h2>'+
+            '<p>'+escapeHtml(error.message)+'</p></div>';
+        }
+      }catch(_){}
       root.showToast?.("Consent PDF could not be generated");
       root.alert?.(`Consent PDF could not be generated.\n\n${error.message}`);
       return null;
@@ -638,8 +731,9 @@
     modal.querySelector("[data-generate-custom-consent]")?.addEventListener("click",async()=>{
       if(!activePickerProtocol) return;
       const protocol=activePickerProtocol;
+      const viewer=openPdfPlaceholder();
       closeAgentPicker();
-      await generateConsentPdf(protocol);
+      await generateConsentPdf(protocol,viewer);
     });
     modal.querySelector("#consentAgentSearch")?.addEventListener("input",event=>{
       renderAgentSearchResults(event.target.value);
@@ -786,8 +880,9 @@
         consent.addEventListener("click",async event=>{
           event.preventDefault();
           event.stopPropagation();
+          const viewer=openPdfPlaceholder();
           const live=root.SACTCheckProtocolLoader?.getProtocolById?.(protocol.protocol_id)||protocol;
-          await generateConsentPdf(live);
+          await generateConsentPdf(live,viewer);
         });
         const info=actions.querySelector(".regimen-info-link");
         if(info) info.insertAdjacentElement("afterend",consent);
@@ -838,11 +933,11 @@
   function install(){
     if(!root?.document) return;
     const html=root.document.documentElement;
-    if(html?.dataset?.consentBuilderInstalled==="v0712"){
+    if(html?.dataset?.consentBuilderInstalled==="v0713"){
       refreshButtons();
       return;
     }
-    if(html) html.dataset.consentBuilderInstalled="v0712";
+    if(html) html.dataset.consentBuilderInstalled="v0713";
     ensureStyles();
     ensureAgentPicker();
     applyReleaseLabel();
@@ -880,6 +975,7 @@
     removeAgent,
     clearAddedAgents,
     makePdfPayload,
+    openPdfPlaceholder,
     generateConsentPdf,
     renderCardButtons,
     openAgentPicker,
@@ -888,3 +984,5 @@
     install
   });
 });
+
+// Historical regression sentinel: regimen-consent-builder-v0710.js?v=0.71.0

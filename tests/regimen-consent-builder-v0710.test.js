@@ -48,7 +48,7 @@ for(let i=0;i<40;i++){
 const validation=Builder.validateContent(content);
 assert.ok(validation.valid,validation.errors.join("; "));
 assert.strictEqual(Builder.version,"0.71.0");
-assert.strictEqual(Builder.release,"0.71.2");
+assert.strictEqual(Builder.release,"0.71.3");
 
 const folfox={
   protocol_id:"test-folfox",
@@ -90,8 +90,12 @@ assert.strictEqual(Builder.getAddedAgentKeys(folfox).length,1,"Duplicate agent a
 Builder.addAgent(folfox,"pembrolizumab");
 draft=Builder.buildDraft(folfox,content,{addedAgentKeys:Builder.getAddedAgentKeys(folfox)});
 assert.strictEqual(draft.classification.immunotherapy,true,"Adding an ICI must automatically activate the immunotherapy consent module.");
-assert.ok(draft.immunotherapy.some(item=>item.id==="immune:pneumonitis"));
-assert.ok(draft.agentGroups.find(group=>group.key==="pembrolizumab").clinicianAdded);
+const pembrolizumabGroup=draft.agentGroups.find(group=>group.key==="pembrolizumab");
+assert.ok(pembrolizumabGroup.clinicianAdded);
+assert.ok(pembrolizumabGroup.risks.some(item=>/pneumonitis/i.test(item.label)),
+  "Core ICI pneumonitis risk should render under the checkpoint-inhibitor agent.");
+assert.ok(draft.immunotherapy.some(item=>/Delayed/i.test(item.label)),
+  "Additional immune-risk section should retain delayed immune toxicity.");
 
 const payload=Builder.makePdfPayload(folfox,content,Builder.getAddedAgentKeys(folfox));
 assert.deepStrictEqual(payload.draft.addedAgents.sort(),["Bevacizumab","Pembrolizumab"].sort());
@@ -147,3 +151,37 @@ const noSchedule=Builder.scheduleSummary({protocol_id:"none",metadata:{}});
 assert.strictEqual(noSchedule,"Structured schedule unavailable - verify against the current NCCP regimen.");
 
 console.log("v0.71.2 schedule hardening tests passed.");
+
+
+// v0.71.3: checkpoint inhibitors must render the core six directly under the agent.
+const ROOT=path.resolve(__dirname,"..");
+const fullContent=JSON.parse(fs.readFileSync(path.join(ROOT,"data","consent-content-v0710.json"),"utf8"));
+const atezoProtocol={
+  protocol_id:"atezo-test",
+  metadata:{
+    nccp_regimen_code:"00688",nccp_version:"2a",
+    title:"Atezolizumab and nab-Paclitaxel",
+    indication:"Test indication",
+    treatment_class:["immunotherapy","cytotoxic_chemotherapy"],
+    cytotoxic:true
+  },
+  treatment_phases:[{cycle_length_days:28,administration:[
+    {day:1,drug:"atezolizumab",route:"IV"},
+    {day:1,drug:"nab-paclitaxel",route:"IV"}
+  ]}]
+};
+const atezoDraft=Builder.buildDraft(atezoProtocol,fullContent);
+const atezoGroup=atezoDraft.agentGroups.find(group=>group.key==="atezolizumab");
+assert(atezoGroup,"Atezolizumab agent group missing.");
+for(const label of ["Pneumonitis","Diarrhoea / colitis","Hepatitis","Endocrine toxicity","Nephritis","Severe skin toxicity"]){
+  assert.ok(atezoGroup.risks.some(r=>r.label===label),`Missing core ICI risk under atezolizumab: ${label}`);
+}
+assert.ok(!atezoGroup.risks.some(r=>/Review current medicine-specific material risks/i.test(r.label)),
+  "Checkpoint inhibitor agent card must not fall back to generic manual-review wording.");
+assert.ok(atezoDraft.immunotherapy.some(r=>r.label==="Myocarditis"));
+assert.ok(atezoDraft.immunotherapy.some(r=>r.label==="Meningoencephalitis"));
+assert.ok(atezoDraft.immunotherapy.some(r=>r.frequency==="<0.1%*"),
+  "Atezolizumab rare immune-event frequency data should be carried into the PDF payload.");
+assert.ok(atezoDraft.immuneFrequencySource?.population?.includes("5,039"));
+
+console.log("v0.71.3 ICI agent rendering and evidence-frequency tests passed.");

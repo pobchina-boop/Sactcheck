@@ -72,7 +72,7 @@ const payload={
 };
 
 assert.strictEqual(Pdf.version,"0.71.0");
-assert.strictEqual(Pdf.release,"0.71.2");
+assert.strictEqual(Pdf.release,"0.71.3");
 assert.strictEqual(Pdf.ascii("ALT 5×ULN ≥ threshold"),"ALT 5xULN >= threshold");
 assert.strictEqual(Pdf.ascii("Day 1 · IV – q3w"),"Day 1 - IV - q3w");
 assert.ok(!Pdf.ascii("µg β-test").includes("?"),"Unsupported PDF glyphs must never render as question marks.");
@@ -87,7 +87,7 @@ assert.ok(text.includes("%%EOF"));
 assert.ok(text.includes("/Count 2"),"PDF page tree must contain exactly two pages.");
 assert.ok(text.includes("GENERIC SACT / CHEMOTHERAPY CONSENT"));
 assert.ok(text.includes("REGIMEN / AGENT-SPECIFIC MATERIAL RISKS"));
-assert.ok(text.includes("IMMUNOTHERAPY / IMMUNE-RELATED RISKS"));
+assert.ok(text.includes("RARE / IMPORTANT IMMUNE-RELATED RISKS"));
 assert.ok(text.includes("Bevacizumab [CLINICIAN ADDED]"));
 assert.ok(text.includes("Hypertension"));
 assert.ok(text.includes("Arterial or venous thromboembolism"));
@@ -107,8 +107,59 @@ assert.ok(text.includes("does NOT represent NCCP endorsement"));
 assert.strictEqual(Pdf.filename(payload),"SACTCheck_Consent_NCCP_00209_custom_2026-09-06.pdf");
 assert.ok(text.includes("Myocarditis / pericarditis") || true);
 
-const sample=path.join(__dirname,"..","SAMPLE_CONSENT_FOLFOX_BEVA_PEMBRO.pdf");
-fs.writeFileSync(sample,Buffer.from(pdf));
-console.log(`v0.71.1 two-page consent PDF tests passed and sample written to ${sample}`);
 
-console.log("v0.71.2 immunotherapy and glyph-hardening tests passed.");
+console.log("v0.71.3 two-page consent, immunotherapy and glyph-hardening tests passed.");
+
+
+// v0.71.3 visual/evidence PDF checks.
+const visualPayload={
+  generatedAt:"2026-09-16T22:56:00Z",
+  draft:{
+    title:"Atezolizumab and nab-Paclitaxel",
+    nccpCode:"00688",nccpVersion:"2a",
+    indication:"PD-L1 positive advanced breast cancer",
+    intent:"Advanced/metastatic disease - clinician to confirm treatment intent",
+    baseComponents:["Nab-paclitaxel","Atezolizumab"],
+    components:["Nab-paclitaxel","Atezolizumab"],
+    addedAgents:[],schedule:"28-day cycle: Day 1 Atezolizumab (IV) + Nab-paclitaxel (IV)",
+    coverage:{unmappedAgents:[]}
+  },
+  fields:{diagnosis:"PD-L1 positive advanced breast cancer",intent:"Palliative"},
+  genericRisks:[{label:"Bone-marrow suppression and infection"}],
+  agentGroups:[
+    {displayName:"Nab-paclitaxel",module:null,category:"cytotoxic",risks:[
+      {label:"Peripheral neuropathy"},{label:"Myelosuppression"},{label:"Hair loss"}
+    ]},
+    {displayName:"Atezolizumab",module:"immune_checkpoint_inhibitor",category:"immunotherapy",risks:[
+      {label:"Pneumonitis"},{label:"Diarrhoea / colitis"},{label:"Hepatitis"},
+      {label:"Endocrine toxicity"},{label:"Nephritis",frequency:"0.2%*"},
+      {label:"Severe skin toxicity",frequency:"0.6%*"}
+    ]}
+  ],
+  immuneRisks:[
+    {label:"Myocarditis",frequency:"<0.1%*"},
+    {label:"Meningoencephalitis",frequency:"0.4%*"},
+    {label:"Guillain-Barre / demyelinating neuropathy",frequency:"0.1%*"},
+    {label:"Myasthenia gravis / myasthenic syndrome",frequency:"<0.1%*"},
+    {label:"Myositis",frequency:"0.6%*"},
+    {label:"Pancreatitis",frequency:"0.8%*"},
+    {label:"Pericardial disorders",frequency:"1.0%*"},
+    {label:"Ocular inflammation"},
+    {label:"Delayed or persistent immune toxicity"}
+  ],
+  immuneFrequencySource:{
+    label:"Tecentriq (atezolizumab) SmPC, section 4.8",
+    population:"Pooled atezolizumab monotherapy safety population (n=5,039)",
+    caveat:"risk may differ by indication, combination therapy, route and patient factors."
+  }
+};
+const visualPdf=Pdf.buildPdf(visualPayload);
+const visualText=Buffer.from(visualPdf).toString("latin1");
+assert.ok(visualText.includes("Atezolizumab"));
+assert.ok(visualText.includes("Nephritis \\(0.2%*\\)"));
+assert.ok(visualText.includes("Myocarditis \\(<0.1%*\\)"));
+assert.ok(visualText.includes("Pooled atezolizumab monotherapy safety population"));
+assert.ok(visualText.includes("0.071 0.192 0.290 rg"),"Expected navy RGB header styling is missing.");
+assert.ok(visualText.includes("0.920 0.980 0.970 rg"),"Expected pale-teal agent card styling is missing.");
+assert.ok(visualText.includes("/Count 2"),"Visual redesign must remain exactly two pages.");
+console.log("v0.71.3 colour layout and evidence-frequency PDF tests passed.");
