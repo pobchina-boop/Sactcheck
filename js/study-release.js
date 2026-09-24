@@ -87,3 +87,24 @@
 })(typeof globalThis!=="undefined"?globalThis:this);
 
 /* Historical regression sentinel: regimen-consent-builder-v0710.js?v=0.71.0 */
+
+/* v0.72.0: regimen-driven clinic workflow layer.
+   Loaded after the consent runtime so workflow actions can reuse the existing
+   consent PDF module without modifying historical index.html script ordering. */
+(function(root){
+  "use strict";
+  const WORKFLOW_RELEASE="0.72.0";
+  if(!root?.document?.createElement||!root.document.head?.appendChild) return;
+  function loadWorkflowEngine(){
+    if(root.SACTCheckRegimenWorkflow?.release===WORKFLOW_RELEASE) return;
+    const existing=root.document.querySelector('script[data-regimen-workflow-engine]');
+    existing?.remove?.();
+    const script=root.document.createElement("script");
+    script.src=`js/regimen-workflow-engine-v0720.js?v=${WORKFLOW_RELEASE}`;
+    script.defer=true;
+    script.dataset.regimenWorkflowEngine="true";
+    root.document.head.appendChild(script);
+  }
+  if(root.document.readyState==="loading") root.document.addEventListener("DOMContentLoaded",loadWorkflowEngine,{once:true});
+  else loadWorkflowEngine();
+})(typeof globalThis!=="undefined"?globalThis:this);
