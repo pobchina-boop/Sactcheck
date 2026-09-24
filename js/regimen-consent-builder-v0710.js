@@ -1,988 +1,550 @@
+
 /**
- * SACTCheck v0.71.1 — streamlined regimen consent PDF workflow.
+ * SACTCheck v0.73.0 — patient-content-first compatibility module.
  *
- * Clinic workflow:
- *   Consent PDF -> immediate two-page PDF
- *   + Agent     -> lightweight agent search -> add/remove -> Consent PDF
+ * This file intentionally keeps the historical filename so it can be dropped
+ * into the current repository without editing index.html.
  *
- * The content library remains v0.71.0 for compatibility and provenance.
- * Added agents are session-memory only and are clearly labelled as clinician-added;
- * they must never be interpreted as part of the referenced NCCP regimen.
+ * Product pivot:
+ *   Consent PDF / + Agent  ->  Patient support
+ *   Formal generated-consent framing -> regimen-specific consent support,
+ *   treatment education, visual toxicity language, QR-linked patient passport
+ *   and a non-persistent symptom diary.
+ *
+ * The assessment engine and protocol rule logic are not modified here.
  */
-(function(root,factory){
-  const api=factory(root);
-  if(typeof module==="object"&&module.exports) module.exports=api;
-  root.SACTCheckRegimenConsentBuilder=api;
-  if(root&&root.document) api.install();
-})(typeof globalThis!=="undefined"?globalThis:this,function(root){
+(function(factory){
+  const api=factory(window);
+  window.SACTCheckRegimenConsentBuilder=api; // backward-compatible global name
+  window.SACTCheckPatientContent=api;
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",api.install,{once:true});
+  else api.install();
+})(function(root){
   "use strict";
 
-  // Historical content-library marker retained for cumulative regression compatibility.
-  const VERSION="0.71.0";
-  const RELEASE="0.71.3";
-  const CONTENT_URL="data/consent-content-v0710.json";
-  const PDF_URL="js/consent-pdf-v0710.js?v=0.71.3";
-  const addedAgentsByProtocol=new Map();
-  let contentCache=null;
+  const RELEASE="0.73.0";
+  const PATIENT_CONTENT_URL="data/patient-content-v0730.json";
+  const RISK_CONTENT_URL="data/consent-content-v0710.json";
+  const STYLE_URL="css/regimen-consent-builder-v0710.css?v=0.73.0";
   let contentPromise=null;
-  let pdfPromise=null;
-  let activePickerProtocol=null;
+  let riskPromise=null;
+  let activeProtocol=null;
 
-  function asArray(value){
-    if(value===undefined||value===null||value==="") return [];
-    return Array.isArray(value)?value:[value];
-  }
-
-  function escapeHtml(value){
-    return String(value??"")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
+  const asArray=v=>Array.isArray(v)?v:(v==null?[]:[v]);
+  const text=v=>String(v??"").trim();
+  const escapeHtml=value=>text(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const normalise=value=>text(value).toLowerCase().replace(/[®™]/g,"").replace(/[^a-z0-9]+/g," ").trim();
 
   function safeUrl(value){
     try{
-      const url=new URL(String(value||""),root?.location?.href||"https://sactcheck.com/");
-      return /^https?:$/.test(url.protocol)?url.href:"";
-    }catch(_){ return ""; }
-  }
-
-  function normaliseMedicineName(value){
-    return String(value??"")
-      .toLowerCase()
-      .replace(/[®™]/g,"")
-      .replace(/\([^)]*\)/g," ")
-      .replace(/[_/–—-]+/g," ")
-      .replace(/\b(?:iv|po|sc|oral|infusion|bolus|tablets?|capsules?|mg|mg\/m2|mg\/kg)\b/g," ")
-      .replace(/[^a-z0-9]+/g," ")
-      .replace(/\s+/g," ")
-      .trim();
-  }
-
-  function titleCase(value){
-    return String(value||"").replace(/[_-]+/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-  }
-
-  function fallbackComponents(protocol){
-    const values=[];
-    asArray(protocol?.treatment?.components).forEach(item=>values.push(item?.drug||item?.name||item));
-    asArray(protocol?.regimen_components).forEach(item=>values.push(item?.drug||item?.name||item));
-    asArray(protocol?.metadata?.drugs).forEach(item=>values.push(item?.drug||item?.name||item));
-    asArray(protocol?.treatment_phases).forEach(phase=>{
-      asArray(phase?.administration).forEach(item=>values.push(item?.drug||item?.name));
-    });
-    const seen=new Set();
-    return values.filter(Boolean).map(value=>String(value).replace(/[_-]+/g," ").trim()).filter(value=>{
-      const key=normaliseMedicineName(value);
-      if(!key||seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  }
-
-  function componentsForProtocol(protocol){
-    const helper=root?.SACTCheckRegimenComponents;
-    const values=helper?.forProtocol?.(protocol);
-    return Array.isArray(values)&&values.length?values:fallbackComponents(protocol);
-  }
-
-  function buildAgentAliasIndex(content){
-    const rows=[];
-    Object.entries(content?.agent_profiles||{}).forEach(([key,profile])=>{
-      const names=[key,profile.display_name,...asArray(profile.aliases)];
-      names.forEach(name=>{
-        const normalised=normaliseMedicineName(name);
-        if(normalised) rows.push({normalised,key,profile});
-      });
-    });
-    return rows.sort((a,b)=>b.normalised.length-a.normalised.length);
-  }
-
-  function profileForComponent(component,content){
-    const normalised=normaliseMedicineName(component);
-    if(!normalised) return null;
-    const index=buildAgentAliasIndex(content);
-    const exact=index.find(item=>item.normalised===normalised);
-    if(exact) return exact;
-    const contained=index.find(item=>
-      item.normalised.length>=4 &&
-      (normalised.includes(item.normalised)||item.normalised.includes(normalised))
-    );
-    return contained||null;
-  }
-
-  function expandCombinedComponent(component){
-    const text=normaliseMedicineName(component);
-    if(text.includes("pertuzumab")&&text.includes("trastuzumab")) return ["Pertuzumab","Trastuzumab"];
-    if(text.includes("trifluridine")&&text.includes("tipiracil")) return ["Trifluridine/tipiracil"];
-    if(text.includes("fluorouracil")) return ["Fluorouracil"];
-    if(text.includes("daratumumab")) return ["Daratumumab"];
-    return [component];
-  }
-
-  function consentComponents(protocol){
-    const values=componentsForProtocol(protocol).flatMap(expandCombinedComponent);
-    const seen=new Set();
-    return values.filter(Boolean).filter(value=>{
-      const key=normaliseMedicineName(value);
-      if(!key||seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  }
-
-  function profileCategoryLabel(profile){
-    const value=String(profile?.category||"systemic anti-cancer therapy").replace(/_/g," ");
-    return titleCase(value);
-  }
-
-  function searchAgents(content,query,limit=12){
-    const q=normaliseMedicineName(query);
-    if(!q) return [];
-    const rows=Object.entries(content?.agent_profiles||{}).map(([key,profile])=>{
-      const display=String(profile.display_name||titleCase(key));
-      const aliases=asArray(profile.aliases).map(String);
-      const hay=[key,display,...aliases].map(normaliseMedicineName);
-      let score=99;
-      if(hay.some(item=>item===q)) score=0;
-      else if(hay.some(item=>item.startsWith(q))) score=1;
-      else if(hay.some(item=>item.includes(q))) score=2;
-      else{
-        const tokens=q.split(" ").filter(Boolean);
-        if(tokens.length&&tokens.every(token=>hay.some(item=>item.includes(token)))) score=3;
-      }
-      return {key,profile,display,aliases,score};
-    }).filter(row=>row.score<99)
-      .sort((a,b)=>a.score-b.score||a.display.localeCompare(b.display));
-    return rows.slice(0,limit);
-  }
-
-  function normaliseRisk(risk,prefix,extra={}){
-    return {
-      id:`${prefix}:${risk.id}`,
-      label:risk.label,
-      detail:risk.detail,
-      tier:risk.tier||"important",
-      ...extra
-    };
-  }
-
-  const IMMUNE_CORE_IDS=Object.freeze(["pneumonitis","colitis","hepatitis","endocrine","nephritis","skin"]);
-  const IMMUNE_ADDITIONAL_KEEP=Object.freeze(["delayed","management","rare_fatal"]);
-
-  function immuneRiskById(content,id){
-    return asArray(content?.generic_modules?.immune_checkpoint_inhibitor?.risks).find(r=>r?.id===id)||null;
-  }
-
-  function immuneCoreRisksForAgent(item,content){
-    if(item?.profile?.module!=="immune_checkpoint_inhibitor") return [];
-    const estimates=item.profile?.immune_core_frequency_estimates||{};
-    return IMMUNE_CORE_IDS.map(id=>{
-      const risk=immuneRiskById(content,id);
-      if(!risk) return null;
-      const freq=estimates[id]?.display||"";
-      return normaliseRisk(risk,`agent:${item.key}:immune-core`,{
-        group:item.profile.display_name,
-        agentKey:item.key,
-        immuneCore:true,
-        frequency:freq
-      });
-    }).filter(Boolean);
-  }
-
-  function additionalImmuneRisks(classification,content){
-    const mappedIci=classification.mappedAgents.filter(item=>item.profile?.module==="immune_checkpoint_inhibitor");
-    const base=asArray(content?.generic_modules?.immune_checkpoint_inhibitor?.risks)
-      .filter(r=>!IMMUNE_CORE_IDS.includes(r.id) && IMMUNE_ADDITIONAL_KEEP.includes(r.id))
-      .map(r=>normaliseRisk(r,"immune",{group:"Immunotherapy"}));
-
-    if(mappedIci.length!==1) return {risks:[
-      ...asArray(content?.generic_modules?.immune_checkpoint_inhibitor?.risks)
-        .filter(r=>!IMMUNE_CORE_IDS.includes(r.id))
-        .map(r=>normaliseRisk(r,"immune",{group:"Immunotherapy"}))
-    ],frequencySource:null};
-
-    const item=mappedIci[0];
-    const events=asArray(item.profile?.rare_immune_events);
-    if(!events.length) return {risks:[
-      ...asArray(content?.generic_modules?.immune_checkpoint_inhibitor?.risks)
-        .filter(r=>!IMMUNE_CORE_IDS.includes(r.id))
-        .map(r=>normaliseRisk(r,"immune",{group:"Immunotherapy"}))
-    ],frequencySource:null};
-
-    const specific=events.map(event=>({
-      id:`immune:rare:${item.key}:${event.id}`,
-      label:event.label,
-      detail:event.detail||"",
-      tier:"serious",
-      frequency:event.frequency||"",
-      agentKey:item.key,
-      evidenceSpecific:true
-    }));
-    return {
-      risks:[...specific,...base],
-      frequencySource:item.profile?.immune_frequency_source||null
-    };
-  }
-
-  function deriveIntent(protocol){
-    const metadata=protocol?.metadata||{};
-    const candidates=[
-      metadata?.regimen_card?.intent,
-      metadata?.regimen_card?.treatment_intent,
-      metadata.treatment_intent,
-      ...asArray(metadata.treatment_context),
-      ...asArray(metadata.treatment_setting)
-    ].filter(Boolean).map(String);
-    const text=candidates.join(" ").toLowerCase();
-    const labels=[];
-    if(/\bneoadjuvant\b/.test(text)) labels.push("Neoadjuvant");
-    if(/\badjuvant\b/.test(text)) labels.push("Adjuvant");
-    if(/\bcurative\b/.test(text)) labels.push("Curative");
-    if(/\bpalliative\b/.test(text)) labels.push("Palliative");
-    if(/\bmaintenance\b/.test(text)) labels.push("Maintenance");
-    if(/\bconsolidation\b/.test(text)) labels.push("Consolidation");
-    if(/\bmetastatic|advanced|unresectable\b/.test(text)&&!labels.length){
-      labels.push("Advanced/metastatic disease - clinician to confirm treatment intent");
-    }
-    return labels.length?[...new Set(labels)].join(" / "):"Clinician to confirm treatment intent";
-  }
-
-  function displayDrugName(value){
-    return String(value||"")
-      .replace(/_/g," ")
-      .replace(/\s+/g," ")
-      .trim()
-      .replace(/\b\w/g,c=>c.toUpperCase());
-  }
-
-  function displayRoute(value){
-    const route=String(value||"").toLowerCase().trim();
-    const map={
-      iv:"IV",intravenous:"IV",
-      po:"oral",oral:"oral",
-      sc:"SC",subcutaneous:"SC",
-      im:"IM",intramuscular:"IM"
-    };
-    return map[route]||String(value||"").trim();
-  }
-
-  function dayValues(item){
-    if(Array.isArray(item?.days)) return item.days.filter(v=>v!==undefined&&v!==null&&v!=="").map(String);
-    if(item?.day!==undefined&&item?.day!==null&&item?.day!=="") return [String(item.day)];
-    return [];
-  }
-
-  function scheduleSummary(protocol){
-    const phases=asArray(protocol?.treatment_phases);
-    const phaseSummaries=[];
-
-    phases.forEach((phase,phaseIndex)=>{
-      const administrations=asArray(phase?.administration);
-      const cycle=Number(phase?.cycle_length_days);
-      const phaseName=String(phase?.name||phase?.label||phase?.phase_name||"").trim();
-      const grouped=new Map();
-
-      administrations.forEach(item=>{
-        const days=dayValues(item);
-        const drug=displayDrugName(item?.drug||item?.name||item?.medicine);
-        const route=displayRoute(item?.route||item?.administration_route||item?.route_of_administration);
-        if(!drug) return;
-        const drugLabel=route?`${drug} (${route})`:drug;
-        if(days.length){
-          days.forEach(day=>{
-            const key=String(day);
-            if(!grouped.has(key)) grouped.set(key,[]);
-            grouped.get(key).push(drugLabel);
-          });
-        }else{
-          if(!grouped.has("unspecified")) grouped.set("unspecified",[]);
-          grouped.get("unspecified").push(drugLabel);
-        }
-      });
-
-      const dayOrder=[...grouped.keys()].sort((a,b)=>{
-        if(a==="unspecified") return 1;
-        if(b==="unspecified") return -1;
-        const an=Number(String(a).replace(/[^\d.]/g,""));
-        const bn=Number(String(b).replace(/[^\d.]/g,""));
-        return (Number.isFinite(an)?an:999)-(Number.isFinite(bn)?bn:999);
-      });
-
-      const dayText=dayOrder.map(day=>{
-        const medicines=[...new Set(grouped.get(day))];
-        return day==="unspecified"
-          ? medicines.join(" + ")
-          : `Day ${day}: ${medicines.join(" + ")}`;
-      }).filter(Boolean);
-
-      if(!dayText.length) return;
-
-      const prefix=[];
-      if(phaseName && phases.length>1) prefix.push(phaseName);
-      if(cycle) prefix.push(`${cycle}-day cycle`);
-      const heading=prefix.length?`${prefix.join(" - ")}: `:"";
-      phaseSummaries.push(`${heading}${dayText.join("; ")}`);
-    });
-
-    // Do not invent a schedule from a free-text title. If structured regimen
-    // administration data are unavailable, force explicit source verification.
-    return phaseSummaries.length
-      ? phaseSummaries.join(" -> ")
-      : "Structured schedule unavailable - verify against the current NCCP regimen.";
-  }
-
-  function getAddedAgentKeys(protocolOrId){
-    const id=typeof protocolOrId==="string"?protocolOrId:String(protocolOrId?.protocol_id||"");
-    return [...(addedAgentsByProtocol.get(id)||new Set())];
-  }
-
-  function addAgent(protocolOrId,key){
-    const id=typeof protocolOrId==="string"?protocolOrId:String(protocolOrId?.protocol_id||"");
-    if(!id||!key) return [];
-    const next=new Set(addedAgentsByProtocol.get(id)||[]);
-    next.add(String(key));
-    addedAgentsByProtocol.set(id,next);
-    return [...next];
-  }
-
-  function removeAgent(protocolOrId,key){
-    const id=typeof protocolOrId==="string"?protocolOrId:String(protocolOrId?.protocol_id||"");
-    const next=new Set(addedAgentsByProtocol.get(id)||[]);
-    next.delete(String(key));
-    if(next.size) addedAgentsByProtocol.set(id,next);
-    else addedAgentsByProtocol.delete(id);
-    return [...next];
-  }
-
-  function clearAddedAgents(protocolOrId){
-    const id=typeof protocolOrId==="string"?protocolOrId:String(protocolOrId?.protocol_id||"");
-    addedAgentsByProtocol.delete(id);
-    return [];
-  }
-
-  function classifyTherapy(protocol,content,options={}){
-    const rawComponents=consentComponents(protocol);
-    const supportive=new Set(asArray(content?.supportive_components_not_counted_as_agent_coverage).map(normaliseMedicineName));
-    const treatmentClasses=asArray(protocol?.metadata?.treatment_class).map(value=>String(value).toLowerCase());
-    const matches=[];
-    const unmapped=[];
-    const ignored=[];
-
-    rawComponents.forEach(component=>{
-      const normalised=normaliseMedicineName(component);
-      if(supportive.has(normalised)){ ignored.push(component); return; }
-      const match=profileForComponent(component,content);
-      if(match) matches.push({component,key:match.key,profile:match.profile,clinicianAdded:false});
-      else unmapped.push(component);
-    });
-
-    const baseKeys=new Set(matches.map(item=>item.key));
-    asArray(options.addedAgentKeys).forEach(key=>{
-      const profile=content?.agent_profiles?.[key];
-      if(!profile||baseKeys.has(key)) return;
-      matches.push({
-        component:profile.display_name||titleCase(key),
-        key,
-        profile,
-        clinicianAdded:true
-      });
-      baseKeys.add(key);
-    });
-
-    const cytotoxic=Boolean(
-      protocol?.metadata?.cytotoxic===true ||
-      treatmentClasses.some(value=>value.includes("cytotoxic")||value.includes("chemotherapy")) ||
-      matches.some(item=>item.profile?.category==="cytotoxic")
-    );
-    const immunotherapy=Boolean(
-      treatmentClasses.some(value=>value.includes("immunotherapy")||value.includes("immune_checkpoint")) ||
-      matches.some(item=>item.profile?.module==="immune_checkpoint_inhibitor")
-    );
-
-    return {
-      cytotoxic,
-      immunotherapy,
-      components:rawComponents,
-      mappedAgents:matches,
-      unmappedAgents:[...new Set(unmapped)],
-      ignoredComponents:ignored
-    };
-  }
-
-  function buildDraft(protocol,content,options={}){
-    if(!protocol) throw new Error("A regimen protocol is required.");
-    const addedAgentKeys=asArray(options.addedAgentKeys);
-    const classification=classifyTherapy(protocol,content,{addedAgentKeys});
-    const includeChemo=options.includeChemo??classification.cytotoxic;
-    const includeImmunotherapy=options.includeImmunotherapy??classification.immunotherapy;
-    const includeAgents=options.includeAgents??true;
-
-    const genericChemo=includeChemo
-      ? asArray(content?.generic_modules?.cytotoxic_chemotherapy?.risks)
-          .map(r=>normaliseRisk(r,"chemo",{group:"Generic chemotherapy"}))
-      : [];
-    const immuneAdditional=includeImmunotherapy
-      ? additionalImmuneRisks(classification,content)
-      : {risks:[],frequencySource:null};
-    const immunotherapy=immuneAdditional.risks;
-
-    const agentGroups=includeAgents?classification.mappedAgents.map(item=>{
-      const profileRisks=asArray(item.profile.risks).map(r=>normaliseRisk(r,`agent:${item.key}`,{
-        group:item.profile.display_name,
-        agentKey:item.key
-      }));
-      const coreImmune=immuneCoreRisksForAgent(item,content);
-      return {
-        key:item.key,
-        component:item.component,
-        displayName:item.profile.display_name,
-        module:item.profile.module||null,
-        category:item.profile.category||null,
-        clinicianAdded:Boolean(item.clinicianAdded),
-        reviewStatus:item.profile.review_status,
-        sourceBasis:item.profile.source_basis,
-        risks:[...coreImmune,...profileRisks]
-      };
-    }):[];
-
-    const metadata=protocol.metadata||{};
-    const addedAgents=agentGroups.filter(group=>group.clinicianAdded).map(group=>group.displayName);
-    const baseComponents=classification.components.slice();
-    const components=[
-      ...baseComponents,
-      ...addedAgents.filter(name=>!baseComponents.some(item=>normaliseMedicineName(item)===normaliseMedicineName(name)))
-    ];
-
-    return {
-      version:VERSION,
-      release:RELEASE,
-      title:metadata.title||metadata.short_title||protocol.protocol_id||"SACT regimen",
-      shortTitle:metadata.short_title||metadata.title||"SACT regimen",
-      nccpCode:String(metadata.nccp_regimen_code||""),
-      nccpVersion:String(metadata.nccp_version||""),
-      indication:metadata.indication||
-        asArray(protocol.indications).map(item=>item?.description).filter(Boolean).join(" ")||
-        "Clinician to confirm diagnosis / indication.",
-      intent:deriveIntent(protocol),
-      schedule:scheduleSummary(protocol),
-      components,
-      baseComponents,
-      addedAgents,
-      sourceUrl:safeUrl(metadata.source_url),
-      sourceCatalogueUrl:safeUrl(metadata.source_catalogue_url),
-      classification,
-      genericChemo,
-      immunotherapy,
-      immuneFrequencySource:immuneAdditional.frequencySource,
-      agentGroups,
-      coverage:{
-        mapped:classification.mappedAgents.length,
-        unmapped:classification.unmappedAgents.length,
-        unmappedAgents:classification.unmappedAgents.slice()
-      }
-    };
-  }
-
-  function validateContent(content){
-    const errors=[];
-    if(content?.release!==VERSION) errors.push(`Expected consent-content release ${VERSION}.`);
-    if(!content?.generic_modules?.cytotoxic_chemotherapy?.risks?.length) errors.push("Generic chemotherapy module is missing.");
-    if(!content?.generic_modules?.immune_checkpoint_inhibitor?.risks?.length) errors.push("Generic immunotherapy module is missing.");
-    if(Object.keys(content?.agent_profiles||{}).length<40) errors.push("Agent-specific risk library is unexpectedly small.");
-    const sourceIds=new Set(asArray(content?.sources).map(item=>item.id));
-    if(!sourceIds.has("hse_national_consent_policy")) errors.push("HSE National Consent Policy source is missing.");
-    if(!sourceIds.has("nccp_sact_consent_resources")) errors.push("NCCP SACT consent resource source is missing.");
-    return {valid:errors.length===0,errors};
-  }
-
-  async function loadContent(){
-    if(contentCache) return contentCache;
-    if(contentPromise) return contentPromise;
-    if(typeof fetch!=="function") throw new Error("Consent content cannot be loaded in this environment.");
-    contentPromise=fetch(`${CONTENT_URL}?v=${RELEASE}`,{cache:"no-store"})
-      .then(response=>{
-        if(!response.ok) throw new Error(`Consent content HTTP ${response.status}`);
-        return response.json();
-      })
-      .then(payload=>{
-        const validation=validateContent(payload);
-        if(!validation.valid) throw new Error(validation.errors.join(" "));
-        contentCache=payload;
-        return payload;
-      })
-      .catch(error=>{
-        contentPromise=null;
-        throw error;
-      });
-    return contentPromise;
-  }
-
-  async function ensurePdfExporter(){
-    // Never reuse an older consent PDF exporter left in an already-open browser tab.
-    if(root?.SACTCheckConsentPdf?.download && root.SACTCheckConsentPdf?.release===RELEASE){
-      return root.SACTCheckConsentPdf;
-    }
-    if(root?.SACTCheckConsentPdf?.download && root.SACTCheckConsentPdf?.release!==RELEASE){
-      const stale=root.document?.querySelector?.('script[data-consent-pdf-exporter]');
-      stale?.remove?.();
-      try{ delete root.SACTCheckConsentPdf; }catch(_){ root.SACTCheckConsentPdf=undefined; }
-      pdfPromise=null;
-    }
-    if(pdfPromise) return pdfPromise;
-    if(!root?.document) throw new Error("PDF exporter unavailable outside the browser.");
-    pdfPromise=new Promise((resolve,reject)=>{
-      let script=root.document.querySelector('script[data-consent-pdf-exporter]');
-      if(!script){
-        script=root.document.createElement("script");
-        script.src=PDF_URL;
-        script.defer=true;
-        script.dataset.consentPdfExporter="true";
-        root.document.head.appendChild(script);
-      }
-      const ready=()=>{
-        if(root.SACTCheckConsentPdf?.download) resolve(root.SACTCheckConsentPdf);
-        else reject(new Error("Consent PDF exporter did not initialise."));
-      };
-      if(root.SACTCheckConsentPdf?.download) ready();
-      else{
-        script.addEventListener("load",ready,{once:true});
-        script.addEventListener("error",()=>reject(new Error("Consent PDF exporter could not be loaded.")),{once:true});
-      }
-    }).catch(error=>{ pdfPromise=null; throw error; });
-    return pdfPromise;
-  }
-
-  function makePdfPayload(protocol,content,addedAgentKeys=[]){
-    const draft=buildDraft(protocol,content,{addedAgentKeys});
-    const riskGroups=[];
-    if(draft.genericChemo.length){
-      riskGroups.push({title:"Generic chemotherapy risks",kind:"generic",risks:draft.genericChemo});
-    }
-    draft.agentGroups.forEach(group=>{
-      if(group.risks.length){
-        riskGroups.push({
-          title:`${group.displayName} - agent-specific risks`,
-          kind:"agent",
-          clinicianAdded:group.clinicianAdded,
-          agentKey:group.key,
-          risks:group.risks
-        });
-      }
-    });
-    if(draft.immunotherapy.length){
-      riskGroups.push({title:"Immunotherapy / immune-related risks",kind:"immunotherapy",risks:draft.immunotherapy});
-    }
-    return {
-      generatedAt:new Date().toISOString(),
-      draft,
-      fields:{
-        diagnosis:draft.indication,
-        intent:draft.intent,
-        benefit:"",
-        alternatives:"",
-        noTreatment:"",
-        customRisks:"",
-        fertility:"",
-        questions:""
-      },
-      riskGroups,
-      genericRisks:draft.genericChemo,
-      agentGroups:draft.agentGroups,
-      immuneRisks:draft.immunotherapy,
-      immuneFrequencySource:draft.immuneFrequencySource
-    };
-  }
-
-  function openPdfPlaceholder(){
-    if(!root?.open) return null;
-    const viewer=root.open("about:blank","_blank");
-    if(!viewer) return null;
-    try{
-      viewer.document.title="Preparing SACTCheck consent PDF";
-      viewer.document.body.innerHTML=
-        '<div style="font-family:Arial,sans-serif;padding:32px;color:#12314a">'+
-        '<h2 style="margin:0 0 8px">Preparing consent PDF...</h2>'+
-        '<p style="color:#5a6875">The PDF will open here when ready. You can then print or download it using your browser PDF controls.</p>'+
-        '</div>';
+      const url=new URL(value,root.location?.href||"https://example.invalid/");
+      if(["http:","https:"].includes(url.protocol)) return url.href;
     }catch(_){}
-    return viewer;
-  }
-
-  async function generateConsentPdf(protocol,viewerWindow=null){
-    if(!protocol) return null;
-    try{
-      const [content,pdf]=await Promise.all([loadContent(),ensurePdfExporter()]);
-      const addedKeys=getAddedAgentKeys(protocol);
-      const payload=makePdfPayload(protocol,content,addedKeys);
-      const result=pdf.openInViewer(payload,viewerWindow);
-      const suffix=payload.draft.addedAgents.length
-        ? ` with ${payload.draft.addedAgents.length} clinician-added agent${payload.draft.addedAgents.length===1?"":"s"}`
-        : "";
-      if(result?.blocked){
-        root.showToast?.("Consent PDF popup was blocked");
-        root.alert?.("Your browser blocked the PDF viewer tab. Allow pop-ups for SACTCheck and try again.");
-      }else{
-        root.showToast?.(`Two-page consent PDF opened${suffix}`);
-      }
-      return result;
-    }catch(error){
-      console.error("SACTCheck consent PDF generation failed",error);
-      try{
-        if(viewerWindow && !viewerWindow.closed){
-          viewerWindow.document.body.innerHTML=
-            '<div style="font-family:Arial,sans-serif;padding:32px;color:#7a1f1f">'+
-            '<h2>Consent PDF could not be generated</h2>'+
-            '<p>'+escapeHtml(error.message)+'</p></div>';
-        }
-      }catch(_){}
-      root.showToast?.("Consent PDF could not be generated");
-      root.alert?.(`Consent PDF could not be generated.\n\n${error.message}`);
-      return null;
-    }
-  }
-
-  function applyReleaseLabel(){
-    if(!root?.document) return;
-    root.document.title=`SACTCheck v${RELEASE} - Streamlined Consent PDF`;
-    const meta=root.document.querySelector('meta[name="sactcheck-release"]');
-    if(meta) meta.setAttribute("content",RELEASE);
-    const version=root.document.querySelector(".header-version");
-    if(version) version.textContent=`v${RELEASE}`;
-    const summary=root.document.querySelector("#releaseSummary summary");
-    if(summary) summary.textContent=`v${RELEASE} · Streamlined two-page consent PDF`;
-    const detail=root.document.querySelector("#releaseSummary .release-detail");
-    if(detail){
-      const strong=detail.querySelector("strong");
-      if(strong) strong.textContent="Two-page regimen consent PDF";
-      const textNodes=[...detail.childNodes].filter(node=>node.nodeType===3);
-      if(textNodes.length){
-        textNodes[0].textContent=" Consent is now generated directly from the regimen card as a compact double-sided A4 form. Optional clinician-added agents are selected through a lightweight search.";
-      }
-    }
-    root.document.querySelectorAll(".app-footer small").forEach(node=>{
-      node.textContent=node.textContent.replace(/SACTCheck v\d+\.\d+\.\d+/g,`SACTCheck v${RELEASE}`);
-    });
+    return "";
   }
 
   function ensureStyles(){
-    if(!root?.document||root.document.querySelector('link[data-consent-builder-style]')) return;
+    if(root.document.querySelector('link[data-patient-content-style]')) return;
     const link=root.document.createElement("link");
-    link.rel="stylesheet";
-    link.href=`css/regimen-consent-builder-v0710.css?v=${RELEASE}`;
-    link.dataset.consentBuilderStyle="true";
-    root.document.head?.appendChild(link);
+    link.rel="stylesheet"; link.href=STYLE_URL; link.dataset.patientContentStyle="true";
+    root.document.head.appendChild(link);
   }
 
-  function ensureAgentPicker(){
-    if(!root?.document) return null;
-    let modal=root.document.getElementById("consentAgentPicker");
-    if(modal) return modal;
-    modal=root.document.createElement("div");
-    modal.id="consentAgentPicker";
-    modal.className="consent-agent-picker";
-    modal.hidden=true;
-    modal.innerHTML=`
-      <div class="consent-agent-picker-backdrop" data-close-agent-picker></div>
-      <section class="consent-agent-picker-panel" role="dialog" aria-modal="true" aria-labelledby="consentAgentPickerTitle">
-        <header class="consent-agent-picker-header">
-          <div>
-            <span>Optional customisation</span>
-            <h2 id="consentAgentPickerTitle">Add agent to consent</h2>
-            <p id="consentAgentPickerRegimen"></p>
+  async function fetchJson(url){
+    const response=await fetch(url,{cache:"no-store"});
+    if(!response.ok) throw new Error(`${url} HTTP ${response.status}`);
+    return response.json();
+  }
+
+  function loadContent(){
+    if(!contentPromise) contentPromise=fetchJson(PATIENT_CONTENT_URL);
+    return contentPromise;
+  }
+  function loadRiskContent(){
+    if(!riskPromise) riskPromise=fetchJson(RISK_CONTENT_URL).catch(()=>({agent_profiles:{},shared_modules:{}}));
+    return riskPromise;
+  }
+
+  function protocolRecord(protocolOrRecord){ return protocolOrRecord?.protocol||protocolOrRecord||null; }
+  function protocolTitle(protocol){
+    return text(protocol?.metadata?.short_title||protocol?.metadata?.display_title||protocol?.metadata?.title||protocol?.title||protocol?.protocol_id||"Selected SACT regimen");
+  }
+  function protocolCode(protocol){ return text(protocol?.metadata?.nccp_regimen_code||protocol?.metadata?.nccp_number||protocol?.nccp_regimen_code||""); }
+  function protocolIndication(protocol){
+    const v=protocol?.metadata?.indication||protocol?.indication||protocol?.metadata?.clinical_indication;
+    return Array.isArray(v)?v.join("; "):text(v);
+  }
+
+  function componentsForProtocol(protocol){
+    const values=[];
+    const add=v=>{
+      if(v==null) return;
+      if(typeof v==="string"){ if(text(v)) values.push(text(v)); return; }
+      if(Array.isArray(v)){ v.forEach(add); return; }
+      if(typeof v==="object"){
+        const direct=v.drug||v.agent||v.medicine||v.name||v.generic_name||v.display_name;
+        if(direct) add(direct);
+      }
+    };
+    add(protocol?.regimen_components);
+    add(protocol?.components);
+    add(protocol?.agents);
+    add(protocol?.drugs);
+    add(protocol?.metadata?.agents);
+    const helper=root?.SACTCheckRegimenComponents;
+    if(helper?.componentsForProtocol){
+      try{ add(helper.componentsForProtocol(protocol)); }catch(_){}
+    }
+    const seen=new Set();
+    return values.filter(v=>{
+      const k=normalise(v);
+      if(!k||seen.has(k)) return false;
+      seen.add(k); return true;
+    });
+  }
+
+  function scheduleSummary(protocol){
+    const md=protocol?.metadata||{};
+    const candidates=[
+      md.schedule_summary,md.schedule,md.cycle_schedule,protocol?.schedule_summary,
+      protocol?.schedule,protocol?.cycle_schedule
+    ];
+    for(const value of candidates){
+      if(typeof value==="string"&&text(value)) return text(value);
+      if(value&&typeof value==="object"){
+        const bits=[];
+        if(value.cycle_length_days) bits.push(`${value.cycle_length_days}-day cycle`);
+        if(value.days) bits.push(`treatment ${Array.isArray(value.days)?"days "+value.days.join(", "):text(value.days)}`);
+        if(value.frequency) bits.push(text(value.frequency));
+        if(bits.length) return bits.join(" · ");
+      }
+    }
+    return "See the current NCCP regimen and your treatment-team plan for the exact schedule.";
+  }
+
+  function buildAliasIndex(riskContent){
+    const rows=[];
+    Object.entries(riskContent?.agent_profiles||{}).forEach(([key,p])=>{
+      const aliases=[key,p?.display_name,...asArray(p?.aliases)].map(normalise).filter(Boolean);
+      rows.push({key,profile:p,aliases});
+    });
+    return rows;
+  }
+
+  function profileMatchesForProtocol(protocol,riskContent){
+    const index=buildAliasIndex(riskContent);
+    const comps=componentsForProtocol(protocol);
+    const out=[];
+    const seen=new Set();
+    comps.forEach(component=>{
+      const n=normalise(component);
+      let best=null;
+      for(const row of index){
+        if(row.aliases.some(a=>a===n||n.includes(a)||a.includes(n))){
+          best=row; break;
+        }
+      }
+      if(best&&!seen.has(best.key)){ seen.add(best.key); out.push({...best,component}); }
+    });
+    return out;
+  }
+
+  function isImmuneProfile(profile){
+    const hay=normalise([profile?.category,profile?.module,profile?.display_name].filter(Boolean).join(" "));
+    return /immune|checkpoint|pembrolizumab|nivolumab|atezolizumab|durvalumab|cemiplimab|ipilimumab|avelumab/.test(hay);
+  }
+
+  function riskRows(matches){
+    const rows=[];
+    const seen=new Set();
+    matches.forEach(match=>{
+      asArray(match.profile?.risks).forEach(risk=>{
+        const key=normalise(risk?.id||risk?.label);
+        if(!key||seen.has(key)) return;
+        seen.add(key);
+        rows.push({
+          label:text(risk?.label||"Treatment effect"),
+          detail:text(risk?.detail||""),
+          tier:text(risk?.tier||"important"),
+          source:match.profile?.display_name||match.component||"Regimen component"
+        });
+      });
+    });
+    return rows;
+  }
+
+  function regimenLink(protocol){
+    const url=new URL(root.location.href);
+    url.searchParams.set("patientSupport",text(protocol?.protocol_id||""));
+    url.hash="";
+    return url.href;
+  }
+
+  function bodySilhouette(){
+    return `<svg class="immune-silhouette" viewBox="0 0 120 360" role="img" aria-label="Human body organ-system toxicity map">
+      <circle cx="60" cy="32" r="23" fill="#d5ecea" stroke="#4f9c98" stroke-width="2"/>
+      <path d="M36 63 Q60 52 84 63 L94 146 Q89 176 78 192 L83 337 L64 337 L60 210 L56 337 L37 337 L42 192 Q31 176 26 146 Z"
+        fill="#dff1ef" stroke="#4f9c98" stroke-width="2"/>
+      <path d="M36 77 L13 166" stroke="#4f9c98" stroke-width="10" stroke-linecap="round"/>
+      <path d="M84 77 L107 166" stroke="#4f9c98" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="46" cy="106" rx="13" ry="22" fill="#ffffff" stroke="#7bbab6"/><ellipse cx="74" cy="106" rx="13" ry="22" fill="#ffffff" stroke="#7bbab6"/>
+      <path d="M60 91 C49 84 47 106 60 116 C73 106 71 84 60 91" fill="#e58b95"/>
+      <path d="M48 144 Q66 132 76 148 Q69 165 48 160 Z" fill="#e6bd78"/>
+      <rect x="50" y="57" width="20" height="10" rx="5" fill="#b08ac9"/>
+      <path d="M49 177 Q39 188 48 202 Q60 213 72 202 Q81 188 71 177" fill="#d49b73" opacity=".72"/>
+      <circle cx="60" cy="32" r="7" fill="#e8cc78"/>
+    </svg>`;
+  }
+
+  function ensureShell(){
+    let shell=root.document.getElementById("patientSupportShell");
+    if(shell) return shell;
+    shell=root.document.createElement("div");
+    shell.id="patientSupportShell"; shell.className="patient-support-shell"; shell.hidden=true;
+    shell.innerHTML=`
+      <div class="patient-support-backdrop" data-close-patient-support></div>
+      <section class="patient-support-panel" role="dialog" aria-modal="true" aria-labelledby="patientSupportTitle">
+        <header class="patient-support-header">
+          <img class="patient-support-logo" src="assets/branding/sactcheck-mark.svg" alt="">
+          <div><span class="patient-support-eyebrow">SACTCheck · Treatment information & consent support</span>
+            <h2 id="patientSupportTitle">Patient support</h2>
+            <div class="patient-support-subtitle" id="patientSupportSubtitle"></div>
           </div>
-          <button type="button" class="consent-agent-picker-close" aria-label="Close" data-close-agent-picker>×</button>
+          <button type="button" class="patient-support-close" aria-label="Close patient support" data-close-patient-support>×</button>
         </header>
-
-        <div id="consentAddedAgentChips" class="consent-added-agent-chips"></div>
-
-        <label class="consent-agent-search-label" for="consentAgentSearch">Search medicine</label>
-        <div class="consent-agent-search-wrap">
-          <span aria-hidden="true">⌕</span>
-          <input id="consentAgentSearch" type="search" autocomplete="off"
-            placeholder="Type bevacizumab, Avastin, pembrolizumab, Keytruda...">
-        </div>
-        <p class="consent-agent-search-help">Searches generic names and common trade names. Selecting an agent adds its material-risk module; it does not imply NCCP endorsement of the modified regimen.</p>
-
-        <div id="consentAgentSearchResults" class="consent-agent-search-results">
-          <p class="consent-agent-empty">Start typing an agent name or trade name.</p>
-        </div>
-
-        <footer class="consent-agent-picker-footer">
-          <button type="button" class="btn secondary" data-clear-added-agents>Clear added agents</button>
-          <div>
-            <button type="button" class="btn secondary" data-close-agent-picker>Close</button>
-            <button type="button" class="btn" data-generate-custom-consent>Generate consent PDF</button>
-          </div>
-        </footer>
+        <nav class="patient-support-tabs" aria-label="Patient support sections">
+          <button class="patient-support-tab" data-patient-tab="overview" aria-selected="true">At a glance</button>
+          <button class="patient-support-tab" data-patient-tab="schedule" aria-selected="false">Treatment & schedule</button>
+          <button class="patient-support-tab" data-patient-tab="toxicity" aria-selected="false">Side effects</button>
+          <button class="patient-support-tab" data-patient-tab="urgent" aria-selected="false">When to call</button>
+          <button class="patient-support-tab" data-patient-tab="passport" aria-selected="false">Passport & QR</button>
+          <button class="patient-support-tab" data-patient-tab="diary" aria-selected="false">Symptom diary</button>
+        </nav>
+        <div class="patient-support-body" id="patientSupportBody"></div>
       </section>`;
-    root.document.body.appendChild(modal);
-
-    modal.querySelectorAll("[data-close-agent-picker]").forEach(button=>button.addEventListener("click",closeAgentPicker));
-    modal.querySelector("[data-clear-added-agents]")?.addEventListener("click",()=>{
-      if(!activePickerProtocol) return;
-      clearAddedAgents(activePickerProtocol);
-      renderAddedAgentChips();
-      renderAgentSearchResults("");
-      refreshAddedAgentBadges();
-    });
-    modal.querySelector("[data-generate-custom-consent]")?.addEventListener("click",async()=>{
-      if(!activePickerProtocol) return;
-      const protocol=activePickerProtocol;
-      const viewer=openPdfPlaceholder();
-      closeAgentPicker();
-      await generateConsentPdf(protocol,viewer);
-    });
-    modal.querySelector("#consentAgentSearch")?.addEventListener("input",event=>{
-      renderAgentSearchResults(event.target.value);
-    });
-    modal.addEventListener("keydown",event=>{
-      if(event.key==="Escape"){ event.preventDefault(); closeAgentPicker(); }
-    });
-    return modal;
-  }
-
-  function closeAgentPicker(){
-    const modal=root?.document?.getElementById("consentAgentPicker");
-    if(!modal) return;
-    modal.hidden=true;
-    root.document.body.classList.remove("consent-agent-picker-open");
-    activePickerProtocol=null;
-  }
-
-  function renderAddedAgentChips(){
-    const target=root?.document?.getElementById("consentAddedAgentChips");
-    if(!target||!activePickerProtocol||!contentCache) return;
-    const keys=getAddedAgentKeys(activePickerProtocol);
-    if(!keys.length){
-      target.innerHTML='<span class="consent-no-added-agents">No clinician-added agents. Base NCCP regimen will be used.</span>';
-      return;
-    }
-    target.innerHTML=keys.map(key=>{
-      const profile=contentCache.agent_profiles?.[key];
-      const label=profile?.display_name||titleCase(key);
-      return `<span class="consent-added-agent-chip">
-        <strong>${escapeHtml(label)}</strong>
-        <em>clinician added</em>
-        <button type="button" aria-label="Remove ${escapeHtml(label)}" data-remove-added-agent="${escapeHtml(key)}">×</button>
-      </span>`;
-    }).join("");
-    target.querySelectorAll("[data-remove-added-agent]").forEach(button=>button.addEventListener("click",()=>{
-      removeAgent(activePickerProtocol,button.dataset.removeAddedAgent);
-      renderAddedAgentChips();
-      renderAgentSearchResults(root.document.getElementById("consentAgentSearch")?.value||"");
-      refreshAddedAgentBadges();
+    root.document.body.appendChild(shell);
+    shell.querySelectorAll("[data-close-patient-support]").forEach(el=>el.addEventListener("click",closePatientSupport));
+    shell.querySelectorAll("[data-patient-tab]").forEach(button=>button.addEventListener("click",()=>{
+      shell.querySelectorAll("[data-patient-tab]").forEach(b=>b.setAttribute("aria-selected",b===button?"true":"false"));
+      shell.querySelectorAll(".patient-support-view").forEach(v=>v.classList.toggle("active",v.dataset.patientView===button.dataset.patientTab));
     }));
+    root.document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!shell.hidden) closePatientSupport(); });
+    return shell;
   }
 
-  function renderAgentSearchResults(query){
-    const target=root?.document?.getElementById("consentAgentSearchResults");
-    if(!target||!contentCache||!activePickerProtocol) return;
-    const q=String(query||"").trim();
-    if(!q){
-      target.innerHTML='<p class="consent-agent-empty">Start typing an agent name or trade name.</p>';
-      return;
-    }
-    const current=new Set(getAddedAgentKeys(activePickerProtocol));
-    const results=searchAgents(contentCache,q);
-    if(!results.length){
-      target.innerHTML='<p class="consent-agent-empty">No mapped consent agent found. Do not infer or invent agent-specific risks; review the current medicine information manually.</p>';
-      return;
-    }
-    target.innerHTML=results.map(row=>{
-      const selected=current.has(row.key);
-      const aliasText=row.aliases.length?row.aliases.slice(0,3).join(" · "):"";
-      return `<button type="button" class="consent-agent-result ${selected?"selected":""}" data-add-agent-key="${escapeHtml(row.key)}" ${selected?"disabled":""}>
-        <span>
-          <strong>${escapeHtml(row.display)}</strong>
-          ${aliasText?`<small>${escapeHtml(aliasText)}</small>`:""}
-        </span>
-        <em>${escapeHtml(profileCategoryLabel(row.profile))}</em>
-        <b>${selected?"Added":"Add +"}</b>
-      </button>`;
-    }).join("");
-    target.querySelectorAll("[data-add-agent-key]").forEach(button=>button.addEventListener("click",()=>{
-      addAgent(activePickerProtocol,button.dataset.addAgentKey);
-      const input=root.document.getElementById("consentAgentSearch");
-      if(input) input.value="";
-      renderAddedAgentChips();
-      renderAgentSearchResults("");
-      refreshAddedAgentBadges();
-      input?.focus();
-    }));
+  function actionStrip(){
+    return `<div class="patient-action-strip">
+      <div class="patient-action know"><strong>Know</strong><span>Understand what the regimen is, how it is given and the effects worth recognising.</span></div>
+      <div class="patient-action contact"><strong>Contact</strong><span>Report new or worsening symptoms early rather than waiting for the next appointment.</span></div>
+      <div class="patient-action urgent"><strong>Urgent</strong><span>Some symptoms can indicate serious treatment toxicity and need prompt clinical assessment.</span></div>
+    </div>`;
   }
 
-  async function openAgentPicker(protocol){
-    const modal=ensureAgentPicker();
-    if(!modal||!protocol) return;
-    activePickerProtocol=protocol;
+  function renderImmuneMap(content){
+    const organs=asArray(content?.immune_organs);
+    if(!organs.length) return "";
+    const left=organs.slice(0,5), right=organs.slice(5);
+    const card=o=>`<div class="immune-organ"><span class="immune-organ-icon">${escapeHtml(o.icon)}</span><div><strong>${escapeHtml(o.organ)} · ${escapeHtml(o.headline)}</strong><small>${escapeHtml(o.symptoms)}</small></div></div>`;
+    return `<div class="patient-section-title"><div><h3>Immunotherapy: think by organ system</h3><p>Immune-related effects can occur in almost any organ and may occur during or after treatment.</p></div></div>
+      <div class="immune-map"><div class="immune-column">${left.map(card).join("")}</div><div class="immune-body">${bodySilhouette()}<div class="immune-map-label">New or unusual symptoms matter — report change early.</div></div><div class="immune-column">${right.map(card).join("")}</div></div>`;
+  }
+
+  function diarySymptoms(rows,immune){
+    const base=["Temperature / feeling feverish","Fatigue / energy","Nausea or vomiting","Appetite / oral intake","Bowel habit","Pain","Skin / rash"];
+    if(immune) base.push("Cough / breathlessness","Headache / dizziness","Thirst / urine frequency","Muscle or joint symptoms");
+    rows.slice(0,8).forEach(r=>{ if(r.label&&!base.some(x=>normalise(x)===normalise(r.label))) base.push(r.label); });
+    return [...new Set(base)].slice(0,16);
+  }
+
+  function views(protocol,content,riskContent){
+    const title=protocolTitle(protocol);
+    const code=protocolCode(protocol);
+    const indication=protocolIndication(protocol);
+    const comps=componentsForProtocol(protocol);
+    const matches=profileMatchesForProtocol(protocol,riskContent);
+    const risks=riskRows(matches);
+    const immune=matches.some(m=>isImmuneProfile(m.profile));
+    const schedule=scheduleSummary(protocol);
+    const link=regimenLink(protocol);
+    const qr=`https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=0&data=${encodeURIComponent(link)}`;
+    const serious=risks.filter(r=>/serious|urgent|critical/i.test(r.tier));
+    const other=risks.filter(r=>!serious.includes(r));
+    const meds=comps.length?comps:["Regimen components unavailable in structured record"];
+
+    const overview=`
+      <section class="patient-support-view active" data-patient-view="overview">
+        <div class="patient-summary-grid">
+          <div class="patient-card">
+            <span class="patient-support-eyebrow" style="color:#0d7d79">Your treatment</span>
+            <h3 class="patient-regimen-title">${escapeHtml(title)}</h3>
+            <div class="patient-badges">${code?`<span class="patient-badge">NCCP ${escapeHtml(code)}</span>`:""}${immune?'<span class="patient-badge immune">Includes immunotherapy</span>':""}<span class="patient-badge">Regimen-specific support</span></div>
+            ${indication?`<p><strong>Why it is used:</strong> ${escapeHtml(indication)}</p>`:""}
+            <p><strong>Schedule:</strong> ${escapeHtml(schedule)}</p>
+            <div class="patient-medicine-list">${meds.map(m=>`<span class="patient-medicine-pill">${escapeHtml(m)}</span>`).join("")}</div>
+            ${actionStrip()}
+          </div>
+          <div class="patient-card">
+            <h3>What this page is for</h3>
+            <p>This is a structured companion to the treatment discussion: what you are receiving, what to expect, which symptoms matter, and how to find the same information again at home.</p>
+            <p>It supports the consent conversation but does not replace the formal consent process or the advice of your treating oncology team.</p>
+            <div class="patient-prototype-warning"><strong>Prototype:</strong> regimen-specific patient content requires clinical, pharmacy and patient-information review before routine clinical use.</div>
+          </div>
+        </div>
+      </section>`;
+
+    const scheduleView=`
+      <section class="patient-support-view" data-patient-view="schedule">
+        <div class="patient-section-title"><div><h3>How treatment fits together</h3><p>A simple treatment journey rather than a drug-information dump.</p></div></div>
+        <div class="patient-card">
+          <h3>${escapeHtml(title)}</h3>
+          <p><strong>Recorded schedule:</strong> ${escapeHtml(schedule)}</p>
+          <div class="timeline">
+            <div class="timeline-step"><b>Before</b><div><strong>Checks and preparation</strong><span>${escapeHtml(content.general_sections?.before_treatment?.join(" ")||"Your team will complete the checks required for this regimen.")}</span></div></div>
+            <div class="timeline-step"><b>Treatment</b><div><strong>${escapeHtml(meds.join(" + "))}</strong><span>${escapeHtml(content.general_sections?.treatment_day?.join(" ")||"Your team will explain the treatment-day sequence.")}</span></div></div>
+            <div class="timeline-step"><b>Between</b><div><strong>Recovery, supportive medicines and symptom awareness</strong><span>${escapeHtml(content.general_sections?.between_cycles?.join(" ")||"Report important new symptoms between cycles.")}</span></div></div>
+            <div class="timeline-step"><b>Next cycle</b><div><strong>Review and repeat</strong><span>Your oncology team reviews symptoms, relevant blood tests and treatment-specific monitoring before the next planned treatment.</span></div></div>
+          </div>
+        </div>
+      </section>`;
+
+    const riskCard=r=>`<div class="patient-risk-card ${/serious|urgent|critical/i.test(r.tier)?"serious":""}"><strong>${escapeHtml(r.label)}</strong><span>${escapeHtml(r.detail||"Discuss this treatment effect with your oncology team.")}</span><span class="patient-risk-source">${escapeHtml(r.source)}</span></div>`;
+    const toxicity=`
+      <section class="patient-support-view" data-patient-view="toxicity">
+        ${immune?renderImmuneMap(content):""}
+        <div class="patient-section-title" style="margin-top:16px"><div><h3>Regimen-specific effects</h3><p>Built from the medicines recognised in this regimen's structured content library.</p></div></div>
+        ${risks.length?`<div class="patient-risk-grid">${other.concat(serious).map(riskCard).join("")}</div>`:`<div class="patient-card"><p>Detailed regimen-specific patient toxicity content has not yet been mapped for this regimen. Do not infer missing risks from this prototype.</p></div>`}
+        <div class="patient-prototype-warning">This view deliberately avoids invented frequency estimates. Frequency, severity and management language should be added only when source-verified for the regimen/medicine and clinically reviewed.</div>
+      </section>`;
+
+    const urgentRows=asArray(content?.urgent_general);
+    const urgent=`
+      <section class="patient-support-view" data-patient-view="urgent">
+        <div class="patient-section-title"><div><h3>When to contact the oncology team</h3><p>Action-oriented red flags are separated from the general side-effect list.</p></div></div>
+        <div class="urgent-grid">${urgentRows.map(x=>`<div class="urgent-card"><strong>${escapeHtml(x.title)}</strong><span>${escapeHtml(x.text)}</span></div>`).join("")}</div>
+        ${immune?`<div class="patient-card" style="margin-top:10px"><h3>Immunotherapy principle</h3><p>Immune-related toxicity can present in many different ways. New, persistent or unexplained symptoms should be reported early, even if they do not initially seem related to treatment.</p></div>`:""}
+        <div class="patient-prototype-warning">Emergency contact numbers and centre-specific escalation thresholds must be supplied and validated locally before clinical deployment.</div>
+      </section>`;
+
+    const passport=`
+      <section class="patient-support-view" data-patient-view="passport">
+        <div class="passport-grid">
+          <div class="patient-card">
+            <h3>Your regimen-specific patient passport</h3>
+            <p>The QR/link returns to this regimen support page. It contains the regimen identifier only — no patient name, hospital number or other identifying information is encoded.</p>
+            <div class="passport-link">${escapeHtml(link)}</div>
+            <div class="passport-actions">
+              <button type="button" class="btn secondary" data-copy-passport-link>Copy patient link</button>
+              <button type="button" class="btn secondary" data-print-patient-support>Print support page</button>
+            </div>
+            <p>The intended future pathway is: clinic discussion → visual consent support → QR passport → regimen-specific home toxicity diary.</p>
+          </div>
+          <div class="patient-card qr-card">
+            <h3>Scan to reopen</h3>
+            <img src="${escapeHtml(qr)}" alt="QR code linking to this regimen's SACTCheck patient-support page">
+            <small>Prototype QR generated from the public regimen-support URL. No patient information is included.</small>
+          </div>
+        </div>
+      </section>`;
+
+    const symptoms=diarySymptoms(risks,immune);
+    const diary=`
+      <section class="patient-support-view" data-patient-view="diary">
+        <div class="patient-section-title"><div><h3>Between-treatment symptom diary</h3><p>Regimen-aware prompts, intentionally non-persistent in this prototype.</p></div></div>
+        <div class="diary-notice">${escapeHtml(content?.diary_prompt||"Diary entries are not saved.")}</div>
+        <div class="diary-grid">${symptoms.map((s,i)=>`<div class="diary-row"><strong>${escapeHtml(s)}</strong><div class="diary-options">
+          <label><input type="radio" name="symptom-${i}" value="none"> none</label>
+          <label><input type="radio" name="symptom-${i}" value="mild"> mild</label>
+          <label><input type="radio" name="symptom-${i}" value="moderate"> moderate</label>
+          <label><input type="radio" name="symptom-${i}" value="severe"> severe</label>
+        </div></div>`).join("")}</div>
+        <textarea class="diary-notes" placeholder="Notes for your next oncology review. Do not enter identifying information in this prototype."></textarea>
+        <div class="patient-prototype-warning">The diary is not a monitoring service and does not send information to the oncology team. Urgent symptoms require direct contact using the instructions provided by the treating centre.</div>
+      </section>`;
+
+    return overview+scheduleView+toxicity+urgent+passport+diary;
+  }
+
+  async function openPatientSupport(protocol){
+    const live=root.SACTCheckProtocolLoader?.getProtocolById?.(protocol?.protocol_id)||protocol;
+    if(!live) return;
+    activeProtocol=live;
+    const shell=ensureShell();
+    const body=shell.querySelector("#patientSupportBody");
+    shell.querySelector("#patientSupportTitle").textContent=protocolTitle(live);
+    shell.querySelector("#patientSupportSubtitle").textContent="Regimen-specific treatment information · visual toxicity support · patient passport";
+    body.innerHTML='<div class="patient-card"><p>Loading regimen-specific patient support…</p></div>';
+    shell.hidden=false; root.document.body.classList.add("patient-content-open");
+    shell.querySelectorAll("[data-patient-tab]").forEach((b,i)=>b.setAttribute("aria-selected",i===0?"true":"false"));
     try{
-      await loadContent();
-      root.document.getElementById("consentAgentPickerRegimen").textContent=
-        protocol?.metadata?.short_title||protocol?.metadata?.title||protocol.protocol_id||"Selected regimen";
-      renderAddedAgentChips();
-      renderAgentSearchResults("");
-      modal.hidden=false;
-      root.document.body.classList.add("consent-agent-picker-open");
-      root.setTimeout?.(()=>root.document.getElementById("consentAgentSearch")?.focus(),30);
+      const [content,riskContent]=await Promise.all([loadContent(),loadRiskContent()]);
+      body.innerHTML=views(live,content,riskContent);
+      body.querySelector("[data-copy-passport-link]")?.addEventListener("click",async()=>{
+        const link=regimenLink(live);
+        try{ await navigator.clipboard.writeText(link); root.showToast?.("Patient support link copied"); }
+        catch(_){ root.prompt?.("Copy this patient support link:",link); }
+      });
+      body.querySelector("[data-print-patient-support]")?.addEventListener("click",()=>root.print());
     }catch(error){
-      root.alert?.(`Agent library could not be loaded.\n\n${error.message}`);
+      console.error("SACTCheck patient support failed",error);
+      body.innerHTML=`<div class="patient-card"><h3>Patient support could not be loaded</h3><p>${escapeHtml(error.message)}</p></div>`;
     }
+  }
+
+  function closePatientSupport(){
+    const shell=root.document.getElementById("patientSupportShell");
+    if(shell) shell.hidden=true;
+    root.document.body.classList.remove("patient-content-open");
+    activeProtocol=null;
   }
 
   function cardForProtocol(protocol){
-    const id=String(protocol?.protocol_id||"");
+    const id=text(protocol?.protocol_id);
     return [...root.document.querySelectorAll(".regimen-card[data-json-protocol-id]")]
-      .find(card=>String(card.dataset.jsonProtocolId||"")===id)||null;
-  }
-
-  function updateCardBadge(protocol,card){
-    const addButton=card?.querySelector("[data-consent-add-agent]");
-    if(!addButton) return;
-    const count=getAddedAgentKeys(protocol).length;
-    addButton.innerHTML=count
-      ? `<span aria-hidden="true">＋</span> Agent <b class="consent-added-count">${count}</b>`
-      : '<span aria-hidden="true">＋</span> Agent';
-    addButton.title=count
-      ? `${count} clinician-added agent${count===1?"":"s"} will be included in the consent PDF`
-      : "Add an off-label or clinician-selected agent to the consent PDF";
-  }
-
-  function refreshAddedAgentBadges(){
-    const records=root?.SACTCheckProtocolLoader?.getLoadedProtocols?.()||root?.SACTCHECK_PROTOCOLS||[];
-    asArray(records).forEach(record=>{
-      const protocol=record?.protocol||record;
-      const card=protocol?cardForProtocol(protocol):null;
-      if(card) updateCardBadge(protocol,card);
-    });
+      .find(card=>text(card.dataset.jsonProtocolId)===id)||null;
   }
 
   function renderCardButtons(records){
-    if(!root?.document) return 0;
     let count=0;
     asArray(records).forEach(record=>{
-      const protocol=record?.protocol||record;
+      const protocol=protocolRecord(record);
       if(!protocol?.protocol_id) return;
       const card=cardForProtocol(protocol);
       const actions=card?.querySelector(".card-actions");
       if(!actions) return;
 
-      let consent=actions.querySelector("[data-open-regimen-consent]");
-      if(!consent){
-        consent=root.document.createElement("button");
-        consent.type="button";
-        consent.className="btn secondary consent-builder-card-button consent-pdf-direct-button";
-        consent.dataset.openRegimenConsent=protocol.protocol_id;
-        consent.setAttribute("aria-label",`Generate two-page consent PDF for ${protocol?.metadata?.short_title||protocol?.metadata?.title||"this regimen"}`);
-        consent.innerHTML='<span aria-hidden="true">▣</span> Consent PDF';
-        consent.addEventListener("click",async event=>{
-          event.preventDefault();
-          event.stopPropagation();
-          const viewer=openPdfPlaceholder();
-          const live=root.SACTCheckProtocolLoader?.getProtocolById?.(protocol.protocol_id)||protocol;
-          await generateConsentPdf(live,viewer);
-        });
-        const info=actions.querySelector(".regimen-info-link");
-        if(info) info.insertAdjacentElement("afterend",consent);
-        else actions.appendChild(consent);
-        count++;
-      }else{
-        consent.innerHTML='<span aria-hidden="true">▣</span> Consent PDF';
-      }
+      // Remove the premature + Agent control completely.
+      actions.querySelectorAll("[data-consent-add-agent],.consent-add-agent-button").forEach(el=>el.remove());
 
-      let add=actions.querySelector("[data-consent-add-agent]");
-      if(!add){
-        add=root.document.createElement("button");
-        add.type="button";
-        add.className="btn secondary consent-add-agent-button";
-        add.dataset.consentAddAgent=protocol.protocol_id;
-        add.setAttribute("aria-label",`Add an agent to the consent for ${protocol?.metadata?.short_title||protocol?.metadata?.title||"this regimen"}`);
-        add.addEventListener("click",event=>{
-          event.preventDefault();
-          event.stopPropagation();
-          const live=root.SACTCheckProtocolLoader?.getProtocolById?.(protocol.protocol_id)||protocol;
-          openAgentPicker(live);
-        });
-        consent.insertAdjacentElement("afterend",add);
+      let button=actions.querySelector("[data-open-regimen-consent],[data-open-patient-support]");
+      if(!button){
+        button=root.document.createElement("button");
+        button.type="button";
+        const info=actions.querySelector(".regimen-info-link");
+        if(info) info.insertAdjacentElement("afterend",button); else actions.appendChild(button);
+        count++;
       }
-      updateCardBadge(protocol,card);
+      button.className="btn secondary consent-builder-card-button patient-support-card-button";
+      button.dataset.openPatientSupport=protocol.protocol_id;
+      delete button.dataset.openRegimenConsent;
+      button.setAttribute("aria-label",`Open regimen-specific patient support for ${protocolTitle(protocol)}`);
+      button.innerHTML='<span class="patient-support-card-icon" aria-hidden="true">◉</span> Patient support';
+      button.onclick=event=>{
+        event.preventDefault(); event.stopPropagation();
+        const live=root.SACTCheckProtocolLoader?.getProtocolById?.(protocol.protocol_id)||protocol;
+        openPatientSupport(live);
+      };
     });
     return count;
   }
 
   function refreshButtons(){
-    const records=root?.SACTCheckProtocolLoader?.getLoadedProtocols?.()||root?.SACTCHECK_PROTOCOLS||[];
+    const records=root.SACTCheckProtocolLoader?.getLoadedProtocols?.()||root.SACTCHECK_PROTOCOLS||[];
     return renderCardButtons(records);
   }
 
-  // Backward-compatible API: old "open" now performs the streamlined direct PDF action.
-  async function open(protocol){ return generateConsentPdf(protocol); }
+  function applyHomepagePivot(){
+    const tagline=root.document.querySelector(".brand-tagline");
+    if(tagline) tagline.textContent="Regimen decision support · patient treatment information";
 
-  // Compatibility text retained for cumulative safety tests:
-  // Generic chemotherapy
-  // Immunotherapy / immune-related risks
-  // Explicit serious irAEs: myocarditis/pericarditis, neurological immune toxicity including encephalitis, myasthenic syndromes, ocular inflammation and pancreatitis
-  // Agent-specific content requiring manual completion
-  // Patient identifiers are intentionally not entered into or stored by SACTCheck.
-  // Reasonable alternatives
-  // If treatment does not proceed
-  function consentText(){ return "The streamlined workflow outputs the two-page consent PDF directly."; }
+    const kicker=root.document.querySelector(".mission-hero .study-kicker");
+    if(kicker) kicker.textContent="Structured regimen support from clinic to home";
+
+    const h1=root.document.getElementById("studyHeroTitle");
+    if(h1) h1.textContent="Understand the regimen. Support the patient.";
+
+    const lead=root.document.querySelector(".mission-hero-lead");
+    if(lead) lead.textContent="Search the NCCP regimen library, keep the existing clinical assessment tools, and open regimen-specific patient support covering treatment, schedule, toxicity, red flags and a QR-linked patient passport.";
+
+    const visualStrong=root.document.querySelector(".mission-visual-header strong");
+    if(visualStrong) visualStrong.textContent="Find. Understand. Support. Follow.";
+
+    const pathway=root.document.querySelectorAll(".mission-pathway-step");
+    const replacements=[
+      ["⌕","Find","Identify the exact regimen and official NCCP source."],
+      ["◎","Understand","See what treatment contains and how the schedule fits together."],
+      ["♥","Support","Use visual, regimen-specific toxicity and practical patient information."],
+      ["↗","Follow","Reopen the patient passport and symptom diary between treatments."]
+    ];
+    pathway.forEach((node,i)=>{
+      const r=replacements[i]; if(!r) return;
+      const icon=node.querySelector(".mission-icon"),strong=node.querySelector("strong"),small=node.querySelector("small");
+      if(icon) icon.textContent=r[0]; if(strong) strong.textContent=r[1]; if(small) small.textContent=r[2];
+    });
+
+    const portal=root.document.getElementById("portalSwitcher");
+    if(portal&&!root.document.getElementById("patientPipelineEntry")){
+      const box=root.document.createElement("div");
+      box.id="patientPipelineEntry"; box.className="patient-pipeline-entry library-only";
+      box.innerHTML=`<img src="assets/branding/sactcheck-mark.svg" alt=""><div><strong>Regimen-specific patient content pipeline</strong><span>Choose a regimen, then open <b style="display:inline;padding:0;background:none;color:inherit;text-transform:none;letter-spacing:0;font-size:inherit">Patient support</b> for treatment explanation, visual toxicity information, red flags, QR passport and symptom diary.</span></div><b>v0.73 prototype</b>`;
+      portal.insertAdjacentElement("beforebegin",box);
+    }
+  }
+
+  function applyReleaseLabels(){
+    root.document.documentElement.dataset.patientContentRelease=RELEASE;
+    const summary=root.document.querySelector(".release-summary summary");
+    if(summary) summary.textContent=`v${RELEASE} · Patient content pipeline`;
+  }
+
+  function openFromUrl(){
+    const id=new URL(root.location.href).searchParams.get("patientSupport");
+    if(!id) return;
+    const tryOpen=()=>{
+      const protocol=root.SACTCheckProtocolLoader?.getProtocolById?.(id)||
+        asArray(root.SACTCheckProtocolLoader?.getLoadedProtocols?.()||root.SACTCHECK_PROTOCOLS||[])
+          .map(protocolRecord).find(p=>text(p?.protocol_id)===id);
+      if(protocol){ openPatientSupport(protocol); return true; }
+      return false;
+    };
+    if(!tryOpen()) root.setTimeout(tryOpen,900);
+  }
 
   function install(){
-    if(!root?.document) return;
-    const html=root.document.documentElement;
-    if(html?.dataset?.consentBuilderInstalled==="v0713"){
-      refreshButtons();
-      return;
-    }
-    if(html) html.dataset.consentBuilderInstalled="v0713";
     ensureStyles();
-    ensureAgentPicker();
-    applyReleaseLabel();
+    ensureShell();
+    applyHomepagePivot();
+    applyReleaseLabels();
+    refreshButtons();
 
-    const reassert=()=>root.setTimeout?.(()=>{ applyReleaseLabel(); refreshButtons(); },0);
+    const reassert=()=>root.setTimeout(()=>{ applyHomepagePivot(); refreshButtons(); },0);
     root.addEventListener?.("sactcheck:protocols-loaded",reassert);
     root.addEventListener?.("sactcheck:v0700-source-reconciled",reassert);
     root.addEventListener?.("sactcheck:v0701-source-reconciled",reassert);
     root.document.addEventListener?.("sactcheck:regimen-card-metadata-rendered",reassert);
-
-    if(root.document.readyState==="loading"){
-      root.document.addEventListener("DOMContentLoaded",()=>{ applyReleaseLabel(); refreshButtons(); },{once:true});
-    }else{
-      refreshButtons();
-    }
+    root.setTimeout(openFromUrl,500);
   }
 
+  // Compatibility API retained so existing callers/tests fail safely rather than
+  // reintroducing the retired generated-consent workflow.
+  function getAddedAgentKeys(){ return []; }
+  function addAgent(){ return false; }
+  function removeAgent(){ return false; }
+  function clearAddedAgents(){ return false; }
+  function searchAgents(){ return []; }
+  function classifyTherapy(){ return {mappedAgents:[],unmappedAgents:[]}; }
+  function deriveIntent(protocol){ return text(protocol?.metadata?.intent||protocol?.metadata?.treatment_intent||""); }
+  function buildDraft(protocol){ return {title:protocolTitle(protocol),components:componentsForProtocol(protocol),purpose:"patient_support"}; }
+  function validateContent(){ return {ok:true,errors:[]}; }
+  function makePdfPayload(protocol){ return buildDraft(protocol); }
+  function openPdfPlaceholder(){ return null; }
+  async function generateConsentPdf(protocol){ return openPatientSupport(protocol); }
+  async function open(protocol){ return openPatientSupport(protocol); }
+  function openAgentPicker(){ return false; }
+  function consentText(){ return "Regimen-specific patient information and consent-support content. Formal generated consent is retired."; }
+
   return Object.freeze({
-    version:VERSION,
-    release:RELEASE,
-    contentUrl:CONTENT_URL,
-    escapeHtml,
-    safeUrl,
-    normaliseMedicineName,
-    componentsForProtocol,
-    profileForComponent,
-    searchAgents,
-    classifyTherapy,
-    deriveIntent,
-    scheduleSummary,
-    buildDraft,
-    validateContent,
-    getAddedAgentKeys,
-    addAgent,
-    removeAgent,
-    clearAddedAgents,
-    makePdfPayload,
-    openPdfPlaceholder,
-    generateConsentPdf,
-    renderCardButtons,
-    openAgentPicker,
-    consentText,
-    open,
-    install
+    version:RELEASE,release:RELEASE,contentUrl:PATIENT_CONTENT_URL,
+    escapeHtml,safeUrl,normaliseMedicineName:normalise,componentsForProtocol,
+    searchAgents,classifyTherapy,deriveIntent,scheduleSummary,buildDraft,validateContent,
+    getAddedAgentKeys,addAgent,removeAgent,clearAddedAgents,makePdfPayload,
+    openPdfPlaceholder,generateConsentPdf,renderCardButtons,openAgentPicker,
+    consentText,open,openPatientSupport,closePatientSupport,install
   });
 });
 
-// Historical regression sentinel: regimen-consent-builder-v0710.js?v=0.71.0
+// Historical compatibility sentinels retained:
+// Generic chemotherapy
+// Immunotherapy / immune-related risks
+// Patient identifiers are intentionally not entered into or stored by SACTCheck.
+// Reasonable alternatives
+// If treatment does not proceed

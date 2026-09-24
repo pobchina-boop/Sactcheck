@@ -1,0 +1,48 @@
+SACTCheck v0.73.0 — PATIENT CONTENT PIPELINE DROP-IN
+
+BASE
+Current main / v0.72.0 workflow-engine build.
+
+WHAT THIS DROP-IN CHANGES
+1. Replaces the existing consent-builder module in place.
+2. Removes the + Agent control from regimen cards.
+3. Replaces 'Consent PDF' with 'Patient support'.
+4. Retires generated-consent framing; the module is now consent support / patient treatment information.
+5. Adds a regimen-specific patient support workspace:
+   - treatment at a glance
+   - regimen components and recorded schedule
+   - regimen-specific toxicity content from the existing structured risk library
+   - immunotherapy organ-system visual language
+   - urgent symptom / escalation section
+   - regimen-specific patient passport link + QR code
+   - non-persistent symptom diary
+6. Reframes the homepage toward clinician + patient regimen support.
+7. Reuses the existing SACTCheck logo/mark throughout.
+8. Leaves the assessment engine, NCCP rules, protocol encodings and workflow engine untouched.
+
+HOW TO APPLY
+- Extract this ZIP.
+- Drag the css, js and data folders into the ROOT of your local Sactcheck repository.
+- Allow Windows to MERGE folders and REPLACE the existing files when prompted.
+- No index.html edit is required: the current app already loads js/regimen-consent-builder-v0710.js.
+- Open the app, hard refresh (Ctrl+F5) and confirm the v0.73 patient-content UI appears.
+- Commit only after the checks below pass.
+
+IMPORTANT PROTOTYPE BOUNDARY
+This is an information-support architecture. It does not replace formal consent, local patient-information governance, the current NCCP regimen, local policy or clinical judgement.
+The QR encodes the public regimen-support URL plus protocol identifier only; it contains no patient identifier.
+The symptom diary is intentionally non-persistent and sends no information to the oncology team.
+The QR image currently uses api.qrserver.com as a prototype renderer; replace with an internally hosted/client-side QR generator before formal clinical deployment.
+
+SMOKE CHECKS
+[ ] App loads normally.
+[ ] Regimen cards no longer show + Agent.
+[ ] Regimen cards show Patient support.
+[ ] Patient support modal opens and closes.
+[ ] Existing assessment buttons still work.
+[ ] Immunotherapy-containing regimen shows organ-system visual.
+[ ] Non-immunotherapy regimen does not show immune organ map.
+[ ] Passport QR/link is regimen-specific.
+[ ] patientSupport=<protocol_id> URL reopens the correct regimen page.
+[ ] Diary values disappear after refresh (no persistence).
+[ ] No patient identifiers are requested or stored.
