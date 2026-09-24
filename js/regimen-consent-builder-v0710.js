@@ -483,7 +483,54 @@
   function applyReleaseLabels(){
     root.document.documentElement.dataset.patientContentRelease=RELEASE;
     const summary=root.document.querySelector(".release-summary summary");
-    if(summary) summary.textContent=`v${RELEASE} · Patient content pipeline`;
+    if(summary && summary.textContent!==`v${RELEASE} · Patient content pipeline`)
+      summary.textContent=`v${RELEASE} · Patient content pipeline`;
+
+    const headerVersion=root.document.querySelector(".header-version");
+    if(headerVersion && headerVersion.textContent!==`v${RELEASE}`)
+      headerVersion.textContent=`v${RELEASE}`;
+
+    const meta=root.document.querySelector('meta[name="sactcheck-release"]');
+    if(meta && meta.getAttribute("content")!==RELEASE)
+      meta.setAttribute("content",RELEASE);
+
+    const desiredTitle=`SACTCheck v${RELEASE} - Patient Content Pipeline`;
+    if(root.document.title!==desiredTitle) root.document.title=desiredTitle;
+  }
+
+  function reassertPatientDirection(){
+    applyReleaseLabels();
+    applyHomepagePivot();
+  }
+
+  function installReleaseGuard(){
+    if(root.document.documentElement.dataset.patientReleaseGuard==="v0730") return;
+    root.document.documentElement.dataset.patientReleaseGuard="v0730";
+
+    // v0.72 workflow refreshes after protocol events and previously rewrote the
+    // app title/header and older Consent wording. Reassert the cumulative v0.73
+    // presentation after those asynchronous refreshes without changing its logic.
+    let queued=false;
+    const queue=()=>{
+      if(queued) return;
+      queued=true;
+      root.setTimeout(()=>{ queued=false; reassertPatientDirection(); },35);
+    };
+
+    const target=root.document.documentElement;
+    if(root.MutationObserver){
+      const observer=new MutationObserver(mutations=>{
+        const needsRepair=mutations.some(m=>{
+          const t=(m.target?.textContent||"");
+          return /v0\.72\.0|Concise regimen-specific consent output|AssessConsentSupportInform/.test(t.replace(/\s+/g,""));
+        });
+        if(needsRepair) queue();
+      });
+      observer.observe(target,{subtree:true,childList:true,characterData:true});
+    }
+
+    // Also cover delayed workflow/protocol initialisation.
+    [0,100,300,750,1500,3000].forEach(ms=>root.setTimeout(reassertPatientDirection,ms));
   }
 
   function openFromUrl(){
@@ -504,9 +551,13 @@
     ensureShell();
     applyHomepagePivot();
     applyReleaseLabels();
+    installReleaseGuard();
     refreshButtons();
 
-    const reassert=()=>root.setTimeout(()=>{ applyHomepagePivot(); refreshButtons(); },0);
+    const reassert=()=>{
+      root.setTimeout(()=>{ applyHomepagePivot(); applyReleaseLabels(); refreshButtons(); },40);
+      root.setTimeout(()=>{ applyHomepagePivot(); applyReleaseLabels(); },300);
+    };
     root.addEventListener?.("sactcheck:protocols-loaded",reassert);
     root.addEventListener?.("sactcheck:v0700-source-reconciled",reassert);
     root.addEventListener?.("sactcheck:v0701-source-reconciled",reassert);
