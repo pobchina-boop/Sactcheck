@@ -1,4 +1,4 @@
-/** SACTCheck study presentation + v0.74.0 interface bootstrap. */
+/** SACTCheck study presentation + v0.74.1 interface bootstrap. */
 (function (root) {
   "use strict";
   const VERSION = "0.48.4";
@@ -68,13 +68,13 @@
   else bind();
 })(typeof globalThis !== "undefined" ? globalThis : this);
 
-/* v0.74.0
-   One coordinated bootstrap replaces the accumulated patient/consent loaders.
-   The clinical workflow remains v0.72 internally; patient support and the
-   interface shell are v0.74.0.  No treatment-rule files are changed. */
+/* v0.74.1
+   v0.74 patient-facing architecture retained.
+   This bootstrap adds a canonical HTTPS QR/link hotfix so locally generated
+   passports never encode file:// or localhost URLs. */
 (function(root){
   "use strict";
-  const RELEASE="0.74.0";
+  const RELEASE="0.74.1";
 
   function loadCss(){
     if(root.document.querySelector('link[data-sactcheck-interface-v0740]')) return;
@@ -104,8 +104,7 @@
   async function boot(){
     loadCss();
 
-    // Evict the retired v0.71/v0.73 consent runtime if it survived in an open tab.
-    if(root.SACTCheckRegimenConsentBuilder?.release && root.SACTCheckRegimenConsentBuilder.release!==RELEASE){
+    if(root.SACTCheckRegimenConsentBuilder?.release && !["0.74.0","0.74.1"].includes(root.SACTCheckRegimenConsentBuilder.release)){
       try{ delete root.SACTCheckRegimenConsentBuilder; }catch(_){ root.SACTCheckRegimenConsentBuilder=undefined; }
       try{ delete root.SACTCheckPatientContent; }catch(_){ root.SACTCheckPatientContent=undefined; }
     }
@@ -129,6 +128,12 @@
     await loadScript(
       `js/sactcheck-interface-v0740.js?v=${RELEASE}`,
       "data-sactcheck-interface-v0740",
+      RELEASE
+    );
+
+    await loadScript(
+      `js/patient-qr-hotfix-v0741.js?v=${RELEASE}`,
+      "data-patient-qr-hotfix-v0741",
       RELEASE
     );
   }

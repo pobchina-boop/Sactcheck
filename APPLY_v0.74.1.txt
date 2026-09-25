@@ -1,0 +1,42 @@
+SACTCheck v0.74.1 - QR ROUTING HOTFIX
+OLD-STYLE DRAG / DROP / REPLACE
+
+WHY THIS IS NEEDED
+The v0.74.0 QR used the current browser address. When you demonstrated SACTCheck
+from C:\...\index.html or localhost, the QR encoded that local address.
+A phone cannot open a path on your PC, so the QR appeared to do nothing.
+
+WHAT v0.74.1 DOES
+- Every patient QR now points to:
+  https://sactcheck.com/?patientSupport=<REGIMEN_ID>
+- The QR contains a regimen identifier only. No patient data.
+- The QR image is also clickable during a desktop demonstration.
+- "Copy regimen link" copies the public HTTPS link rather than file:// or localhost.
+- Printable passports have the public URL and canonical QR patched in before printing.
+- Existing clinician / patient interface and printable passport remain unchanged.
+
+IMPORTANT
+The QR will open the deployed public patient-facing experience only AFTER this
+update has been pushed to the live sactcheck.com site. Local testing can verify
+the encoded destination, but a phone cannot load unpublished local changes.
+
+APPLY
+1. Extract this ZIP.
+2. Ctrl+A -> Copy.
+3. Paste into:
+   C:\Users\Paul\Documents\GitHub\Sactcheck
+4. Choose Replace.
+5. Close all SACTCheck tabs.
+6. Re-open and press Ctrl+F5 once.
+7. Run:
+   node tests\patient-qr-hotfix-v0741.test.js
+   npm.cmd test
+8. Push to GitHub / Pages.
+9. Once the live deployment is complete, scan a newly generated QR with your phone.
+
+SMOKE TEST
+- Open any regimen -> Patient support -> Printable passport.
+- The displayed URL should begin https://sactcheck.com/?patientSupport=
+- Click the QR on desktop: it should open the public regimen link in a new tab.
+- Scan the same QR on a phone after deployment: it should open SACTCheck directly
+  into the patient-facing support for that regimen.
