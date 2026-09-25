@@ -1,0 +1,16 @@
+const assert=require('assert');
+const fs=require('fs');
+const path=require('path');
+const interfaceApi=require('../js/sactcheck-interface-v0750.js');
+assert.equal(interfaceApi.release,'0.75.0');
+const ui=fs.readFileSync(path.join(__dirname,'../js/sactcheck-interface-v0750.js'),'utf8');
+const workflow=fs.readFileSync(path.join(__dirname,'../js/regimen-workflow-engine-v0750.js'),'utf8');
+const bootstrap=fs.readFileSync(path.join(__dirname,'../js/study-release.js'),'utf8');
+assert.ok(ui.includes('One regimen, connected support'));
+assert.ok(ui.includes('Patient A4 treatment guide'));
+assert.ok(ui.includes('hero.querySelectorAll(".v0740-brand-lockup,.v0750-brand-lockup")'));
+assert.ok(!workflow.includes('brand.innerHTML='),'workflow engine must not inject a competing homepage logo');
+assert.ok(bootstrap.includes('patient-support-v0750.js'));
+assert.ok(bootstrap.includes('regimen-workflow-engine-v0750.js'));
+assert.ok(!bootstrap.includes('patient-qr-hotfix-v0741.js'));
+console.log('interface-v0750: PASS');

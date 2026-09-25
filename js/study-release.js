@@ -1,4 +1,4 @@
-/** SACTCheck study presentation + v0.74.1 interface bootstrap. */
+/** SACTCheck study presentation + v0.75.0 interface bootstrap. */
 (function (root) {
   "use strict";
   const VERSION = "0.48.4";
@@ -68,28 +68,32 @@
   else bind();
 })(typeof globalThis !== "undefined" ? globalThis : this);
 
-/* v0.74.1
-   v0.74 patient-facing architecture retained.
-   This bootstrap adds a canonical HTTPS QR/link hotfix so locally generated
-   passports never encode file:// or localhost URLs. */
+/* v0.75.0
+   Patient-facing A4 treatment guide + supportive-care reconciliation.
+   Loads the v0.75 patient content, interface and workflow layers together so
+   local supportive-medicine completeness and drug-content isolation remain aligned. */
 (function(root){
   "use strict";
-  const RELEASE="0.74.1";
+  const RELEASE="0.75.0";
 
   function loadCss(){
-    if(root.document.querySelector('link[data-sactcheck-interface-v0740]')) return;
+    root.document.querySelectorAll('link[data-sactcheck-interface-v0740],link[data-sactcheck-interface-v0750]').forEach(x=>x.remove());
     const link=root.document.createElement("link");
     link.rel="stylesheet";
-    link.href=`css/sactcheck-interface-v0740.css?v=${RELEASE}`;
-    link.dataset.sactcheckInterfaceV0740="true";
+    link.href=`css/sactcheck-interface-v0750.css?v=${RELEASE}`;
+    link.dataset.sactcheckInterfaceV0750="true";
     root.document.head.appendChild(link);
+  }
+
+  function resetGlobal(name,expected){
+    const api=root[name];
+    if(api?.release===expected) return;
+    try{ delete root[name]; }catch(_){ root[name]=undefined; }
   }
 
   function loadScript(src,attr,value){
     return new Promise((resolve,reject)=>{
-      const selector=`script[${attr}]`;
-      const old=root.document.querySelector(selector);
-      old?.remove?.();
+      root.document.querySelectorAll(`script[${attr}]`).forEach(x=>x.remove());
       const script=root.document.createElement("script");
       script.src=src;
       script.defer=true;
@@ -103,37 +107,20 @@
 
   async function boot(){
     loadCss();
+    resetGlobal("SACTCheckPatientContent",RELEASE);
+    resetGlobal("SACTCheckRegimenConsentBuilder",RELEASE);
+    resetGlobal("SACTCheckRegimenWorkflow",RELEASE);
+    resetGlobal("SACTCheckSupportiveCarePdf",RELEASE);
+    resetGlobal("SACTCheckInterface",RELEASE);
 
-    if(root.SACTCheckRegimenConsentBuilder?.release && !["0.74.0","0.74.1"].includes(root.SACTCheckRegimenConsentBuilder.release)){
-      try{ delete root.SACTCheckRegimenConsentBuilder; }catch(_){ root.SACTCheckRegimenConsentBuilder=undefined; }
-      try{ delete root.SACTCheckPatientContent; }catch(_){ root.SACTCheckPatientContent=undefined; }
-    }
-
-    const patient = loadScript(
-      `js/patient-support-v0740.js?v=${RELEASE}`,
-      "data-patient-support-v0740",
-      RELEASE
-    );
-
-    const workflow = root.SACTCheckRegimenWorkflow?.release==="0.72.0"
-      ? Promise.resolve()
-      : loadScript(
-          `js/regimen-workflow-engine-v0720.js?v=0.72.0&shell=${RELEASE}`,
-          "data-regimen-workflow-engine",
-          "0.72.0"
-        );
-
-    await Promise.all([patient,workflow]);
+    await Promise.all([
+      loadScript(`js/patient-support-v0750.js?v=${RELEASE}`,"data-patient-support-v0750",RELEASE),
+      loadScript(`js/regimen-workflow-engine-v0750.js?v=${RELEASE}`,"data-regimen-workflow-engine-v0750",RELEASE)
+    ]);
 
     await loadScript(
-      `js/sactcheck-interface-v0740.js?v=${RELEASE}`,
-      "data-sactcheck-interface-v0740",
-      RELEASE
-    );
-
-    await loadScript(
-      `js/patient-qr-hotfix-v0741.js?v=${RELEASE}`,
-      "data-patient-qr-hotfix-v0741",
+      `js/sactcheck-interface-v0750.js?v=${RELEASE}`,
+      "data-sactcheck-interface-v0750",
       RELEASE
     );
   }
