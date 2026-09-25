@@ -1,31 +1,40 @@
-/** SACTCheck v0.48.4 feasibility-study presentation layer. */
+/** SACTCheck study presentation + v0.74.0 interface bootstrap. */
 (function (root) {
   "use strict";
   const VERSION = "0.48.4";
   const HIDE_KEY = "sactcheck:hide-study-welcome:v1";
   let lastFocused = null;
+
   function modal() { return document.getElementById("studyWelcomeModal"); }
   function focusable(panel) {
     return [...panel.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')]
       .filter(item => !item.disabled && item.offsetParent !== null);
   }
   function openWelcome() {
-    const box = modal(); if (!box) return;
+    const box = modal();
+    if (!box) return;
     lastFocused = document.activeElement;
-    box.hidden = false; document.body.classList.add("study-modal-open");
+    box.hidden = false;
+    document.body.classList.add("study-modal-open");
     box.querySelector(".study-modal-close")?.focus();
   }
   function closeWelcome() {
-    const box = modal(); if (!box) return;
+    const box = modal();
+    if (!box) return;
     const neverAgain = document.getElementById("studyWelcomeNeverAgain")?.checked;
-    if (neverAgain) { try { root.localStorage?.setItem(HIDE_KEY, "yes"); } catch (_) {} }
-    box.hidden = true; document.body.classList.remove("study-modal-open"); lastFocused?.focus?.();
+    if (neverAgain) {
+      try { root.localStorage?.setItem(HIDE_KEY, "yes"); } catch (_) {}
+    }
+    box.hidden = true;
+    document.body.classList.remove("study-modal-open");
+    lastFocused?.focus?.();
   }
   function focusSearch() {
-    closeWelcome(); root.location.hash = "#libraryScreen";
+    closeWelcome();
+    root.location.hash = "#libraryScreen";
     const search = document.getElementById("regimenSearch");
     search?.scrollIntoView({ behavior: "smooth", block: "center" });
-    root.setTimeout(() => search?.focus(), 250);
+    root.setTimeout(() => search?.focus(), 160);
   }
   function shouldAutoOpen() {
     try { return root.localStorage?.getItem(HIDE_KEY) !== "yes"; } catch (_) { return true; }
@@ -37,7 +46,9 @@
     document.querySelectorAll("[data-close-study-info]").forEach(button => button.addEventListener("click", closeWelcome));
     document.querySelectorAll("[data-focus-regimen-search]").forEach(button => button.addEventListener("click", focusSearch));
     const box = modal();
-    box?.addEventListener("click", event => { if (event.target?.classList?.contains("study-modal-backdrop")) closeWelcome(); });
+    box?.addEventListener("click", event => {
+      if (event.target?.classList?.contains("study-modal-backdrop")) closeWelcome();
+    });
     document.addEventListener("keydown", event => {
       if (box?.hidden !== false) return;
       if (event.key === "Escape") { event.preventDefault(); closeWelcome(); return; }
@@ -51,60 +62,80 @@
     });
     if (shouldAutoOpen()) root.setTimeout(openWelcome, 280);
   }
+
   root.SACTCheckStudyRelease = Object.freeze({ version: VERSION, openWelcome, closeWelcome, focusSearch });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
   else bind();
 })(typeof globalThis !== "undefined" ? globalThis : this);
 
-/* v0.71.2a: force the current consent runtime instead of an old cached builder. */
+/* v0.74.0
+   One coordinated bootstrap replaces the accumulated patient/consent loaders.
+   The clinical workflow remains v0.72 internally; patient support and the
+   interface shell are v0.74.0.  No treatment-rule files are changed. */
 (function(root){
   "use strict";
-  const CONSENT_RELEASE="0.71.3";
-  if(!root?.document?.createElement||!root.document.head?.appendChild) return;
+  const RELEASE="0.74.0";
 
-  function loadConsentBuilder(){
-    const existing=root.document.querySelector('script[data-regimen-consent-builder]');
-    const liveRelease=root.SACTCheckRegimenConsentBuilder?.release;
+  function loadCss(){
+    if(root.document.querySelector('link[data-sactcheck-interface-v0740]')) return;
+    const link=root.document.createElement("link");
+    link.rel="stylesheet";
+    link.href=`css/sactcheck-interface-v0740.css?v=${RELEASE}`;
+    link.dataset.sactcheckInterfaceV0740="true";
+    root.document.head.appendChild(link);
+  }
 
-    if(existing && liveRelease===CONSENT_RELEASE) return;
+  function loadScript(src,attr,value){
+    return new Promise((resolve,reject)=>{
+      const selector=`script[${attr}]`;
+      const old=root.document.querySelector(selector);
+      old?.remove?.();
+      const script=root.document.createElement("script");
+      script.src=src;
+      script.defer=true;
+      script.async=false;
+      script.setAttribute(attr,value||"true");
+      script.addEventListener("load",()=>resolve(script),{once:true});
+      script.addEventListener("error",()=>reject(new Error(`Could not load ${src}`)),{once:true});
+      root.document.head.appendChild(script);
+    });
+  }
 
-    if(existing) existing.remove();
-    if(liveRelease && liveRelease!==CONSENT_RELEASE){
-      try{ delete root.SACTCheckRegimenConsentBuilder; }
-      catch(_){ root.SACTCheckRegimenConsentBuilder=undefined; }
+  async function boot(){
+    loadCss();
+
+    // Evict the retired v0.71/v0.73 consent runtime if it survived in an open tab.
+    if(root.SACTCheckRegimenConsentBuilder?.release && root.SACTCheckRegimenConsentBuilder.release!==RELEASE){
+      try{ delete root.SACTCheckRegimenConsentBuilder; }catch(_){ root.SACTCheckRegimenConsentBuilder=undefined; }
+      try{ delete root.SACTCheckPatientContent; }catch(_){ root.SACTCheckPatientContent=undefined; }
     }
 
-    const script=root.document.createElement("script");
-    script.src=`js/regimen-consent-builder-v0710.js?v=${CONSENT_RELEASE}&loader=0713`;
-    script.defer=true;
-    script.dataset.regimenConsentBuilder="true";
-    script.dataset.consentRelease=CONSENT_RELEASE;
-    root.document.head.appendChild(script);
+    const patient = loadScript(
+      `js/patient-support-v0740.js?v=${RELEASE}`,
+      "data-patient-support-v0740",
+      RELEASE
+    );
+
+    const workflow = root.SACTCheckRegimenWorkflow?.release==="0.72.0"
+      ? Promise.resolve()
+      : loadScript(
+          `js/regimen-workflow-engine-v0720.js?v=0.72.0&shell=${RELEASE}`,
+          "data-regimen-workflow-engine",
+          "0.72.0"
+        );
+
+    await Promise.all([patient,workflow]);
+
+    await loadScript(
+      `js/sactcheck-interface-v0740.js?v=${RELEASE}`,
+      "data-sactcheck-interface-v0740",
+      RELEASE
+    );
   }
 
-  if(root.document.readyState==="loading") root.document.addEventListener("DOMContentLoaded",loadConsentBuilder,{once:true});
-  else loadConsentBuilder();
-})(typeof globalThis!=="undefined"?globalThis:this);
-
-/* Historical regression sentinel: regimen-consent-builder-v0710.js?v=0.71.0 */
-
-/* v0.72.0: regimen-driven clinic workflow layer.
-   Loaded after the consent runtime so workflow actions can reuse the existing
-   consent PDF module without modifying historical index.html script ordering. */
-(function(root){
-  "use strict";
-  const WORKFLOW_RELEASE="0.72.0";
-  if(!root?.document?.createElement||!root.document.head?.appendChild) return;
-  function loadWorkflowEngine(){
-    if(root.SACTCheckRegimenWorkflow?.release===WORKFLOW_RELEASE) return;
-    const existing=root.document.querySelector('script[data-regimen-workflow-engine]');
-    existing?.remove?.();
-    const script=root.document.createElement("script");
-    script.src=`js/regimen-workflow-engine-v0720.js?v=${WORKFLOW_RELEASE}`;
-    script.defer=true;
-    script.dataset.regimenWorkflowEngine="true";
-    root.document.head.appendChild(script);
+  if(root.document.readyState==="loading"){
+    root.document.addEventListener("DOMContentLoaded",()=>boot().catch(console.error),{once:true});
+  }else{
+    boot().catch(console.error);
   }
-  if(root.document.readyState==="loading") root.document.addEventListener("DOMContentLoaded",loadWorkflowEngine,{once:true});
-  else loadWorkflowEngine();
 })(typeof globalThis!=="undefined"?globalThis:this);
