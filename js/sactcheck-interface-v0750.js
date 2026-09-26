@@ -13,7 +13,7 @@
   }
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
-  const RELEASE="0.75.1";
+  const RELEASE="0.76.0";
   let mode="clinician";
   let queued=false;
 
@@ -43,7 +43,7 @@
         else root.showToast?.("Clinic workflow is still loading - try again in a moment.");
       }else{
         const api=root.SACTCheckPatientContent||root.SACTCheckRegimenConsentBuilder;
-        if(api?.open) api.open(protocol,{tab:"overview"});
+        if(api?.open) api.open(protocol,{tab:"print",autoPdf:true});
         else root.showToast?.("Patient support is still loading - try again in a moment.");
       }
     });
@@ -80,7 +80,7 @@
         button.dataset.openPatientSupport=id;
         button.className="btn secondary patient-support-card-button";
       }
-      button.innerHTML='<span aria-hidden="true">◎</span> Patient support';
+      button.innerHTML='<span aria-hidden="true">◎</span> Patient guide PDF';
       replaceButtonWithOwned(button,"patient");
     }
   }
@@ -137,12 +137,12 @@
     const sub=root.document.getElementById("librarySubheading");
     if(sub){
       sub.textContent=mode==="patient"
-        ?"Find the exact regimen, then open the patient-facing A4 treatment guide, schedule and toxicity support."
+        ?"Find the exact regimen, then open the patient-facing A4 / PDF treatment guide with schedule and toxicity support."
         :"Find the exact NCCP regimen and open the regimen-derived clinical workflow.";
     }
     const search=root.document.getElementById("regimenSearch");
     if(search) search.placeholder=mode==="patient"
-      ?"Find a regimen for patient support"
+      ?"Find a regimen for patient guide PDF"
       :"Regimen, drug, trade name, NCCP number or indication";
   }
 
@@ -161,7 +161,7 @@
       const h1=hero.querySelector("#studyHeroTitle");
       if(h1) h1.textContent="One regimen. Two connected experiences.";
       const lead=hero.querySelector(".mission-hero-lead");
-      if(lead) lead.textContent="The regimen drives both the clinical workflow and a patient-facing treatment guide from the same regimen-specific content model.";
+      if(lead) lead.textContent="The regimen drives both the clinical workflow and a patient-facing A4 / PDF treatment guide from the same regimen-specific content model.";
       const purpose=hero.querySelector(".mission-hero-purpose");
       if(purpose) purpose.innerHTML="<strong>SACT support at point of care:</strong> assessment, supportive medicines, administration safety, consent support and patient information are surfaced from the properties of the selected regimen.";
 
@@ -176,7 +176,7 @@
           <div class="mission-pathway">
             <div class="mission-pathway-step"><span class="mission-icon">1</span><div><strong>Select the regimen</strong><small>Use the NCCP regimen identity, indication and schedule.</small></div></div>
             <div class="mission-pathway-step"><span class="mission-icon">2</span><div><strong>Clinician workspace</strong><small>Assessment, supportive care, administration safety and sources.</small></div></div>
-            <div class="mission-pathway-step"><span class="mission-icon">3</span><div><strong>Patient guide</strong><small>A4 treatment-at-a-glance, exact treatment days and toxicity recognition.</small></div></div>
+            <div class="mission-pathway-step"><span class="mission-icon">3</span><div><strong>Patient guide PDF</strong><small>Auto-opens an A4 / PDF page with schedule, chemo-man visual language and toxicity recognition.</small></div></div>
             <div class="mission-pathway-step"><span class="mission-icon">4</span><div><strong>Verify the source</strong><small>Clinical judgement and the current NCCP source remain visible.</small></div></div>
           </div>
           <div class="mission-visual-footer"><span>Regimen-specific</span><span>Patient-agnostic</span><span>Source-linked</span></div>`;
@@ -201,13 +201,13 @@
       if(h3?.textContent==="Regimen consent"){
         h3.textContent="Consent & patient support";
         const p=h3.parentElement?.querySelector("p");
-        if(p) p.textContent="Open the regimen-specific treatment and toxicity snapshot used to support the consent discussion.";
-        if(button) button.textContent="Open patient support";
+        if(p) p.textContent="Open the regimen-specific A4 / PDF treatment guide used to support the consent discussion.";
+        if(button) button.textContent="Open patient guide PDF";
       }
       if(module.classList.contains("patient")){
         h3.textContent="Patient A4 treatment guide";
         const p=h3.parentElement?.querySelector("p");
-        if(p) p.textContent="Patient-agnostic, regimen-specific A4 guide with exact schedule, toxicity categories, urgent warnings and QR access.";
+        if(p) p.textContent="Patient-agnostic, regimen-specific A4 / PDF guide with exact schedule, chemo-man visual language, toxicity categories, urgent warnings and QR access.";
         const status=module.querySelector(".workflow-status");
         if(status){ status.className="workflow-status available"; status.textContent="Ready"; }
         if(!module.querySelector("[data-workflow-print-passport]")){
@@ -223,7 +223,7 @@
             if(protocol){
               const api=root.SACTCheckPatientContent;
               const risk=await api?.preload?.().then(()=>null).catch(()=>null);
-              api?.open?.(protocol,{tab:"print"});
+              api?.open?.(protocol,{tab:"print",autoPdf:true});
             }
           });
           module.appendChild(b);

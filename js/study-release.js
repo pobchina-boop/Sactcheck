@@ -1,4 +1,4 @@
-/** SACTCheck study presentation + v0.75.1 interface bootstrap. */
+/** SACTCheck study presentation + v0.76.0 interface bootstrap. */
 (function (root) {
   "use strict";
   const VERSION = "0.48.4";
@@ -68,13 +68,13 @@
   else bind();
 })(typeof globalThis !== "undefined" ? globalThis : this);
 
-/* v0.75.1
-   Patient-facing A4 treatment guide + supportive-care reconciliation.
-   Loads the v0.75 patient content, interface and workflow layers together so
+/* v0.76.0
+   Patient-facing PDF-first guide + supportive-care reconciliation.
+   Loads the v0.76 patient content, interface and workflow layers together so
    local supportive-medicine completeness and drug-content isolation remain aligned. */
 (function(root){
   "use strict";
-  const RELEASE="0.75.1";
+  const RELEASE="0.76.0";
 
   function loadCss(){
     root.document.querySelectorAll('link[data-sactcheck-interface-v0740],link[data-sactcheck-interface-v0750]').forEach(x=>x.remove());
