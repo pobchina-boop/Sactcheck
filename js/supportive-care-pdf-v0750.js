@@ -1,5 +1,5 @@
 /**
- * SACTCheck v0.75.0 - Supportive-care prescribing support PDF.
+ * SACTCheck v0.75.1 - Supportive-care prescribing support PDF.
  * Dependency-free, one-page A4 output for browser viewing.
  */
 (function(root,factory){
@@ -8,7 +8,7 @@
   root.SACTCheckSupportiveCarePdf=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
-  const RELEASE="0.75.0";
+  const RELEASE="0.75.1";
   const W=595.28,H=841.89,M=38,CW=W-(M*2);
 
   const RGB={

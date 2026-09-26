@@ -2,7 +2,7 @@ const assert=require('assert');
 const fs=require('fs');
 const path=require('path');
 const interfaceApi=require('../js/sactcheck-interface-v0750.js');
-assert.equal(interfaceApi.release,'0.75.0');
+assert.equal(interfaceApi.release,'0.75.1');
 const ui=fs.readFileSync(path.join(__dirname,'../js/sactcheck-interface-v0750.js'),'utf8');
 const workflow=fs.readFileSync(path.join(__dirname,'../js/regimen-workflow-engine-v0750.js'),'utf8');
 const bootstrap=fs.readFileSync(path.join(__dirname,'../js/study-release.js'),'utf8');

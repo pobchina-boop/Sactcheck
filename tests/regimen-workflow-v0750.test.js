@@ -5,8 +5,8 @@ const engine=require('../js/regimen-workflow-engine-v0750.js');
 const pdf=require('../js/supportive-care-pdf-v0750.js');
 const data=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/regimen-workflow-v0750.json'),'utf8'));
 
-assert.equal(engine.release,'0.75.0');
-assert.equal(data.release,'0.75.0');
+assert.equal(engine.release,'0.75.1');
+assert.equal(data.release,'0.75.1');
 
 const carboplatinProtocol={
   protocol_id:'00689',metadata:{short_title:'Atezolizumab + Carboplatin + Etoposide',nccp_regimen_code:'00689',nccp_version:'4'},

@@ -1,5 +1,5 @@
 /**
- * SACTCheck v0.75.0 - patient-facing regimen support.
+ * SACTCheck v0.75.1 - patient-facing regimen support.
  *
  * Patient agnostic by design:
  * - no patient identifiers are requested or persisted;
@@ -20,7 +20,7 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
 
-  const RELEASE="0.75.0";
+  const RELEASE="0.75.1";
   const CONTENT_URL="data/patient-content-v0730.json";
   const RISK_URL="data/consent-content-v0710.json";
   let contentPromise=null;

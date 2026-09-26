@@ -1,5 +1,5 @@
 /**
- * SACTCheck v0.75.0 - cohesive clinician/patient interface shell.
+ * SACTCheck v0.75.1 - cohesive clinician/patient interface shell.
  * Keeps regimen-card actions stable from first render and removes the delayed
  * "two buttons first, more buttons later" effect.
  */
@@ -13,7 +13,7 @@
   }
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
-  const RELEASE="0.75.0";
+  const RELEASE="0.75.1";
   let mode="clinician";
   let queued=false;
 

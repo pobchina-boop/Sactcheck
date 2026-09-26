@@ -1,5 +1,5 @@
 /**
- * SACTCheck v0.75.0 - Regimen Workflow Engine
+ * SACTCheck v0.75.1 - Regimen Workflow Engine
  *
  * Regimen properties are translated into clinic workflow outputs:
  * assessment, consent, supportive medicines, extravasation guidance,
@@ -15,9 +15,9 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
 
-  const RELEASE="0.75.0";
+  const RELEASE="0.75.1";
   const DATA_URL="data/regimen-workflow-v0750.json";
-  const PDF_URL="js/supportive-care-pdf-v0750.js?v=0.75.0";
+  const PDF_URL="js/supportive-care-pdf-v0750.js?v=0.75.1";
   let dataCache=null;
   let dataPromise=null;
   let pdfPromise=null;
@@ -560,7 +560,7 @@
   }
 
   function applyBranding(){
-    // v0.75.0: the interface shell owns the homepage hero. The workflow engine
+    // v0.75.1: the interface shell owns the homepage hero. The workflow engine
     // must not inject a second logo or overwrite patient-facing hero copy.
     root.document.querySelectorAll?.(".workflow-brand-lockup").forEach?.(x=>x.remove());
     const meta=root.document.querySelector('meta[name="sactcheck-release"]');
