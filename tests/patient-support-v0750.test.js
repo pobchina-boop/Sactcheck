@@ -1,7 +1,7 @@
 const assert=require('assert');
 const api=require('../js/patient-support-v0750.js');
 
-assert.equal(api.release,'0.75.1');
+assert.equal(api.release,'0.76.1');
 
 const scheduleProtocol={
   protocol_id:'demo',
@@ -35,4 +35,30 @@ assert.ok(!matches.some(x=>x.key==='trastuzumab'));
 const link=api.regimenLink({protocol_id:'nccp-123'});
 assert.equal(link,'https://sactcheck.com/?patientSupport=nccp-123');
 assert.ok(!/localhost|file:/i.test(link));
+
+// The two extra bevacizumab risks must be attributed to that medicine only,
+// while the patient's label leads with a recognisable symptom or description.
+const fs=require('fs'),path=require('path');
+const hcc=JSON.parse(fs.readFileSync(path.join(__dirname,'../protocols/gastrointestinal/00831-atezolizumab-bevacizumab-hcc.json')));
+const actualRisk=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/consent-content-v0710.json')));
+const hccRows=api.buildRiskRows(hcc,actualRisk).rows;
+for(const id of ['jaw_osteonecrosis','pres']){
+  const row=hccRows.find(x=>x.id===id);
+  assert.ok(row,`${id} must be present`);
+  assert.equal(row.agent,'Bevacizumab');
+  assert.ok(row.label.includes('('));
+}
+assert.equal(hccRows.find(x=>x.id==='pres').action,'urgent');
+assert.ok(hccRows.find(x=>x.id==='thrombosis').label.startsWith('Clots'));
+assert.equal(api.regimenLink(hcc),'https://sactcheck.com/docs/patient/00831/');
+const onlyImmune={protocol_id:'test-atezo',treatment_phases:[{administration:[{drug:'Atezolizumab',day:1}]}]};
+assert.ok(!api.buildRiskRows(onlyImmune,actualRisk).rows.some(x=>['pres','jaw_osteonecrosis'].includes(x.id)));
+let printable='';
+global.location={href:'https://sactcheck.com/'};
+global.open=()=>({document:{open(){},write(value){printable+=value;},close(){}}});
+api.openPrintablePassport(hcc,actualRisk);
+assert.ok(printable.includes('body-map-00831.svg'));
+assert.ok(printable.includes('Jaw-bone damage (osteonecrosis of the jaw)'));
+assert.ok(printable.includes('Rare brain condition (PRES)'));
+assert.ok(printable.includes('https://sactcheck.com/docs/patient/00831/'));
 console.log('patient-support-v0750: PASS');
