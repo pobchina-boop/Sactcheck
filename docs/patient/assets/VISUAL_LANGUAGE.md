@@ -1,4 +1,4 @@
-# SACTCheck side-effect visual language v0.5
+# SACTCheck side-effect visual language v0.76.2
 
 The SVG symbol IDs in `toxicity-icons.svg` are reusable on any patient regimen page:
 `brain`, `lungs`, `heart`, `liver`, `bowel`, `kidney`, `skin`, `vessel`,
@@ -16,5 +16,4 @@ CTCAE grade. Clinicians must review every regimen-specific risk attribution.
 
 Example: `<svg class="tox-icon" aria-hidden="true"><use href="../assets/toxicity-icons.svg#jaw"></use></svg>`
 
-Icons and body silhouette are original SACTCheck vector drawings, not adapted
-from the Keytruda product handout.
+The body-system icons are original SACTCheck vector drawings. The HCC anatomy illustration is a generated bitmap used as a visual aid. All clinical labels, warning text and connectors are independently editable text or vector overlays. Do not infer an exact diagnosis from the position of a marker.

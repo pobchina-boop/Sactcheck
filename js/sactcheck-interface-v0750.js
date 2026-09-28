@@ -13,7 +13,7 @@
   }
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
-  const RELEASE="0.76.1";
+  const RELEASE="0.76.2";
   let mode="clinician";
   let queued=false;
 
