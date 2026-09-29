@@ -1,0 +1,37 @@
+SACTCheck v0.76.2 HCC QR publication fix (consolidated drop-in)
+
+What the screenshot means
+The QR points to https://sactcheck.com/docs/patient/00831/ . That page returns
+404 on the currently published site, which still displays v0.68.0. The earlier
+v0.76.2 drop-in already contains the page. Its files must reach the deployed
+GitHub Pages artifact before a printed QR can open the detailed patient guide.
+
+Install
+1. Unzip this archive. Copy the contents of its js/, css/, data/, assets/,
+   docs/, tests/ and tools/ folders into the matching folders at the top of
+   your SACTCheck repository, replacing files when prompted. Do not put the
+   archive itself into the repository.
+2. Commit the changed files, including docs/patient/00831/index.html and
+   docs/patient/00831/*.pdf. Push to the main branch used by .github/workflows/pages.yml,
+   or merge your work from develop into main. Pushing only to develop does not
+   run this site's GitHub Pages publishing workflow.
+3. In GitHub, check Actions > Deploy SACTCheck Pages for a successful run. If
+   another regression or security check fails, fix that error before expecting
+   the live QR destination to change.
+4. Open https://sactcheck.com/docs/patient/00831/ in a fresh browser tab.
+   Confirm that the HCC guide, anatomy image and page links load. Then scan
+   the QR from the printed guide or card again.
+
+This package includes the full v0.76.2 HCC visual and public guide, plus a
+tools/validate-pages-site.js gate: the publishing workflow now fails when
+the HCC QR destination, anatomy art, icons or linked printable files are absent
+from the final deployable artifact. It does not itself publish your website.
+
+Suggested GitHub summary
+Publish HCC patient QR guide and guard the Pages route
+
+Suggested GitHub description
+Include the v0.76.2 HCC patient guide, anatomical image, printable guide and
+passport at the public /docs/patient/00831/ route. Require that route and its
+supporting files in the Pages artifact so a future QR cannot deploy to a 404.
+Deploy to main and verify the live URL after the GitHub Pages action succeeds.

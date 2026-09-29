@@ -15,13 +15,39 @@ const required = [
   "js/sustainability-module.js",
   "css",
   "data/sustainability-regimen-metadata-v0691.json",
-  "protocols/index.json"
+  "protocols/index.json",
+  // These public pages are encoded in printed regimen QR codes.
+  "docs/patient/00831/index.html",
+  "docs/patient/00831/guide.pdf",
+  "docs/patient/00831/passport.pdf",
+  "docs/patient/00831/contact-card.pdf",
+  "docs/patient/assets/anatomy-hcc-v0762.png",
+  "docs/patient/assets/toxicity-icons.svg"
 ];
 const problems = [];
 
 if (!fs.existsSync(site)) problems.push("_site directory does not exist");
 for (const item of required) {
   if (!fs.existsSync(path.join(site, item))) problems.push(`missing required public item: ${item}`);
+}
+// Do not ship a QR pointing to a route absent from the same deployment.
+const patientRoutes = ["00831"];
+const supportModule = path.join(site, "js", "patient-support-v0750.js");
+if (fs.existsSync(supportModule)) {
+  const content = fs.readFileSync(supportModule, "utf8");
+  for (const code of patientRoutes) {
+    if (!content.includes(`code===\"${code}\"`)) {
+      problems.push(`patient QR route ${code} missing from patient-support-v0750.js`);
+    }
+  }
+} else {
+  problems.push("missing patient QR routing module: js/patient-support-v0750.js");
+}
+for (const code of patientRoutes) {
+  const page = path.join(site, "docs", "patient", code, "index.html");
+  if (fs.existsSync(page) && !fs.readFileSync(page, "utf8").includes(`https://sactcheck.com/docs/patient/${code}/`)) {
+    problems.push(`patient page ${code} does not identify its public QR destination`);
+  }
 }
 for (const item of forbiddenTopLevel) {
   if (fs.existsSync(path.join(site, item))) problems.push(`forbidden development item exposed: ${item}`);
