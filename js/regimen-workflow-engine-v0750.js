@@ -56,6 +56,60 @@
     catch(_){return "";}
   }
 
+  function knowledgeModule(){
+    return root?.SACTCheckRegimenKnowledgeBase
+      || root?.SACTCheckRegimenKnowledge
+      || root?.SACTCheckKnowledgeBase
+      || null;
+  }
+
+  function knowledgeProfile(protocol){
+    const module=knowledgeModule();
+    if(!module||!protocol) return null;
+    const resolvers=[module.profileForProtocol,module.getProfileForProtocol,module.getProfileForRegimen,module.getEvidenceProfile,module.getRegimenProfile,module.findRegimenProfile,module.getProfile,module.resolveProfile];
+    for(const resolver of resolvers){
+      if(typeof resolver!="function") continue;
+      try{
+        const profile=resolver.call(module,protocol);
+        if(profile&&typeof profile.then!=="function") return profile;
+      }catch(_){}
+    }
+    const checks=[module.hasProfile,module.isAvailableForProtocol,module.hasRegimenProfile,module.hasExpandedProfile];
+    for(const check of checks){
+      if(typeof check!="function") continue;
+      try{ if(check.call(module,protocol)) return {available:true}; }catch(_){}
+    }
+    return null;
+  }
+
+  function openKnowledgeProfile(protocol){
+    const module=knowledgeModule();
+    if(module){
+      const openers=[module.openProfile,module.openRegimenProfile,module.openEvidenceProfile,module.openRegimenKnowledge,module.openRegimenInformation,module.openKnowledgeProfile,module.openRegimen,module.showProfile,module.openForProtocol,module.open];
+      for(const opener of openers){
+        if(typeof opener!=="function") continue;
+        try{
+          const result=opener.call(module,protocol);
+          if(result!==false) return true;
+        }catch(_){}
+      }
+    }
+    const card=cardFor(protocol);
+    let trigger=card?.querySelector?.('[data-open-regimen-knowledge], [data-open-knowledge-profile], [data-regimen-knowledge], .regimen-knowledge-button');
+    if(!trigger&&card?.querySelectorAll){
+      trigger=[...card.querySelectorAll('button,a,[role="button"]')].find(node=>/regimen\s+(information|knowledge|evidence)|knowledge\s+(base|profile)|evidence\s+profile/i.test(node.textContent||""));
+    }
+    if(trigger){trigger.click();return true;}
+    return false;
+  }
+
+  function openConsentSupport(protocol){
+    const builder=root?.SACTCheckRegimenConsentBuilder;
+    if(typeof builder?.generateConsentPdf==="function") return builder.generateConsentPdf(protocol);
+    if(typeof builder?.open==="function") return builder.open(protocol,{tab:"print"});
+    return null;
+  }
+
   function administrationRows(protocol){
     const rows=[];
     asArray(protocol?.treatment_phases).forEach(phase=>{
@@ -274,6 +328,7 @@
       modules:{
         assessment:{status:"available"},
         consent:{status:root?.SACTCheckRegimenConsentBuilder?"available":"available_when_loaded"},
+        knowledge:{status:knowledgeProfile(protocol)?"available":"content_check_required"},
         supportiveCare:{status:supportive.status},
         extravasation:{status:extra.status},
         patientInformation:{status:"available",label:"Patient regimen hub / QR / Treatment Passport"},
@@ -484,9 +539,18 @@
 
         <article class="workflow-module consent">
           <div class="workflow-module-icon">✎</div>
-          <div><span>Documentation</span><h3>Regimen consent</h3><p>Open the concise regimen-specific two-page consent PDF.</p></div>
-          ${moduleStatus("available")}
-          <button class="btn secondary workflow-module-action" type="button" data-workflow-consent>Open consent PDF</button>
+          <div><span>Clinic workflow</span><h3>Consent discussion support</h3><p>Generate the regimen-specific draft support PDF to use alongside the formal consent process.</p></div>
+          ${moduleStatus("review_required")}
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-consent>Generate draft consent support</button>
+          <small class="workflow-module-note">Content is awaiting consultant and oncology-pharmacy review. Supports discussion; it does not replace formal consent, the national consent form or clinical judgement.</small>
+        </article>
+
+        <article class="workflow-module knowledge">
+          <div class="workflow-module-icon">▤</div>
+          <div><span>Clinic workflow</span><h3>Knowledge &amp; evidence</h3><p>Open the expanded regimen profile, including linked trials, outcomes and evidence context where available.</p></div>
+          ${moduleStatus(knowledgeProfile(activeProtocol)?"available":"content_check_required")}
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-knowledge>Open regimen profile</button>
+          <small class="workflow-module-note">A profile marked for content check is still being expanded; confirm source details before relying on it.</small>
         </article>
 
         <article class="workflow-module supportive">
@@ -533,7 +597,15 @@
     body.querySelector("[data-workflow-consent]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
       closePanel();
-      root.SACTCheckRegimenConsentBuilder?.open?.(protocol);
+      openConsentSupport(protocol);
+    });
+    body.querySelector("[data-workflow-knowledge]")?.addEventListener("click",()=>{
+      const protocol=activeProtocol;
+      closePanel();
+      if(!openKnowledgeProfile(protocol)){
+        const message="The regimen knowledge profile could not be opened. The knowledge module may still be loading, or this regimen may not yet have an expanded profile.";
+        root.alert?.(message);
+      }
     });
     body.querySelector("[data-workflow-support]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
@@ -661,6 +733,9 @@
     chooseAntiemeticPlan,
     interactionOverrides,
     resolveExtravasation,
+    hasKnowledgeProfile:protocol=>Boolean(knowledgeProfile(protocol)),
+    openKnowledgeProfile,
+    openConsentSupport,
     buildManifest,
     load,
     resolve,
