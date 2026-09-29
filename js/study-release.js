@@ -1,4 +1,4 @@
-/** SACTCheck study presentation + v0.76.2 interface bootstrap. */
+/** SACTCheck study presentation + v0.76.3 interface bootstrap. */
 (function (root) {
   "use strict";
   const VERSION = "0.48.4";
@@ -74,7 +74,7 @@
    local supportive-medicine completeness and drug-content isolation remain aligned. */
 (function(root){
   "use strict";
-  const RELEASE="0.76.2";
+  const RELEASE="0.76.3";
 
   function loadCss(){
     root.document.querySelectorAll('link[data-sactcheck-interface-v0740],link[data-sactcheck-interface-v0750]').forEach(x=>x.remove());

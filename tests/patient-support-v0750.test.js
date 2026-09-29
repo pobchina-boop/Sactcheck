@@ -1,7 +1,7 @@
 const assert=require('assert');
 const api=require('../js/patient-support-v0750.js');
 
-assert.equal(api.release,'0.76.2');
+assert.equal(api.release,'0.76.3');
 
 const scheduleProtocol={
   protocol_id:'demo',
@@ -60,7 +60,10 @@ api.openPrintablePassport(hcc,actualRisk);
 assert.ok(printable.includes('anatomy-hcc-v0762.png'));
 assert.ok(printable.includes('A picture of side effects'));
 assert.ok(printable.includes('Chest pain, palpitations'));
-assert.equal((printable.match(/<article class=\"hcc-organ-card /g)||[]).length,8);
+assert.equal((printable.match(/<article class=\"hcc-organ-card /g)||[]).length,9);
+assert.ok(printable.includes('data-hcc-pin="bowel"'));
+assert.ok(printable.includes('BEVACIZUMAB · VESSELS / HEALING'));
+assert.ok(printable.includes('hcc-connectors-v0763.js'));
 assert.ok(printable.includes('Jaw-bone damage (osteonecrosis of the jaw)'));
 assert.ok(printable.includes('Rare brain condition (PRES)'));
 assert.ok(printable.includes('https://sactcheck.com/docs/patient/00831/'));

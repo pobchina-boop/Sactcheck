@@ -22,7 +22,9 @@ const required = [
   "docs/patient/00831/passport.pdf",
   "docs/patient/00831/contact-card.pdf",
   "docs/patient/assets/anatomy-hcc-v0762.png",
-  "docs/patient/assets/toxicity-icons.svg"
+  "docs/patient/assets/toxicity-icons.svg",
+  "assets/patient/hcc-bodymap-v0763.css",
+  "assets/patient/hcc-connectors-v0763.js"
 ];
 const problems = [];
 
@@ -47,6 +49,12 @@ for (const code of patientRoutes) {
   const page = path.join(site, "docs", "patient", code, "index.html");
   if (fs.existsSync(page) && !fs.readFileSync(page, "utf8").includes(`https://sactcheck.com/docs/patient/${code}/`)) {
     problems.push(`patient page ${code} does not identify its public QR destination`);
+  }
+  if (code === "00831" && fs.existsSync(page)) {
+    const html = fs.readFileSync(page, "utf8");
+    for (const asset of ["hcc-bodymap-v0763.css", "hcc-connectors-v0763.js"]) {
+      if (!html.includes(asset)) problems.push(`HCC public page does not load ${asset}`);
+    }
   }
 }
 for (const item of forbiddenTopLevel) {
