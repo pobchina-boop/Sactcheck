@@ -15,7 +15,7 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
 
-  const RELEASE="0.75.1";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.77.0";
   const DATA_URL="data/regimen-workflow-v0750.json";
   const PDF_URL="js/supportive-care-pdf-v0750.js?v=0.75.1";
   let dataCache=null;

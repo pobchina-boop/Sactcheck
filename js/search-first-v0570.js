@@ -4,7 +4,7 @@
 (function(){
   'use strict';
 
-  const ENGINE_FIRST_RELEASE = '0.70.1';
+  const ENGINE_FIRST_RELEASE = window.SACTCHECK_RELEASE || '0.77.0';
 
   function ensureEngineFirstStyles(){
     if(document.querySelector('link[data-engine-first-homepage]')) return;
@@ -40,7 +40,7 @@
   }
 
   function applyReleaseLabel(){
-    document.title=`SACTCheck v${ENGINE_FIRST_RELEASE} — Source Fidelity Hotfix`;
+    document.title=`SACTCheck v${ENGINE_FIRST_RELEASE} - Oncology information and workflow platform`;
     const releaseMeta=document.querySelector('meta[name="sactcheck-release"]');
     if(releaseMeta) releaseMeta.setAttribute('content',ENGINE_FIRST_RELEASE);
     setText('.header-version',`v${ENGINE_FIRST_RELEASE}`);
@@ -97,12 +97,12 @@
       entry.innerHTML=`
         <div class="engine-first-heading">
           <div>
-            <span class="engine-first-eyebrow">Primary workflow · SACTCheck Engine</span>
-            <h2 id="engineFirstTitle">Find a regimen to assess</h2>
+            <span class="engine-first-eyebrow">Regimen information hub</span>
+            <h2 id="engineFirstTitle">Find a treatment regimen</h2>
           </div>
           <span class="engine-first-protocol-count">376 NCCP protocols</span>
         </div>
-        <p class="engine-first-copy">Search the exact NCCP regimen, then enter only the clinical information available for review.</p>
+        <p class="engine-first-copy">Search the exact NCCP regimen, then open the clinical workflow, patient guide, source material or sustainability support you need.</p>
         <div class="engine-first-search-host"></div>
         <div class="engine-first-flow" aria-label="SACTCheck assessment workflow">
           <span><strong>1</strong> Find</span>

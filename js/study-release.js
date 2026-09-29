@@ -36,9 +36,7 @@
     search?.scrollIntoView({ behavior: "smooth", block: "center" });
     root.setTimeout(() => search?.focus(), 160);
   }
-  function shouldAutoOpen() {
-    try { return root.localStorage?.getItem(HIDE_KEY) !== "yes"; } catch (_) { return true; }
-  }
+  function shouldAutoOpen() { return false; }
   function bind() {
     const mobileNote = document.getElementById("mobileOpenNote");
     if (mobileNote) mobileNote.hidden = /^(https?:)$/.test(root.location?.protocol || "");
@@ -60,7 +58,7 @@
       if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     });
-    if (shouldAutoOpen()) root.setTimeout(openWelcome, 280);
+    // v0.77.0: no automatic landing/launcher modal. The site opens directly to the working homepage.
   }
 
   root.SACTCheckStudyRelease = Object.freeze({ version: VERSION, openWelcome, closeWelcome, focusSearch });
@@ -74,7 +72,7 @@
    local supportive-medicine completeness and drug-content isolation remain aligned. */
 (function(root){
   "use strict";
-  const RELEASE="0.76.3";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.77.0";
 
   function loadCss(){
     root.document.querySelectorAll('link[data-sactcheck-interface-v0740],link[data-sactcheck-interface-v0750]').forEach(x=>x.remove());

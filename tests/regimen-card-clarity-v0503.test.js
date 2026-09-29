@@ -11,7 +11,7 @@ const catalogue = require(path.join(root, "protocols/index.json"));
 
 assert(pkg.version.localeCompare("0.56.1", undefined, { numeric: true }) >= 0);
 assert(index.includes("SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot"));
-assert(index.includes('<strong>376</strong><span>protocols across Solid Tumour and Haematology</span>'));
+assert(index.includes('<strong>376</strong><span>protocols forming a common regimen information layer</span>'));
 assert(!index.includes("361 + 15"));
 assert(index.includes("js/regimen-components.js?v=0.51.0"));
 assert(index.includes("js/toxicity-attribution.js?v=0.51.0"));

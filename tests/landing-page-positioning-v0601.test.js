@@ -12,13 +12,13 @@ const integrity = JSON.parse(read('V0601_PROTOCOL_JSON_HASHES.json'));
 assert.ok(pkg.version.localeCompare('0.60.1', undefined, { numeric: true }) >= 0);
 assert.ok(read('CHANGELOG.MD').includes('v0.60.1 — Mission-Led Landing Page'), 'Historical release label should remain in the changelog trace.');
 assert.ok(/css\/landing-page-v0602\.css\?v=0\.(?:60\.[123]|61\.0)/.test(html));
-assert.ok(html.includes('Clearer regimen assessment at the point of care'));
-assert.ok(html.includes('Why it exists:'));
-assert.ok(html.includes('Find. Assess. Explain. Verify.'));
-assert.ok(html.includes('Make oncology regimen assessment clearer, more consistent and easier to review.'));
+assert.ok(html.includes('From national treatment guidance to usable information at every step.'));
+assert.ok(html.includes('Our purpose:'));
+assert.ok(html.includes('One regimen. One connected information pathway.'));
+assert.ok(html.includes('Turn complex cancer-treatment information into a connected, usable pathway for clinicians and patients.'));
 assert.ok(html.includes('class="study-modal landing-modal"'));
 assert.ok(html.includes('See the three-step quick start'));
-assert.ok((html.match(/Launch SACTCheck Engine/g) || []).length >= 3, 'Launch CTA must appear in the modal, hero and mission section.');
+assert.strictEqual((html.match(/Launch SACTCheck Engine/g) || []).length, 0, 'Legacy launch gate should be removed in the current direct-open homepage.');
 assert.ok(html.includes('What SACTCheck is, and why it is being developed'));
 assert.ok(html.includes('Why it was created'));
 assert.ok(html.includes('What is being evaluated'));
@@ -38,4 +38,4 @@ for (const [relative, expected] of Object.entries(integrity.hashes)) {
   assert.strictEqual(actual, expected, `Protocol JSON changed unexpectedly: ${relative}`);
 }
 }
-console.log('v0.60.1 landing-page tests passed: mission-led product introduction, engine CTA, responsive UI and unchanged protocol JSON verified.');
+console.log('Landing-page regression tests passed: mission-led direct-open product introduction, responsive UI and unchanged protocol JSON verified.');

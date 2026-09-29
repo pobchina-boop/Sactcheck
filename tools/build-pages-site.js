@@ -10,10 +10,11 @@ const out = path.join(root, "_site");
 const topLevelFiles = [
   "index.html",
   "sustainability.html",
+  "404.html",
   "manifest.webmanifest",
   ".nojekyll"
 ];
-const publicDirectories = ["assets", "css", "data", "docs", "icons", "js"];
+const publicDirectories = ["assets", "css", "data", "docs", "patient", "icons", "js"];
 
 function remove(target) {
   fs.rmSync(target, { recursive: true, force: true });

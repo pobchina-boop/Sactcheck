@@ -13,7 +13,7 @@
   }
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
-  const RELEASE="0.76.3";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.77.0";
   let mode="clinician";
   let queued=false;
 
@@ -148,7 +148,7 @@
 
   function applyBranding(){
     const tagline=root.document.querySelector(".brand-tagline");
-    if(tagline) tagline.textContent="SACT support at point of care";
+    if(tagline) tagline.textContent="Regimen-specific oncology information and workflow support";
 
     const hero=root.document.getElementById("studyHero");
     if(hero){
@@ -157,29 +157,29 @@
       // old injected lock-up so the hero never shows duplicate branding.
       hero.querySelectorAll(".v0740-brand-lockup,.v0750-brand-lockup").forEach(x=>x.remove());
       const kicker=hero.querySelector(".study-kicker");
-      if(kicker) kicker.textContent="One regimen · connected clinical and patient support";
+      if(kicker) kicker.textContent="Regimen-specific oncology information pipeline";
       const h1=hero.querySelector("#studyHeroTitle");
-      if(h1) h1.textContent="One regimen. Two connected experiences.";
+      if(h1) h1.textContent="From national treatment guidance to usable information at every step.";
       const lead=hero.querySelector(".mission-hero-lead");
-      if(lead) lead.textContent="The regimen drives both the clinical workflow and a patient-facing A4 / PDF treatment guide from the same regimen-specific content model.";
+      if(lead) lead.textContent="SACTCheck structures regimen-specific information around the way cancer care is actually delivered: clinician workflow, patient understanding, supportive care, evidence and sustainability.";
       const purpose=hero.querySelector(".mission-hero-purpose");
-      if(purpose) purpose.innerHTML="<strong>SACT support at point of care:</strong> assessment, supportive medicines, administration safety, consent support and patient information are surfaced from the properties of the selected regimen.";
+      if(purpose) purpose.innerHTML="<strong>Our purpose:</strong> close important information gaps across clinic, day ward and home while keeping the current NCCP source, provenance and clinical judgement visible.";
 
       const visual=hero.querySelector(".mission-visual");
       if(visual && visual.dataset.v0750Mission!=="ready"){
         visual.dataset.v0750Mission="ready";
         visual.innerHTML=`
           <div class="mission-visual-header v0750-mission-header">
-            <div><strong>One regimen, connected support</strong><span>The selected regimen determines what each workspace shows.</span></div>
+            <div><strong>One regimen. One connected information pathway.</strong><span>National guidance is structured once, then surfaced where it is needed.</span></div>
             <b>376 NCCP protocols</b>
           </div>
           <div class="mission-pathway">
-            <div class="mission-pathway-step"><span class="mission-icon">1</span><div><strong>Select the regimen</strong><small>Use the NCCP regimen identity, indication and schedule.</small></div></div>
-            <div class="mission-pathway-step"><span class="mission-icon">2</span><div><strong>Clinician workspace</strong><small>Assessment, supportive care, administration safety and sources.</small></div></div>
-            <div class="mission-pathway-step"><span class="mission-icon">3</span><div><strong>Patient guide PDF</strong><small>Auto-opens an A4 / PDF page with schedule, chemo-man visual language and toxicity recognition.</small></div></div>
-            <div class="mission-pathway-step"><span class="mission-icon">4</span><div><strong>Verify the source</strong><small>Clinical judgement and the current NCCP source remain visible.</small></div></div>
+            <div class="mission-pathway-step"><span class="mission-icon">1</span><div><strong>Source</strong><small>Anchor content to current NCCP and authoritative treatment information.</small></div></div>
+            <div class="mission-pathway-step"><span class="mission-icon">2</span><div><strong>Structure</strong><small>Organise schedule, safety, supportive care, evidence and patient information around the regimen.</small></div></div>
+            <div class="mission-pathway-step"><span class="mission-icon">3</span><div><strong>Deliver</strong><small>Surface the right information in clinician and patient workflows.</small></div></div>
+            <div class="mission-pathway-step"><span class="mission-icon">4</span><div><strong>Review</strong><small>Keep provenance, source currency, governance and sustainability opportunities visible.</small></div></div>
           </div>
-          <div class="mission-visual-footer"><span>Regimen-specific</span><span>Patient-agnostic</span><span>Source-linked</span></div>`;
+          <div class="mission-visual-footer"><span>Clinical workflow</span><span>Patient information</span><span>Supportive care</span><span>Sustainability</span></div>`;
       }
     }
 
@@ -187,7 +187,7 @@
     if(headerVersion) headerVersion.textContent=`v${RELEASE}`;
     const meta=root.document.querySelector('meta[name="sactcheck-release"]');
     if(meta) meta.setAttribute("content",RELEASE);
-    root.document.title=`SACTCheck v${RELEASE} - SACT support at point of care`;
+    root.document.title=`SACTCheck v${RELEASE} - Oncology information and workflow platform`;
     root.document.documentElement.dataset.sactcheckInterfaceRelease=RELEASE;
   }
 

@@ -21,6 +21,15 @@ const required = [
   "docs/patient/00831/guide.pdf",
   "docs/patient/00831/passport.pdf",
   "docs/patient/00831/contact-card.pdf",
+  "patient/00209/index.html",
+  "patient/00209/guide.pdf",
+  "patient/00209/passport.pdf",
+  "patient/00209/contact-card.pdf",
+  "patient/00831/index.html",
+  "patient/00831/guide.pdf",
+  "patient/00831/passport.pdf",
+  "patient/00831/contact-card.pdf",
+  "404.html",
   "docs/patient/assets/anatomy-hcc-v0762.png",
   "docs/patient/assets/toxicity-icons.svg",
   "assets/patient/hcc-bodymap-v0763.css",
@@ -47,7 +56,7 @@ if (fs.existsSync(supportModule)) {
 }
 for (const code of patientRoutes) {
   const page = path.join(site, "docs", "patient", code, "index.html");
-  if (fs.existsSync(page) && !fs.readFileSync(page, "utf8").includes(`https://sactcheck.com/docs/patient/${code}/`)) {
+  if (fs.existsSync(page) && !fs.readFileSync(page, "utf8").includes(`https://sactcheck.com/patient/${code}/`)) {
     problems.push(`patient page ${code} does not identify its public QR destination`);
   }
   if (code === "00831" && fs.existsSync(page)) {

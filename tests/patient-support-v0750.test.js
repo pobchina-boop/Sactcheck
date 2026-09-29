@@ -1,7 +1,7 @@
 const assert=require('assert');
 const api=require('../js/patient-support-v0750.js');
 
-assert.equal(api.release,'0.76.3');
+assert.equal(api.release,'0.77.0');
 
 const scheduleProtocol={
   protocol_id:'demo',
@@ -50,7 +50,7 @@ for(const id of ['jaw_osteonecrosis','pres']){
 }
 assert.equal(hccRows.find(x=>x.id==='pres').action,'urgent');
 assert.ok(hccRows.find(x=>x.id==='thrombosis').label.startsWith('Clots'));
-assert.equal(api.regimenLink(hcc),'https://sactcheck.com/docs/patient/00831/');
+assert.equal(api.regimenLink(hcc),'https://sactcheck.com/patient/00831/');
 const onlyImmune={protocol_id:'test-atezo',treatment_phases:[{administration:[{drug:'Atezolizumab',day:1}]}]};
 assert.ok(!api.buildRiskRows(onlyImmune,actualRisk).rows.some(x=>['pres','jaw_osteonecrosis'].includes(x.id)));
 let printable='';
@@ -66,5 +66,5 @@ assert.ok(printable.includes('BEVACIZUMAB · VESSELS / HEALING'));
 assert.ok(printable.includes('hcc-connectors-v0763.js'));
 assert.ok(printable.includes('Jaw-bone damage (osteonecrosis of the jaw)'));
 assert.ok(printable.includes('Rare brain condition (PRES)'));
-assert.ok(printable.includes('https://sactcheck.com/docs/patient/00831/'));
+assert.ok(printable.includes('https://sactcheck.com/patient/00831/'));
 console.log('patient-support-v0750: PASS');

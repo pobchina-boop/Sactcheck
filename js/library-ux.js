@@ -5,7 +5,7 @@
   const FAVOURITES_KEY = "sactcheck:favourites:v1";
   const RECENTS_KEY = "sactcheck:recent-protocols:v1";
   const MAX_RECENTS = 5;
-  const SUSTAINABILITY_RELEASE = "0.69.1";
+  const SUSTAINABILITY_RELEASE = root.SACTCHECK_RELEASE || "0.77.0";
 
   function read(key, fallback = []) {
     try {
@@ -136,7 +136,7 @@
   }
 
   function applySustainabilityReleaseLabel() {
-    document.title = "SACTCheck v0.69.0 — Sustainability Module";
+    document.title = `SACTCheck v${SUSTAINABILITY_RELEASE} - Oncology information and workflow platform`;
     const releaseMeta = document.querySelector('meta[name="sactcheck-release"]');
     if (releaseMeta) releaseMeta.setAttribute("content", SUSTAINABILITY_RELEASE);
     document.querySelectorAll(".header-version").forEach(node => { node.textContent = `v${SUSTAINABILITY_RELEASE}`; });
@@ -146,8 +146,8 @@
     if (releaseBody) {
       const strong = releaseBody.querySelector("strong");
       const paragraph = releaseBody.querySelector("p");
-      if (strong) strong.textContent = "Sustainability module";
-      if (paragraph) paragraph.textContent = "Adds an evidence-linked sustainability workspace covering clinical value, treatment delivery, travel, medicines waste, deprescribing and supportive care. It does not assign unsupported carbon scores or alter NCCP treatment criteria.";
+      if (strong) strong.textContent = "Unified information-pipeline homepage and patient routing";
+      if (paragraph) paragraph.textContent = "Removes the launch gate, stabilises the visible release and patient routes, and frames SACTCheck around connected clinician, patient, supportive-care, knowledge and sustainability workflows.";
     }
   }
 
