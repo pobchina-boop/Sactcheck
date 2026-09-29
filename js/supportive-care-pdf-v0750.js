@@ -8,7 +8,7 @@
   root.SACTCheckSupportiveCarePdf=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
-  const RELEASE="0.75.1";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
   const W=595.28,H=841.89,M=38,CW=W-(M*2);
 
   const RGB={

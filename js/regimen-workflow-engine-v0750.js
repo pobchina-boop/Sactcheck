@@ -15,9 +15,9 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
 
-  const RELEASE=root.SACTCHECK_RELEASE||"0.77.0";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
   const DATA_URL="data/regimen-workflow-v0750.json";
-  const PDF_URL="js/supportive-care-pdf-v0750.js?v=0.75.1";
+  const PDF_URL=`js/supportive-care-pdf-v0750.js?app=${RELEASE}`;
   let dataCache=null;
   let dataPromise=null;
   let pdfPromise=null;
@@ -121,6 +121,23 @@
       ...plan,
       localPrescriptionSource:localSourceId?data?.sources?.[localSourceId]||null:null
     };
+  }
+
+  function agentSupportForProtocol(protocol,data){
+    const names=componentNames(protocol).map(normaliseDrug);
+    const matches=[];
+    Object.entries(data?.local_agent_proformas||{}).forEach(([id,item])=>{
+      const agents=asArray(item?.match_agents).map(normaliseDrug);
+      if(agents.some(a=>names.some(n=>n===a||n.includes(a)||a.includes(n)))){
+        const sourceId=item.local_prescription_source_id||"";
+        matches.push({
+          id,
+          ...item,
+          localPrescriptionSource:sourceId?data?.sources?.[sourceId]||null:null
+        });
+      }
+    });
+    return matches;
   }
 
   function chooseAntiemeticPlan(protocol,data,riskRecord={}){
@@ -236,6 +253,8 @@
     if(!protocol) throw new Error("A protocol is required.");
     const metadata=protocol.metadata||{};
     const supportive=chooseAntiemeticPlan(protocol,data,riskRecord);
+    const agentSupport=agentSupportForProtocol(protocol,data);
+    if(supportive) supportive.agentSupport=agentSupport;
     const interactions=interactionOverrides(protocol,data);
     const extra=resolveExtravasation(protocol,data);
 
@@ -257,7 +276,7 @@
         consent:{status:root?.SACTCheckRegimenConsentBuilder?"available":"available_when_loaded"},
         supportiveCare:{status:supportive.status},
         extravasation:{status:extra.status},
-        patientInformation:{status:"planned",label:"Patient regimen hub / QR"},
+        patientInformation:{status:"available",label:"Patient regimen hub / QR / Treatment Passport"},
         evidence:{status:"available"}
       }
     };
@@ -295,6 +314,12 @@
     link.href=`css/regimen-workflow-v0720.css?v=${RELEASE}`;
     link.dataset.regimenWorkflowStyle="true";
     root.document.head.appendChild(link);
+    if(!root.document.getElementById("workflowV0780Style")){
+      const style=root.document.createElement("style");
+      style.id="workflowV0780Style";
+      style.textContent=`.workflow-support-script{grid-column:1/-1;border-top:1px solid #dbe6ea;padding-top:10px;margin-top:4px}.workflow-rx-block{margin:7px 0}.workflow-rx-block>strong{display:block;font-size:.78rem;color:#37505d;margin-bottom:5px}.workflow-rx-pills{display:flex;flex-wrap:wrap;gap:5px}.workflow-rx-pill{font-size:.72rem;line-height:1.25;padding:5px 7px;border-radius:999px;background:#eef4f6;color:#193848;border:1px solid #d4e1e5}.workflow-rx-note,.workflow-rx-evidence{font-size:.74rem;line-height:1.4;color:#4c6069;margin-top:7px}.workflow-rx-evidence{padding:7px 8px;background:#f7fafb;border-left:3px solid #7a99a7;border-radius:4px}`;
+      root.document.head.appendChild(style);
+    }
   }
 
   async function ensurePdf(){
@@ -412,6 +437,29 @@
     ).join("")}</div>`;
   }
 
+  function medLine(items){
+    return asArray(items).map(item=>{
+      const bits=[item.medicine,item.dose,item.frequency,item.route].filter(Boolean);
+      return `<span class="workflow-rx-pill">${esc(bits.join(" · "))}</span>`;
+    }).join("");
+  }
+
+  function renderSupportiveScript(manifest){
+    const supportive=manifest.supportiveCare||{};
+    if(supportive.status!=="available") return `<div class="workflow-support-script"><p>${esc(supportive.message||"Confirm current supportive-care guidance.")}</p></div>`;
+    const local=asArray(supportive.local_prescription_items);
+    const adjunctNames=[...new Set(local.map(x=>x.medicine).filter(Boolean))];
+    const agent=asArray(supportive.agentSupport);
+    return `<div class="workflow-support-script">
+      <div class="workflow-rx-block"><strong>Day 1 CINV prophylaxis</strong><div class="workflow-rx-pills">${medLine(supportive.day1)}</div></div>
+      ${asArray(supportive.subsequent).length?`<div class="workflow-rx-block"><strong>Subsequent / rescue</strong><div class="workflow-rx-pills">${medLine(supportive.subsequent)}</div></div>`:""}
+      ${adjunctNames.length?`<div class="workflow-rx-note"><strong>Local-reference adjuncts retained:</strong> ${esc(adjunctNames.join(", "))}. These are not all antiemetics; verify the current local prescription.</div>`:""}
+      ${agent.length?`<div class="workflow-rx-note"><strong>Agent-specific support:</strong> ${agent.map(x=>esc(x.label)).join(" · ")}</div>`:""}
+      ${supportive.evidence_update?`<div class="workflow-rx-evidence"><strong>Evidence update:</strong> ${esc(supportive.evidence_update)}</div>`:""}
+      ${supportive.local_adjunct_note?`<div class="workflow-rx-evidence">${esc(supportive.local_adjunct_note)}</div>`:""}
+    </div>`;
+  }
+
   function renderPanel(manifest){
     const body=root.document.getElementById("workflowPanelBody");
     if(!body) return;
@@ -445,6 +493,7 @@
           <div class="workflow-module-icon">Rx</div>
           <div><span>Supportive care</span><h3>${esc(risk.label||supportive.label||"Antiemetic support")}</h3><p>${esc(supportive.label||supportive.message||"Regimen-derived supportive care")}</p></div>
           ${moduleStatus(supportive.status)}
+          ${renderSupportiveScript(manifest)}
           <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"?"":"disabled"}>Open prescribing support</button>
           <a class="workflow-source-link" href="${esc(dataCache?.sources?.nccp_antiemetic_v8?.url||"")}" target="_blank" rel="noopener noreferrer">NCCP antiemetic source ↗</a>
         </article>
@@ -457,10 +506,12 @@
           ${extra.sourceGuidance?.url?`<a class="workflow-source-link" href="${esc(extra.sourceGuidance.url)}" target="_blank" rel="noopener noreferrer">NCCP extravasation guidance ↗</a>`:""}
         </article>
 
-        <article class="workflow-module patient planned">
+        <article class="workflow-module patient">
           <div class="workflow-module-icon">QR</div>
-          <div><span>Patient</span><h3>Patient regimen hub</h3><p>Permanent patient-agnostic regimen page and QR will use this same workflow manifest.</p></div>
-          ${moduleStatus("planned")}
+          <div><span>Patient</span><h3>Patient information + Treatment Passport</h3><p>Open the regimen guide or print the generic wallet-sized card. Patient details are written by hand; the QR remains patient-agnostic.</p></div>
+          ${moduleStatus("available")}
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-patient-guide>Open patient guide</button>
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-passport-card>Open Treatment Passport</button>
         </article>
 
         <article class="workflow-module source">
@@ -487,6 +538,15 @@
     body.querySelector("[data-workflow-support]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
       openSupportivePdf(protocol);
+    });
+    body.querySelector("[data-workflow-patient-guide]")?.addEventListener("click",()=>{
+      const protocol=activeProtocol;
+      closePanel();
+      root.SACTCheckPatientContent?.open?.(protocol,{tab:"print"});
+    });
+    body.querySelector("[data-workflow-passport-card]")?.addEventListener("click",()=>{
+      const protocol=activeProtocol;
+      root.SACTCheckTreatmentPassportCard?.open?.(protocol);
     });
   }
 

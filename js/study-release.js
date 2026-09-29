@@ -58,7 +58,7 @@
       if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     });
-    // v0.77.0: no automatic landing/launcher modal. The site opens directly to the working homepage.
+    // v0.78.0: no automatic landing/launcher modal. The site opens directly to the working homepage.
   }
 
   root.SACTCheckStudyRelease = Object.freeze({ version: VERSION, openWelcome, closeWelcome, focusSearch });
@@ -72,7 +72,7 @@
    local supportive-medicine completeness and drug-content isolation remain aligned. */
 (function(root){
   "use strict";
-  const RELEASE=root.SACTCHECK_RELEASE||"0.77.0";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
 
   function loadCss(){
     root.document.querySelectorAll('link[data-sactcheck-interface-v0740],link[data-sactcheck-interface-v0750]').forEach(x=>x.remove());
@@ -110,10 +110,17 @@
     resetGlobal("SACTCheckRegimenWorkflow",RELEASE);
     resetGlobal("SACTCheckSupportiveCarePdf",RELEASE);
     resetGlobal("SACTCheckInterface",RELEASE);
+    resetGlobal("SACTCheckTreatmentPassportCard",RELEASE);
+    resetGlobal("SACTCheckAntiemeticCard",RELEASE);
 
     await Promise.all([
       loadScript(`js/patient-support-v0750.js?v=${RELEASE}`,"data-patient-support-v0750",RELEASE),
       loadScript(`js/regimen-workflow-engine-v0750.js?v=${RELEASE}`,"data-regimen-workflow-engine-v0750",RELEASE)
+    ]);
+
+    await Promise.all([
+      loadScript(`js/treatment-passport-card-v0780.js?v=${RELEASE}`,"data-treatment-passport-v0780",RELEASE),
+      loadScript(`js/antiemetic-card-v0780.js?v=${RELEASE}`,"data-antiemetic-card-v0780",RELEASE)
     ]);
 
     await loadScript(

@@ -1,7 +1,7 @@
 const assert=require('assert');
 const api=require('../js/patient-support-v0750.js');
 
-assert.equal(api.release,'0.77.0');
+assert.equal(api.release,'0.78.0');
 
 const scheduleProtocol={
   protocol_id:'demo',

@@ -20,7 +20,7 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
 
-  const RELEASE=root.SACTCHECK_RELEASE||"0.77.0";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
   const CONTENT_URL="data/patient-content-v0730.json";
   const RISK_URL="data/consent-content-v0710.json";
   let contentPromise=null;
@@ -453,7 +453,7 @@
     const schedule=`<section class="patient-support-view" data-patient-view="schedule"><div class="patient-section-title"><div><h3>Your treatment schedule</h3><p>Each treatment day is kept separate. Sequential phases are labelled explicitly, including induction and maintenance when encoded in the NCCP regimen.</p></div></div><div class="patient-schedule-timeline">${scheduleMarkup(protocol)}</div><div class="patient-card patient-note"><strong>The schedule is pulled from the selected regimen record. Confirm dates and individual changes with your oncology team.</strong></div></section>`;
     const grades=patientGradeScale(),toxicity=`<section class="patient-support-view" data-patient-view="toxicity"><div class="patient-section-title"><div><h3>Detailed toxicity guide</h3><p>General, agent-specific and immune toxicities stay separated so drug content cannot bleed between regimens.</p></div></div>${categoryBlock("General treatment effects","Shared treatment effects",general,"general")}${categoryBlock("Agent-specific effects","Medicine-specific effects",agent,"agent",code==="00831"?8:6)}${categoryBlock("Immunotherapy-related effects","Immune-mediated effects",immune,"immune")}<div class="patient-section-title"><div><h3>How severe does it feel?</h3></div></div><div class="patient-grade-scale">${grades.map(g=>`<div class="grade-${g.grade}"><strong>${g.grade} · ${esc(g.label)}</strong><span>${esc(g.meaning)}</span></div>`).join("")}</div><div class="patient-grade-boundary">Communication aid only — not a CTCAE assessment and not a treatment decision tool.</div></section>`;
     const urgentCards=[...(content?.urgent_general||[]).map(x=>({title:x.title,text:x.text})),...urgent.slice(0,6).map(x=>({title:x.label,text:x.detail}))],urgentView=`<section class="patient-support-view" data-patient-view="urgent"><div class="patient-emergency-banner"><strong>Do not wait for the next appointment if you are significantly unwell.</strong><span>Use your treating centre's emergency instructions.</span></div><div class="urgent-grid">${urgentCards.map(x=>`<article><strong>${esc(x.title)}</strong><p>${esc(x.text)}</p></article>`).join("")}</div></section>`;
-    const printView=`<section class="patient-support-view" data-patient-view="print"><div class="patient-print-card"><div><span class="patient-kicker">A4 · GRASP AT A GLANCE</span><h3>Printable regimen guide</h3><p>Open the regimen-specific A4 / PDF guide directly. This is now the default patient-information output.</p></div><a href="${esc(regimenLink(protocol))}" target="_blank" rel="noopener noreferrer"><img src="${esc(qrUrl(protocol))}" alt="Regimen QR"></a></div><div class="patient-print-actions"><button type="button" class="btn" data-open-print-passport>Open printable A4 guide</button><button type="button" class="btn secondary" data-copy-regimen-link>Copy regimen link</button></div></section>`;
+    const printView=`<section class="patient-support-view" data-patient-view="print"><div class="patient-print-card"><div><span class="patient-kicker">A4 · GRASP AT A GLANCE</span><h3>Printable regimen guide</h3><p>Open the regimen-specific A4 / PDF guide directly. This is now the default patient-information output.</p></div><a href="${esc(regimenLink(protocol))}" target="_blank" rel="noopener noreferrer"><img src="${esc(qrUrl(protocol))}" alt="Regimen QR"></a></div><div class="patient-print-actions"><button type="button" class="btn" data-open-print-passport>Open printable A4 guide</button><button type="button" class="btn secondary" data-open-treatment-passport>Open Treatment Passport Card</button><button type="button" class="btn secondary" data-copy-regimen-link>Copy regimen link</button></div></section>`;
     return overview+schedule+toxicity+urgentView+printView;
   }
 
@@ -496,6 +496,7 @@
       shell.querySelectorAll("[data-patient-tab]").forEach(b=>b.setAttribute("aria-selected",b.dataset.patientTab===requested?"true":"false"));
       shell.querySelectorAll("[data-patient-view]").forEach(v=>v.classList.toggle("active",v.dataset.patientView===requested));
       body.querySelectorAll("[data-open-print-passport]").forEach(button=>button.addEventListener("click",()=>openPrintablePassport(live,risk)));
+      body.querySelectorAll("[data-open-treatment-passport]").forEach(button=>button.addEventListener("click",()=>root.SACTCheckTreatmentPassportCard?.open?.(live)));
       body.querySelectorAll("[data-copy-regimen-link]").forEach(button=>button.addEventListener("click",async()=>{
         const link=regimenLink(live);
         try{ await root.navigator.clipboard.writeText(link); root.showToast?.("Regimen link copied"); }

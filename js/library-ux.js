@@ -5,7 +5,7 @@
   const FAVOURITES_KEY = "sactcheck:favourites:v1";
   const RECENTS_KEY = "sactcheck:recent-protocols:v1";
   const MAX_RECENTS = 5;
-  const SUSTAINABILITY_RELEASE = root.SACTCHECK_RELEASE || "0.77.0";
+  const SUSTAINABILITY_RELEASE = root.SACTCHECK_RELEASE || "0.78.0";
 
   function read(key, fallback = []) {
     try {

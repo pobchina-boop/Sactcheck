@@ -13,7 +13,7 @@
   }
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
-  const RELEASE=root.SACTCHECK_RELEASE||"0.77.0";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
   let mode="clinician";
   let queued=false;
 
@@ -119,7 +119,7 @@
         <span class="mode-icon">⌁</span><span><strong>Clinician workspace</strong><small>Assessment · supportive care · administration safety · sources</small></span>
       </button>
       <button type="button" data-sact-mode="patient" aria-pressed="false">
-        <span class="mode-icon">◎</span><span><strong>Patient-facing support</strong><small>A4 treatment guide · exact schedule · toxicity recognition</small></span>
+        <span class="mode-icon">◎</span><span><strong>Patient-facing support</strong><small>A4 treatment guide · Treatment Passport · exact schedule · toxicity recognition</small></span>
       </button>`;
     portal.insertAdjacentElement("beforebegin",section);
     section.querySelectorAll("[data-sact-mode]").forEach(button=>button.addEventListener("click",()=>{
@@ -137,7 +137,7 @@
     const sub=root.document.getElementById("librarySubheading");
     if(sub){
       sub.textContent=mode==="patient"
-        ?"Find the exact regimen, then open the patient-facing A4 / PDF treatment guide with schedule and toxicity support."
+        ?"Find the exact regimen, then open the patient guide or printable Treatment Passport Card with schedule, toxicity and emergency support."
         :"Find the exact NCCP regimen and open the regimen-derived clinical workflow.";
     }
     const search=root.document.getElementById("regimenSearch");

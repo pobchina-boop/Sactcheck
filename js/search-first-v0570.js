@@ -4,7 +4,7 @@
 (function(){
   'use strict';
 
-  const ENGINE_FIRST_RELEASE = window.SACTCHECK_RELEASE || '0.77.0';
+  const ENGINE_FIRST_RELEASE = window.SACTCHECK_RELEASE || '0.78.0';
 
   function ensureEngineFirstStyles(){
     if(document.querySelector('link[data-engine-first-homepage]')) return;
