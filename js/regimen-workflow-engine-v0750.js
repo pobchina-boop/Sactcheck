@@ -15,7 +15,37 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
 
-  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.80.0";
+
+  const DEDICATED_PATIENT_PIPELINES=Object.freeze({
+    "00209":"docs/patient/00209/",
+    "00568":"docs/patient/00568/",
+    "00857":"docs/patient/00857/",
+    "00722":"docs/patient/00722/",
+    "00382":"docs/patient/00382/",
+    "00619":"docs/patient/00619/",
+    "00831":"docs/patient/00831/"
+  });
+  function nccpCodeFor(protocol){
+    return String(protocol?.metadata?.nccp_regimen_code||protocol?.nccp_regimen_code||"").trim().padStart(5,"0");
+  }
+  function dedicatedPatientPipeline(protocol){
+    const code=nccpCodeFor(protocol);
+    return DEDICATED_PATIENT_PIPELINES[code]||null;
+  }
+  function openPatientPipeline(protocol){
+    const path=dedicatedPatientPipeline(protocol);
+    if(path){
+      const base=root.location?.href||"https://sactcheck.com/";
+      const url=new URL(path,base).href;
+      const win=root.open?.(url,"_blank");
+      if(win){ try{ win.opener=null; }catch(_){} }
+      else if(root.location) root.location.href=url;
+      return true;
+    }
+    return root.SACTCheckPatientContent?.open?.(protocol,{tab:"print"});
+  }
+
   const DATA_URL="data/regimen-workflow-v0750.json";
   const PDF_URL=`js/supportive-care-pdf-v0750.js?app=${RELEASE}`;
   let dataCache=null;
@@ -572,7 +602,7 @@
 
         <article class="workflow-module patient">
           <div class="workflow-module-icon">QR</div>
-          <div><span>Patient</span><h3>Patient information + Treatment Passport</h3><p>Open the regimen guide or print the generic wallet-sized card. Patient details are written by hand; the QR remains patient-agnostic.</p></div>
+          <div><span>Patient</span><h3>Patient information + Treatment Passport</h3><p>${dedicatedPatientPipeline(activeProtocol)?"Open the dedicated regimen-specific patient pipeline, visual guide and schedule-aware support.":"Open the regimen guide or print the generic wallet-sized card."} Patient details remain patient-agnostic in SACTCheck.</p></div>
           ${moduleStatus("available")}
           <button class="btn secondary workflow-module-action" type="button" data-workflow-patient-guide>Open patient guide</button>
           <button class="btn secondary workflow-module-action" type="button" data-workflow-passport-card>Open Treatment Passport</button>
@@ -614,7 +644,7 @@
     body.querySelector("[data-workflow-patient-guide]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
       closePanel();
-      root.SACTCheckPatientContent?.open?.(protocol,{tab:"print"});
+      openPatientPipeline(protocol);
     });
     body.querySelector("[data-workflow-passport-card]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
