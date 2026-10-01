@@ -15,16 +15,23 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
 
-  const RELEASE=root.SACTCHECK_RELEASE||"0.80.0";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
+  const WORKFLOW_DATA_RELEASE="0.78.0";
 
   const DEDICATED_PATIENT_PIPELINES=Object.freeze({
-    "00209":"docs/patient/00209/",
-    "00568":"docs/patient/00568/",
-    "00857":"docs/patient/00857/",
-    "00722":"docs/patient/00722/",
-    "00382":"docs/patient/00382/",
-    "00619":"docs/patient/00619/",
-    "00831":"docs/patient/00831/"
+    "00209":"patient/00209/",
+    "00222":"patient/00222/",
+    "00317":"patient/00317/",
+    "00318":"patient/00318/",
+    "00382":"patient/00382/",
+    "00568":"patient/00568/",
+    "00569":"patient/00569/",
+    "00619":"patient/00619/",
+    "00713":"patient/00713/",
+    "00714":"patient/00714/",
+    "00722":"patient/00722/",
+    "00831":"patient/00831/",
+    "00857":"patient/00857/"
   });
   function nccpCodeFor(protocol){
     return String(protocol?.metadata?.nccp_regimen_code||protocol?.nccp_regimen_code||"").trim().padStart(5,"0");
@@ -371,13 +378,13 @@
     if(dataCache) return dataCache;
     if(dataPromise) return dataPromise;
     if(typeof fetch!=="function") throw new Error("Workflow data cannot be loaded in this environment.");
-    dataPromise=fetch(`${DATA_URL}?v=${RELEASE}`,{cache:"no-store"})
+    dataPromise=fetch(`${DATA_URL}?v=${WORKFLOW_DATA_RELEASE}`,{cache:"no-store"})
       .then(response=>{
         if(!response.ok) throw new Error(`Workflow data HTTP ${response.status}`);
         return response.json();
       })
       .then(payload=>{
-        if(payload?.release!==RELEASE) throw new Error(`Expected workflow data ${RELEASE}.`);
+        if(payload?.release!==WORKFLOW_DATA_RELEASE) throw new Error(`Expected workflow data ${WORKFLOW_DATA_RELEASE}.`);
         dataCache=payload; return payload;
       }).catch(error=>{dataPromise=null; throw error;});
     return dataPromise;
@@ -743,6 +750,14 @@
     if(!root?.document) return;
     ensureCss();
     ensurePanel();
+    // Start the small workflow-data fetch before regimen cards render so the
+    // supportive-care card does not arrive in a second visible wave.
+    try{ load().catch(()=>{}); }catch(_){}
+    if(root.document.documentElement.dataset.regimenWorkflowV0804Installed==="true"){
+      refresh();
+      return;
+    }
+    root.document.documentElement.dataset.regimenWorkflowV0804Installed="true";
     const reassert=()=>root.setTimeout?.(refresh,0);
     root.addEventListener?.("sactcheck:protocols-loaded",reassert);
     root.addEventListener?.("sactcheck:v0700-source-reconciled",reassert);
@@ -751,11 +766,11 @@
     root.document.addEventListener?.("sactcheck:regimen-card-metadata-rendered",reassert);
     if(root.document.readyState==="loading") root.document.addEventListener("DOMContentLoaded",refresh,{once:true});
     else refresh();
-    root.setTimeout?.(refresh,350);
   }
 
   return Object.freeze({
     release:RELEASE,
+    dataRelease:WORKFLOW_DATA_RELEASE,
     dataUrl:DATA_URL,
     normaliseDrug,
     administrationRows,

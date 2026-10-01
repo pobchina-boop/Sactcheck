@@ -1,0 +1,12 @@
+/** v0.80.4: make emetogenic traffic lights open the printable regimen-derived antiemetic script. */
+(function(root){
+  "use strict";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.80.4";
+  function protocolFor(card){const id=card?.dataset?.jsonProtocolId;return root.SACTCheckProtocolLoader?.getProtocolById?.(id)||null;}
+  async function openPdf(card){const protocol=protocolFor(card);if(!protocol)return;const api=root.SACTCheckRegimenWorkflow;if(typeof api?.openSupportivePdf==='function')return api.openSupportivePdf(protocol);root.alert?.('Printable antiemetic support is still loading. Please try again in a moment.');}
+  function ensureCss(){if(root.document?.getElementById('antiemeticPrintV0804Style'))return;const s=root.document.createElement('style');s.id='antiemeticPrintV0804Style';s.textContent='.anti-print-v0804{display:inline-flex;align-items:center;gap:6px;margin-top:8px;border:0;border-radius:7px;background:#0f7f82;color:#fff;font-weight:800;padding:8px 10px;cursor:pointer}.anti-print-v0804:hover{filter:brightness(.96)}';root.document.head.appendChild(s);}
+  function decorate(){ensureCss();root.document.querySelectorAll('.regimen-card[data-json-protocol-id] .antiemetic-script-v0780').forEach(details=>{if(details.dataset.printV0804==='ready')return;details.dataset.printV0804='ready';const body=details.querySelector('.antiemetic-script-body');if(!body)return;const b=root.document.createElement('button');b.type='button';b.className='anti-print-v0804';b.textContent='Open printable antiemetic script';b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openPdf(details.closest('.regimen-card'));});body.appendChild(b);});}
+  function install(){decorate();const obs=new MutationObserver(decorate);obs.observe(root.document.body,{childList:true,subtree:true});root.document.addEventListener('click',e=>{const badge=e.target?.closest?.('.regimen-card .emetogenic-badge');if(!badge)return;e.preventDefault();e.stopImmediatePropagation();openPdf(badge.closest('.regimen-card'));},true);root.addEventListener?.('sactcheck:protocols-loaded',decorate);root.document.addEventListener?.('sactcheck:regimen-card-metadata-rendered',decorate);}
+  if(root.document){if(root.document.readyState==='loading')root.document.addEventListener('DOMContentLoaded',install,{once:true});else install();}
+  root.SACTCheckAntiemeticPrintV0804=Object.freeze({release:RELEASE,decorate,openPdf});
+})(typeof globalThis!=="undefined"?globalThis:this);
