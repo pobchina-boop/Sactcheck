@@ -20,7 +20,7 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(root){
   "use strict";
 
-  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
+  const RELEASE=root.SACTCHECK_RELEASE||"0.80.3";
   const CONTENT_URL="data/patient-content-v0730.json";
   const RISK_URL="data/consent-content-v0710.json";
   let contentPromise=null;
@@ -391,7 +391,7 @@
 
   function regimenLink(protocol){
     const code=protocolCode(protocol);
-    if(["00209","00568","00857","00722","00382","00619","00831"].includes(code)) return `https://sactcheck.com/docs/patient/${code}/`;
+    if(["00209","00568","00857","00722","00382","00619","00831"].includes(code)) return `https://sactcheck.com/patient/${code}/`;
     const base=new URL("https://sactcheck.com/"); const id=text(protocol?.protocol_id); if(id) base.searchParams.set("patientSupport",id); return base.href;
   }
 
