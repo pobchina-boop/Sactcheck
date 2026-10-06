@@ -27,6 +27,14 @@
   let riskPromise=null;
   let activeProtocol=null;
 
+  function patientAssets(){
+    if(root.SACTCheckPatientAssets) return root.SACTCheckPatientAssets;
+    if(typeof require==="function"){
+      try{return require("./patient-asset-registry-v0810.js");}catch(_){}
+    }
+    return null;
+  }
+
   const CORE_IRAE_IDS=["pneumonitis","colitis","hepatitis","endocrine","nephritis","skin"];
   const URGENT_IDS=new Set([
     "pneumonitis","ild","perforation","bleeding","thrombosis","vte","myocarditis",
@@ -390,9 +398,14 @@
   }
 
   function regimenLink(protocol){
-    const code=protocolCode(protocol);
-    if(["00209","00222","00317","00318","00382","00568","00569","00619","00713","00714","00722","00831","00857"].includes(code)) return `https://sactcheck.com/patient/${code}/`;
+    const registry=patientAssets();
+    if(registry?.publicPortalUrl) return registry.publicPortalUrl(protocol);
     const base=new URL("https://sactcheck.com/"); const id=text(protocol?.protocol_id); if(id) base.searchParams.set("patientSupport",id); return base.href;
+  }
+
+  function guideLink(protocol){
+    const registry=patientAssets();
+    return registry?.guideUrl?.(protocol)||null;
   }
 
   function qrUrl(protocol){
@@ -482,9 +495,16 @@
   }
 
   function openPrintablePassport(protocol,riskContent,options={}){
+    const consentSupport=Boolean(options?.consentSupport);
+    const registry=patientAssets();
+    // Dedicated patient guides are immutable static assets. They must always win
+    // over the historical dynamic about:blank renderer. The dynamic renderer is
+    // retained only for consent-discussion output and unsupported-regimen fallback.
+    if(!consentSupport && registry?.hasDedicated?.(protocol)){
+      return registry.openGuide(protocol);
+    }
     const viewer=root.open?.("about:blank","_blank");
     if(!viewer){ root.alert?.("Allow pop-ups for SACTCheck to open the printable guide."); return null; }
-    const consentSupport=Boolean(options?.consentSupport);
     const title=protocolTitle(protocol),code=protocolCode(protocol),version=protocolVersion(protocol),components=componentsForProtocol(protocol),rows=buildRiskRows(protocol,riskContent).rows;
     const general=rows.filter(r=>r.category==="general"),immune=rows.filter(r=>r.category==="immune"),agent=rows.filter(r=>r.category!=="general"&&r.category!=="immune");
     const phaseHtml=scheduleRows(protocol).map(p=>`<div class="phase"><b>${esc(p.phase)}</b><span>${esc([p.cycle?`${p.cycle}-day cycle`:"",p.frequency].filter(Boolean).join(" · "))}</span>${p.days.map(d=>`<div><strong>${esc(d.day)}</strong> ${esc(d.medicines.join(" + "))}</div>`).join("")}</div>`).join("")||`<p>${esc(scheduleSummary(protocol))}</p>`;
@@ -502,6 +522,11 @@
     if(!live) return null;
     activeProtocol=live;
     try{
+      const registry=patientAssets();
+      if((options?.autoPdf || options?.tab==="print") && !options?.consentSupport && registry?.hasDedicated?.(live)){
+        close();
+        return registry.openGuide(live);
+      }
       const [content,risk]=await Promise.all([loadContent(),loadRisk()]);
       if(options?.autoPdf || options?.tab==="print"){
         close();
@@ -518,7 +543,11 @@
       shell.querySelectorAll("[data-patient-tab]").forEach(b=>b.setAttribute("aria-selected",b.dataset.patientTab===requested?"true":"false"));
       shell.querySelectorAll("[data-patient-view]").forEach(v=>v.classList.toggle("active",v.dataset.patientView===requested));
       body.querySelectorAll("[data-open-print-passport]").forEach(button=>button.addEventListener("click",()=>openPrintablePassport(live,risk)));
-      body.querySelectorAll("[data-open-treatment-passport]").forEach(button=>button.addEventListener("click",()=>root.SACTCheckTreatmentPassportCard?.open?.(live)));
+      body.querySelectorAll("[data-open-treatment-passport]").forEach(button=>button.addEventListener("click",()=>{
+        const registry=patientAssets();
+        if(registry?.hasDedicated?.(live)) registry.openPassport(live);
+        else root.SACTCheckTreatmentPassportCard?.open?.(live);
+      }));
       body.querySelectorAll("[data-copy-regimen-link]").forEach(button=>button.addEventListener("click",async()=>{
         const link=regimenLink(live);
         try{ await root.navigator.clipboard.writeText(link); root.showToast?.("Regimen link copied"); }
@@ -549,7 +578,14 @@
       const p=root.SACTCheckProtocolLoader?.getProtocolById?.(id);
       if(!p) return false;
       root.SACTCheckInterface?.setMode?.("patient");
-      open(p,{tab:"print",autoPdf:true});
+      const registry=patientAssets();
+      if(registry?.hasDedicated?.(p)){
+        const target=registry.runtimeUrl?.(p,"portal");
+        if(target&&root.location?.replace) root.location.replace(target);
+        else registry.openPortal?.(p);
+      }else{
+        open(p,{tab:"print",autoPdf:true});
+      }
       return true;
     };
     if(attempt()) return;
@@ -569,7 +605,7 @@
   return Object.freeze({
     release:RELEASE,version:RELEASE,
     normalise,componentsForProtocol,scheduleRows,scheduleSummary,profileMatches,
-    actionLevel,patientGradeScale,buildRiskRows,bodyMapMarkup,regimenLink,qrUrl,
+    actionLevel,patientGradeScale,buildRiskRows,bodyMapMarkup,regimenLink,guideLink,qrUrl,
     preload,open,openPatientSupport:open,close,install,openPrintablePassport,
     generateConsentPdf,consentText
   });

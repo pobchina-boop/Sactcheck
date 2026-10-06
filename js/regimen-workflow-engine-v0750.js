@@ -18,40 +18,27 @@
   const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
   const WORKFLOW_DATA_RELEASE="0.78.0";
 
-  const DEDICATED_PATIENT_PIPELINES=Object.freeze({
-    "00209":"patient/00209/",
-    "00222":"patient/00222/",
-    "00317":"patient/00317/",
-    "00318":"patient/00318/",
-    "00382":"patient/00382/",
-    "00568":"patient/00568/",
-    "00569":"patient/00569/",
-    "00619":"patient/00619/",
-    "00713":"patient/00713/",
-    "00714":"patient/00714/",
-    "00722":"patient/00722/",
-    "00831":"patient/00831/",
-    "00857":"patient/00857/"
-  });
+  function patientAssets(){
+    if(root.SACTCheckPatientAssets) return root.SACTCheckPatientAssets;
+    if(typeof require==="function"){
+      try{return require("./patient-asset-registry-v0810.js");}catch(_){}
+    }
+    return null;
+  }
   function nccpCodeFor(protocol){
-    return String(protocol?.metadata?.nccp_regimen_code||protocol?.nccp_regimen_code||"").trim().padStart(5,"0");
+    return patientAssets()?.codeFor?.(protocol)||String(protocol?.metadata?.nccp_regimen_code||protocol?.nccp_regimen_code||"").trim().padStart(5,"0");
   }
   function dedicatedPatientPipeline(protocol){
-    const code=nccpCodeFor(protocol);
-    return DEDICATED_PATIENT_PIPELINES[code]||null;
+    const registry=patientAssets();
+    if(registry?.hasDedicated?.(protocol)) return registry.relativePath(protocol,"portal");
+    return null;
   }
   function openPatientPipeline(protocol){
-    const path=dedicatedPatientPipeline(protocol);
-    if(path){
-      const base=root.location?.href||"https://sactcheck.com/";
-      const url=new URL(path,base).href;
-      const win=root.open?.(url,"_blank");
-      if(win){ try{ win.opener=null; }catch(_){} }
-      else if(root.location) root.location.href=url;
-      return true;
-    }
+    const registry=patientAssets();
+    if(registry?.hasDedicated?.(protocol)) return registry.openPortal(protocol);
     return root.SACTCheckPatientContent?.open?.(protocol,{tab:"print"});
   }
+
 
   const DATA_URL="data/regimen-workflow-v0750.json";
   const PDF_URL=`js/supportive-care-pdf-v0750.js?app=${RELEASE}`;
@@ -655,7 +642,9 @@
     });
     body.querySelector("[data-workflow-passport-card]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
-      root.SACTCheckTreatmentPassportCard?.open?.(protocol);
+      const registry=patientAssets();
+      if(registry?.hasDedicated?.(protocol)) registry.openPassport(protocol);
+      else root.SACTCheckTreatmentPassportCard?.open?.(protocol);
     });
   }
 
