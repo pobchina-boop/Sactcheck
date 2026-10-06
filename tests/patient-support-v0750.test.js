@@ -1,7 +1,9 @@
 const assert=require('assert');
 const api=require('../js/patient-support-v0750.js');
+const patientAssets=require('../js/patient-asset-registry-v0810.js');
 
 assert.equal(api.release,'0.78.0');
+assert.equal(patientAssets.release,'0.81.0');
 
 const scheduleProtocol={
   protocol_id:'demo',
@@ -53,10 +55,23 @@ assert.ok(hccRows.find(x=>x.id==='thrombosis').label.startsWith('Clots'));
 assert.equal(api.regimenLink(hcc),'https://sactcheck.com/patient/00831/');
 const onlyImmune={protocol_id:'test-atezo',treatment_phases:[{administration:[{drug:'Atezolizumab',day:1}]}]};
 assert.ok(!api.buildRiskRows(onlyImmune,actualRisk).rows.some(x=>['pres','jaw_osteonecrosis'].includes(x.id)));
-let printable='';
+
+// v0.81 architecture: a registered dedicated regimen must open the protected
+// static guide PDF. The historical about:blank renderer must not own this path.
+let openedUrl='';
 global.location={href:'https://sactcheck.com/'};
+global.open=(url)=>{openedUrl=String(url);return {opener:null};};
+const dedicated=api.openPrintablePassport(hcc,actualRisk);
+assert.ok(dedicated,'Dedicated guide should open through the patient asset registry.');
+assert.equal(openedUrl,'https://sactcheck.com/patient/00831/guide.pdf');
+assert.ok(!/^about:blank$/i.test(openedUrl),'Dedicated patient guide must never use the legacy about:blank renderer.');
+
+// The old printable renderer remains intentionally available for clinician
+// consent-discussion support and unsupported-regimen fallback. Keep its HCC
+// anatomy/content regression checks attached to that remaining responsibility.
+let printable='';
 global.open=()=>({document:{open(){},write(value){printable+=value;},close(){}}});
-api.openPrintablePassport(hcc,actualRisk);
+api.openPrintablePassport(hcc,actualRisk,{consentSupport:true});
 assert.ok(printable.includes('anatomy-hcc-v0762.png'));
 assert.ok(printable.includes('A picture of side effects'));
 assert.ok(printable.includes('Chest pain, palpitations'));
