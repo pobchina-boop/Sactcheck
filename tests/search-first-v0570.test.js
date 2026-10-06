@@ -43,15 +43,11 @@ const trackerWorkflow=fs.readFileSync(path.join(root,'.github','workflows','nccp
 
 assert.ok(ui.includes('ensureV0700Reconciliation()'), 'v0.70.0 source reconciliation must remain loaded.');
 assert.ok(ui.includes('source-reconciliation-v0700.js'), 'v0.70.0 source reconciliation script path is missing.');
-for(const sentinel of ['CAB_COUNTS_COMBINED','DAY15_AFTER_FULL_INTERMEDIATE','BEV_PROTEIN_2_3','BEV_HTN_UNCONTROLLED_NUMERIC']){
-  assert.ok(reconciliation.includes(sentinel), `v0.70.0 reconciliation sentinel ${sentinel} is missing.`);
-}
+for(const sentinel of ['CAB_COUNTS_COMBINED','DAY15_AFTER_FULL_INTERMEDIATE','BEV_PROTEIN_2_3','BEV_HTN_UNCONTROLLED_NUMERIC']) assert.ok(reconciliation.includes(sentinel), `v0.70.0 reconciliation sentinel ${sentinel} is missing.`);
 assert.strictEqual(kbAddendum.release,'0.70.0');
 assert.strictEqual(kbAddendum.regimen_profiles.length,3,'v0.70.0 must add exactly three detailed regimen profiles.');
 assert.strictEqual(kbAddendum.evidence_records.length,6,'v0.70.0 must add six principal evidence records.');
-for(const acronym of ['TROPIC','PROSELICA','CARD','MPACT','TRIBE','TRIBE2']){
-  assert.ok(kbAddendum.evidence_records.some(record=>record.trial_acronym===acronym),`${acronym} evidence record missing.`);
-}
+for(const acronym of ['TROPIC','PROSELICA','CARD','MPACT','TRIBE','TRIBE2']) assert.ok(kbAddendum.evidence_records.some(record=>record.trial_acronym===acronym),`${acronym} evidence record missing.`);
 assert.ok(sustainabilityModule.includes('data/sustainability-regimen-metadata-v0691.json'),'Base v0.69.1 sustainability metadata must remain the canonical base.');
 assert.ok(sustainabilityModule.includes('data/sustainability-regimen-metadata-v0700-addendum.json'),'v0.70.0 sustainability addendum is not loaded.');
 assert.ok(sustainabilityModule.includes('version:"0.69.1"'),'Historical sustainability module version must remain stable.');
@@ -64,22 +60,14 @@ assert.ok(trackerWorkflow.includes('PR creation is blocked by repository setting
 const hotfix=fs.readFileSync(path.join(root,'js','source-reconciliation-v0701.js'),'utf8');
 assert.ok(ui.includes('ensureV0701Reconciliation()'),'v0.70.1 hotfix loader is missing.');
 assert.ok(ui.includes('source-reconciliation-v0701.js'),'v0.70.1 source-fidelity script path is missing.');
-for(const sentinel of [
-  'LONSURF_NEXT_CYCLE_ANC','LONSURF_DELAY_REDUCE_ANC',
-  'RIBO_HEP_G3','RIBO_HEP_DILI','RIBO_QT_GT500_ADJ_RECUR',
-  'sourceCheckPending'
-]){
-  assert.ok(hotfix.includes(sentinel),`v0.70.1 hotfix sentinel ${sentinel} is missing.`);
-}
+for(const sentinel of ['LONSURF_NEXT_CYCLE_ANC','LONSURF_DELAY_REDUCE_ANC','RIBO_HEP_G3','RIBO_HEP_DILI','RIBO_QT_GT500_ADJ_RECUR','sourceCheckPending']) assert.ok(hotfix.includes(sentinel),`v0.70.1 hotfix sentinel ${sentinel} is missing.`);
 assert.ok(hotfix.includes('trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf'),'Current Lonsurf v4 source URL is missing.');
 assert.ok(hotfix.includes('NCCP regimen catalogue'),'NCCP catalogue source fallback is missing.');
 assert.ok(hotfix.includes('Source check pending — do not interpret this as zero updates.'),'Tracker pending-state safeguard is missing.');
 
-// Current cumulative presentation layer: the historical consent-generation implementation
-// remains in the repository for traceability, but the live product direction is the
-// regimen-specific patient-information pipeline loaded by study-release.js.
 const studyRelease=fs.readFileSync(path.join(root,'js','study-release.js'),'utf8');
 const patientSupport=fs.readFileSync(path.join(root,'js','patient-support-v0750.js'),'utf8');
+const patientRegistry=fs.readFileSync(path.join(root,'js','patient-asset-registry-v0810.js'),'utf8');
 const interfaceShell=fs.readFileSync(path.join(root,'js','sactcheck-interface-v0750.js'),'utf8');
 const consentContent=JSON.parse(fs.readFileSync(path.join(root,'data','consent-content-v0710.json'),'utf8'));
 assert.ok(studyRelease.includes('patient-support-v0750.js'), 'Current patient-support runtime loader is missing.');
@@ -87,7 +75,9 @@ assert.ok(studyRelease.includes('regimen-workflow-engine-v0750.js'), 'Current re
 assert.ok(studyRelease.includes('sactcheck-interface-v0750.js'), 'Current interface runtime loader is missing.');
 assert.ok(studyRelease.includes('const VERSION = "0.48.4"'), 'Historical study-release version must remain traceable.');
 assert.ok(patientSupport.includes('SACTCHECK_RELEASE'), 'Patient support must inherit the canonical visible release.');
-assert.ok(patientSupport.includes('https://sactcheck.com/patient/${code}/'), 'Canonical patient route generator is missing.');
+assert.ok(patientSupport.includes('SACTCheckPatientAssets'), 'Patient support must delegate dedicated patient routes to the canonical registry.');
+assert.ok(patientRegistry.includes("return `patient/${def.code}/`"), 'Canonical patient route generator is missing from the central patient registry.');
+assert.ok(patientRegistry.includes("PUBLIC_ORIGIN='https://sactcheck.com/'"), 'Canonical patient origin is missing from the central patient registry.');
 assert.ok(interfaceShell.includes('Regimen-specific oncology information pipeline'), 'Information-pipeline homepage framing is missing.');
 assert.strictEqual(consentContent.governance.no_autonomous_consent,true);
 assert.ok(Object.keys(consentContent.agent_profiles||{}).length>=50);

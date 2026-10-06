@@ -4,6 +4,7 @@
     const stage=panel.querySelector(".hcc-visual-stage");
     if(!stage) return;
     stage.querySelector(".hcc-connector-layer")?.remove();
+    if(stage.querySelector(".hcc-static-connectors")) return;
     if(root.matchMedia?.("(max-width:700px)").matches) return;
     const bounds=stage.getBoundingClientRect();
     if(!bounds.width||!bounds.height) return;

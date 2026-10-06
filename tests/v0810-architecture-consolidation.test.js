@@ -6,14 +6,14 @@ const json=p=>JSON.parse(read(p));
 const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
 
 const pkg=json('package.json'),app=json('data/app-release.json');
-assert.strictEqual(pkg.version,'0.81.0');
+assert.ok(pkg.version.localeCompare('0.81.0',undefined,{numeric:true})>=0,'v0.81 architecture must remain present in later patch releases');
 assert.strictEqual(app.version,pkg.version);
 assert.strictEqual(app.release,pkg.version,'app-release.release must remain a version, not a prose label');
 assert.strictEqual(app.knowledge_module_release,'0.68.0');
 assert.strictEqual(app.validation_module_release,'0.68.0');
 
 const registry=require('../js/patient-asset-registry-v0810.js');
-assert.strictEqual(registry.release,'0.81.0');
+assert.strictEqual(registry.release,pkg.version);
 assert.strictEqual(registry.codes.length,13);
 assert.strictEqual(registry.publicUrl('00568','portal'),'https://sactcheck.com/patient/00568/');
 assert.strictEqual(registry.publicUrl('00568','guide'),'https://sactcheck.com/patient/00568/guide.pdf');
@@ -43,19 +43,19 @@ assert.ok(workflow.includes('const WORKFLOW_DATA_RELEASE="0.78.0"'),'workflow da
 
 const index=read('index.html');
 const order=[
-  'sactcheck-release.js?app=0.81.0',
-  'runtime-performance-v0810.js?app=0.81.0',
-  'patient-asset-registry-v0810.js?app=0.81.0',
-  'patient-support-v0750.js?app=0.81.0',
-  'regimen-workflow-engine-v0750.js?app=0.81.0',
-  'sactcheck-interface-v0750.js?app=0.81.0',
-  'ui-stability-v0810.js?app=0.81.0',
-  'antiemetic-print-v0810.js?app=0.81.0',
-  'protocol-loader.js?v=0.59.0&app=0.81.0'
+  `sactcheck-release.js?app=${pkg.version}`,
+  `runtime-performance-v0810.js?app=${pkg.version}`,
+  `patient-asset-registry-v0810.js?app=${pkg.version}`,
+  `patient-support-v0750.js?app=${pkg.version}`,
+  `regimen-workflow-engine-v0750.js?app=${pkg.version}`,
+  `sactcheck-interface-v0750.js?app=${pkg.version}`,
+  `ui-stability-v0810.js?app=${pkg.version}`,
+  `antiemetic-print-v0810.js?app=${pkg.version}`,
+  `protocol-loader.js?v=0.59.0&app=${pkg.version}`
 ];
 let last=-1;for(const token of order){const pos=index.indexOf(token);assert.ok(pos>last,`bootstrap order invalid at ${token}`);last=pos;}
-assert.ok(!index.includes('ui-stability-v0804.js?app=0.81.0'));
-assert.ok(!index.includes('antiemetic-print-v0804.js?app=0.81.0'));
+assert.ok(!index.includes(`ui-stability-v0804.js?app=${pkg.version}`));
+assert.ok(!index.includes(`antiemetic-print-v0804.js?app=${pkg.version}`));
 assert.ok(!read('js/study-release.js').includes('function loadScript('),'study layer must not perform a second runtime bootstrap');
 
 const perf=read('js/runtime-performance-v0810.js');
@@ -84,4 +84,4 @@ assert.ok(fs.statSync(path.join(root,'patient/00568/guide.pdf')).size>800000,'00
 
 const notFound=read('404.html');for(const code of registry.codes)assert.ok(notFound.includes(code),`404 compatibility routing missing ${code}`);
 
-console.log('v0.81.0 architecture consolidation gate passed: one patient registry, direct protected guides/passports, stable bootstrap, cached protocol startup and 13 protected patient pipelines.');
+console.log(`v${pkg.version} architecture consolidation gate passed: one patient registry, direct protected guides/passports, stable bootstrap, cached protocol startup and 13 protected patient pipelines.`);
