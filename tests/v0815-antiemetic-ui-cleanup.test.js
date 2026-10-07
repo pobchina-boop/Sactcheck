@@ -3,7 +3,7 @@ const assert=require('assert'),fs=require('fs'),path=require('path');
 const root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const pkg=JSON.parse(read('package.json')),app=JSON.parse(read('data/app-release.json'));
-assert.strictEqual(pkg.version,'0.81.5');
+assert.ok(pkg.version.localeCompare('0.81.5',undefined,{numeric:true})>=0);
 assert.strictEqual(app.version,pkg.version);assert.strictEqual(app.release,pkg.version);
 const card=read('js/antiemetic-card-v0780.js');
 assert.ok(card.includes("querySelectorAll('.antiemetic-script-v0780')"),'legacy dropdown cleanup missing');
@@ -13,6 +13,6 @@ for(const marker of ['.regimen-card .emetogenic-badge','Rx script ↗','openSupp
 assert.ok(print.includes("querySelectorAll('.antiemetic-script-v0780').forEach(el=>el.remove())"),'print owner must remove legacy duplicate dropdown');
 assert.ok(print.includes("replace(/CUH/gi,'   ')")||print.includes('replace(/CUH/gi'), 'print presentation must suppress CUH wording');
 const index=read('index.html');
-assert.ok(index.includes('antiemetic-card-v0780.js?app=0.81.5'),'antiemetic card cleanup must load in v0.81.5 bootstrap');
-assert.ok(index.includes('antiemetic-print-v0810.js?app=0.81.5'),'single antiemetic print owner must load in v0.81.5 bootstrap');
+assert.ok(index.includes(`antiemetic-card-v0780.js?app=${pkg.version}`),'antiemetic card cleanup must load in the cumulative bootstrap');
+assert.ok(index.includes(`antiemetic-print-v0810.js?app=${pkg.version}`),'single antiemetic print owner must load in the cumulative bootstrap');
 console.log('v0.81.5 antiemetic UI/content cleanup checks passed.');
