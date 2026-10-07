@@ -2,6 +2,7 @@
 "use strict";
 const fs=require("fs"),path=require("path"),crypto=require("crypto");
 const root=path.resolve(__dirname,".."),site=path.join(root,"_site");
+const pkg=JSON.parse(fs.readFileSync(path.join(root,"package.json"),"utf8"));
 const registry=require(path.join(root,"js","patient-asset-registry-v0810.js"));
 const codes=registry.codes;
 const protectedManifest=JSON.parse(fs.readFileSync(path.join(root,"data","protected-patient-assets-v0810.json"),"utf8"));
@@ -25,7 +26,12 @@ for(const item of required) if(!fs.existsSync(path.join(site,item))) problems.pu
 
 if(fs.existsSync(path.join(site,"data/app-release.json"))){
   const app=JSON.parse(fs.readFileSync(path.join(site,"data/app-release.json"),"utf8"));
-  if(app.version!=="0.81.0"||app.release!==app.version) problems.push("public app release schema/version is inconsistent");
+  if(!app.version||app.release!==app.version||app.version!==pkg.version){
+    problems.push(`public app release schema/version is inconsistent (package=${pkg.version}, app.version=${app.version||"missing"}, app.release=${app.release||"missing"})`);
+  }
+  if(app.display_version&&app.display_version!==`v${pkg.version}`){
+    problems.push(`public display_version does not match package version (${app.display_version} vs v${pkg.version})`);
+  }
 }
 const supportPath=path.join(site,"js","patient-support-v0750.js");
 if(fs.existsSync(supportPath)){
@@ -71,4 +77,4 @@ for(const item of forbiddenTopLevel) if(fs.existsSync(path.join(site,item))) pro
 function walk(directory){if(!fs.existsSync(directory))return;for(const entry of fs.readdirSync(directory,{withFileTypes:true})){const absolute=path.join(directory,entry.name),relative=path.relative(site,absolute).replaceAll(path.sep,"/");if(entry.isDirectory())walk(absolute);else if(/\.(?:pem|p12|pfx|key)$/i.test(entry.name)||/^\.env/i.test(entry.name))problems.push(`credential-like file in public artefact: ${relative}`);}}
 walk(site);
 if(problems.length){console.error("Deployable-site validation failed:");for(const p of problems)console.error(`- ${p}`);process.exit(1);}
-console.log(`Deployable-site validation passed: v0.81.0 canonical architecture, ${codes.length} protected patient portals, compatibility redirects and route/PDF integrity.`);
+console.log(`Deployable-site validation passed: v${pkg.version} canonical architecture, ${codes.length} protected patient portals, compatibility redirects and route/PDF integrity.`);
