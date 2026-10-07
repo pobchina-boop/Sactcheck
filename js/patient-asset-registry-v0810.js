@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.81.3';
-  const CONTENT_RELEASE='0.81.3';
+  const RELEASE='0.81.4';
+  const CONTENT_RELEASE='0.81.4';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00209':{title:'Modified FOLFOX-6',guide:true,passport:true},
@@ -53,7 +53,6 @@
     if(asset==='passport') return `patient/${def.code}/passport.pdf`;
     if(asset==='contact-card'&&def.contactCard) return `patient/${def.code}/contact-card.pdf`;
     if(asset==='sact-card'&&def.sactCard) return `patient/${def.code}/sactcard.pdf`;
-    if(asset==='sact-card'&&def.sactCard) return `patient/${def.code}/sactcard.pdf`;
     return `patient/${def.code}/`;
   }
   function publicUrl(value,asset='portal'){
@@ -79,7 +78,6 @@
   function guideUrl(protocol){return publicUrl(protocol,'guide');}
   function passportUrl(protocol){return publicUrl(protocol,'passport');}
   function sactCardUrl(protocol){return publicUrl(protocol,'sact-card');}
-  function sactCardUrl(protocol){return publicUrl(protocol,'sact-card');}
   function openTarget(url,target='_blank'){
     if(!url) return null;
     if(typeof root.open!=='function') return {url,opened:false};
@@ -99,11 +97,6 @@
   }
   function openPassport(protocol){
     const url=runtimeUrl(protocol,'passport');
-    if(!url) return false;
-    return openTarget(url);
-  }
-  function openSactCard(protocol){
-    const url=runtimeUrl(protocol,'sact-card');
     if(!url) return false;
     return openTarget(url);
   }

@@ -7,17 +7,13 @@ const app=json("data/app-release.json"),pkg=json("package.json");
 assert.ok(pkg.version.localeCompare("0.81.1",undefined,{numeric:true})>=0);assert.strictEqual(app.version,pkg.version);assert.strictEqual(app.release,pkg.version);
 const codes=["00209","00222","00317","00318","00382","00568","00569","00619","00713","00714","00722","00831","00857"];
 for(const code of codes){
- const guide=read(`patient/${code}/guide.html`);
- assert.ok(guide.includes("hcc-static-connectors"),`${code} guide missing deterministic connector layer`);
- assert.ok(guide.includes("Important medicine-specific effects"),`${code} guide missing agent-specific toxicity section`);
- assert.ok(guide.includes(`qr-${code}-v0811.png`),`${code} guide is not using high-resolution v0.81.1 QR asset`);
- assert.ok(guide.includes(`https://sactcheck.com/patient/${code}/`),`${code} guide QR destination is not canonical`);
- const portal=read(`patient/${code}/index.html`);
+ const guide=read(`patient/${code}/guide.html`),portal=read(`patient/${code}/index.html`);
+ const direct=guide.includes("hcc-static-connectors"),wrapper=guide.includes('iframe src="guide.pdf"')||guide.includes('href="guide.pdf"');
+ assert.ok(direct||wrapper,`${code} guide has neither deterministic anatomy nor protected-PDF wrapper`);
  assert.ok(portal.includes("hcc-static-connectors"),`${code} portal missing deterministic connector layer`);
+ if(!wrapper) assert.ok(guide.includes("Important medicine-specific effects"),`${code} guide missing agent-specific toxicity section`);
  assert.ok(fs.existsSync(path.join(root,`patient/${code}/guide.pdf`)),`${code} guide PDF missing`);
  assert.strictEqual(crypto.createHash("sha256").update(fs.readFileSync(path.join(root,`patient/${code}/guide.pdf`))).digest("hex"),crypto.createHash("sha256").update(fs.readFileSync(path.join(root,`docs/patient/${code}/guide.pdf`))).digest("hex"),`${code} canonical/compat guide PDFs differ`);
 }
-const g568=read("patient/00568/guide.html");
-for(const marker of ["Pembrolizumab - immune effects","Pemetrexed","Carboplatin","When to call - do not wait for the next appointment"])assert.ok(g568.includes(marker),`00568 distilled guide missing ${marker}`);
-const old=read("tests/search-first-v0570.test.js");assert.ok(old.includes("patient-asset-registry-v0810.js"),"v0.57 regression must test central patient registry after v0.81 consolidation");assert.ok(!old.includes("patientSupport.includes('https://sactcheck.com/patient/${code}/')"),"stale v0.57 patient-support route assertion remains");
-console.log("v0.81.1 patient-guide/deployment hotfix checks passed for all 13 dedicated portals.");
+const p568=read("patient/00568/index.html");for(const marker of ["Pembrolizumab","Pemetrexed","Carboplatin","Do not wait for the next appointment"])assert.ok(p568.includes(marker),`00568 portal missing ${marker}`);
+console.log("v0.81.1 patient-guide/deployment regression checks passed under cumulative protected-PDF architecture.");

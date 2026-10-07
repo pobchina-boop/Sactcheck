@@ -20,6 +20,7 @@ for(const code of codes){
 }
 required.push("patient/00831/contact-card.pdf","docs/patient/00831/contact-card.pdf");
 required.push("patient/00568/sactcard.html","patient/00568/sactcard.pdf","docs/patient/00568/sactcard.html","docs/patient/00568/sactcard.pdf");
+required.push("patient/00568/passport.html","docs/patient/00568/passport.html");
 const problems=[];
 const sha=p=>crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex");
 if(!fs.existsSync(site)) problems.push("_site directory does not exist");
