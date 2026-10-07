@@ -19,6 +19,7 @@ for(const code of codes){
   for(const f of ["index.html","guide.html","guide.pdf","passport.pdf"]) required.push(`docs/patient/${code}/${f}`);
 }
 required.push("patient/00831/contact-card.pdf","docs/patient/00831/contact-card.pdf");
+required.push("patient/00568/sactcard.html","patient/00568/sactcard.pdf","docs/patient/00568/sactcard.html","docs/patient/00568/sactcard.pdf");
 const problems=[];
 const sha=p=>crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex");
 if(!fs.existsSync(site)) problems.push("_site directory does not exist");
@@ -63,7 +64,7 @@ for(const code of codes){
   }
   const compatIndex=path.join(compat,"index.html");
   if(fs.existsSync(compatIndex)&&!fs.readFileSync(compatIndex,"utf8").includes(`https://sactcheck.com/patient/${code}/`)) problems.push(`docs/patient/${code} does not redirect to canonical portal`);
-  for(const file of ["guide.pdf","passport.pdf"]){
+  for(const file of ["guide.pdf","passport.pdf",...(code==="00568"?["sactcard.pdf"]:[])]){
     const a=path.join(canonical,file),b=path.join(compat,file);
     if(fs.existsSync(a)&&fs.existsSync(b)&&sha(a)!==sha(b)) problems.push(`compatibility ${file} drift for ${code}`);
     const fixture=protectedManifest.assets?.[code]?.[file];

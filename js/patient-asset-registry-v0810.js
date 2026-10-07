@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.81.2';
-  const CONTENT_RELEASE='0.81.2';
+  const RELEASE='0.81.3';
+  const CONTENT_RELEASE='0.81.3';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00209':{title:'Modified FOLFOX-6',guide:true,passport:true},
@@ -22,7 +22,7 @@
     '00317':{title:'Pemetrexed + Cisplatin',guide:true,passport:true},
     '00318':{title:'Pemetrexed + Carboplatin',guide:true,passport:true},
     '00382':{title:'Trifluridine/Tipiracil',guide:true,passport:true},
-    '00568':{title:'Pembrolizumab + Pemetrexed + Carboplatin',guide:true,passport:true},
+    '00568':{title:'Pembrolizumab + Pemetrexed + Carboplatin',guide:true,passport:true,sactCard:true},
     '00569':{title:'Pembrolizumab + Pemetrexed + Cisplatin',guide:true,passport:true},
     '00619':{title:'Abemaciclib + Endocrine Therapy',guide:true,passport:true},
     '00713':{title:'Nivolumab + Ipilimumab + Pemetrexed + Carboplatin',guide:true,passport:true},
@@ -52,6 +52,8 @@
     if(asset==='guide') return `patient/${def.code}/guide.pdf`;
     if(asset==='passport') return `patient/${def.code}/passport.pdf`;
     if(asset==='contact-card'&&def.contactCard) return `patient/${def.code}/contact-card.pdf`;
+    if(asset==='sact-card'&&def.sactCard) return `patient/${def.code}/sactcard.pdf`;
+    if(asset==='sact-card'&&def.sactCard) return `patient/${def.code}/sactcard.pdf`;
     return `patient/${def.code}/`;
   }
   function publicUrl(value,asset='portal'){
@@ -64,7 +66,7 @@
   }
   function compatibilityUrl(value,asset='portal'){
     const def=definitionFor(value); if(!def) return null;
-    const suffix=asset==='guide'?'guide.pdf':asset==='passport'?'passport.pdf':asset==='contact-card'&&def.contactCard?'contact-card.pdf':'';
+    const suffix=asset==='guide'?'guide.pdf':asset==='passport'?'passport.pdf':asset==='contact-card'&&def.contactCard?'contact-card.pdf':asset==='sact-card'&&def.sactCard?'sactcard.pdf':'';
     return new URL(`docs/patient/${def.code}/${suffix}`,PUBLIC_ORIGIN).href;
   }
   function fallbackUrl(protocol){
@@ -76,6 +78,8 @@
   function publicPortalUrl(protocol){return publicUrl(protocol,'portal')||fallbackUrl(protocol);}
   function guideUrl(protocol){return publicUrl(protocol,'guide');}
   function passportUrl(protocol){return publicUrl(protocol,'passport');}
+  function sactCardUrl(protocol){return publicUrl(protocol,'sact-card');}
+  function sactCardUrl(protocol){return publicUrl(protocol,'sact-card');}
   function openTarget(url,target='_blank'){
     if(!url) return null;
     if(typeof root.open!=='function') return {url,opened:false};
@@ -98,6 +102,16 @@
     if(!url) return false;
     return openTarget(url);
   }
+  function openSactCard(protocol){
+    const url=runtimeUrl(protocol,'sact-card');
+    if(!url) return false;
+    return openTarget(url);
+  }
+  function openSactCard(protocol){
+    const url=runtimeUrl(protocol,'sact-card');
+    if(!url) return false;
+    return openTarget(url);
+  }
 
   return Object.freeze({
     release:RELEASE,
@@ -107,6 +121,6 @@
     definitions:DEFINITIONS,
     normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,
     publicUrl,runtimeUrl,compatibilityUrl,fallbackUrl,publicPortalUrl,
-    guideUrl,passportUrl,openPortal,openGuide,openPassport
+    guideUrl,passportUrl,sactCardUrl,openPortal,openGuide,openPassport,openSactCard
   });
 });
