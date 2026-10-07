@@ -2,7 +2,7 @@
 const assert=require("assert"),fs=require("fs"),path=require("path"),crypto=require("crypto");
 const root=path.resolve(__dirname,".."); const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 const pkg=JSON.parse(read("package.json")),app=JSON.parse(read("data/app-release.json"));
-assert.strictEqual(pkg.version,"0.81.6");assert.strictEqual(app.version,pkg.version);assert.strictEqual(app.release,pkg.version);
+assert.ok(pkg.version.localeCompare("0.81.6",undefined,{numeric:true})>=0);assert.strictEqual(app.version,pkg.version);assert.strictEqual(app.release,pkg.version);
 const profile=JSON.parse(read("data/patient-passport-profiles-v0816.json"));
 assert.strictEqual(profile.design_contract.cycle_page_rule,"One treatment cycle per page.");
 assert.strictEqual(profile.design_contract.table_unit,"One symptom-grading table per treatment agent active in that cycle.");

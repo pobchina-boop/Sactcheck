@@ -13,7 +13,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.81.6';
+  const RELEASE='0.81.7';
   const CONTENT_RELEASE='0.81.6';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
