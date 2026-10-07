@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,"..");
 const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 const json=p=>JSON.parse(read(p));
 const app=json("data/app-release.json"),pkg=json("package.json");
-assert.strictEqual(pkg.version,"0.81.1");assert.strictEqual(app.version,"0.81.1");assert.strictEqual(app.release,"0.81.1");
+assert.ok(pkg.version.localeCompare("0.81.1",undefined,{numeric:true})>=0);assert.strictEqual(app.version,pkg.version);assert.strictEqual(app.release,pkg.version);
 const codes=["00209","00222","00317","00318","00382","00568","00569","00619","00713","00714","00722","00831","00857"];
 for(const code of codes){
  const guide=read(`patient/${code}/guide.html`);

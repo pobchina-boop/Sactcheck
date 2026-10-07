@@ -2,8 +2,8 @@ const assert=require('assert');
 const api=require('../js/patient-support-v0750.js');
 const patientAssets=require('../js/patient-asset-registry-v0810.js');
 
-assert.equal(api.release,'0.78.0');
-assert.equal(patientAssets.release,'0.81.0');
+assert.equal(api.release,global.SACTCHECK_RELEASE||'0.78.0');
+assert.ok(patientAssets.release.localeCompare('0.81.0',undefined,{numeric:true})>=0);
 
 const scheduleProtocol={
   protocol_id:'demo',

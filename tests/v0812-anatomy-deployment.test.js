@@ -1,0 +1,10 @@
+"use strict";
+const assert=require("assert"),fs=require("fs"),path=require("path");
+const root=path.resolve(__dirname,"..");const read=p=>fs.readFileSync(path.join(root,p),"utf8");
+const pkg=require(path.join(root,"package.json"));const app=require(path.join(root,"data/app-release.json"));
+assert.strictEqual(pkg.version,"0.81.2");assert.strictEqual(app.version,"0.81.2");assert.strictEqual(app.release,"0.81.2");
+const css=read("assets/patient/guide-v0812.css");assert.ok(css.includes("1.65fr"),"guide anatomy column must be wide enough to prevent image letterboxing");
+const g=read("patient/00568/guide.html");
+for(const marker of ['data-hcc-pin="heart" style="left:52.5%;top:28.3%"','data-hcc-pin="liver" style="left:43%;top:33%"','data-hcc-pin="kidneys" style="left:39.5%;top:38.6%"','data-hcc-pin="bowel" style="left:50%;top:44.5%"','data-hcc-pin="vessels" style="left:61.5%;top:61.5%"'])assert.ok(g.includes(marker),`00568 anatomical anchor missing ${marker}`);
+const legacy=read("tests/patient-support-v0750.test.js");assert.ok(legacy.includes("global.SACTCHECK_RELEASE||'0.78.0'"),"legacy patient-support release assertion must tolerate the canonical app release");
+console.log("v0.81.2 anatomy/deployment regression passed.");
