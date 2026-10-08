@@ -50,8 +50,6 @@
   function hydrateCard(card){
     if(!card||card.dataset.sactCardReady==='true') return;
     placeholder(card);
-    try{root.SACTCheckInterface?.decorateCards?.();}catch(_){}
-    try{root.SACTCheckAntiemeticPrintV0810?.decorate?.();}catch(_){}
     try{root.SACTCheckAntiemeticCard?.decorateCard?.(card);}catch(_){}
     const state=capabilityState(card);
     if(complete(state)){
@@ -74,6 +72,8 @@
   }
   function hydrateAll(){
     ensureCss();
+    try{root.SACTCheckInterface?.decorateCards?.();}catch(_){}
+    try{root.SACTCheckAntiemeticPrintV0810?.decorate?.();}catch(_){}
     root.document.querySelectorAll('.regimen-card[data-json-protocol-id]').forEach(hydrateCard);
   }
   function schedule(){

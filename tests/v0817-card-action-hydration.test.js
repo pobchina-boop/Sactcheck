@@ -3,7 +3,7 @@ const assert=require("assert"),fs=require("fs"),path=require("path");
 const root=path.resolve(__dirname,"..");
 const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 const pkg=JSON.parse(read("package.json")),app=JSON.parse(read("data/app-release.json"));
-assert.strictEqual(pkg.version,"0.81.7");
+assert.ok(pkg.version.localeCompare("0.81.7",undefined,{numeric:true})>=0,"v0.81.7 behaviour must remain in cumulative releases");
 assert.strictEqual(app.version,pkg.version);assert.strictEqual(app.release,pkg.version);
 const ui=read("js/ui-stability-v0810.js");
 assert.ok(ui.includes(".emetogenic-badge,.antiemetic-script-v0780"),"card readiness must accept the v0.81.5 single Rx-script badge");
@@ -12,7 +12,7 @@ assert.ok(ui.includes("},900);"),"hydration fallback should no longer impose the
 assert.ok(ui.includes("SACTCheckInterface?.decorateCards"),"hydration must actively restore the core workflow/patient actions");
 assert.ok(ui.includes("SACTCheckAntiemeticPrintV0810?.decorate"),"hydration must reassert the single antiemetic Rx-script control");
 const index=read("index.html");
-for(const marker of ["sactcheck-interface-v0750.js?app=0.81.7","ui-stability-v0810.js?app=0.81.7","antiemetic-print-v0810.js?app=0.81.7","protocol-loader.js?v=0.59.0&app=0.81.7"]) assert.ok(index.includes(marker),`bootstrap/cache marker missing ${marker}`);
+for(const marker of ["sactcheck-interface-v0750.js?app=0.81.7","ui-stability-v0810.js?app=0.81.7","antiemetic-print-v0810.js?app=0.81.7","protocol-loader.js?v=0.59.0&app=0.81.7"]) assert.ok(index.includes(marker.replace(/app=0\.81\.7/g,`app=${pkg.version}`)),`bootstrap/cache marker missing ${marker}`);
 const v816=read("tests/v0816-passport-cycle-agent-layout.test.js");
 assert.ok(v816.includes('localeCompare("0.81.6"'),"v0.81.6 passport regression must tolerate later hotfix releases");
 console.log("v0.81.7 card-action hydration hotfix checks passed.");

@@ -53,6 +53,8 @@
   function ensureAction(actions,card,kind){
     const id=text(card.dataset.jsonProtocolId);
     if(kind==="workflow"){
+      const owned=actions.querySelector("[data-open-regimen-workflow][data-v0740-owned=\"true\"]");
+      if(owned && owned.dataset.openRegimenWorkflow===id) return;
       let button=actions.querySelector("[data-open-regimen-workflow]");
       if(!button){
         button=root.document.createElement("button");
@@ -67,6 +69,8 @@
       }
       replaceButtonWithOwned(button,"workflow");
     }else{
+      const owned=actions.querySelector("[data-open-patient-support][data-v0740-owned=\"true\"]");
+      if(owned && owned.dataset.openPatientSupport===id) return;
       let button=actions.querySelector("[data-open-patient-support],[data-open-regimen-consent]");
       if(!button){
         button=root.document.createElement("button");
@@ -148,7 +152,7 @@
 
   function applyBranding(){
     const tagline=root.document.querySelector(".brand-tagline");
-    if(tagline) tagline.textContent="Regimen-specific oncology information and workflow support";
+    if(tagline) if(tagline.textContent!=="Regimen-specific oncology information and workflow support") tagline.textContent="Regimen-specific oncology information and workflow support";
 
     const hero=root.document.getElementById("studyHero");
     if(hero){
@@ -157,13 +161,13 @@
       // old injected lock-up so the hero never shows duplicate branding.
       hero.querySelectorAll(".v0740-brand-lockup,.v0750-brand-lockup").forEach(x=>x.remove());
       const kicker=hero.querySelector(".study-kicker");
-      if(kicker) kicker.textContent="Regimen-specific oncology information pipeline";
+      if(kicker) if(kicker.textContent!=="Regimen-specific oncology information pipeline") kicker.textContent="Regimen-specific oncology information pipeline";
       const h1=hero.querySelector("#studyHeroTitle");
-      if(h1) h1.textContent="From national treatment guidance to usable information at every step.";
+      if(h1) if(h1.textContent!=="From national treatment guidance to usable information at every step.") h1.textContent="From national treatment guidance to usable information at every step.";
       const lead=hero.querySelector(".mission-hero-lead");
-      if(lead) lead.textContent="SACTCheck structures regimen-specific information around the way cancer care is actually delivered: clinician workflow, patient understanding, supportive care, evidence and sustainability.";
+      if(lead) if(lead.textContent!=="SACTCheck structures regimen-specific information around the way cancer care is actually delivered: clinician workflow, patient understanding, supportive care, evidence and sustainability.") lead.textContent="SACTCheck structures regimen-specific information around the way cancer care is actually delivered: clinician workflow, patient understanding, supportive care, evidence and sustainability.";
       const purpose=hero.querySelector(".mission-hero-purpose");
-      if(purpose) purpose.innerHTML="<strong>Our purpose:</strong> close important information gaps across clinic, day ward and home while keeping the current NCCP source, provenance and clinical judgement visible.";
+      if(purpose) if(purpose.innerHTML!=="<strong>Our purpose:</strong> close important information gaps across clinic, day ward and home while keeping the current NCCP source, provenance and clinical judgement visible.") purpose.innerHTML="<strong>Our purpose:</strong> close important information gaps across clinic, day ward and home while keeping the current NCCP source, provenance and clinical judgement visible.";
 
       const visual=hero.querySelector(".mission-visual");
       if(visual && visual.dataset.v0750Mission!=="ready"){
@@ -199,23 +203,23 @@
       const h3=module.querySelector("h3");
       const button=module.querySelector(".workflow-module-action");
       if(h3?.textContent==="Regimen consent"){
-        h3.textContent="Consent & patient support";
+        if(h3.textContent!=="Consent & patient support") h3.textContent="Consent & patient support";
         const p=h3.parentElement?.querySelector("p");
-        if(p) p.textContent="Open the regimen-specific A4 / PDF treatment guide used to support the consent discussion.";
-        if(button) button.textContent="Open patient guide PDF";
+        if(p) if(p.textContent!=="Open the regimen-specific A4 / PDF treatment guide used to support the consent discussion.") p.textContent="Open the regimen-specific A4 / PDF treatment guide used to support the consent discussion.";
+        if(button) if(button.textContent!=="Open patient guide PDF") button.textContent="Open patient guide PDF";
       }
       if(module.classList.contains("patient")){
-        h3.textContent="Patient A4 treatment guide";
+        if(h3.textContent!=="Patient A4 treatment guide") h3.textContent="Patient A4 treatment guide";
         const p=h3.parentElement?.querySelector("p");
-        if(p) p.textContent="Patient-agnostic, regimen-specific A4 / PDF guide with exact schedule, chemo-man visual language, toxicity categories, urgent warnings and QR access.";
+        if(p) if(p.textContent!=="Patient-agnostic, regimen-specific A4 / PDF guide with exact schedule, chemo-man visual language, toxicity categories, urgent warnings and QR access.") p.textContent="Patient-agnostic, regimen-specific A4 / PDF guide with exact schedule, chemo-man visual language, toxicity categories, urgent warnings and QR access.";
         const status=module.querySelector(".workflow-status");
-        if(status){ status.className="workflow-status available"; status.textContent="Ready"; }
+        if(status){ status.className="workflow-status available"; if(status.textContent!=="Ready") status.textContent="Ready"; }
         if(!module.querySelector("[data-workflow-print-passport]")){
           const b=root.document.createElement("button");
           b.type="button";
           b.className="btn secondary workflow-module-action";
           b.dataset.workflowPrintPassport="true";
-          b.textContent="Open patient guide";
+          if(b.textContent!=="Open patient guide") b.textContent="Open patient guide";
           b.addEventListener("click",async()=>{
             const panel=root.document.getElementById("regimenWorkflowOverlay");
             panel && (panel.hidden=true);
@@ -264,7 +268,9 @@
     // metadata / supportive-care enrichment passes.
     if(root.document.documentElement.dataset.v0740CardObserver==="true") return;
     root.document.documentElement.dataset.v0740CardObserver="true";
-    const observer=new MutationObserver(()=>{
+    const observer=new MutationObserver(mutations=>{
+      if(!mutations.some(m=>[...m.addedNodes].some(n=>n.nodeType===1 &&
+        (n.matches?.('.regimen-card,.card-actions')||n.querySelector?.('.regimen-card,.card-actions'))))) return;
       if(queued) return;
       queued=true;
       (root.requestAnimationFrame||root.setTimeout)(()=>{queued=false;decorateCards();removeUnusedControls();},0);
