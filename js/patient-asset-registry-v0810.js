@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.81.8';
-  const CONTENT_RELEASE='0.81.6';
+  const RELEASE='0.81.9';
+  const CONTENT_RELEASE='0.81.9';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00209':{title:'Modified FOLFOX-6',guide:true,passport:true},
@@ -22,7 +22,7 @@
     '00317':{title:'Pemetrexed + Cisplatin',guide:true,passport:true},
     '00318':{title:'Pemetrexed + Carboplatin',guide:true,passport:true},
     '00382':{title:'Trifluridine/Tipiracil',guide:true,passport:true},
-    '00568':{title:'Pembrolizumab + Pemetrexed + Carboplatin',guide:true,passport:true,sactCard:true},
+    '00568':{title:'Pembrolizumab + Pemetrexed + Carboplatin',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
     '00569':{title:'Pembrolizumab + Pemetrexed + Cisplatin',guide:true,passport:true},
     '00619':{title:'Abemaciclib + Endocrine Therapy',guide:true,passport:true},
     '00713':{title:'Nivolumab + Ipilimumab + Pemetrexed + Carboplatin',guide:true,passport:true},
@@ -49,6 +49,8 @@
   function hasDedicated(value){return Boolean(definitionFor(value));}
   function relativePath(value,asset='portal'){
     const def=definitionFor(value); if(!def) return null;
+    if(asset==='knowledge') return def.knowledge?`patient/${def.code}/knowledge.html`:null;
+    if(asset==='consent-draft') return def.consentDraft?`patient/${def.code}/consent.html`:null;
     if(asset==='guide') return `patient/${def.code}/guide.pdf`;
     if(asset==='passport') return `patient/${def.code}/passport.pdf`;
     if(asset==='contact-card'&&def.contactCard) return `patient/${def.code}/contact-card.pdf`;

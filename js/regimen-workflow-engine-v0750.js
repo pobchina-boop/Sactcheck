@@ -128,6 +128,14 @@
   }
 
   function openConsentSupport(protocol){
+    const registry=patientAssets();
+    const draft=registry?.runtimeUrl?.(protocol,"consent-draft");
+    if(draft&&typeof root.open==="function"){
+      const viewer=root.open(draft,"_blank");
+      if(viewer){try{viewer.opener=null;}catch(_){}return viewer;}
+      root.alert?.("The consent discussion draft was blocked. Allow this site's pop-up and try again.");
+      return false;
+    }
     const builder=root?.SACTCheckRegimenConsentBuilder;
     if(typeof builder?.generateConsentPdf==="function") return builder.generateConsentPdf(protocol);
     if(typeof builder?.open==="function") return builder.open(protocol,{tab:"print"});
