@@ -1,81 +1,25 @@
+/* Educational cycle navigation. No patient details are stored or transmitted. */
 (function(){
-  'use strict';
-  const root=document.querySelector('[data-patient-knowledge]');
-  const dataNode=document.getElementById('pk-data');
-  if(!root||!dataNode)return;
-  const data=JSON.parse(dataNode.textContent);
-  document.documentElement.classList.add('pk-reference-mode');
-
-  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
-  }[ch]));
-
-  function source(id){return data.sources.find(item=>item.id===id)||null;}
-  function sourceLink(id,label){
-    const item=source(id);if(!item)return '';
-    return `<a class="pk-source-chip" href="#source-${esc(id)}">${esc(label||item.title)}</a>`;
-  }
-
-  const nav=root.querySelector('.pk-nav');
-  if(nav){
-    nav.innerHTML=`
-      <a href="#medicines">How it works</a>
-      <a href="#phases">Treatment plan</a>
-      <a href="#cycle">Cycle overview</a>
-      <a href="#support">Practical support</a>
-      <a href="#urgent">When to get help</a>
-      <a href="#questions">Questions</a>
-      <a href="#sources">Evidence & sources</a>`;
-
-    const banner=document.createElement('aside');
-    banner.className='pk-evidence-banner';
-    banner.innerHTML=`
-      <div>
-        <strong>Evidence-linked patient information</strong>
-        <p>This page uses the same regimen identity and source structure as the clinician knowledge base, translated into patient language. Schedule information is anchored to the current NCCP regimen; medicine explanations link to the original sources below.</p>
-      </div>
-      <div class="pk-evidence-links">
-        ${sourceLink('nccp','NCCP regimen')}
-        ${sourceLink('pembro','Pembrolizumab')}
-        ${sourceLink('pemetrexed','Pemetrexed')}
-        ${sourceLink('carboplatin','Carboplatin')}
-      </div>`;
-    nav.insertAdjacentElement('afterend',banner);
-  }
-
-  const cycle=document.getElementById('cycle');
-  if(cycle){
-    const phaseCards=(data.phases||[]).map((phase,index)=>{
-      const names=(phase.agents||[]).map(id=>data.agents.find(a=>a.id===id)?.name).filter(Boolean);
-      return `<article class="pk-reference-card ${index===0?'active-phase':''}">
-        <div class="pk-type">${esc(phase.short||'Treatment phase')}</div>
-        <h3>${esc(phase.label)}</h3>
-        <p>${esc(phase.detail)}</p>
-        <p class="pk-small"><strong>Medicines:</strong> ${esc(names.join(' + '))}</p>
-      </article>`;
-    }).join('');
-
-    const practical=(data.day_groups||[]).map(group=>`<article class="pk-cycle-note">
-      <strong>Day ${group.start}${group.end!==group.start?'–'+group.end:''}</strong>
-      <span>${esc(group.title)}</span>
-      <p>${esc(group.body)}</p>
-    </article>`).join('');
-
-    cycle.innerHTML=`
-      <div class="pk-eyebrow">Treatment schedule</div>
-      <h2>What a 21-day cycle means</h2>
-      <p class="pk-lead">Treatment is planned in 21-day cycles, but symptoms do not follow a fixed calendar. You do not need to enter dates or choose a day. Use this section to understand the treatment structure, then use the symptom and urgent-advice sections according to how you actually feel.</p>
-      <div class="pk-reference-grid">${phaseCards}</div>
-      <div class="pk-note immune"><strong>No “safe-day” assumption.</strong> Infection, treatment toxicity and immune-related effects can occur outside a predicted window. New or worsening symptoms matter more than the cycle day.</div>
-      <h3 class="pk-subheading">A simple orientation to the cycle</h3>
-      <div class="pk-cycle-reference">${practical}</div>
-      <p class="pk-small">This is explanatory context, not a forecast of blood counts, side-effect timing or whether the next treatment will proceed. ${sourceLink('nccp','NCCP schedule')} ${sourceLink('hse','HSE safety guidance')}</p>`;
-  }
-
-  const hero=document.querySelector('.pk-hero .pk-shell');
-  if(hero){
-    const tags=[...hero.querySelectorAll('.pk-tag')];
-    const review=tags.find(tag=>/draft|review/i.test(tag.textContent||''));
-    if(review) review.textContent='Evidence-linked patient reference · clinical/PPI review draft';
-  }
+'use strict';
+const node=document.getElementById('pk-data');
+if(!node||!document.querySelector('[data-patient-knowledge]'))return;
+const data=JSON.parse(node.textContent),date=document.getElementById('pk-start'),phase=document.getElementById('pk-phase');
+let selected=1;
+const localDate=value=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(value))return null;const [y,m,d]=value.split('-').map(Number);const x=new Date(y,m-1,d,12);return Number.isNaN(x.getTime())?null:x;};
+const addDays=(start,n)=>{const x=new Date(start);x.setDate(x.getDate()+n);return x;};
+const fmt=x=>x.toLocaleDateString('en-IE',{day:'numeric',month:'short'});
+function render(){
+ const start=localDate(date.value),p=data.phases.find(p=>p.id===phase.value)||data.phases[0],g=data.day_groups.find(g=>selected>=g.start&&selected<=g.end);
+ document.getElementById('pk-active-medicines').textContent=p.agents.map(id=>data.agents.find(a=>a.id===id).name).join(' + ');
+ document.querySelectorAll('[data-day]').forEach(b=>{const n=Number(b.dataset.day);b.setAttribute('aria-pressed',String(n===selected));b.querySelector('small').textContent=start?fmt(addDays(start,n-1)):'';b.setAttribute('aria-label',`Day ${n}${start?', '+fmt(addDays(start,n-1)):''}`);});
+ document.getElementById('pk-day-number').textContent=`Day ${selected}${start?' · '+fmt(addDays(start,selected-1)):''}`;
+ document.getElementById('pk-day-title').textContent=g.title;
+ document.getElementById('pk-day-body').textContent=g.body;
+ document.getElementById('pk-day-action').textContent=g.action;
+ document.getElementById('pk-next').textContent=start?`Next planned Day 1: ${fmt(addDays(start,data.cycle_days))}. Your team must confirm treatment can proceed.`:`The next cycle starts ${data.cycle_days} days after this one, if your team confirms it.`;
+}
+for(const b of document.querySelectorAll('[data-day]'))b.addEventListener('click',()=>{selected=Number(b.dataset.day);render();});
+date.addEventListener('change',render);phase.addEventListener('change',render);
+document.getElementById('pk-clear').addEventListener('click',()=>{date.value='';render();});
+render();
 })();

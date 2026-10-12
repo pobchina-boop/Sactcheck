@@ -1,0 +1,21 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const path=require('node:path'),root=path.resolve(__dirname,'..');
+const data=JSON.parse(fs.readFileSync(path.join(root,'data/patient-knowledge/00568.json')));
+function element(){return {value:'',textContent:'',attrs:{},events:{},setAttribute(k,v){this.attrs[k]=v;},addEventListener(k,f){this.events[k]=f;}};}
+const ids=Object.fromEntries(['pk-start','pk-phase','pk-clear','pk-active-medicines','pk-day-number','pk-day-title','pk-day-body','pk-day-action','pk-next'].map(id=>[id,element()]));
+ids['pk-phase'].value='induction';ids['pk-data']={textContent:JSON.stringify(data)};
+const days=Array.from({length:21},(_,i)=>{const b=element();b.dataset={day:String(i+1)};b.small=element();b.querySelector=()=>b.small;return b;});
+const document={getElementById:id=>ids[id],querySelector:()=>({}),querySelectorAll:()=>days};
+vm.runInNewContext(fs.readFileSync(path.join(root,'assets/patient/patient-knowledge.js'),'utf8'),{document,Date,console});
+assert.match(ids['pk-active-medicines'].textContent,/Carboplatin/);
+ids['pk-phase'].value='maintenance';ids['pk-phase'].events.change();assert.doesNotMatch(ids['pk-active-medicines'].textContent,/Carboplatin/);
+ids['pk-start'].value='2026-10-12';ids['pk-start'].events.change();
+assert.equal(days[0].small.textContent,'12 Oct');assert.equal(days[20].small.textContent,'1 Nov');assert.match(ids['pk-next'].textContent,/2 Nov/);
+days[20].events.click();assert.equal(days[20].attrs['aria-pressed'],'true');assert.equal(days[0].attrs['aria-pressed'],'false');assert.match(ids['pk-day-title'].textContent,/next review/);
+ids['pk-clear'].events.click();assert.equal(ids['pk-start'].value,'');assert.equal(days[0].small.textContent,'');assert.doesNotMatch(ids['pk-next'].textContent,/Nov/);
+ids['pk-start'].value='2028-02-20';ids['pk-start'].events.change();assert.equal(days[9].small.textContent,'29 Feb');assert.match(ids['pk-next'].textContent,/12 Mar/);
+const kb=JSON.parse(fs.readFileSync(path.join(root,'data/regimen-knowledge-base-v0680.json')));
+const profile=kb.regimen_profiles.find(p=>p.protocol_id===data.protocol_id);
+for(const key of ['patient_selection','supportive_care','monitoring_and_toxicity','administration'])assert(profile[key],key);
+console.log('00568 timeline: induction/maintenance, date rollover, leap year, selection and clear passed; expanded clinical profile present.');
