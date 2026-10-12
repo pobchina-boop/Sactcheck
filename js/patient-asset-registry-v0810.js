@@ -50,7 +50,9 @@
   function relativePath(value,asset='portal'){
     const def=definitionFor(value); if(!def) return null;
     if(asset==='knowledge') return def.knowledge?`patient/${def.code}/knowledge.html`:null;
-    if(asset==='consent-draft') return def.consentDraft?`patient/${def.code}/consent.html`:null;
+    // Clinic Workflow consent generator now opens the dedicated one-page form.
+    // The longer consent discussion adjunct remains available separately as patient/${code}/consent.html.
+    if(asset==='consent-draft') return def.consentDraft?`patient/${def.code}/consent-form.html`:null;
     if(asset==='guide') return `patient/${def.code}/guide.pdf`;
     if(asset==='passport') return `patient/${def.code}/passport.pdf`;
     if(asset==='contact-card'&&def.contactCard) return `patient/${def.code}/contact-card.pdf`;
