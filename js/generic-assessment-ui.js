@@ -164,13 +164,14 @@
           <details id="jsonLabProfilePanel" class="lab-profile-details hidden">
             <summary>Local laboratory profile · automatic ×ULN calculation</summary>
             <div class="details-body">
-              <p class="subtle">Enter the actual ALT, AST or bilirubin result. SACTCheck calculates the protocol decision value using the centrally configured CUH upper limits.</p>
+              <p class="subtle">Enter actual results. SACTCheck calculates the protocol decision values using the local profile. The supplied ALT and creatinine defaults are female reference limits; check the patient’s laboratory report and edit these limits where appropriate.</p>
               <div class="grid three">
                 <div><label for="jsonLabAltUln">ALT ULN (U/L)</label><input id="jsonLabAltUln" type="number" min="1" step="1"></div>
                 <div><label for="jsonLabAstUln">AST ULN (U/L)</label><input id="jsonLabAstUln" type="number" min="1" step="1"></div>
+                <div><label for="jsonLabCreatinineUln">Creatinine ULN (µmol/L)</label><input id="jsonLabCreatinineUln" type="number" min="1" step="1"></div>
                 <div><label for="jsonLabBilirubinUln">Bilirubin ULN (µmol/L)</label><input id="jsonLabBilirubinUln" type="number" min="1" step="1"></div>
               </div>
-              <div class="toolbar" style="margin-top:10px"><button class="btn secondary" type="button" id="jsonLabReset">Reset CUH defaults</button><span class="subtle">Defaults: ALT 34 U/L · AST 42 U/L · bilirubin 20 µmol/L.</span></div>
+              <div class="toolbar" style="margin-top:10px"><button class="btn secondary" type="button" id="jsonLabReset">Reset CUH defaults</button><span class="subtle">Defaults: ALT 34 U/L (female) · AST 42 U/L · bilirubin 20 µmol/L · creatinine 90 µmol/L (female).</span></div>
             </div>
           </details>
         </section>
@@ -335,7 +336,7 @@
       grid.addEventListener("input", updateConditionalInputs);
     });
 
-    ["jsonLabAltUln", "jsonLabAstUln", "jsonLabBilirubinUln"].forEach(id => {
+    ["jsonLabAltUln", "jsonLabAstUln", "jsonLabBilirubinUln", "jsonLabCreatinineUln"].forEach(id => {
       document.getElementById(id)?.addEventListener("change", saveLabProfile);
     });
     document.getElementById("jsonLabReset")?.addEventListener("click", () => {
@@ -511,7 +512,7 @@
   function populateLabProfileControls() {
     if (!LocalLab) return;
     const settings = LocalLab.read();
-    const map = { jsonLabAltUln: settings.altUln, jsonLabAstUln: settings.astUln, jsonLabBilirubinUln: settings.bilirubinUln };
+    const map = { jsonLabAltUln: settings.altUln, jsonLabAstUln: settings.astUln, jsonLabBilirubinUln: settings.bilirubinUln, jsonLabCreatinineUln: settings.creatinineUln };
     Object.entries(map).forEach(([id, value]) => { const element = document.getElementById(id); if (element) element.value = String(value); });
   }
 
@@ -520,7 +521,8 @@
     LocalLab.write({
       altUln: document.getElementById("jsonLabAltUln")?.value,
       astUln: document.getElementById("jsonLabAstUln")?.value,
-      bilirubinUln: document.getElementById("jsonLabBilirubinUln")?.value
+      bilirubinUln: document.getElementById("jsonLabBilirubinUln")?.value,
+      creatinineUln: document.getElementById("jsonLabCreatinineUln")?.value
     });
     refreshCompactInputStates();
     hideResult();
@@ -674,8 +676,8 @@
       const settings = LocalLab.read();
       return `<div class="lab-actual-inputs" data-lab-control-group="${escapeHtml(definition.id)}">${labAdapter.analytes.map(analyte => {
         const upper = settings[analyte.setting];
-        return `<div class="lab-value-pair"><label for="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}">${escapeHtml(analyte.label)}</label><div class="lab-inline-control"><input id="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}" data-lab-target="${escapeHtml(definition.id)}" data-lab-analyte="${escapeHtml(analyte.id)}" data-type="number" type="number" min="0" step="0.1" placeholder="Enter value"${disabledAttribute}><span class="lab-inline-unit">${escapeHtml(analyte.unit)}</span></div><span class="hint">ULN ${escapeHtml(upper)} ${escapeHtml(analyte.unit)}</span></div>`;
-      }).join("")}<div class="lab-calculation-preview hidden" data-lab-preview="${escapeHtml(definition.id)}" aria-live="polite"></div></div>`;
+        return `<div class="lab-value-pair"><label for="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}">${escapeHtml(analyte.label)}</label><div class="lab-inline-control"><input id="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}" data-lab-target="${escapeHtml(definition.id)}" data-lab-analyte="${escapeHtml(analyte.id)}" data-type="number" type="number" min="0" step="0.1" placeholder="Enter value"${disabledAttribute}><span class="lab-inline-unit">${escapeHtml(analyte.unit)}</span></div><span class="hint" data-lab-reference="${escapeHtml(analyte.setting)}" data-lab-unit="${escapeHtml(analyte.unit)}">ULN ${escapeHtml(upper)} ${escapeHtml(analyte.unit)}</span></div>`;
+      }).join("")}${labAdapter.referenceNote ? `<p class="hint">${escapeHtml(labAdapter.referenceNote)}</p>` : ""}<div class="lab-calculation-preview hidden" data-lab-preview="${escapeHtml(definition.id)}" aria-live="polite"></div></div>`;
     }
     if (definition.type === "boolean") {
       return `
@@ -1017,10 +1019,18 @@
     document.querySelectorAll(`[data-lab-target="${cssEscape(target)}"]`).forEach(element => {
       actualValues[element.dataset.labAnalyte] = element.value;
     });
-    return LocalLab.calculate(target, actualValues);
+    const raw = activeProtocol?.input_definitions || {};
+    const definition = Array.isArray(raw) ? raw.find(item => item.id === target) : raw[target];
+    return LocalLab.calculate(definition ? { ...definition, id: target } : target, actualValues);
   }
 
   function refreshLabPreviews() {
+    if (LocalLab) {
+      const settings = LocalLab.read();
+      document.querySelectorAll("[data-lab-reference]").forEach(element => {
+        element.textContent = `ULN ${settings[element.dataset.labReference]} ${element.dataset.labUnit}`;
+      });
+    }
     document.querySelectorAll("[data-lab-preview]").forEach(preview => {
       const calculation = calculateLabTarget(preview.dataset.labPreview);
       preview.textContent = calculation?.display || "";

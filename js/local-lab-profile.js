@@ -17,6 +17,7 @@
     altUln: 34,
     astUln: 42,
     bilirubinUln: 20,
+    creatinineUln: 90,
     tshLower: 0.38,
     tshUpper: 5.33,
     freeT4Lower: 8,
@@ -46,6 +47,7 @@
       altUln: finitePositive(candidate.altUln, DEFAULTS.altUln),
       astUln: finitePositive(candidate.astUln, DEFAULTS.astUln),
       bilirubinUln: finitePositive(candidate.bilirubinUln, DEFAULTS.bilirubinUln),
+      creatinineUln: finitePositive(candidate.creatinineUln, DEFAULTS.creatinineUln),
       tshLower: finitePositive(candidate.tshLower, DEFAULTS.tshLower),
       tshUpper: finitePositive(candidate.tshUpper, DEFAULTS.tshUpper),
       freeT4Lower: finitePositive(candidate.freeT4Lower, DEFAULTS.freeT4Lower),
@@ -82,6 +84,13 @@
   function adapterFor(definitionOrId) {
     const id = typeof definitionOrId === "string" ? definitionOrId : definitionOrId?.id;
     if (!id) return null;
+    // Opt-in only: do not reinterpret other protocols' baseline-ratio fields.
+    if (definitionOrId?.actual_result_adapter === "creatinine_uln") {
+      return { target: id, title: "Creatinine result", decisionUnit: "×ULN",
+        exactRatio: true,
+        referenceNote: "NCCP 00568 uses laboratory ULN, not the patient's baseline. Default 90 µmol/L is the supplied CUH female ULN; check the lab report and edit the local profile if different.",
+        analytes: [{ id: "creatinine", label: "Creatinine", unit: "µmol/L", setting: "creatinineUln" }] };
+    }
     if (BILIRUBIN_FIELDS.has(id)) {
       return {
         target: id,
@@ -144,10 +153,10 @@
     const highestPart = parts.find(part => Math.abs(part.ratio - ratio) < 1e-12) || parts[0];
     return {
       target: adapter.target,
-      ratio: Number(ratio.toFixed(4)),
+      ratio: adapter.exactRatio ? ratio : Number(ratio.toFixed(4)),
       parts,
       highestPart,
-      display: `${parts.map(part => `${part.label} ${format(part.actual)} ${part.unit} (${format(part.ratio, 2)} ×ULN)`).join(" · ")}`,
+      display: adapter.exactRatio ? `${parts[0].label} ${format(parts[0].actual)} ${parts[0].unit} ÷ ULN ${format(parts[0].upper)} ${parts[0].unit} = ${format(ratio, 2)} ×ULN` : `${parts.map(part => `${part.label} ${format(part.actual)} ${part.unit} (${format(part.ratio, 2)} ×ULN)`).join(" · ")}`,
       decisionDisplay: `${format(ratio, 2)} ×ULN`
     };
   }
@@ -171,7 +180,7 @@
   }
 
   return Object.freeze({
-    version: "0.37.2",
+    version: "0.82.1",
     defaults: DEFAULTS,
     read,
     write,
