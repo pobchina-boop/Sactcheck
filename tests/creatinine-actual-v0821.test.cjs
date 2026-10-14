@@ -6,8 +6,8 @@ const id='creatinine_ratio_baseline_or_uln',definition=Engine.getInputDefinition
 assert.equal(definition.actual_result_adapter,'creatinine_uln');
 assert.equal(Lab.adapterFor(id),null,'Unannotated baseline fields in other protocols must not be reinterpreted');
 assert.equal(Lab.calculate(definition,{creatinine:''}),null);
-assert.equal(Lab.calculate(definition,{creatinine:-1}),null);
-assert.equal(Lab.calculate(definition,{creatinine:'bad'}),null);
+assert.equal(Lab.calculate(definition,{creatinine:-1}).invalid,true);
+assert.equal(Lab.calculate(definition,{creatinine:'bad'}).invalid,true);
 const input={dataset:{labTarget:id,labAnalyte:'creatinine'},value:'600',disabled:false};
 const document={readyState:'loading',addEventListener(){},querySelectorAll(selector){return selector.includes('data-lab-target')?[input]:[];}};
 let source=fs.readFileSync(path.join(root,'js/generic-assessment-ui.js'),'utf8');
@@ -23,5 +23,5 @@ for(const [actual,hasG2,hasG3] of [[90,false,false],[135,false,false],[135.01,tr
 }
 Lab.write({creatinineUln:100});input.value='600';assert.equal(Number(api.collectRawInputs()[id]),6);Lab.reset();
 input.value='';assert.equal(api.collectRawInputs()[id],undefined,'Clearing input must clear the ratio');
-assert.equal(Lab.calculate('alt_ast_uln_multiple',{alt:500,ast:400}).ratio,14.7059);
+assert.equal(Lab.calculate('alt_ast_uln_multiple',{alt:500,ast:400}).ratio,500/34);
 console.log('Raw creatinine form→collection→engine→comparison passed; exact boundaries, single-value partial assessment, changed ULN, clear and legacy isolation passed.');

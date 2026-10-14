@@ -14,6 +14,8 @@
   const STORAGE_KEY = "sactcheck.localLabProfile.v1";
   const DEFAULTS = Object.freeze({
     profileName: "CUH",
+    lftProfile: "female",
+    alpUln: null,
     altUln: 34,
     astUln: 42,
     bilirubinUln: 20,
@@ -24,6 +26,13 @@
     freeT4Upper: 18
   });
 
+  const LFT_KEYS = ["altUln", "astUln", "bilirubinUln"];
+  const LFT_PRESETS = Object.freeze({
+    female: Object.freeze({ altUln: 34, astUln: 42, bilirubinUln: 20 }),
+    male: Object.freeze({ altUln: 40, astUln: 40, bilirubinUln: 20 })
+  });
+  const PROFILE_LABELS = Object.freeze({female: "Supplied female/local LFT limits", male: "Provisional male LFT limits — not verified for CUH", custom: "Custom laboratory LFT limits"});
+
   const BILIRUBIN_FIELDS = new Set([
     "bilirubin_ratio_uln", "bilirubin_uln_multiple", "bilirubin_uln"
   ]);
@@ -31,7 +40,11 @@
   const AST_FIELDS = new Set(["ast_uln_multiple", "ast_uln"]);
   const COMBINED_TRANSAMINASE_FIELDS = new Set([
     "alt_ast_uln_multiple", "alt_ast_ratio_uln", "ast_alt_uln",
-    "transaminases_uln_multiple", "alt_ratio_uln"
+    "ast_alt_uln_multiple", "transaminases_uln_multiple", "alt_ratio_uln"
+  ]);
+  const POSITIVE_SETTING_KEYS = new Set([
+    "altUln", "astUln", "bilirubinUln", "creatinineUln",
+    "tshLower", "tshUpper", "freeT4Lower", "freeT4Upper"
   ]);
 
   let memorySettings = { ...DEFAULTS };
@@ -42,7 +55,12 @@
   }
 
   function normalise(candidate = {}) {
+    const lftProfile = Object.prototype.hasOwnProperty.call(PROFILE_LABELS, candidate.lftProfile) ? candidate.lftProfile : "custom";
+    const customLft = Object.fromEntries(LFT_KEYS.map(key => [key, finitePositive(candidate.customLft?.[key], finitePositive(candidate[key], DEFAULTS[key]))]));
     return {
+      lftProfile,
+      customLft,
+      alpUln: finitePositive(candidate.alpUln, null),
       profileName: String(candidate.profileName || DEFAULTS.profileName),
       altUln: finitePositive(candidate.altUln, DEFAULTS.altUln),
       astUln: finitePositive(candidate.astUln, DEFAULTS.astUln),
@@ -55,10 +73,21 @@
     };
   }
 
+  function validatePatch(patch = {}) {
+    const invalid = [];
+    for (const key of POSITIVE_SETTING_KEYS) {
+      if (!Object.prototype.hasOwnProperty.call(patch, key)) continue;
+      const value = Number(patch[key]);
+      if (!Number.isFinite(value) || value <= 0) invalid.push(key);
+    }
+    if (Object.prototype.hasOwnProperty.call(patch, "alpUln") && patch.alpUln !== "" && patch.alpUln !== null && (!Number.isFinite(Number(patch.alpUln)) || Number(patch.alpUln) <= 0)) invalid.push("alpUln");
+    return { valid: invalid.length === 0, invalid };
+  }
+
   function read() {
     try {
       const stored = root?.localStorage?.getItem(STORAGE_KEY);
-      if (stored) memorySettings = normalise({ ...DEFAULTS, ...JSON.parse(stored) });
+      if (stored) memorySettings = normalise(JSON.parse(stored));
     } catch (error) {
       // Local storage is optional (for example some file previews block it).
     }
@@ -66,7 +95,24 @@
   }
 
   function write(patch = {}) {
-    memorySettings = normalise({ ...read(), ...patch });
+    const current = read();
+    const next = { ...current };
+    if (Object.prototype.hasOwnProperty.call(patch, "profileName") && String(patch.profileName || "").trim()) {
+      next.profileName = String(patch.profileName).trim();
+    }
+    for (const key of POSITIVE_SETTING_KEYS) {
+      if (!Object.prototype.hasOwnProperty.call(patch, key)) continue;
+      const value = Number(patch[key]);
+      // Safety behaviour: an empty/invalid edited denominator must never silently
+      // reset to a default and then be used in a clinical calculation.
+      if (Number.isFinite(value) && value > 0) next[key] = value;
+    }
+    if (Object.prototype.hasOwnProperty.call(patch, "alpUln") && validatePatch({alpUln: patch.alpUln}).valid) next.alpUln = finitePositive(patch.alpUln, null);
+    if (LFT_KEYS.some(key => next[key] !== current[key])) {
+      next.lftProfile = "custom";
+      next.customLft = Object.fromEntries(LFT_KEYS.map(key => [key, next[key]]));
+    }
+    memorySettings = normalise(next);
     try {
       root?.localStorage?.setItem(STORAGE_KEY, JSON.stringify(memorySettings));
     } catch (error) {
@@ -75,23 +121,66 @@
     return { ...memorySettings };
   }
 
+  function selectProfile(id) {
+    if (!Object.prototype.hasOwnProperty.call(PROFILE_LABELS, id)) throw new Error("Unknown laboratory profile");
+    const current = normalise(read());
+    const customLft = current.lftProfile === "custom" ? Object.fromEntries(LFT_KEYS.map(key => [key, current[key]])) : current.customLft;
+    memorySettings = normalise({...current, ...(id === "custom" ? customLft : LFT_PRESETS[id]), customLft, lftProfile:id});
+    try { root?.localStorage?.setItem(STORAGE_KEY, JSON.stringify(memorySettings)); } catch (error) {}
+    return read();
+  }
+
   function reset() {
     memorySettings = { ...DEFAULTS };
     try { root?.localStorage?.removeItem(STORAGE_KEY); } catch (error) {}
     return { ...memorySettings };
   }
 
+  function fieldIdentity(definitionOrId) {
+    const definition = typeof definitionOrId === "object" && definitionOrId ? definitionOrId : null;
+    const id = String(typeof definitionOrId === "string" ? definitionOrId : definition?.id || "").trim();
+    const label = String(definition?.label || "").toLowerCase();
+    return { definition, id, label };
+  }
+
+  function bilirubinAlias(id) {
+    return BILIRUBIN_FIELDS.has(id) || /(?:^|_)bilirubin_(?:ratio_)?uln(?:_multiple)?$/.test(id);
+  }
+
+  function combinedTransaminaseAlias(id, label = "") {
+    if (COMBINED_TRANSAMINASE_FIELDS.has(id)) return true;
+    if (/(?:^|_)(?:alt_ast|ast_alt)(?:_ratio)?_uln(?:_multiple)?$/.test(id)) return true;
+    if (/(?:^|_)transaminases?_uln(?:_multiple)?$/.test(id)) return true;
+    // Some older encoded fields are named ALT-only even though the source-facing
+    // label explicitly says ALT/AST. When the full definition is available, honour
+    // the label and calculate the higher entered transaminase rather than ALT alone.
+    return /(?:alt.*ast|ast.*alt)/.test(label) && /(?:alt|ast)/.test(id) && /uln/.test(id);
+  }
+
+  function altAlias(id) {
+    return ALT_FIELDS.has(id) || /(?:^|_)alt_(?:ratio_)?uln(?:_multiple)?$/.test(id);
+  }
+
+  function astAlias(id) {
+    return AST_FIELDS.has(id) || /(?:^|_)ast_(?:ratio_)?uln(?:_multiple)?$/.test(id);
+  }
+
   function adapterFor(definitionOrId) {
-    const id = typeof definitionOrId === "string" ? definitionOrId : definitionOrId?.id;
-    if (!id) return null;
+    const { definition, id, label } = fieldIdentity(definitionOrId);
+    if (!id || (definition?.type && definition.type !== "number")) return null;
+
     // Opt-in only: do not reinterpret other protocols' baseline-ratio fields.
-    if (definitionOrId?.actual_result_adapter === "creatinine_uln") {
+    if (definition?.actual_result_adapter === "creatinine_uln") {
       return { target: id, title: "Creatinine result", decisionUnit: "×ULN",
         exactRatio: true,
         referenceNote: "NCCP 00568 uses laboratory ULN, not the patient's baseline. Default 90 µmol/L is the supplied CUH female ULN; check the lab report and edit the local profile if different.",
         analytes: [{ id: "creatinine", label: "Creatinine", unit: "µmol/L", setting: "creatinineUln" }] };
     }
-    if (BILIRUBIN_FIELDS.has(id)) {
+
+    if (/^(?:alk_phos|alp)_uln(?:_multiple)?$/.test(id)) {
+      return {target:id, title:"ALP result", decisionUnit:"×ULN", analytes:[{id:"alp",label:"ALP",unit:"U/L",setting:"alpUln"}], referenceNote:"Enter the ALP ULN from the laboratory report in the local laboratory profile. No default is assumed."};
+    }
+    if (bilirubinAlias(id)) {
       return {
         target: id,
         title: "Bilirubin result",
@@ -99,23 +188,8 @@
         decisionUnit: "×ULN"
       };
     }
-    if (ALT_FIELDS.has(id)) {
-      return {
-        target: id,
-        title: "ALT result",
-        analytes: [{ id: "alt", label: "ALT", unit: "U/L", setting: "altUln" }],
-        decisionUnit: "×ULN"
-      };
-    }
-    if (AST_FIELDS.has(id)) {
-      return {
-        target: id,
-        title: "AST result",
-        analytes: [{ id: "ast", label: "AST", unit: "U/L", setting: "astUln" }],
-        decisionUnit: "×ULN"
-      };
-    }
-    if (COMBINED_TRANSAMINASE_FIELDS.has(id)) {
+
+    if (combinedTransaminaseAlias(id, label)) {
       return {
         target: id,
         title: "ALT / AST results",
@@ -127,15 +201,39 @@
         highest: true
       };
     }
+
+    if (altAlias(id)) {
+      return {
+        target: id,
+        title: "ALT result",
+        analytes: [{ id: "alt", label: "ALT", unit: "U/L", setting: "altUln" }],
+        decisionUnit: "×ULN"
+      };
+    }
+
+    if (astAlias(id)) {
+      return {
+        target: id,
+        title: "AST result",
+        analytes: [{ id: "ast", label: "AST", unit: "U/L", setting: "astUln" }],
+        decisionUnit: "×ULN"
+      };
+    }
+
     return null;
   }
 
   function calculate(targetOrDefinition, actualValues = {}, settings = read()) {
     const adapter = adapterFor(targetOrDefinition);
     if (!adapter) return null;
+    const invalid = adapter.analytes.find(analyte => {
+      const raw = actualValues[analyte.id];
+      return raw !== undefined && raw !== null && String(raw).trim() !== "" && (!Number.isFinite(Number(raw)) || Number(raw) < 0 || !Number.isFinite(Number(settings[analyte.setting])) || Number(settings[analyte.setting]) <= 0);
+    });
+    if (invalid) return {target:adapter.target, ratio:NaN, parts:[], invalid:true, display:`${invalid.label}: enter a non-negative result and a positive laboratory ULN before assessment.`, decisionDisplay:"Invalid laboratory result/reference"};
     const parts = adapter.analytes.map(analyte => {
       const raw = actualValues[analyte.id];
-      if (raw === undefined || raw === null || raw === "") return null;
+      if (raw === undefined || raw === null || String(raw).trim() === "") return null;
       const actual = Number(raw);
       const upper = Number(settings[analyte.setting]);
       if (!Number.isFinite(actual) || actual < 0 || !Number.isFinite(upper) || upper <= 0) return null;
@@ -149,15 +247,31 @@
       };
     }).filter(Boolean);
     if (!parts.length) return null;
+
     const ratio = adapter.highest ? Math.max(...parts.map(part => part.ratio)) : parts[0].ratio;
     const highestPart = parts.find(part => Math.abs(part.ratio - ratio) < 1e-12) || parts[0];
+    const missingAnalytes = adapter.analytes.filter(analyte => !parts.some(part => part.id === analyte.id)).map(analyte => analyte.id);
+    const calculationText = parts.map(part =>
+      `${part.label} ${format(part.actual)} ${part.unit} ÷ ULN ${format(part.upper)} ${part.unit} = ${format(part.ratio, 2)} ×ULN`
+    ).join(" · ");
+    const missingText = adapter.highest && missingAnalytes.length
+      ? ` · ${missingAnalytes.map(id => id.toUpperCase()).join(" / ")} not entered (not assumed normal)`
+      : "";
+    const decisionText = adapter.highest
+      ? ` · highest entered transaminase = ${format(ratio, 2)} ×ULN`
+      : "";
+
     return {
       target: adapter.target,
-      ratio: adapter.exactRatio ? ratio : Number(ratio.toFixed(4)),
+      ratio,
+      profileLabel: PROFILE_LABELS[settings.lftProfile] || PROFILE_LABELS.custom,
       parts,
       highestPart,
-      display: adapter.exactRatio ? `${parts[0].label} ${format(parts[0].actual)} ${parts[0].unit} ÷ ULN ${format(parts[0].upper)} ${parts[0].unit} = ${format(ratio, 2)} ×ULN` : `${parts.map(part => `${part.label} ${format(part.actual)} ${part.unit} (${format(part.ratio, 2)} ×ULN)`).join(" · ")}`,
-      decisionDisplay: `${format(ratio, 2)} ×ULN`
+      missingAnalytes,
+      display: `${calculationText}${missingText}${decisionText}`,
+      decisionDisplay: adapter.highest
+        ? `${format(ratio, 2)} ×ULN (highest entered transaminase)`
+        : `${format(ratio, 2)} ×ULN`
     };
   }
 
@@ -165,7 +279,7 @@
     const number = Number(value);
     if (!Number.isFinite(number)) return String(value ?? "");
     if (digits !== null) return number.toFixed(digits).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1");
-    return Number.isInteger(number) ? String(number) : String(Number(number.toFixed(3)));
+    return String(number);
   }
 
   function referenceText(analyteId, settings = read()) {
@@ -180,11 +294,14 @@
   }
 
   return Object.freeze({
-    version: "0.82.1",
+    version: "0.82.2",
+    selectProfile,
+    profileLabels: PROFILE_LABELS,
     defaults: DEFAULTS,
     read,
     write,
     reset,
+    validatePatch,
     adapterFor,
     calculate,
     referenceText

@@ -164,8 +164,13 @@
           <details id="jsonLabProfilePanel" class="lab-profile-details hidden">
             <summary>Local laboratory profile · automatic ×ULN calculation</summary>
             <div class="details-body">
-              <p class="subtle">Enter actual results. SACTCheck calculates the protocol decision values using the local profile. The supplied ALT and creatinine defaults are female reference limits; check the patient’s laboratory report and edit these limits where appropriate.</p>
+              <p class="subtle">Enter the patient’s actual laboratory results. SACTCheck divides each result by the ULN shown below and passes the calculated ×ULN value into the unchanged protocol rule. For combined transaminase rules, ALT and AST are calculated separately and the higher entered multiple is used. An unentered analyte is not assumed normal. Displayed multiples are rounded; decisions use full precision. Reference limits vary: check the patient’s laboratory report and edit the ULNs where appropriate.</p>
+              <label for="jsonLabLftProfile">LFT reference profile</label>
+              <select id="jsonLabLftProfile"><option value="female">Supplied female/local limits</option><option value="male">Provisional male — not verified for CUH</option><option value="custom">Custom laboratory limits</option></select>
+              <p class="hint" id="jsonLabProfileNote" aria-live="polite"></p>
+              <p class="hint">Profiles change ALT, AST and bilirubin only. ALP and creatinine remain independently editable; the supplied creatinine default of 90 µmol/L is female. Check each against the laboratory report.</p>
               <div class="grid three">
+                <div><label for="jsonLabAlpUln">ALP ULN (U/L; from lab report)</label><input id="jsonLabAlpUln" type="number" min="0.01" step="any" placeholder="Required only for ALP conversion"></div>
                 <div><label for="jsonLabAltUln">ALT ULN (U/L)</label><input id="jsonLabAltUln" type="number" min="1" step="1"></div>
                 <div><label for="jsonLabAstUln">AST ULN (U/L)</label><input id="jsonLabAstUln" type="number" min="1" step="1"></div>
                 <div><label for="jsonLabCreatinineUln">Creatinine ULN (µmol/L)</label><input id="jsonLabCreatinineUln" type="number" min="1" step="1"></div>
@@ -336,12 +341,20 @@
       grid.addEventListener("input", updateConditionalInputs);
     });
 
-    ["jsonLabAltUln", "jsonLabAstUln", "jsonLabBilirubinUln", "jsonLabCreatinineUln"].forEach(id => {
+    ["jsonLabAltUln", "jsonLabAstUln", "jsonLabBilirubinUln", "jsonLabCreatinineUln", "jsonLabAlpUln"].forEach(id => {
       document.getElementById(id)?.addEventListener("change", saveLabProfile);
+    });
+    document.getElementById("jsonLabLftProfile")?.addEventListener("change", event => {
+      LocalLab?.selectProfile(event.target.value);
+      populateLabProfileControls();
+      updateConditionalInputs();
+      refreshCompactInputStates();
+      hideResult();
     });
     document.getElementById("jsonLabReset")?.addEventListener("click", () => {
       LocalLab?.reset();
       populateLabProfileControls();
+      updateConditionalInputs();
       refreshCompactInputStates();
       hideResult();
     });
@@ -512,20 +525,36 @@
   function populateLabProfileControls() {
     if (!LocalLab) return;
     const settings = LocalLab.read();
-    const map = { jsonLabAltUln: settings.altUln, jsonLabAstUln: settings.astUln, jsonLabBilirubinUln: settings.bilirubinUln, jsonLabCreatinineUln: settings.creatinineUln };
+    const profile = document.getElementById("jsonLabLftProfile");
+    if (profile) profile.value = settings.lftProfile || "custom";
+    const note = document.getElementById("jsonLabProfileNote");
+    if (note) note.textContent = `${LocalLab.profileLabels[settings.lftProfile] || LocalLab.profileLabels.custom}. ALT ${settings.altUln}, AST ${settings.astUln} U/L; bilirubin ${settings.bilirubinUln} µmol/L. ${settings.lftProfile === "male" ? "ALT/AST 40 are provisional generic limits; bilirubin 20 is the supplied local value. Verify against the report." : "Check against the patient’s laboratory report."}`;
+    const map = { jsonLabAlpUln: settings.alpUln ?? "", jsonLabAltUln: settings.altUln, jsonLabAstUln: settings.astUln, jsonLabBilirubinUln: settings.bilirubinUln, jsonLabCreatinineUln: settings.creatinineUln };
     Object.entries(map).forEach(([id, value]) => { const element = document.getElementById(id); if (element) element.value = String(value); });
   }
 
   function saveLabProfile() {
     if (!LocalLab) return;
-    LocalLab.write({
+    const patch = {
+      alpUln: document.getElementById("jsonLabAlpUln")?.value ?? "",
       altUln: document.getElementById("jsonLabAltUln")?.value,
       astUln: document.getElementById("jsonLabAstUln")?.value,
       bilirubinUln: document.getElementById("jsonLabBilirubinUln")?.value,
       creatinineUln: document.getElementById("jsonLabCreatinineUln")?.value
-    });
+    };
+    const validation = LocalLab.validatePatch?.(patch);
+    if (validation && !validation.valid) {
+      populateLabProfileControls();
+      refreshLabPreviews();
+      if (typeof root.showToast === "function") root.showToast("ULN values must be positive numbers. Previous laboratory limits were kept.");
+      return;
+    }
+    LocalLab.write(patch);
+    populateLabProfileControls();
+    updateConditionalInputs();
     refreshCompactInputStates();
     hideResult();
+    if (typeof root.showToast === "function") root.showToast("Laboratory ULNs updated. ×ULN calculations refreshed.");
   }
 
   const BLOOD_FIELD_PRIORITIES = [
@@ -676,7 +705,7 @@
       const settings = LocalLab.read();
       return `<div class="lab-actual-inputs" data-lab-control-group="${escapeHtml(definition.id)}">${labAdapter.analytes.map(analyte => {
         const upper = settings[analyte.setting];
-        return `<div class="lab-value-pair"><label for="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}">${escapeHtml(analyte.label)}</label><div class="lab-inline-control"><input id="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}" data-lab-target="${escapeHtml(definition.id)}" data-lab-analyte="${escapeHtml(analyte.id)}" data-type="number" type="number" min="0" step="0.1" placeholder="Enter value"${disabledAttribute}><span class="lab-inline-unit">${escapeHtml(analyte.unit)}</span></div><span class="hint" data-lab-reference="${escapeHtml(analyte.setting)}" data-lab-unit="${escapeHtml(analyte.unit)}">ULN ${escapeHtml(upper)} ${escapeHtml(analyte.unit)}</span></div>`;
+        return `<div class="lab-value-pair"><label for="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}">${escapeHtml(analyte.label)}</label><div class="lab-inline-control"><input id="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}" data-lab-target="${escapeHtml(definition.id)}" data-lab-analyte="${escapeHtml(analyte.id)}" data-type="number" type="number" min="0" step="any" placeholder="Enter value"${disabledAttribute}><span class="lab-inline-unit">${escapeHtml(analyte.unit)}</span></div><span class="hint" data-lab-reference="${escapeHtml(analyte.setting)}" data-lab-unit="${escapeHtml(analyte.unit)}">ULN ${escapeHtml(upper ?? "not set")} ${escapeHtml(analyte.unit)}</span></div>`;
       }).join("")}${labAdapter.referenceNote ? `<p class="hint">${escapeHtml(labAdapter.referenceNote)}</p>` : ""}<div class="lab-calculation-preview hidden" data-lab-preview="${escapeHtml(definition.id)}" aria-live="polite"></div></div>`;
     }
     if (definition.type === "boolean") {
@@ -958,7 +987,7 @@
         const settings = LocalLab.read();
         const adapter = LocalLab.adapterFor(targetDefinition);
         const analyte = adapter?.analytes.find(item => item.id === element.dataset.labAnalyte);
-        if (analyte) element.value = String(settings[analyte.setting]);
+        if (analyte) element.value = settings[analyte.setting] == null ? "" : String(settings[analyte.setting]);
       });
       updateConditionalInputs();
     }
@@ -996,7 +1025,7 @@
     });
     const targets = [...new Set([...document.querySelectorAll("[data-lab-target]")].filter(element => includeDisabled || !element.disabled).map(element => element.dataset.labTarget))];
     targets.forEach(target => {
-      const calculation = calculateLabTarget(target);
+      const calculation = calculateLabTarget(target, includeDisabled);
       if (calculation) {
         inputs[target] = String(calculation.ratio);
         const rawDefinitions = activeProtocol?.input_definitions || {};
@@ -1013,11 +1042,11 @@
     return inputs;
   }
 
-  function calculateLabTarget(target) {
+  function calculateLabTarget(target, includeDisabled = false) {
     if (!LocalLab) return null;
     const actualValues = {};
     document.querySelectorAll(`[data-lab-target="${cssEscape(target)}"]`).forEach(element => {
-      actualValues[element.dataset.labAnalyte] = element.value;
+      if (includeDisabled || !element.disabled) actualValues[element.dataset.labAnalyte] = element.value;
     });
     const raw = activeProtocol?.input_definitions || {};
     const definition = Array.isArray(raw) ? raw.find(item => item.id === target) : raw[target];
@@ -1028,7 +1057,7 @@
     if (LocalLab) {
       const settings = LocalLab.read();
       document.querySelectorAll("[data-lab-reference]").forEach(element => {
-        element.textContent = `ULN ${settings[element.dataset.labReference]} ${element.dataset.labUnit}`;
+        element.textContent = `ULN ${settings[element.dataset.labReference] ?? "not set"} ${element.dataset.labUnit}`;
       });
     }
     document.querySelectorAll("[data-lab-preview]").forEach(preview => {
