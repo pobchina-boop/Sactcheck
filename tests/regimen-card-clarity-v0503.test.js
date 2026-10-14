@@ -11,7 +11,9 @@ const catalogue = require(path.join(root, "protocols/index.json"));
 
 assert(pkg.version.localeCompare("0.56.1", undefined, { numeric: true }) >= 0);
 assert(index.includes("SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot"));
-assert(index.includes('<strong>376</strong><span>protocols forming a common regimen information layer</span>'));
+// v0.82.3 retired the fixed homepage protocol count; verify the real catalogue and navigation instead.
+assert(index.includes('id="regimenSearch"'), 'Regimen search must remain available.');
+assert(catalogue.protocols.length >= 376, 'Regimen inventory must not regress below the v0.51 baseline.');
 assert(!index.includes("361 + 15"));
 assert(index.includes("js/regimen-components.js?v=0.51.0"));
 assert(index.includes("js/toxicity-attribution.js?v=0.51.0"));
