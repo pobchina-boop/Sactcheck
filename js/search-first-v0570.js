@@ -100,7 +100,7 @@
             <span class="engine-first-eyebrow">Regimen information hub</span>
             <h2 id="engineFirstTitle">Find a treatment regimen</h2>
           </div>
-          <span class="engine-first-protocol-count">376 NCCP protocols</span>
+          <span class="engine-first-protocol-count">Source-linked regimen library</span>
         </div>
         <p class="engine-first-copy">Search the exact NCCP regimen, then open the clinical workflow, patient guide, source material or sustainability support you need.</p>
         <div class="engine-first-search-host"></div>
@@ -154,15 +154,15 @@
     if(!hero) return;
 
     setText('#studyHero .study-kicker','SACTCheck Engine · clinician-controlled NCCP decision support');
-    setText('#studyHero .mission-hero-copy h1','NCCP regimen assessment at the point of care');
+    setText('#studyHero .mission-hero-copy h1','Operationalising NCCP protocols at the point of care.');
     setText(
       '#studyHero .mission-hero-lead',
-      'Find the exact regimen, enter the clinical information available, see the encoded criterion beside each result and verify the official NCCP source.'
+      'Regimen-specific assessment, supportive care, clinical evidence and patient information in one connected workflow.'
     );
 
     const purpose=hero.querySelector('.mission-hero-purpose');
     if(purpose){
-      purpose.innerHTML='<strong>Primary purpose:</strong> make protocol assessment faster and clearer without hiding the reasoning or removing clinician control.';
+      purpose.innerHTML='<strong>Our purpose:</strong> help clinicians apply national guidance and patients understand their treatment, with the source and reasoning always visible.';
     }
 
     const visualKicker=hero.querySelector('.mission-visual-brand span');

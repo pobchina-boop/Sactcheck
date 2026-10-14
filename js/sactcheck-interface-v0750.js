@@ -163,11 +163,11 @@
       const kicker=hero.querySelector(".study-kicker");
       if(kicker) if(kicker.textContent!=="Regimen-specific oncology information pipeline") kicker.textContent="Regimen-specific oncology information pipeline";
       const h1=hero.querySelector("#studyHeroTitle");
-      if(h1) if(h1.textContent!=="From national treatment guidance to usable information at every step.") h1.textContent="From national treatment guidance to usable information at every step.";
+      if(h1) if(h1.textContent!=="Operationalising NCCP protocols at the point of care.") h1.textContent="Operationalising NCCP protocols at the point of care.";
       const lead=hero.querySelector(".mission-hero-lead");
-      if(lead) if(lead.textContent!=="SACTCheck structures regimen-specific information around the way cancer care is actually delivered: clinician workflow, patient understanding, supportive care, evidence and sustainability.") lead.textContent="SACTCheck structures regimen-specific information around the way cancer care is actually delivered: clinician workflow, patient understanding, supportive care, evidence and sustainability.";
+      if(lead) if(lead.textContent!=="Regimen-specific assessment, supportive care, clinical evidence and patient information in one connected workflow.") lead.textContent="Regimen-specific assessment, supportive care, clinical evidence and patient information in one connected workflow.";
       const purpose=hero.querySelector(".mission-hero-purpose");
-      if(purpose) if(purpose.innerHTML!=="<strong>Our purpose:</strong> close important information gaps across clinic, day ward and home while keeping the current NCCP source, provenance and clinical judgement visible.") purpose.innerHTML="<strong>Our purpose:</strong> close important information gaps across clinic, day ward and home while keeping the current NCCP source, provenance and clinical judgement visible.";
+      if(purpose) if(purpose.innerHTML!=="<strong>Our purpose:</strong> help clinicians apply national guidance and patients understand their treatment, with the source and reasoning always visible.") purpose.innerHTML="<strong>Our purpose:</strong> help clinicians apply national guidance and patients understand their treatment, with the source and reasoning always visible.";
 
       const visual=hero.querySelector(".mission-visual");
       if(visual && visual.dataset.v0750Mission!=="ready"){
@@ -175,7 +175,7 @@
         visual.innerHTML=`
           <div class="mission-visual-header v0750-mission-header">
             <div><strong>One regimen. One connected information pathway.</strong><span>National guidance is structured once, then surfaced where it is needed.</span></div>
-            <b>376 NCCP protocols</b>
+            <b>Source-linked regimen library</b>
           </div>
           <div class="mission-pathway">
             <div class="mission-pathway-step"><span class="mission-icon">1</span><div><strong>Source</strong><small>Anchor content to current NCCP and authoritative treatment information.</small></div></div>
