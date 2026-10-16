@@ -35,3 +35,9 @@ after intentionally regenerating a protected PDF. Run `npm run test:ci`,
 
 Changing medicines or clinical recommendations requires source review.
 Passing CI does not validate clinical content or authorise treatment.
+
+Batch 2 (v0.83.2): 00227 FOLFIRI; 00449 FOLFIRI + bevacizumab; 00446 modified FOLFOX-6 + bevacizumab. Shared port/PICC and pump education also added to 00209.
+
+Colorectal is the first tissue library being completed to this standard. Candidate inventory: `data/colorectal-suite-progress-v0832.json`; source catalogue reconciliation is required before any completeness claim. Five software packages are expanded; independent clinical/pharmacy/PPI review remains pending.
+
+Future breast patient timelines and monitoring logistics must consult `docs/BREAST_PATIENT_REFERENCE_MATERIALS.md` and the privately retained consultant decks.

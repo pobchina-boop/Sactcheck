@@ -13,10 +13,14 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.83.1';
-  const CONTENT_RELEASE='0.83.1';
+  const RELEASE='0.83.2';
+  const CONTENT_RELEASE='0.83.2';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00227':{title:'FOLFIRI',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
+    '00449':{title:'FOLFIRI + bevacizumab',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
+    '00446':{title:'Modified FOLFOX-6 + bevacizumab',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
+
     '00209':{title:'Modified FOLFOX-6',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
     '00226':{title:'Weekly paclitaxel',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
     '00321':{title:'CAPOX / XELOX',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
