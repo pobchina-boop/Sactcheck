@@ -43,8 +43,8 @@ for (const entry of catalogue.protocols) {
 }
 
 assert.strictEqual(catalogue.protocols.length, 376);
-assert.strictEqual(usefulCoverage, 84);
-assert.strictEqual(scheduleCoverage, 78);
+assert.strictEqual(usefulCoverage, 85);
+assert.strictEqual(scheduleCoverage, 79);
 assert.strictEqual(doseLevelCoverage, 25);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));

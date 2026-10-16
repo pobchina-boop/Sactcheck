@@ -456,10 +456,13 @@
     return Number(number) > 0 ? `-${number}` : number;
   }
 
-  function targetDoseLevel(model, component, change, result, relativeToCurrent) {
+  function targetDoseLevel(model, component, change, result, relativeToCurrent, currentField) {
     const group = findDoseLevelGroup(model, component);
     if (!group || !Number.isFinite(Number(change))) return null;
-    const currentRaw = result?.inputs?.current_dose_level ?? result?.inputs?.dose_level ?? result?.inputs?.current_level;
+    const currentRaw = currentField ? result?.inputs?.[currentField] : result?.inputs?.current_dose_level ?? result?.inputs?.dose_level ?? result?.inputs?.current_level;
+    if (relativeToCurrent && currentField && (currentRaw == null || currentRaw === "")) {
+      return { level: "Current level required", dose: "Confirm the current component dose level before calculating the reduced dose" };
+    }
     const current = relativeToCurrent ? normaliseCurrentLevel(currentRaw) : "0";
     const currentNumber = Number(current) || 0;
     const target = String(currentNumber + Number(change));
@@ -518,7 +521,7 @@
     if (levelChange == null && merged.type === "dose_reduce_one_level") levelChange = -1;
     if (levelChange == null && merged.type === "dose_reduce_two_levels") levelChange = -2;
     if (levelChange != null) {
-      const target = targetDoseLevel(model, component, levelChange, result, Boolean(merged.relative_to_current_dose_level));
+      const target = targetDoseLevel(model, component, levelChange, result, Boolean(merged.relative_to_current_dose_level), merged.current_dose_level_field);
       if (target) return { kind: "level", label: target.level, dose: target.dose, precise: true };
     }
 

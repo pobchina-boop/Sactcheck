@@ -29,7 +29,7 @@ for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
   const rec = m.organ_function_reconciliation;
-  const superseded = ['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4';
+  const superseded = (['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4') || (item.nccp_code === '00225' && m.validation?.audit_release === '0.83.5');
   assert(rec, `${item.nccp_code}: missing organ-function reconciliation metadata`);
   assert.strictEqual(rec.release, '0.59.0');
   assert.strictEqual(rec.source_reconciled, true);

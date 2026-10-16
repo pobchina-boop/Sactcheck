@@ -13,10 +13,13 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.83.4';
-  const CONTENT_RELEASE='0.83.4';
+  const RELEASE='0.83.5';
+  const CONTENT_RELEASE='0.83.5';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00225':{title:"Panitumumab",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00447':{title:"Panitumumab + modified FOLFOX-6",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00448':{title:"Panitumumab + FOLFIRI",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00216':{title:'Capecitabine',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00586':{title:'Capecitabine + radiotherapy',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00623':{title:'Bevacizumab + capecitabine',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},

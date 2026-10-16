@@ -51,11 +51,11 @@
         return response.json();
       })
       .then(async payload => {
-        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json"]) {
+        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json"]) {
         const response = await fetch(extraUrl, { cache: "no-store" });
         if (!response.ok) throw new Error(`Could not load colorectal knowledge (${response.status}).`);
         const extra = await response.json();
-        for (const [collection, key] of [["regimen_profiles", "protocol_id"], ["evidence_records", "evidence_id"]]) {
+        for (const [collection, key] of [["regimen_profiles", "protocol_id"], ["evidence_records", "evidence_id"], ["drug_profiles", "id"]]) {
           for (const item of extra[collection] || []) {
             const i = payload[collection].findIndex(existing => existing[key] === item[key]);
             if (i < 0) payload[collection].push(item); else payload[collection][i] = item;
@@ -226,6 +226,7 @@
         <article class="wide"><h4>How the components work together</h4><p>${escapeHtml(profile.component_rationale || "")}</p></article>
         <article class="wide"><h4>Schedule context</h4><p>${escapeHtml(profile.schedule_context || "")}</p></article>
       </div>
+      ${root.SACTCheckTreatmentRelationship?.renderForCode(profile.treatment_relationship_code)||""}
       ${asArray(profile.key_points).length ? `<div class="regimen-key-point-tags">${asArray(profile.key_points).map(item => `<span>${escapeHtml(item)}</span>`).join("")}</div>` : ""}
       <div class="regimen-overview-review">${reviewMarkup(profile.review_status, profile.last_reviewed, profile.source_checked_date)}</div>
     </section>`;

@@ -13,7 +13,7 @@
     "published_date": "2017-10-23",
     "review_date": "2026-12-21",
     "source_document_pages": 10,
-    "source_url": "https://healthservice.hse.ie/documents/6480/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+    "source_url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
     "migration": {
       "mode": "live_json",
       "switch_to_generic_assessment": true,
@@ -27,10 +27,12 @@
       "clinical_use_authorised": false,
       "software_tests_completed": true,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
+      "audit_release": "0.83.5",
+      "software_validation_evidence": "validation/colorectal-v0835/VALIDATION.md"
     },
     "regimen_reimbursement_code": "00448a",
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.83.5",
     "catalog": {
       "enabled": true
     },
@@ -68,24 +70,25 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-mapped rules · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.83.5",
+      "audit_date": "2026-10-16",
+      "scope_note": "Published version audited; HSE document migration caused intermittent retrieval failures. Versioned source and table-level indexed extracts used. Reconfirm latest PDF before clinical adoption."
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00448-v4b"
+    "canonical_protocol_id": "nccp-00448-v4b",
+    "source_checked_date": "2026-10-16"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "JSON assessment encoding derived from NCCP 00227 Version 9. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+    "disclaimer": "Source-mapped NCCP 00448 v4b; independent clinical/pharmacy validation remains pending. Use the current source and individual clinical judgement."
   },
   "indications": [
     {
@@ -173,6 +176,12 @@
       "-1": 1900,
       "-2": 1500,
       "-3": "discontinue"
+    },
+    "folinic_acid": {
+      "0": 400,
+      "-1": 400,
+      "-2": 400,
+      "-3": "discontinue"
     }
   },
   "required_inputs": [],
@@ -188,306 +197,915 @@
     "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
     "missing_data_policy": "Evaluate only supplied values; do not infer missing values. Eligibility/context fields remain optional unless a specific rule requires them.",
     "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
       "contraindicated",
       "discontinue",
       "withhold",
       "consultant_review",
       "dose_reduce",
+      "proceed_with_caution",
       "proceed"
     ],
     "rules": [
       {
-        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "rule_id": "RAS_EXCLUSION",
+        "when": {
+          "field": "ras_status",
+          "operator": "in",
+          "value": [
+            "mutant",
+            "unknown"
+          ]
+        },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "panitumumab"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "Do not give panitumumab without validated RAS wild-type status."
         },
+        "explanation": "Do not give panitumumab without validated RAS wild-type status.",
         "source": {
+          "document": "NCCP 00448 v4b",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "ECOG_ELIGIBILITY",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
         },
-        "explanation": "Hypersensitivity to irinotecan, fluorouracil or an excipient is an exclusion."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab",
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "ECOG exceeds the NCCP 0–2 eligibility range; review treatment suitability.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ECOG exceeds the NCCP 0–2 eligibility range; review treatment suitability.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 2,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "HYPERSENSITIVITY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "panitumumab",
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Known hypersensitivity to a regimen medicine or excipient is an exclusion."
+        },
+        "explanation": "Known hypersensitivity to a regimen medicine or excipient is an exclusion.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 2,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "ILD_CONFIRMED",
+        "when": {
+          "field": "interstitial_lung_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Do not administer panitumumab with confirmed interstitial lung disease / pulmonary fibrosis. Discontinue for confirmed treatment-emergent ILD."
+        },
+        "explanation": "Do not administer panitumumab with confirmed interstitial lung disease / pulmonary fibrosis. Discontinue for confirmed treatment-emergent ILD.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 6,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "RESPIRATORY_HOLD",
+        "when": {
+          "field": "unexplained_respiratory_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Withhold and investigate new or worsening respiratory symptoms before further treatment with the implicated medicines."
+        },
+        "explanation": "Withhold and investigate new or worsening respiratory symptoms before further treatment with the implicated medicines.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 6,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "SKIN_CURRENT_HOLD",
+        "when": {
+          "field": "rash_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Withhold panitumumab for 1–2 doses; assess severity, recurrence, complications and recovery before any restart."
+        },
+        "explanation": "Withhold panitumumab for 1–2 doses; assess severity, recurrence, complications and recovery before any restart.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "SKIN_FOURTH_EPISODE",
+        "when": {
+          "field": "skin_occurrence",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Discontinue panitumumab after the fourth grade ≥3 skin-toxicity episode."
+        },
+        "explanation": "Discontinue panitumumab after the fourth grade ≥3 skin-toxicity episode.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "SKIN_FAILED_RECOVERY",
+        "when": {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Discontinue panitumumab if the skin reaction has not recovered after the planned withholding period."
+        },
+        "explanation": "Discontinue panitumumab if the skin reaction has not recovered after the planned withholding period.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "SKIN_RECOVERED_1",
+        "when": {
+          "all": [
+            {
+              "field": "rash_grade",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 100% of original dose. Confirm suitability and previous individual modifications.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 100% of original dose. Confirm suitability and previous individual modifications.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "SKIN_RECOVERED_2",
+        "when": {
+          "all": [
+            {
+              "field": "rash_grade",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 80% of original dose. Confirm suitability and previous individual modifications.",
+          "component_changes": {
+            "panitumumab": {
+              "dose_percent_of_original": 80
+            }
+          }
+        },
+        "explanation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 80% of original dose. Confirm suitability and previous individual modifications.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "SKIN_RECOVERED_3",
+        "when": {
+          "all": [
+            {
+              "field": "rash_grade",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 60% of original dose. Confirm suitability and previous individual modifications.",
+          "component_changes": {
+            "panitumumab": {
+              "dose_percent_of_original": 60
+            }
+          }
+        },
+        "explanation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 60% of original dose. Confirm suitability and previous individual modifications.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "SKIN_COMPLICATION",
+        "when": {
+          "field": "severe_skin_complication",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Urgent assessment of severe infected, blistering or peeling skin; withhold panitumumab and consider discontinuation under the SmPC."
+        },
+        "explanation": "Urgent assessment of severe infected, blistering or peeling skin; withhold panitumumab and consider discontinuation under the SmPC.",
+        "source": {
+          "document": "Vectibix SmPC (supplementary safety source)",
+          "page": "sections 4.2–4.6",
+          "url": "https://www.medicines.org.uk/emc/product/6178/smpc"
+        }
+      },
+      {
+        "rule_id": "INFUSION_MILD_MODERATE",
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": "in",
+          "value": [
+            1,
+            2
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Reduce panitumumab infusion rate and retain the lower rate for subsequent infusions; treat the reaction according to severity and local policy.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Reduce panitumumab infusion rate and retain the lower rate for subsequent infusions; treat the reaction according to severity and local policy.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 6,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "INFUSION_SEVERE",
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Permanently discontinue panitumumab for a severe or life-threatening infusion reaction; urgent treatment as appropriate."
+        },
+        "explanation": "Permanently discontinue panitumumab for a severe or life-threatening infusion reaction; urgent treatment as appropriate.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 6,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "EYE_SYMPTOMS",
+        "when": {
+          "field": "ocular_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Prompt ophthalmology assessment for possible keratitis; assess risk before continuing panitumumab.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Prompt ophthalmology assessment for possible keratitis; assess risk before continuing panitumumab.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 6,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "ULCERATIVE_KERATITIS",
+        "when": {
+          "field": "ulcerative_keratitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Interrupt panitumumab and obtain ophthalmology/consultant review; source permits interruption or discontinuation for confirmed ulcerative keratitis."
+        },
+        "explanation": "Interrupt panitumumab and obtain ophthalmology/consultant review; source permits interruption or discontinuation for confirmed ulcerative keratitis.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 6,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "ELECTROLYTES",
+        "when": {
+          "field": "electrolyte_abnormality",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Correct magnesium, calcium and potassium as indicated. NCCP/SmPC do not specify a numerical panitumumab hold threshold; use clinical severity and local policy.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Correct magnesium, calcium and potassium as indicated. NCCP/SmPC do not specify a numerical panitumumab hold threshold; use clinical severity and local policy.",
+        "source": {
+          "document": "Vectibix SmPC (supplementary safety source)",
+          "page": "sections 4.2–4.6",
+          "url": "https://www.medicines.org.uk/emc/product/6178/smpc"
+        }
       },
       {
         "rule_id": "EXCLUSION_PREGNANCY_BREASTFEEDING",
-        "any": [
-          {
-            "field": "pregnancy",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "breastfeeding",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "when": {
+          "any": [
+            {
+              "field": "pregnancy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "breastfeeding",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "Pregnancy or breastfeeding is an exclusion."
         },
+        "explanation": "Pregnancy or breastfeeding is an exclusion.",
         "source": {
+          "document": "NCCP 00448 v4b",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Pregnancy or breastfeeding is an exclusion."
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
         "rule_id": "EXCLUSION_BOWEL_DISEASE_OBSTRUCTION",
-        "field": "bowel_obstruction_or_chronic_bowel_disease",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "field": "bowel_obstruction_or_chronic_bowel_disease",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "Chronic bowel disease and/or bowel obstruction is an exclusion."
         },
+        "explanation": "Chronic bowel disease and/or bowel obstruction is an exclusion.",
         "source": {
+          "document": "NCCP 00448 v4b",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Chronic bowel disease and/or bowel obstruction is an exclusion."
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
         "rule_id": "DPD_COMPLETE",
-        "field": "dpd_status",
-        "operator": "==",
-        "value": "complete",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "complete"
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "fluorouracil_bolus",
-            "fluorouracil_infusion",
-            "whole_regimen"
+            "fluorouracil_infusion"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "Known complete DPD deficiency contraindicates fluorouracil."
         },
+        "explanation": "Known complete DPD deficiency contraindicates fluorouracil.",
         "source": {
+          "document": "NCCP 00448 v4b",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Known complete DPD deficiency contraindicates fluorouracil."
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
         "rule_id": "DPD_PARTIAL",
-        "field": "dpd_status",
-        "operator": "==",
-        "value": "partial",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "partial"
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Use an individualised reduced starting dose and consider cautious escalation if tolerated."
+          "recommendation": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose.",
         "source": {
+          "document": "NCCP 00448 v4b",
           "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose."
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
         "rule_id": "DPD_UNKNOWN_BASELINE",
-        "all": [
-          {
-            "field": "assessment_type",
-            "operator": "==",
-            "value": "baseline"
-          },
-          {
-            "field": "dpd_status",
-            "operator": "==",
-            "value": "unknown"
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "dpd_status",
+              "operator": "==",
+              "value": "unknown"
+            }
+          ]
+        },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Obtain or verify DPD testing before first fluorouracil treatment."
+          "recommendation": "DPD testing is required before first fluorouracil treatment unless previously tested."
         },
+        "explanation": "DPD testing is required before first fluorouracil treatment unless previously tested.",
         "source": {
+          "document": "NCCP 00448 v4b",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "DPD testing is required before first fluorouracil treatment unless previously tested."
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
         "rule_id": "BASELINE_LOOSE_BM_CAUTION",
-        "field": "baseline_loose_bm_gt3",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "field": "baseline_loose_bm_gt3",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Review baseline bowel function and suitability before treatment."
+          "recommendation": "Baseline greater than 3 loose bowel movements per day is listed as a caution.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Baseline greater than 3 loose bowel movements per day is listed as a caution.",
         "source": {
+          "document": "NCCP 00448 v4b",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Baseline greater than 3 loose bowel movements per day is listed as a caution."
-      },
-      {
-        "rule_id": "UGT1A1_28_CAUTION",
-        "field": "ugt1a1_homozygous_28",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "irinotecan"
-          ],
-          "recommendation": "Consider a reduced irinotecan starting dose."
-        },
-        "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "For patients known to be homozygous UGT1A1*28, a reduced irinotecan starting dose may be considered."
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
         "rule_id": "ANC_DAY1_HOLD",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": "<",
-            "value": 1.5
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 4
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "any": [
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<",
+                      "value": 4
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "missing"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Hold treatment and repeat FBC weekly."
+          "recommendation": "If ANC is below 1.5 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly."
         },
+        "explanation": "If ANC is below 1.5 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "If ANC is below 1.5 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
         "rule_id": "ANC_NO_RECOVERY_4W",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": "<",
-            "value": 1.5
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": ">=",
-            "value": 4
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": ">=",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Discontinue treatment."
+          "recommendation": "If ANC remains below 1.5 ×10⁹/L after 4 weeks, discontinue treatment."
         },
+        "explanation": "If ANC remains below 1.5 ×10⁹/L after 4 weeks, discontinue treatment.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "If ANC remains below 1.5 ×10⁹/L after 4 weeks, discontinue treatment."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
         "rule_id": "PLATELETS_DAY1_HOLD",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": "<",
-            "value": 75
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 2
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 75
+                },
+                {
+                  "any": [
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "missing"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Hold treatment and repeat FBC weekly."
+          "recommendation": "If platelets are below 75 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly."
         },
+        "explanation": "If platelets are below 75 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "If platelets are below 75 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
         "rule_id": "PLATELETS_NO_RECOVERY_2W",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": "<",
-            "value": 75
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 75
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Discontinue treatment."
+          "recommendation": "If platelets remain below 75 ×10⁹/L after 2 weeks, discontinue treatment."
         },
+        "explanation": "If platelets remain below 75 ×10⁹/L after 2 weeks, discontinue treatment.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "If platelets remain below 75 ×10⁹/L after 2 weeks, discontinue treatment."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
         "rule_id": "ANC_DELAY_NADIR_G3",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "lowest_anc_during_delay_x10e9_l",
-            "operator": ">=",
-            "value": 0.5
-          },
-          {
-            "field": "lowest_anc_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 1
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "anc_x10e9_l",
+                          "operator": ">=",
+                          "value": 1.5
+                        },
+                        {
+                          "field": "lowest_anc_during_delay_x10e9_l",
+                          "operator": ">=",
+                          "value": 0.5
+                        },
+                        {
+                          "field": "lowest_anc_during_delay_x10e9_l",
+                          "operator": "<",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 75
+                    }
+                  ]
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -495,28 +1113,89 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level."
+          "recommendation": "Lowest ANC 0.5–0.99 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
         },
+        "explanation": "Lowest ANC 0.5–0.99 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Lowest ANC 0.5–0.99 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
         "rule_id": "ANC_DELAY_NADIR_G4",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "lowest_anc_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 0.5
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "anc_x10e9_l",
+                          "operator": ">=",
+                          "value": 1.5
+                        },
+                        {
+                          "field": "lowest_anc_during_delay_x10e9_l",
+                          "operator": "<",
+                          "value": 0.5
+                        }
+                      ]
+                    },
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 75
+                    }
+                  ]
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -524,33 +1203,94 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels."
+          "recommendation": "Lowest ANC below 0.5 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
         },
+        "explanation": "Lowest ANC below 0.5 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Lowest ANC below 0.5 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
         "rule_id": "PLATELETS_DELAY_NADIR_G3",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_platelets_during_delay_x10e9_l",
-            "operator": ">=",
-            "value": 10
-          },
-          {
-            "field": "lowest_platelets_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 50
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "platelets_x10e9_l",
+                          "operator": ">=",
+                          "value": 75
+                        },
+                        {
+                          "field": "lowest_platelets_during_delay_x10e9_l",
+                          "operator": ">=",
+                          "value": 10
+                        },
+                        {
+                          "field": "lowest_platelets_during_delay_x10e9_l",
+                          "operator": "<",
+                          "value": 50
+                        }
+                      ]
+                    },
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 75
+                    }
+                  ]
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -558,28 +1298,89 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level."
+          "recommendation": "Lowest platelets 10–49.9 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
         },
+        "explanation": "Lowest platelets 10–49.9 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Lowest platelets 10–49.9 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
         "rule_id": "PLATELETS_DELAY_NADIR_G4",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_platelets_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 10
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "platelets_x10e9_l",
+                          "operator": ">=",
+                          "value": 75
+                        },
+                        {
+                          "field": "lowest_platelets_during_delay_x10e9_l",
+                          "operator": "<",
+                          "value": 10
+                        }
+                      ]
+                    },
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 75
+                    }
+                  ]
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -587,19 +1388,71 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels."
+          "recommendation": "Lowest platelets below 10 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
         },
+        "explanation": "Lowest platelets below 10 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Lowest platelets below 10 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
         "rule_id": "FEBRILE_G4_NEUTROPENIA",
-        "field": "grade4_neutropenia_with_grade2_fever",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "grade4_neutropenia_with_grade2_fever",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "any": [
+                    {
+                      "field": "assessment_type",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "assessment_type",
+                      "operator": "!=",
+                      "value": "baseline"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -607,514 +1460,916 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels; G-CSF may be considered."
+          "recommendation": "Grade 4 neutropenia with fever grade ≥2: reduce irinotecan and fluorouracil two dose levels.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
         },
+        "explanation": "Grade 4 neutropenia with fever grade ≥2: reduce irinotecan and fluorouracil two dose levels.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade 4 neutropenia with fever grade ≥2: reduce irinotecan and fluorouracil two dose levels."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
-        "rule_id": "IRINOTECAN_CRCL_LT10",
-        "all": [
-          {
-            "field": "crcl_ml_min",
-            "operator": "<",
-            "value": 10
-          },
-          {
-            "field": "haemodialysis",
-            "operator": "==",
-            "value": false
-          }
-        ],
+        "rule_id": "IRINOTECAN_BILI_GT3ULN",
+        "when": {
+          "field": "bilirubin_ratio_uln",
+          "operator": ">",
+          "value": 3
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "contraindicated",
           "components": [
             "irinotecan"
           ],
-          "recommendation": "Start irinotecan at 50–66% of the original dose; increase if tolerated."
+          "recommendation": "Irinotecan is contraindicated when bilirubin exceeds 3 × ULN."
         },
+        "explanation": "Irinotecan is contraindicated when bilirubin exceeds 3 × ULN.",
         "source": {
+          "document": "NCCP 00448 v4b",
           "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "For CrCl below 10 mL/min, start irinotecan at 50–66% of the original dose and increase if tolerated."
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
-        "rule_id": "IRINOTECAN_HAEMODIALYSIS",
-        "field": "haemodialysis",
-        "operator": "==",
-        "value": true,
+        "rule_id": "DIARRHOEA_CURRENT_G2_HOLD",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_current_grade",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "any": [
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "missing"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Current diarrhoea grade ≥2: hold treatment for up to two weeks."
+        },
+        "explanation": "Current diarrhoea grade ≥2: hold treatment for up to two weeks.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_PERSISTENT_G2_STOP",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_current_grade",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Diarrhoea remaining grade ≥2 after two weeks: discontinue treatment."
+        },
+        "explanation": "Diarrhoea remaining grade ≥2 after two weeks: discontinue treatment.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_HIGHEST_G3",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_current_grade",
+                  "operator": "<",
+                  "value": 2
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Previous grade 3 diarrhoea: reduce irinotecan and fluorouracil one dose level.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
+        },
+        "explanation": "Previous grade 3 diarrhoea: reduce irinotecan and fluorouracil one dose level.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_HIGHEST_G4",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "diarrhoea_current_grade",
+                  "operator": "<",
+                  "value": 2
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Previous grade 4 diarrhoea: reduce irinotecan and fluorouracil two dose levels.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
+        },
+        "explanation": "Previous grade 4 diarrhoea: reduce irinotecan and fluorouracil two dose levels.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_CURRENT_G2_HOLD",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "stomatitis_current_grade",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "any": [
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "missing"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Current stomatitis grade ≥2: hold treatment for up to two weeks."
+        },
+        "explanation": "Current stomatitis grade ≥2: hold treatment for up to two weeks.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_PERSISTENT_G2_STOP",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "stomatitis_current_grade",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Stomatitis remaining grade ≥2 after two weeks: discontinue treatment."
+        },
+        "explanation": "Stomatitis remaining grade ≥2 after two weeks: discontinue treatment.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_HIGHEST_G3",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "stomatitis_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "stomatitis_current_grade",
+                  "operator": "<",
+                  "value": 2
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Previous grade 3 stomatitis: maintain irinotecan and reduce fluorouracil one dose level.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
+        },
+        "explanation": "Previous grade 3 stomatitis: maintain irinotecan and reduce fluorouracil one dose level.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_HIGHEST_G4",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "stomatitis_highest_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "stomatitis_current_grade",
+                  "operator": "<",
+                  "value": 2
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Previous grade 4 stomatitis: maintain irinotecan and reduce fluorouracil two dose levels.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
+        },
+        "explanation": "Previous grade 4 stomatitis: maintain irinotecan and reduce fluorouracil two dose levels.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 5,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "ACUTE_CHOLINERGIC_SYNDROME",
+        "when": {
+          "field": "acute_cholinergic_syndrome",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "irinotecan"
           ],
-          "recommendation": "Start irinotecan at 50–66% of the original dose and individualise dialysis timing."
+          "recommendation": "Acute cholinergic syndrome requires atropine unless contraindicated; prophylaxis may be appropriate in later cycles.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Acute cholinergic syndrome requires atropine unless contraindicated; prophylaxis may be appropriate in later cycles.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "For haemodialysis, start irinotecan at 50–66% of the original dose and increase if tolerated."
+          "document": "NCCP 00448 v4b",
+          "page": 6,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
-        "rule_id": "IRINOTECAN_BILI_GT3ULN",
-        "field": "bilirubin_ratio_uln",
-        "operator": ">",
-        "value": 3,
+        "rule_id": "BASELINE_COUNTS",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 2
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "irinotecan",
-            "whole_regimen"
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "NCCP baseline exclusion: ANC <2 or platelets <100 ×10⁹/L. Subsequent-cycle thresholds must not clear initiation."
         },
+        "explanation": "NCCP baseline exclusion: ANC <2 or platelets <100 ×10⁹/L. Subsequent-cycle thresholds must not clear initiation.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Irinotecan is contraindicated when bilirubin exceeds 3 × ULN."
+          "document": "NCCP 00448 v4b",
+          "page": 2,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
-        "rule_id": "FIVEFU_HEPATIC_CONTRAINDICATED",
-        "any": [
-          {
-            "field": "bilirubin_umol_l",
-            "operator": ">",
-            "value": 85
-          },
-          {
-            "field": "ast_u_l",
-            "operator": ">",
-            "value": 180
-          }
-        ],
+        "rule_id": "ANC_SOURCE_INTERVAL",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Continue withholding and obtain consultant clarification: table 2 allows recovery within 2 weeks but says stop if ANC remains low after 4 weeks. No automatic restart in this source gap."
+        },
+        "explanation": "Continue withholding and obtain consultant clarification: table 2 allows recovery within 2 weeks but says stop if ANC remains low after 4 weeks. No automatic restart in this source gap.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "IRINOTECAN_DIARRHOEA_NOT_RESOLVED",
+        "when": {
+          "field": "diarrhoea_current_grade",
+          "operator": "==",
+          "value": 1
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Irinotecan requires treatment-related diarrhoea to be fully resolved, even though table 4 permits recovery below grade 2. Confirm bowel baseline before restarting."
+        },
+        "explanation": "Irinotecan requires treatment-related diarrhoea to be fully resolved, even though table 4 permits recovery below grade 2. Confirm bowel baseline before restarting.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 3,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "IRINOTECAN_BILI_1_TO3",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_ratio_uln",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "field": "bilirubin_ratio_uln",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Irinotecan table 3 provides no quantified dose in this bilirubin range. Resolve the broad hepatic exclusion and clinical dosing plan.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Irinotecan table 3 provides no quantified dose in this bilirubin range. Resolve the broad hepatic exclusion and clinical dosing plan.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "ORGAN_SOURCE_CONFLICT",
+        "when": {
+          "any": [
+            {
+              "field": "renal_impairment",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "severe_renal_impairment",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "hepatic_impairment_category",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate",
+                "severe"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab",
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Source discrepancy: page 2 broadly excludes renal/hepatic impairment, while table 3 gives component-specific advice. Resolve eligibility and dosing with consultant/pharmacy; no automatic treatment clearance.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source discrepancy: page 2 broadly excludes renal/hepatic impairment, while table 3 gives component-specific advice. Resolve eligibility and dosing with consultant/pharmacy; no automatic treatment clearance.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "FIVEFU_HEPATIC_CI",
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 85
+            },
+            {
+              "field": "ast_u_l",
+              "operator": ">",
+              "value": 180
+            }
+          ]
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "fluorouracil_bolus",
             "fluorouracil_infusion",
-            "whole_regimen"
+            "folinic_acid"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "NCCP table 3 contraindicates fluorouracil above bilirubin 85 µmol/L or AST 180 U/L."
         },
+        "explanation": "NCCP table 3 contraindicates fluorouracil above bilirubin 85 µmol/L or AST 180 U/L.",
         "source": {
+          "document": "NCCP 00448 v4b",
           "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Fluorouracil is contraindicated when bilirubin exceeds 85 µmol/L or AST exceeds 180 U/L."
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 3
+        }
       },
       {
-        "rule_id": "FIVEFU_MODERATE_HEPATIC",
-        "field": "hepatic_impairment_severity",
-        "operator": "==",
-        "value": "moderate",
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce initial fluorouracil dose by one third; increase if no toxicity."
+        "rule_id": "FIVEFU_BOUNDARY",
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "==",
+              "value": 85
+            },
+            {
+              "field": "ast_u_l",
+              "operator": "==",
+              "value": 180
+            }
+          ]
         },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Moderate hepatic impairment: reduce initial fluorouracil dose by one third."
-      },
-      {
-        "rule_id": "FIVEFU_SEVERE_HEPATIC",
-        "field": "hepatic_impairment_severity",
-        "operator": "==",
-        "value": "severe",
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce initial fluorouracil dose by one half; increase if no toxicity."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe hepatic impairment: reduce initial fluorouracil dose by one half."
-      },
-      {
-        "rule_id": "DIARRHOEA_CURRENT_G2_HOLD",
-        "all": [
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Hold and reassess; proceed only once diarrhoea is below grade 2 and fully resolved as required."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Current diarrhoea grade ≥2: hold treatment for up to two weeks."
-      },
-      {
-        "rule_id": "DIARRHOEA_PERSISTENT_G2_STOP",
-        "all": [
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Discontinue treatment."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Diarrhoea remaining grade ≥2 after two weeks: discontinue treatment."
-      },
-      {
-        "rule_id": "DIARRHOEA_HIGHEST_G3",
-        "field": "diarrhoea_highest_grade",
-        "operator": "==",
-        "value": 3,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "irinotecan",
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Previous grade 3 diarrhoea: reduce irinotecan and fluorouracil one dose level."
-      },
-      {
-        "rule_id": "DIARRHOEA_HIGHEST_G4",
-        "field": "diarrhoea_highest_grade",
-        "operator": "==",
-        "value": 4,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "irinotecan",
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Previous grade 4 diarrhoea: reduce irinotecan and fluorouracil two dose levels."
-      },
-      {
-        "rule_id": "STOMATITIS_CURRENT_G2_HOLD",
-        "all": [
-          {
-            "field": "stomatitis_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Hold and reassess; proceed only once stomatitis is below grade 2."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Current stomatitis grade ≥2: hold treatment for up to two weeks."
-      },
-      {
-        "rule_id": "STOMATITIS_PERSISTENT_G2_STOP",
-        "all": [
-          {
-            "field": "stomatitis_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Discontinue treatment."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Stomatitis remaining grade ≥2 after two weeks: discontinue treatment."
-      },
-      {
-        "rule_id": "STOMATITIS_HIGHEST_G3",
-        "field": "stomatitis_highest_grade",
-        "operator": "==",
-        "value": 3,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce both fluorouracil components by one dose level; maintain irinotecan."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Previous grade 3 stomatitis: maintain irinotecan and reduce fluorouracil one dose level."
-      },
-      {
-        "rule_id": "STOMATITIS_HIGHEST_G4",
-        "field": "stomatitis_highest_grade",
-        "operator": "==",
-        "value": 4,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce both fluorouracil components by two dose levels; maintain irinotecan."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Previous grade 4 stomatitis: maintain irinotecan and reduce fluorouracil two dose levels."
-      },
-      {
-        "rule_id": "ACUTE_CHOLINERGIC_SYNDROME",
-        "field": "acute_cholinergic_syndrome",
-        "operator": "==",
-        "value": true,
         "action": {
           "type": "consultant_review",
           "components": [
-            "irinotecan"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Administer atropine 250 micrograms SC unless contraindicated; consider prophylactic atropine with subsequent irinotecan."
+          "recommendation": "The source uses strict < and > limits, leaving equality at bilirubin 85 or AST 180 unassigned. Obtain consultant/pharmacy clarification.",
+          "show_in_dose_actions": true
         },
+        "explanation": "The source uses strict < and > limits, leaving equality at bilirubin 85 or AST 180 unassigned. Obtain consultant/pharmacy clarification.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Acute cholinergic syndrome requires atropine unless contraindicated; prophylaxis may be appropriate in later cycles."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 3
+        }
       },
       {
-        "rule_id": "PROCEED_NO_ENCODED_MODIFICATION",
-        "all": [
-          {
-            "field": "hypersensitivity",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "pregnancy",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "breastfeeding",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "bowel_obstruction_or_chronic_bowel_disease",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "dpd_status",
-            "operator": "==",
-            "value": "documented_normal"
-          },
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "crcl_ml_min",
-            "operator": ">=",
-            "value": 10
-          },
-          {
-            "field": "haemodialysis",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "bilirubin_ratio_uln",
-            "operator": "<=",
-            "value": 3
-          },
-          {
-            "field": "bilirubin_umol_l",
-            "operator": "<=",
-            "value": 85
-          },
-          {
-            "field": "ast_u_l",
-            "operator": "<=",
-            "value": 180
-          },
-          {
-            "field": "hepatic_impairment_severity",
-            "operator": "==",
-            "value": "none"
-          },
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": "<",
-            "value": 2
-          },
-          {
-            "field": "stomatitis_current_grade",
-            "operator": "<",
-            "value": 2
-          },
-          {
-            "field": "baseline_loose_bm_gt3",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "ugt1a1_homozygous_28",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "grade4_neutropenia_with_grade2_fever",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "acute_cholinergic_syndrome",
-            "operator": "==",
-            "value": false
-          }
-        ],
+        "rule_id": "FIVEFU_HEPATIC_REVIEW",
+        "when": {
+          "field": "hepatic_impairment_category",
+          "operator": "in",
+          "value": [
+            "moderate",
+            "severe"
+          ]
+        },
         "action": {
-          "type": "proceed",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "No encoded dose-modification criterion was triggered by the entered data."
+          "recommendation": "Table 3 suggests reducing the initial fluorouracil dose by one third for moderate or one half for severe hepatic impairment. Resolve the broad exclusion and any contraindicating laboratory values first; do not infer a new starting dose.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Table 3 suggests reducing the initial fluorouracil dose by one third for moderate or one half for severe hepatic impairment. Resolve the broad exclusion and any contraindicating laboratory values first; do not infer a new starting dose.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Entered values meet the encoded Day 1 parameters and do not trigger an encoded modification."
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 3
+        }
       },
       {
-        "rule_id": "PANITUMUMAB_RASH_G3",
-        "field": "rash_grade",
-        "operator": ">=",
-        "value": 3,
+        "rule_id": "FIVEFU_SEVERE_RENAL",
+        "when": {
+          "field": "severe_renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Consider fluorouracil reduction in severe renal impairment; this source does not quantify it.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Consider fluorouracil reduction in severe renal impairment; this source does not quantify it.",
+        "source": {
+          "document": "NCCP 00448 v4b",
+          "page": 4,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "FIVEFU_CARDIAC",
+        "when": {
+          "field": "suspected_fluoropyrimidine_cardiotoxicity",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "withhold",
           "components": [
-            "panitumumab"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Withhold panitumumab and follow the protocol dermatologic toxicity pathway."
+          "recommendation": "Urgent assessment; withhold fluorouracil while suspected cardiotoxicity is investigated. No automated rechallenge."
         },
+        "explanation": "Urgent assessment; withhold fluorouracil while suspected cardiotoxicity is investigated. No automated rechallenge.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold panitumumab and follow the protocol dermatologic toxicity pathway."
+          "document": "NCCP 00448 v4b",
+          "page": 8,
+          "url": "https://assets.hse.ie/media/documents/448_v4b_Panitumumab_plus_FOLFIRI.pdf"
+        }
       },
       {
-        "rule_id": "PANITUMUMAB_LOW_MAG",
-        "field": "magnesium_grade",
-        "operator": ">=",
-        "value": 3,
+        "rule_id": "ECOG2_COMBINATION_REVIEW",
+        "when": {
+          "field": "ecog",
+          "operator": "==",
+          "value": 2
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "panitumumab"
           ],
-          "recommendation": "Correct magnesium and obtain consultant review before treatment."
+          "show_in_dose_actions": true,
+          "recommendation": "Assess benefit/risk specifically at ECOG 2: a positive balance for panitumumab plus chemotherapy is not established in the SmPC."
         },
+        "explanation": "ECOG 2 combination treatment needs individual benefit/risk review.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Correct magnesium and obtain consultant review before treatment."
-      },
-      {
-        "rule_id": "PANITUMUMAB_INFUSION_G3",
-        "field": "infusion_reaction_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "panitumumab"
-          ],
-          "recommendation": "Permanently discontinue panitumumab for a severe infusion reaction."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Permanently discontinue panitumumab for a severe infusion reaction."
+          "document": "Vectibix SmPC",
+          "page": "section 4.4",
+          "url": "https://www.medicines.org.uk/emc/product/6178/smpc"
+        }
       }
     ]
   },
@@ -1144,7 +2399,7 @@
       "max": 999,
       "step": 1,
       "demo_value": 2,
-      "input_role": "context"
+      "input_role": "monitoring"
     },
     "hypersensitivity": {
       "label": "Known hypersensitivity to regimen components",
@@ -1230,49 +2485,22 @@
       "input_role": "decision"
     },
     "crcl_ml_min": {
-      "label": "Creatinine clearance category",
-      "type": "select",
+      "label": "Verified creatinine clearance (monitoring)",
+      "type": "number",
       "required": false,
-      "demo_value": "renal_10_plus",
-      "options": [
-        {
-          "value": "renal_0_9",
-          "label": "<10 mL/min",
-          "decision_value": 4,
-          "range_min_inclusive": 0,
-          "range_max_inclusive": 9
-        },
-        {
-          "value": "renal_10_plus",
-          "label": ">=10 mL/min",
-          "decision_value": 10,
-          "range_min_inclusive": 10,
-          "range_max_inclusive": null
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis - use the protocol-specific dialysis pathway / specialist review",
-          "decision_value": 0,
-          "sets_fields": {
-            "haemodialysis": true
-          }
-        }
-      ],
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation.",
-      "input_role": "decision"
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "input_role": "monitoring",
+      "demo_value": 90,
+      "always_show": true
     },
     "haemodialysis": {
-      "label": "Haemodialysis",
+      "label": "Receiving haemodialysis",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "visible": false,
-      "derived_from": "crcl_ml_min",
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "bilirubin_ratio_uln": {
       "label": "Bilirubin (×ULN)",
@@ -1302,27 +2530,6 @@
       "max": 5000,
       "step": 1,
       "demo_value": 25,
-      "input_role": "decision"
-    },
-    "hepatic_impairment_severity": {
-      "label": "Hepatic impairment severity",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "none",
-          "label": "None / not clinically impaired"
-        },
-        {
-          "value": "moderate",
-          "label": "Moderate"
-        },
-        {
-          "value": "severe",
-          "label": "Severe"
-        }
-      ],
-      "demo_value": "none",
       "input_role": "decision"
     },
     "diarrhoea_current_grade": {
@@ -1525,7 +2732,7 @@
       "input_role": "decision"
     },
     "grade4_neutropenia_with_grade2_fever": {
-      "label": "Grade 4 neutropenia with fever grade ≥2",
+      "label": "Previous grade 4 neutropenia with grade ≥2 fever (next-dose planning)",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -1538,15 +2745,8 @@
       "demo_value": false,
       "input_role": "decision"
     },
-    "ugt1a1_homozygous_28": {
-      "label": "Known homozygous UGT1A1*28 genotype",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
     "rash_grade": {
-      "label": "Acneiform/dermatologic toxicity grade",
+      "label": "Current panitumumab skin toxicity grade",
       "type": "select",
       "required": false,
       "ui_section": "clinical",
@@ -1554,7 +2754,7 @@
       "ctcae_version": "5.0",
       "ctcae_category": "rash_acneiform",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess papules/pustules, body-surface area, pruritus/tenderness, psychosocial and functional impact, and local or extensive superinfection.",
+      "assessment_guidance": "Grade the dermatological reaction clinically, not acne alone. Record the number of severe episodes and response after withholding. Blistering, skin detachment or infection requires urgent assessment.",
       "options": [
         {
           "value": 0,
@@ -1585,50 +2785,6 @@
           "label": "Grade 4",
           "ctcae_grade": 4,
           "description": "Life-threatening consequences, or extensive superinfection requiring IV antibiotics."
-        }
-      ],
-      "input_role": "decision"
-    },
-    "magnesium_grade": {
-      "label": "Hypomagnesaemia grade",
-      "type": "select",
-      "required": false,
-      "ui_section": "labs",
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "hypomagnesaemia",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use the measured serum magnesium and local lower limit of normal; assess symptoms, ECG effects and the need for oral or IV replacement.",
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "Serum magnesium at or above the local lower limit of normal."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Below the lower limit of normal to 0.5 mmol/L."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Below 0.5 to 0.4 mmol/L."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Below 0.4 to 0.3 mmol/L."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Below 0.3 mmol/L or life-threatening consequences."
         }
       ],
       "input_role": "decision"
@@ -1676,6 +2832,279 @@
         }
       ],
       "input_role": "decision"
+    },
+    "ras_status": {
+      "label": "Validated tumour RAS status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "wild_type",
+          "label": "RAS wild type confirmed"
+        },
+        {
+          "value": "mutant",
+          "label": "RAS mutation"
+        },
+        {
+          "value": "unknown",
+          "label": "Unknown / not confirmed"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "wild_type"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "interstitial_lung_disease": {
+      "label": "Confirmed interstitial pneumonitis / pulmonary fibrosis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "unexplained_respiratory_symptoms": {
+      "label": "New or worsening unexplained respiratory symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ocular_symptoms": {
+      "label": "New eye pain, redness, light sensitivity or blurred vision",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ulcerative_keratitis": {
+      "label": "Ulcerative keratitis confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "electrolyte_abnormality": {
+      "label": "Electrolyte abnormality requiring correction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "renal_impairment": {
+      "label": "Renal impairment present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_renal_impairment": {
+      "label": "Severe renal impairment assessed clinically",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment_category": {
+      "label": "Clinical hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "magnesium_mmol_l": {
+      "label": "Magnesium",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mmol/L",
+      "input_role": "monitoring",
+      "demo_value": 0.8,
+      "assessment_guidance": "Interpret against the local range and symptoms. Set electrolyte abnormality when correction is needed; this regimen has no source-defined numerical hold threshold.",
+      "always_show": true
+    },
+    "skin_occurrence": {
+      "label": "Number of episodes of grade ≥3 skin toxicity",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "skin_doses_withheld": {
+      "label": "Doses withheld for this skin episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "skin_failed_recovery": {
+      "label": "Not recovered after the planned 1–2 dose withholding period",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_skin_complication": {
+      "label": "Severe skin infection, blistering or skin detachment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_fluoropyrimidine_cardiotoxicity": {
+      "label": "Suspected fluoropyrimidine cardiotoxicity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_irinotecan_level": {
+      "label": "Current irinotecan dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "always_show": true
+    },
+    "current_fluorouracil_bolus_level": {
+      "label": "Current fluorouracil bolus dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "always_show": true
+    },
+    "current_fluorouracil_infusion_level": {
+      "label": "Current fluorouracil infusion dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "always_show": true
     }
   },
   "supportive_care": {
@@ -1683,11 +3112,18 @@
     "script_id": "nccp-parenteral-moderate",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Panitumumab is minimal risk and FOLFIRI is driven by irinotecan, which is moderate risk.",
+    "mapping_basis": "Panitumumab is low risk; the chemotherapy combination is driven by irinotecan, which is moderate risk (NCCP V6 table 7).",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
+    "premedication": "Not routinely required for panitumumab; local policy after reactions. Chemotherapy antiemetics follow NCCP/local regimen risk.",
+    "other_supportive_care": [
+      "Pre-emptive skin care, sun protection and prescribed therapy under local EGFR policy.",
+      "Monitor magnesium, calcium and potassium before/during treatment and for up to 8 weeks after; NCCP specifies monthly electrolytes for 2 months post treatment.",
+      "Review eye symptoms, lung symptoms, skin infection and diarrhoea; give urgent contact plan.",
+      "NCCP prophylactic atropine 250 micrograms SC; assess contraindications including glaucoma. Give a separate delayed-diarrhoea plan."
+    ]
   }
 }

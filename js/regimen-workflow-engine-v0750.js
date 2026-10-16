@@ -593,7 +593,7 @@
           <div><span>Supportive care</span><h3>${esc(risk.label||supportive.label||"Antiemetic support")}</h3><p>${esc(supportive.label||supportive.message||"Regimen-derived supportive care")}</p></div>
           ${moduleStatus(supportive.status)}
           ${renderSupportiveScript(manifest)}
-          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||root.SACTCheckPatientAssets?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${root.SACTCheckPatientAssets?.relativePath?.(activeProtocol,'supportive-care')?"Open oral supportive-care review":"Open prescribing support"}</button>
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||root.SACTCheckPatientAssets?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${root.SACTCheckPatientAssets?.relativePath?.(activeProtocol,'supportive-care')?"Open supportive-care review":"Open prescribing support"}</button>
           <a class="workflow-source-link" href="${esc(dataCache?.sources?.nccp_antiemetic_v8?.url||"")}" target="_blank" rel="noopener noreferrer">NCCP antiemetic source ↗</a>
         </article>
 

@@ -44,7 +44,7 @@ const records = files(protocolRoot).filter(file => !file.includes(`${path.sep}_t
   const inputs = organInputs(protocol);
   const rules = organRules(protocol);
   const issues = [];
-  const superseded = ['00586','00623'].includes(code) && m.validation?.audit_release === '0.83.4';
+  const superseded = (['00586','00623'].includes(code) && m.validation?.audit_release === '0.83.4') || (code === '00225' && m.validation?.audit_release === '0.83.5');
   if (inScope) {
     if (!rec) issues.push('missing_reconciliation_metadata');
     if (rec?.release !== '0.59.0') issues.push('wrong_reconciliation_release');
@@ -64,7 +64,7 @@ const records = files(protocolRoot).filter(file => !file.includes(`${path.sep}_t
     in_v0590_scope: inScope,
     encoding_maturity: m.encoding_maturity?.level || 'not_formally_audited',
     resolution: rec?.resolution || '',
-    ...(superseded ? {superseded_by_release:'0.83.4',replacement_evidence:'validation/colorectal-v0834/source-map.json'} : {}),
+    ...(superseded ? {superseded_by_release:m.validation.audit_release,replacement_evidence:code==='00225'?'validation/colorectal-v0835/source-map.json':'validation/colorectal-v0834/source-map.json'} : {}),
     source_url: rec?.source_url || m.source_url || '',
     organ_inputs: inputs,
     organ_rules: rules,

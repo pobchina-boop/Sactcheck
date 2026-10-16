@@ -11,8 +11,8 @@
     "short_title": "Panitumumab 6 mg/kg Therapy",
     "indication": "RAS wild-type metastatic colorectal cancer after fluoropyrimidine, oxaliplatin and irinotecan.",
     "source_url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 4,
+    "sactcheck_encoding_version": "0.83.5",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -45,7 +45,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
+      "audit_release": "0.83.5",
+      "software_validation_evidence": "validation/colorectal-v0835/VALIDATION.md"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -62,11 +64,14 @@
     },
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "label": "Source-mapped rules · independent clinical/pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.83.5",
+      "audit_date": "2026-10-16",
+      "scope_note": "Published version audited; HSE document migration caused intermittent retrieval failures. Versioned source and table-level indexed extracts used. Reconfirm latest PDF before clinical adoption."
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -86,27 +91,21 @@
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00225-v6"
+    "canonical_protocol_id": "nccp-00225-v6",
+    "source_checked_date": "2026-10-16"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00225 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "disclaimer": "Source-mapped NCCP 00225 v6; independent clinical/pharmacy validation remains pending. Use the current source and individual clinical judgement.",
     "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
-      "indication_id": "00225a",
+      "indication_id": "00225c",
       "description": "RAS wild-type metastatic colorectal cancer after fluoropyrimidine, oxaliplatin and irinotecan."
     }
   ],
-  "treatment": {
-    "cycle_length_days": 14,
-    "schedule_summary": "Panitumumab 6 mg/kg Therapy",
-    "drugs": [
-      "panitumumab"
-    ]
-  },
   "input_definitions": {
     "ecog": {
       "label": "ECOG performance status",
@@ -134,8 +133,8 @@
           "label": "4"
         }
       ],
-      "demo_value": 0,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": 0
     },
     "hypersensitivity": {
       "label": "Known hypersensitivity to a regimen component",
@@ -159,7 +158,7 @@
       "input_role": "decision"
     },
     "acneiform_rash_grade": {
-      "label": "Acneiform rash grade",
+      "label": "Current panitumumab skin toxicity grade",
       "type": "select",
       "required": false,
       "options": [
@@ -195,7 +194,7 @@
         }
       ],
       "demo_value": 0,
-      "assessment_guidance": "Grade by body-surface area, symptoms, psychosocial impact and impact on activities of daily living.",
+      "assessment_guidance": "Grade the dermatological reaction clinically, not acne alone. Record the number of severe episodes and response after withholding. Blistering, skin detachment or infection requires urgent assessment.",
       "ctcae_version": "5.0",
       "ctcae_category": "rash_acneiform",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
@@ -245,14 +244,182 @@
       "input_role": "decision"
     },
     "magnesium_mmol_l": {
-      "label": "Serum magnesium",
+      "label": "Magnesium",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 0.8,
       "unit": "mmol/L",
-      "input_role": "decision"
+      "input_role": "monitoring",
+      "demo_value": 0.8,
+      "assessment_guidance": "Interpret against the local range and symptoms. Set electrolyte abnormality when correction is needed; this regimen has no source-defined numerical hold threshold.",
+      "always_show": true
+    },
+    "ras_status": {
+      "label": "Validated tumour RAS status",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "wild_type",
+          "label": "RAS wild type confirmed"
+        },
+        {
+          "value": "mutant",
+          "label": "RAS mutation"
+        },
+        {
+          "value": "unknown",
+          "label": "Unknown / not confirmed"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "wild_type"
+    },
+    "interstitial_lung_disease": {
+      "label": "Confirmed interstitial pneumonitis / pulmonary fibrosis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "unexplained_respiratory_symptoms": {
+      "label": "New or worsening unexplained respiratory symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ocular_symptoms": {
+      "label": "New eye pain, redness, light sensitivity or blurred vision",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ulcerative_keratitis": {
+      "label": "Ulcerative keratitis confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "electrolyte_abnormality": {
+      "label": "Electrolyte abnormality requiring correction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "renal_impairment": {
+      "label": "Renal impairment present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_renal_impairment": {
+      "label": "Severe renal impairment assessed clinically",
+      "type": "boolean",
+      "required": false,
+      "input_role": "monitoring",
+      "demo_value": false
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment_category": {
+      "label": "Clinical hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "skin_occurrence": {
+      "label": "Number of episodes of grade ≥3 skin toxicity",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "skin_doses_withheld": {
+      "label": "Doses withheld for this skin episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "skin_failed_recovery": {
+      "label": "Not recovered after the planned 1–2 dose withholding period",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_skin_complication": {
+      "label": "Severe skin infection, blistering or skin detachment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -287,8 +454,31 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
+        "rule_id": "RAS_EXCLUSION",
+        "when": {
+          "field": "ras_status",
+          "operator": "in",
+          "value": [
+            "mutant",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Do not give panitumumab without validated RAS wild-type status."
+        },
+        "explanation": "Do not give panitumumab without validated RAS wild-type status.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf"
+        }
+      },
+      {
+        "rule_id": "ECOG_ELIGIBILITY",
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -297,19 +487,20 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "panitumumab"
           ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "recommendation": "ECOG exceeds the NCCP 0–2 eligibility range; review treatment suitability.",
+          "show_in_dose_actions": true
         },
+        "explanation": "ECOG exceeds the NCCP 0–2 eligibility range; review treatment suitability.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "document": "NCCP 00225 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf"
+        }
       },
       {
-        "id": "HYPERSENSITIVITY_EXCLUSION",
-        "priority": 10,
+        "rule_id": "HYPERSENSITIVITY",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -318,19 +509,442 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "panitumumab"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "recommendation": "Known hypersensitivity to a regimen medicine or excipient is an exclusion."
         },
+        "explanation": "Known hypersensitivity to a regimen medicine or excipient is an exclusion.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+          "document": "NCCP 00225 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf"
+        }
       },
       {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "ILD_CONFIRMED",
+        "when": {
+          "field": "interstitial_lung_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Do not administer panitumumab with confirmed interstitial lung disease / pulmonary fibrosis. Discontinue for confirmed treatment-emergent ILD."
+        },
+        "explanation": "Do not administer panitumumab with confirmed interstitial lung disease / pulmonary fibrosis. Discontinue for confirmed treatment-emergent ILD.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf"
+        }
+      },
+      {
+        "rule_id": "RESPIRATORY_HOLD",
+        "when": {
+          "field": "unexplained_respiratory_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Withhold and investigate new or worsening respiratory symptoms before further treatment with the implicated medicines."
+        },
+        "explanation": "Withhold and investigate new or worsening respiratory symptoms before further treatment with the implicated medicines.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf"
+        }
+      },
+      {
+        "rule_id": "SKIN_CURRENT_HOLD",
+        "when": {
+          "field": "acneiform_rash_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Withhold panitumumab for 1–2 doses; assess severity, recurrence, complications and recovery before any restart."
+        },
+        "explanation": "Withhold panitumumab for 1–2 doses; assess severity, recurrence, complications and recovery before any restart.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "SKIN_FOURTH_EPISODE",
+        "when": {
+          "field": "skin_occurrence",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Discontinue panitumumab after the fourth grade ≥3 skin-toxicity episode."
+        },
+        "explanation": "Discontinue panitumumab after the fourth grade ≥3 skin-toxicity episode.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "SKIN_FAILED_RECOVERY",
+        "when": {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Discontinue panitumumab if the skin reaction has not recovered after the planned withholding period."
+        },
+        "explanation": "Discontinue panitumumab if the skin reaction has not recovered after the planned withholding period.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "SKIN_RECOVERED_1",
+        "when": {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 100% of original dose. Confirm suitability and previous individual modifications.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 100% of original dose. Confirm suitability and previous individual modifications.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "SKIN_RECOVERED_2",
+        "when": {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 80% of original dose. Confirm suitability and previous individual modifications.",
+          "component_changes": {
+            "panitumumab": {
+              "dose_percent_of_original": 80
+            }
+          }
+        },
+        "explanation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 80% of original dose. Confirm suitability and previous individual modifications.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "SKIN_RECOVERED_3",
+        "when": {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 60% of original dose. Confirm suitability and previous individual modifications.",
+          "component_changes": {
+            "panitumumab": {
+              "dose_percent_of_original": 60
+            }
+          }
+        },
+        "explanation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 60% of original dose. Confirm suitability and previous individual modifications.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "SKIN_COMPLICATION",
+        "when": {
+          "field": "severe_skin_complication",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Urgent assessment of severe infected, blistering or peeling skin; withhold panitumumab and consider discontinuation under the SmPC."
+        },
+        "explanation": "Urgent assessment of severe infected, blistering or peeling skin; withhold panitumumab and consider discontinuation under the SmPC.",
+        "source": {
+          "document": "Vectibix SmPC (supplementary safety source)",
+          "page": "sections 4.2–4.6",
+          "url": "https://www.medicines.org.uk/emc/product/6178/smpc"
+        }
+      },
+      {
+        "rule_id": "INFUSION_MILD_MODERATE",
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": "in",
+          "value": [
+            1,
+            2
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Reduce panitumumab infusion rate and retain the lower rate for subsequent infusions; treat the reaction according to severity and local policy.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Reduce panitumumab infusion rate and retain the lower rate for subsequent infusions; treat the reaction according to severity and local policy.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf"
+        }
+      },
+      {
+        "rule_id": "INFUSION_SEVERE",
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Permanently discontinue panitumumab for a severe or life-threatening infusion reaction; urgent treatment as appropriate."
+        },
+        "explanation": "Permanently discontinue panitumumab for a severe or life-threatening infusion reaction; urgent treatment as appropriate.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf"
+        }
+      },
+      {
+        "rule_id": "EYE_SYMPTOMS",
+        "when": {
+          "field": "ocular_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Prompt ophthalmology assessment for possible keratitis; assess risk before continuing panitumumab.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Prompt ophthalmology assessment for possible keratitis; assess risk before continuing panitumumab.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf"
+        }
+      },
+      {
+        "rule_id": "ULCERATIVE_KERATITIS",
+        "when": {
+          "field": "ulcerative_keratitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Interrupt panitumumab and obtain ophthalmology/consultant review; source permits interruption or discontinuation for confirmed ulcerative keratitis."
+        },
+        "explanation": "Interrupt panitumumab and obtain ophthalmology/consultant review; source permits interruption or discontinuation for confirmed ulcerative keratitis.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf"
+        }
+      },
+      {
+        "rule_id": "ELECTROLYTES",
+        "when": {
+          "field": "electrolyte_abnormality",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "Correct magnesium, calcium and potassium as indicated. NCCP/SmPC do not specify a numerical panitumumab hold threshold; use clinical severity and local policy.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Correct magnesium, calcium and potassium as indicated. NCCP/SmPC do not specify a numerical panitumumab hold threshold; use clinical severity and local policy.",
+        "source": {
+          "document": "Vectibix SmPC (supplementary safety source)",
+          "page": "sections 4.2–4.6",
+          "url": "https://www.medicines.org.uk/emc/product/6178/smpc"
+        }
+      },
+      {
+        "rule_id": "ORGAN_FUNCTION",
+        "when": {
+          "any": [
+            {
+              "field": "renal_impairment",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "hepatic_impairment_category",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate",
+                "severe"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "panitumumab"
+          ],
+          "recommendation": "NCCP table 1 expects no renal or dialysis adjustment, no mild/moderate hepatic adjustment and no expected severe hepatic adjustment. This does not establish overall treatment suitability."
+        },
+        "explanation": "NCCP table 1 expects no renal or dialysis adjustment, no mild/moderate hepatic adjustment and no expected severe hepatic adjustment. This does not establish overall treatment suitability.",
+        "source": {
+          "document": "NCCP 00225 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "PREGNANCY_LACTATION",
         "when": {
           "any": [
             {
@@ -346,80 +960,19 @@
           ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "panitumumab"
           ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "recommendation": "Urgent specialist benefit/risk discussion. Avoid breastfeeding during panitumumab and for 2 months after the last dose; pregnancy requires counselling. Do not treat this as routine clearance.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Urgent specialist benefit/risk discussion. Avoid breastfeeding during panitumumab and for 2 months after the last dose; pregnancy requires counselling. Do not treat this as routine clearance.",
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
-      },
-      {
-        "id": "EGFR_RASH_G3_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "acneiform_rash_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse acneiform rash requires withholding and occurrence-specific dose modification."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse acneiform rash requires withholding and occurrence-specific dose modification."
-      },
-      {
-        "id": "EGFR_INFUSION_REACTION_G3_PLUS",
-        "priority": 10,
-        "when": {
-          "field": "infusion_reaction_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or 4 infusion reaction requires permanent discontinuation."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or 4 infusion reaction requires permanent discontinuation."
-      },
-      {
-        "id": "HYPOMAGNESAEMIA",
-        "priority": 8,
-        "when": {
-          "field": "magnesium_mmol_l",
-          "operator": "<",
-          "value": 0.5
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Severe hypomagnesaemia requires correction and treatment review before further anti-EGFR therapy."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Severe hypomagnesaemia requires correction and treatment review before further anti-EGFR therapy."
+          "document": "Vectibix SmPC (supplementary safety source)",
+          "page": "sections 4.2–4.6",
+          "url": "https://www.medicines.org.uk/emc/product/6178/smpc"
+        }
       }
     ]
   },
@@ -436,18 +989,42 @@
     "Treatment-specific toxicity monitoring before each administration/cycle"
   ],
   "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
+    "NCCP table 1 organ function, table 2 skin recurrence/recovery, table 3 infusion/ILD/ocular actions; source-mapped v0.83.5."
   ],
   "supportive_care": {
-    "emetogenic_risk": "minimal",
-    "script_id": "nccp-minimal-no-routine-prophylaxis",
+    "emetogenic_risk": "low",
+    "script_id": "nccp-parenteral-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "mapping_basis": "NCCP SACT Antiemetic Guidance V6 (2025), table 7, and NCCP 00225 v6 both classify panitumumab as low risk.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
+    "premedication": "Not routinely required for panitumumab; local policy after reactions. Chemotherapy antiemetics follow NCCP/local regimen risk.",
+    "other_supportive_care": [
+      "Pre-emptive skin care, sun protection and prescribed therapy under local EGFR policy.",
+      "Monitor magnesium, calcium and potassium before/during treatment and for up to 8 weeks after; NCCP specifies monthly electrolytes for 2 months post treatment.",
+      "Review eye symptoms, lung symptoms, skin infection and diarrhoea; give urgent contact plan."
+    ]
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "fourteen_day_cycle",
+      "cycle_length_days": 14,
+      "administration": [
+        {
+          "day": 1,
+          "drug": "panitumumab",
+          "dose": {
+            "value": 6,
+            "unit": "mg/kg"
+          },
+          "route": "IV infusion",
+          "notes": "First dose usually 60 minutes; >1000 mg over 90 minutes. Subsequent doses 30–60 minutes if tolerated. 0.9% NaCl, 0.22 micron filter; incompatible with glucose."
+        }
+      ]
+    }
+  ]
 }
