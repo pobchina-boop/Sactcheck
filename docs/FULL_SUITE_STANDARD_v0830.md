@@ -14,7 +14,7 @@ connected to the correct protocol and its limitations are visible.
 | Interactions and extravasation | Medicines resolve consistently; oral medicines do not receive infusion guidance; unmapped data remains explicit. |
 | Other suite modules | Existing applicable services, including sustainability, remain accessible; available evidence is not overstated. |
 | Patient reference | Substantive plain-language chapters, practical actions, FAQs, medicine mechanisms, sources and contextualised evidence. |
-| Timeline | Correct cycle length, medicine days, rest periods, optional schedules, date rollover and clear/reset controls. |
+| Cycle graph | Use the 00568 Day 1–X axis, colour bands, broad symptom patterns and source context. Show the full graph on the portal and knowledge page without date entry or schedule selection; state alternative prescribed schedules in plain text. |
 | Visual guide | Regimen-specific anatomical map, clear callouts and practical support; readable, unclipped print output. |
 | Passport | Medicines separately identified, one cycle per page, symptom reporting and urgent-contact guidance; no invented validation status. |
 | Contact card and QR | Correct canonical portal, readable print layout, no encoded patient details. |

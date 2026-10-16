@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.83.0';
-  const CONTENT_RELEASE='0.83.0';
+  const RELEASE='0.83.1';
+  const CONTENT_RELEASE='0.83.1';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00209':{title:'Modified FOLFOX-6',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
