@@ -51,7 +51,8 @@
         return response.json();
       })
       .then(async payload => {
-        const response = await fetch("data/regimen-knowledge-base-v0832-addendum.json", { cache: "no-store" });
+        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json"]) {
+        const response = await fetch(extraUrl, { cache: "no-store" });
         if (!response.ok) throw new Error(`Could not load colorectal knowledge (${response.status}).`);
         const extra = await response.json();
         for (const [collection, key] of [["regimen_profiles", "protocol_id"], ["evidence_records", "evidence_id"]]) {
@@ -59,6 +60,7 @@
             const i = payload[collection].findIndex(existing => existing[key] === item[key]);
             if (i < 0) payload[collection].push(item); else payload[collection][i] = item;
           }
+        }
         }
         data = payload;
         return data;

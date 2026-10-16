@@ -4,7 +4,7 @@ const Engine = require('../js/assessment-engine.js');
 const Validator = require('../js/protocol-validator.js');
 
 const cases = [
-  ['protocols/gastrointestinal/00216-capecitabine-monotherapy.json', 'nccp-00216-v8', 'CRCL_LT30', {crcl_ml_min: 25}],
+  ['protocols/gastrointestinal/00216-capecitabine-monotherapy.json', 'nccp-00216-v8', 'RENAL_LT30', {crcl_ml_min: 25}],
   ['protocols/gastrointestinal/00660-5fu-folinic-acid.json', 'nccp-00660-v2b', 'ANC_DAY1_HOLD', {anc_x10e9_l: 0.8}],
   ['protocols/gastrointestinal/00555-folfoxiri.json', 'nccp-00555-v6b', 'CRCL_LT30', {crcl_ml_min: 20}],
   ['protocols/gastrointestinal/00244-regorafenib.json', 'nccp-00244-v5', 'LIVER_G4', {alt_ast_ratio_uln: 25}],

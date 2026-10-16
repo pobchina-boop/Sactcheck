@@ -96,7 +96,7 @@ for (const { file, data } of gi) {
   const metadata = data.metadata || {};
   assert(!/placeholder|draft/i.test(String(data.status || '')), `${code} remains a placeholder or draft.`);
   assert.strictEqual(data.status, 'encoded_prototype_pending_clinical_and_pharmacy_validation', `${code} lacks active encoded-prototype status.`);
-  assert(['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
+  assert(['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
   assert.strictEqual(metadata.partial_assessment_supported, true, `${code} does not declare single-entry support.`);
   assert(/^https:\/\/healthservice\.hse\.ie\/documents\//.test(metadata.source_url || ''), `${code} does not link directly to an official HSE/NCCP source PDF.`);
   assert(metadata.gi_subgroup, `${code} lacks a GI subgroup.`);
@@ -128,12 +128,17 @@ for (const { file, data } of gi) {
     if (trueGradeField(field, definition)) {
       ctcaeFields += 1;
       assert.strictEqual(definition.type, 'select', `${code}/${field} CTCAE input must be a selector.`);
-      assert.strictEqual(definition.ctcae_version, '5.0', `${code}/${field} lacks CTCAE v5.0 metadata.`);
+      const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
+      assert.strictEqual(definition.ctcae_version, sourceDiarrhoea?'4.0':'5.0', `${code}/${field} has wrong source grading metadata.`);
+      if(sourceDiarrhoea) assert.match(definition.ctcae_source_url,/healthservice.hse.ie/);
       assert(definition.assessment_guidance, `${code}/${field} lacks practical assessment guidance.`);
       const grades = new Set((definition.options || []).map(item => Number(item.value)));
-      [0, 1, 2, 3, 4].forEach(grade => assert(grades.has(grade), `${code}/${field} lacks Grade ${grade}.`));
+      const sourceHfs=['00216','00586','00623'].includes(code)&&['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field);
+      const expectedGrades=sourceHfs?[0,1,2,3]:[0,1,2,3,4];
+      expectedGrades.forEach(grade => assert(grades.has(grade), `${code}/${field} lacks Grade ${grade}.`));
+      if(sourceHfs) assert(!grades.has(4));
       const guide = CTCAE.guide({ ...definition, id: field });
-      assert(guide?.grades?.length >= 5, `${code}/${field} has no beside-control grade guide.`);
+      assert(guide?.grades?.length >= expectedGrades.length, `${code}/${field} has no beside-control grade guide.`);
       guide.grades.slice(0, 5).forEach(item => assert(item.description, `${code}/${field}/Grade ${item.grade} lacks an explanation.`));
     }
     if (/crcl|creatinine clearance|\begfr\b|renal function/.test(text)) {

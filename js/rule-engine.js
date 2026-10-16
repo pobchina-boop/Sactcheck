@@ -175,6 +175,11 @@
     if (!field) throw new Error("A leaf rule condition is missing its field name.");
 
     const actual = inputs[field];
+    // Explicit presence tests are decidable even when the operand is absent.
+    // All ordinary comparisons retain tri-state missing-data behaviour.
+    if (["exists", "missing", "not_exists"].includes(String(node.operator).toLowerCase())) {
+      return { state: compare(actual, node.operator, node.value), missingFields: [] };
+    }
     if (!hasValue(actual)) {
       return { state: "unknown", missingFields: [field] };
     }

@@ -498,6 +498,10 @@
 
     const percent = merged.dose_percent_of_original ?? merged.dose_percent;
     if (percent != null && Number.isFinite(Number(percent))) {
+      if (merged.dose_basis === "documented_starting_dose") {
+        return { kind: "percent", label: `Use ${formatNumber(Number(percent))}% of documented starting dose`,
+          percent: Number(percent), dose: `${formatNumber(Number(percent))}% of documented starting dose per administration; confirm prior reductions and pharmacy tablet banding`, precise: true };
+      }
       const starting = startingDoseFor(model, component);
       const parsed = parseDoseText(starting);
       return {
@@ -665,7 +669,8 @@
       // Resolve simultaneous reductions by the lower component dose, never by
       // rule order or addition of separate reductions.
       const dose = parseDoseText(parsed.dose);
-      if (dose && dose.value >= 0) rank += 1 / (1 + dose.value);
+      if (parsed.kind === "percent" && Number.isFinite(parsed.percent)) rank += 1 / (1 + parsed.percent);
+      else if (dose && dose.value >= 0) rank += 1 / (1 + dose.value);
     }
 
     return {

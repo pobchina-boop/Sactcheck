@@ -150,13 +150,18 @@ for (const { file, data } of protocols) {
     if (trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
-      assert.equal(def.ctcae_version, '5.0', `${code}/${field} lacks CTCAE v5.0 declaration`);
+      const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
+      assert.equal(def.ctcae_version, sourceDiarrhoea ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
+      if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
       assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
-      [0, 1, 2, 3, 4].forEach(grade => assert(grades.has(grade), `${code}/${field} lacks Grade ${grade}`));
+      const sourceHfs = ['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field);
+      const expectedGrades = sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
+      expectedGrades.forEach(grade => assert(grades.has(grade), `${code}/${field} lacks Grade ${grade}`));
+      if(sourceHfs) assert(!grades.has(4), 'HFS has no grade 4 in the source table');
       const guide = ctcae.guide({ ...def, id: field });
-      assert(guide && guide.grades.length >= 5, `${code}/${field} has no rendered CTCAE grade guide`);
+      assert(guide && guide.grades.length >= expectedGrades.length, `${code}/${field} has no rendered CTCAE grade guide`);
       guide.grades.forEach(item => assert(item.description, `${code}/${field} Grade ${item.grade} has no explanation`));
       const fieldText = `${field} ${def.label || ''}`.toLowerCase();
       if (/non[-_ ]?ha?em|non[-_ ]?hemat|non[-_ ]?haemat/.test(fieldText)) {

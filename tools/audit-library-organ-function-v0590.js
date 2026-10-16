@@ -44,13 +44,14 @@ const records = files(protocolRoot).filter(file => !file.includes(`${path.sep}_t
   const inputs = organInputs(protocol);
   const rules = organRules(protocol);
   const issues = [];
+  const superseded = ['00586','00623'].includes(code) && m.validation?.audit_release === '0.83.4';
   if (inScope) {
     if (!rec) issues.push('missing_reconciliation_metadata');
     if (rec?.release !== '0.59.0') issues.push('wrong_reconciliation_release');
     if (rec?.source_reconciled !== true) issues.push('source_reconciled_not_true');
     if (m.encoding_maturity?.level !== 'source_reconciled_rule_encoding') issues.push('wrong_encoding_maturity');
-    if (m.validation?.rule_level_source_reconciliation_status !== 'source_reconciled_organ_function_v0590') issues.push('wrong_validation_status');
-    if (rec?.resolution === 'structured_rules' && !rules.some(id => String(id).startsWith('OF590_'))) issues.push('structured_resolution_without_v0590_rule');
+    if (m.validation?.rule_level_source_reconciliation_status !== (superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590')) issues.push('wrong_validation_status');
+    if (rec?.resolution === 'structured_rules' && (superseded ? !['RENAL_LT30','HEPATOTOXICITY'].every(id => protocol.rule_engine.rules.some(r=>r.rule_id===id && r.source?.url===m.source_url && r.source?.page)) : !rules.some(id => String(id).startsWith('OF590_')))) issues.push('structured_resolution_without_v0590_rule');
     if (rec?.resolution === 'source_reviewed_no_prescriptive_adjustment' && rules.some(id => String(id).startsWith('OF590_'))) issues.push('no_prescriptive_resolution_with_artificial_rule');
     if (!['structured_rules', 'source_reviewed_no_prescriptive_adjustment'].includes(rec?.resolution)) issues.push('invalid_resolution');
   }
@@ -63,6 +64,7 @@ const records = files(protocolRoot).filter(file => !file.includes(`${path.sep}_t
     in_v0590_scope: inScope,
     encoding_maturity: m.encoding_maturity?.level || 'not_formally_audited',
     resolution: rec?.resolution || '',
+    ...(superseded ? {superseded_by_release:'0.83.4',replacement_evidence:'validation/colorectal-v0834/source-map.json'} : {}),
     source_url: rec?.source_url || m.source_url || '',
     organ_inputs: inputs,
     organ_rules: rules,

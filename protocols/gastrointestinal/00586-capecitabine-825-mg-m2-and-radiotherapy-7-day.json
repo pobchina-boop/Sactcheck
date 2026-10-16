@@ -8,11 +8,11 @@
     "nccp_version": "3",
     "tumour_group": "Gastrointestinal",
     "title": "Capecitabine 825 mg/m² and Radiotherapy – 7 day",
-    "short_title": "Capecitabine 825 mg/m² and Radiotherapy – 7 day",
+    "short_title": "Capecitabine + radiotherapy",
     "indication": "Locally advanced rectal cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 6,
+    "sactcheck_encoding_version": "0.83.4",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "rectal_anal",
@@ -47,7 +47,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
+      "audit_release": "0.83.4",
+      "audit_date": "2026-10-16"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -88,13 +90,31 @@
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00586-v3"
+    "canonical_protocol_id": "nccp-00586-v3",
+    "regimen_card": {
+      "schema_version": "1.0.0",
+      "contexts": [
+        {
+          "id": "00586a",
+          "indication_id": "00586a",
+          "intent": "advanced_disease",
+          "cycle_length_days": 7,
+          "maximum_cycles": 6
+        }
+      ],
+      "provenance": {
+        "method": "NCCP source schedule review v0.83.4",
+        "reviewed": false,
+        "source_url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+        "note": "00586 specifies maximum 5–6 weekly cycles; confirm individual radiation course."
+      }
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
     "disclaimer": "Decision-support encoding derived from NCCP 00586 Version 3. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
-    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
+    "organ_function_rule_status": "Source mapped in SACTCheck v0.83.4, with declared source discrepancies; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
@@ -104,13 +124,33 @@
   ],
   "treatment": {
     "cycle_length_days": 7,
-    "schedule_summary": "Capecitabine 825 mg/m² and Radiotherapy – 7 day",
+    "schedule_summary": "Concurrent radiotherapy and capecitabine Days 1–5 of each 7-day cycle, maximum 5–6 cycles. Radiation decisions require the radiation oncology plan.",
     "drugs": [
       "capecitabine",
       "radiotherapy"
     ]
   },
   "input_definitions": {
+    "anc_x10e9_l": {
+      "label": "Absolute neutrophil count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 2,
+      "unit": "×10⁹/L",
+      "input_role": "decision"
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelet count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 150,
+      "unit": "×10⁹/L",
+      "input_role": "decision"
+    },
     "ecog": {
       "label": "ECOG performance status",
       "type": "select",
@@ -138,14 +178,8 @@
         }
       ],
       "demo_value": 0,
-      "input_role": "decision"
-    },
-    "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "NCCP eligibility is ECOG 0–1. Outside this range requires consultant review."
     },
     "pregnancy": {
       "label": "Pregnant",
@@ -159,76 +193,6 @@
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "decision"
-    },
-    "anc_x10e9_l": {
-      "label": "Absolute neutrophil count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 2,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "platelets_x10e9_l": {
-      "label": "Platelet count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 150,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "febrile_or_active_infection": {
-      "label": "Fever, febrile neutropenia or active infection requiring treatment",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "other_nonhaem_toxicity_grade": {
-      "label": "Worst relevant non-haematological toxicity",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No other non-haematological adverse event."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "input_role": "decision"
     },
     "dpd_status": {
@@ -256,51 +220,328 @@
       "demo_value": "normal",
       "input_role": "decision"
     },
+    "assessment_type": {
+      "label": "Assessment timing (optional)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first dose"
+        },
+        {
+          "value": "current",
+          "label": "Before a subsequent cycle / dose"
+        },
+        {
+          "value": "within_cycle",
+          "label": "Unscheduled blood check while taking tablets"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "baseline"
+    },
+    "capecitabine_hypersensitivity": {
+      "label": "Hypersensitivity to capecitabine or its excipients",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "history_severe_unexpected_fluoropyrimidine_reaction": {
+      "label": "Previous severe, unexpected fluoropyrimidine reaction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recent_or_concomitant_brivudine": {
+      "label": "Brivudine now or within the previous four weeks",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "haematology_occurrence": {
+      "label": "Occurrence of this blood-count toxicity (including this episode)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 1,
+          "label": "1st occurrence"
+        },
+        {
+          "value": 2,
+          "label": "2nd occurrence"
+        },
+        {
+          "value": 3,
+          "label": "3rd occurrence"
+        },
+        {
+          "value": 4,
+          "label": "4th or later occurrence"
+        }
+      ],
+      "input_role": "decision",
+      "assessment_guidance": "Optional for the immediate hold. Required to select an event-based next dose. Do not count an unknown history as a first event.",
+      "demo_value": 1
+    },
+    "lowest_anc_episode": {
+      "label": "Lowest ANC in the toxicity episode",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "lowest_platelets_episode": {
+      "label": "Lowest platelets in the toxicity episode",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "capecitabine_renal_band": {
+      "label": "Creatinine clearance category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "lt30",
+          "label": "<30 mL/min",
+          "decision_value": 15,
+          "sets_fields": {
+            "haemodialysis": false
+          },
+          "range_min_inclusive": 0,
+          "range_max_exclusive": 30
+        },
+        {
+          "value": "30_50",
+          "label": "30–50 mL/min",
+          "decision_value": 40,
+          "sets_fields": {
+            "haemodialysis": false
+          },
+          "range_min_inclusive": 30,
+          "range_max_inclusive": 50
+        },
+        {
+          "value": "gap_50_51",
+          "label": ">50 to <51 mL/min: source boundary review",
+          "decision_value": 50.5,
+          "sets_fields": {
+            "haemodialysis": false
+          },
+          "range_min_exclusive": 50,
+          "range_max_exclusive": 51
+        },
+        {
+          "value": "51_80",
+          "label": "51–80 mL/min",
+          "decision_value": 60,
+          "sets_fields": {
+            "haemodialysis": false
+          },
+          "range_min_inclusive": 51,
+          "range_max_inclusive": 80
+        },
+        {
+          "value": "gt80",
+          "label": ">80 mL/min",
+          "decision_value": 90,
+          "sets_fields": {
+            "haemodialysis": false
+          },
+          "range_min_exclusive": 80
+        },
+        {
+          "value": "dialysis",
+          "label": "Haemodialysis",
+          "decision_value": null,
+          "sets_fields": {
+            "haemodialysis": true
+          }
+        }
+      ],
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Use verified Cockcroft–Gault creatinine clearance for this source. The band is not a measured value.",
+      "demo_value": "lt30"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "visible": false,
+      "derived_from": "capecitabine_renal_band",
+      "demo_value": false
+    },
+    "capecitabine_bilirubin_uln": {
+      "label": "Bilirubin (×ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "capecitabine_alt_ast_uln": {
+      "label": "ALT or AST (highest ×ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "hepatic_impairment_severity": {
+      "label": "Clinically assessed hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild_moderate",
+          "label": "Mild or moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "none"
+    },
     "diarrhoea_grade": {
-      "label": "Diarrhoea grade",
+      "label": "Current diarrhoea grade",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No increase above the patient's usual stool frequency or ostomy output."
+          "label": "Grade 0",
+          "description": "Usual bowel pattern.",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+          "label": "Grade 1",
+          "description": "NCCP low-grade band: 2–3 extra stools/day; source nocturnal-stool wording overlaps grade 2.",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+          "label": "Grade 2",
+          "description": "4–6 extra stools/day or nocturnal stools (NCCP table 4).",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+          "label": "Grade 3",
+          "description": "7–9 extra stools/day or incontinence (NCCP table 4).",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "label": "Grade 4",
+          "description": "10 or more extra stools/day or grossly bloody diarrhoea; parenteral support may be needed (NCCP table 4).",
+          "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
-      "ctcae_version": "5.0",
+      "assessment_guidance": "NCCP Table 4 uses legacy diarrhoea bands. Nocturnal stools appear in both low-grade and grade-2 rows: clarify the grade clinically. Assess hydration, stoma output, fever, pain and need for urgent care; do not grade by stool count alone.",
+      "ctcae_version": "4.0",
       "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
       "input_role": "decision"
     },
+    "diarrhoea_highest_grade": {
+      "label": "Highest diarrhoea grade in this episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "Usual bowel pattern.",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "NCCP low-grade band: 2–3 extra stools/day; source nocturnal-stool wording overlaps grade 2.",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "4–6 extra stools/day or nocturnal stools (NCCP table 4).",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "7–9 extra stools/day or incontinence (NCCP table 4).",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "10 or more extra stools/day or grossly bloody diarrhoea; parenteral support may be needed (NCCP table 4).",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "NCCP Table 4 uses legacy diarrhoea bands. Nocturnal stools appear in both low-grade and grade-2 rows: clarify the grade clinically. Assess hydration, stoma output, fever, pain and need for urgent care; do not grade by stool count alone.",
+      "ctcae_version": "4.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+      "input_role": "decision"
+    },
+    "diarrhoea_occurrence": {
+      "label": "Diarrhoea: occurrence of this toxicity (including this episode)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4 or later"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 1
+    },
     "mucositis_grade": {
-      "label": "Oral mucositis/stomatitis grade",
+      "label": "Current mouth soreness / mucositis grade",
       "type": "select",
       "required": false,
       "options": [
@@ -336,11 +577,190 @@
         }
       ],
       "demo_value": 0,
-      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible.",
+      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible. Use the regimen-specific source definition. Current grade alone triggers a hold; recurrence and highest grade guide the later dose.",
       "ctcae_version": "5.0",
       "ctcae_category": "mucositis",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "input_role": "decision"
+    },
+    "mucositis_highest_grade": {
+      "label": "Highest mouth soreness / mucositis grade in this episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible. Use the regimen-specific source definition. Current grade alone triggers a hold; recurrence and highest grade guide the later dose.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "input_role": "decision"
+    },
+    "mucositis_occurrence": {
+      "label": "Mouth soreness / mucositis: occurrence of this toxicity (including this episode)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4 or later"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "other_nonhaem_toxicity_grade": {
+      "label": "Current other relevant toxicity grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No other non-haematological adverse event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade. Use the regimen-specific source definition. Current grade alone triggers a hold; recurrence and highest grade guide the later dose.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "input_role": "decision"
+    },
+    "other_nonhaem_toxicity_highest_grade": {
+      "label": "Highest other relevant toxicity grade in this episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No other non-haematological adverse event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade. Use the regimen-specific source definition. Current grade alone triggers a hold; recurrence and highest grade guide the later dose.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "input_role": "decision"
+    },
+    "other_nonhaem_toxicity_occurrence": {
+      "label": "Other relevant toxicity: occurrence of this toxicity (including this episode)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4 or later"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 1
     },
     "hand_foot_syndrome_grade": {
       "label": "Palmar-plantar erythrodysaesthesia (hand-foot syndrome) grade",
@@ -370,12 +790,6 @@
           "label": "Grade 3 — Severe",
           "ctcae_grade": 3,
           "description": "Severe painful skin changes; limits self-care activities of daily living."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Grade 4 is not defined under the CTCAE palmar–plantar erythrodysesthesia term; use another term for life-threatening complications."
         }
       ],
       "demo_value": 0,
@@ -385,63 +799,41 @@
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "input_role": "decision"
     },
-    "capecitabine_renal_band": {
-      "label": "Renal function for capecitabine",
+    "hand_foot_highest_grade": {
+      "label": "Highest hand-foot syndrome grade in this episode",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "ge51",
-          "label": "CrCl ≥51 mL/min",
-          "decision_value": "ge51"
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No palmar–plantar erythrodysesthesia."
         },
         {
-          "value": "30_50",
-          "label": "CrCl 30–50 mL/min",
-          "decision_value": "30_50"
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Minimal skin changes or dermatitis, such as erythema, oedema or hyperkeratosis, without pain."
         },
         {
-          "value": "lt30",
-          "label": "CrCl <30 mL/min",
-          "decision_value": "lt30"
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Painful skin changes, including peeling, blisters, bleeding, fissures, oedema or hyperkeratosis; limits instrumental activities of daily living."
         },
         {
-          "value": "dialysis",
-          "label": "Dialysis",
-          "decision_value": "dialysis"
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Severe painful skin changes; limits self-care activities of daily living."
         }
       ],
-      "demo_value": "ge51",
-      "ui_section": "labs",
-      "always_show": true,
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
-    },
-    "capecitabine_bilirubin_uln": {
-      "label": "Bilirubin for capecitabine",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 0.8,
-      "ui_section": "labs",
-      "always_show": true,
-      "unit": "×ULN",
-      "input_role": "decision"
-    },
-    "capecitabine_alt_ast_uln": {
-      "label": "ALT or AST for capecitabine",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 1,
-      "ui_section": "labs",
-      "always_show": true,
-      "unit": "×ULN",
+      "demo_value": 0,
+      "assessment_guidance": "Assess skin changes, pain and impact on instrumental or self-care activities of daily living.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "ppe",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "input_role": "decision"
     }
   },
@@ -456,71 +848,104 @@
     "permanently_discontinue": "The entered value triggers permanent discontinuation in the encoded pathway."
   },
   "rule_engine": {
-    "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "report_unassessed_coverage_gap",
+    "conflict_policy": "Use the most restrictive action for each affected drug; do not sum dose reductions. A component-specific action does not authorise the other component.",
+    "missing_data_policy": "Never infer missing values, occurrence, recovery or treatment timing.",
     "actions_ranked_most_to_least_restrictive": [
-      "permanently_discontinue",
       "contraindicated",
       "discontinue",
-      "cease",
-      "omit",
-      "withhold_then_reduce",
       "withhold",
-      "delay_then_dose_reduce",
-      "delay",
       "consultant_review",
-      "dose_reduce_two_levels",
-      "dose_reduce_one_level",
       "dose_reduce",
-      "proceed_with_caution",
-      "proceed"
+      "proceed_with_caution"
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
+        "rule_id": "ECOG_ELIGIBILITY",
         "when": {
           "field": "ecog",
           "operator": ">",
-          "value": 2
+          "value": 1
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "capecitabine"
           ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "recommendation": "ECOG is outside this regimen’s eligibility range. Obtain consultant assessment of suitability.",
+          "show_in_dose_actions": true
         },
+        "explanation": "ECOG is outside this regimen’s eligibility range. Obtain consultant assessment of suitability.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "document": "NCCP 00586 v3",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf"
+        }
       },
       {
-        "id": "HYPERSENSITIVITY_EXCLUSION",
-        "priority": 10,
+        "rule_id": "CAPECITABINE_ALLERGY",
         "when": {
-          "field": "hypersensitivity",
+          "field": "capecitabine_hypersensitivity",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "capecitabine"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "recommendation": "Do not administer capecitabine: hypersensitivity."
         },
+        "explanation": "Do not administer capecitabine: hypersensitivity.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+          "document": "NCCP 00586 v3",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf"
+        }
       },
       {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "PREVIOUS_SEVERE_REACTION",
+        "when": {
+          "field": "history_severe_unexpected_fluoropyrimidine_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Do not administer capecitabine: previous severe and unexpected fluoropyrimidine reaction is an exclusion."
+        },
+        "explanation": "Do not administer capecitabine: previous severe and unexpected fluoropyrimidine reaction is an exclusion.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf"
+        }
+      },
+      {
+        "rule_id": "BRIVUDINE",
+        "when": {
+          "field": "recent_or_concomitant_brivudine",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Do not administer capecitabine with brivudine or within four weeks of its completion; obtain urgent oncology/pharmacy advice."
+        },
+        "explanation": "Do not administer capecitabine with brivudine or within four weeks of its completion; obtain urgent oncology/pharmacy advice.",
+        "source": {
+          "document": "Capecitabine SmPC (supplementary interaction source)",
+          "page": "sections 4.4–4.5",
+          "url": "https://www.medicines.org.uk/emc/product/14545/smpc"
+        }
+      },
+      {
+        "rule_id": "PREGNANCY_LACTATION",
         "when": {
           "any": [
             {
@@ -538,103 +963,19 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "capecitabine"
           ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "recommendation": "Pregnancy or breastfeeding is an exclusion from systemic treatment."
         },
+        "explanation": "Pregnancy or breastfeeding is an exclusion from systemic treatment.",
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "document": "NCCP 00586 v3",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf"
+        }
       },
       {
-        "id": "ANC_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "PLATELETS_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "FEVER_OR_ACTIVE_INFECTION",
-        "priority": 10,
-        "when": {
-          "field": "febrile_or_active_infection",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
-      },
-      {
-        "id": "SEVERE_OTHER_TOXICITY",
-        "priority": 8,
-        "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-      },
-      {
-        "id": "DPD_COMPLETE_DEFICIENCY",
-        "priority": 10,
+        "rule_id": "DPD_COMPLETE",
         "when": {
           "field": "dpd_status",
           "operator": "==",
@@ -643,19 +984,19 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "capecitabine"
           ],
-          "message": "Complete DPD deficiency is a contraindication to fluoropyrimidine therapy."
+          "recommendation": "Do not administer capecitabine in complete DPD deficiency."
         },
+        "explanation": "Do not administer capecitabine in complete DPD deficiency.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Complete DPD deficiency is a contraindication to fluoropyrimidine therapy."
+          "document": "NCCP 00586 v3",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf"
+        }
       },
       {
-        "id": "DPD_PARTIAL_DEFICIENCY",
-        "priority": 8,
+        "rule_id": "DPD_PARTIAL",
         "when": {
           "field": "dpd_status",
           "operator": "==",
@@ -664,19 +1005,20 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "capecitabine"
           ],
-          "message": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
+          "recommendation": "Individualise a reduced starting dose for partial DPD deficiency. The NCCP regimen does not specify a universal percentage; subsequent titration requires careful monitoring.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Individualise a reduced starting dose for partial DPD deficiency. The NCCP regimen does not specify a universal percentage; subsequent titration requires careful monitoring.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf"
+        }
       },
       {
-        "id": "DPD_UNKNOWN",
-        "priority": 7,
+        "rule_id": "DPD_UNKNOWN",
         "when": {
           "field": "dpd_status",
           "operator": "==",
@@ -685,134 +1027,1717 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "capecitabine"
           ],
-          "message": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
+          "recommendation": "Confirm the DPD test result before first capecitabine treatment; a missing result is not normal.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Confirm the DPD test result before first capecitabine treatment; a missing result is not normal.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf"
+        }
       },
       {
-        "id": "DIARRHOEA_GRADE_2_PLUS",
-        "priority": 8,
+        "rule_id": "CURRENT_LOW_COUNTS",
         "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 2
+          "any": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "capecitabine"
           ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
+          "recommendation": "Table 1: delay capecitabine pending recovery of ANC ≥1.5 and platelets ≥75. Establish assessment timing and occurrence before restart; the source has separate baseline/within-cycle wording."
         },
+        "explanation": "Table 1: delay capecitabine pending recovery of ANC ≥1.5 and platelets ≥75. Establish assessment timing and occurrence before restart; the source has separate baseline/within-cycle wording.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
       },
       {
-        "id": "MUCOSITIS_GRADE_2_PLUS",
-        "priority": 8,
+        "rule_id": "SEVERE_HAEM_STOP_OR_EXCEPTION",
         "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
+          "any": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 25
+            },
+            {
+              "field": "lowest_anc_episode",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "field": "lowest_platelets_episode",
+              "operator": "<",
+              "value": 25
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Table 1 severe-count band: discontinue. On the first event only, the source permits consultant-directed delay and 50% restart after BOTH counts recover. Do not restart automatically; establish occurrence and consultant decision."
+        },
+        "explanation": "Table 1 severe-count band: discontinue. On the first event only, the source permits consultant-directed delay and 50% restart after BOTH counts recover. Do not restart automatically; establish occurrence and consultant decision.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_0_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "capecitabine"
           ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 100% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
         },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 100% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
       },
       {
-        "id": "HAND_FOOT_GRADE_2_PLUS",
-        "priority": 8,
+        "rule_id": "HAEM_ANC_0_1_1",
         "when": {
-          "field": "hand_foot_syndrome_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After documented recovery of BOTH counts, the table gives 100% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After documented recovery of BOTH counts, the table gives 100% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_0_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "capecitabine"
           ],
-          "message": "Withhold oral fluoropyrimidine for grade 2 or worse hand-foot syndrome until improved and use the source dose-reduction pathway."
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 75% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
         },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 75% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold oral fluoropyrimidine for grade 2 or worse hand-foot syndrome until improved and use the source dose-reduction pathway."
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
       },
       {
-        "id": "OF590_00586_CAPE_RENAL_30_50",
-        "priority": 20,
+        "rule_id": "HAEM_ANC_0_2_1",
         "when": {
-          "field": "capecitabine_renal_band",
-          "operator": "==",
-          "value": "30_50"
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "dose_reduce",
           "components": [
             "capecitabine"
           ],
-          "message": "CrCl 30–50 mL/min: administer 75% of the capecitabine dose.",
-          "recommendation": "CrCl 30–50 mL/min: administer 75% of the capecitabine dose.",
+          "recommendation": "After documented recovery of BOTH counts, the table gives 75% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
           "component_changes": {
             "capecitabine": {
-              "dose_percent_of_original": 75
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
             }
           }
         },
+        "explanation": "After documented recovery of BOTH counts, the table gives 75% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "CrCl 30–50 mL/min: administer 75% of the capecitabine dose."
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
       },
       {
-        "id": "OF590_00586_CAPE_RENAL_LT30",
-        "priority": 20,
+        "rule_id": "HAEM_ANC_0_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 50% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
+        },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 50% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_0_3_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After documented recovery of BOTH counts, the table gives 50% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After documented recovery of BOTH counts, the table gives 50% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_0_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_0_4_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_1_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 75% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
+        },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 75% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_1_1_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After documented recovery of BOTH counts, the table gives 75% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After documented recovery of BOTH counts, the table gives 75% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_1_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 50% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
+        },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 50% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_1_2_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After documented recovery of BOTH counts, the table gives 50% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After documented recovery of BOTH counts, the table gives 50% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_1_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_1_3_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_1_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_ANC_1_4_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "lowest_anc_episode",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_0_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 100% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
+        },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 100% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_0_1_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": "<",
+                  "value": 75
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After documented recovery of BOTH counts, the table gives 100% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After documented recovery of BOTH counts, the table gives 100% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_0_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 75% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
+        },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 75% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_0_2_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": "<",
+                  "value": 75
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After documented recovery of BOTH counts, the table gives 75% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After documented recovery of BOTH counts, the table gives 75% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_0_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 50% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
+        },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 50% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_0_3_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": "<",
+                  "value": 75
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After documented recovery of BOTH counts, the table gives 50% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After documented recovery of BOTH counts, the table gives 50% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_0_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_0_4_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": "<",
+                  "value": 75
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_1_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 25
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 75% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
+        },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 75% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_1_1_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": ">=",
+                  "value": 25
+                },
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After documented recovery of BOTH counts, the table gives 75% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After documented recovery of BOTH counts, the table gives 75% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_1_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 25
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 50% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required."
+        },
+        "explanation": "Delay capecitabine now. Once ANC ≥1.5 AND platelets ≥75, table 1 gives 50% of starting dose for this recurrence; consultant confirmation and reconciliation of other reductions are required.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_1_2_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": ">=",
+                  "value": 25
+                },
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After documented recovery of BOTH counts, the table gives 50% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After documented recovery of BOTH counts, the table gives 50% of the starting capecitabine dose. Reconcile previous reductions and other toxicity before prescribing; do not re-escalate a toxicity-reduced dose.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_1_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 25
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_1_3_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": ">=",
+                  "value": 25
+                },
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_1_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 25
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "haematology_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_PLT_1_4_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": ">=",
+                  "value": 25
+                },
+                {
+                  "field": "lowest_platelets_episode",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "field": "haematology_occurrence",
+                  "operator": "==",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this count band and recurrence number."
+        },
+        "explanation": "Discontinue capecitabine for this count band and recurrence number.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "RENAL_30_50",
+        "when": {
+          "all": [
+            {
+              "field": "capecitabine_renal_band",
+              "operator": ">=",
+              "value": 30
+            },
+            {
+              "field": "capecitabine_renal_band",
+              "operator": "<=",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Use 75% of the original capecitabine dose for CrCl 30–50 mL/min; apply tablet dose banding and consultant review.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "Use 75% of the original capecitabine dose for CrCl 30–50 mL/min; apply tablet dose banding and consultant review.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "RENAL_LT30",
         "when": {
           "field": "capecitabine_renal_band",
-          "operator": "in",
-          "value": [
-            "lt30",
-            "dialysis"
-          ]
+          "operator": "<",
+          "value": 30
         },
         "action": {
           "type": "contraindicated",
           "components": [
             "capecitabine"
           ],
-          "message": "CrCl <30 mL/min or dialysis: capecitabine is not recommended.",
-          "recommendation": "CrCl <30 mL/min or dialysis: capecitabine is not recommended."
+          "recommendation": "Capecitabine is not recommended at CrCl <30 mL/min."
         },
+        "explanation": "Capecitabine is not recommended at CrCl <30 mL/min.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "CrCl <30 mL/min or dialysis: capecitabine is not recommended."
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "OF590_00586_CAPE_HEPATIC_HOLD",
-        "priority": 20,
+        "rule_id": "RENAL_DIALYSIS",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Capecitabine is not recommended on haemodialysis."
+        },
+        "explanation": "Capecitabine is not recommended on haemodialysis.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "RENAL_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "capecitabine_renal_band",
+              "operator": ">",
+              "value": 50
+            },
+            {
+              "field": "capecitabine_renal_band",
+              "operator": "<",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "The NCCP table lists 30–50 and 51–80. Confirm the dose for an unrounded CrCl between 50 and 51; do not silently round across the boundary.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The NCCP table lists 30–50 and 51–80. Confirm the dose for an unrounded CrCl between 50 and 51; do not silently round across the boundary.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "RENAL_NO_REDUCTION",
+        "when": {
+          "field": "capecitabine_renal_band",
+          "operator": ">=",
+          "value": 51
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "No renal reduction is specified in this range. This assesses the renal domain only; other eligibility and toxicity checks remain necessary."
+        },
+        "explanation": "No renal reduction is specified in this range. This assesses the renal domain only; other eligibility and toxicity checks remain necessary.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "HEPATOTOXICITY",
         "when": {
           "any": [
             {
@@ -832,35 +2757,1986 @@
           "components": [
             "capecitabine"
           ],
-          "message": "Bilirubin >3 ×ULN or ALT/AST >2.5 ×ULN: withhold capecitabine and reassess according to the source pathway.",
-          "recommendation": "Bilirubin >3 ×ULN or ALT/AST >2.5 ×ULN: withhold capecitabine and reassess according to the source pathway."
+          "recommendation": "Treatment-related hepatotoxicity threshold exceeded: hold capecitabine and establish causality. Restart only after the affected liver tests recover to bilirubin ≤3×ULN and ALT/AST ≤2.5×ULN; missing tests are not normal."
         },
+        "explanation": "Treatment-related hepatotoxicity threshold exceeded: hold capecitabine and establish causality. Restart only after the affected liver tests recover to bilirubin ≤3×ULN and ALT/AST ≤2.5×ULN; missing tests are not normal.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00586 v3",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "HEPATIC_IMPAIRMENT",
+        "when": {
+          "field": "hepatic_impairment_severity",
+          "operator": "in",
+          "value": [
+            "mild_moderate"
+          ]
         },
-        "explanation": "Bilirubin >3 ×ULN or ALT/AST >2.5 ×ULN: withhold capecitabine and reassess according to the source pathway."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Mild/moderate hepatic impairment needs clinical review and close monitoring separately from treatment-related liver-test toxicity. NCCP table 2 specifies no routine hepatic reduction; table 6 addresses treatment-related hepatotoxicity. Severe impairment is excluded separately by the supplementary SmPC.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Mild/moderate hepatic impairment needs clinical review and close monitoring separately from treatment-related liver-test toxicity. NCCP table 2 specifies no routine hepatic reduction; table 6 addresses treatment-related hepatotoxicity. Severe impairment is excluded separately by the supplementary SmPC.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_CURRENT_HOLD",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Interrupt capecitabine until this toxicity resolves to grade 0–1. Establish its highest grade and occurrence to select the next dose. Missed tablets are not replaced."
+        },
+        "explanation": "Interrupt capecitabine until this toxicity resolves to grade 0–1. Establish its highest grade and occurrence to select the next dose. Missed tablets are not replaced.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_G4",
+        "when": {
+          "any": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Grade 4 toxicity: discontinue capecitabine. Only for a first occurrence, the consultant may exceptionally choose interruption until grade 0–1 followed by 50%; there is no automatic restart."
+        },
+        "explanation": "Grade 4 toxicity: discontinue capecitabine. Only for a first occurrence, the consultant may exceptionally choose interruption until grade 0–1 followed by 50%; there is no automatic restart.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_2_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 100% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 100% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_2_1_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 4 gives 100% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After recovery to grade 0–1, table 4 gives 100% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_2_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_2_2_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 4 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 4 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_2_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_2_3_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 4 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 4 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_2_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_2_4_1",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_3_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_3_1_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 4 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 4 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_3_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 4 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_3_2_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 4 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 4 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_3_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_3_3_1",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_3_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_3_4_1",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_CURRENT_HOLD",
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Interrupt capecitabine until this toxicity resolves to grade 0–1. Establish its highest grade and occurrence to select the next dose. Missed tablets are not replaced."
+        },
+        "explanation": "Interrupt capecitabine until this toxicity resolves to grade 0–1. Establish its highest grade and occurrence to select the next dose. Missed tablets are not replaced.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_G4",
+        "when": {
+          "any": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "mucositis_highest_grade",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Grade 4 toxicity: discontinue capecitabine. Only for a first occurrence, the consultant may exceptionally choose interruption until grade 0–1 followed by 50%; there is no automatic restart."
+        },
+        "explanation": "Grade 4 toxicity: discontinue capecitabine. Only for a first occurrence, the consultant may exceptionally choose interruption until grade 0–1 followed by 50%; there is no automatic restart.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_2_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 100% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 100% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_2_1_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "mucositis_highest_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 100% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 100% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_2_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_2_2_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "mucositis_highest_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_2_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_2_3_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "mucositis_highest_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_2_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_2_4_1",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_highest_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_3_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_3_1_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "mucositis_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_3_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_3_2_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "mucositis_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_3_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_3_3_1",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_3_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_3_4_1",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_CURRENT_HOLD",
+        "when": {
+          "field": "other_nonhaem_toxicity_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Interrupt capecitabine until this toxicity resolves to grade 0–1. Establish its highest grade and occurrence to select the next dose. Missed tablets are not replaced."
+        },
+        "explanation": "Interrupt capecitabine until this toxicity resolves to grade 0–1. Establish its highest grade and occurrence to select the next dose. Missed tablets are not replaced.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_G4",
+        "when": {
+          "any": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "other_nonhaem_toxicity_highest_grade",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Grade 4 toxicity: discontinue capecitabine. Only for a first occurrence, the consultant may exceptionally choose interruption until grade 0–1 followed by 50%; there is no automatic restart."
+        },
+        "explanation": "Grade 4 toxicity: discontinue capecitabine. Only for a first occurrence, the consultant may exceptionally choose interruption until grade 0–1 followed by 50%; there is no automatic restart.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_2_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 100% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 100% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_2_1_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "other_nonhaem_toxicity_highest_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "other_nonhaem_toxicity_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 100% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 100% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_2_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_2_2_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "other_nonhaem_toxicity_highest_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "other_nonhaem_toxicity_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_2_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_2_3_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "other_nonhaem_toxicity_highest_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "other_nonhaem_toxicity_occurrence",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_2_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_2_4_1",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_highest_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_3_1_0",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 75% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_3_1_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "other_nonhaem_toxicity_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "other_nonhaem_toxicity_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 75,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 75% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_3_2_0",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant."
+        },
+        "explanation": "Hold capecitabine now. After recovery to grade 0–1, table 3 gives 50% of starting dose for this occurrence; confirm the restart plan with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_3_2_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "other_nonhaem_toxicity_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "other_nonhaem_toxicity_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After recovery to grade 0–1, table 3 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+          "component_changes": {
+            "capecitabine": {
+              "dose_percent_of_original": 50,
+              "dose_basis": "documented_starting_dose"
+            }
+          }
+        },
+        "explanation": "After recovery to grade 0–1, table 3 gives 50% of starting capecitabine dose. Reconcile earlier reductions and other findings before restart; do not re-escalate after a toxicity reduction.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_3_3_0",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_3_3_1",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_3_4_0",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_NONHAEM_TOXICITY_3_4_1",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "other_nonhaem_toxicity_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Discontinue capecitabine for this toxicity grade and occurrence."
+        },
+        "explanation": "Discontinue capecitabine for this toxicity grade and occurrence.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "HFS_CURRENT_HOLD",
+        "when": {
+          "field": "hand_foot_syndrome_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Withhold capecitabine until hand-foot syndrome is grade 1 or better. Grade 3 requires a subsequent reduction, but table 5 does not quantify it."
+        },
+        "explanation": "Withhold capecitabine until hand-foot syndrome is grade 1 or better. Grade 3 requires a subsequent reduction, but table 5 does not quantify it.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "HFS_RECOVERED_G3",
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "hand_foot_syndrome_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "After grade 3 hand-foot syndrome resolves to grade ≤1, reduce subsequent capecitabine doses. Table 5 does not specify a percentage; agree the dose with the consultant.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After grade 3 hand-foot syndrome resolves to grade ≤1, reduce subsequent capecitabine doses. Table 5 does not specify a percentage; agree the dose with the consultant.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "SEVERE_HEPATIC_SMPC_EXCLUSION",
+        "when": {
+          "field": "hepatic_impairment_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Do not administer capecitabine in severe hepatic impairment: the supplementary capecitabine SmPC section 4.3 lists this as a contraindication. The NCCP table 2 statement about routine hepatic dose adjustment does not override that exclusion; resolve the plan with consultant/pharmacy.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Do not administer capecitabine in severe hepatic impairment: the supplementary capecitabine SmPC section 4.3 lists this as a contraindication. The NCCP table 2 statement about routine hepatic dose adjustment does not override that exclusion; resolve the plan with consultant/pharmacy.",
+        "source": {
+          "document": "NCCP 00586 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+          "table": 2,
+          "additional_url": "https://www.medicines.org.uk/emc/product/14545/smpc",
+          "supplementary_section": "SmPC 4.3"
+        }
       }
     ]
   },
-  "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and organ function appropriate for the selected treatment"
-  ],
-  "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source"
-  ],
   "monitoring": [
     "FBC, renal and liver profile as specified by the current NCCP regimen",
     "Treatment-specific toxicity monitoring before each administration/cycle"
   ],
-  "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
-  ],
   "supportive_care": {
-    "emetogenic_risk": "low",
-    "script_id": "nccp-parenteral-low",
+    "emetogenic_risk": "oral_minimal_low",
+    "script_id": "nccp-oral-minimal-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
@@ -868,6 +4744,34 @@
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
+    "emetogenic_risk_note": "Capecitabine: oral minimal-to-low risk. Radiotherapy-associated nausea depends on site and field and needs the radiation oncology plan. Follow local policy; provide rescue treatment and stop-and-call education."
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "main_cycle",
+      "cycle_length_days": 7,
+      "administration": [
+        {
+          "day": "1–5",
+          "drug": "capecitabine",
+          "route": "PO",
+          "dose": {
+            "value": 825,
+            "unit": "mg/m2 twice daily"
+          },
+          "notes": "With or within 30 minutes of food. Tablet strengths and final dose require pharmacy dose banding."
+        }
+      ],
+      "notes": "Concurrent radiotherapy and capecitabine Days 1–5 of each 7-day cycle, maximum 5–6 cycles. Radiation decisions require the radiation oncology plan."
+    }
+  ],
+  "dose_levels": {
+    "capecitabine": {
+      "0": 825,
+      "-1": "75% of starting dose; final tablets pharmacy banded",
+      "-2": "50% of starting dose; final tablets pharmacy banded",
+      "-3": "discontinue"
+    }
   }
 }

@@ -29,6 +29,7 @@ for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
   const rec = m.organ_function_reconciliation;
+  const superseded = ['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4';
   assert(rec, `${item.nccp_code}: missing organ-function reconciliation metadata`);
   assert.strictEqual(rec.release, '0.59.0');
   assert.strictEqual(rec.source_reconciled, true);
@@ -37,7 +38,7 @@ for (const item of register.records) {
   assert.strictEqual(rec.oncology_pharmacy_reviewed, false);
   assert.strictEqual(rec.clinical_use_authorised, false);
   assert.strictEqual(m.encoding_maturity.level, 'source_reconciled_rule_encoding');
-  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, 'source_reconciled_organ_function_v0590');
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
   for (const [field, def] of Object.entries(p.input_definitions || {})) {
     if (/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label || ''}`)) {
       assert.strictEqual(def.required, false, `${item.nccp_code}/${field} must remain optional for independent partial assessment`);
@@ -45,7 +46,12 @@ for (const item of register.records) {
     }
   }
   const releaseRules = (p.rule_engine?.rules || []).filter(r => String(r.id || r.rule_id || '').startsWith('OF590_'));
-  if (rec.resolution === 'structured_rules') assert(releaseRules.length > 0, `${item.nccp_code}: structured resolution lacks v0.59.0 rules`);
+  if (rec.resolution === 'structured_rules') {
+    if(superseded) {
+      for(const id of ['RENAL_LT30','HEPATOTOXICITY']) assert(p.rule_engine.rules.some(r=>r.rule_id===id && r.source.url===m.source_url && r.source.page), `${item.nccp_code}: missing replacement source-mapped rule ${id}`);
+      assert.equal(releaseRules.length,0,'Superseded renal rules must not remain active');
+    } else assert(releaseRules.length > 0, `${item.nccp_code}: structured resolution lacks v0.59.0 rules`);
+  }
   else {
     assert.strictEqual(rec.resolution, 'source_reviewed_no_prescriptive_adjustment');
     assert.strictEqual(releaseRules.length, 0, `${item.nccp_code}: no-prescriptive-adjustment record must not invent a rule`);
@@ -100,7 +106,7 @@ for (const p of allProtocols) {
     );
   }
 }
-assert.strictEqual(triggerableRuleCount, 299, 'Every v0.59.0 organ-function rule must be executable through the live assessment engine.');
+assert.strictEqual(triggerableRuleCount, 293, 'All 293 retained v0.59.0 rules remain executable; six 00586/00623 rules are superseded by the v0.83.4 source-based clinical suite.');
 
 // Sentinel source pathways and single-value partial assessments.
 let result = assess('00205', { pld_bilirubin_band: '51_86' });

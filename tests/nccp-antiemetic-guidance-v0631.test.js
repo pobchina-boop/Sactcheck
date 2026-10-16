@@ -43,6 +43,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00586": "oral_minimal_low", // v0.83.4 NCCP capecitabine oral risk
+    "00623": "oral_minimal_low",
     "00844": "moderate",
     "00449": "moderate", // v0.83.3: NCCP 00449 v6a p6
     "00446": "moderate", // v0.83.3: NCCP 00446 v7b p6
@@ -69,6 +71,8 @@ for (const record of index.protocols || []) {
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
   if (baseline) {
     const correctionByPath = {
+      "gastrointestinal/00586-capecitabine-825-mg-m2-and-radiotherapy-7-day.json": "oral_minimal_low",
+      "gastrointestinal/00623-bevacizumab-7-5-mg-kg-and-capecitabine-1250-mg-m2-therapy.json": "oral_minimal_low",
       "gastrointestinal/00844-nivolumab-modified-folfox6.json": "moderate",
       "gastrointestinal/00449-bevacizumab-folfiri.json": "moderate",
       "gastrointestinal/00446-bevacizumab-modified-folfox6.json": "moderate",

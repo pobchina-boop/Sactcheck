@@ -13,10 +13,13 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.83.3';
-  const CONTENT_RELEASE='0.83.2';
+  const RELEASE='0.83.4';
+  const CONTENT_RELEASE='0.83.4';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00216':{title:'Capecitabine',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00586':{title:'Capecitabine + radiotherapy',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00623':{title:'Bevacizumab + capecitabine',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00227':{title:'FOLFIRI',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
     '00449':{title:'FOLFIRI + bevacizumab',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
     '00446':{title:'Modified FOLFOX-6 + bevacizumab',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
@@ -55,6 +58,7 @@
   function hasDedicated(value){return Boolean(definitionFor(value));}
   function relativePath(value,asset='portal'){
     const def=definitionFor(value); if(!def) return null;
+    if(asset==='supportive-care') return def.supportiveCare?`patient/${def.code}/supportive-care.pdf`:null;
     if(asset==='knowledge') return def.knowledge?`patient/${def.code}/knowledge.html`:null;
     // Clinic Workflow consent generator now opens the dedicated one-page form.
     // The longer consent discussion adjunct remains available separately as patient/${code}/consent.html.
