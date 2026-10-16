@@ -44,6 +44,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
 } else {
   const allowedCorrections = {
     "00844": "moderate",
+    "00449": "moderate", // v0.83.3: NCCP 00449 v6a p6
+    "00446": "moderate", // v0.83.3: NCCP 00446 v7b p6
     "00945": "low",
     "00431": "low"
   };
@@ -68,6 +70,8 @@ for (const record of index.protocols || []) {
   if (baseline) {
     const correctionByPath = {
       "gastrointestinal/00844-nivolumab-modified-folfox6.json": "moderate",
+      "gastrointestinal/00449-bevacizumab-folfiri.json": "moderate",
+      "gastrointestinal/00446-bevacizumab-modified-folfox6.json": "moderate",
       "genitourinary/00945-enfortumab-vedotin-and-pembrolizumab-therapy.json": "low",
       "skin/00431-nivolumab-1-mg-kg-and-ipilimumab-3-mg-kg-therapy.json": "low"
     };

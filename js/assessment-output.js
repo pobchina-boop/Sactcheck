@@ -138,7 +138,7 @@
           rows.push({
             field: leaf.field,
             label: definition.label || humanise(leaf.field),
-            actual: lab ? `${lab.display} → ${lab.decisionDisplay}` : `${result?.displayInputs?.[leaf.field] ?? formatValue(result?.inputs?.[leaf.field])}${lab ? "" : unit}`,
+            actual: lab ? `${lab.display} → ${lab.decisionDisplay}` : `${result?.displayInputs?.[leaf.field] ?? formatValue(result?.inputs?.[leaf.field])}${lab || definition.type === "select" ? "" : unit}`,
             criterion: `${operatorSymbol(leaf.operator)} ${formatCutoff(leaf.value, leaf.operator)}${unit}`,
             outcome: category.label,
             outcomeKey: category.key,
@@ -158,7 +158,7 @@
         rows.push({
           field,
           label: definition.label || humanise(field),
-          actual: lab ? `${lab.display} → ${lab.decisionDisplay}` : `${result?.displayInputs?.[field] ?? formatValue(result?.inputs?.[field])}${lab ? "" : unit}`,
+          actual: lab ? `${lab.display} → ${lab.decisionDisplay}` : `${result?.displayInputs?.[field] ?? formatValue(result?.inputs?.[field])}${lab || definition.type === "select" ? "" : unit}`,
           criterion: finding.contextRequired ? "Linked context required" : "Encoded pathway reviewed",
           outcome: category.label,
           outcomeKey: category.key,
@@ -179,7 +179,7 @@
       rows.push({
         field: definition.id,
         label: definition.label || humanise(definition.id),
-        actual: lab ? `${lab.display} → ${lab.decisionDisplay}` : `${result?.displayInputs?.[definition.id] ?? formatValue(value)}${lab ? "" : unit}`,
+        actual: lab ? `${lab.display} → ${lab.decisionDisplay}` : `${result?.displayInputs?.[definition.id] ?? formatValue(value)}${lab || definition.type === "select" ? "" : unit}`,
         criterion: "No standalone encoded criterion",
         outcome: "Recorded",
         outcomeKey: "recorded",
@@ -224,7 +224,7 @@
     if (restrictive.length) {
       return {
         key: "review",
-        title: `${restrictive.length} encoded ${restrictive.length === 1 ? "criterion" : "criteria"} require clinical review`,
+        title: `${restrictive.length} encoded ${restrictive.length === 1 ? "criterion requires" : "criteria require"} clinical review`,
         detail: "Review the highlighted protocol criteria and the current NCCP source before the final treatment decision."
       };
     }
@@ -293,6 +293,8 @@
     const rowData = findingRows(result, options.labCalculations || {});
     const course = courseTokens(protocol, result?.context?.indicationId);
     const outcome = outcomeFor(result);
+    const doseApi = typeof globalThis !== "undefined" ? globalThis.SACTCheckProtocolDoseSchedule : null;
+    const protocolActions = doseApi?.buildModificationModel(protocol, result)?.rows || [];
     const tumourGroup = cleanText(options.tumourGroup) && options.tumourGroup !== "all"
       ? cleanText(options.tumourGroup)
       : cleanText(metadata.tumour_group || asArray(metadata.tumour_groups).join(" / ")) || "Not specified";
@@ -317,6 +319,11 @@
       course: course.join(" · ") || "Course metadata not confirmed",
       treatmentContext: contextParts.join(" · ") || "Not entered",
       outcome,
+      protocolActions: protocolActions.map(row => ({
+        component: row.component, action: row.actionLabel,
+        dose: row.protocolDose === row.explanation ? "" : row.protocolDose,
+        explanation: row.explanation, source: row.sourceText
+      })),
       rows: rowData.rows,
       allRows: rowData.allRows,
       omittedRoutineCount: rowData.omittedRoutineCount,
@@ -377,6 +384,8 @@
           ${omitted}
         </section>
 
+        ${(model.protocolActions || []).length ? `<section class="print-values-section"><h3>Component-specific protocol actions</h3><p>Protocol-level guidance; verify the prescribed dose and current dose level.</p><ul>${model.protocolActions.map(row => `<li><strong>${escapeHtml(row.component)}: ${escapeHtml(row.action)}</strong> — ${escapeHtml(row.dose)}. ${escapeHtml(row.explanation)} <small>${escapeHtml(row.source)}</small></li>`).join("")}</ul></section>` : ""}
+
         <div class="print-summary-grid">
           <section><h3>Unassessed domains</h3><p>${escapeHtml(model.unassessed)}</p><small>Blank domains were not assumed normal.</small></section>
           <section><h3>Clinician decision</h3><p><strong>${escapeHtml(model.clinicianDecision)}</strong></p><small>${escapeHtml(model.clinicianNote)}</small></section>
@@ -410,6 +419,10 @@
       textRows.forEach(row => lines.push(`- ${row.label}: ${row.actual} | ${row.criterion} | ${row.outcome}`));
     } else {
       lines.push("- No printable criterion row generated.");
+    }
+    if (model.protocolActions?.length) {
+      lines.push("", "Component-specific protocol actions (verify the prescribed dose/current level):");
+      model.protocolActions.forEach(row => lines.push(`- ${row.component}: ${row.action} | ${row.dose} | ${row.explanation} | ${row.source}`));
     }
     lines.push(
       "",

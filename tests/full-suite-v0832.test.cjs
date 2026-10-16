@@ -7,7 +7,7 @@ const workflowData=json(workflow.dataUrl),supportivePdf=require('../js/supportiv
 for(const code of ['00227','00449','00446']){
  const d=json(`data/patient-knowledge/${code}.json`),entry=index.protocols.find(p=>p.id===d.protocol_id||p.protocol_id===d.protocol_id),protocol=json(entry.path);
  const kp=kb.regimen_profiles.find(p=>p.protocol_id===d.protocol_id);
- const manifest=workflow.buildManifest(protocol,workflowData,{level:code==='00226'?'low':'moderate'});
+ const manifest=workflow.buildManifest(protocol,workflowData,{level:protocol.supportive_care.emetogenic_risk});
  assert.equal(manifest.supportiveCare.status,'available');
  assert.equal(manifest.supportiveCare.planId,code==='00226'?'low':'moderate');
  assert(Buffer.from(supportivePdf.buildPdf({manifest})).subarray(0,5).toString()==='%PDF-');

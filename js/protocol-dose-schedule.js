@@ -57,6 +57,14 @@
   }
 
   function componentComparable(value) {
+    // The bolus and 46-hour infusion are different doseable components.
+    // Normalise their aliases without collapsing either into generic 5-FU.
+    const key = componentKey(value).replace(/5_fu/g, "5fu");
+    if (key.includes("5fu")) {
+      if (/bolus|push/.test(key)) return "5fubolus";
+      if (/infusion|infusional|continuous/.test(key)) return "5fuinfusion";
+      return "5fu";
+    }
     return componentKey(value)
       .replace(/^bolus_/, "")
       .replace(/^infusional_/, "")
@@ -73,6 +81,7 @@
     const b = componentComparable(right);
     if (!a || !b) return false;
     if (a === b) return true;
+    if (a.startsWith("5fu") || b.startsWith("5fu")) return false;
     if (a.includes(b) || b.includes(a)) return true;
     const fluorouracilAliases = new Set(["5fu", "fluorouracil"]);
     return fluorouracilAliases.has(a) && fluorouracilAliases.has(b);
@@ -464,7 +473,9 @@
   function componentChange(action, component) {
     const changes = action?.component_changes;
     if (!changes || typeof changes !== "object") return null;
-    const match = Object.entries(changes).find(([key]) => componentMatches(key, component));
+    const match = Object.entries(changes).find(([key]) => componentMatches(key, component))
+      || (componentComparable(component).startsWith("5fu")
+        ? Object.entries(changes).find(([key]) => componentComparable(key) === "5fu") : null);
     return match?.[1] || null;
   }
 
@@ -617,10 +628,14 @@
     const raw = asArray(finding?.action?.components);
     const universe = componentUniverse(model);
     if (!raw.length || raw.some(item => componentKey(item) === "whole_regimen")) return universe.length ? universe : [{ id: "whole_regimen", label: "Whole regimen" }];
-    return raw.map(item => {
+    return raw.flatMap(item => {
+      if (componentComparable(item) === "5fu") {
+        const routes = universe.filter(candidate => componentComparable(candidate.id).startsWith("5fu"));
+        if (routes.length) return routes;
+      }
       const match = universe.find(candidate => componentMatches(candidate.id, item) || componentMatches(candidate.label, item));
-      return match || { id: componentKey(item), label: normaliseDrug(item) };
-    });
+      return [match || { id: componentKey(item), label: normaliseDrug(item) }];
+    }).filter((item, index, array) => array.findIndex(other => other.id === item.id) === index);
   }
 
   function interpretFindingForComponent(finding, component, model, result) {
@@ -629,11 +644,12 @@
     const parsed = structured || parseRecommendationInstruction(finding, component.id, model, result);
     const isImmediatePrecise = ["permanently_discontinue", "contraindicated", "discontinue", "cease", "omit", "withhold", "delay"].includes(type);
     const hasQuantifiedFuture = Boolean(parsed?.precise);
-    if (!isImmediatePrecise && !hasQuantifiedFuture && !["withhold_then_reduce", "delay_then_dose_reduce"].includes(type)) return null;
+    const explicitReview = type === "consultant_review" && finding.action?.show_in_dose_actions === true;
+    if (!isImmediatePrecise && !hasQuantifiedFuture && !explicitReview && !["withhold_then_reduce", "delay_then_dose_reduce"].includes(type)) return null;
     if (["withhold_then_reduce", "delay_then_dose_reduce"].includes(type) && !hasQuantifiedFuture) return null;
 
     let actionLabel = immediateAction(finding);
-    let protocolDose = "";
+    let protocolDose = explicitReview ? (finding.action.recommendation || "Individualised clinical decision required") : "";
     if (parsed) {
       if (["withhold_then_reduce", "delay_then_dose_reduce"].includes(type)) actionLabel = `${actionLabel}; then ${parsed.label.toLowerCase()}`;
       else if (["dose_reduce", "dose_reduce_one_level", "dose_reduce_two_levels"].includes(type)) actionLabel = parsed.label;
@@ -641,12 +657,22 @@
     }
     if (["permanently_discontinue", "contraindicated", "discontinue", "cease", "omit"].includes(type)) protocolDose = "Not to be administered";
     if (["withhold", "delay"].includes(type)) protocolDose = "No dose now";
+    let rank = ACTION_RANK[type] || 50;
+    if (parsed?.kind === "stop" || parsed?.kind === "omit") {
+      protocolDose = "Not to be administered";
+      rank = Math.max(rank, parsed.kind === "stop" ? ACTION_RANK.discontinue : ACTION_RANK.omit);
+    } else if (type === "dose_reduce" && parsed?.dose) {
+      // Resolve simultaneous reductions by the lower component dose, never by
+      // rule order or addition of separate reductions.
+      const dose = parseDoseText(parsed.dose);
+      if (dose && dose.value >= 0) rank += 1 / (1 + dose.value);
+    }
 
     return {
       componentId: component.id,
       component: component.label,
       actionType: type,
-      rank: ACTION_RANK[type] || 50,
+      rank,
       actionLabel,
       protocolDose,
       startingDose: startingDoseFor(model, component.id),

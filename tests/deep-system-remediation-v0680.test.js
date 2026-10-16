@@ -34,7 +34,10 @@ function canonical(value) { return JSON.stringify(value, Object.keys(value || {}
 function scanSelectReachability(node, defs, protocolId, rid) {
   if (!node || typeof node !== "object") return;
   if (node.field && ["==","in"].includes(node.operator) && defs[node.field]?.type === "select") {
-    const options = new Set((defs[node.field].options || []).map(item => String(item.value)));
+    // Rules compare the parsed decision value; the option ID is only a UI key.
+    const options = new Set((defs[node.field].options || []).flatMap(item => [
+      String(item.value), ...(Object.prototype.hasOwnProperty.call(item, "decision_value") ? [String(item.decision_value)] : [])
+    ]));
     const values = node.operator === "in" ? (Array.isArray(node.value) ? node.value : []) : [node.value];
     for (const value of values) assert(options.has(String(value)), `${protocolId}/${rid}: unreachable select value ${value} for ${node.field}`);
   }

@@ -381,6 +381,23 @@
     }
 
     state.page.y += 9;
+    if (model.protocolActions?.length) {
+      ensureSpace(state, 50, "Component-specific protocol actions");
+      drawSectionHeading(state.page, "Component-specific protocol actions", "Protocol-level guidance; verify prescribed dose/current level");
+      model.protocolActions.forEach(row => {
+        const heading = `${row.component}: ${row.action}${row.dose ? ` — ${row.dose}` : ""}`;
+        const headingLines = wrapText(heading, CONTENT_WIDTH - 30, 7.8, true);
+        const detailLines = wrapText(`${row.explanation || ""} ${row.source || ""}`, CONTENT_WIDTH - 30, 6.8, false);
+        const height = 12 + headingLines.length * 9.2 + detailLines.length * 8;
+        ensureSpace(state, height + 5, "Component-specific protocol actions continued");
+        state.page.commands += rectCommand(MARGIN, state.page.y, CONTENT_WIDTH, height, { fill: COLOURS.pale, stroke: COLOURS.line, lineWidth: 0.5 });
+        let y = state.page.y + 6;
+        headingLines.forEach(line => { state.page.commands += textCommand(line, MARGIN + 7, y, {size: 7.8, bold: true}); y += 9.2; });
+        detailLines.forEach(line => { state.page.commands += textCommand(line, MARGIN + 7, y, {size: 6.8}); y += 8; });
+        state.page.y += height + 5;
+      });
+      state.page.y += 4;
+    }
     const summaryEstimate = dualSummaryMetrics(model).height + 9;
     ensureSpace(state, summaryEstimate, "Assessment documentation");
     drawDualSummary(state.page, model);

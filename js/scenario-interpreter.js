@@ -132,9 +132,13 @@
     return (definition.options || []).find(option => {
       const low = option.range_min_inclusive;
       const high = option.range_max_inclusive;
-      if (low !== undefined || high !== undefined) {
+      const lowExclusive = option.range_min_exclusive;
+      const highExclusive = option.range_max_exclusive;
+      if (low !== undefined || high !== undefined || lowExclusive !== undefined || highExclusive !== undefined) {
         return (low === undefined || low === null || number >= Number(low)) &&
-          (high === undefined || high === null || number <= Number(high));
+          (high === undefined || high === null || number <= Number(high)) &&
+          (lowExclusive === undefined || lowExclusive === null || number > Number(lowExclusive)) &&
+          (highExclusive === undefined || highExclusive === null || number < Number(highExclusive));
       }
       return Number(option.decision_value) === number || Number(option.value) === number;
     }) || null;

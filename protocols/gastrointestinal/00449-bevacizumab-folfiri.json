@@ -27,7 +27,10 @@
       "clinical_use_authorised": false,
       "software_tests_completed": true,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "audit_fixes_source_checked_date": "2026-10-16",
+      "audit_fixes_scope": "v0.83.2 live-audit findings; see docs/RELEASE_v0833_CLINICAL_FIXES.md. Independent clinical/pharmacy validation pending.",
+      "audit_fixes_release": "0.83.3"
     },
     "regimen_reimbursement_code": "00449a",
     "sactcheck_encoding_version": "0.39.0",
@@ -86,7 +89,7 @@
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "JSON assessment encoding derived from NCCP 00227 Version 9. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+    "disclaimer": "JSON assessment encoding for NCCP 00449 Version 6a. Audit corrections reconciled to this regimen's current source on 16 October 2026. Confirm the official PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
   },
   "indications": [
     {
@@ -207,7 +210,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Hypersensitivity to irinotecan, fluorouracil or an excipient is an exclusion."
       },
@@ -234,7 +238,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Pregnancy or breastfeeding is an exclusion."
       },
@@ -244,17 +249,18 @@
         "operator": "==",
         "value": true,
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "irinotecan"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "Review bowel disease/obstruction before irinotecan. This is a supplementary FOLFIRI caution, not an encoded exclusion from the 00449 table."
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "Supplementary NCCP 00227 v9 FOLFIRI (not a 00449 exclusion)",
+          "url": "https://healthservice.hse.ie/documents/6563/227_v9_FOLFIRI.pdf"
         },
-        "explanation": "Chronic bowel disease and/or bowel obstruction is an exclusion."
+        "explanation": "Review bowel disease/obstruction before irinotecan. This is a supplementary FOLFIRI caution, not an encoded exclusion from the 00449 table."
       },
       {
         "rule_id": "DPD_COMPLETE",
@@ -272,7 +278,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Known complete DPD deficiency contraindicates fluorouracil."
       },
@@ -291,7 +298,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose."
       },
@@ -318,7 +326,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "DPD testing is required before first fluorouracil treatment unless previously tested."
       },
@@ -336,7 +345,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "Supplementary NCCP 00227 v9 FOLFIRI (not a 00449 exclusion)",
+          "url": "https://healthservice.hse.ie/documents/6563/227_v9_FOLFIRI.pdf"
         },
         "explanation": "Baseline greater than 3 loose bowel movements per day is listed as a caution."
       },
@@ -354,36 +364,33 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "Supplementary NCCP 00227 v9 FOLFIRI (not a 00449 exclusion)",
+          "url": "https://healthservice.hse.ie/documents/6563/227_v9_FOLFIRI.pdf"
         },
         "explanation": "For patients known to be homozygous UGT1A1*28, a reduced irinotecan starting dose may be considered."
       },
       {
         "rule_id": "ANC_DAY1_HOLD",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": "<",
-            "value": 1.5
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 4
-          }
-        ],
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Hold treatment and repeat FBC weekly."
+          "recommendation": "If ANC is below 1.5 ×10⁹/L on Day 1, hold FOLFIRI chemotherapy and repeat FBC weekly. Confirm delay duration and the persistent-toxicity stopping pathway before rescheduling. Bevacizumab may be delayed independently; review its own criteria and the timing of subsequent treatment (page 3)."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "If ANC is below 1.5 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly."
+        "explanation": "If ANC is below 1.5 ×10⁹/L on Day 1, hold FOLFIRI chemotherapy and repeat FBC weekly.",
+        "field": "anc_x10e9_l",
+        "operator": "<",
+        "value": 1.5
       },
       {
         "rule_id": "ANC_NO_RECOVERY_4W",
@@ -402,42 +409,43 @@
         "action": {
           "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Discontinue treatment."
+          "recommendation": "Discontinue FOLFIRI chemotherapy. Bevacizumab may be delayed independently; review its own criteria and the timing of subsequent treatment (page 3)."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "If ANC remains below 1.5 ×10⁹/L after 4 weeks, discontinue treatment."
+        "explanation": "If ANC remains below 1.5 ×10⁹/L after 4 weeks, discontinue FOLFIRI chemotherapy."
       },
       {
         "rule_id": "PLATELETS_DAY1_HOLD",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": "<",
-            "value": 75
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 2
-          }
-        ],
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Hold treatment and repeat FBC weekly."
+          "recommendation": "If platelets are below 75 ×10⁹/L on Day 1, hold FOLFIRI chemotherapy and repeat FBC weekly. Confirm delay duration and the persistent-toxicity stopping pathway before rescheduling. Bevacizumab may be delayed independently; review its own criteria and the timing of subsequent treatment (page 3)."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "If platelets are below 75 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly."
+        "explanation": "If platelets are below 75 ×10⁹/L on Day 1, hold FOLFIRI chemotherapy and repeat FBC weekly.",
+        "field": "platelets_x10e9_l",
+        "operator": "<",
+        "value": 75
       },
       {
         "rule_id": "PLATELETS_NO_RECOVERY_2W",
@@ -456,15 +464,20 @@
         "action": {
           "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Discontinue treatment."
+          "recommendation": "Discontinue FOLFIRI chemotherapy. Bevacizumab may be delayed independently; review its own criteria and the timing of subsequent treatment (page 3)."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "If platelets remain below 75 ×10⁹/L after 2 weeks, discontinue treatment."
+        "explanation": "If platelets remain below 75 ×10⁹/L after 2 weeks, discontinue FOLFIRI chemotherapy."
       },
       {
         "rule_id": "ANC_DELAY_NADIR_G3",
@@ -492,11 +505,24 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level."
+          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -1
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -1
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1
+            }
+          }
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Lowest ANC 0.5–0.99 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level."
       },
@@ -521,11 +547,24 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels."
+          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -2
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -2
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2
+            }
+          }
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Lowest ANC below 0.5 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels."
       },
@@ -555,11 +594,24 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level."
+          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -1
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -1
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1
+            }
+          }
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Lowest platelets 10–49.9 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level."
       },
@@ -584,11 +636,24 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels."
+          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -2
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -2
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2
+            }
+          }
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Lowest platelets below 10 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels."
       },
@@ -604,58 +669,26 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels; G-CSF may be considered."
+          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels; G-CSF may be considered.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -2
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -2
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2
+            }
+          }
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Grade 4 neutropenia with fever grade ≥2: reduce irinotecan and fluorouracil two dose levels."
-      },
-      {
-        "rule_id": "IRINOTECAN_CRCL_LT10",
-        "all": [
-          {
-            "field": "crcl_ml_min",
-            "operator": "<",
-            "value": 10
-          },
-          {
-            "field": "haemodialysis",
-            "operator": "==",
-            "value": false
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "irinotecan"
-          ],
-          "recommendation": "Start irinotecan at 50–66% of the original dose; increase if tolerated."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "For CrCl below 10 mL/min, start irinotecan at 50–66% of the original dose and increase if tolerated."
-      },
-      {
-        "rule_id": "IRINOTECAN_HAEMODIALYSIS",
-        "field": "haemodialysis",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "irinotecan"
-          ],
-          "recommendation": "Start irinotecan at 50–66% of the original dose and individualise dialysis timing."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "For haemodialysis, start irinotecan at 50–66% of the original dose and increase if tolerated."
       },
       {
         "rule_id": "IRINOTECAN_BILI_GT3ULN",
@@ -665,14 +698,14 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "irinotecan",
-            "whole_regimen"
-          ],
-          "whole_regimen": "discontinue"
+            "irinotecan"
+          ]
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "table": 3,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Irinotecan is contraindicated when bilirubin exceeds 3 × ULN."
       },
@@ -694,81 +727,39 @@
           "type": "contraindicated",
           "components": [
             "fluorouracil_bolus",
-            "fluorouracil_infusion",
-            "whole_regimen"
-          ],
-          "whole_regimen": "discontinue"
+            "fluorouracil_infusion"
+          ]
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "table": 3,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Fluorouracil is contraindicated when bilirubin exceeds 85 µmol/L or AST exceeds 180 U/L."
       },
       {
-        "rule_id": "FIVEFU_MODERATE_HEPATIC",
-        "field": "hepatic_impairment_severity",
-        "operator": "==",
-        "value": "moderate",
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce initial fluorouracil dose by one third; increase if no toxicity."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Moderate hepatic impairment: reduce initial fluorouracil dose by one third."
-      },
-      {
-        "rule_id": "FIVEFU_SEVERE_HEPATIC",
-        "field": "hepatic_impairment_severity",
-        "operator": "==",
-        "value": "severe",
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce initial fluorouracil dose by one half; increase if no toxicity."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe hepatic impairment: reduce initial fluorouracil dose by one half."
-      },
-      {
         "rule_id": "DIARRHOEA_CURRENT_G2_HOLD",
-        "all": [
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 2
-          }
-        ],
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Hold and reassess; proceed only once diarrhoea is below grade 2 and fully resolved as required."
+          "recommendation": "Current diarrhoea grade ≥2: hold FOLFIRI chemotherapy for up to two weeks. Confirm delay duration and the persistent-toxicity stopping pathway before rescheduling. Bevacizumab may be delayed independently; review its own criteria and the timing of subsequent treatment (page 3)."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "table": 6,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Current diarrhoea grade ≥2: hold treatment for up to two weeks."
+        "explanation": "Current diarrhoea grade ≥2: hold FOLFIRI chemotherapy for up to two weeks.",
+        "field": "diarrhoea_current_grade",
+        "operator": ">=",
+        "value": 2
       },
       {
         "rule_id": "DIARRHOEA_PERSISTENT_G2_STOP",
@@ -787,15 +778,20 @@
         "action": {
           "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Discontinue treatment."
+          "recommendation": "Discontinue FOLFIRI chemotherapy. Bevacizumab may be delayed independently; review its own criteria and the timing of subsequent treatment (page 3)."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "table": 6,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Diarrhoea remaining grade ≥2 after two weeks: discontinue treatment."
+        "explanation": "Diarrhoea remaining grade ≥2 after two weeks: discontinue FOLFIRI chemotherapy."
       },
       {
         "rule_id": "DIARRHOEA_HIGHEST_G3",
@@ -809,11 +805,24 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level."
+          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -1
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -1
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1
+            }
+          }
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "table": 6,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Previous grade 3 diarrhoea: reduce irinotecan and fluorouracil one dose level."
       },
@@ -829,40 +838,49 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels."
+          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_level_change": -2
+            },
+            "fluorouracil_bolus": {
+              "dose_level_change": -2
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2
+            }
+          }
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "table": 6,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Previous grade 4 diarrhoea: reduce irinotecan and fluorouracil two dose levels."
       },
       {
         "rule_id": "STOMATITIS_CURRENT_G2_HOLD",
-        "all": [
-          {
-            "field": "stomatitis_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 2
-          }
-        ],
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Hold and reassess; proceed only once stomatitis is below grade 2."
+          "recommendation": "Current stomatitis grade ≥2: hold FOLFIRI chemotherapy for up to two weeks. Confirm delay duration and the persistent-toxicity stopping pathway before rescheduling. Bevacizumab may be delayed independently; review its own criteria and the timing of subsequent treatment (page 3)."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "table": 6,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Current stomatitis grade ≥2: hold treatment for up to two weeks."
+        "explanation": "Current stomatitis grade ≥2: hold FOLFIRI chemotherapy for up to two weeks.",
+        "field": "stomatitis_current_grade",
+        "operator": ">=",
+        "value": 2
       },
       {
         "rule_id": "STOMATITIS_PERSISTENT_G2_STOP",
@@ -881,15 +899,20 @@
         "action": {
           "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "recommendation": "Discontinue treatment."
+          "recommendation": "Discontinue FOLFIRI chemotherapy. Bevacizumab may be delayed independently; review its own criteria and the timing of subsequent treatment (page 3)."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "table": 6,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Stomatitis remaining grade ≥2 after two weeks: discontinue treatment."
+        "explanation": "Stomatitis remaining grade ≥2 after two weeks: discontinue FOLFIRI chemotherapy."
       },
       {
         "rule_id": "STOMATITIS_HIGHEST_G3",
@@ -902,11 +925,21 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce both fluorouracil components by one dose level; maintain irinotecan."
+          "recommendation": "Reduce both fluorouracil components by one dose level; maintain irinotecan.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1
+            }
+          }
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "table": 6,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Previous grade 3 stomatitis: maintain irinotecan and reduce fluorouracil one dose level."
       },
@@ -921,11 +954,21 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce both fluorouracil components by two dose levels; maintain irinotecan."
+          "recommendation": "Reduce both fluorouracil components by two dose levels; maintain irinotecan.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -2
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2
+            }
+          }
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "table": 6,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Previous grade 4 stomatitis: maintain irinotecan and reduce fluorouracil two dose levels."
       },
@@ -942,122 +985,11 @@
           "recommendation": "Administer atropine 250 micrograms SC unless contraindicated; consider prophylactic atropine with subsequent irinotecan."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 8,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Acute cholinergic syndrome requires atropine unless contraindicated; prophylaxis may be appropriate in later cycles."
-      },
-      {
-        "rule_id": "PROCEED_NO_ENCODED_MODIFICATION",
-        "all": [
-          {
-            "field": "hypersensitivity",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "pregnancy",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "breastfeeding",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "bowel_obstruction_or_chronic_bowel_disease",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "dpd_status",
-            "operator": "==",
-            "value": "documented_normal"
-          },
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "crcl_ml_min",
-            "operator": ">=",
-            "value": 10
-          },
-          {
-            "field": "haemodialysis",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "bilirubin_ratio_uln",
-            "operator": "<=",
-            "value": 3
-          },
-          {
-            "field": "bilirubin_umol_l",
-            "operator": "<=",
-            "value": 85
-          },
-          {
-            "field": "ast_u_l",
-            "operator": "<=",
-            "value": 180
-          },
-          {
-            "field": "hepatic_impairment_severity",
-            "operator": "==",
-            "value": "none"
-          },
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": "<",
-            "value": 2
-          },
-          {
-            "field": "stomatitis_current_grade",
-            "operator": "<",
-            "value": 2
-          },
-          {
-            "field": "baseline_loose_bm_gt3",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "ugt1a1_homozygous_28",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "grade4_neutropenia_with_grade2_fever",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "acute_cholinergic_syndrome",
-            "operator": "==",
-            "value": false
-          }
-        ],
-        "action": {
-          "type": "proceed",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "No encoded dose-modification criterion was triggered by the entered data."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Entered values meet the encoded Day 1 parameters and do not trigger an encoded modification."
       },
       {
         "rule_id": "ANTI_VEGF_UNCONTROLLED_HTN",
@@ -1069,31 +1001,15 @@
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Withhold the anti-VEGF component until hypertension is controlled."
+          "recommendation": "Withhold bevacizumab for uncontrolled or symptomatic hypertension on Day 1; initiate or adjust antihypertensive treatment."
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "table": 5,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Withhold the anti-VEGF component until hypertension is controlled."
-      },
-      {
-        "rule_id": "ANTI_VEGF_PROTEINURIA_2G",
-        "field": "proteinuria_g_24h",
-        "operator": ">=",
-        "value": 2,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Withhold the anti-VEGF component and follow the protocol proteinuria pathway."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold the anti-VEGF component and follow the protocol proteinuria pathway."
+        "explanation": "Withhold bevacizumab for uncontrolled or symptomatic hypertension on Day 1; initiate or adjust antihypertensive treatment."
       },
       {
         "rule_id": "ANTI_VEGF_SEVERE_BLEEDING",
@@ -1109,7 +1025,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "table": 5,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Discontinue the anti-VEGF component for severe haemorrhage."
       },
@@ -1123,13 +1041,15 @@
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Discontinue the anti-VEGF component for GI perforation or fistula."
+          "recommendation": "Discontinue bevacizumab for GI perforation, tracheoesophageal fistula or any grade 4 fistula."
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "table": 5,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Discontinue the anti-VEGF component for GI perforation or fistula."
+        "explanation": "Discontinue bevacizumab for GI perforation, tracheoesophageal fistula or any grade 4 fistula."
       },
       {
         "rule_id": "ANTI_VEGF_ATE",
@@ -1144,8 +1064,9 @@
           "recommendation": "Discontinue the anti-VEGF component for an arterial thromboembolic event."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 7,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Discontinue the anti-VEGF component for an arterial thromboembolic event."
       },
@@ -1162,10 +1083,363 @@
           "recommendation": "Withhold and obtain consultant review around surgery or impaired wound healing."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 7,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "Withhold and obtain consultant review around surgery or impaired wound healing."
+      },
+      {
+        "rule_id": "FIVEFU_HEPATIC_EXACT_BOUNDARY",
+        "any": [
+          {
+            "field": "bilirubin_umol_l",
+            "operator": "==",
+            "value": 85
+          },
+          {
+            "field": "ast_u_l",
+            "operator": "==",
+            "value": 180
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "The source table does not assign bilirubin exactly 85 µmol/L or AST exactly 180 U/L. Obtain a Consultant dosing decision; do not infer a standard dose.",
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "page": 4,
+          "table": 3,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "The source table does not assign bilirubin exactly 85 µmol/L or AST exactly 180 U/L. Obtain a Consultant dosing decision; do not infer a standard dose."
+      },
+      {
+        "rule_id": "ANTI_VEGF_PROTEINURIA_GT2_TO4",
+        "all": [
+          {
+            "field": "proteinuria_g_24h",
+            "operator": ">",
+            "value": 2
+          },
+          {
+            "field": "proteinuria_g_24h",
+            "operator": "<=",
+            "value": 4
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Hold bevacizumab; repeat 24-hour urine protein every two weeks. Resume on this criterion when protein is ≤2 g/24 h."
+        },
+        "source": {
+          "page": 5,
+          "table": 4,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "Hold bevacizumab; repeat 24-hour urine protein every two weeks. Resume on this criterion when protein is ≤2 g/24 h."
+      },
+      {
+        "rule_id": "ANTI_VEGF_PROTEINURIA_GT4",
+        "field": "proteinuria_g_24h",
+        "operator": ">",
+        "value": 4,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab when 24-hour urine protein exceeds 4 g/24 h."
+        },
+        "source": {
+          "page": 5,
+          "table": 4,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "Discontinue bevacizumab when 24-hour urine protein exceeds 4 g/24 h."
+      },
+      {
+        "rule_id": "ANTI_VEGF_PROTEINURIA_LE2",
+        "field": "proteinuria_g_24h",
+        "operator": "<=",
+        "value": 2,
+        "action": {
+          "type": "proceed",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "The 24-hour urine protein criterion permits bevacizumab at ≤2 g/24 h. Other bevacizumab criteria and unassessed domains still require review."
+        },
+        "source": {
+          "page": 5,
+          "table": 4,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "The 24-hour urine protein criterion permits bevacizumab at ≤2 g/24 h. Other bevacizumab criteria and unassessed domains still require review."
+      },
+      {
+        "rule_id": "ANTI_VEGF_DIPSTICK_4",
+        "field": "urine_protein_dipstick",
+        "operator": "==",
+        "value": "4",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Withhold bevacizumab for a 4+ dipstick and collect 24-hour urine protein."
+        },
+        "source": {
+          "page": 5,
+          "table": 4,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "Withhold bevacizumab for a 4+ dipstick and collect 24-hour urine protein."
+      },
+      {
+        "rule_id": "ANTI_VEGF_DIPSTICK_2_3",
+        "field": "urine_protein_dipstick",
+        "operator": "in",
+        "value": [
+          "2",
+          "3"
+        ],
+        "action": {
+          "type": "proceed",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "A 2+ or 3+ dipstick permits the scheduled bevacizumab dose on this criterion; collect 24-hour urine protein within three days before the next dose and apply the quantitative pathway. Any concurrent hold or stop criterion takes precedence."
+        },
+        "source": {
+          "page": 5,
+          "table": 4,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "A 2+ or 3+ dipstick permits the scheduled bevacizumab dose on this criterion; collect 24-hour urine protein within three days before the next dose and apply the quantitative pathway. Any concurrent hold or stop criterion takes precedence."
+      },
+      {
+        "rule_id": "ANTI_VEGF_PROTEINURIA_G4",
+        "field": "grade4_proteinuria",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 4 proteinuria."
+        },
+        "source": {
+          "page": 5,
+          "table": 5,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "Discontinue bevacizumab for grade 4 proteinuria."
+      },
+      {
+        "rule_id": "FIVEFU_SEVERE_RENAL_REVIEW",
+        "field": "renal_impairment_severity",
+        "operator": "in",
+        "value": [
+          "severe",
+          "dialysis"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Consider a fluorouracil dose reduction in severe renal impairment only. The source does not quantify the reduction; obtain an individualised Consultant/pharmacy decision.",
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "page": 4,
+          "table": 3,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "Consider a fluorouracil dose reduction in severe renal impairment only. The source does not quantify the reduction; obtain an individualised Consultant/pharmacy decision."
+      },
+      {
+        "rule_id": "BEVACIZUMAB_RENAL_REVIEW",
+        "field": "renal_impairment_severity",
+        "operator": "in",
+        "value": [
+          "mild_moderate",
+          "severe",
+          "dialysis"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "No renal-impairment studies are provided for bevacizumab in this source. Review suitability; do not infer a quantified dose reduction.",
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "page": 4,
+          "table": 3,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "No renal-impairment studies are provided for bevacizumab in this source. Review suitability; do not infer a quantified dose reduction."
+      },
+      {
+        "rule_id": "IRINOTECAN_RENAL_CAUTION",
+        "field": "renal_impairment_severity",
+        "operator": "in",
+        "value": [
+          "mild_moderate",
+          "severe",
+          "dialysis"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "NCCP 00449 specifies no irinotecan dose reduction for renal impairment, but advises caution because information is lacking. For dialysis, obtain a specialist plan; this source does not specify a dialysis dose or timing.",
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "page": 4,
+          "table": 3,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "NCCP 00449 specifies no irinotecan dose reduction for renal impairment, but advises caution because information is lacking. For dialysis, obtain a specialist plan; this source does not specify a dialysis dose or timing."
+      },
+      {
+        "rule_id": "ANC_DELAY_BEYOND_TWO_WEEKS_REVIEW",
+        "all": [
+          {
+            "field": "toxicity_delay_weeks",
+            "operator": ">",
+            "value": 2
+          },
+          {
+            "field": "anc_x10e9_l",
+            "operator": ">=",
+            "value": 1.5
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "ANC recovery after more than two delayed weeks falls outside the source recovery wording. Confirm the FOLFIRI restart plan with the Consultant; assess bevacizumab independently."
+        },
+        "source": {
+          "page": 4,
+          "table": 2,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "ANC recovery after more than two delayed weeks falls outside the source recovery wording. Confirm the FOLFIRI restart plan with the Consultant; assess bevacizumab independently."
+      },
+      {
+        "rule_id": "FIVEFU_MODERATE_HEPATIC",
+        "field": "hepatic_impairment_severity",
+        "operator": "==",
+        "value": "moderate",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one third; increase if no toxicity. Any bilirubin/AST contraindication takes precedence.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_percent_of_original": 66.66666666666667
+            },
+            "fluorouracil_infusion": {
+              "dose_percent_of_original": 66.66666666666667
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 3,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one third; increase if no toxicity. Any bilirubin/AST contraindication takes precedence."
+      },
+      {
+        "rule_id": "FIVEFU_SEVERE_HEPATIC",
+        "field": "hepatic_impairment_severity",
+        "operator": "==",
+        "value": "severe",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one half; increase if no toxicity. Any bilirubin/AST contraindication takes precedence.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_percent_of_original": 50
+            },
+            "fluorouracil_infusion": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "source": {
+          "page": 4,
+          "table": 3,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one half; increase if no toxicity. Any bilirubin/AST contraindication takes precedence."
+      },
+      {
+        "rule_id": "BEVACIZUMAB_HEPATIC_REVIEW",
+        "field": "hepatic_impairment_severity",
+        "operator": "in",
+        "value": [
+          "moderate",
+          "severe"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "No hepatic-impairment studies are provided for bevacizumab in this source; review suitability without inventing a dose reduction.",
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "page": 4,
+          "table": 3,
+          "document": "NCCP 00449 v6a",
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
+        },
+        "explanation": "No hepatic-impairment studies are provided for bevacizumab in this source; review suitability without inventing a dose reduction."
       }
     ]
   },
@@ -1278,51 +1552,6 @@
       "max": 4,
       "step": 1,
       "demo_value": 0,
-      "input_role": "decision"
-    },
-    "crcl_ml_min": {
-      "label": "Creatinine clearance category",
-      "type": "select",
-      "required": false,
-      "demo_value": "renal_10_plus",
-      "options": [
-        {
-          "value": "renal_0_9",
-          "label": "<10 mL/min",
-          "decision_value": 4,
-          "range_min_inclusive": 0,
-          "range_max_inclusive": 9
-        },
-        {
-          "value": "renal_10_plus",
-          "label": ">=10 mL/min",
-          "decision_value": 10,
-          "range_min_inclusive": 10,
-          "range_max_inclusive": null
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis - use the protocol-specific dialysis pathway / specialist review",
-          "decision_value": 0,
-          "sets_fields": {
-            "haemodialysis": true
-          }
-        }
-      ],
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation.",
-      "input_role": "decision"
-    },
-    "haemodialysis": {
-      "label": "Haemodialysis",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "visible": false,
-      "derived_from": "crcl_ml_min",
       "input_role": "decision"
     },
     "bilirubin_ratio_uln": {
@@ -1597,12 +1826,13 @@
       "input_role": "decision"
     },
     "uncontrolled_hypertension": {
-      "label": "Uncontrolled hypertension",
+      "label": "Uncontrolled or symptomatic hypertension on Day 1",
       "type": "boolean",
       "required": false,
       "ui_section": "clinical",
       "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "NCCP defines uncontrolled hypertension for initiation as sustained BP >150/100 mmHg while receiving antihypertensive medication."
     },
     "proteinuria_g_24h": {
       "label": "Proteinuria (g/24 h)",
@@ -1616,7 +1846,7 @@
       "input_role": "decision"
     },
     "active_severe_bleeding": {
-      "label": "Active severe bleeding",
+      "label": "Haemorrhagic event grade 3 or greater",
       "type": "boolean",
       "required": false,
       "ui_section": "clinical",
@@ -1624,7 +1854,7 @@
       "input_role": "decision"
     },
     "gi_perforation_or_fistula": {
-      "label": "Gastrointestinal perforation or fistula",
+      "label": "GI perforation, tracheoesophageal fistula or any grade 4 fistula",
       "type": "boolean",
       "required": false,
       "ui_section": "clinical",
@@ -1646,18 +1876,83 @@
       "ui_section": "clinical",
       "demo_value": false,
       "input_role": "decision"
+    },
+    "urine_protein_dipstick": {
+      "label": "Urine protein dipstick",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "negative",
+          "label": "Negative"
+        },
+        {
+          "value": "1",
+          "label": "1+"
+        },
+        {
+          "value": "2",
+          "label": "2+"
+        },
+        {
+          "value": "3",
+          "label": "3+"
+        },
+        {
+          "value": "4",
+          "label": "4+"
+        }
+      ],
+      "demo_value": "negative",
+      "input_role": "decision",
+      "ui_section": "labs"
+    },
+    "grade4_proteinuria": {
+      "label": "Grade 4 proteinuria (clinically assessed)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "renal_impairment_severity": {
+      "label": "Renal impairment severity",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No renal impairment"
+        },
+        {
+          "value": "mild_moderate",
+          "label": "Mild or moderate renal impairment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe renal impairment (clinically assessed)"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis — specialist review"
+        }
+      ],
+      "demo_value": "none",
+      "input_role": "decision",
+      "ui_section": "labs",
+      "always_show": true,
+      "assessment_guidance": "Use the clinically verified severity. NCCP does not provide a numeric cutoff or a percentage reduction for 5-FU in severe renal impairment in this regimen."
     }
   },
   "supportive_care": {
-    "emetogenic_risk": "minimal",
-    "script_id": "nccp-minimal-no-routine-prophylaxis",
+    "emetogenic_risk": "moderate",
+    "script_id": "nccp-parenteral-moderate",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Highest active parenteral component is minimal emetogenic risk in NCCP V6 Table 7.",
+    "mapping_basis": "NCCP 00449 v6a, page 6: irinotecan is moderate emetogenic risk and determines the combination risk.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
+    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
   }
 }

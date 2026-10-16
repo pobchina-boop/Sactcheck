@@ -1155,7 +1155,7 @@
       labCalculations: latestLabCalculations,
       clinicianDecision: document.getElementById("jsonClinicianDecision")?.value || "",
       clinicianNote: document.getElementById("jsonClinicianNote")?.value || "",
-      appVersion: "0.59.0"
+      appVersion: root.SACTCHECK_RELEASE || "0.59.0"
     });
   }
 
@@ -1261,7 +1261,7 @@
 
   function renderThresholdComparison(finding, result) {
     const conditions = finding.conditions?.length ? finding.conditions : [finding.condition];
-    const comparisons = conditions.flatMap(condition => comparisonRows(condition, result.inputs, result.definitions));
+    const comparisons = conditions.flatMap(condition => comparisonRows(condition, result.inputs, result.definitions, result.displayInputs));
     const uniqueComparisons = comparisons.filter((item, index, array) =>
       array.findIndex(other => other.label === item.label && other.actual === item.actual && other.symbol === item.symbol && other.cutoff === item.cutoff) === index
     );
@@ -1276,7 +1276,7 @@
     </div>`;
   }
 
-  function comparisonRows(condition, inputs, definitions) {
+  function comparisonRows(condition, inputs, definitions, displayInputs = {}) {
     if (!condition || typeof condition !== "object") return [];
     const definitionMap = new Map((definitions || []).map(definition => [definition.id, definition]));
     const leaves = [];
@@ -1289,7 +1289,7 @@
         const unit = definition.unit ? ` ${definition.unit}` : "";
         return {
           label: labCalculation ? `${definition.label || humanise(leaf.field)} · calculated` : (definition.label || humanise(leaf.field)),
-          actual: labCalculation ? `${labCalculation.display} → ${labCalculation.decisionDisplay}` : `${formatComparisonValue(inputs[leaf.field])}${unit}`,
+          actual: labCalculation ? `${labCalculation.display} → ${labCalculation.decisionDisplay}` : `${displayInputs[leaf.field] ?? formatComparisonValue(inputs[leaf.field])}${definition.type === "select" ? "" : unit}`,
           symbol: operatorSymbol(leaf.operator),
           cutoff: `${formatCutoff(leaf.value, leaf.operator)}${unit}`
         };
