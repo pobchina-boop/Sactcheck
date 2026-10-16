@@ -62,12 +62,13 @@
       .replace(/[®™]/g,"")
       .replace(/\([^)]*\)/g," ")
       .replace(/[_/–—-]+/g," ")
-      .replace(/\b(?:iv|po|sc|oral|intravenous|subcutaneous|infusion|bolus|tablets?|capsules?|mg|mcg)\b/g," ")
+      .replace(/\b(?:iv|po|sc|oral|intravenous|subcutaneous|infusion|infusional|bolus|tablets?|capsules?|mg|mcg)\b/g," ")
       .replace(/[^a-z0-9]+/g," ")
       .replace(/\s+/g," ")
       .trim()
       .replace(/\bnab paclitaxel\b/g,"nab paclitaxel")
-      .replace(/\b5 fluorouracil\b/g,"fluorouracil");
+      .replace(/\b5 fluorouracil\b/g,"fluorouracil")
+      .replace(/^5\s*fu$/,"fluorouracil");
   }
   function displayDrug(value){
     return String(value||"").replace(/[_-]+/g," ").replace(/\s+/g," ").trim();
@@ -608,6 +609,8 @@
           ${moduleStatus("available")}
           <button class="btn secondary workflow-module-action" type="button" data-workflow-patient-guide>Open patient guide</button>
           <button class="btn secondary workflow-module-action" type="button" data-workflow-passport-card>Open Treatment Passport</button>
+          ${patientAssets()?.relativePath?.(activeProtocol,'knowledge')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'knowledge'))}" target="_blank" rel="noopener noreferrer">Complete patient reference + cycle timeline</a>`:''}
+          ${patientAssets()?.definitionFor?.(activeProtocol)?.sactCard?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'sact-card'))}" target="_blank" rel="noopener noreferrer">Treatment / contact card</a>`:''}
         </article>
 
         <article class="workflow-module source">

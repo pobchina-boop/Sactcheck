@@ -13,11 +13,13 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.82.3';
-  const CONTENT_RELEASE='0.82.3';
+  const RELEASE='0.83.0';
+  const CONTENT_RELEASE='0.83.0';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
-    '00209':{title:'Modified FOLFOX-6',guide:true,passport:true},
+    '00209':{title:'Modified FOLFOX-6',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
+    '00226':{title:'Weekly paclitaxel',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
+    '00321':{title:'CAPOX / XELOX',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
     '00222':{title:'Pemetrexed Monotherapy',guide:true,passport:true},
     '00317':{title:'Pemetrexed + Cisplatin',guide:true,passport:true},
     '00318':{title:'Pemetrexed + Carboplatin',guide:true,passport:true},

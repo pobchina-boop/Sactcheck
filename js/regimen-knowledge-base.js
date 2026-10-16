@@ -323,7 +323,7 @@
       </section>
 
       ${overview}
-      ${regimenProfile?.reference_links?.length ? `<section class="regimen-information-section"><h3>00568 source and patient links</h3><div class="regimen-information-actions">${regimenProfile.reference_links.map(item => publicationLink(item, item.label)).join("")}</div></section>` : ""}
+      ${regimenProfile?.reference_links?.length ? `<section class="regimen-information-section"><h3>Regimen sources and patient resources</h3><div class="regimen-information-actions">${regimenProfile.reference_links.map(item => publicationLink(item, item.label)).join("")}</div></section>` : ""}
       ${patientSelection}
       ${supportiveCare}
       ${monitoring}

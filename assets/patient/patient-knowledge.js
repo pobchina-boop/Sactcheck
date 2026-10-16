@@ -10,6 +10,7 @@ const addDays=(start,n)=>{const x=new Date(start);x.setDate(x.getDate()+n);retur
 const fmt=x=>x.toLocaleDateString('en-IE',{day:'numeric',month:'short'});
 function render(){
  const start=localDate(date.value),p=data.phases.find(p=>p.id===phase.value)||data.phases[0],g=data.day_groups.find(g=>selected>=g.start&&selected<=g.end);
+ document.querySelectorAll('[data-phase-ids]').forEach(row=>{if(row.dataset.phaseIds)row.hidden=!row.dataset.phaseIds.split(' ').includes(p.id);});
  document.getElementById('pk-active-medicines').textContent=p.agents.map(id=>data.agents.find(a=>a.id===id).name).join(' + ');
  document.querySelectorAll('[data-day]').forEach(b=>{const n=Number(b.dataset.day);b.setAttribute('aria-pressed',String(n===selected));b.querySelector('small').textContent=start?fmt(addDays(start,n-1)):'';b.setAttribute('aria-label',`Day ${n}${start?', '+fmt(addDays(start,n-1)):''}`);});
  document.getElementById('pk-day-number').textContent=`Day ${selected}${start?' · '+fmt(addDays(start,selected-1)):''}`;
