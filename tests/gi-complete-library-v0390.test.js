@@ -96,7 +96,7 @@ for (const { file, data } of gi) {
   const metadata = data.metadata || {};
   assert(!/placeholder|draft/i.test(String(data.status || '')), `${code} remains a placeholder or draft.`);
   assert.strictEqual(data.status, 'encoded_prototype_pending_clinical_and_pharmacy_validation', `${code} lacks active encoded-prototype status.`);
-  assert(['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
+  assert(['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5','0.83.6'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
   assert.strictEqual(metadata.partial_assessment_supported, true, `${code} does not declare single-entry support.`);
   assert(/^https:\/\/(?:healthservice\.hse\.ie\/documents\/|assets\.hse\.ie\/media\/documents\/)/.test(metadata.source_url || ''), `${code} does not link directly to an official HSE/NCCP source PDF.`);
   assert(metadata.gi_subgroup, `${code} lacks a GI subgroup.`);
@@ -129,7 +129,7 @@ for (const { file, data } of gi) {
       ctcaeFields += 1;
       assert.strictEqual(definition.type, 'select', `${code}/${field} CTCAE input must be a selector.`);
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
-      const folfoxSourceDiarrhoea = code === '00447' && ['diarrhoea_current_grade','diarrhoea_highest_grade'].includes(field);
+      const folfoxSourceDiarrhoea = (['00447','00733'].includes(code)) && ['diarrhoea_current_grade','diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
       assert.strictEqual(definition.ctcae_version, folfoxSourceDiarrhoea?'NCCP source table 6':sourceDiarrhoea?'4.0':'5.0', `${code}/${field} has wrong source grading metadata.`);
       if(folfoxSourceDiarrhoea) assert.match(definition.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) assert.match(definition.ctcae_source_url,/healthservice.hse.ie/);

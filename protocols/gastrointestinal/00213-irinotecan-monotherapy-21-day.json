@@ -11,8 +11,8 @@
     "short_title": "Irinotecan Monotherapy – 21 day",
     "indication": "Advanced colorectal cancer after failure of 5-fluorouracil-containing therapy.",
     "source_url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 5,
+    "sactcheck_encoding_version": "0.83.6",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -45,7 +45,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
+      "audit_release": "0.83.6",
+      "software_validation_record": "validation/colorectal-v0836/VALIDATION.md"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -62,11 +64,14 @@
     },
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "label": "Source-mapped rules · independent clinical/pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.83.6",
+      "audit_date": "2026-10-17",
+      "scope_note": "NCCP web-rendered tables checked; source ambiguities exposed. Binary PDF retrieval failed. Reconfirm latest source before clinical adoption."
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -86,12 +91,13 @@
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00213-v7"
+    "canonical_protocol_id": "nccp-00213-v7",
+    "source_checked_date": "2026-10-17"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00213 Version 7. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "disclaimer": "NCCP 00213 v7 source mapping, SACTCheck v0.83.6. Independent consultant/pharmacy validation and clinical authorisation remain pending. Resolve declared source conflicts; missing inputs are unassessed.",
     "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
@@ -100,18 +106,12 @@
       "description": "Advanced colorectal cancer after failure of 5-fluorouracil-containing therapy."
     }
   ],
-  "treatment": {
-    "cycle_length_days": 21,
-    "schedule_summary": "Irinotecan Monotherapy – 21 day",
-    "drugs": [
-      "irinotecan"
-    ]
-  },
   "input_definitions": {
     "ecog": {
       "label": "ECOG performance status",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -134,61 +134,91 @@
           "label": "4"
         }
       ],
-      "demo_value": 0,
-      "input_role": "decision"
+      "demo_value": 0
     },
     "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
+      "label": "Known hypersensitivity to a regimen medicine",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "pregnancy": {
       "label": "Pregnant",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "anc_x10e9_l": {
-      "label": "Absolute neutrophil count",
+      "label": "Current ANC",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 0.1,
-      "demo_value": 2,
+      "step": 0.01,
       "unit": "×10⁹/L",
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": 3
     },
     "platelets_x10e9_l": {
-      "label": "Platelet count",
+      "label": "Current platelets",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 1,
-      "demo_value": 150,
+      "step": 0.01,
       "unit": "×10⁹/L",
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": 200
+    },
+    "lowest_anc": {
+      "label": "Lowest ANC during delayed weeks / previous toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 3
+    },
+    "lowest_platelets": {
+      "label": "Lowest platelets during delayed weeks / previous toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 200
+    },
+    "delay_weeks": {
+      "label": "Weeks delayed for count recovery",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": 0
     },
     "febrile_or_active_infection": {
-      "label": "Fever, febrile neutropenia or active infection requiring treatment",
+      "label": "Fever or active infection",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "other_nonhaem_toxicity_grade": {
-      "label": "Worst relevant non-haematological toxicity",
+      "label": "Current other non-haematological toxicity grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -225,69 +255,277 @@
       "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade.",
       "ctcae_version": "5.0",
       "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
     },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin result (actual value entered; ×ULN calculated automatically)",
+    "diarrhoea_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "diarrhoea_highest_grade": {
+      "label": "Worst diarrhoea grade in this episode",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "toxicity_delay_weeks": {
+      "label": "Weeks delayed for this non-haematological toxicity",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": 0
     },
-    "bowel_obstruction_or_chronic_inflammatory_bowel_disease": {
-      "label": "Bowel obstruction or clinically significant chronic inflammatory bowel disease",
+    "febrile_neutropenia": {
+      "label": "Prior febrile neutropenia / grade 4 neutropenia with grade ≥2 fever",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "acute_cholinergic_syndrome": {
-      "label": "Acute cholinergic symptoms during/after irinotecan",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "irinotecan_renal_band": {
-      "label": "Renal status for irinotecan",
+    "assessment_type": {
+      "label": "Treatment assessment",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": "not_dialysis",
-          "label": "Not receiving dialysis",
-          "decision_value": "not_dialysis"
+          "value": "subsequent_cycle",
+          "label": "Subsequent cycle"
         },
         {
-          "value": "dialysis",
-          "label": "Haemodialysis",
-          "decision_value": "dialysis"
+          "value": "baseline",
+          "label": "Before first cycle"
         }
       ],
-      "demo_value": "not_dialysis",
-      "ui_section": "labs",
-      "always_show": true,
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
+      "demo_value": "subsequent_cycle",
+      "always_show": true
     },
-    "irinotecan_bilirubin_uln": {
-      "label": "Bilirubin for irinotecan",
+    "crcl_ml_min": {
+      "label": "Verified creatinine clearance",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 0.1,
-      "demo_value": 0.8,
-      "ui_section": "labs",
-      "always_show": true,
+      "step": 0.01,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "demo_value": 90,
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Retain the verified numerical result for this source audit: strict threshold comparisons and the exactly-30 mL/min source gap must not be rounded into another band."
+      }
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_renal_impairment": {
+      "label": "Clinically severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment": {
+      "label": "Clinical hepatic impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "renal_impairment": {
+      "label": "Renal impairment present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "grade4_thrombocytopenia_with_leucopenia": {
+      "label": "Grade 4 thrombocytopenia with leucopenia <1.0 ×10⁹/L",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
       "unit": "×ULN",
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "bowel_obstruction_or_chronic_inflammatory_bowel_disease": {
+      "label": "Bowel obstruction / chronic bowel disease",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "acute_cholinergic_syndrome": {
+      "label": "Acute irinotecan cholinergic symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ugt1a1_homozygous_28": {
+      "label": "Known UGT1A1*28 homozygosity / Gilbert syndrome",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_bone_marrow_failure": {
+      "label": "Severe bone marrow failure",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "worst_other_nonhaem_grade": {
+      "label": "Worst previous non-haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No other non-haematological adverse event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
     }
   },
   "required_inputs": [],
@@ -322,8 +560,7 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
+        "rule_id": "ECOG_ELIGIBILITY",
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -332,19 +569,21 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "irinotecan"
           ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "recommendation": "Outside the NCCP ECOG eligibility range; review suitability.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Outside the NCCP ECOG eligibility range; review suitability.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "document": "NCCP 00213 v7",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
       },
       {
-        "id": "HYPERSENSITIVITY_EXCLUSION",
-        "priority": 10,
+        "rule_id": "HYPERSENSITIVITY",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -353,19 +592,19 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "irinotecan"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "recommendation": "Known hypersensitivity is an NCCP exclusion."
         },
+        "explanation": "Known hypersensitivity is an NCCP exclusion.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+          "document": "NCCP 00213 v7",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
       },
       {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "PREGNANCY_LACTATION",
         "when": {
           "any": [
             {
@@ -383,61 +622,19 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "irinotecan"
           ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "recommendation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions."
         },
+        "explanation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions.",
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "document": "NCCP 00213 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
       },
       {
-        "id": "ANC_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "PLATELETS_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "FEVER_OR_ACTIVE_INFECTION",
-        "priority": 10,
+        "rule_id": "INFECTION",
         "when": {
           "field": "febrile_or_active_infection",
           "operator": "==",
@@ -446,40 +643,128 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "irinotecan"
           ],
-          "message": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
+          "recommendation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review."
         },
+        "explanation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
+          "document": "NCCP 00213 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
       },
       {
-        "id": "SEVERE_OTHER_TOXICITY",
-        "priority": 8,
+        "rule_id": "ANC_HOLD",
         "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1.5
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "irinotecan"
           ],
-          "message": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
+          "recommendation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart."
         },
+        "explanation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
+          "document": "NCCP 00213 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "table": 1
+        }
       },
       {
-        "id": "IRINOTECAN_BILIRUBIN_OVER_3ULN",
-        "priority": 10,
+        "rule_id": "PLATELETS_HOLD",
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart."
+        },
+        "explanation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart.",
+        "source": {
+          "document": "NCCP 00213 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "HAEM_REDUCTION_RANGE",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "lowest_anc",
+                      "operator": "<",
+                      "value": 0.5
+                    },
+                    {
+                      "field": "lowest_platelets",
+                      "operator": "<",
+                      "value": 25
+                    }
+                  ]
+                },
+                {
+                  "field": "febrile_neutropenia",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "grade4_thrombocytopenia_with_leucopenia",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "NCCP specifies a 15–20% irinotecan reduction after these haematological events. Select the dose with consultant/pharmacy; do not invent a single percentage.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP specifies a 15–20% irinotecan reduction after these haematological events. Select the dose with consultant/pharmacy; do not invent a single percentage.",
+        "source": {
+          "document": "NCCP 00213 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "BILI_CI",
         "when": {
           "field": "bilirubin_uln_multiple",
           "operator": ">",
@@ -488,19 +773,20 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "irinotecan"
           ],
-          "message": "Bilirubin >3 ×ULN is an irinotecan exclusion in the NCCP pathway."
+          "recommendation": "Irinotecan is contraindicated above bilirubin 3 ×ULN."
         },
+        "explanation": "Irinotecan is contraindicated above bilirubin 3 ×ULN.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Bilirubin >3 ×ULN is an irinotecan exclusion in the NCCP pathway."
+          "document": "NCCP 00213 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "IRINOTECAN_BOWEL_EXCLUSION",
-        "priority": 10,
+        "rule_id": "BOWEL_EXCLUSION",
         "when": {
           "field": "bowel_obstruction_or_chronic_inflammatory_bowel_disease",
           "operator": "==",
@@ -509,19 +795,40 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "irinotecan"
           ],
-          "message": "Bowel obstruction or significant chronic bowel disease is an irinotecan exclusion."
+          "recommendation": "Bowel obstruction / chronic bowel disease is an irinotecan exclusion."
         },
+        "explanation": "Bowel obstruction / chronic bowel disease is an irinotecan exclusion.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Bowel obstruction or significant chronic bowel disease is an irinotecan exclusion."
+          "document": "NCCP 00213 v7",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
       },
       {
-        "id": "IRINOTECAN_CHOLINERGIC",
-        "priority": 7,
+        "rule_id": "MARROW_EXCLUSION",
+        "when": {
+          "field": "severe_bone_marrow_failure",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Severe bone marrow failure excludes irinotecan treatment."
+        },
+        "explanation": "Severe bone marrow failure excludes irinotecan treatment.",
+        "source": {
+          "document": "NCCP 00213 v7",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
+      },
+      {
+        "rule_id": "CHOLINERGIC",
         "when": {
           "field": "acute_cholinergic_syndrome",
           "operator": "==",
@@ -530,90 +837,268 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "irinotecan"
           ],
-          "message": "Treat acute cholinergic syndrome promptly and review atropine/supportive measures before further irinotecan."
+          "recommendation": "Immediate clinical assessment; atropine according to NCCP and local policy after checking contraindications. Distinguish this from delayed diarrhoea.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Immediate clinical assessment; atropine according to NCCP and local policy after checking contraindications. Distinguish this from delayed diarrhoea.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Treat acute cholinergic syndrome promptly and review atropine/supportive measures before further irinotecan."
+          "document": "NCCP 00213 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
       },
       {
-        "id": "OF590_00213_IRINO_DIALYSIS",
-        "priority": 20,
+        "rule_id": "UGT_REVIEW",
         "when": {
-          "field": "irinotecan_renal_band",
+          "field": "ugt1a1_homozygous_28",
           "operator": "==",
-          "value": "dialysis"
+          "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "irinotecan"
           ],
-          "message": "Haemodialysis: irinotecan dosing is not routinely established; use only after Consultant/pharmacy review.",
-          "recommendation": "Haemodialysis: irinotecan dosing is not routinely established; use only after Consultant/pharmacy review."
+          "recommendation": "Consider reduced irinotecan starting dose and enhanced toxicity monitoring; no fixed source percentage.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Consider reduced irinotecan starting dose and enhanced toxicity monitoring; no fixed source percentage.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Haemodialysis: irinotecan dosing is not routinely established; use only after Consultant/pharmacy review."
+          "document": "NCCP 00213 v7",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
       },
       {
-        "id": "OF590_00213_IRINO_BILI_1_5_3",
-        "priority": 20,
+        "rule_id": "DIARRHOEA_NOT_RESOLVED",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 1
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Treatment-related diarrhoea must be fully resolved before irinotecan; assess hydration, infection and bowel baseline."
+        },
+        "explanation": "Treatment-related diarrhoea must be fully resolved before irinotecan; assess hydration, infection and bowel baseline.",
+        "source": {
+          "document": "NCCP 00213 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
+      },
+      {
+        "rule_id": "OTHER_TOXICITY_HOLD",
+        "when": {
+          "field": "other_nonhaem_toxicity_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Allow treatment-related adverse events to recover to grade 0–1 before irinotecan."
+        },
+        "explanation": "Allow treatment-related adverse events to recover to grade 0–1 before irinotecan.",
+        "source": {
+          "document": "NCCP 00213 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf"
+        }
+      },
+      {
+        "rule_id": "RENAL_IRI",
+        "when": {
+          "any": [
+            {
+              "field": "renal_impairment",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "NCCP gives no routine irinotecan renal reduction but cautions that evidence is limited. Review clinical suitability; do not borrow the <10 mL/min dose range from other regimens.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP gives no routine irinotecan renal reduction but cautions that evidence is limited. Review clinical suitability; do not borrow the <10 mL/min dose range from other regimens.",
+        "source": {
+          "document": "NCCP 00213 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "BILI_START_200",
         "when": {
           "all": [
             {
-              "field": "irinotecan_bilirubin_uln",
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "bilirubin_uln_multiple",
               "operator": ">",
               "value": 1.5
             },
             {
-              "field": "irinotecan_bilirubin_uln",
+              "field": "bilirubin_uln_multiple",
               "operator": "<=",
               "value": 3
             }
           ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "irinotecan"
           ],
-          "message": "Bilirubin >1.5 to 3 ×ULN: use the source-reduced irinotecan dose (200 mg/m² for the 3-weekly monotherapy table).",
-          "recommendation": "Bilirubin >1.5 to 3 ×ULN: use the source-reduced irinotecan dose (200 mg/m² for the 3-weekly monotherapy table)."
+          "recommendation": "Source monotherapy starting dose is 200 mg/m² in the >1.5–3 ×ULN bilirubin band. Confirm performance status, coagulation and weekly FBC monitoring; lower boundary is assigned to ≤1.5 band.",
+          "show_in_dose_actions": true,
+          "component_changes": {
+            "irinotecan": {
+              "dose_mg_m2": 200
+            }
+          }
         },
+        "explanation": "Source monotherapy starting dose is 200 mg/m² in the >1.5–3 ×ULN bilirubin band. Confirm performance status, coagulation and weekly FBC monitoring; lower boundary is assigned to ≤1.5 band.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Bilirubin >1.5 to 3 ×ULN: use the source-reduced irinotecan dose (200 mg/m² for the 3-weekly monotherapy table)."
+          "document": "NCCP 00213 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "OF590_00213_IRINO_BILI_GT3",
-        "priority": 20,
+        "rule_id": "BILI_SUBSEQUENT_REVIEW",
         "when": {
-          "field": "irinotecan_bilirubin_uln",
-          "operator": ">",
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "The source bilirubin table describes starting doses. Reconcile previous dose, toxicity and current liver function before a subsequent dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source bilirubin table describes starting doses. Reconcile previous dose, toxicity and current liver function before a subsequent dose.",
+        "source": {
+          "document": "NCCP 00213 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "NONHAEM_REDUCTION",
+        "when": {
+          "field": "worst_other_nonhaem_grade",
+          "operator": ">=",
           "value": 3
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "irinotecan"
           ],
-          "message": "Bilirubin >3 ×ULN: discontinue/do not administer irinotecan.",
-          "recommendation": "Bilirubin >3 ×ULN: discontinue/do not administer irinotecan."
+          "recommendation": "After recovery to grade ≤1 and fully resolved diarrhoea, consider a 15–20% irinotecan reduction. No single percentage is selected automatically.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "After recovery to grade ≤1 and fully resolved diarrhoea, consider a 15–20% irinotecan reduction. No single percentage is selected automatically.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00213 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "TOXICITY_PERSISTENT",
+        "when": {
+          "all": [
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "diarrhoea_grade",
+                  "operator": ">=",
+                  "value": 1
+                }
+              ]
+            }
+          ]
         },
-        "explanation": "Bilirubin >3 ×ULN: discontinue/do not administer irinotecan."
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "If toxicity has not recovered after two weeks, consider discontinuing irinotecan with consultant review."
+        },
+        "explanation": "If toxicity has not recovered after two weeks, consider discontinuing irinotecan with consultant review.",
+        "source": {
+          "document": "NCCP 00213 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "table": 3
+        }
       }
     ]
   },
@@ -630,7 +1115,7 @@
     "Treatment-specific toxicity monitoring before each administration/cycle"
   ],
   "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
+    "Use source-mapped component rules below. Relative reductions require the actual current component dose level; do not assume level 0. Source ambiguities require consultant/pharmacy clarification."
   ],
   "supportive_care": {
     "emetogenic_risk": "moderate",
@@ -642,6 +1127,32 @@
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
+    "premedication": "Antiemetics per NCCP/local moderate-risk protocol. Assess prophylactic atropine suitability; separate delayed-diarrhoea plan.",
+    "other_supportive_care": [
+      "Symptom-led support, hydration and urgent contact plan.",
+      "No home fluorouracil pump in this regimen."
+    ]
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "repeating_cycle",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "day": 1,
+          "drug": "irinotecan",
+          "dose": {
+            "value": 350,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "notes": "Atropine suitability and delayed-diarrhoea plan.",
+          "duration": "90 minutes"
+        }
+      ]
+    }
+  ],
+  "dose_levels": {},
+  "assessment_profiles": []
 }

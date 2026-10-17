@@ -11,8 +11,8 @@
     "short_title": "Cetuximab (14 day) and Irinotecan (14 day) Therapy",
     "indication": "Second-line RAS wild-type metastatic colorectal cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 7,
+    "sactcheck_encoding_version": "0.83.6",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -48,7 +48,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
+      "audit_release": "0.83.6",
+      "software_validation_record": "validation/colorectal-v0836/VALIDATION.md"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -65,11 +67,14 @@
     },
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "label": "Source-mapped rules · independent clinical/pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.83.6",
+      "audit_date": "2026-10-17",
+      "scope_note": "NCCP web-rendered tables checked; source ambiguities exposed. Binary PDF retrieval failed. Reconfirm latest source before clinical adoption."
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -90,12 +95,13 @@
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00331-v7"
+    "canonical_protocol_id": "nccp-00331-v7",
+    "source_checked_date": "2026-10-17"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00331 Version 7. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "disclaimer": "NCCP 00331 v7 source mapping, SACTCheck v0.83.6. Independent consultant/pharmacy validation and clinical authorisation remain pending. Resolve declared source conflicts; missing inputs are unassessed.",
     "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
@@ -104,19 +110,12 @@
       "description": "Second-line RAS wild-type metastatic colorectal cancer."
     }
   ],
-  "treatment": {
-    "cycle_length_days": 14,
-    "schedule_summary": "Cetuximab (14 day) and Irinotecan (14 day) Therapy",
-    "drugs": [
-      "cetuximab",
-      "irinotecan"
-    ]
-  },
   "input_definitions": {
     "ecog": {
       "label": "ECOG performance status",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -139,128 +138,55 @@
           "label": "4"
         }
       ],
-      "demo_value": 0,
-      "input_role": "decision"
+      "demo_value": 0
     },
     "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
+      "label": "Known hypersensitivity to a regimen medicine",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "pregnancy": {
       "label": "Pregnant",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "anc_x10e9_l": {
-      "label": "Absolute neutrophil count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 2,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "platelets_x10e9_l": {
-      "label": "Platelet count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 150,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "febrile_or_active_infection": {
-      "label": "Fever, febrile neutropenia or active infection requiring treatment",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "other_nonhaem_toxicity_grade": {
-      "label": "Worst relevant non-haematological toxicity",
+    "ras_status": {
+      "label": "Validated tumour RAS status (colorectal indication)",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No other non-haematological adverse event."
+          "value": "wild_type",
+          "label": "RAS wild type confirmed"
         },
         {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
+          "value": "mutant",
+          "label": "RAS mutation"
         },
         {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
+          "value": "unknown",
+          "label": "Unknown / not confirmed"
         }
       ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin result (actual value entered; ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
-    },
-    "bowel_obstruction_or_chronic_inflammatory_bowel_disease": {
-      "label": "Bowel obstruction or clinically significant chronic inflammatory bowel disease",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "acute_cholinergic_syndrome": {
-      "label": "Acute cholinergic symptoms during/after irinotecan",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "demo_value": "wild_type"
     },
     "acneiform_rash_grade": {
-      "label": "Acneiform rash grade",
+      "label": "Current cetuximab skin toxicity grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -297,13 +223,59 @@
       "assessment_guidance": "Grade by body-surface area, symptoms, psychosocial impact and impact on activities of daily living.",
       "ctcae_version": "5.0",
       "ctcae_category": "rash_acneiform",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
     },
-    "infusion_reaction_grade": {
-      "label": "Infusion-related reaction grade",
+    "skin_occurrence": {
+      "label": "Number of grade ≥3 skin episodes",
       "type": "select",
       "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "skin_delay_weeks": {
+      "label": "Weeks withheld for this skin episode",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "skin_failed_recovery": {
+      "label": "Skin reaction failed to recover within the source withholding period",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "infusion_reaction_grade": {
+      "label": "Cetuximab infusion reaction grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -340,55 +312,373 @@
       "assessment_guidance": "Grade by required interruption, response to symptomatic treatment, recurrence, hospitalisation and life-threatening features.",
       "ctcae_version": "5.0",
       "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "reaction_first_15_minutes": {
+      "label": "Reaction in first 15 minutes of first cetuximab infusion",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "interstitial_lung_disease": {
+      "label": "Confirmed interstitial lung disease",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "unexplained_respiratory_symptoms": {
+      "label": "New unexplained respiratory symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ocular_symptoms": {
+      "label": "New eye pain, redness, light sensitivity or blurred vision",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "electrolyte_abnormality": {
+      "label": "Electrolyte abnormality requiring correction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     },
     "magnesium_mmol_l": {
-      "label": "Serum magnesium",
+      "label": "Magnesium (monitoring; no source hold cutoff)",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 0.8,
       "unit": "mmol/L",
-      "input_role": "decision"
+      "input_role": "monitoring",
+      "demo_value": 0.8,
+      "always_show": true
     },
-    "irinotecan_renal_band": {
-      "label": "Renal status for irinotecan",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "not_dialysis",
-          "label": "Not receiving dialysis",
-          "decision_value": "not_dialysis"
-        },
-        {
-          "value": "dialysis",
-          "label": "Haemodialysis",
-          "decision_value": "dialysis"
-        }
-      ],
-      "demo_value": "not_dialysis",
-      "ui_section": "labs",
-      "always_show": true,
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
-    },
-    "irinotecan_bilirubin_uln": {
-      "label": "Bilirubin for irinotecan",
+    "anc_x10e9_l": {
+      "label": "Current ANC",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 0.1,
-      "demo_value": 0.8,
-      "ui_section": "labs",
-      "always_show": true,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 3
+    },
+    "platelets_x10e9_l": {
+      "label": "Current platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 200
+    },
+    "lowest_anc": {
+      "label": "Lowest ANC during delayed weeks / previous toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 3
+    },
+    "lowest_platelets": {
+      "label": "Lowest platelets during delayed weeks / previous toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 200
+    },
+    "delay_weeks": {
+      "label": "Weeks delayed for count recovery",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "febrile_or_active_infection": {
+      "label": "Fever or active infection",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "other_nonhaem_toxicity_grade": {
+      "label": "Current other non-haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No other non-haematological adverse event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "diarrhoea_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "diarrhoea_highest_grade": {
+      "label": "Worst diarrhoea grade in this episode",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "toxicity_delay_weeks": {
+      "label": "Weeks delayed for this non-haematological toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "febrile_neutropenia": {
+      "label": "Prior febrile neutropenia / grade 4 neutropenia with grade ≥2 fever",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "assessment_type": {
+      "label": "Treatment assessment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "subsequent_cycle",
+          "label": "Subsequent cycle"
+        },
+        {
+          "value": "baseline",
+          "label": "Before first cycle"
+        }
+      ],
+      "demo_value": "subsequent_cycle",
+      "always_show": true
+    },
+    "crcl_ml_min": {
+      "label": "Verified creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "demo_value": 90,
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Retain the verified numerical result for this source audit: strict threshold comparisons and the exactly-30 mL/min source gap must not be rounded into another band."
+      }
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_renal_impairment": {
+      "label": "Clinically severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment": {
+      "label": "Clinical hepatic impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "renal_impairment": {
+      "label": "Renal impairment present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin multiple of ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
       "unit": "×ULN",
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "bowel_obstruction_or_chronic_inflammatory_bowel_disease": {
+      "label": "Bowel obstruction / chronic bowel disease",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "acute_cholinergic_syndrome": {
+      "label": "Acute irinotecan cholinergic symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ugt1a1_homozygous_28": {
+      "label": "Known UGT1A1*28 homozygosity / Gilbert syndrome",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_bone_marrow_failure": {
+      "label": "Severe bone marrow failure",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -423,8 +713,7 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
+        "rule_id": "ECOG_ELIGIBILITY",
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -433,19 +722,22 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cetuximab",
+            "irinotecan"
           ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "recommendation": "Outside the NCCP ECOG eligibility range; review suitability.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Outside the NCCP ECOG eligibility range; review suitability.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
       },
       {
-        "id": "HYPERSENSITIVITY_EXCLUSION",
-        "priority": 10,
+        "rule_id": "HYPERSENSITIVITY",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -454,19 +746,20 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "cetuximab",
+            "irinotecan"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "recommendation": "Known hypersensitivity is an NCCP exclusion."
         },
+        "explanation": "Known hypersensitivity is an NCCP exclusion.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
       },
       {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "PREGNANCY_LACTATION",
         "when": {
           "any": [
             {
@@ -484,166 +777,44 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "cetuximab",
+            "irinotecan"
           ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "recommendation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions."
         },
+        "explanation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions.",
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
       },
       {
-        "id": "ANC_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
+        "rule_id": "RAS_EXCLUSION",
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "PLATELETS_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "FEVER_OR_ACTIVE_INFECTION",
-        "priority": 10,
-        "when": {
-          "field": "febrile_or_active_infection",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
-      },
-      {
-        "id": "SEVERE_OTHER_TOXICITY",
-        "priority": 8,
-        "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-      },
-      {
-        "id": "IRINOTECAN_BILIRUBIN_OVER_3ULN",
-        "priority": 10,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 3
+          "field": "ras_status",
+          "operator": "in",
+          "value": [
+            "mutant",
+            "unknown"
+          ]
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "Bilirubin >3 ×ULN is an irinotecan exclusion in the NCCP pathway."
+          "recommendation": "Colorectal cetuximab requires validated extended RAS wild-type status. KRAS exon 2 alone is not sufficient."
         },
+        "explanation": "Colorectal cetuximab requires validated extended RAS wild-type status. KRAS exon 2 alone is not sufficient.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Bilirubin >3 ×ULN is an irinotecan exclusion in the NCCP pathway."
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
       },
       {
-        "id": "IRINOTECAN_BOWEL_EXCLUSION",
-        "priority": 10,
-        "when": {
-          "field": "bowel_obstruction_or_chronic_inflammatory_bowel_disease",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Bowel obstruction or significant chronic bowel disease is an irinotecan exclusion."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Bowel obstruction or significant chronic bowel disease is an irinotecan exclusion."
-      },
-      {
-        "id": "IRINOTECAN_CHOLINERGIC",
-        "priority": 7,
-        "when": {
-          "field": "acute_cholinergic_syndrome",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Treat acute cholinergic syndrome promptly and review atropine/supportive measures before further irinotecan."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Treat acute cholinergic syndrome promptly and review atropine/supportive measures before further irinotecan."
-      },
-      {
-        "id": "EGFR_RASH_G3_PLUS",
-        "priority": 8,
+        "rule_id": "SKIN_HOLD",
         "when": {
           "field": "acneiform_rash_grade",
           "operator": ">=",
@@ -652,19 +823,283 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "Grade 3 or worse acneiform rash requires withholding and occurrence-specific dose modification."
+          "recommendation": "Hold cetuximab for severe skin toxicity; source allows a maximum two-week interruption and requires recovery to grade ≤2 before restart."
         },
+        "explanation": "Hold cetuximab for severe skin toxicity; source allows a maximum two-week interruption and requires recovery to grade ≤2 before restart.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse acneiform rash requires withholding and occurrence-specific dose modification."
+          "document": "NCCP 00331 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 4
+        }
       },
       {
-        "id": "EGFR_INFUSION_REACTION_G3_PLUS",
-        "priority": 10,
+        "rule_id": "SKIN_FOURTH",
+        "when": {
+          "field": "skin_occurrence",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Discontinue cetuximab after the fourth severe skin episode."
+        },
+        "explanation": "Discontinue cetuximab after the fourth severe skin episode.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "SKIN_FAILED",
+        "when": {
+          "any": [
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "all": [
+                {
+                  "field": "acneiform_rash_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "skin_delay_weeks",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Discontinue / obtain urgent specialist confirmation when severe skin toxicity has not resolved within the permitted interruption; do not automatically restart."
+        },
+        "explanation": "Discontinue / obtain urgent specialist confirmation when severe skin toxicity has not resolved within the permitted interruption; do not automatically restart.",
+        "source": {
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
+      },
+      {
+        "rule_id": "SKIN_RESTART_1",
+        "when": {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 500 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+          "show_in_dose_actions": true,
+          "component_changes": {
+            "cetuximab": {
+              "dose_mg_m2": 500
+            }
+          }
+        },
+        "explanation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 500 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "SKIN_RESTART_2",
+        "when": {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 400 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+          "component_changes": {
+            "cetuximab": {
+              "dose_mg_m2": 400
+            }
+          }
+        },
+        "explanation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 400 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "SKIN_RESTART_3",
+        "when": {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 300 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+          "component_changes": {
+            "cetuximab": {
+              "dose_mg_m2": 300
+            }
+          }
+        },
+        "explanation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 300 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "INFUSION_G1",
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": "==",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Slow cetuximab infusion and monitor closely; follow acute reaction policy.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Slow cetuximab infusion and monitor closely; follow acute reaction policy.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "INFUSION_G2",
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Slow cetuximab infusion and immediately treat symptoms; specialist assessment before continuation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Slow cetuximab infusion and immediately treat symptoms; specialist assessment before continuation.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "INFUSION_G34",
         "when": {
           "field": "infusion_reaction_grade",
           "operator": ">=",
@@ -673,73 +1108,244 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "Grade 3 or 4 infusion reaction requires permanent discontinuation."
+          "recommendation": "Stop cetuximab immediately, treat the reaction and contraindicate further cetuximab."
         },
+        "explanation": "Stop cetuximab immediately, treat the reaction and contraindicate further cetuximab.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or 4 infusion reaction requires permanent discontinuation."
+          "document": "NCCP 00331 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 4
+        }
       },
       {
-        "id": "HYPOMAGNESAEMIA",
-        "priority": 8,
+        "rule_id": "FIRST_15_MINUTES",
         "when": {
-          "field": "magnesium_mmol_l",
-          "operator": "<",
-          "value": 0.5
+          "field": "reaction_first_15_minutes",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "Severe hypomagnesaemia requires correction and treatment review before further anti-EGFR therapy."
+          "recommendation": "Interrupt the first infusion for a reaction within 15 minutes irrespective of grade. Assess benefit/risk and IgE-related risk before any resumption."
         },
+        "explanation": "Interrupt the first infusion for a reaction within 15 minutes irrespective of grade. Assess benefit/risk and IgE-related risk before any resumption.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Severe hypomagnesaemia requires correction and treatment review before further anti-EGFR therapy."
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
       },
       {
-        "id": "OF590_00331_IRINO_DIALYSIS",
-        "priority": 20,
+        "rule_id": "ILD",
         "when": {
-          "field": "irinotecan_renal_band",
+          "field": "interstitial_lung_disease",
           "operator": "==",
-          "value": "dialysis"
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Discontinue cetuximab for confirmed interstitial lung disease."
+        },
+        "explanation": "Discontinue cetuximab for confirmed interstitial lung disease.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "RESPIRATORY",
+        "when": {
+          "field": "unexplained_respiratory_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Interrupt implicated treatment and urgently investigate unexplained respiratory symptoms."
+        },
+        "explanation": "Interrupt implicated treatment and urgently investigate unexplained respiratory symptoms.",
+        "source": {
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
+      },
+      {
+        "rule_id": "EYE",
+        "when": {
+          "field": "ocular_symptoms",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "irinotecan"
+            "cetuximab"
           ],
-          "message": "Haemodialysis: irinotecan dosing is not routinely established; use only after Consultant/pharmacy review.",
-          "recommendation": "Haemodialysis: irinotecan dosing is not routinely established; use only after Consultant/pharmacy review."
+          "recommendation": "Prompt ophthalmology assessment for possible keratitis; assess continuation versus interruption.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Prompt ophthalmology assessment for possible keratitis; assess continuation versus interruption.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Haemodialysis: irinotecan dosing is not routinely established; use only after Consultant/pharmacy review."
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
       },
       {
-        "id": "OF590_00331_IRINO_BILI_1_5_3",
-        "priority": 20,
+        "rule_id": "ELECTROLYTES",
+        "when": {
+          "field": "electrolyte_abnormality",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Correct magnesium, calcium and potassium as indicated. No numeric cetuximab hold threshold is specified; use clinical assessment.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Correct magnesium, calcium and potassium as indicated. No numeric cetuximab hold threshold is specified; use clinical assessment.",
+        "source": {
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
+      },
+      {
+        "rule_id": "INFECTION",
+        "when": {
+          "field": "febrile_or_active_infection",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review."
+        },
+        "explanation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
+      },
+      {
+        "rule_id": "ANC_HOLD",
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1.5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab",
+            "irinotecan"
+          ],
+          "recommendation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart."
+        },
+        "explanation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "PLATELETS_HOLD",
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab",
+            "irinotecan"
+          ],
+          "recommendation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart."
+        },
+        "explanation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "COUNTS_RESTART_MODERATE",
         "when": {
           "all": [
             {
-              "field": "irinotecan_bilirubin_uln",
-              "operator": ">",
-              "value": 1.5
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
             },
             {
-              "field": "irinotecan_bilirubin_uln",
-              "operator": "<=",
-              "value": 3
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "lowest_anc",
+                      "operator": ">=",
+                      "value": 0.5
+                    },
+                    {
+                      "field": "lowest_anc",
+                      "operator": "<",
+                      "value": 1
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "lowest_platelets",
+                      "operator": ">=",
+                      "value": 10
+                    },
+                    {
+                      "field": "lowest_platelets",
+                      "operator": "<",
+                      "value": 50
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -748,20 +1354,110 @@
           "components": [
             "irinotecan"
           ],
-          "message": "Bilirubin >1.5 to 3 ×ULN: use the source-reduced irinotecan dose (200 mg/m² for the 3-weekly monotherapy table).",
-          "recommendation": "Bilirubin >1.5 to 3 ×ULN: use the source-reduced irinotecan dose (200 mg/m² for the 3-weekly monotherapy table)."
+          "recommendation": "After count recovery, source irinotecan restart dose 150 mg/m²; cetuximab is maintained if otherwise suitable. Confirm previous dose and do not escalate an already lower dose.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_mg_m2": 150
+            }
+          }
         },
+        "explanation": "After count recovery, source irinotecan restart dose 150 mg/m²; cetuximab is maintained if otherwise suitable. Confirm previous dose and do not escalate an already lower dose.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Bilirubin >1.5 to 3 ×ULN: use the source-reduced irinotecan dose (200 mg/m² for the 3-weekly monotherapy table)."
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 1
+        }
       },
       {
-        "id": "OF590_00331_IRINO_BILI_GT3",
-        "priority": 20,
+        "rule_id": "COUNTS_RESTART_SEVERE",
         "when": {
-          "field": "irinotecan_bilirubin_uln",
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "lowest_anc",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "lowest_platelets",
+                  "operator": "<",
+                  "value": 10
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "After count recovery, source irinotecan restart dose 120 mg/m²; cetuximab is maintained if otherwise suitable. Confirm previous dose and do not escalate an already lower dose.",
+          "component_changes": {
+            "irinotecan": {
+              "dose_mg_m2": 120
+            }
+          }
+        },
+        "explanation": "After count recovery, source irinotecan restart dose 120 mg/m²; cetuximab is maintained if otherwise suitable. Confirm previous dose and do not escalate an already lower dose.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "ANC_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "field": "delay_weeks",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Discontinue irinotecan for ANC <0.5 after two weeks. Cetuximab continuation requires oncologist discretion and absence of progression."
+        },
+        "explanation": "Discontinue irinotecan for ANC <0.5 after two weeks. Cetuximab continuation requires oncologist discretion and absence of progression.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "BILI_CI",
+        "when": {
+          "field": "bilirubin_uln_multiple",
           "operator": ">",
           "value": 3
         },
@@ -770,14 +1466,333 @@
           "components": [
             "irinotecan"
           ],
-          "message": "Bilirubin >3 ×ULN: discontinue/do not administer irinotecan.",
-          "recommendation": "Bilirubin >3 ×ULN: discontinue/do not administer irinotecan."
+          "recommendation": "Irinotecan is contraindicated above bilirubin 3 ×ULN."
         },
+        "explanation": "Irinotecan is contraindicated above bilirubin 3 ×ULN.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00331 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "BOWEL_EXCLUSION",
+        "when": {
+          "field": "bowel_obstruction_or_chronic_inflammatory_bowel_disease",
+          "operator": "==",
+          "value": true
         },
-        "explanation": "Bilirubin >3 ×ULN: discontinue/do not administer irinotecan."
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Bowel obstruction / chronic bowel disease is an irinotecan exclusion."
+        },
+        "explanation": "Bowel obstruction / chronic bowel disease is an irinotecan exclusion.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
+      },
+      {
+        "rule_id": "MARROW_EXCLUSION",
+        "when": {
+          "field": "severe_bone_marrow_failure",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Severe bone marrow failure excludes irinotecan treatment."
+        },
+        "explanation": "Severe bone marrow failure excludes irinotecan treatment.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
+      },
+      {
+        "rule_id": "CHOLINERGIC",
+        "when": {
+          "field": "acute_cholinergic_syndrome",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Immediate clinical assessment; atropine according to NCCP and local policy after checking contraindications. Distinguish this from delayed diarrhoea.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Immediate clinical assessment; atropine according to NCCP and local policy after checking contraindications. Distinguish this from delayed diarrhoea.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
+      },
+      {
+        "rule_id": "UGT_REVIEW",
+        "when": {
+          "field": "ugt1a1_homozygous_28",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Consider reduced irinotecan starting dose and enhanced toxicity monitoring; no fixed source percentage.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Consider reduced irinotecan starting dose and enhanced toxicity monitoring; no fixed source percentage.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_NOT_RESOLVED",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 1
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Treatment-related diarrhoea must be fully resolved before irinotecan; assess hydration, infection and bowel baseline."
+        },
+        "explanation": "Treatment-related diarrhoea must be fully resolved before irinotecan; assess hydration, infection and bowel baseline.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
+      },
+      {
+        "rule_id": "OTHER_TOXICITY_HOLD",
+        "when": {
+          "field": "other_nonhaem_toxicity_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Allow treatment-related adverse events to recover to grade 0–1 before irinotecan."
+        },
+        "explanation": "Allow treatment-related adverse events to recover to grade 0–1 before irinotecan.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
+      },
+      {
+        "rule_id": "RENAL_IRI",
+        "when": {
+          "any": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "NCCP suggests irinotecan 50–66% of original dose at CrCl <10 or dialysis, with escalation if tolerated. Consultant/pharmacy must choose within the range.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP suggests irinotecan 50–66% of original dose at CrCl <10 or dialysis, with escalation if tolerated. Consultant/pharmacy must choose within the range.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "BILI_ABNORMAL_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "The regimen does not quantify an irinotecan dose for this bilirubin band; obtain consultant/pharmacy review.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The regimen does not quantify an irinotecan dose for this bilirubin band; obtain consultant/pharmacy review.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf"
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Discontinue irinotecan if diarrhoea remains above grade 2 for more than two weeks."
+        },
+        "explanation": "Discontinue irinotecan if diarrhoea remains above grade 2 for more than two weeks.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_RESTART_3",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 0
+            },
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab",
+            "irinotecan"
+          ],
+          "recommendation": "After full diarrhoea recovery, source irinotecan dose 150 mg/m². Source cetuximab dose 400 mg/m². Confirm previous reductions and clinical suitability.",
+          "show_in_dose_actions": true,
+          "component_changes": {
+            "irinotecan": {
+              "dose_mg_m2": 150
+            },
+            "cetuximab": {
+              "dose_mg_m2": 400
+            }
+          }
+        },
+        "explanation": "After full diarrhoea recovery, source irinotecan dose 150 mg/m². Source cetuximab dose 400 mg/m². Confirm previous reductions and clinical suitability.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_RESTART_4",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 0
+            },
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab",
+            "irinotecan"
+          ],
+          "recommendation": "After full diarrhoea recovery, source irinotecan dose 120 mg/m². Source cetuximab dose 300 mg/m². Confirm previous reductions and clinical suitability.",
+          "show_in_dose_actions": true,
+          "component_changes": {
+            "irinotecan": {
+              "dose_mg_m2": 120
+            },
+            "cetuximab": {
+              "dose_mg_m2": 300
+            }
+          }
+        },
+        "explanation": "After full diarrhoea recovery, source irinotecan dose 120 mg/m². Source cetuximab dose 300 mg/m². Confirm previous reductions and clinical suitability.",
+        "source": {
+          "document": "NCCP 00331 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
+          "table": 3
+        }
       }
     ]
   },
@@ -794,7 +1809,7 @@
     "Treatment-specific toxicity monitoring before each administration/cycle"
   ],
   "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
+    "Use source-mapped component rules below. Relative reductions require the actual current component dose level; do not assume level 0. Source ambiguities require consultant/pharmacy clarification."
   ],
   "supportive_care": {
     "emetogenic_risk": "moderate",
@@ -806,6 +1821,42 @@
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
+    "premedication": "Cetuximab antihistamine plus corticosteroid at least one hour before infusion, including subsequent infusions; follow local policy. Antiemetics per NCCP/local moderate-risk protocol. Assess prophylactic atropine suitability; separate delayed-diarrhoea plan.",
+    "other_supportive_care": [
+      "Skin care, electrolyte monitoring including monthly magnesium/calcium for two months after cetuximab; eye and respiratory symptom review.",
+      "No home fluorouracil pump in this regimen."
+    ]
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "repeating_cycle",
+      "cycle_length_days": 14,
+      "administration": [
+        {
+          "day": 1,
+          "drug": "cetuximab",
+          "dose": {
+            "value": 500,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "notes": "500 mg/m² every 14 days; do not apply weekly loading schedule."
+        },
+        {
+          "day": 1,
+          "drug": "irinotecan",
+          "dose": {
+            "value": 180,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "notes": "Atropine suitability and delayed-diarrhoea plan.",
+          "duration": "90 minutes"
+        }
+      ]
+    }
+  ],
+  "dose_levels": {},
+  "assessment_profiles": []
 }

@@ -665,6 +665,7 @@
     const overlay=ensurePanel();
     if(!overlay||!protocol) return;
     activeProtocol=protocol;
+    root.__v0740ActiveProtocol=protocol; // Preserve context for workflow-linked services.
     const body=root.document.getElementById("workflowPanelBody");
     body.innerHTML='<div class="workflow-loading">Building regimen workflow...</div>';
     overlay.hidden=false;

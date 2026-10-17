@@ -29,7 +29,8 @@ for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
   const rec = m.organ_function_reconciliation;
-  const superseded = (['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4') || (item.nccp_code === '00225' && m.validation?.audit_release === '0.83.5');
+  const v0836 = m.validation?.audit_release === '0.83.6';
+  const superseded = v0836 || (['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4') || (item.nccp_code === '00225' && m.validation?.audit_release === '0.83.5');
   assert(rec, `${item.nccp_code}: missing organ-function reconciliation metadata`);
   assert.strictEqual(rec.release, '0.59.0');
   assert.strictEqual(rec.source_reconciled, true);
@@ -48,7 +49,7 @@ for (const item of register.records) {
   const releaseRules = (p.rule_engine?.rules || []).filter(r => String(r.id || r.rule_id || '').startsWith('OF590_'));
   if (rec.resolution === 'structured_rules') {
     if(superseded) {
-      for(const id of ['RENAL_LT30','HEPATOTOXICITY']) assert(p.rule_engine.rules.some(r=>r.rule_id===id && r.source.url===m.source_url && r.source.page), `${item.nccp_code}: missing replacement source-mapped rule ${id}`);
+      for(const id of (v0836 ? (['00207','00732'].includes(item.nccp_code)?['ORGAN_REVIEW']:['00213','00330','00331'].includes(item.nccp_code)?['RENAL_IRI','BILI_CI']:['FU_HEPATIC_CI','FU_HEPATIC_EQUALITY']) : ['RENAL_LT30','HEPATOTOXICITY'])) assert(p.rule_engine.rules.some(r=>r.rule_id===id && r.source.url===m.source_url && r.source.page), `${item.nccp_code}: missing replacement source-mapped rule ${id}`);
       assert.equal(releaseRules.length,0,'Superseded renal rules must not remain active');
     } else assert(releaseRules.length > 0, `${item.nccp_code}: structured resolution lacks v0.59.0 rules`);
   }
@@ -106,7 +107,7 @@ for (const p of allProtocols) {
     );
   }
 }
-assert.strictEqual(triggerableRuleCount, 293, 'All 293 retained v0.59.0 rules remain executable; six 00586/00623 rules are superseded by the v0.83.4 source-based clinical suite.');
+assert.strictEqual(triggerableRuleCount, 247, 'All 247 retained v0.59.0 rules remain executable; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests.');
 
 // Sentinel source pathways and single-value partial assessments.
 let result = assess('00205', { pld_bilirubin_band: '51_86' });
@@ -154,6 +155,6 @@ const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_R
 assert.strictEqual(audit.summary.protocols_in_reconciliation_scope, 74);
 assert.strictEqual(audit.summary.remaining_partial_rule_encoding_records, 0);
 assert.strictEqual(audit.summary.records_with_audit_issues, 0);
-assert(audit.summary.total_v0590_rules >= 250);
+assert.strictEqual(audit.summary.total_v0590_rules, 247);
 
 console.log('v0.59.0 library-wide organ-function reconciliation tests passed.');

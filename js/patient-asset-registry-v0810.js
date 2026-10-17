@@ -13,10 +13,20 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.83.5';
-  const CONTENT_RELEASE='0.83.5';
+  const RELEASE='0.83.6';
+  const CONTENT_RELEASE='0.83.6';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00207':{title:"Cetuximab \u00b7 weekly",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00732':{title:"Cetuximab \u00b7 every two weeks",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00328':{title:"Weekly cetuximab + FOLFIRI",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00585':{title:"Fortnightly cetuximab + FOLFIRI",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00330':{title:"Weekly cetuximab + irinotecan",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00331':{title:"Fortnightly cetuximab + irinotecan",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00692':{title:"Weekly cetuximab + FOLFOX-4",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00733':{title:"Fortnightly cetuximab + modified FOLFOX-6",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00210':{title:"FOLFOX-4",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
+    '00213':{title:"Irinotecan \u00b7 every three weeks",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00225':{title:"Panitumumab",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00447':{title:"Panitumumab + modified FOLFOX-6",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00448':{title:"Panitumumab + FOLFIRI",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},

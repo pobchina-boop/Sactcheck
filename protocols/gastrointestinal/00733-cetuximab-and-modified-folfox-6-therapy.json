@@ -11,8 +11,8 @@
     "short_title": "Cetuximab and modified FOLFOX-6 Therapy",
     "indication": "RAS wild-type metastatic colorectal cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 10,
+    "sactcheck_encoding_version": "0.83.6",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -50,7 +50,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
+      "audit_release": "0.83.6",
+      "software_validation_record": "validation/colorectal-v0836/VALIDATION.md"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -67,11 +69,14 @@
     },
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "label": "Source-mapped rules · independent clinical/pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.83.6",
+      "audit_date": "2026-10-17",
+      "scope_note": "NCCP web-rendered tables checked; source ambiguities exposed. Binary PDF retrieval failed. Reconfirm latest source before clinical adoption."
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -93,12 +98,13 @@
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00733-v2a"
+    "canonical_protocol_id": "nccp-00733-v2a",
+    "source_checked_date": "2026-10-17"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00733 Version 2a. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "disclaimer": "NCCP 00733 v2a source mapping, SACTCheck v0.83.6. Independent consultant/pharmacy validation and clinical authorisation remain pending. Resolve declared source conflicts; missing inputs are unassessed.",
     "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
@@ -107,21 +113,12 @@
       "description": "RAS wild-type metastatic colorectal cancer."
     }
   ],
-  "treatment": {
-    "cycle_length_days": 14,
-    "schedule_summary": "Cetuximab and modified FOLFOX-6 Therapy",
-    "drugs": [
-      "cetuximab",
-      "oxaliplatin",
-      "folinic acid",
-      "5-fluorouracil"
-    ]
-  },
   "input_definitions": {
     "ecog": {
       "label": "ECOG performance status",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -144,288 +141,55 @@
           "label": "4"
         }
       ],
-      "demo_value": 0,
-      "input_role": "decision"
+      "demo_value": 0
     },
     "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
+      "label": "Known hypersensitivity to a regimen medicine",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "pregnancy": {
       "label": "Pregnant",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "anc_x10e9_l": {
-      "label": "Absolute neutrophil count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 2,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "platelets_x10e9_l": {
-      "label": "Platelet count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 150,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "febrile_or_active_infection": {
-      "label": "Fever, febrile neutropenia or active infection requiring treatment",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "other_nonhaem_toxicity_grade": {
-      "label": "Worst relevant non-haematological toxicity",
+    "ras_status": {
+      "label": "Validated tumour RAS status (colorectal indication)",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No other non-haematological adverse event."
+          "value": "wild_type",
+          "label": "RAS wild type confirmed"
         },
         {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
-    },
-    "dpd_status": {
-      "label": "DPD status",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "normal",
-          "label": "Normal/adequate"
-        },
-        {
-          "value": "partial",
-          "label": "Partial DPD deficiency"
-        },
-        {
-          "value": "complete",
-          "label": "Complete DPD deficiency"
+          "value": "mutant",
+          "label": "RAS mutation"
         },
         {
           "value": "unknown",
-          "label": "Not known"
+          "label": "Unknown / not confirmed"
         }
       ],
-      "demo_value": "normal",
-      "input_role": "decision"
-    },
-    "diarrhoea_grade": {
-      "label": "Diarrhoea grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No increase above the patient's usual stool frequency or ostomy output."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
-    },
-    "mucositis_grade": {
-      "label": "Oral mucositis/stomatitis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No oral mucositis."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Asymptomatic or mild symptoms; intervention not indicated."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Severe pain that interferes with oral intake."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
-    },
-    "neuropathy_grade": {
-      "label": "Peripheral sensory neuropathy grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No peripheral sensory or motor neuropathy."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Asymptomatic; clinical or diagnostic observations only. CTCAE v5.0 grades symptomatic paraesthesia separately when that is the more accurate term."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Moderate symptoms that limit instrumental activities of daily living."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Severe symptoms that limit self-care activities of daily living."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Life-threatening neurological consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Grade by symptoms and functional impact: instrumental ADL limitation is grade 2; self-care ADL limitation is grade 3.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
-    },
-    "oxaliplatin_renal_band": {
-      "label": "Renal function for oxaliplatin",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "ge30",
-          "label": "CrCl ≥30 mL/min",
-          "decision_value": "ge30"
-        },
-        {
-          "value": "lt30",
-          "label": "CrCl <30 mL/min",
-          "decision_value": "lt30"
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis",
-          "decision_value": "dialysis"
-        }
-      ],
-      "demo_value": "ge30",
-      "ui_section": "labs",
-      "always_show": true,
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
+      "demo_value": "wild_type"
     },
     "acneiform_rash_grade": {
-      "label": "Acneiform rash grade",
+      "label": "Current cetuximab skin toxicity grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -462,13 +226,59 @@
       "assessment_guidance": "Grade by body-surface area, symptoms, psychosocial impact and impact on activities of daily living.",
       "ctcae_version": "5.0",
       "ctcae_category": "rash_acneiform",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
     },
-    "infusion_reaction_grade": {
-      "label": "Infusion-related reaction grade",
+    "skin_occurrence": {
+      "label": "Number of grade ≥3 skin episodes",
       "type": "select",
       "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "skin_delay_weeks": {
+      "label": "Weeks withheld for this skin episode",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "skin_failed_recovery": {
+      "label": "Skin reaction failed to recover within the source withholding period",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "infusion_reaction_grade": {
+      "label": "Cetuximab infusion reaction grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -505,84 +315,631 @@
       "assessment_guidance": "Grade by required interruption, response to symptomatic treatment, recurrence, hospitalisation and life-threatening features.",
       "ctcae_version": "5.0",
       "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "reaction_first_15_minutes": {
+      "label": "Reaction in first 15 minutes of first cetuximab infusion",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "interstitial_lung_disease": {
+      "label": "Confirmed interstitial lung disease",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "unexplained_respiratory_symptoms": {
+      "label": "New unexplained respiratory symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ocular_symptoms": {
+      "label": "New eye pain, redness, light sensitivity or blurred vision",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "electrolyte_abnormality": {
+      "label": "Electrolyte abnormality requiring correction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     },
     "magnesium_mmol_l": {
-      "label": "Serum magnesium",
+      "label": "Magnesium (monitoring; no source hold cutoff)",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 0.8,
       "unit": "mmol/L",
-      "input_role": "decision"
+      "input_role": "monitoring",
+      "demo_value": 0.8,
+      "always_show": true
     },
-    "fluorouracil_renal_impairment": {
-      "label": "Renal impairment for fluorouracil",
+    "anc_x10e9_l": {
+      "label": "Current ANC",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 3
+    },
+    "platelets_x10e9_l": {
+      "label": "Current platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 200
+    },
+    "lowest_anc": {
+      "label": "Lowest ANC during delayed weeks / previous toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 3
+    },
+    "lowest_platelets": {
+      "label": "Lowest platelets during delayed weeks / previous toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 200
+    },
+    "delay_weeks": {
+      "label": "Weeks delayed for count recovery",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "febrile_or_active_infection": {
+      "label": "Fever or active infection",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "other_nonhaem_toxicity_grade": {
+      "label": "Current other non-haematological toxicity grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": "none_mild_moderate",
-          "label": "None, mild or moderate"
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No other non-haematological adverse event."
         },
         {
-          "value": "severe",
-          "label": "Severe renal impairment"
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
         }
       ],
-      "demo_value": "none_mild_moderate",
-      "ui_section": "labs",
-      "always_show": true,
-      "input_role": "decision"
+      "demo_value": 0,
+      "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
     },
-    "fluorouracil_bilirubin_umol_l": {
-      "label": "Bilirubin for fluorouracil",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 12,
-      "ui_section": "labs",
-      "always_show": true,
-      "unit": "µmol/L",
-      "input_role": "decision"
-    },
-    "fluorouracil_ast_u_l": {
-      "label": "AST for fluorouracil",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 30,
-      "ui_section": "labs",
-      "always_show": true,
-      "unit": "U/L",
-      "input_role": "decision"
-    },
-    "fluorouracil_hepatic_impairment": {
-      "label": "Clinical hepatic impairment for fluorouracil",
+    "diarrhoea_grade": {
+      "label": "Current diarrhoea grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No diarrhoea"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "2–3 extra stools/day; mild watery ostomy increase"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "4–6 extra stools/day or nocturnal stools; mild watery ostomy increase (source overlap)"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "7–9 extra stools/day, incontinence, malabsorption or severe watery ostomy increase"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "≥10 extra stools/day, grossly bloody ostomy output, parenteral support or dehydration"
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Use NCCP 00733 Table 6 legacy grading, not CTCAE v5; ostomy descriptions overlap and need clinical adjudication.",
+      "ctcae_version": "NCCP source table 6",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+    },
+    "diarrhoea_highest_grade": {
+      "label": "Worst diarrhoea grade in this episode",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No diarrhoea"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "2–3 extra stools/day; mild watery ostomy increase"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "4–6 extra stools/day or nocturnal stools; mild watery ostomy increase (source overlap)"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "7–9 extra stools/day, incontinence, malabsorption or severe watery ostomy increase"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "≥10 extra stools/day, grossly bloody ostomy output, parenteral support or dehydration"
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Use NCCP 00733 Table 6 legacy grading, not CTCAE v5; ostomy descriptions overlap and need clinical adjudication.",
+      "ctcae_version": "NCCP source table 6",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+    },
+    "toxicity_delay_weeks": {
+      "label": "Weeks delayed for this non-haematological toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "febrile_neutropenia": {
+      "label": "Prior febrile neutropenia / grade 4 neutropenia with grade ≥2 fever",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "assessment_type": {
+      "label": "Treatment assessment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "subsequent_cycle",
+          "label": "Subsequent cycle"
+        },
+        {
+          "value": "baseline",
+          "label": "Before first cycle"
+        }
+      ],
+      "demo_value": "subsequent_cycle",
+      "always_show": true
+    },
+    "crcl_ml_min": {
+      "label": "Verified creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "demo_value": 90,
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Retain the verified numerical result for this source audit: strict threshold comparisons and the exactly-30 mL/min source gap must not be rounded into another band."
+      }
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_renal_impairment": {
+      "label": "Clinically severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment": {
+      "label": "Clinical hepatic impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": "none",
-          "label": "No clinically significant impairment"
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
         },
         {
           "value": "moderate",
-          "label": "Moderate impairment"
+          "label": "Moderate"
         },
         {
           "value": "severe",
-          "label": "Severe impairment"
+          "label": "Severe"
         }
       ],
-      "demo_value": "none",
-      "ui_section": "labs",
-      "always_show": true,
-      "input_role": "decision"
+      "demo_value": "none"
+    },
+    "renal_impairment": {
+      "label": "Renal impairment present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "normal",
+          "label": "No deficiency identified"
+        },
+        {
+          "value": "partial",
+          "label": "Partial deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Not tested / result unavailable"
+        }
+      ],
+      "demo_value": "normal"
+    },
+    "fluorouracil_bilirubin_umol_l": {
+      "label": "Bilirubin for fluorouracil assessment",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "µmol/L",
+      "input_role": "decision",
+      "demo_value": 10
+    },
+    "fluorouracil_ast_u_l": {
+      "label": "AST for fluorouracil assessment",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "U/L",
+      "input_role": "decision",
+      "demo_value": 20
+    },
+    "mucositis_grade": {
+      "label": "Current stomatitis / mucositis grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "mucositis_highest_grade": {
+      "label": "Worst stomatitis grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "suspected_fluoropyrimidine_cardiotoxicity": {
+      "label": "Suspected fluoropyrimidine cardiotoxicity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "neuropathy_grade": {
+      "label": "Current peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No peripheral sensory or motor neuropathy."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Asymptomatic; clinical or diagnostic observations only. CTCAE v5.0 grades symptomatic paraesthesia separately when that is the more accurate term."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Moderate symptoms that limit instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Severe symptoms that limit self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening neurological consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Grade by symptoms and functional impact: instrumental ADL limitation is grade 2; self-care ADL limitation is grade 3.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "neuropathy_pattern": {
+      "label": "Grade 3 neuropathy occurrence / persistence",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "first",
+          "label": "First occurrence"
+        },
+        {
+          "value": "second",
+          "label": "Second occurrence"
+        },
+        {
+          "value": "persistent",
+          "label": "Persistent"
+        }
+      ],
+      "demo_value": "first"
+    },
+    "baseline_functional_neuropathy": {
+      "label": "Functional neuropathy before first cycle",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "laryngopharyngeal_dysaesthesia": {
+      "label": "Oxaliplatin laryngopharyngeal dysaesthesia",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_hus": {
+      "label": "Suspected haemolytic uraemic syndrome",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "confirmed_hus": {
+      "label": "Confirmed haemolytic uraemic syndrome",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_oxaliplatin_level": {
+      "label": "Current oxaliplatin dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "demo_value": 0,
+      "always_show": true
+    },
+    "current_fluorouracil_infusion_level": {
+      "label": "Current fluorouracil infusion dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "demo_value": 0,
+      "always_show": true
+    },
+    "current_fluorouracil_bolus_level": {
+      "label": "Current fluorouracil bolus dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "demo_value": 0,
+      "always_show": true
     }
   },
   "required_inputs": [],
@@ -617,8 +974,7 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
+        "rule_id": "ECOG_ELIGIBILITY",
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -627,19 +983,25 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cetuximab",
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "recommendation": "Outside the NCCP ECOG eligibility range; review suitability.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Outside the NCCP ECOG eligibility range; review suitability.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "document": "NCCP 00733 v2a",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
       },
       {
-        "id": "HYPERSENSITIVITY_EXCLUSION",
-        "priority": 10,
+        "rule_id": "HYPERSENSITIVITY",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -648,19 +1010,23 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "cetuximab",
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "recommendation": "Known hypersensitivity is an NCCP exclusion."
         },
+        "explanation": "Known hypersensitivity is an NCCP exclusion.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+          "document": "NCCP 00733 v2a",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
       },
       {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "PREGNANCY_LACTATION",
         "when": {
           "any": [
             {
@@ -678,271 +1044,47 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "cetuximab",
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "recommendation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions."
         },
+        "explanation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions.",
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "document": "NCCP 00733 v2a",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
       },
       {
-        "id": "ANC_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
+        "rule_id": "RAS_EXCLUSION",
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "PLATELETS_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "FEVER_OR_ACTIVE_INFECTION",
-        "priority": 10,
-        "when": {
-          "field": "febrile_or_active_infection",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
-      },
-      {
-        "id": "SEVERE_OTHER_TOXICITY",
-        "priority": 8,
-        "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-      },
-      {
-        "id": "DPD_COMPLETE_DEFICIENCY",
-        "priority": 10,
-        "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "complete"
+          "field": "ras_status",
+          "operator": "in",
+          "value": [
+            "mutant",
+            "unknown"
+          ]
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "Complete DPD deficiency is a contraindication to fluoropyrimidine therapy."
+          "recommendation": "Colorectal cetuximab requires validated extended RAS wild-type status. KRAS exon 2 alone is not sufficient."
         },
+        "explanation": "Colorectal cetuximab requires validated extended RAS wild-type status. KRAS exon 2 alone is not sufficient.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Complete DPD deficiency is a contraindication to fluoropyrimidine therapy."
+          "document": "NCCP 00733 v2a",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
       },
       {
-        "id": "DPD_PARTIAL_DEFICIENCY",
-        "priority": 8,
-        "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "partial"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
-      },
-      {
-        "id": "DPD_UNKNOWN",
-        "priority": 7,
-        "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "unknown"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
-      },
-      {
-        "id": "DIARRHOEA_GRADE_2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
-      },
-      {
-        "id": "MUCOSITIS_GRADE_2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
-      },
-      {
-        "id": "OXALIPLATIN_NEUROPATHY_G2",
-        "priority": 8,
-        "when": {
-          "field": "neuropathy_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Persistent grade 2 or worse neuropathy requires oxaliplatin-specific interruption/reduction review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Persistent grade 2 or worse neuropathy requires oxaliplatin-specific interruption/reduction review."
-      },
-      {
-        "id": "OXALIPLATIN_SEVERE_RENAL",
-        "priority": 8,
-        "when": {
-          "field": "oxaliplatin_renal_band",
-          "operator": "==",
-          "value": "lt30"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "CrCl <30 mL/min requires protocol-specific oxaliplatin dose review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "CrCl <30 mL/min requires protocol-specific oxaliplatin dose review."
-      },
-      {
-        "id": "OXALIPLATIN_DIALYSIS",
-        "priority": 9,
-        "when": {
-          "field": "oxaliplatin_renal_band",
-          "operator": "==",
-          "value": "dialysis"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Haemodialysis requires specialist pharmacy and Consultant dosing review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Haemodialysis requires specialist pharmacy and Consultant dosing review."
-      },
-      {
-        "id": "EGFR_RASH_G3_PLUS",
-        "priority": 8,
+        "rule_id": "SKIN_HOLD",
         "when": {
           "field": "acneiform_rash_grade",
           "operator": ">=",
@@ -951,19 +1093,283 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "Grade 3 or worse acneiform rash requires withholding and occurrence-specific dose modification."
+          "recommendation": "Hold cetuximab for severe skin toxicity; source allows a maximum two-week interruption and requires recovery to grade ≤2 before restart."
         },
+        "explanation": "Hold cetuximab for severe skin toxicity; source allows a maximum two-week interruption and requires recovery to grade ≤2 before restart.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse acneiform rash requires withholding and occurrence-specific dose modification."
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 4
+        }
       },
       {
-        "id": "EGFR_INFUSION_REACTION_G3_PLUS",
-        "priority": 10,
+        "rule_id": "SKIN_FOURTH",
+        "when": {
+          "field": "skin_occurrence",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Discontinue cetuximab after the fourth severe skin episode."
+        },
+        "explanation": "Discontinue cetuximab after the fourth severe skin episode.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "SKIN_FAILED",
+        "when": {
+          "any": [
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "all": [
+                {
+                  "field": "acneiform_rash_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "skin_delay_weeks",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Discontinue / obtain urgent specialist confirmation when severe skin toxicity has not resolved within the permitted interruption; do not automatically restart."
+        },
+        "explanation": "Discontinue / obtain urgent specialist confirmation when severe skin toxicity has not resolved within the permitted interruption; do not automatically restart.",
+        "source": {
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
+      },
+      {
+        "rule_id": "SKIN_RESTART_1",
+        "when": {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 500 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+          "show_in_dose_actions": true,
+          "component_changes": {
+            "cetuximab": {
+              "dose_mg_m2": 500
+            }
+          }
+        },
+        "explanation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 500 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "SKIN_RESTART_2",
+        "when": {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 400 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+          "component_changes": {
+            "cetuximab": {
+              "dose_mg_m2": 400
+            }
+          }
+        },
+        "explanation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 400 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "SKIN_RESTART_3",
+        "when": {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 300 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+          "component_changes": {
+            "cetuximab": {
+              "dose_mg_m2": 300
+            }
+          }
+        },
+        "explanation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 300 mg/m². Confirm prior individual reductions; this is not a re-loading dose.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "INFUSION_G1",
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": "==",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Slow cetuximab infusion and monitor closely; follow acute reaction policy.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Slow cetuximab infusion and monitor closely; follow acute reaction policy.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "INFUSION_G2",
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Slow cetuximab infusion and immediately treat symptoms; specialist assessment before continuation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Slow cetuximab infusion and immediately treat symptoms; specialist assessment before continuation.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "INFUSION_G34",
         "when": {
           "field": "infusion_reaction_grade",
           "operator": ">=",
@@ -972,200 +1378,1165 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "Grade 3 or 4 infusion reaction requires permanent discontinuation."
+          "recommendation": "Stop cetuximab immediately, treat the reaction and contraindicate further cetuximab."
         },
+        "explanation": "Stop cetuximab immediately, treat the reaction and contraindicate further cetuximab.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or 4 infusion reaction requires permanent discontinuation."
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 4
+        }
       },
       {
-        "id": "HYPOMAGNESAEMIA",
-        "priority": 8,
+        "rule_id": "FIRST_15_MINUTES",
         "when": {
-          "field": "magnesium_mmol_l",
-          "operator": "<",
-          "value": 0.5
+          "field": "reaction_first_15_minutes",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "Severe hypomagnesaemia requires correction and treatment review before further anti-EGFR therapy."
+          "recommendation": "Interrupt the first infusion for a reaction within 15 minutes irrespective of grade. Assess benefit/risk and IgE-related risk before any resumption."
         },
+        "explanation": "Interrupt the first infusion for a reaction within 15 minutes irrespective of grade. Assess benefit/risk and IgE-related risk before any resumption.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Severe hypomagnesaemia requires correction and treatment review before further anti-EGFR therapy."
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
       },
       {
-        "id": "OF590_00733_OXALI_LT30",
-        "priority": 20,
+        "rule_id": "ILD",
         "when": {
-          "field": "oxaliplatin_renal_band",
+          "field": "interstitial_lung_disease",
           "operator": "==",
-          "value": "lt30"
+          "value": true
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "permanently_discontinue",
           "components": [
-            "oxaliplatin"
+            "cetuximab"
           ],
-          "message": "CrCl <30 mL/min: consider 50% of the original oxaliplatin dose.",
-          "recommendation": "CrCl <30 mL/min: consider 50% of the original oxaliplatin dose.",
-          "component_changes": {
-            "oxaliplatin": {
-              "dose_percent_of_original": 50
-            }
-          }
+          "recommendation": "Discontinue cetuximab for confirmed interstitial lung disease."
         },
+        "explanation": "Discontinue cetuximab for confirmed interstitial lung disease.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "CrCl <30 mL/min: consider 50% of the original oxaliplatin dose."
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 4
+        }
       },
       {
-        "id": "OF590_00733_OXALI_DIALYSIS",
-        "priority": 20,
+        "rule_id": "RESPIRATORY",
         "when": {
-          "field": "oxaliplatin_renal_band",
+          "field": "unexplained_respiratory_symptoms",
           "operator": "==",
-          "value": "dialysis"
+          "value": true
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
+            "cetuximab",
             "oxaliplatin"
           ],
-          "message": "Dialysis: consider 50% oxaliplatin with dialysis timing directed by the Consultant and oncology pharmacy.",
-          "recommendation": "Dialysis: consider 50% oxaliplatin with dialysis timing directed by the Consultant and oncology pharmacy.",
-          "component_changes": {
-            "oxaliplatin": {
-              "dose_percent_of_original": 50
-            }
-          }
+          "recommendation": "Interrupt implicated treatment and urgently investigate unexplained respiratory symptoms."
         },
+        "explanation": "Interrupt implicated treatment and urgently investigate unexplained respiratory symptoms.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Dialysis: consider 50% oxaliplatin with dialysis timing directed by the Consultant and oncology pharmacy."
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
       },
       {
-        "id": "OF590_00733_5FU_RENAL_SEVERE",
-        "priority": 20,
+        "rule_id": "EYE",
         "when": {
-          "field": "fluorouracil_renal_impairment",
+          "field": "ocular_symptoms",
           "operator": "==",
-          "value": "severe"
+          "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "fluorouracil"
+            "cetuximab"
           ],
-          "message": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability.",
-          "recommendation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
+          "recommendation": "Prompt ophthalmology assessment for possible keratitis; assess continuation versus interruption.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Prompt ophthalmology assessment for possible keratitis; assess continuation versus interruption.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
       },
       {
-        "id": "OF590_00733_5FU_BILI_GT85",
-        "priority": 20,
+        "rule_id": "ELECTROLYTES",
         "when": {
-          "field": "fluorouracil_bilirubin_umol_l",
-          "operator": ">",
-          "value": 85
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table.",
-          "recommendation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
-      },
-      {
-        "id": "OF590_00733_5FU_AST_GT180",
-        "priority": 20,
-        "when": {
-          "field": "fluorouracil_ast_u_l",
-          "operator": ">",
-          "value": 180
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table.",
-          "recommendation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
-      },
-      {
-        "id": "OF590_00733_5FU_HEP_MOD",
-        "priority": 20,
-        "when": {
-          "field": "fluorouracil_hepatic_impairment",
+          "field": "electrolyte_abnormality",
           "operator": "==",
-          "value": "moderate"
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "Correct magnesium, calcium and potassium as indicated. No numeric cetuximab hold threshold is specified; use clinical assessment.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Correct magnesium, calcium and potassium as indicated. No numeric cetuximab hold threshold is specified; use clinical assessment.",
+        "source": {
+          "document": "Erbitux EMA product information (supplementary)",
+          "page": "4.2–4.6",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        }
+      },
+      {
+        "rule_id": "INFECTION",
+        "when": {
+          "field": "febrile_or_active_infection",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review."
+        },
+        "explanation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "ANC_HOLD",
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1.5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart."
+        },
+        "explanation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "PLATELETS_HOLD",
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart."
+        },
+        "explanation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "COUNT_STOP_anc_x10e9_l",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "delay_weeks",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review."
+        },
+        "explanation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "COUNT_STOP_platelets_x10e9_l",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            },
+            {
+              "field": "delay_weeks",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review."
+        },
+        "explanation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "ANC_G3",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            },
+            {
+              "field": "delay_weeks",
+              "operator": "<=",
+              "value": 4
+            },
+            {
+              "field": "lowest_anc",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "lowest_anc",
+              "operator": "<",
+              "value": 1
+            }
+          ]
         },
         "action": {
           "type": "dose_reduce",
           "components": [
-            "fluorouracil"
+            "oxaliplatin"
           ],
-          "message": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated.",
-          "recommendation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
+          "recommendation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
+            }
+          }
         },
+        "explanation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "OF590_00733_5FU_HEP_SEV",
-        "priority": 20,
+        "rule_id": "ANC_G4",
         "when": {
-          "field": "fluorouracil_hepatic_impairment",
-          "operator": "==",
-          "value": "severe"
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            },
+            {
+              "field": "delay_weeks",
+              "operator": "<=",
+              "value": 4
+            },
+            {
+              "field": "lowest_anc",
+              "operator": ">=",
+              "value": 0
+            },
+            {
+              "field": "lowest_anc",
+              "operator": "<",
+              "value": 0.5
+            }
+          ]
         },
         "action": {
           "type": "dose_reduce",
           "components": [
-            "fluorouracil"
+            "oxaliplatin",
+            "fluorouracil_infusion",
+            "fluorouracil_bolus",
+            "folinic_acid"
           ],
-          "message": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated.",
-          "recommendation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
+          "recommendation": "After documented recovery, reduce the indicated components relative to their actual current dose levels. Omit bolus fluorouracil and linked folinic acid.",
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            },
+            "fluorouracil_bolus": {
+              "omit": true
+            },
+            "folinic_acid": {
+              "omit": true
+            }
+          }
         },
+        "explanation": "After documented recovery, reduce the indicated components relative to their actual current dose levels. Omit bolus fluorouracil and linked folinic acid.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "PLT_G3",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            },
+            {
+              "field": "delay_weeks",
+              "operator": "<=",
+              "value": 4
+            },
+            {
+              "field": "lowest_platelets",
+              "operator": ">=",
+              "value": 10
+            },
+            {
+              "field": "lowest_platelets",
+              "operator": "<",
+              "value": 50
+            }
+          ]
         },
-        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
+            }
+          }
+        },
+        "explanation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "PLT_G4",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                }
+              ]
+            },
+            {
+              "field": "delay_weeks",
+              "operator": "<=",
+              "value": 4
+            },
+            {
+              "field": "lowest_platelets",
+              "operator": ">=",
+              "value": 0
+            },
+            {
+              "field": "lowest_platelets",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
+            }
+          }
+        },
+        "explanation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DPD_COMPLETE",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "complete"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Complete DPD deficiency contraindicates fluorouracil."
+        },
+        "explanation": "Complete DPD deficiency contraindicates fluorouracil.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_UNKNOWN",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "unknown"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Confirm DPD testing before first fluorouracil treatment. Do not infer a normal result."
+        },
+        "explanation": "Confirm DPD testing before first fluorouracil treatment. Do not infer a normal result.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_PARTIAL",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "partial"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Consider reduced starting fluorouracil dose with careful monitoring; no fixed source percentage.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Consider reduced starting fluorouracil dose with careful monitoring; no fixed source percentage.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_CI",
+        "when": {
+          "any": [
+            {
+              "field": "fluorouracil_bilirubin_umol_l",
+              "operator": ">",
+              "value": 85
+            },
+            {
+              "field": "fluorouracil_ast_u_l",
+              "operator": ">",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Source contraindicates fluorouracil above bilirubin 85 µmol/L or AST 180 U/L."
+        },
+        "explanation": "Source contraindicates fluorouracil above bilirubin 85 µmol/L or AST 180 U/L.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_EQUALITY",
+        "when": {
+          "any": [
+            {
+              "field": "fluorouracil_bilirubin_umol_l",
+              "operator": "==",
+              "value": 85
+            },
+            {
+              "field": "fluorouracil_ast_u_l",
+              "operator": "==",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Strict source inequalities leave equality at bilirubin 85 or AST 180 unassigned; obtain clarification.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Strict source inequalities leave equality at bilirubin 85 or AST 180 unassigned; obtain clarification.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_REDUCTION",
+        "when": {
+          "field": "hepatic_impairment",
+          "operator": "in",
+          "value": [
+            "moderate",
+            "severe"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Source suggests initial fluorouracil reduction by one third for moderate, or one half for severe hepatic impairment. Confirm laboratory exclusions and clinical classification first.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Source suggests initial fluorouracil reduction by one third for moderate, or one half for severe hepatic impairment. Confirm laboratory exclusions and clinical classification first.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "FU_CARDIAC",
+        "when": {
+          "field": "suspected_fluoropyrimidine_cardiotoxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Urgently assess suspected fluorouracil cardiotoxicity; withhold fluorouracil. No automated rechallenge."
+        },
+        "explanation": "Urgently assess suspected fluorouracil cardiotoxicity; withhold fluorouracil. No automated rechallenge.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 7,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_HOLD",
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Hold chemotherapy until stomatitis is grade ≤1."
+        },
+        "explanation": "Hold chemotherapy until stomatitis is grade ≤1.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "BASELINE_NEUROPATHY",
+        "when": {
+          "field": "baseline_functional_neuropathy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Functional neuropathy before the first cycle is an NCCP exclusion."
+        },
+        "explanation": "Functional neuropathy before the first cycle is an NCCP exclusion.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "NEUROPATHY_REDUCE",
+        "when": {
+          "any": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "all": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "neuropathy_pattern",
+                  "operator": "in",
+                  "value": [
+                    "first",
+                    "second"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Reduce oxaliplatin one dose level for grade 2 at cycle start or first/second grade 3 occurrence.",
+          "component_changes": {
+            "oxaliplatin": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
+            }
+          }
+        },
+        "explanation": "Reduce oxaliplatin one dose level for grade 2 at cycle start or first/second grade 3 occurrence.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "NEUROPATHY_STOP",
+        "when": {
+          "any": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "all": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "neuropathy_pattern",
+                  "operator": "==",
+                  "value": "persistent"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Discontinue oxaliplatin for persistent grade 3 or grade 4 neuropathy."
+        },
+        "explanation": "Discontinue oxaliplatin for persistent grade 3 or grade 4 neuropathy.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "NEUROPATHY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "neuropathy_pattern",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Grade 3 neuropathy needs occurrence/persistence context before dose reduction versus discontinuation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Grade 3 neuropathy needs occurrence/persistence context before dose reduction versus discontinuation.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "LARYNGO",
+        "when": {
+          "field": "laryngopharyngeal_dysaesthesia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Assess urgently to exclude allergy or other respiratory cause; source permits extending oxaliplatin infusion from two to six hours.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Assess urgently to exclude allergy or other respiratory cause; source permits extending oxaliplatin infusion from two to six hours.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "SUSPECTED_HUS",
+        "when": {
+          "field": "suspected_hus",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Interrupt oxaliplatin and investigate suspected HUS; permanently discontinue if confirmed."
+        },
+        "explanation": "Interrupt oxaliplatin and investigate suspected HUS; permanently discontinue if confirmed.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 7,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "CONFIRMED_HUS",
+        "when": {
+          "field": "confirmed_hus",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Interrupt oxaliplatin and investigate suspected HUS; permanently discontinue if confirmed."
+        },
+        "explanation": "Interrupt oxaliplatin and investigate suspected HUS; permanently discontinue if confirmed.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 7,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
+      },
+      {
+        "rule_id": "OX_RENAL_REDUCTION",
+        "when": {
+          "any": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 30
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "NCCP suggests considering oxaliplatin 50% of original dose at CrCl <30 / dialysis; arrange dialysis within 90 minutes after administration. Consultant/nephrology/pharmacy plan required.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP suggests considering oxaliplatin 50% of original dose at CrCl <30 / dialysis; arrange dialysis within 90 minutes after administration. Consultant/nephrology/pharmacy plan required.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_HOLD",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Hold chemotherapy, assess weekly and allow up to four weeks for recovery below source grade 2."
+        },
+        "explanation": "Hold chemotherapy, assess weekly and allow up to four weeks for recovery below source grade 2.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Discontinue chemotherapy if source grade ≥2 diarrhoea persists after four weeks."
+        },
+        "explanation": "Discontinue chemotherapy if source grade ≥2 diarrhoea persists after four weeks.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_RESTART_3",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "After recovery from source grade 3, reduce both fluorouracil components one level; maintain oxaliplatin.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
+        },
+        "explanation": "After recovery from source grade 3, reduce both fluorouracil components one level; maintain oxaliplatin.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_RESTART_4",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "oxaliplatin"
+          ],
+          "recommendation": "After recovery from source grade 4, reduce both fluorouracil components one level and oxaliplatin one level.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            },
+            "oxaliplatin": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
+            }
+          }
+        },
+        "explanation": "After recovery from source grade 4, reduce both fluorouracil components one level and oxaliplatin one level.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "LATE_COUNT_RECOVERY_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "delay_weeks",
+              "operator": ">",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Counts recovered after the source 4-week restart window. Do not infer permission to restart; obtain consultant/pharmacy review of the delay, nadir and source stopping clauses.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Recovery outside the specified source window requires individual review.",
+        "source": {
+          "document": "NCCP 00733 v2a",
+          "page": 3,
+          "table": 2,
+          "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
+        }
       }
     ]
   },
@@ -1182,7 +2553,7 @@
     "Treatment-specific toxicity monitoring before each administration/cycle"
   ],
   "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
+    "Use source-mapped component rules below. Relative reductions require the actual current component dose level; do not assume level 0. Source ambiguities require consultant/pharmacy clarification."
   ],
   "supportive_care": {
     "emetogenic_risk": "moderate",
@@ -1194,6 +2565,98 @@
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
+    "premedication": "Cetuximab antihistamine plus corticosteroid at least one hour before infusion, including subsequent infusions; follow local policy. Antiemetics per NCCP/local moderate-risk protocol. ",
+    "other_supportive_care": [
+      "Skin care, electrolyte monitoring including monthly magnesium/calcium for two months after cetuximab; eye and respiratory symptom review.",
+      "Confirm DPD result, line/pump care and fluorouracil cardiac warning symptoms."
+    ]
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "repeating_cycle",
+      "cycle_length_days": 14,
+      "administration": [
+        {
+          "day": 1,
+          "drug": "cetuximab",
+          "dose": {
+            "value": 500,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "notes": "500 mg/m² every 14 days; do not apply weekly loading schedule."
+        },
+        {
+          "day": 1,
+          "drug": "oxaliplatin",
+          "dose": {
+            "value": 85,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "notes": "Before fluorouracil, in glucose 5%; do not flush with saline. Cold precautions.",
+          "duration": "2 hours"
+        },
+        {
+          "day": 1,
+          "drug": "folinic_acid",
+          "dose": {
+            "value": 400,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "notes": "Given before fluorouracil; omit/delay with fluorouracil bolus. "
+        },
+        {
+          "day": 1,
+          "drug": "fluorouracil_bolus",
+          "dose": {
+            "value": 400,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "notes": "IV bolus"
+        },
+        {
+          "day": 1,
+          "drug": "fluorouracil_infusion",
+          "dose": {
+            "value": 2400,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "notes": "Ambulatory continuous infusion.",
+          "duration": "46 hours"
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "oxaliplatin": {
+      "0": 85,
+      "-1": 65,
+      "-2": 50,
+      "-3": "discontinue"
+    },
+    "folinic_acid": {
+      "0": 400,
+      "-1": 400,
+      "-2": 400,
+      "-3": "discontinue"
+    },
+    "fluorouracil_bolus": {
+      "0": 400,
+      "-1": 320,
+      "-2": 260,
+      "-3": "discontinue"
+    },
+    "fluorouracil_infusion": {
+      "0": 2400,
+      "-1": 1900,
+      "-2": 1500,
+      "-3": "discontinue"
+    }
+  },
+  "assessment_profiles": []
 }

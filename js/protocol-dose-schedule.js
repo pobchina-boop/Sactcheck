@@ -544,6 +544,8 @@
   }
 
   function parseRecommendationInstruction(finding, component, model, result) {
+    // A source range or conflict is not a single calculable dose.
+    if (finding?.action?.dose_calculation === "specialist_review") return null;
     const text = String(finding?.action?.recommendation || finding?.explanation || "");
     if (!text) return null;
 

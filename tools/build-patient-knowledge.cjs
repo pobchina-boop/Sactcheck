@@ -12,7 +12,7 @@ const profiles=fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(n
 const index=JSON.parse(fs.readFileSync(path.join(root,'protocols/index.json')));
 const catalogue=Array.isArray(index)?index:(index.protocols||index.regimens||[]);
 function diagram(agent){
-  if(agent.id==='panitumumab')return '<svg class="pk-diagram" viewBox="0 0 260 108" aria-hidden="true"><g fill="none" stroke="#086f75" stroke-width="4"><path d="M20 68h220M120 68V40l-18-17m18 17 18-17M153 12l-26 29M110 86h35"/><circle cx="201" cy="85" r="12"/><path d="M152 85h30" stroke-dasharray="4 4"/></g></svg>';
+  if(agent.id==='panitumumab'||agent.id==='cetuximab')return '<svg class="pk-diagram" viewBox="0 0 260 108" aria-hidden="true"><g fill="none" stroke="#086f75" stroke-width="4"><path d="M20 68h220M120 68V40l-18-17m18 17 18-17M153 12l-26 29M110 86h35"/><circle cx="201" cy="85" r="12"/><path d="M152 85h30" stroke-dasharray="4 4"/></g></svg>';
 
   if(agent.id==='bevacizumab')return '<svg class="pk-diagram" viewBox="0 0 260 108" aria-hidden="true"><g fill="none" stroke="#086f75" stroke-width="4"><path d="M30 80V55l35-30m-35 30 35 25M195 80V55l35-30m-35 30 35 25"/><circle cx="128" cy="52" r="22"/><path d="m113 67 30-30"/></g></svg>';
   if(agent.id==='irinotecan')return '<svg class="pk-diagram" viewBox="0 0 260 108" aria-hidden="true"><g fill="none" stroke="#086f75" stroke-width="4"><path d="M35 20q70 8 90 68M35 88q70-8 90-68M165 20q40 0 60 68"/><circle cx="135" cy="54" r="22"/><path d="m120 69 30-30" stroke="#9b6120"/></g></svg>';

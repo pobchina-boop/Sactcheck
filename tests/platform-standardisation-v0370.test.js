@@ -151,7 +151,7 @@ for (const { file, data } of protocols) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
-      const folfoxSourceDiarrhoea = code === '00447' && ['diarrhoea_current_grade','diarrhoea_highest_grade'].includes(field);
+      const folfoxSourceDiarrhoea = (['00447','00733'].includes(code)) && ['diarrhoea_current_grade','diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
       assert.equal(def.ctcae_version, folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }

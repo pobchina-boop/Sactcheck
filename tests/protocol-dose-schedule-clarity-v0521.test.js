@@ -43,9 +43,9 @@ for (const entry of catalogue.protocols) {
 }
 
 assert.strictEqual(catalogue.protocols.length, 376);
-assert.strictEqual(usefulCoverage, 85);
-assert.strictEqual(scheduleCoverage, 79);
-assert.strictEqual(doseLevelCoverage, 25);
+assert.strictEqual(usefulCoverage, 95);
+assert.strictEqual(scheduleCoverage, 89);
+assert.strictEqual(doseLevelCoverage, 30);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');
