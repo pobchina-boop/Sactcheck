@@ -2,10 +2,10 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00892-v2",
   "file_name": "00892-ribociclib-adjuvant.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00892",
-    "nccp_version": 2,
+    "nccp_version": "2",
     "tumour_group": "Breast",
     "title": "Ribociclib Therapy (Adjuvant) - 28 day",
     "short_title": "Adjuvant ribociclib",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.83.8",
     "treatment_setting": [
       "adjuvant"
     ],
@@ -30,7 +30,8 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "software_validation_record": "validation/breast-v0838/CLINICAL_AUDIT.md"
     },
     "partial_assessment_supported": true,
     "partial_assessment_note": "Only entered values are assessed; omitted clinical domains remain explicitly unassessed.",
@@ -64,19 +65,19 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
+      "reconciled_release": "0.83.8",
+      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "clinical_use_authorised": false
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00892-v2"
+    "canonical_protocol_id": "nccp-00892-v2",
+    "source_checked_date": "2026-10-17"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -85,39 +86,434 @@
   },
   "input_definitions": {
     "anc": {
-      "label": "ANC (×10⁹/L)",
+      "label": "ANC",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 50,
       "step": 0.01,
       "unit": "×10⁹/L",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "demo_value": "baseline",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before starting"
+        },
+        {
+          "value": "ongoing",
+          "label": "During treatment"
+        }
+      ]
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
       "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 4
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "qtc_f": {
+      "label": "QTcF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "ms",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "qtc_change_ms": {
+      "label": "QTcF increase from baseline",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "ms",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "alt_ast_uln_multiple": {
+      "label": "Highest ALT or AST / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
       "input_role": "decision"
     },
     "febrile_neutropenia": {
-      "label": "Febrile neutropenia / concurrent infection",
+      "label": "Febrile neutropenia",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "recurrent_grade3": {
       "label": "Recurrent grade 3 neutropenia",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
+    },
+    "qtc_over480_recurrent": {
+      "label": "Recurrent QTcF >480 ms",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "qtc_over500_recurrent": {
+      "label": "Recurrent QTcF >500 ms",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "qtc_serious_arrhythmia": {
+      "label": "Torsade, polymorphic VT or serious arrhythmia symptoms",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "cholestasis_absent": {
+      "label": "Cholestasis excluded",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "recurrent_liver_grade3": {
+      "label": "Recurrent grade 3 liver toxicity",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "recurrent_liver_grade2": {
+      "label": "Recurrent grade 2 liver toxicity",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "long_qt_or_significant_cardiac_risk": {
+      "label": "Long QT or significant cardiac risk",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "electrolyte_abnormality": {
+      "label": "Uncorrected electrolyte abnormality",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "strong_cyp3a_or_qt_drug": {
+      "label": "Potential CYP3A or QT-prolonging interaction",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "node_negative": {
+      "label": "Node-negative disease",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "prior_cdk46": {
+      "label": "Previous CDK4/6 inhibitor",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "further_reduction_required": {
+      "label": "Further dose reduction required",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "baseline_liver_grade": {
+      "label": "Baseline ALT/AST grade",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "hepatic_alt_ast",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "ast_alt_grade": {
+      "label": "Current ALT/AST grade if numerical result unavailable",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "hepatic_alt_ast",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "ild_grade": {
+      "label": "ILD / pneumonitis grade",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "pneumonitis",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "dose_level": {
+      "label": "Current adjuvant ribociclib dose",
+      "type": "select",
+      "demo_value": 400,
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": 400,
+          "label": "400 mg daily"
+        },
+        {
+          "value": 200,
+          "label": "200 mg daily"
+        }
+      ]
+    },
+    "renal_band": {
+      "label": "Renal category",
+      "type": "select",
+      "demo_value": "mild_moderate",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "mild_moderate",
+          "label": "Mild/moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis"
+        }
+      ]
     },
     "child_pugh": {
       "label": "Child-Pugh class",
       "type": "select",
+      "demo_value": "A",
       "required": false,
+      "always_show": true,
+      "input_role": "context",
       "options": [
-        {
-          "value": "none",
-          "label": "No hepatic impairment"
-        },
         {
           "value": "A",
           "label": "A"
@@ -130,160 +526,51 @@
           "value": "C",
           "label": "C"
         }
-      ],
-      "demo_value": "none",
-      "input_role": "decision"
+      ]
     },
-    "qtc_f": {
-      "label": "QTcF (ms)",
-      "type": "number",
-      "required": false,
-      "min": 200,
-      "max": 1000,
-      "step": 1,
-      "unit": "ms",
-      "demo_value": 420,
-      "input_role": "decision"
-    },
-    "long_qt_or_significant_cardiac_risk": {
-      "label": "Long-QT syndrome or significant QT/cardiac risk",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "electrolyte_abnormality": {
-      "label": "Uncorrected relevant electrolyte abnormality",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "ast_alt_grade": {
-      "label": "AST/ALT elevation grade (CTCAE)",
+    "her2_status": {
+      "label": "HER2 status",
       "type": "select",
+      "demo_value": "negative",
       "required": false,
+      "always_show": true,
+      "input_role": "context",
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0 — within normal range",
-          "ctcae_grade": 0
+          "value": "negative",
+          "label": "Negative"
         },
         {
-          "value": 1,
-          "label": "Grade 1 — >ULN to 3 × ULN",
-          "ctcae_grade": 1
+          "value": "positive",
+          "label": "Positive"
         },
         {
-          "value": 2,
-          "label": "Grade 2 — >3 to 5 × ULN",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — >5 to 20 × ULN",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — >20 × ULN",
-          "ctcae_grade": 4
+          "value": "unknown",
+          "label": "Unknown"
         }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Use the measured ALT/AST and laboratory ULN; account for an abnormal baseline where CTCAE specifies a baseline-relative definition. Assess bilirubin and alternative causes concurrently.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "hepatic_alt_ast",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      ]
     },
-    "bilirubin_elevated": {
-      "label": "Bilirubin elevated with AST/ALT abnormality",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "nonhaem_toxicity_grade": {
-      "label": "Other non-haematological toxicity (CTCAE)",
+    "hr_status": {
+      "label": "Hormone receptors",
       "type": "select",
+      "demo_value": "positive",
       "required": false,
+      "always_show": true,
+      "input_role": "context",
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0 — no toxicity",
-          "description": "No clinical or laboratory evidence of other non-haematological toxicity.",
-          "ctcae_grade": 0
+          "value": "positive",
+          "label": "Positive"
         },
         {
-          "value": 1,
-          "label": "Grade 1 — mild",
-          "description": "Mild or asymptomatic; clinical observation or diagnostic review only; intervention generally not indicated.",
-          "ctcae_grade": 1
+          "value": "negative",
+          "label": "Negative"
         },
         {
-          "value": 2,
-          "label": "Grade 2 — moderate",
-          "description": "Moderate symptoms or abnormality; minimal, local or non-invasive intervention may be indicated; limits age-appropriate instrumental activities of daily living.",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — severe",
-          "description": "Severe or medically significant but not immediately life-threatening; hospitalisation or prolongation of hospitalisation may be indicated; disabling; limits self-care activities of daily living.",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — life-threatening",
-          "description": "Life-threatening consequences requiring urgent intervention.",
-          "ctcae_grade": 4
+          "value": "unknown",
+          "label": "Unknown"
         }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Name the exact non-haematological adverse event first and apply that event's own CTCAE v5.0 criterion. The general Grade 1-4 severity anchors are a screening aid only and are not a substitute for the named term.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
-    },
-    "dose_level": {
-      "label": "Current adjuvant ribociclib dose",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 400,
-          "label": "400 mg — recommended starting dose"
-        },
-        {
-          "value": 200,
-          "label": "200 mg — reduced dose"
-        }
-      ],
-      "demo_value": 400,
-      "input_role": "decision"
-    },
-    "renal_band": {
-      "label": "Renal function category",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "mild_moderate",
-          "label": "Mild or moderate renal impairment — no dose adjustment"
-        },
-        {
-          "value": "severe",
-          "label": "Severe renal impairment — starting dose 200 mg"
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis — specialist oncology/pharmacy review"
-        }
-      ],
-      "demo_value": "mild_moderate",
-      "input_role": "decision"
+      ]
     }
   },
   "required_inputs": [],
@@ -293,7 +580,7 @@
   },
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "report_unassessed_coverage_gap",
+    "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -313,284 +600,944 @@
     ],
     "rules": [
       {
-        "rule_id": "ANC_G4",
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "ribociclib"
-          ],
-          "recommendation": "Interrupt until recovery to grade ≤2, then resume one dose level lower."
+        "rule_id": "HYPERSENSITIVITY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
         },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Interrupt until recovery to grade ≤2, then resume one dose level lower.",
-        "field": "anc",
-        "operator": "<",
-        "value": 0.5
-      },
-      {
-        "rule_id": "FEBRILE",
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "ribociclib"
-          ],
-          "recommendation": "Interrupt until recovery to grade ≤2, then resume one dose level lower."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Interrupt until recovery to grade ≤2, then resume one dose level lower.",
-        "field": "febrile_neutropenia",
-        "operator": "==",
-        "value": true
-      },
-      {
-        "rule_id": "ANC_G3_FIRST",
-        "action": {
-          "type": "withhold",
-          "components": [
-            "ribociclib"
-          ],
-          "recommendation": "Interrupt until ANC recovers to ≥1.0 ×10⁹/L, then resume at the same dose."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Interrupt until ANC recovers to ≥1.0 ×10⁹/L, then resume at the same dose.",
-        "all": [
-          {
-            "field": "anc",
-            "operator": ">=",
-            "value": 0.5
-          },
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1.0
-          },
-          {
-            "field": "recurrent_grade3",
-            "operator": "==",
-            "value": false
-          }
-        ]
-      },
-      {
-        "rule_id": "ANC_G3_RECUR",
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "ribociclib"
-          ],
-          "recommendation": "Interrupt until recovery to grade ≤2, then resume one dose level lower."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Interrupt until recovery to grade ≤2, then resume one dose level lower.",
-        "all": [
-          {
-            "field": "anc",
-            "operator": ">=",
-            "value": 0.5
-          },
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1.0
-          },
-          {
-            "field": "recurrent_grade3",
-            "operator": "==",
-            "value": true
-          }
-        ]
-      },
-      {
-        "rule_id": "DIALYSIS",
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "ribociclib"
-          ],
-          "recommendation": "Ribociclib is not recommended in haemodialysis."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Dialysis requires specialist oncology/pharmacy review.",
-        "field": "renal_band",
-        "operator": "==",
-        "value": "dialysis"
-      },
-      {
-        "rule_id": "SEVERE_RENAL_200",
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "ribociclib"
-          ],
-          "recommendation": "Use 33% of the original starting dose for CrCl <30 mL/min."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "For severe renal impairment, use a 200 mg starting dose.",
-        "field": "renal_band",
-        "operator": "==",
-        "value": "severe"
-      },
-      {
-        "rule_id": "CHILDPUGH_BC",
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "ribociclib"
-          ],
-          "recommendation": "Use 67% of the original dose in Child-Pugh B or C."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Use 67% of the original dose in Child-Pugh B or C.",
-        "any": [
-          {
-            "field": "child_pugh",
-            "operator": "==",
-            "value": "B"
-          },
-          {
-            "field": "child_pugh",
-            "operator": "==",
-            "value": "C"
-          }
-        ]
-      },
-      {
-        "rule_id": "QT_RISK",
         "action": {
           "type": "contraindicated",
           "components": [
             "ribociclib"
           ],
-          "recommendation": "Avoid ribociclib until major QT/cardiac risk factors and electrolyte abnormalities are corrected or reviewed."
+          "recommendation": "Relevant hypersensitivity: do not administer; review the responsible component."
         },
+        "explanation": "Relevant hypersensitivity: do not administer; review the responsible component.",
         "source": {
-          "page": 7,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "PREGNANCY_LACTATION",
+        "when": {
+          "any": [
+            {
+              "field": "pregnancy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "breastfeeding",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
-        "explanation": "Avoid ribociclib until major QT/cardiac risk factors and electrolyte abnormalities are corrected or reviewed.",
-        "any": [
-          {
-            "field": "long_qt_or_significant_cardiac_risk",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "electrolyte_abnormality",
-            "operator": "==",
-            "value": true
-          }
-        ]
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Pregnancy/breastfeeding requires treatment exclusion and specialist review."
+        },
+        "explanation": "Pregnancy/breastfeeding requires treatment exclusion and specialist review.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "ECOG_REVIEW",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Outside the published performance-status population; consultant assessment required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside the published performance-status population; consultant assessment required.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "ANC_HOLD",
+        "when": {
+          "field": "anc",
+          "operator": "<",
+          "value": 1
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Interrupt until ANC recovers to ≥1.0. First uncomplicated grade 3 can resume at the same dose; recurrence, grade 4 or febrile neutropenia requires the lower level after recovery."
+        },
+        "explanation": "Interrupt until ANC recovers to ≥1.0. First uncomplicated grade 3 can resume at the same dose; recurrence, grade 4 or febrile neutropenia requires the lower level after recovery.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "FEBRILE",
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Treat febrile neutropenia urgently; resume only after recovery at a lower level, or discontinue if reduction below 200 mg would be needed."
+        },
+        "explanation": "Treat febrile neutropenia urgently; resume only after recovery at a lower level, or discontinue if reduction below 200 mg would be needed.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "RENAL_SEVERE",
+        "when": {
+          "field": "renal_band",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "The adjuvant source recommends a starting dose of 200 mg in severe renal impairment. Confirm the current dose and clinical context; do not calculate a percentage of the metastatic starting dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The adjuvant source recommends a starting dose of 200 mg in severe renal impairment. Confirm the current dose and clinical context; do not calculate a percentage of the metastatic starting dose.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "RENAL_DIALYSIS",
+        "when": {
+          "field": "renal_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "The adjuvant source does not provide a separate dialysis dosing schedule. Obtain specialist oncology/pharmacy review.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The adjuvant source does not provide a separate dialysis dosing schedule. Obtain specialist oncology/pharmacy review.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HEPATIC_BASELINE",
+        "when": {
+          "any": [
+            {
+              "field": "child_pugh",
+              "operator": "==",
+              "value": "A"
+            },
+            {
+              "field": "child_pugh",
+              "operator": "==",
+              "value": "B"
+            },
+            {
+              "field": "child_pugh",
+              "operator": "==",
+              "value": "C"
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "The early-breast source requires no starting dose adjustment solely for hepatic impairment. Treatment-emergent liver toxicity is assessed separately."
+        },
+        "explanation": "The early-breast source requires no starting dose adjustment solely for hepatic impairment. Treatment-emergent liver toxicity is assessed separately.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "QT_BASELINE",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "qtc_f",
+              "operator": ">=",
+              "value": 450
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Before starting, QTcF must be <450 ms. Correct reversible causes and review interacting medicines."
+        },
+        "explanation": "Before starting, QTcF must be <450 ms. Correct reversible causes and review interacting medicines.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "QT_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "qtc_f",
+              "operator": ">=",
+              "value": 450
+            },
+            {
+              "field": "qtc_f",
+              "operator": "<=",
+              "value": 480
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Confirm baseline versus ongoing ECG; the initiation and interruption thresholds differ.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm baseline versus ongoing ECG; the initiation and interruption thresholds differ.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "QT_480_500",
+        "when": {
+          "all": [
+            {
+              "field": "qtc_f",
+              "operator": ">",
+              "value": 480
+            },
+            {
+              "field": "qtc_f",
+              "operator": "<=",
+              "value": 500
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Interrupt until QTcF <481 ms. First event: same dose after review; recurrence: next lower level. No restart dose is authorised by this abnormal result."
+        },
+        "explanation": "Interrupt until QTcF <481 ms. First event: same dose after review; recurrence: next lower level. No restart dose is authorised by this abnormal result.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 5
+        }
       },
       {
         "rule_id": "QT_500",
+        "when": {
+          "field": "qtc_f",
+          "operator": ">",
+          "value": 500
+        },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "withhold",
           "components": [
             "ribociclib"
           ],
-          "recommendation": "Interrupt for QTcF >500 ms; resume at the next lower dose only after recovery, per protocol."
+          "recommendation": "Interrupt until QTcF <481 ms, then the next lower level only after review. Recurrent >500 ms requires discontinuation."
         },
+        "explanation": "Interrupt until QTcF <481 ms, then the next lower level only after review. Recurrent >500 ms requires discontinuation.",
         "source": {
-          "page": 6,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Interrupt for QTcF >500 ms; resume at the next lower dose only after recovery, per protocol.",
-        "field": "qtc_f",
-        "operator": ">",
-        "value": 500
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 5
+        }
       },
       {
-        "rule_id": "LIVER_DILI",
+        "rule_id": "QT_RECURRENT_500",
+        "when": {
+          "field": "qtc_over500_recurrent",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "discontinue",
           "components": [
             "ribociclib"
           ],
-          "recommendation": "Discontinue for AST/ALT elevation with bilirubin elevation consistent with severe drug-induced liver injury criteria."
+          "recommendation": "Recurrent QTcF >500 ms: discontinue ribociclib."
         },
+        "explanation": "Recurrent QTcF >500 ms: discontinue ribociclib.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Discontinue for AST/ALT elevation with bilirubin elevation consistent with severe drug-induced liver injury criteria.",
-        "all": [
-          {
-            "field": "ast_alt_grade",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "bilirubin_elevated",
-            "operator": "==",
-            "value": true
-          }
-        ]
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 5
+        }
       },
       {
-        "rule_id": "NONHAEM_G3",
+        "rule_id": "QT_ARRHYTHMIA",
+        "when": {
+          "all": [
+            {
+              "field": "qtc_serious_arrhythmia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "qtc_f",
+                  "operator": ">",
+                  "value": 500
+                },
+                {
+                  "field": "qtc_change_ms",
+                  "operator": ">",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "permanently_discontinue",
           "components": [
             "ribociclib"
           ],
-          "recommendation": "Interrupt for grade ≥3 toxicity until recovery, then resume according to recurrence and dose-modification table."
+          "recommendation": "The source QT change with serious arrhythmia requires permanent discontinuation and urgent cardiac care."
         },
+        "explanation": "The source QT change with serious arrhythmia requires permanent discontinuation and urgent cardiac care.",
         "source": {
-          "page": 6,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Interrupt for grade ≥3 toxicity until recovery, then resume according to recurrence and dose-modification table.",
-        "field": "nonhaem_toxicity_grade",
-        "operator": ">=",
-        "value": 3
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 5
+        }
       },
       {
-        "rule_id": "BELOW200",
+        "rule_id": "QT_RISK",
+        "when": {
+          "any": [
+            {
+              "field": "long_qt_or_significant_cardiac_risk",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "electrolyte_abnormality",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Correct/review QT risk and electrolyte abnormalities before treatment; specialist assessment required."
+        },
+        "explanation": "Correct/review QT risk and electrolyte abnormalities before treatment; specialist assessment required.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "LIVER_G2_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                },
+                {
+                  "field": "ast_alt_grade",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "baseline_liver_grade",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Baseline liver grade is needed. The source treats baseline grade 2 differently; do not assume normal baseline.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Baseline liver grade is needed. The source treats baseline grade 2 differently; do not assume normal baseline.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "LIVER_G2_HOLD",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                },
+                {
+                  "field": "ast_alt_grade",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "baseline_liver_grade",
+              "operator": "<",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Interrupt until baseline grade recovers. Resume same level after a first event, lower after recurrence."
+        },
+        "explanation": "Interrupt until baseline grade recovers. Resume same level after a first event, lower after recurrence.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "LIVER_G2_BASELINE2",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                },
+                {
+                  "field": "ast_alt_grade",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "baseline_liver_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "The isolated grade 2 branch with baseline grade 2 does not require interruption. Assess bilirubin and other hepatic findings separately."
+        },
+        "explanation": "The isolated grade 2 branch with baseline grade 2 does not require interruption. Assess bilirubin and other hepatic findings separately.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "LIVER_G3",
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                },
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": "<=",
+                  "value": 20
+                }
+              ]
+            },
+            {
+              "field": "ast_alt_grade",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Interrupt until recovery to baseline or lower, then reduce one level. Recurrent grade 3 requires discontinuation."
+        },
+        "explanation": "Interrupt until recovery to baseline or lower, then reduce one level. Recurrent grade 3 requires discontinuation.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "LIVER_G3_RECURRENT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 5
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": "<=",
+                      "value": 20
+                    }
+                  ]
+                },
+                {
+                  "field": "ast_alt_grade",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "recurrent_liver_grade3",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "discontinue",
           "components": [
             "ribociclib"
           ],
-          "recommendation": "If a further dose reduction below 200 mg/day is required, discontinue treatment."
+          "recommendation": "Recurrent grade 3 liver toxicity: discontinue."
         },
+        "explanation": "Recurrent grade 3 liver toxicity: discontinue.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "LIVER_G4",
+        "when": {
+          "any": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 20
+            },
+            {
+              "field": "ast_alt_grade",
+              "operator": "==",
+              "value": 4
+            }
+          ]
         },
-        "explanation": "If further reduction below 200 mg/day is required, discontinue treatment.",
-        "all": [
-          {
-            "field": "dose_level",
-            "operator": "==",
-            "value": 200
-          },
-          {
-            "field": "recurrent_grade3",
-            "operator": "==",
-            "value": true
-          }
-        ]
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Grade 4 liver toxicity: discontinue."
+        },
+        "explanation": "Grade 4 liver toxicity: discontinue.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "DILI_STOP",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "cholestasis_absent",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "ALT/AST >3×ULN with bilirubin >2×ULN without cholestasis: discontinue."
+        },
+        "explanation": "ALT/AST >3×ULN with bilirubin >2×ULN without cholestasis: discontinue.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "DILI_REVIEW",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "cholestasis_absent",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Combined liver abnormalities require holding treatment and urgent assessment including cholestasis before a restart decision."
+        },
+        "explanation": "Combined liver abnormalities require holding treatment and urgent assessment including cholestasis before a restart decision.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "ILD_G2",
+        "when": {
+          "field": "ild_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Interrupt and assess ILD. The source describes grade 2 as asymptomatic and recovery <1; reconcile this wording with current SmPC before any lower-dose restart."
+        },
+        "explanation": "Interrupt and assess ILD. The source describes grade 2 as asymptomatic and recovery <1; reconcile this wording with current SmPC before any lower-dose restart.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "ILD_G3_4",
+        "when": {
+          "field": "ild_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Severe grade 3–4 ILD: discontinue."
+        },
+        "explanation": "Severe grade 3–4 ILD: discontinue.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "OTHER_G3",
+        "when": {
+          "field": "nonhaem_toxicity_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Interrupt until grade ≤1. First occurrence resumes at the same dose; recurrence at the lower dose after review."
+        },
+        "explanation": "Interrupt until grade ≤1. First occurrence resumes at the same dose; recurrence at the lower dose after review.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "OTHER_G4",
+        "when": {
+          "field": "nonhaem_toxicity_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Other grade 4 toxicity: discontinue."
+        },
+        "explanation": "Other grade 4 toxicity: discontinue.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "LOWEST_DOSE",
+        "when": {
+          "all": [
+            {
+              "field": "dose_level",
+              "operator": "==",
+              "value": 200
+            },
+            {
+              "field": "further_reduction_required",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Further reduction below 200 mg/day is not permitted."
+        },
+        "explanation": "Further reduction below 200 mg/day is not permitted.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "NODE_NEGATIVE_CONFLICT",
+        "when": {
+          "field": "node_negative",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "The source eligibility includes selected node-negative stage IIA disease, but its exclusion list says node-negative disease. Reconcile this internal conflict before selection.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The source eligibility includes selected node-negative stage IIA disease, but its exclusion list says node-negative disease. Reconcile this internal conflict before selection.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "RECEPTOR_CONTEXT",
+        "when": {
+          "any": [
+            {
+              "field": "her2_status",
+              "operator": "==",
+              "value": "positive"
+            },
+            {
+              "field": "hr_status",
+              "operator": "==",
+              "value": "negative"
+            },
+            {
+              "field": "prior_cdk46",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Outside the HR-positive/HER2-negative adjuvant source context or prior CDK4/6 exposure: verify eligibility.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside the HR-positive/HER2-negative adjuvant source context or prior CDK4/6 exposure: verify eligibility.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "INTERACTIONS",
+        "when": {
+          "field": "strong_cyp3a_or_qt_drug",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ribociclib"
+          ],
+          "recommendation": "Review CYP3A and QT interactions against current product information and the actual adjuvant dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Review CYP3A and QT interactions against current product information and the actual adjuvant dose.",
+        "source": {
+          "document": "NCCP 00892 v2",
+          "url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
+          "page": 7
+        }
       }
     ]
   },
@@ -620,5 +1567,56 @@
   "ctcae_standard": {
     "reference": "CTCAE grading as cited by the NCCP source protocol",
     "display_requirement": "Every grade-based input includes toxicity-specific criteria and practical assessment guidance. Do not select a grade from the number alone."
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "adjuvant_ribociclib",
+      "name": "Adjuvant ribociclib with endocrine treatment",
+      "cycle_length_days": 28,
+      "administration": [
+        {
+          "drug": "ribociclib",
+          "dose": {
+            "value": 400,
+            "unit": "mg daily"
+          },
+          "day": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "route": "oral",
+          "notes": "Days 22–28 off ribociclib; endocrine partner continues on its own schedule. Up to three years."
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "ribociclib": {
+      "0": {
+        "dose_mg": 400
+      },
+      "-1": {
+        "dose_mg": 200
+      }
+    }
   }
 }

@@ -1,0 +1,1 @@
+(function(){'use strict';const select=document.getElementById('support-phase');if(!select)return;select.value='';const render=()=>{document.querySelectorAll('[data-support-phase]').forEach(el=>{el.hidden=el.dataset.supportPhase!==select.value;});document.getElementById('phase-prompt').hidden=Boolean(select.value);};select.addEventListener('change',render);render();})();

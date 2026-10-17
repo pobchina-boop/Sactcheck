@@ -48,11 +48,16 @@
     return TOXICITY_PATTERN.test(text);
   }
 
+  function conditionFields(condition) {
+    if (!condition || typeof condition !== 'object') return [];
+    return [...(condition.field ? [String(condition.field)] : []), ...['all','any'].flatMap(key => asArray(condition[key]).flatMap(conditionFields)), ...conditionFields(condition.not)];
+  }
+
   function componentFor(protocol, fieldId, definition) {
     if (!isToxicityDefinition(fieldId, definition)) return null;
     const values = [];
     rules(protocol).forEach(rule => {
-      if (String(rule.field || "") !== String(fieldId)) return;
+      if (![String(rule.field || ""), ...conditionFields(rule.when || rule.condition)].includes(String(fieldId))) return;
       const action = rule.action && typeof rule.action === "object" ? rule.action : {};
       asArray(action.components).forEach(component => {
         const cleaned = clean(component).toLowerCase();

@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
-    "sactcheck_encoding_version": "0.68.0",
+    "sactcheck_encoding_version": "0.83.8",
     "treatment_setting": [
       "adjuvant"
     ],
@@ -30,7 +30,8 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
+      "software_validation_record": "validation/breast-v0838/CLINICAL_AUDIT.md"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -57,17 +58,16 @@
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
-    "source_checked_date": "2026-08-15",
+    "source_checked_date": "2026-10-17",
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
       "source_reconciled": true,
+      "reconciled_release": "0.83.8",
+      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "reconciled_release": "0.68.0",
-      "reconciled_date": "2026-08-15",
-      "scope_note": "Rebuilt against NCCP 00815 Version 3 with source defined haematology bands, paclitaxel hepatic rules, toxicity actions and trastuzumab cardiac pathways."
+      "clinical_use_authorised": false
     },
     "canonical_protocol_id": "nccp-00815-v3"
   },
@@ -80,227 +80,346 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
       "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
       "unit": "×10⁹/L",
-      "demo_value": 2
+      "always_show": true,
+      "input_role": "decision"
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "step": 1,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "treatment_phase": {
+      "label": "Current treatment phase",
+      "type": "select",
+      "demo_value": "combination",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "combination",
+          "label": "Weekly paclitaxel with trastuzumab"
+        },
+        {
+          "value": "trastuzumab_maintenance",
+          "label": "Trastuzumab continuation after paclitaxel"
+        }
+      ]
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "demo_value": "baseline",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before starting"
+        },
+        {
+          "value": "ongoing",
+          "label": "During treatment"
+        }
+      ]
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
       "always_show": true,
       "input_role": "decision",
-      "unit": "×10⁹/L",
-      "demo_value": 200
+      "max": 4
     },
-    "hb_g_dl": {
-      "label": "Haemoglobin",
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "alt_uln_multiple": {
+      "label": "ALT / ULN",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "step": 0.1,
+      "step": 0.01,
+      "unit": "×ULN",
       "always_show": true,
-      "input_role": "monitoring",
-      "unit": "g/dL",
-      "demo_value": 12
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "anc_below_0_5_ge7_days": {
+      "label": "ANC below 0.5 for at least 7 days",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy",
+      "type": "select",
+      "demo_value": 0,
       "required": false,
       "always_show": true,
       "input_role": "decision",
-      "demo_value": false
-    },
-    "neuropathy_grade": {
-      "label": "Motor or sensory neuropathy grade",
-      "type": "select",
-      "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
-      "always_show": true,
-      "input_role": "decision",
       "unit": "CTCAE grade",
       "ctcae_version": "5.0",
-      "demo_value": 0,
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "ctcae_category": "neuropathy",
-      "assessment_guidance": "Assess sensory and motor symptoms, gait, dexterity and impact on instrumental or self care activities."
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
     },
-    "anc_below_0_5_ge7_days": {
-      "label": "ANC below 0.5 ×10⁹/L for at least 7 days",
-      "type": "boolean",
+    "other_nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity",
+      "type": "select",
+      "demo_value": 0,
       "required": false,
       "always_show": true,
       "input_role": "decision",
-      "demo_value": false
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
     },
-    "baseline_lvef_percent": {
-      "label": "Pretreatment LVEF",
+    "current_paclitaxel_mg_m2": {
+      "label": "Actual current paclitaxel dose",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
       "step": 0.01,
+      "unit": "mg/m²",
       "always_show": true,
-      "input_role": "decision",
-      "unit": "%",
-      "demo_value": 60
+      "input_role": "decision"
+    },
+    "baseline_lvef_percent": {
+      "label": "Baseline LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision"
     },
     "current_lvef_percent": {
       "label": "Current LVEF",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
       "step": 0.01,
+      "unit": "",
       "always_show": true,
-      "input_role": "decision",
-      "unit": "%",
-      "demo_value": 60
+      "input_role": "decision"
     },
     "lvef_drop_points_from_baseline": {
-      "label": "LVEF fall from baseline",
+      "label": "LVEF fall from baseline in percentage points",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
       "step": 0.01,
+      "unit": "",
       "always_show": true,
-      "input_role": "decision",
-      "unit": "ejection fraction points",
-      "demo_value": 0
+      "input_role": "decision"
+    },
+    "days_overdue_trastuzumab": {
+      "label": "Days since scheduled trastuzumab dose was missed",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision"
     },
     "symptomatic_heart_failure": {
       "label": "Symptomatic heart failure",
       "type": "boolean",
+      "demo_value": false,
       "required": false,
       "always_show": true,
-      "input_role": "decision",
-      "demo_value": false
+      "input_role": "decision"
+    },
+    "prior_anthracycline": {
+      "label": "Previous anthracycline treatment",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
     },
     "hypersensitivity_grade": {
-      "label": "Hypersensitivity reaction grade",
+      "label": "Trastuzumab hypersensitivity reaction",
       "type": "select",
+      "demo_value": 0,
       "required": false,
+      "always_show": true,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4
         }
       ],
-      "always_show": true,
-      "input_role": "decision",
       "unit": "CTCAE grade",
       "ctcae_version": "5.0",
-      "demo_value": 0,
-      "ctcae_category": "hypersensitivity_anaphylaxis",
-      "assessment_guidance": "Assess timing, symptoms, treatment required, recurrence and any airway or haemodynamic compromise."
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "allergic_reaction",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
     },
-    "alt_uln_multiple": {
-      "label": "ALT multiple of ULN",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "× ULN",
-      "demo_value": 1
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin multiple of ULN",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "× ULN",
-      "demo_value": 1
-    },
-    "other_nonhaem_toxicity_grade": {
-      "label": "Other non haematological toxicity grade",
+    "trastuzumab_route": {
+      "label": "Trastuzumab formulation",
       "type": "select",
+      "demo_value": "iv",
       "required": false,
+      "always_show": true,
+      "input_role": "context",
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0"
+          "value": "iv",
+          "label": "Intravenous"
         },
         {
-          "value": 1,
-          "label": "Grade 1"
-        },
-        {
-          "value": 2,
-          "label": "Grade 2"
-        },
-        {
-          "value": 3,
-          "label": "Grade 3"
-        },
-        {
-          "value": 4,
-          "label": "Grade 4"
+          "value": "sc",
+          "label": "Subcutaneous"
         }
-      ],
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "CTCAE grade",
-      "ctcae_version": "5.0",
-      "demo_value": 0,
-      "ctcae_category": "other_nonhaematological",
-      "assessment_guidance": "Identify the exact adverse event and apply its own CTCAE criteria, intervention requirement and functional impact."
+      ]
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Rapid partial assessment",
-      "required_inputs": [],
-      "context": {}
-    }
-  ],
   "output_templates": {
     "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
     "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
@@ -311,27 +430,719 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "PTH815_BASELINE_LVEF_LT50",
+        "rule_id": "HYPERSENSITIVITY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel",
+            "trastuzumab"
+          ],
+          "recommendation": "Relevant hypersensitivity: do not administer; review the responsible component."
+        },
+        "explanation": "Relevant hypersensitivity: do not administer; review the responsible component.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PREGNANCY_LACTATION",
+        "when": {
+          "any": [
+            {
+              "field": "pregnancy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "breastfeeding",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel",
+            "trastuzumab"
+          ],
+          "recommendation": "Pregnancy/breastfeeding requires treatment exclusion and specialist review."
+        },
+        "explanation": "Pregnancy/breastfeeding requires treatment exclusion and specialist review.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "ECOG_REVIEW",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "trastuzumab"
+          ],
+          "recommendation": "Outside the published performance-status population; consultant assessment required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside the published performance-status population; consultant assessment required.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_ANC_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay paclitaxel for ANC below 1.0. Establish duration, recovery and the need for dose reduction."
+        },
+        "explanation": "Delay paclitaxel for ANC below 1.0. Establish duration, recovery and the need for dose reduction.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_PLT_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 70
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 90
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay paclitaxel for platelets below 90. Below 70 requires one dose-level reduction after recovery."
+        },
+        "explanation": "Delay paclitaxel for platelets below 90. Below 70 requires one dose-level reduction after recovery.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_PLT_90_OVERLAP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "==",
+              "value": 90
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "The source includes platelets 90 in both the full-dose and delay bands. Resolve the overlap with oncology/pharmacy before treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The source includes platelets 90 in both the full-dose and delay bands. Resolve the overlap with oncology/pharmacy before treatment.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_PROLONGED_NEUTROPENIA",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "anc_below_0_5_ge7_days",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay; after recovery reduce one level (80, 65, 50 mg/m²). Consider G-CSF; confirm the actual current dose."
+        },
+        "explanation": "Delay; after recovery reduce one level (80, 65, 50 mg/m²). Consider G-CSF; confirm the actual current dose.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_SEVERE_THROMBOCYTOPENIA",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 70
+            }
+          ]
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay; after recovery reduce one paclitaxel level. Confirm the current level before any restart."
+        },
+        "explanation": "Delay; after recovery reduce one paclitaxel level. Confirm the current level before any restart.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_NEURO_G2",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Grade 2 neuropathy: decrease paclitaxel by 10 mg/m² from the actual current dose.",
+          "absolute_reduction": {
+            "value": 10,
+            "unit": "mg/m2"
+          },
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Grade 2 neuropathy: decrease paclitaxel by 10 mg/m² from the actual current dose.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_OTHER_G2",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Hold until grade ≤1, then reduce subsequent doses by 10 mg/m² from the actual dose."
+        },
+        "explanation": "Hold until grade ≤1, then reduce subsequent doses by 10 mg/m² from the actual dose.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_G3",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "any": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Grade ≥3 paclitaxel non-haematological toxicity: discontinue per the source table."
+        },
+        "explanation": "Grade ≥3 paclitaxel non-haematological toxicity: discontinue per the source table.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "any": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Paclitaxel is not recommended at this hepatic threshold."
+        },
+        "explanation": "Paclitaxel is not recommended at this hepatic threshold.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_60",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "<",
+                  "value": 10
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">=",
+                      "value": 1.26
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<=",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Source hepatic band corresponds to 60 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Source hepatic band corresponds to 60 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_40",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "<",
+                  "value": 10
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">=",
+                      "value": 2.01
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Source hepatic band corresponds to 40 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+          "dose": {
+            "value": 40,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Source hepatic band corresponds to 40 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_GAP_1.25",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.25
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<",
+                  "value": 1.26
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "This decimal value falls between the published hepatic bands. Do not round it into a dosing band.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "This decimal value falls between the published hepatic bands. Do not round it into a dosing band.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_GAP_2",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<",
+                  "value": 2.01
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "This decimal value falls between the published hepatic bands. Do not round it into a dosing band.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "This decimal value falls between the published hepatic bands. Do not round it into a dosing band.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.25
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "ALT is required to interpret this paclitaxel hepatic band; do not assume normal ALT.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ALT is required to interpret this paclitaxel hepatic band; do not assume normal ALT.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PHASE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "exists"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "exists"
+                },
+                {
+                  "field": "neuropathy_grade",
+                  "operator": "exists"
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "exists"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Confirm whether paclitaxel is still prescribed. Its toxicity/dose rules do not automatically apply during trastuzumab-only continuation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm whether paclitaxel is still prescribed. Its toxicity/dose rules do not automatically apply during trastuzumab-only continuation.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "LOW_COUNTS_PHASE_UNKNOWN",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 90
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "These counts require delaying paclitaxel if still prescribed. Trastuzumab may continue during reversible chemotherapy myelosuppression after review."
+        },
+        "explanation": "These counts require delaying paclitaxel if still prescribed. Trastuzumab may continue during reversible chemotherapy myelosuppression after review.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "BASELINE_LVEF_LT50",
         "when": {
           "field": "baseline_lvef_percent",
           "operator": "<",
           "value": 50
         },
         "action": {
-          "type": "withhold",
-          "message": "Pretreatment LVEF below 50% is outside the source eligibility range. Do not clear treatment without Consultant cardiac review.",
+          "type": "contraindicated",
           "components": [
             "trastuzumab"
-          ]
+          ],
+          "recommendation": "Pretreatment LVEF below 50% is outside source eligibility."
         },
+        "explanation": "Pretreatment LVEF below 50% is outside source eligibility.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Eligibility"
-        },
-        "explanation": "Pretreatment LVEF below 50% is outside the source eligibility range. Do not clear treatment without Consultant cardiac review."
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
       },
       {
-        "id": "PTH815_BASELINE_LVEF_50_54",
+        "rule_id": "BASELINE_LVEF_50_54",
         "when": {
           "all": [
             {
@@ -348,346 +1159,83 @@
         },
         "action": {
           "type": "consultant_review",
-          "message": "Pretreatment LVEF 50% to below 55%: NCCP notes that clinical judgement should be exercised.",
           "components": [
             "trastuzumab"
-          ]
+          ],
+          "recommendation": "Baseline LVEF 50–54% requires clinical judgement.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Baseline LVEF 50–54% requires clinical judgement.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Eligibility"
-        },
-        "explanation": "Pretreatment LVEF 50% to below 55%: NCCP notes that clinical judgement should be exercised."
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
       },
       {
-        "id": "PTH815_ANC_LT0_5_PROLONGED",
-        "when": {
-          "field": "anc_below_0_5_ge7_days",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "message": "ANC below 0.5 ×10⁹/L for at least 7 days: delay paclitaxel and reduce one dose level after recovery.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 4"
-        },
-        "explanation": "ANC below 0.5 ×10⁹/L for at least 7 days: delay paclitaxel and reduce one dose level after recovery.",
-        "priority": 90
-      },
-      {
-        "id": "PTH815_ANC_LT0_5",
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 0.5
-        },
-        "action": {
-          "type": "delay",
-          "message": "ANC below 0.5 ×10⁹/L: delay paclitaxel. If this persists for at least 7 days, reduce one dose level after recovery.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 4"
-        },
-        "explanation": "ANC below 0.5 ×10⁹/L: delay paclitaxel. If this persists for at least 7 days, reduce one dose level after recovery."
-      },
-      {
-        "id": "PTH815_ANC_0_5_0_99",
+        "rule_id": "LVEF_WITHHOLD",
         "when": {
           "all": [
-            {
-              "field": "anc_x10e9_l",
-              "operator": ">=",
-              "value": 0.5
-            },
-            {
-              "field": "anc_x10e9_l",
-              "operator": "<",
-              "value": 1.0
-            }
-          ]
-        },
-        "action": {
-          "type": "delay",
-          "message": "ANC 0.5 to 0.99 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent treatment.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 4"
-        },
-        "explanation": "ANC 0.5 to 0.99 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent treatment."
-      },
-      {
-        "id": "PTH815_PLT_LT70",
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 70
-        },
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "message": "Platelets below 70 ×10⁹/L: delay paclitaxel and reduce one dose level after recovery.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 4"
-        },
-        "explanation": "Platelets below 70 ×10⁹/L: delay paclitaxel and reduce one dose level after recovery."
-      },
-      {
-        "id": "PTH815_PLT_70_89",
-        "when": {
-          "all": [
-            {
-              "field": "platelets_x10e9_l",
-              "operator": ">=",
-              "value": 70
-            },
-            {
-              "field": "platelets_x10e9_l",
-              "operator": "<",
-              "value": 90
-            }
-          ]
-        },
-        "action": {
-          "type": "delay",
-          "message": "Platelets 70 to 89 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent treatment.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 4"
-        },
-        "explanation": "Platelets 70 to 89 ×10⁹/L: delay paclitaxel and consider dose reduction at the subsequent treatment."
-      },
-      {
-        "id": "PTH815_FN",
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "consultant_review",
-          "message": "Febrile neutropenia: consider G CSF according to the NCCP pathway and review subsequent paclitaxel dosing.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 4"
-        },
-        "explanation": "Febrile neutropenia: consider G CSF according to the NCCP pathway and review subsequent paclitaxel dosing."
-      },
-      {
-        "id": "PTH815_PAC_HEP_75",
-        "when": {
-          "all": [
-            {
-              "field": "alt_uln_multiple",
-              "operator": "<",
-              "value": 10
-            },
-            {
-              "field": "bilirubin_uln_multiple",
-              "operator": ">",
-              "value": 1.25
-            },
-            {
-              "field": "bilirubin_uln_multiple",
-              "operator": "<=",
-              "value": 2
-            }
-          ]
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "ALT below 10 × ULN with bilirubin 1.26 to 2 × ULN: use 75% of the original paclitaxel dose.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 5"
-        },
-        "explanation": "ALT below 10 × ULN with bilirubin 1.26 to 2 × ULN: use 75% of the original paclitaxel dose."
-      },
-      {
-        "id": "PTH815_PAC_HEP_50",
-        "when": {
-          "all": [
-            {
-              "field": "alt_uln_multiple",
-              "operator": "<",
-              "value": 10
-            },
-            {
-              "field": "bilirubin_uln_multiple",
-              "operator": ">",
-              "value": 2
-            },
-            {
-              "field": "bilirubin_uln_multiple",
-              "operator": "<=",
-              "value": 5
-            }
-          ]
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "ALT below 10 × ULN with bilirubin 2.01 to 5 × ULN: use 50% of the original paclitaxel dose.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 5"
-        },
-        "explanation": "ALT below 10 × ULN with bilirubin 2.01 to 5 × ULN: use 50% of the original paclitaxel dose."
-      },
-      {
-        "id": "PTH815_PAC_HEP_CI",
-        "when": {
-          "any": [
-            {
-              "field": "alt_uln_multiple",
-              "operator": ">=",
-              "value": 10
-            },
-            {
-              "field": "bilirubin_uln_multiple",
-              "operator": ">",
-              "value": 5
-            }
-          ]
-        },
-        "action": {
-          "type": "contraindicated",
-          "message": "ALT at least 10 × ULN or bilirubin above 5 × ULN: paclitaxel is contraindicated in the NCCP table.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 5"
-        },
-        "explanation": "ALT at least 10 × ULN or bilirubin above 5 × ULN: paclitaxel is contraindicated in the NCCP table.",
-        "priority": 98
-      },
-      {
-        "id": "PTH815_NEURO_G2",
-        "when": {
-          "field": "neuropathy_grade",
-          "operator": "==",
-          "value": 2
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "Grade 2 motor or sensory neuropathy: decrease paclitaxel by 10 mg/m².",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 6"
-        },
-        "explanation": "Grade 2 motor or sensory neuropathy: decrease paclitaxel by 10 mg/m²."
-      },
-      {
-        "id": "PTH815_OTHER_NONHAEM_G2",
-        "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": "==",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "message": "Other grade 2 non haematological toxicity: hold until grade 1 or lower, then decrease subsequent paclitaxel doses by 10 mg/m².",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 6"
-        },
-        "explanation": "Other grade 2 non haematological toxicity: hold until grade 1 or lower, then decrease subsequent paclitaxel doses by 10 mg/m²."
-      },
-      {
-        "id": "PTH815_NONHAEM_G3",
-        "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "discontinue",
-          "message": "Grade 3 or worse paclitaxel related non haematological toxicity: discontinue paclitaxel in the encoded NCCP pathway.",
-          "components": [
-            "paclitaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 5, Table 6"
-        },
-        "explanation": "Grade 3 or worse paclitaxel related non haematological toxicity: discontinue paclitaxel in the encoded NCCP pathway.",
-        "priority": 96
-      },
-      {
-        "id": "PTH815_LVEF_WITHHOLD",
-        "when": {
-          "all": [
-            {
-              "field": "lvef_drop_points_from_baseline",
-              "operator": ">=",
-              "value": 10
-            },
             {
               "field": "current_lvef_percent",
               "operator": "<",
               "value": 50
+            },
+            {
+              "field": "lvef_drop_points_from_baseline",
+              "operator": ">=",
+              "value": 10
             }
           ]
         },
         "action": {
           "type": "withhold",
-          "message": "LVEF has fallen by at least 10 points from baseline and is below 50%: withhold trastuzumab and repeat LVEF after 3 weeks.",
           "components": [
             "trastuzumab"
-          ]
+          ],
+          "recommendation": "Withhold trastuzumab and repeat LVEF after 3 weeks. If no improvement or further decline, consultant/cardiology review."
         },
+        "explanation": "Withhold trastuzumab and repeat LVEF after 3 weeks. If no improvement or further decline, consultant/cardiology review.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 6, Table 7"
-        },
-        "explanation": "LVEF has fallen by at least 10 points from baseline and is below 50%: withhold trastuzumab and repeat LVEF after 3 weeks."
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 6
+        }
       },
       {
-        "id": "PTH815_HF",
+        "rule_id": "LVEF_MISSING_CHANGE",
+        "when": {
+          "all": [
+            {
+              "field": "current_lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points_from_baseline",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "The LVEF fall from baseline is needed to apply the on-treatment hold rule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The LVEF fall from baseline is needed to apply the on-treatment hold rule.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "HEART_FAILURE",
         "when": {
           "field": "symptomatic_heart_failure",
           "operator": "==",
@@ -695,19 +1243,22 @@
         },
         "action": {
           "type": "consultant_review",
-          "message": "Symptomatic heart failure: consider discontinuation of trastuzumab and refer for cardiology review.",
           "components": [
             "trastuzumab"
-          ]
+          ],
+          "recommendation": "Symptomatic heart failure: urgent consultant/cardiology review and consideration of discontinuation; no automatic treatment clearance.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Symptomatic heart failure: urgent consultant/cardiology review and consideration of discontinuation; no automatic treatment clearance.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 6, Table 7"
-        },
-        "explanation": "Symptomatic heart failure: consider discontinuation of trastuzumab and refer for cardiology review."
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 6
+        }
       },
       {
-        "id": "PTH815_HSR_G4",
+        "rule_id": "HSR_G4",
         "when": {
           "field": "hypersensitivity_grade",
           "operator": ">=",
@@ -715,19 +1266,43 @@
         },
         "action": {
           "type": "discontinue",
-          "message": "Grade 4 hypersensitivity reaction: discontinue trastuzumab.",
           "components": [
             "trastuzumab"
-          ]
+          ],
+          "recommendation": "Grade 4 trastuzumab hypersensitivity: discontinue."
         },
+        "explanation": "Grade 4 trastuzumab hypersensitivity: discontinue.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 6, Table 7"
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "MISSED_TRASTUZUMAB",
+        "when": {
+          "field": "days_overdue_trastuzumab",
+          "operator": ">",
+          "value": 0
         },
-        "explanation": "Grade 4 hypersensitivity reaction: discontinue trastuzumab.",
-        "priority": 96
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Verify IV versus SC formulation and time overdue. IV >7 days overdue may need reloading; the source mistakenly says weekly after reloading despite its 21-day regimen. Reconcile with current SmPC. SC doses must remain at least 3 weeks apart.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Verify IV versus SC formulation and time overdue. IV >7 days overdue may need reloading; the source mistakenly says weekly after reloading despite its 21-day regimen. Reconcile with current SmPC. SC doses must remain at least 3 weeks apart.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 4
+        }
       }
-    ]
+    ],
+    "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase."
   },
   "supportive_care": {
     "emetogenic_risk": "low",
@@ -740,5 +1315,54 @@
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general"
-  }
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "combination",
+      "name": "Paclitaxel plus trastuzumab",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "paclitaxel",
+          "dose": {
+            "value": 80,
+            "unit": "mg/m2"
+          },
+          "day": [
+            1,
+            8,
+            15
+          ],
+          "route": "IV infusion"
+        },
+        {
+          "drug": "trastuzumab",
+          "dose": {
+            "value": 6,
+            "unit": "mg/kg"
+          },
+          "day": 1,
+          "route": "IV infusion",
+          "notes": "IV 8 mg/kg loading dose first; SC 600 mg is a formulation alternative, not an additional dose."
+        }
+      ]
+    },
+    {
+      "phase_id": "trastuzumab_maintenance",
+      "name": "Trastuzumab continuation",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "trastuzumab",
+          "dose": {
+            "value": 6,
+            "unit": "mg/kg"
+          },
+          "day": 1,
+          "route": "IV infusion",
+          "notes": "Complete the prescribed one-year HER2 course; verify route and loading requirements."
+        }
+      ]
+    }
+  ]
 }

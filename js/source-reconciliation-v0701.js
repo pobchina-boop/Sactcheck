@@ -604,6 +604,10 @@
   }
 
   function reconcileRibociclib(protocol,setting){
+    // Modern, source-reconciled JSON owns the clinical rules. Do not merge this
+    // historical runtime repair back into a newer audited encoding.
+    const release=String(protocol?.metadata?.sactcheck_encoding_version||'0');
+    if(protocol?.metadata?.validation?.source_document_checked && release.localeCompare('0.83.7',undefined,{numeric:true})>=0) return protocol;
     addSourceFallback(protocol);
     addRibociclibInputs(protocol,setting);
 

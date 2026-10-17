@@ -81,7 +81,7 @@ const sourceReconciled = ["00202","00815","00423","00377","00378","00381","00262
 for (const code of sourceReconciled) {
   const p = protocol(code);
   assert.strictEqual(p.metadata.encoding_maturity.source_reconciled, true, `${code} source reconciliation flag`);
-  assert.strictEqual(p.metadata.encoding_maturity.reconciled_release, "0.68.0", `${code} reconciliation release`);
+  assert.strictEqual(p.metadata.encoding_maturity.reconciled_release, code==="00815"?"0.83.8":"0.68.0", `${code} reconciliation release`);
 }
 
 // Source fidelity sentinels from the v0.68.0 audit remediation.

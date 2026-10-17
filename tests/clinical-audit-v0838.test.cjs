@@ -1,0 +1,52 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),E=require('../js/assessment-engine'),D=require('../js/protocol-dose-schedule');
+const codes=['00485','00815','00659','00892','00936'],ps=Object.fromEntries(codes.map(c=>[c,require('../protocols/breast/'+fs.readdirSync(path.join(__dirname,'../protocols/breast')).find(f=>f.startsWith(c)))])),out=[];
+function t(c,name,inputs,expected,check=()=>{}){const r=E.assess(ps[c],inputs),d=D.buildModificationModel(ps[c],r);assert.deepEqual(r.errors,[],name);assert.deepEqual(r.invalid,[],name);if(expected)assert.equal(r.actionType,expected,`${c}: ${name}; ${r.findings.map(x=>x.ruleId)}`);check(r,d);out.push({code:c,name,inputs,expected:expected||'component-specific assertion',actual:r.actionType,pass:true,findings:r.findings.filter(x=>!x.domainAssessment).map(x=>({rule:x.ruleId,action:x.actionType,explanation:x.explanation})),dose_rows:d.rows.map(x=>({component:x.component,action:x.actionLabel,dose:x.protocolDose}))});return r;}
+const noRestart=(r,d)=>assert(!d.rows.some(x=>/^\d+(?:[.,]\d+)?\s*mg/.test(x.protocolDose)),'Held / review-required result must not prescribe restart dose');
+for(const c of codes){t(c,'Blank assessment',{},'incomplete');t(c,'ECOG outside source',{ecog:4},'consultant_review');t(c,'Relevant hypersensitivity',{hypersensitivity:true},'contraindicated');assert.equal(ps[c].metadata.validation.clinical_use_authorised,false);assert(ps[c].rule_engine.rules.every(r=>r.source?.url&&r.source?.page));}
+for(const v of [.49,.5,.99])t('00485','AC low ANC '+v,{treatment_phase:'anthracycline',anc_x10e9_l:v},'delay',noRestart);
+for(const v of [89.99,90,99.99])t('00485','AC platelet threshold '+v,{treatment_phase:'anthracycline',platelets_x10e9_l:v},'delay');
+t('00485','Baseline ANC exclusion differs from ongoing',{assessment_stage:'baseline',treatment_phase:'anthracycline',anc_x10e9_l:1.49},'contraindicated');
+t('00485','Unknown phase retains organ result',{bilirubin_umol_l:25},'consultant_review');
+t('00485','Phase absent with low counts',{anc_x10e9_l:.8},'delay');
+for(const [f,v,e] of [['bilirubin_umol_l',20,'dose_reduce'],['bilirubin_umol_l',50,'dose_reduce'],['bilirubin_umol_l',50.5,'consultant_review'],['bilirubin_umol_l',51,'dose_reduce'],['bilirubin_umol_l',86.01,'omit'],['crcl_ml_min',29.5,'consultant_review'],['crcl_ml_min',9.99,'omit'],['lvef_percent',50,'consultant_review']])t('00485','AC boundary '+f+' '+v,{treatment_phase:'anthracycline',[f]:v},e);
+for(const c of ['00485','00815']){const phase=c==='00485'?'paclitaxel':'combination';
+ t(c,'Paclitaxel platelet 90 source overlap',{treatment_phase:phase,platelets_x10e9_l:90},'consultant_review');
+ t(c,'Paclitaxel platelet <70',{treatment_phase:phase,platelets_x10e9_l:69.99},'delay_then_dose_reduce',noRestart);
+ for(const [v,e] of [[1.255,'consultant_review'],[1.26,'dose_reduce'],[2,'dose_reduce'],[2.005,'consultant_review'],[2.01,'dose_reduce'],[5.01,'contraindicated']])t(c,'Paclitaxel hepatic boundary '+v,{treatment_phase:phase,alt_uln_multiple:2,bilirubin_uln_multiple:v},e);
+ t(c,'Paclitaxel G2 neuropathy',{treatment_phase:phase,neuropathy_grade:2},'dose_reduce');
+ t(c,'Paclitaxel G3 neuropathy',{treatment_phase:phase,neuropathy_grade:3},'discontinue');
+}
+t('00815','Continuation excludes old paclitaxel toxicities',{treatment_phase:'trastuzumab_maintenance',anc_x10e9_l:.8,neuropathy_grade:3,alt_uln_multiple:12},null,r=>assert(!r.findings.some(x=>x.ruleId?.startsWith('PAC_'))));
+t('00815','Trastuzumab current LVEF 49 with drop10',{current_lvef_percent:49,lvef_drop_points_from_baseline:10},'withhold',noRestart);
+t('00815','Trastuzumab missing baseline change',{current_lvef_percent:49},'consultant_review');
+t('00815','Baseline LVEF 49',{baseline_lvef_percent:49},'contraindicated');
+t('00815','Baseline LVEF 50',{baseline_lvef_percent:50},'consultant_review');
+t('00815','Delayed dose / formulation review',{days_overdue_trastuzumab:8},'consultant_review');
+for(const v of [24.99,25,49.99,50,74.99])t('00659','Early T-DM1 platelet hold '+v,{platelets:v},'withhold',noRestart);
+t('00659','Platelets 75 is outside hold bands',{platelets:75},null,r=>assert(!r.findings.some(x=>x.ruleId?.startsWith('PLT_'))));
+for(const f of ['alt_uln_multiple','ast_uln_multiple'])for(const [v,e] of [[3.01,'withhold'],[5,'withhold'],[5.01,'withhold'],[20,'withhold'],[20.01,'discontinue']])t('00659','T-DM1 liver boundary '+f+' '+v,{[f]:v},e);
+const alt=t('00659','ALT G2 lower restart level',{alt_uln_multiple:4},'withhold');assert(alt.findings.some(x=>/reduce one level/.test(x.explanation)));
+const ast=t('00659','AST G2 same restart level',{ast_uln_multiple:4},'withhold');assert(ast.findings.some(x=>/same dose/.test(x.explanation)));
+for(const [v,e] of [[1.01,'withhold'],[2,'withhold'],[2.01,'discontinue']])t('00659','T-DM1 bilirubin '+v,{bilirubin_uln_multiple:v},e);
+for(const [v,drop,e] of [[44.99,0,'withhold'],[45,10,'withhold'],[49.99,10,'withhold'],[45,9.99,'proceed_with_caution']])t('00659','Early cardiac branch '+v+'/'+drop,{lvef_percent:v,lvef_drop_points:drop},e);
+t('00659','Missing cardiac change',{lvef_percent:46},'consultant_review');t('00659','Persistent cardiac stop',{lvef_repeat_confirms:true},'discontinue');
+t('00659','Drug ILD',{pulmonary_toxicity:true},'permanently_discontinue');t('00659','RT G2 unresolved',{rt_pneumonitis_grade:2,rt_pneumonitis_not_resolving:true},'discontinue');t('00659','Below lowest dose',{dose_reduction_level:2,further_reduction_required:true},'discontinue');
+for(const v of [.49,.5,.99])t('00892','Ribociclib ANC '+v,{anc:v},'withhold',noRestart);
+for(const v of [480.01,500,500.01])t('00892','Ribociclib QT '+v,{assessment_stage:'ongoing',qtc_f:v},'withhold',noRestart);
+t('00892','Baseline QT exact450',{assessment_stage:'baseline',qtc_f:450},'withhold');t('00892','Ongoing QT exact480',{assessment_stage:'ongoing',qtc_f:480},null,r=>assert(!r.findings.some(x=>/^QT_480/.test(x.ruleId))));
+t('00892','Recurrent QT >500',{qtc_over500_recurrent:true},'discontinue');t('00892','Arrhythmia plus delta60.01',{qtc_change_ms:60.01,qtc_serious_arrhythmia:true},'permanently_discontinue');
+t('00892','Severe renal starting-dose review',{renal_band:'severe'},'consultant_review',noRestart);
+t('00892','Adjuvant hepatic rules differ',{child_pugh:'B'},'proceed_with_caution',r=>assert(r.findings.some(x=>/no starting dose adjustment/.test(x.explanation))));
+t('00892','Node-negative internal source conflict',{node_negative:true},'consultant_review');t('00892','Below 200 mg floor',{dose_level:200,further_reduction_required:true},'discontinue');
+for(const [v,e] of [[3.01,'withhold'],[5,'withhold'],[5.01,'withhold'],[20,'withhold'],[20.01,'discontinue']])t('00892','LFT boundary '+v,{alt_ast_uln_multiple:v,baseline_liver_grade:0},e);
+t('00892','Baseline G2 branch',{alt_ast_uln_multiple:4,baseline_liver_grade:2},'proceed_with_caution');
+t('00892','Combined DILI',{alt_ast_uln_multiple:3.01,bilirubin_uln_multiple:2.01,cholestasis_absent:true},'discontinue');
+for(const [f,v] of [['anc',.99],['platelets',74.99]])t('00936','Midcycle capecitabine interruption '+f,{assessment_stage:'midcycle',[f]:v},'withhold');
+t('00936','Cape renal <30',{crcl_ml_min:29.99},'contraindicated');t('00936','Cape renal 50.5 source gap',{crcl_ml_min:50.5},'consultant_review');
+t('00936','Trastuzumab cardiac branch',{lvef_percent:49,lvef_drop_points:10},'withhold');
+t('00936','G2 diarrhoea affects cape only',{diarrhoea_grade:2},'withhold',r=>assert(!r.findings.some(x=>x.ruleId?.startsWith('TUC_DIARR'))));
+t('00936','G3 diarrhoea',{diarrhoea_grade:3},'withhold');t('00936','G4 diarrhoea',{diarrhoea_grade:4},'permanently_discontinue');t('00936','Fourth grade2 episode',{diarrhoea_grade:2,toxicity_event_number:4},'permanently_discontinue');
+t('00936','Combined hepatic injury',{alt_uln_multiple:3.01,bilirubin_uln_multiple:2.01},'permanently_discontinue');t('00936','Tucatinib lowest level',{tucatinib_dose_mg:150,further_tucatinib_reduction_required:true},'permanently_discontinue');
+if(process.env.SACT_WRITE_VALIDATION){fs.mkdirSync(path.join(__dirname,'../validation/breast-v0838'),{recursive:true});fs.writeFileSync(path.join(__dirname,'../validation/breast-v0838/engine-cases.json'),JSON.stringify(out,null,2)+'\n');}
+console.log(`${out.length} source-derived five-breast decision cases passed.`);

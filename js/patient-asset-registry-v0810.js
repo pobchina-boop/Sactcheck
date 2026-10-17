@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.83.7';
-  const CONTENT_RELEASE='0.83.7';
+  const RELEASE='0.83.8';
+  const CONTENT_RELEASE='0.83.8';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00485':{title:"Dose-dense AC \u2192 weekly paclitaxel",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
+    '00815':{title:"Weekly paclitaxel + trastuzumab \u2192 trastuzumab continuation",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
+    '00659':{title:"Adjuvant trastuzumab emtansine (T-DM1)",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
+    '00892':{title:"Adjuvant ribociclib + endocrine therapy",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
+    '00936':{title:"Tucatinib + capecitabine + trastuzumab",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
     '00525':{title:"Ribociclib + endocrine therapy \u00b7 metastatic",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true},
     '00726':{title:"Pertuzumab + trastuzumab maintenance",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true},
     '00207':{title:"Cetuximab \u00b7 weekly",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
@@ -53,7 +58,7 @@
     '00714':{title:'Nivolumab + Ipilimumab + Pemetrexed + Cisplatin',guide:true,passport:true},
     '00722':{title:"TCHP: docetaxel, carboplatin, trastuzumab and pertuzumab",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true},
     '00831':{title:'Atezolizumab + Bevacizumab',guide:true,passport:true,contactCard:true},
-    '00857':{title:"Pembrolizumab + carboplatin/paclitaxel \u2192 AC",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true}
+    '00857':{title:"Pembrolizumab + carboplatin/paclitaxel \u2192 AC",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true}
   });
   const CODES=Object.freeze(Object.keys(DEFINITIONS));
 
@@ -73,6 +78,7 @@
   function hasDedicated(value){return Boolean(definitionFor(value));}
   function relativePath(value,asset='portal'){
     const def=definitionFor(value); if(!def) return null;
+    if(asset==='supportive-care-selector') return def.phaseSupport?`patient/${def.code}/supportive-care.html`:null;
     if(asset==='longitudinal') return def.longitudinal?`patient/${def.code}/treatment-journey.html`:null;
     if(asset==='supportive-care') return def.supportiveCare?`patient/${def.code}/supportive-care.pdf`:null;
     if(asset==='knowledge') return def.knowledge?`patient/${def.code}/knowledge.html`:null;

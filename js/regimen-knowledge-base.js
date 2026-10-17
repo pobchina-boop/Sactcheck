@@ -51,9 +51,9 @@
         return response.json();
       })
       .then(async payload => {
-        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json"]) {
+        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json"]) {
         const response = await fetch(extraUrl, { cache: "no-store" });
-        if (!response.ok) throw new Error(`Could not load colorectal knowledge (${response.status}).`);
+        if (!response.ok) throw new Error(`Could not load regimen knowledge (${response.status}).`);
         const extra = await response.json();
         for (const [collection, key] of [["regimen_profiles", "protocol_id"], ["evidence_records", "evidence_id"], ["drug_profiles", "id"]]) {
           for (const item of extra[collection] || []) {
@@ -91,10 +91,16 @@
   function profileForComponent(component, profiles = []) {
     const value = normalise(component);
     if (!value) return null;
-    return profiles.find(profile => asArray(profile.aliases).some(alias => {
-      const candidate = normalise(alias);
-      return candidate && (value === candidate || value.includes(candidate) || candidate.includes(value));
-    })) || null;
+    // A linked antibody-drug conjugate must not resolve to the parent antibody
+    // simply because its shorter name appears earlier in the data bank.
+    const aliases = profiles.flatMap(profile => asArray(profile.aliases)
+      .map(alias => ({ profile, candidate: normalise(alias) }))
+      .filter(item => item.candidate));
+    const exact = aliases.find(item => item.candidate === value);
+    if (exact) return exact.profile;
+    const related = aliases.filter(item => value.includes(item.candidate) || item.candidate.includes(value));
+    related.sort((a, b) => b.candidate.length - a.candidate.length);
+    return related[0]?.profile || null;
   }
 
   function profilesForProtocol(protocol, payload = data) {

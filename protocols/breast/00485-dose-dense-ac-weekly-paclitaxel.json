@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00485-v6",
   "file_name": "00485-dose-dense-ac-weekly-paclitaxel.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00485",
     "nccp_version": "6",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.83.8",
     "treatment_setting": [
       "neoadjuvant",
       "adjuvant"
@@ -31,7 +31,8 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "software_validation_record": "validation/breast-v0838/CLINICAL_AUDIT.md"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -58,19 +59,19 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
+      "reconciled_release": "0.83.8",
+      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "clinical_use_authorised": false
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00485-v6"
+    "canonical_protocol_id": "nccp-00485-v6",
+    "source_checked_date": "2026-10-17"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -81,76 +82,142 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
-      "unit": "×10⁹/L",
+      "demo_value": 2,
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 2,
+      "unit": "×10⁹/L",
       "always_show": true,
       "input_role": "decision"
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
-      "unit": "×10⁹/L",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "step": 1,
-      "demo_value": 200,
+      "step": 0.01,
+      "unit": "×10⁹/L",
       "always_show": true,
       "input_role": "decision"
     },
-    "hb_g_dl": {
-      "label": "Haemoglobin",
-      "type": "number",
-      "unit": "g/dL",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 12,
-      "always_show": true,
-      "input_role": "monitoring"
-    },
     "treatment_phase": {
-      "label": "Treatment phase",
+      "label": "Current treatment phase",
       "type": "select",
+      "demo_value": "anthracycline",
       "required": false,
+      "always_show": true,
+      "input_role": "context",
       "options": [
         {
           "value": "anthracycline",
-          "label": "Anthracycline phase"
+          "label": "AC: four 14-day cycles"
         },
         {
           "value": "paclitaxel",
-          "label": "Paclitaxel phase"
+          "label": "Paclitaxel: 12 weekly doses"
+        }
+      ]
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "demo_value": "baseline",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before starting"
         },
         {
-          "value": "trastuzumab_maintenance",
-          "label": "Trastuzumab maintenance"
+          "value": "ongoing",
+          "label": "During treatment"
         }
-      ],
-      "demo_value": "anthracycline",
+      ]
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
       "always_show": true,
-      "input_role": "context"
+      "input_role": "decision",
+      "max": 4
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "alt_uln_multiple": {
+      "label": "ALT / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "anc_below_0_5_ge7_days": {
+      "label": "ANC below 0.5 for at least 7 days",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
       "always_show": true,
       "input_role": "decision"
     },
     "neuropathy_grade": {
-      "label": "Peripheral neuropathy grade",
+      "label": "Peripheral neuropathy",
       "type": "select",
-      "unit": "CTCAE grade",
-      "required": false,
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -178,19 +245,149 @@
           "ctcae_grade": 4
         }
       ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "neuropathy",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "other_nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "current_paclitaxel_mg_m2": {
+      "label": "Actual current paclitaxel dose",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "µmol/L",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "always_show": true,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Retain exact measured creatinine clearance so decimal gaps between the source bands are surfaced for review rather than rounded into a dose band."
+      }
+    },
+    "lvef_percent": {
+      "label": "LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "ac_delay_count": {
+      "label": "Prior AC haematological delays",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "lifetime_doxorubicin_mg_m2": {
+      "label": "Cumulative doxorubicin before proposed dose",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "significant_heart_disease": {
+      "label": "Significant heart disease",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
       "always_show": true,
       "input_role": "decision"
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Rapid partial assessment",
-      "required_inputs": [],
-      "context": {}
-    }
-  ],
   "output_templates": {
     "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
     "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
@@ -199,7 +396,7 @@
   },
   "rule_engine": {
     "conflict_policy": "Return the most restrictive applicable action and display every triggered rule.",
-    "missing_data_policy": "Evaluate only supplied values. Do not infer missing values and do not block a partial assessment.",
+    "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -213,98 +410,1325 @@
     ],
     "rules": [
       {
-        "rule_id": "COUNTS_DELAY",
-        "any": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": "<",
-            "value": 1.0
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": "<",
-            "value": 100
-          }
-        ],
+        "rule_id": "HYPERSENSITIVITY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
         "action": {
-          "type": "delay",
+          "type": "contraindicated",
           "components": [
-            "whole_regimen"
-          ]
+            "doxorubicin",
+            "cyclophosphamide",
+            "paclitaxel"
+          ],
+          "recommendation": "Relevant hypersensitivity: do not administer; review the responsible component."
         },
+        "explanation": "Relevant hypersensitivity: do not administer; review the responsible component.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L or platelets below 100 ×10⁹/L triggers a one-week delay."
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 2
+        }
       },
       {
-        "rule_id": "COUNTS_PROCEED",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.0
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "proceed",
-          "components": [
-            "whole_regimen"
+        "rule_id": "PREGNANCY_LACTATION",
+        "when": {
+          "any": [
+            {
+              "field": "pregnancy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "breastfeeding",
+              "operator": "==",
+              "value": true
+            }
           ]
         },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide",
+            "paclitaxel"
+          ],
+          "recommendation": "Pregnancy/breastfeeding requires treatment exclusion and specialist review."
         },
-        "explanation": "Counts meet the encoded day-1 threshold."
+        "explanation": "Pregnancy/breastfeeding requires treatment exclusion and specialist review.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 2
+        }
       },
       {
-        "rule_id": "FEBRILE_NEUTROPENIA_REVIEW",
-        "any": [
-          {
-            "field": "febrile_neutropenia",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "rule_id": "ECOG_REVIEW",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "doxorubicin",
+            "cyclophosphamide",
+            "paclitaxel"
+          ],
+          "recommendation": "Outside the published performance-status population; consultant assessment required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside the published performance-status population; consultant assessment required.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "PHASE_REQUIRED_FOR_COUNTS",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "exists"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "exists"
+                }
+              ]
+            }
           ]
         },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Febrile neutropenia triggers dose reduction and/or G-CSF support."
-      },
-      {
-        "rule_id": "NEUROPATHY_REVIEW",
-        "any": [
-          {
-            "field": "neuropathy_grade",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
+          ],
+          "recommendation": "AC and paclitaxel have different count thresholds. The supplied value is retained; select the current phase to resolve the component-specific rule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "AC and paclitaxel have different count thresholds. The supplied value is retained; select the current phase to resolve the component-specific rule.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PHASE_REQUIRED_FOR_ORGANS",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": "exists"
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "exists"
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "exists"
+                },
+                {
+                  "field": "neuropathy_grade",
+                  "operator": "exists"
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "exists"
+                }
+              ]
+            }
           ]
         },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Select the active AC or paclitaxel phase before applying its organ-function or toxicity rules.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
-        "explanation": "Paclitaxel-related neuropathy requires review and possible dose modification."
+        "explanation": "Select the active AC or paclitaxel phase before applying its organ-function or toxicity rules.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "LOW_COUNTS_ANY_PHASE",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 90
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "This value is below the minimum count threshold in either chemotherapy phase. Delay and establish the active phase and recovery plan."
+        },
+        "explanation": "This value is below the minimum count threshold in either chemotherapy phase. Delay and establish the active phase and recovery plan.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "AC_COUNTS_DELAY",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide"
+          ],
+          "recommendation": "Delay AC for at least one week until recovery. A second delay requires consideration of 75% dosing; check exact source recovery wording."
+        },
+        "explanation": "Delay AC for at least one week until recovery. A second delay requires consideration of 75% dosing; check exact source recovery wording.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "AC_SECOND_DELAY",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "ac_delay_count",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide"
+          ],
+          "recommendation": "After a second count-related delay the source specifies 75% dosing. Confirm both counts have recovered before calculating a restart dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After a second count-related delay the source specifies 75% dosing. Confirm both counts have recovered before calculating a restart dose.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "AC_FN",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide"
+          ],
+          "recommendation": "Source specifies 75% for current/subsequent AC cycles after febrile neutropenia. Treat the acute event and confirm recovery before restarting.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source specifies 75% for current/subsequent AC cycles after febrile neutropenia. Treat the acute event and confirm recovery before restarting.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "BASELINE_ANC",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Baseline ANC below 1.5 is an exclusion; this differs from the on-treatment AC threshold."
+        },
+        "explanation": "Baseline ANC below 1.5 is an exclusion; this differs from the on-treatment AC threshold.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "CARDIAC_EXCLUSION",
+        "when": {
+          "any": [
+            {
+              "field": "significant_heart_disease",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "all": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "anthracycline"
+                },
+                {
+                  "field": "lvef_percent",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Do not administer doxorubicin with the source cardiac exclusion; obtain specialist review."
+        },
+        "explanation": "Do not administer doxorubicin with the source cardiac exclusion; obtain specialist review.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "LVEF_50_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "==",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "The source excludes LVEF <50 but separately requires >50 to administer doxorubicin. Resolve exact LVEF 50 before treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The source excludes LVEF <50 but separately requires >50 to administer doxorubicin. Resolve exact LVEF 50 before treatment.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "LIFETIME_DOXO",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "lifetime_doxorubicin_mg_m2",
+              "operator": ">=",
+              "value": 450
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "The published lifetime cumulative doxorubicin ceiling has been reached. Review all prior anthracycline exposure and cardiac risk."
+        },
+        "explanation": "The published lifetime cumulative doxorubicin ceiling has been reached. Review all prior anthracycline exposure and cardiac risk.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "DOXO_BILI_50",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">=",
+                  "value": 20
+                },
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": "<=",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Source bilirubin band: 50% of the original doxorubicin dose.",
+          "dose_percent": 50
+        },
+        "explanation": "Source bilirubin band: 50% of the original doxorubicin dose.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOXO_BILI_25",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">=",
+                  "value": 51
+                },
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": "<=",
+                  "value": 86
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Source bilirubin band: 25% of the original doxorubicin dose.",
+          "dose_percent": 25
+        },
+        "explanation": "Source bilirubin band: 25% of the original doxorubicin dose.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOXO_BILI_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 50
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Decimal bilirubin between 50 and 51 is not assigned by the source; do not round.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Decimal bilirubin between 50 and 51 is not assigned by the source; do not round.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOXO_BILI_OMIT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 86
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Bilirubin above 86 µmol/L: omit doxorubicin."
+        },
+        "explanation": "Bilirubin above 86 µmol/L: omit doxorubicin.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "CYCLO_RENAL_75",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 29
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "CrCl 10–29: 75% of original cyclophosphamide dose.",
+          "dose_percent": 75
+        },
+        "explanation": "CrCl 10–29: 75% of original cyclophosphamide dose.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "CYCLO_RENAL_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": ">",
+              "value": 29
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 30
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "CrCl between the published whole-number bands needs review.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "CrCl between the published whole-number bands needs review.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "CYCLO_RENAL_OMIT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "CrCl below 10: omit cyclophosphamide; specialist renal review."
+        },
+        "explanation": "CrCl below 10: omit cyclophosphamide; specialist renal review.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOXO_DIALYSIS",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "The source allows considering 75% original doxorubicin in haemodialysis. Verify the individual dialysis plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The source allows considering 75% original doxorubicin in haemodialysis. Verify the individual dialysis plan.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "CYCLO_SEVERE_HEPATIC",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "anthracycline"
+            },
+            {
+              "field": "severe_hepatic_impairment",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "Cyclophosphamide is not recommended in severe hepatic impairment because efficacy may be reduced."
+        },
+        "explanation": "Cyclophosphamide is not recommended in severe hepatic impairment because efficacy may be reduced.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_ANC_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay paclitaxel for ANC below 1.0. Establish duration, recovery and the need for dose reduction."
+        },
+        "explanation": "Delay paclitaxel for ANC below 1.0. Establish duration, recovery and the need for dose reduction.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_PLT_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 70
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 90
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay paclitaxel for platelets below 90. Below 70 requires one dose-level reduction after recovery."
+        },
+        "explanation": "Delay paclitaxel for platelets below 90. Below 70 requires one dose-level reduction after recovery.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_PLT_90_OVERLAP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "==",
+              "value": 90
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "The source includes platelets 90 in both the full-dose and delay bands. Resolve the overlap with oncology/pharmacy before treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The source includes platelets 90 in both the full-dose and delay bands. Resolve the overlap with oncology/pharmacy before treatment.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_PROLONGED_NEUTROPENIA",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "field": "anc_below_0_5_ge7_days",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay; after recovery reduce one level (80, 65, 50 mg/m²). Consider G-CSF; confirm the actual current dose."
+        },
+        "explanation": "Delay; after recovery reduce one level (80, 65, 50 mg/m²). Consider G-CSF; confirm the actual current dose.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_SEVERE_THROMBOCYTOPENIA",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 70
+            }
+          ]
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Delay; after recovery reduce one paclitaxel level. Confirm the current level before any restart."
+        },
+        "explanation": "Delay; after recovery reduce one paclitaxel level. Confirm the current level before any restart.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_NEURO_G2",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Grade 2 neuropathy: decrease paclitaxel by 10 mg/m² from the actual current dose.",
+          "absolute_reduction": {
+            "value": 10,
+            "unit": "mg/m2"
+          },
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Grade 2 neuropathy: decrease paclitaxel by 10 mg/m² from the actual current dose.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_OTHER_G2",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Hold until grade ≤1, then reduce subsequent doses by 10 mg/m² from the actual dose."
+        },
+        "explanation": "Hold until grade ≤1, then reduce subsequent doses by 10 mg/m² from the actual dose.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_G3",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "any": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Grade ≥3 paclitaxel non-haematological toxicity: discontinue per the source table."
+        },
+        "explanation": "Grade ≥3 paclitaxel non-haematological toxicity: discontinue per the source table.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "any": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Paclitaxel is not recommended at this hepatic threshold."
+        },
+        "explanation": "Paclitaxel is not recommended at this hepatic threshold.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_60",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "<",
+                  "value": 10
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">=",
+                      "value": 1.26
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<=",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Source hepatic band corresponds to 60 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Source hepatic band corresponds to 60 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_40",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "<",
+                  "value": 10
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">=",
+                      "value": 2.01
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Source hepatic band corresponds to 40 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+          "dose": {
+            "value": 40,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Source hepatic band corresponds to 40 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_GAP_1.25",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.25
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<",
+                  "value": 1.26
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "This decimal value falls between the published hepatic bands. Do not round it into a dosing band.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "This decimal value falls between the published hepatic bands. Do not round it into a dosing band.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_GAP_2",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<",
+                  "value": 2.01
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "This decimal value falls between the published hepatic bands. Do not round it into a dosing band.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "This decimal value falls between the published hepatic bands. Do not round it into a dosing band.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "PAC_HEP_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.25
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "ALT is required to interpret this paclitaxel hepatic band; do not assume normal ALT.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ALT is required to interpret this paclitaxel hepatic band; do not assume normal ALT.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "PAC_FN",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "paclitaxel"
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Review febrile neutropenia, G-CSF and the weekly paclitaxel recovery/dose plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Review febrile neutropenia, G-CSF and the weekly paclitaxel recovery/dose plan.",
+        "source": {
+          "document": "NCCP 00485 v6",
+          "url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
+          "page": 3
+        }
       }
     ]
   },
@@ -328,5 +1752,65 @@
         "script_id": "nccp-parenteral-high"
       }
     }
-  }
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "anthracycline",
+      "name": "AC: cycles 1–4",
+      "cycle_length_days": 14,
+      "administration": [
+        {
+          "drug": "doxorubicin",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV infusion"
+        },
+        {
+          "drug": "cyclophosphamide",
+          "dose": {
+            "value": 600,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV infusion"
+        }
+      ],
+      "cycles": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "phase_id": "paclitaxel",
+      "name": "Weekly paclitaxel: four three-week blocks",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "paclitaxel",
+          "dose": {
+            "value": 80,
+            "unit": "mg/m2"
+          },
+          "day": [
+            1,
+            8,
+            15
+          ],
+          "route": "IV infusion"
+        }
+      ],
+      "cycles": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "transition_note": "Begin 14 days after the final AC dose, subject to review."
+    }
+  ]
 }

@@ -1,0 +1,61 @@
+SACTCheck v0.83.8 — five breast suites and phase-specific support
+
+APPLY
+This is a drop-in source overlay for the committed v0.83.7 repository at:
+5ece06792bccd726574832729ae1fb5b8193680d
+
+Extract the ZIP at the repository root, allowing included files to replace their
+v0.83.7 counterparts. It contains changed/new files, not the entire repository.
+Keep any unrelated local work separate before applying. No files need deleting.
+Run npm run test:ci, review the diff, then commit and push through your usual flow.
+This package has not been committed, pushed or deployed for you.
+
+NEW FULL SUITES
+00485 — dose-dense AC -> weekly paclitaxel
+00815 — weekly paclitaxel/trastuzumab -> trastuzumab continuation
+00659 — adjuvant T-DM1
+00892 — adjuvant ribociclib/endocrine treatment
+00936 — tucatinib/capecitabine/trastuzumab
+
+Includes clinical decision mappings, clinician knowledge/evidence, consent aids,
+patient portals, date-free cycle and whole-course maps, monitoring, practical
+logistics, guides, passports, treatment cards, QR routes and supportive scripts.
+
+RETROSPECTIVE FIXES
+TCHP baseline/cycle imaging and echo table; abemaciclib baseline ECG when clinically
+indicated and early blood monitoring; focused pertuzumab/trastuzumab maintenance
+and ribociclib body maps; separate pembrolizumab/chemotherapy phase scripts.
+Old runtime ribociclib patches no longer overwrite newer source-reconciled data.
+
+REVIEW FIRST
+patient/00722/ — baseline and cycle monitoring table
+patient/00726/ — maintenance-specific body map
+patient/00619/ — baseline ECG qualification and early blood checks
+patient/00485/supportive-care.html — separate AC and paclitaxel scripts
+patient/00892/ — 21-on/7-off cycle and early ECG/laboratory schedule
+validation/breast-v0838/CLINICAL_AUDIT.md — findings, uncertainties and limits
+
+VERIFICATION
+Full CI passed. New decision scenarios: 120. Prior breast regression cases: 139.
+PDFs: 57 / 116 pages. QR destinations decoded: 30.
+Interactive browser QA was not run. Independent clinical/pharmacy/PPI review
+remains pending. Longitudinal maps are educational, not appointment trackers.
+
+BUILD NOTES
+Authored JSON and generated HTML/PDF files are included. Routine HTML parity:
+  npm run patient:build-suite
+  npm run test:breast-next
+
+PDF generation/verification needs Python with WeasyPrint, PyMuPDF, Pillow and
+zxing-cpp. From the repo root:
+  python tools/build-breast-v0838-pdfs.py
+  python tools/verify-breast-pdfs-v0838.py
+After intentionally regenerating protected PDFs, review and refresh the protected
+asset hashes before running the release gate. PDF binaries may vary with renderer
+versions; patient HTML and the clinical sources remain the authored reference.
+
+The reconciliation/content Python files are authoring tools, not normal build
+steps. Re-running reconciliation resets validation flags until tests are rerun.
+When rebuilding content from the authoring tools, run the monitoring refinement
+after the content builder. SACT_SOURCE_PDF_DIR can point to locally downloaded
+official source PDFs; otherwise the recorded source hashes are retained.

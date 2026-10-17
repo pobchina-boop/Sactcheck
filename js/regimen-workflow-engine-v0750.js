@@ -442,6 +442,8 @@
   }
 
   async function openSupportivePdf(protocol){
+    const phaseSelector=root.SACTCheckPatientAssets?.runtimeUrl?.(protocol,'supportive-care-selector');
+    if(phaseSelector){root.open?.(phaseSelector,'_blank','noopener');return phaseSelector;}
     const dedicated=root.SACTCheckPatientAssets?.runtimeUrl?.(protocol,'supportive-care');
     if(dedicated){root.open?.(dedicated,'_blank','noopener');return dedicated;}
     const viewer=openPdfPlaceholder();

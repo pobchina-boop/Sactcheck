@@ -30,7 +30,7 @@ function patched(code){
   const ids=(protocol.rule_engine?.rules||[]).map(ruleId).filter(Boolean);
   assert.strictEqual(new Set(ids).size,ids.length,`${code}: hotfix must be idempotent`);
   if(code!=="00619"){
-    assert.strictEqual(protocol.metadata.encoding_maturity.reconciled_release,"0.70.1");
+    assert.strictEqual((protocol.metadata.encoding_maturity.reconciled_release||protocol.metadata.encoding_maturity.audit_release),code==="00525"?"0.83.7":code==="00892"?"0.83.8":"0.70.1");
     assert.strictEqual(protocol.metadata.validation.consultant_reviewed,false);
     assert.strictEqual(protocol.metadata.validation.oncology_pharmacy_reviewed,false);
     assert.strictEqual(protocol.metadata.validation.clinical_use_authorised,false);
@@ -91,74 +91,14 @@ assert.strictEqual(r.actionType,"contraindicated");
 r=assess(lonsurf,{bilirubin_ratio_uln:2});
 assert(!has(r,"LONSURF_HEPATIC_MOD_SEV"),"Bilirubin elevation alone must not recreate the removed v3 hepatic rule");
 
-// Ribociclib metastatic v6.
-const met=patched("00525");
-assert.strictEqual(met.input_definitions.ast_alt_grade.visible,false);
-assert.strictEqual(met.input_definitions.bilirubin_elevated.visible,false);
-assert(met.input_definitions.alt_ast_uln_multiple);
-assert(met.input_definitions.bilirubin_ratio_uln);
-assert.strictEqual(met.input_definitions.alt_ast_uln_multiple.assessment_guidance.includes("automatic"),true);
-
-r=assess(met,{alt_ast_uln_multiple:3.0,baseline_ast_alt_band:0,hepatotoxicity_grade2_recurrent:false});
-assert(!has(r,"RIBO_HEP_G2_BASE_LT2"));
-r=assess(met,{alt_ast_uln_multiple:3.01,baseline_ast_alt_band:0,hepatotoxicity_grade2_recurrent:false});
-assert.strictEqual(r.actionType,"withhold");
-assert(has(r,"RIBO_HEP_G2_BASE_LT2"));
-r=assess(met,{alt_ast_uln_multiple:5.0,baseline_ast_alt_band:0,hepatotoxicity_grade2_recurrent:true});
-assert.strictEqual(r.actionType,"withhold_then_reduce");
-assert(has(r,"RIBO_HEP_G2_RECUR"));
-r=assess(met,{alt_ast_uln_multiple:5.01,hepatotoxicity_grade3_recurrent:false});
-assert.strictEqual(r.actionType,"withhold_then_reduce");
-assert(has(r,"RIBO_HEP_G3"));
-r=assess(met,{alt_ast_uln_multiple:20.0,hepatotoxicity_grade3_recurrent:true});
-assert.strictEqual(r.actionType,"discontinue");
-assert(has(r,"RIBO_HEP_G3_RECUR"));
-r=assess(met,{alt_ast_uln_multiple:20.01});
-assert.strictEqual(r.actionType,"discontinue");
-assert(has(r,"RIBO_HEP_G4"));
-
-r=assess(met,{alt_ast_uln_multiple:3.01,bilirubin_ratio_uln:2.0,cholestasis_present:false,baseline_ast_alt_band:0,hepatotoxicity_grade2_recurrent:false});
-assert(!has(r,"RIBO_HEP_DILI"));
-r=assess(met,{alt_ast_uln_multiple:3.01,bilirubin_ratio_uln:2.01,cholestasis_present:false,baseline_ast_alt_band:0,hepatotoxicity_grade2_recurrent:false});
-assert.strictEqual(r.actionType,"discontinue");
-assert(has(r,"RIBO_HEP_DILI"));
-
-r=assess(met,{assessment_phase:"baseline",qtc_f:450});
-assert.strictEqual(r.actionType,"contraindicated");
-assert(has(r,"RIBO_BASELINE_QTC"));
-r=assess(met,{assessment_phase:"baseline",ecog_status:2});
-assert.strictEqual(r.actionType,"contraindicated");
-assert(has(r,"RIBO_BASELINE_ECOG"));
-r=assess(met,{qtc_f:481,qtc_recurrent_481_plus:false});
-assert.strictEqual(r.actionType,"withhold");
-r=assess(met,{qtc_f:481,qtc_recurrent_481_plus:true});
-assert.strictEqual(r.actionType,"withhold_then_reduce");
-r=assess(met,{qtc_f:501,qtc_gt500_confirmed_two_ecgs:true,qtc_recurrent_481_plus:false});
-assert.strictEqual(r.actionType,"withhold_then_reduce");
-assert(has(r,"RIBO_QT_GT500_MET"));
-r=assess(met,{qtc_f:501,qtc_change_from_baseline_ms:61,serious_arrhythmia_with_qt_prolongation:true});
-assert.strictEqual(r.actionType,"permanently_discontinue");
-assert(has(r,"RIBO_QT_SERIOUS"));
-r=assess(met,{ild_pneumonitis_severity:2});
-assert.strictEqual(r.actionType,"withhold_then_reduce");
-r=assess(met,{ild_pneumonitis_severity:3});
-assert.strictEqual(r.actionType,"discontinue");
-
-// Ribociclib adjuvant v2.
-const adj=patched("00892");
-assert(!(adj.rule_engine.rules||[]).some(rule=>ruleId(rule)==="CHILDPUGH_BC"),"Adjuvant Child-Pugh B/C dose-reduction rule must be removed");
-r=assess(adj,{child_pugh:"B"});
-assert.notStrictEqual(r.actionType,"dose_reduce","NCCP 00892 v2 states no hepatic dose adjustment is necessary in early breast cancer");
-r=assess(adj,{renal_band:"severe"});
-assert.strictEqual(r.actionType,"dose_reduce");
-r=assess(adj,{qtc_f:501,qtc_gt500_recurrent:false,qtc_recurrent_481_plus:false});
-assert.strictEqual(r.actionType,"withhold_then_reduce");
-assert(has(r,"RIBO_QT_GT500_ADJ"));
-r=assess(adj,{qtc_f:501,qtc_gt500_recurrent:true,qtc_recurrent_481_plus:true});
-assert.strictEqual(r.actionType,"discontinue");
-assert(has(r,"RIBO_QT_GT500_ADJ_RECUR"));
-r=assess(adj,{alt_ast_uln_multiple:5.01,hepatotoxicity_grade3_recurrent:false});
-assert.strictEqual(r.actionType,"withhold_then_reduce");
+// Newer audited JSON must survive the historical runtime repair byte-for-byte.
+for(const code of ["00525","00892"]){
+ const original=read(FILES[code]);const modern=patched(code);
+ assert.deepStrictEqual(modern,original,`${code}: historical hotfix must not overwrite newer rules`);
+}
+// Source boundary and phase tests exercise the modern rules directly.
+require('./clinical-audit-v0837.test.cjs');
+require('./clinical-audit-v0838.test.cjs');
 
 // Abemaciclib: current direct source retained, catalogue fallback added; clinical rules untouched.
 const abema=patched("00619");

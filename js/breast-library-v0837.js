@@ -482,9 +482,9 @@ const regimens={
     "receptors": [
       "unspecified"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Neoadjuvant or adjuvant · early breast cancer; indication remains a clinician decision"
   },
   "00507": {
     "code": "00507",
@@ -586,9 +586,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Adjuvant · residual invasive HER2-positive early breast cancer; indication remains a clinician decision"
   },
   "00688": {
     "code": "00688",
@@ -859,14 +859,15 @@ const regimens={
     "code": "00815",
     "protocol_id": "nccp-00815-v3",
     "settings": [
-      "adjuvant"
+      "adjuvant",
+      "maintenance"
     ],
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Adjuvant · HER2-positive early breast cancer; indication remains a clinician decision"
   },
   "00857": {
     "code": "00857",
@@ -933,9 +934,9 @@ const regimens={
     "receptors": [
       "hrpos-her2neg"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6649/892_Ribociclib_Adjuvant.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Adjuvant · HR-positive / HER2-negative early breast cancer; indication remains a clinician decision"
   },
   "00936": {
     "code": "00936",
@@ -946,9 +947,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Advanced / metastatic · previously treated HER2-positive breast cancer; indication remains a clinician decision"
   },
   "00212": {
     "code": "00212",

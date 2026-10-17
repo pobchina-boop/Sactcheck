@@ -43,10 +43,10 @@ for (const entry of catalogue.protocols) {
 }
 
 assert.strictEqual(catalogue.protocols.length, 376);
-// v0.83.7 adds complete oral schedules for abemaciclib and ribociclib.
-assert.strictEqual(usefulCoverage, 97);
-assert.strictEqual(scheduleCoverage, 91);
-assert.strictEqual(doseLevelCoverage, 32);
+// v0.83.8 adds five complete breast schedules and three dose-level tables.
+assert.strictEqual(usefulCoverage, 102);
+assert.strictEqual(scheduleCoverage, 96);
+assert.strictEqual(doseLevelCoverage, 35);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');

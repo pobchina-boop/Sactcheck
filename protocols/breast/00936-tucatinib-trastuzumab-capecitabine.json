@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00936-vcurrent",
   "file_name": "00936-tucatinib-trastuzumab-capecitabine.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00936",
     "nccp_version": "1",
@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 8,
     "source_url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.83.8",
     "treatment_setting": [
       "metastatic"
     ],
@@ -30,7 +30,8 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "software_validation_record": "validation/breast-v0838/CLINICAL_AUDIT.md"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -64,20 +65,20 @@
     "legacy_internal_id_retained": true,
     "legacy_internal_id_note": "Stable internal ID retained to avoid breaking existing bookmarks and catalogue references; display metadata now records the explicit NCCP source version.",
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
+      "reconciled_release": "0.83.8",
+      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "clinical_use_authorised": false
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00936-v1",
-    "legacy_protocol_id_alias": "nccp-00936-vcurrent"
+    "legacy_protocol_id_alias": "nccp-00936-vcurrent",
+    "source_checked_date": "2026-10-17"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -85,303 +86,503 @@
     "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
   },
   "input_definitions": {
+    "anc": {
+      "label": "ANC",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "platelets": {
+      "label": "Platelets",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "demo_value": "baseline",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first dose"
+        },
+        {
+          "value": "ongoing",
+          "label": "Planned next cycle"
+        },
+        {
+          "value": "midcycle",
+          "label": "Unscheduled bloods during cycle"
+        }
+      ]
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 4
+    },
     "hypersensitivity": {
       "label": "Relevant drug/excipient hypersensitivity",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "pregnancy": {
       "label": "Pregnant",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
-    "anc": {
-      "label": "ANC (×10⁹/L)",
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 50,
       "step": 0.01,
-      "demo_value": 2.0,
-      "input_role": "decision"
+      "unit": "mL/min",
+      "always_show": true,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Retain exact measured creatinine clearance so decimal gaps between the source bands are surfaced for review rather than rounded into a dose band."
+      }
     },
-    "platelets": {
-      "label": "Platelets (×10⁹/L)",
+    "alt_uln_multiple": {
+      "label": "ALT / ULN",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 2000,
-      "step": 1,
-      "demo_value": 180,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
       "input_role": "decision"
     },
-    "crcl": {
-      "label": "Creatinine clearance category",
-      "type": "select",
+    "ast_uln_multiple": {
+      "label": "AST / ULN",
+      "type": "number",
+      "demo_value": 2,
       "required": false,
-      "demo_value": "renal_30_plus",
-      "options": [
-        {
-          "value": "renal_0_29",
-          "label": "<30 mL/min",
-          "decision_value": 14,
-          "range_min_inclusive": 0,
-          "range_max_inclusive": 29
-        },
-        {
-          "value": "renal_30_plus",
-          "label": ">=30 mL/min",
-          "decision_value": 30,
-          "range_min_inclusive": 30,
-          "range_max_inclusive": null
-        }
-      ],
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "source": "Encoded rule thresholds",
-        "exact_value_required": false
-      },
-      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation.",
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
       "input_role": "decision"
     },
-    "diarrhoea_grade": {
-      "label": "Diarrhoea grade",
-      "type": "select",
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / ULN",
+      "type": "number",
+      "demo_value": 2,
       "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated.",
-      "input_role": "decision"
-    },
-    "hand_foot_grade": {
-      "label": "Palmar-plantar erythrodysaesthesia grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "ppe",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess painful erythema, swelling, hyperkeratosis, peeling or blistering of palms/soles and the effect on instrumental or self-care activities.",
-      "input_role": "decision"
-    },
-    "other_toxicity_grade": {
-      "label": "Other treatment-related toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "generic",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the actual adverse event first, then apply that toxicity-specific CTCAE definition. The generic severity anchors are not a substitute for the named CTCAE criterion.",
-      "input_role": "context"
-    },
-    "alt_grade": {
-      "label": "ALT/AST elevation grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "hepatic_alt_ast",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use the measured ALT/AST and laboratory ULN; account for an abnormal baseline where CTCAE specifies a baseline-relative definition. Assess bilirubin and alternative causes concurrently.",
-      "input_role": "decision"
-    },
-    "bilirubin_grade": {
-      "label": "Bilirubin elevation grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "hepatic_bilirubin",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use the measured bilirubin and laboratory ULN; account for an abnormal baseline where CTCAE specifies a baseline-relative definition and assess the overall hepatic pattern.",
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
       "input_role": "decision"
     },
     "lvef_percent": {
-      "label": "Current LVEF (%)",
+      "label": "Current LVEF",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 100,
-      "step": 1,
-      "demo_value": 55,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "lvef_drop_points": {
+      "label": "LVEF fall from baseline",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "percentage points",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "days_overdue_trastuzumab": {
+      "label": "Days overdue for IV trastuzumab",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
       "input_role": "decision"
     },
     "symptomatic_chf": {
-      "label": "Symptomatic cardiac failure",
+      "label": "Symptomatic heart failure",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "severe_hepatic_impairment": {
       "label": "Severe hepatic impairment",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "strong_cyp3a_inducer": {
-      "label": "Strong CYP3A inducer present",
+      "label": "Strong CYP3A inducer",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "strong_cyp2c8_inhibitor": {
-      "label": "Strong CYP2C8 inhibitor present",
+      "label": "Strong CYP2C8 inhibitor",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
+    },
+    "brivudine_recent": {
+      "label": "Recent/concomitant brivudine",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "previous_severe_fluoropyrimidine_reaction": {
+      "label": "Previous severe unexpected fluoropyrimidine reaction",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "antidiarrhoeal_already_used": {
+      "label": "Antidiarrhoeal treatment already used for this episode",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "further_tucatinib_reduction_required": {
+      "label": "Further tucatinib dose reduction required",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "dpd_status": {
+      "label": "DPD status",
+      "type": "select",
+      "demo_value": "normal",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "normal",
+          "label": "No deficiency detected"
+        },
+        {
+          "value": "partial",
+          "label": "Partial deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete deficiency"
+        },
+        {
+          "value": "untested",
+          "label": "Not yet tested / unknown"
+        }
+      ]
+    },
+    "haem_event_number": {
+      "label": "Occurrence of this capecitabine blood-count toxicity",
+      "type": "select",
+      "demo_value": 1,
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "toxicity_event_number": {
+      "label": "Occurrence of this capecitabine non-haematological toxicity",
+      "type": "select",
+      "demo_value": 1,
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "tucatinib_dose_mg": {
+      "label": "Current tucatinib dose per administration",
+      "type": "select",
+      "demo_value": 300,
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": 300,
+          "label": "300 mg twice daily"
+        },
+        {
+          "value": 250,
+          "label": "250 mg twice daily"
+        },
+        {
+          "value": 200,
+          "label": "200 mg twice daily"
+        },
+        {
+          "value": 150,
+          "label": "150 mg twice daily"
+        }
+      ]
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "diarrhoea",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "hand_foot_grade": {
+      "label": "Hand-foot syndrome",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "ppe",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "other_toxicity_grade": {
+      "label": "Other non-haematological toxicity",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "hypersensitivity_grade": {
+      "label": "Trastuzumab hypersensitivity",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "allergic_reaction",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
     }
   },
   "required_inputs": [],
@@ -391,7 +592,7 @@
   },
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "report_unassessed_coverage_gap",
+    "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -411,285 +612,1996 @@
     ],
     "rules": [
       {
-        "rule_id": "EXCL_HS",
-        "field": "hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "rule_id": "HYPERSENSITIVITY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "tucatinib",
-            "trastuzumab",
-            "capecitabine"
+            "capecitabine",
+            "trastuzumab"
           ],
-          "recommendation": "Do not administer; relevant hypersensitivity is present."
+          "recommendation": "Relevant hypersensitivity: do not administer; review the responsible component."
         },
+        "explanation": "Relevant hypersensitivity: do not administer; review the responsible component.",
         "source": {
-          "page": 1,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Do not administer; relevant hypersensitivity is present."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 3
+        }
       },
       {
-        "rule_id": "EXCL_PREG",
-        "field": "pregnancy",
-        "operator": "==",
-        "value": true,
+        "rule_id": "PREGNANCY_LACTATION",
+        "when": {
+          "any": [
+            {
+              "field": "pregnancy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "breastfeeding",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "tucatinib",
-            "trastuzumab",
-            "capecitabine"
+            "capecitabine",
+            "trastuzumab"
           ],
-          "recommendation": "Do not administer during pregnancy."
+          "recommendation": "Pregnancy/breastfeeding requires treatment exclusion and specialist review."
         },
+        "explanation": "Pregnancy/breastfeeding requires treatment exclusion and specialist review.",
         "source": {
-          "page": 1,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Do not administer during pregnancy."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 3
+        }
       },
       {
-        "rule_id": "EXCL_BF",
-        "field": "breastfeeding",
-        "operator": "==",
-        "value": true,
+        "rule_id": "ECOG_REVIEW",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 1
+        },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "tucatinib",
-            "trastuzumab",
-            "capecitabine"
+            "capecitabine",
+            "trastuzumab"
           ],
-          "recommendation": "Do not administer while breastfeeding."
+          "recommendation": "Outside the published performance-status population; consultant assessment required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Outside the published performance-status population; consultant assessment required.",
         "source": {
-          "page": 1,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Do not administer while breastfeeding."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 3
+        }
       },
       {
-        "rule_id": "ANC_LOW",
-        "field": "anc",
-        "operator": "<",
-        "value": 1.5,
-        "action": {
-          "type": "delay",
-          "components": [
-            "tucatinib",
-            "trastuzumab",
-            "capecitabine"
-          ],
-          "recommendation": "Delay capecitabine-containing treatment and reassess."
+        "rule_id": "DPD_COMPLETE",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "complete"
         },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Delay capecitabine-containing treatment and reassess."
-      },
-      {
-        "rule_id": "PLT_LOW",
-        "field": "platelets",
-        "operator": "<",
-        "value": 100,
-        "action": {
-          "type": "delay",
-          "components": [
-            "tucatinib",
-            "trastuzumab",
-            "capecitabine"
-          ],
-          "recommendation": "Delay capecitabine-containing treatment and reassess."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Delay capecitabine-containing treatment and reassess."
-      },
-      {
-        "rule_id": "CRCL_LT30",
-        "field": "crcl",
-        "operator": "<",
-        "value": 30,
         "action": {
           "type": "contraindicated",
           "components": [
             "capecitabine"
           ],
-          "recommendation": "Capecitabine is contraindicated when creatinine clearance is below 30 mL/min."
+          "recommendation": "Complete DPD deficiency: do not administer capecitabine."
         },
+        "explanation": "Complete DPD deficiency: do not administer capecitabine.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Capecitabine is contraindicated when creatinine clearance is below 30 mL/min."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 4
+        }
       },
       {
-        "rule_id": "SEV_HEP",
-        "field": "severe_hepatic_impairment",
-        "operator": "==",
-        "value": true,
+        "rule_id": "DPD_PARTIAL",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "partial"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Partial DPD deficiency requires an individually reduced starting dose and monitoring. The source exclusion wording and partial-deficiency section need reconciliation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Partial DPD deficiency requires an individually reduced starting dose and monitoring. The source exclusion wording and partial-deficiency section need reconciliation.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "DPD_UNTESTED",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "untested"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Confirm pretreatment DPD testing and review the result before first capecitabine exposure."
+        },
+        "explanation": "Confirm pretreatment DPD testing and review the result before first capecitabine exposure.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "BRIVUDINE",
+        "when": {
+          "field": "brivudine_recent",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Recent/concomitant brivudine is an exclusion; verify the required washout with pharmacy."
+        },
+        "explanation": "Recent/concomitant brivudine is an exclusion; verify the required washout with pharmacy.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "PREVIOUS_FP_REACTION",
+        "when": {
+          "field": "previous_severe_fluoropyrimidine_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Previous severe unexpected fluoropyrimidine reaction is a source exclusion."
+        },
+        "explanation": "Previous severe unexpected fluoropyrimidine reaction is a source exclusion.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "BASELINE_COUNTS",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Baseline counts below ANC 1.5 or platelets 100 require source-defined caution and review, distinct from ongoing thresholds.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Baseline counts below ANC 1.5 or platelets 100 require source-defined caution and review, distinct from ongoing thresholds.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "COUNTS_HOLD",
+        "when": {
+          "any": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine and review severity/occurrence. Recovery requires ANC ≥1.5 and platelets ≥75 before a restart decision."
+        },
+        "explanation": "Hold capecitabine and review severity/occurrence. Recovery requires ANC ≥1.5 and platelets ≥75 before a restart decision.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "MIDCYCLE_COUNTS",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "midcycle"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Unscheduled mid-cycle counts below ANC 1 or platelets 75 require interruption."
+        },
+        "explanation": "Unscheduled mid-cycle counts below ANC 1 or platelets 75 require interruption.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "COUNTS_STAGE_UNKNOWN",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets",
+                  "operator": ">=",
+                  "value": 75
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<=",
+                  "value": 99.99
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Confirm baseline versus ongoing treatment: the source starting-count caution differs from its ongoing platelet threshold.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm baseline versus ongoing treatment: the source starting-count caution differs from its ongoing platelet threshold.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G2_1",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 1.49
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">=",
+                      "value": 50
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 74.9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold until recovery of both counts. Source recurrence branch specifies 100% of starting capecitabine dose for the next cycle; reconcile existing reductions."
+        },
+        "explanation": "Hold until recovery of both counts. Source recurrence branch specifies 100% of starting capecitabine dose for the next cycle; reconcile existing reductions.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G2_2",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 1.49
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">=",
+                      "value": 50
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 74.9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold until recovery of both counts. Source recurrence branch specifies 75% of starting capecitabine dose for the next cycle; reconcile existing reductions."
+        },
+        "explanation": "Hold until recovery of both counts. Source recurrence branch specifies 75% of starting capecitabine dose for the next cycle; reconcile existing reductions.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G2_3",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 1.49
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">=",
+                      "value": 50
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 74.9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold until recovery of both counts. Source recurrence branch specifies 50% of starting capecitabine dose for the next cycle; reconcile existing reductions."
+        },
+        "explanation": "Hold until recovery of both counts. Source recurrence branch specifies 50% of starting capecitabine dose for the next cycle; reconcile existing reductions.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G2_4",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 1.49
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">=",
+                      "value": 50
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 74.9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Permanently discontinue capecitabine for this severity and recurrence."
+        },
+        "explanation": "Permanently discontinue capecitabine for this severity and recurrence.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G3_1",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">=",
+                      "value": 0.5
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 0.99
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">=",
+                      "value": 25
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 49.9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold until recovery of both counts. Source recurrence branch specifies 75% of starting capecitabine dose for the next cycle; reconcile existing reductions."
+        },
+        "explanation": "Hold until recovery of both counts. Source recurrence branch specifies 75% of starting capecitabine dose for the next cycle; reconcile existing reductions.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G3_2",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">=",
+                      "value": 0.5
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 0.99
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">=",
+                      "value": 25
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 49.9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold until recovery of both counts. Source recurrence branch specifies 50% of starting capecitabine dose for the next cycle; reconcile existing reductions."
+        },
+        "explanation": "Hold until recovery of both counts. Source recurrence branch specifies 50% of starting capecitabine dose for the next cycle; reconcile existing reductions.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G3_3",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">=",
+                      "value": 0.5
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 0.99
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">=",
+                      "value": 25
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 49.9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Permanently discontinue capecitabine for this severity and recurrence."
+        },
+        "explanation": "Permanently discontinue capecitabine for this severity and recurrence.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G3_4",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">=",
+                      "value": 0.5
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 0.99
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">=",
+                      "value": 25
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 49.9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Permanently discontinue capecitabine for this severity and recurrence."
+        },
+        "explanation": "Permanently discontinue capecitabine for this severity and recurrence.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G4_1",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 25
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "First severe blood toxicity: discontinue or, if the consultant chooses continuation, hold until recovery then 50% of starting dose."
+        },
+        "explanation": "First severe blood toxicity: discontinue or, if the consultant chooses continuation, hold until recovery then 50% of starting dose.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G4_2",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 25
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Permanently discontinue capecitabine for this severity and recurrence."
+        },
+        "explanation": "Permanently discontinue capecitabine for this severity and recurrence.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G4_3",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 25
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Permanently discontinue capecitabine for this severity and recurrence."
+        },
+        "explanation": "Permanently discontinue capecitabine for this severity and recurrence.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HAEM_G4_4",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 25
+                }
+              ]
+            },
+            {
+              "field": "haem_event_number",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Permanently discontinue capecitabine for this severity and recurrence."
+        },
+        "explanation": "Permanently discontinue capecitabine for this severity and recurrence.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "RENAL_LT30",
+        "when": {
+          "any": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 30
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Capecitabine is not recommended below CrCl 30 or with haemodialysis. Review the combination; do not automatically discontinue the other components."
+        },
+        "explanation": "Capecitabine is not recommended below CrCl 30 or with haemodialysis. Review the combination; do not automatically discontinue the other components.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "RENAL_30_50",
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 30
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 50
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
-            "tucatinib"
-          ],
-          "recommendation": "Severe hepatic impairment requires tucatinib dose adjustment and consultant/pharmacy verification."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe hepatic impairment requires tucatinib dose adjustment and consultant/pharmacy verification."
-      },
-      {
-        "rule_id": "DIARR_G3",
-        "field": "diarrhoea_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "tucatinib",
             "capecitabine"
           ],
-          "recommendation": "Interrupt tucatinib/capecitabine, treat diarrhoea and resume according to the NCCP dose-modification pathway after recovery."
+          "recommendation": "CrCl 30–50: 75% of original capecitabine dose under this regimen.",
+          "dose_percent": 75
         },
+        "explanation": "CrCl 30–50: 75% of original capecitabine dose under this regimen.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Interrupt tucatinib/capecitabine, treat diarrhoea and resume according to the NCCP dose-modification pathway after recovery."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 6
+        }
       },
       {
-        "rule_id": "HFS_G3",
-        "field": "hand_foot_grade",
-        "operator": ">=",
-        "value": 3,
+        "rule_id": "RENAL_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">",
+              "value": 50
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 51
+            }
+          ]
+        },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "consultant_review",
           "components": [
             "capecitabine"
           ],
-          "recommendation": "Interrupt capecitabine until recovery and resume with protocol-directed dose reduction."
+          "recommendation": "The source has a decimal gap between CrCl 50 and 51; do not round to clear treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "The source has a decimal gap between CrCl 50 and 51; do not round to clear treatment.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Interrupt capecitabine until recovery and resume with protocol-directed dose reduction."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 6
+        }
       },
       {
-        "rule_id": "HEP_G3",
-        "field": "alt_grade",
-        "operator": ">=",
-        "value": 3,
+        "rule_id": "SEV_HEP_SOURCE_CONFLICT",
+        "when": {
+          "field": "severe_hepatic_impairment",
+          "operator": "==",
+          "value": true
+        },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Severe hepatic impairment appears in exclusions, while the tucatinib table specifies 66% in Child-Pugh C. Resolve the conflict and tablet-strength rounding before treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe hepatic impairment appears in exclusions, while the tucatinib table specifies 66% in Child-Pugh C. Resolve the conflict and tablet-strength rounding before treatment.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "CAPECITABINE_LIVER",
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Hold capecitabine for treatment-related bilirubin >3×ULN or ALT/AST >2.5×ULN until the relevant abnormality recovers. Review both values if both are abnormal."
+        },
+        "explanation": "Hold capecitabine for treatment-related bilirubin >3×ULN or ALT/AST >2.5×ULN until the relevant abnormality recovers. Review both values if both are abnormal.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_alt_uln_multiple_G3",
+        "when": {
+          "all": [
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 5
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
           "components": [
             "tucatinib"
           ],
-          "recommendation": "Withhold tucatinib and reassess liver tests; resume with protocol-directed dose modification only after recovery."
+          "recommendation": "Interrupt until grade ≤1, then reduce one tucatinib dose level."
         },
+        "explanation": "Interrupt until grade ≤1, then reduce one tucatinib dose level.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold tucatinib and reassess liver tests; resume with protocol-directed dose modification only after recovery."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
       },
       {
-        "rule_id": "BILI_G3",
-        "field": "bilirubin_grade",
-        "operator": ">=",
-        "value": 3,
+        "rule_id": "TUC_alt_uln_multiple_G4",
+        "when": {
+          "field": "alt_uln_multiple",
+          "operator": ">",
+          "value": 20
+        },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "permanently_discontinue",
           "components": [
             "tucatinib"
           ],
-          "recommendation": "Withhold tucatinib and reassess bilirubin; resume with protocol-directed dose modification only after recovery."
+          "recommendation": "Grade 4 transaminase elevation: permanently discontinue tucatinib."
         },
+        "explanation": "Grade 4 transaminase elevation: permanently discontinue tucatinib.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold tucatinib and reassess bilirubin; resume with protocol-directed dose modification only after recovery."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
       },
       {
-        "rule_id": "CHF",
-        "field": "symptomatic_chf",
-        "operator": "==",
-        "value": true,
+        "rule_id": "TUC_ast_uln_multiple_G3",
+        "when": {
+          "all": [
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 5
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Interrupt until grade ≤1, then reduce one tucatinib dose level."
+        },
+        "explanation": "Interrupt until grade ≤1, then reduce one tucatinib dose level.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_ast_uln_multiple_G4",
+        "when": {
+          "field": "ast_uln_multiple",
+          "operator": ">",
+          "value": 20
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Grade 4 transaminase elevation: permanently discontinue tucatinib."
+        },
+        "explanation": "Grade 4 transaminase elevation: permanently discontinue tucatinib.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_BILI_G2",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Interrupt until bilirubin grade ≤1, then resume the same dose after review."
+        },
+        "explanation": "Interrupt until bilirubin grade ≤1, then resume the same dose after review.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_BILI_G3",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Interrupt until grade ≤1, then reduce one dose level."
+        },
+        "explanation": "Interrupt until grade ≤1, then reduce one dose level.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_BILI_G4",
+        "when": {
+          "field": "bilirubin_uln_multiple",
+          "operator": ">",
+          "value": 10
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Grade 4 bilirubin elevation: permanently discontinue tucatinib."
+        },
+        "explanation": "Grade 4 bilirubin elevation: permanently discontinue tucatinib.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_DILI",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "ALT/AST >3×ULN together with bilirubin >2×ULN: permanently discontinue tucatinib."
+        },
+        "explanation": "ALT/AST >3×ULN together with bilirubin >2×ULN: permanently discontinue tucatinib.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_DIARR_G3",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Treat diarrhoea and interrupt until grade ≤1. Without prior antidiarrhoeal treatment: same dose after recovery; with it: next lower level. Confirm this history."
+        },
+        "explanation": "Treat diarrhoea and interrupt until grade ≤1. Without prior antidiarrhoeal treatment: same dose after recovery; with it: next lower level. Confirm this history.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_DIARR_G4",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Grade 4 diarrhoea: permanently discontinue tucatinib."
+        },
+        "explanation": "Grade 4 diarrhoea: permanently discontinue tucatinib.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_OTHER_G3",
+        "when": {
+          "field": "other_toxicity_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Other grade 3 toxicity: interrupt until grade ≤1, then next lower level."
+        },
+        "explanation": "Other grade 3 toxicity: interrupt until grade ≤1, then next lower level.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TUC_OTHER_G4",
+        "when": {
+          "field": "other_toxicity_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Other grade 4 toxicity: permanently discontinue tucatinib."
+        },
+        "explanation": "Other grade 4 toxicity: permanently discontinue tucatinib.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "CAPE_diarrhoea_grade_HOLD",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Grade ≥2 toxicity requires holding capecitabine until grade 0–1. Record occurrence and review the source restart percentage; do not restart automatically."
+        },
+        "explanation": "Grade ≥2 toxicity requires holding capecitabine until grade 0–1. Record occurrence and review the source restart percentage; do not restart automatically.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_diarrhoea_grade_G2_RECUR4",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "toxicity_event_number",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Fourth grade 2 occurrence: permanently discontinue capecitabine."
+        },
+        "explanation": "Fourth grade 2 occurrence: permanently discontinue capecitabine.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_diarrhoea_grade_G3_RECUR3",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "toxicity_event_number",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Third grade 3 occurrence: permanently discontinue capecitabine."
+        },
+        "explanation": "Third grade 3 occurrence: permanently discontinue capecitabine.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_diarrhoea_grade_G4",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Grade 4: source default is permanent discontinuation; exceptional continuation requires consultant decision after recovery at 50%. A repeat grade 4 event requires discontinuation."
+        },
+        "explanation": "Grade 4: source default is permanent discontinuation; exceptional continuation requires consultant decision after recovery at 50%. A repeat grade 4 event requires discontinuation.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_diarrhoea_grade_G4_RECUR",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "toxicity_event_number",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Repeated grade 4 toxicity: permanently discontinue."
+        },
+        "explanation": "Repeated grade 4 toxicity: permanently discontinue.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_hand_foot_grade_HOLD",
+        "when": {
+          "field": "hand_foot_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Grade ≥2 toxicity requires holding capecitabine until grade 0–1. Record occurrence and review the source restart percentage; do not restart automatically."
+        },
+        "explanation": "Grade ≥2 toxicity requires holding capecitabine until grade 0–1. Record occurrence and review the source restart percentage; do not restart automatically.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_hand_foot_grade_G2_RECUR4",
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "toxicity_event_number",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Fourth grade 2 occurrence: permanently discontinue capecitabine."
+        },
+        "explanation": "Fourth grade 2 occurrence: permanently discontinue capecitabine.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_hand_foot_grade_G3_RECUR3",
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "toxicity_event_number",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Third grade 3 occurrence: permanently discontinue capecitabine."
+        },
+        "explanation": "Third grade 3 occurrence: permanently discontinue capecitabine.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_hand_foot_grade_G4",
+        "when": {
+          "field": "hand_foot_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Grade 4: source default is permanent discontinuation; exceptional continuation requires consultant decision after recovery at 50%. A repeat grade 4 event requires discontinuation."
+        },
+        "explanation": "Grade 4: source default is permanent discontinuation; exceptional continuation requires consultant decision after recovery at 50%. A repeat grade 4 event requires discontinuation.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_hand_foot_grade_G4_RECUR",
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "toxicity_event_number",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Repeated grade 4 toxicity: permanently discontinue."
+        },
+        "explanation": "Repeated grade 4 toxicity: permanently discontinue.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_other_toxicity_grade_HOLD",
+        "when": {
+          "field": "other_toxicity_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Grade ≥2 toxicity requires holding capecitabine until grade 0–1. Record occurrence and review the source restart percentage; do not restart automatically."
+        },
+        "explanation": "Grade ≥2 toxicity requires holding capecitabine until grade 0–1. Record occurrence and review the source restart percentage; do not restart automatically.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_other_toxicity_grade_G2_RECUR4",
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "toxicity_event_number",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Fourth grade 2 occurrence: permanently discontinue capecitabine."
+        },
+        "explanation": "Fourth grade 2 occurrence: permanently discontinue capecitabine.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_other_toxicity_grade_G3_RECUR3",
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "toxicity_event_number",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Third grade 3 occurrence: permanently discontinue capecitabine."
+        },
+        "explanation": "Third grade 3 occurrence: permanently discontinue capecitabine.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_other_toxicity_grade_G4",
+        "when": {
+          "field": "other_toxicity_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Grade 4: source default is permanent discontinuation; exceptional continuation requires consultant decision after recovery at 50%. A repeat grade 4 event requires discontinuation."
+        },
+        "explanation": "Grade 4: source default is permanent discontinuation; exceptional continuation requires consultant decision after recovery at 50%. A repeat grade 4 event requires discontinuation.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CAPE_other_toxicity_grade_G4_RECUR",
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "toxicity_event_number",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "capecitabine"
+          ],
+          "recommendation": "Repeated grade 4 toxicity: permanently discontinue."
+        },
+        "explanation": "Repeated grade 4 toxicity: permanently discontinue.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "HER2_LVEF",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": ">=",
+              "value": 10
+            }
+          ]
+        },
         "action": {
           "type": "withhold",
           "components": [
             "trastuzumab"
           ],
-          "recommendation": "Withhold trastuzumab and obtain urgent cardiac assessment."
+          "recommendation": "Withhold trastuzumab; repeat LVEF after 3 weeks and seek consultant/cardiology review."
         },
+        "explanation": "Withhold trastuzumab; repeat LVEF after 3 weeks and seek consultant/cardiology review.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold trastuzumab and obtain urgent cardiac assessment."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 9
+        }
       },
       {
-        "rule_id": "LVEF_LOW",
-        "field": "lvef_percent",
-        "operator": "<",
-        "value": 50,
+        "rule_id": "HER2_LVEF_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": "missing"
+            }
+          ]
+        },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
             "trastuzumab"
           ],
-          "recommendation": "LVEF below 50%: withhold trastuzumab and follow the NCCP cardiac pathway."
+          "recommendation": "The fall from baseline is needed for the source cardiac branch. Do not infer it from the current LVEF alone.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "The fall from baseline is needed for the source cardiac branch. Do not infer it from the current LVEF alone.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "LVEF below 50%: withhold trastuzumab and follow the NCCP cardiac pathway."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 9
+        }
       },
       {
-        "rule_id": "CYP3A_IND",
-        "field": "strong_cyp3a_inducer",
-        "operator": "==",
-        "value": true,
+        "rule_id": "HER2_HF",
+        "when": {
+          "field": "symptomatic_chf",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Symptomatic heart failure: urgent consultant/cardiology review and consideration of discontinuation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Symptomatic heart failure: urgent consultant/cardiology review and consideration of discontinuation.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "HER2_HSR",
+        "when": {
+          "field": "hypersensitivity_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Grade 4 trastuzumab hypersensitivity: discontinue."
+        },
+        "explanation": "Grade 4 trastuzumab hypersensitivity: discontinue.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "HER2_RELOAD",
+        "when": {
+          "field": "days_overdue_trastuzumab",
+          "operator": ">",
+          "value": 7
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "IV trastuzumab more than one week overdue may require 8 mg/kg reloading, then 6 mg/kg every three weeks. Confirm the individual prescription.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "IV trastuzumab more than one week overdue may require 8 mg/kg reloading, then 6 mg/kg every three weeks. Confirm the individual prescription.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "TUC_LOWEST",
+        "when": {
+          "all": [
+            {
+              "field": "tucatinib_dose_mg",
+              "operator": "==",
+              "value": 150
+            },
+            {
+              "field": "further_tucatinib_reduction_required",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "tucatinib"
+          ],
+          "recommendation": "Unable to tolerate 150 mg twice daily: permanently discontinue tucatinib."
+        },
+        "explanation": "Unable to tolerate 150 mg twice daily: permanently discontinue tucatinib.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "INTERACTIONS",
+        "when": {
+          "any": [
+            {
+              "field": "strong_cyp3a_inducer",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "strong_cyp2c8_inhibitor",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "tucatinib"
           ],
-          "recommendation": "Strong CYP3A inducer may reduce tucatinib exposure: avoid or obtain specialist pharmacy review."
+          "recommendation": "Avoid or reconcile these exposure-changing interactions with oncology pharmacy and current SmPC.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Avoid or reconcile these exposure-changing interactions with oncology pharmacy and current SmPC.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Strong CYP3A inducer may reduce tucatinib exposure: avoid or obtain specialist pharmacy review."
-      },
-      {
-        "rule_id": "CYP2C8_INH",
-        "field": "strong_cyp2c8_inhibitor",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "tucatinib"
-          ],
-          "recommendation": "Strong CYP2C8 inhibitor may increase tucatinib exposure: avoid or obtain specialist pharmacy review."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Strong CYP2C8 inhibitor may increase tucatinib exposure: avoid or obtain specialist pharmacy review."
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 11
+        }
       }
     ]
   },
@@ -710,5 +2622,95 @@
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "combination",
+      "name": "Concurrent oral and HER2 treatment",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "tucatinib",
+          "dose": {
+            "value": 300,
+            "unit": "mg twice daily"
+          },
+          "day": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "route": "oral"
+        },
+        {
+          "drug": "capecitabine",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m2 twice daily"
+          },
+          "day": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "route": "oral"
+        },
+        {
+          "drug": "trastuzumab",
+          "dose": {
+            "value": 6,
+            "unit": "mg/kg"
+          },
+          "day": 1,
+          "route": "IV infusion",
+          "notes": "IV 8 mg/kg loading dose initially; use verified formulation-specific prescription."
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "tucatinib": {
+      "0": {
+        "dose_mg": 300
+      },
+      "-1": {
+        "dose_mg": 250
+      },
+      "-2": {
+        "dose_mg": 200
+      },
+      "-3": {
+        "dose_mg": 150
+      }
+    }
   }
 }
