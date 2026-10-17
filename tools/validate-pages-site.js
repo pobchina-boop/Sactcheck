@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 "use strict";
-const fs=require("fs"),path=require("path"),crypto=require("crypto");
+const fs=require("fs"),path=require("path"),crypto=require("crypto"),vm=require("vm");
 const root=path.resolve(__dirname,".."),site=path.join(root,"_site");
 const pkg=JSON.parse(fs.readFileSync(path.join(root,"package.json"),"utf8"));
 const registry=require(path.join(root,"js","patient-asset-registry-v0810.js"));
@@ -37,6 +37,16 @@ if(fs.existsSync(path.join(site,"data/app-release.json"))){
   }
 }
 const supportPath=path.join(site,"js","patient-support-v0750.js");
+const releasePath=path.join(site,"js","sactcheck-release.js");
+if(fs.existsSync(releasePath)){
+  try{
+    const bootstrap={};
+    vm.runInNewContext(fs.readFileSync(releasePath,"utf8"),bootstrap);
+    if(bootstrap.SACTCHECK_RELEASE!==pkg.version||bootstrap.SACTCheckRelease?.release!==pkg.version){
+      problems.push(`deployed runtime release mismatch (package=${pkg.version}, runtime=${bootstrap.SACTCHECK_RELEASE||"missing"})`);
+    }
+  }catch(error){problems.push(`deployed release bootstrap cannot execute: ${error.message}`);}
+}
 if(fs.existsSync(supportPath)){
   const support=fs.readFileSync(supportPath,"utf8");
   if(!support.includes("root.SACTCheckPatientAssets")) problems.push("patient support does not use canonical patient asset registry");

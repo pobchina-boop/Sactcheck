@@ -35,6 +35,9 @@
     const copy=new URL(url.href);
     copy.searchParams.delete('sact_retry');
     copy.searchParams.delete('_');
+    // Scope the HTTP URL as well as CacheStorage to the active release.
+    // Otherwise a new cache can be populated with an older HTTP-cached JSON response.
+    if(isCacheable(copy)) copy.searchParams.set('sact_release',RELEASE);
     return copy;
   }
   function cacheApi(){return root.caches&&typeof root.caches.open==='function'?root.caches:null;}
