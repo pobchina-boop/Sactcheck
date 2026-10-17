@@ -21,7 +21,7 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.83.7",
     "catalogue_section": "targeted_her2_therapy",
     "catalogue_section_label": "Targeted & HER2 therapies",
     "treatment_class": [
@@ -44,23 +44,32 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "clinical_use_authorised": false
+      "rule_level_source_reconciliation_status": "v0837_source_mapping_with_declared_gaps_pending_independent_review",
+      "clinical_use_authorised": false,
+      "source_document_checked": true,
+      "software_tests_completed": true,
+      "independent_clinical_review": "pending",
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "audit_release": "0.83.7",
+      "software_validation_record": "validation/breast-v0837/VALIDATION.md",
+      "source_method": "Official web-extracted NCCP PDF text and page/table review; not an independent human clinical sign-off."
     },
     "encoding_maturity": {
       "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
+      "label": "Source-mapped rules \u00b7 independent clinical/pharmacy review pending",
       "source_reconciled": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.83.7",
+      "audit_date": "2026-10-17",
+      "scope_note": "Five-regimen breast source audit. Explicit source gaps and conditional branches require review; missing fields remain unassessed."
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00726-v3a"
+    "canonical_protocol_id": "nccp-00726-v3a",
+    "source_checked_date": "2026-10-17"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -194,27 +203,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No infusion-related or hypersensitivity reaction."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Mild transient reaction; interruption of the infusion is not indicated; intervention not indicated."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Infusion interruption or treatment is indicated, with prompt response to symptomatic medication; prophylaxis may be needed for 24 hours or less."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Prolonged symptoms not rapidly responsive to treatment/brief interruption, or recurrence after initial improvement; hospitalisation indicated for clinical sequelae."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
         }
       ],
       "demo_value": 0,
@@ -241,27 +255,32 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "ctcae_grade": 2,
+          "description": "Increase of 4\u20136 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
         }
       ],
       "demo_value": 0,
@@ -316,6 +335,129 @@
       "ui_section": "clinical",
       "help": "The protocol requires FBC monitoring but does not define a numerical ANC/platelet hold threshold.",
       "input_role": "decision"
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before starting this regimen"
+        },
+        {
+          "value": "ongoing",
+          "label": "During treatment"
+        }
+      ],
+      "demo_value": "ongoing"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "ECOG 0"
+        },
+        {
+          "value": 1,
+          "label": "ECOG 1"
+        },
+        {
+          "value": 2,
+          "label": "ECOG 2"
+        },
+        {
+          "value": 3,
+          "label": "ECOG 3"
+        },
+        {
+          "value": 4,
+          "label": "ECOG 4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "her2_status": {
+      "label": "HER2 status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "positive",
+          "label": "HER2 positive"
+        },
+        {
+          "value": "negative",
+          "label": "HER2 negative"
+        },
+        {
+          "value": "unknown",
+          "label": "Not confirmed"
+        }
+      ],
+      "demo_value": "positive"
+    },
+    "hr_status": {
+      "label": "Hormone-receptor status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "positive",
+          "label": "HR positive"
+        },
+        {
+          "value": "negative",
+          "label": "HR negative"
+        },
+        {
+          "value": "unknown",
+          "label": "Not confirmed"
+        }
+      ],
+      "demo_value": "negative"
+    },
+    "severe_infusion_reaction": {
+      "label": "Severe infusion reaction requiring urgent treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bronchospasm_or_ards": {
+      "label": "Infusion-related bronchospasm or ARDS",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "uncontrolled_hypertension": {
+      "label": "Uncontrolled hypertension",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "dyspnoea_at_rest": {
+      "label": "Dyspnoea at rest",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "trastuzumab_discontinued": {
+      "label": "Trastuzumab permanently discontinued",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -355,7 +497,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "Relevant hypersensitivity is an exclusion."
       },
@@ -383,7 +526,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "Pregnancy and breastfeeding are exclusions."
       },
@@ -402,7 +546,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "Clinically significant cardiac disease is an exclusion."
       },
@@ -421,7 +566,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "FBC is monitored, but no numerical count threshold is specified."
       },
@@ -441,7 +587,8 @@
         "source": {
           "page": 4,
           "table": "Table 3",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "LVEF below 40% requires withholding."
       },
@@ -475,9 +622,10 @@
         "source": {
           "page": 4,
           "table": "Table 3",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
-        "explanation": "LVEF 40–45% with a fall of at least 10 points requires withholding."
+        "explanation": "LVEF 40\u201345% with a fall of at least 10 points requires withholding."
       },
       {
         "rule_id": "SYMPTOMATIC_HEART_FAILURE",
@@ -495,7 +643,8 @@
         "source": {
           "page": 4,
           "table": "Table 3",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "Symptomatic heart failure requires discontinuation."
       },
@@ -515,7 +664,8 @@
         "source": {
           "page": 4,
           "table": "Table 3",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "Grade 4 hypersensitivity requires discontinuation."
       },
@@ -543,7 +693,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "Mild/moderate infusion reactions require interruption or slowing and supportive care."
       },
@@ -570,7 +721,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "Pertuzumab interruption should be considered if severe diarrhoea does not improve."
       },
@@ -580,19 +732,264 @@
         "operator": ">=",
         "value": 6,
         "action": {
-          "type": "proceed_with_caution",
+          "type": "consultant_review",
           "components": [
             "pertuzumab",
             "trastuzumab"
           ],
-          "recommendation": "The interval is 6 weeks or longer: re-administer the pertuzumab 840 mg and trastuzumab 8 mg/kg loading doses, then resume the 3-weekly maintenance schedule."
+          "recommendation": "The interval is 6 weeks or longer: re-administer the pertuzumab 840 mg and trastuzumab 8 mg/kg loading doses, then resume the 3-weekly maintenance schedule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
         "source": {
           "page": 3,
           "table": "Table 1",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
         "explanation": "A gap of at least 6 weeks requires reloading doses."
+      },
+      {
+        "rule_id": "ECOG_SOURCE_RANGE",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Outside the source performance-status range; oncology review of suitability is required.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Outside the source performance-status range; oncology review of suitability is required.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "HER2_SELECTION",
+        "when": {
+          "field": "her2_status",
+          "operator": "in",
+          "value": [
+            "negative",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Confirm validated HER2-positive disease before this HER2-directed regimen.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Confirm validated HER2-positive disease before this HER2-directed regimen.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "SEVERE_REACTION_HOLD",
+        "when": {
+          "any": [
+            {
+              "field": "hypersensitivity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "severe_infusion_reaction",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Stop the infusion and urgently manage the reaction; specialist review is required before any re-exposure."
+        },
+        "explanation": "Stop the infusion and urgently manage the reaction; specialist review is required before any re-exposure.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PERTUZUMAB_BRONCHOSPASM",
+        "when": {
+          "field": "bronchospasm_or_ards",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "Permanently discontinue pertuzumab for infusion-related bronchospasm/ARDS; urgently manage the reaction and review the other components separately."
+        },
+        "explanation": "Permanently discontinue pertuzumab for infusion-related bronchospasm/ARDS; urgently manage the reaction and review the other components separately.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "HER2_DYSPNOEA",
+        "when": {
+          "field": "dyspnoea_at_rest",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Assess resting dyspnoea urgently before infusion; the source identifies increased risk of fatal trastuzumab infusion reactions in this setting.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Assess resting dyspnoea urgently before infusion; the source identifies increased risk of fatal trastuzumab infusion reactions in this setting.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "PERTUZUMAB_LINKED_STOP",
+        "when": {
+          "field": "trastuzumab_discontinued",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "If trastuzumab is discontinued, pertuzumab must also be discontinued."
+        },
+        "explanation": "If trastuzumab is discontinued, pertuzumab must also be discontinued.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "BASELINE_LVEF",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Starting eligibility requires LVEF \u226550%; this differs from the on-treatment withholding criteria.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Starting eligibility requires LVEF \u226550%; this differs from the on-treatment withholding criteria.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "LVEF_DROP_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": ">=",
+              "value": 40
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<=",
+              "value": 45
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Current LVEF is in the 40\u201345% band. The absolute fall from pretreatment is needed to apply the withholding criterion.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Current LVEF is in the 40\u201345% band. The absolute fall from pretreatment is needed to apply the withholding criterion.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 4,
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "SEVERE_DIARRHOEA_REVIEW",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "Urgently assess severe diarrhoea and provide supportive treatment; consider interrupting pertuzumab if there is no improvement.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Urgently assess severe diarrhoea and provide supportive treatment; consider interrupting pertuzumab if there is no improvement.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 5
+        }
       }
     ]
   },

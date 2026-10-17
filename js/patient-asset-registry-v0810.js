@@ -13,10 +13,12 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.83.6';
-  const CONTENT_RELEASE='0.83.6';
+  const RELEASE='0.83.7';
+  const CONTENT_RELEASE='0.83.7';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00525':{title:"Ribociclib + endocrine therapy \u00b7 metastatic",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true},
+    '00726':{title:"Pertuzumab + trastuzumab maintenance",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true},
     '00207':{title:"Cetuximab \u00b7 weekly",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00732':{title:"Cetuximab \u00b7 every two weeks",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00328':{title:"Weekly cetuximab + FOLFIRI",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
@@ -46,12 +48,12 @@
     '00382':{title:'Trifluridine/Tipiracil',guide:true,passport:true},
     '00568':{title:'Pembrolizumab + Pemetrexed + Carboplatin',guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true},
     '00569':{title:'Pembrolizumab + Pemetrexed + Cisplatin',guide:true,passport:true},
-    '00619':{title:'Abemaciclib + Endocrine Therapy',guide:true,passport:true},
+    '00619':{title:"Adjuvant abemaciclib + endocrine therapy",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true},
     '00713':{title:'Nivolumab + Ipilimumab + Pemetrexed + Carboplatin',guide:true,passport:true},
     '00714':{title:'Nivolumab + Ipilimumab + Pemetrexed + Cisplatin',guide:true,passport:true},
-    '00722':{title:'TCHP',guide:true,passport:true},
+    '00722':{title:"TCHP: docetaxel, carboplatin, trastuzumab and pertuzumab",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true},
     '00831':{title:'Atezolizumab + Bevacizumab',guide:true,passport:true,contactCard:true},
-    '00857':{title:'Pembrolizumab + Carboplatin/Paclitaxel → AC',guide:true,passport:true}
+    '00857':{title:"Pembrolizumab + carboplatin/paclitaxel \u2192 AC",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true}
   });
   const CODES=Object.freeze(Object.keys(DEFINITIONS));
 
@@ -71,6 +73,7 @@
   function hasDedicated(value){return Boolean(definitionFor(value));}
   function relativePath(value,asset='portal'){
     const def=definitionFor(value); if(!def) return null;
+    if(asset==='longitudinal') return def.longitudinal?`patient/${def.code}/treatment-journey.html`:null;
     if(asset==='supportive-care') return def.supportiveCare?`patient/${def.code}/supportive-care.pdf`:null;
     if(asset==='knowledge') return def.knowledge?`patient/${def.code}/knowledge.html`:null;
     // Clinic Workflow consent generator now opens the dedicated one-page form.

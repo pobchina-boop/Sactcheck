@@ -612,6 +612,7 @@
           <button class="btn secondary workflow-module-action" type="button" data-workflow-patient-guide>Open patient guide</button>
           <button class="btn secondary workflow-module-action" type="button" data-workflow-passport-card>Open Treatment Passport</button>
           ${patientAssets()?.relativePath?.(activeProtocol,'knowledge')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'knowledge'))}" target="_blank" rel="noopener noreferrer">Complete patient reference + cycle timeline</a>`:''}
+          ${patientAssets()?.relativePath?.(activeProtocol,'longitudinal')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'longitudinal'))}" target="_blank" rel="noopener noreferrer">Whole treatment journey · scans and monitoring</a>`:''}
           ${patientAssets()?.definitionFor?.(activeProtocol)?.sactCard?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'sact-card'))}" target="_blank" rel="noopener noreferrer">Treatment / contact card</a>`:''}
         </article>
 

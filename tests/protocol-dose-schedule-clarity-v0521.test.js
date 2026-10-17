@@ -43,9 +43,10 @@ for (const entry of catalogue.protocols) {
 }
 
 assert.strictEqual(catalogue.protocols.length, 376);
-assert.strictEqual(usefulCoverage, 95);
-assert.strictEqual(scheduleCoverage, 89);
-assert.strictEqual(doseLevelCoverage, 30);
+// v0.83.7 adds complete oral schedules for abemaciclib and ribociclib.
+assert.strictEqual(usefulCoverage, 97);
+assert.strictEqual(scheduleCoverage, 91);
+assert.strictEqual(doseLevelCoverage, 32);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');
@@ -69,3 +70,6 @@ const olaparibModel = DoseSchedule.buildModel(olaparib);
 assert.strictEqual(olaparibModel.doseLevels[0].levels[0].dose, '300 mg twice daily');
 
 console.log(`v0.52.1 clarity guarantees retained in v0.55.0: ${usefulCoverage} useful protocols, ${scheduleCoverage} complete schedules and ${doseLevelCoverage} genuine dose-level tables.`);
+
+const abemaciclib = require('../protocols/breast/00619-abemaciclib-adjuvant.json');
+assert.deepStrictEqual(Array.from(DoseSchedule.buildModel(abemaciclib).doseLevels[0].levels, x=>x.dose), ['150 mg twice daily','100 mg twice daily','50 mg twice daily']);

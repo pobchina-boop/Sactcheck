@@ -90,11 +90,11 @@ const cases = [
   ['olaparib renal dose reduction', assessOlaparib({ crcl_ml_min: 40 }), 'dose_reduce'],
   ['olaparib low counts delays/reduces', assessOlaparib({ anc_x10e9_l: 0.7 }), 'delay_then_dose_reduce'],
   ['olaparib fourth occurrence ceases', assessOlaparib({ haematological_toxicity_occurrence_number: 4 }), 'cease'],
-  ['pembro/carbo/paclitaxel day 1 normal proceeds', assessPembroDay1(), 'proceed'],
+  ['pembro/carbo/paclitaxel day 1 normal proceeds', assessPembroDay1(), 'proceed_with_caution'],
   ['pembro/carbo/paclitaxel day 1 low ANC delays', assessPembroDay1({ anc_x10e9_l: 0.8 }), 'delay'],
-  ['pembro/carbo/paclitaxel day 8 normal proceeds', assessPembroDay8(), 'proceed'],
+  ['pembro/carbo/paclitaxel day 8 normal proceeds', assessPembroDay8(), 'proceed_with_caution'],
   ['pembro/carbo/paclitaxel day 8 low ANC omits paclitaxel', assessPembroDay8({ anc_x10e9_l: 0.4 }), 'omit'],
-  ['AC normal proceeds', assessAc(), 'proceed'],
+  ['AC normal proceeds', assessAc(), 'proceed_with_caution'],
   ['AC low counts delays', assessAc({ anc_x10e9_l: 0.8 }), 'delay'],
   ['AC unlisted count combination requires review', assessAc({ anc_x10e9_l: 1.2, platelets_x10e9_l: 100 }), 'consultant_review'],
   ['active irAE requires review', assessPembroDay1({ active_pembrolizumab_irae: true }), 'consultant_review']
@@ -102,7 +102,8 @@ const cases = [
 
 for (const [name, result, expected] of cases) {
   assert.equal(result.actionType, expected, `${name}: expected ${expected}, got ${result.actionType}\n${JSON.stringify(result.findings, null, 2)}`);
-  assert.equal(result.complete, true, `${name}: expected complete assessment`);
+  // v0.83.7 adds source eligibility/immune domains. These older fixtures do not assess them.
+  assert.equal(result.complete, name.startsWith('olaparib'), `${name}: expected explicit partial coverage for the breast fixtures`);
   console.log(`✓ ${name}`);
 }
 

@@ -252,7 +252,7 @@
     });
     document.getElementById("clearLibraryFilters")?.addEventListener("click", () => {
       if (search) search.value = "";
-      ["tumourFilter", "treatmentFilter", "statusFilter"].forEach(id => {
+      ["tumourFilter", "treatmentFilter", "statusFilter", "breastSetting", "breastReceptor", "breastSuite"].forEach(id => {
         const select = document.getElementById(id);
         if (select) select.value = "all";
       });

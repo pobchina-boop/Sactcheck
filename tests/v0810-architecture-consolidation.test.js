@@ -14,7 +14,7 @@ assert.strictEqual(app.validation_module_release,'0.68.0');
 
 const registry=require('../js/patient-asset-registry-v0810.js');
 assert.strictEqual(registry.release,pkg.version);
-assert.strictEqual(registry.codes.length,34);
+assert.strictEqual(registry.codes.length,36);
 assert.strictEqual(registry.publicUrl('00568','portal'),'https://sactcheck.com/patient/00568/');
 assert.strictEqual(registry.publicUrl('00568','guide'),'https://sactcheck.com/patient/00568/guide.pdf');
 assert.strictEqual(registry.publicUrl('00568','passport'),'https://sactcheck.com/patient/00568/passport.pdf');
@@ -84,4 +84,4 @@ assert.ok(fs.statSync(path.join(root,'patient/00568/guide.pdf')).size>800000,'00
 
 const notFound=read('404.html');for(const code of registry.codes)assert.ok(notFound.includes(code),`404 compatibility routing missing ${code}`);
 
-console.log(`v${pkg.version} architecture consolidation gate passed: one patient registry, direct protected guides/passports, stable bootstrap, cached protocol startup and 34 protected patient pipelines.`);
+console.log(`v${pkg.version} architecture consolidation gate passed: one patient registry, direct protected guides/passports, stable bootstrap, cached protocol startup and 36 protected patient pipelines.`);

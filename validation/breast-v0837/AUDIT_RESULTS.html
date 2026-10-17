@@ -1,0 +1,3539 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SACTCheck v0.83.7 breast audit</title><style>body{max-width:1100px;margin:35px auto;padding:0 20px;font:16px/1.5 system-ui;color:#173747;background:#f5f9fa}header{border-bottom:4px solid #167b79}h1,h2{line-height:1.2}.metrics{display:flex;flex-wrap:wrap;gap:12px}.metrics p,details{background:white;border:1px solid #cadde1;padding:14px;border-radius:9px}.metrics b{display:block;font-size:26px}.note{background:#fff4d9;padding:16px;border-left:4px solid #c39b48}table{width:100%;border-collapse:collapse;background:white}th,td{padding:12px;border:1px solid #cadde1;vertical-align:top;text-align:left}ul{padding-left:18px}summary{cursor:pointer;font-weight:650}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}a{color:#006d79}</style><header><p>SACTCHECK · v0.83.7</p><h1>Five breast suites and longitudinal treatment maps</h1><p>Source audit, actual browser inputs, patient services and release integrity</p></header><div class="metrics"><p><b>139</b>engine cases</p><p><b>34</b>browser decisions</p><p><b>10 + 42</b>journeys + service checks</p><p><b>35 / 80</b>PDFs / pages</p><p><b>20</b>QR decodes</p></div><p class="note">Software checks passed. Independent clinical, oncology-pharmacy and patient/PPI review remain pending. Source limitations and discrepancies are documented. This is not clinical authorisation or an accuracy percentage.</p><h2>Decision-map reconciliation</h2><div style="overflow:auto"><table><thead><tr><th>NCCP</th><th>Version</th><th>Rules</th><th>Changes</th></tr></thead><tbody><tr><td>00722</td><td>2</td><td>32 → 49</td><td><ul><li>Count thresholds and source equality gaps</li><li>FN recovery and treatment strategy</li><li>Baseline vs ongoing LVEF and missing decline context</li><li>Neuropathy/current dose and antibody reloading</li><li>Separate adjuvant handover from metastatic maintenance</li></ul></td></tr><tr><td>00857</td><td>3</td><td>30 → 98</td><td><ul><li>Exact phase/day and active-component gating</li><li>Organ-specific immune interruption/stop criteria</li><li>Weekly-visit immune-toxicity review guard</li><li>Cytopenia, renal/hepatic gaps and treatment eligibility</li><li>Postoperative exclusion and legacy grading context</li></ul></td></tr><tr><td>00619</td><td>4a</td><td>8 → 32</td><td><ul><li>Adjuvant high-risk and timing context</li><li>Baseline vs ongoing cytopenias and growth-factor recovery</li><li>Grade 2 diarrhoea duration and recurrence</li><li>Liver injury, VTE, lung toxicity and Child-Pugh C frequency</li><li>Continuous twice-daily dose levels and two-year course</li></ul></td></tr><tr><td>00726</td><td>3a</td><td>11 → 20</td><td><ul><li>Metastatic maintenance setting</li><li>LVEF thresholds distinct from TCHP</li><li>Heart failure, infusion events and reloading</li><li>NCCP cardiac monitoring with conditional guideline alternatives</li></ul></td></tr><tr><td>00525</td><td>6</td><td>12 → 35</td><td><ul><li>QTcF 480–500 interval and explicit restart-source conflict</li><li>No restart dose during active interruption</li><li>Baseline-context liver injury and DILI thresholds</li><li>Lung toxicity and practical tablet-strength review</li><li>NCCP eligibility wording discrepancies</li></ul></td></tr></tbody></table></div><h2>Across clinician and patient services</h2><p>Five shared longitudinal maps show relative treatment stages, surgery, radiotherapy, systemic treatment and relevant monitoring. Breast navigation combines setting and receptor context. Knowledge, consent, supportive care, logistics, cycle graphs, PDFs and sustainability routes are connected. All 31 other protected patient packages are unchanged. Operational appointment tracking and Oncotype triage remain future work.</p><p><a href="VALIDATION.md">Validation record</a> · <a href="source-map.json">Source and rule map</a> · <a href="browser-cases.json">Actual browser cases</a> · <a href="suite-integration.json">Service checks</a> · <a href="pdf-validation.json">PDF checks</a> · <a href="qr-validation.json">QR checks</a> · <a href="overlay-verify.log">Clean-base replay</a></p><h2>Inspect a source-derived case</h2><details><summary>00722 · Blank remains unassessed · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Blank remains unassessed&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {},
+  &quot;expected&quot;: &quot;incomplete&quot;,
+  &quot;actual&quot;: &quot;incomplete&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00722 · Outside performance status · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Outside performance status&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ecog&quot;: 4
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ECOG_SOURCE_RANGE&quot;,
+      &quot;source&quot;: &quot;page 3&quot;,
+      &quot;explanation&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Blank remains unassessed · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Blank remains unassessed&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {},
+  &quot;expected&quot;: &quot;incomplete&quot;,
+  &quot;actual&quot;: &quot;incomplete&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00857 · Outside performance status · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Outside performance status&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ecog&quot;: 4
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ECOG_SOURCE_RANGE_TAXANE_D1&quot;,
+      &quot;source&quot;: &quot;page 4&quot;,
+      &quot;explanation&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Blank remains unassessed · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Blank remains unassessed&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {},
+  &quot;expected&quot;: &quot;incomplete&quot;,
+  &quot;actual&quot;: &quot;incomplete&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00619 · Outside performance status · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Outside performance status&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ecog&quot;: 4
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ECOG_SOURCE_RANGE&quot;,
+      &quot;source&quot;: &quot;page 1&quot;,
+      &quot;explanation&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ]
+}</pre></details><details><summary>00726 · Blank remains unassessed · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Blank remains unassessed&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {},
+  &quot;expected&quot;: &quot;incomplete&quot;,
+  &quot;actual&quot;: &quot;incomplete&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00726 · Outside performance status · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Outside performance status&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ecog&quot;: 4
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ECOG_SOURCE_RANGE&quot;,
+      &quot;source&quot;: &quot;page 2&quot;,
+      &quot;explanation&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Blank remains unassessed · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Blank remains unassessed&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {},
+  &quot;expected&quot;: &quot;incomplete&quot;,
+  &quot;actual&quot;: &quot;incomplete&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00525 · Outside performance status · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Outside performance status&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ecog&quot;: 4
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ECOG_SOURCE_RANGE&quot;,
+      &quot;source&quot;: &quot;page 2&quot;,
+      &quot;explanation&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Outside the source performance-status range; oncology review of suitability is required.&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Low ANC independently actionable 0.49 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Low ANC independently actionable 0.49&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 0.49
+  },
+  &quot;expected&quot;: &quot;delay&quot;,
+  &quot;actual&quot;: &quot;delay&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNTS_LOW_IMMEDIATE_DELAY&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2&quot;,
+      &quot;explanation&quot;: &quot;Delay docetaxel and carboplatin for low counts. Enter the selected haematological management strategy to refine the post-recovery dose plan.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Low ANC independently actionable 0.5 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Low ANC independently actionable 0.5&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 0.5
+  },
+  &quot;expected&quot;: &quot;delay&quot;,
+  &quot;actual&quot;: &quot;delay&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNTS_LOW_IMMEDIATE_DELAY&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2&quot;,
+      &quot;explanation&quot;: &quot;Delay docetaxel and carboplatin for low counts. Enter the selected haematological management strategy to refine the post-recovery dose plan.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Low ANC independently actionable 0.99 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Low ANC independently actionable 0.99&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 0.99
+  },
+  &quot;expected&quot;: &quot;delay&quot;,
+  &quot;actual&quot;: &quot;delay&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNTS_LOW_IMMEDIATE_DELAY&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2&quot;,
+      &quot;explanation&quot;: &quot;Delay docetaxel and carboplatin for low counts. Enter the selected haematological management strategy to refine the post-recovery dose plan.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Low platelets independently actionable 49.99 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Low platelets independently actionable 49.99&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;platelets&quot;: 49.99
+  },
+  &quot;expected&quot;: &quot;delay&quot;,
+  &quot;actual&quot;: &quot;delay&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNTS_LOW_IMMEDIATE_DELAY&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2&quot;,
+      &quot;explanation&quot;: &quot;Delay docetaxel and carboplatin for low counts. Enter the selected haematological management strategy to refine the post-recovery dose plan.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Low platelets independently actionable 99.99 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Low platelets independently actionable 99.99&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;platelets&quot;: 99.99
+  },
+  &quot;expected&quot;: &quot;delay&quot;,
+  &quot;actual&quot;: &quot;delay&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNTS_LOW_IMMEDIATE_DELAY&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2&quot;,
+      &quot;explanation&quot;: &quot;Delay docetaxel and carboplatin for low counts. Enter the selected haematological management strategy to refine the post-recovery dose plan.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Intermediate ANC selected reduction 1 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Intermediate ANC selected reduction 1&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 1,
+    &quot;platelets&quot;: 101,
+    &quot;gcsf_strategy&quot;: &quot;dose_reduction&quot;
+  },
+  &quot;expected&quot;: &quot;dose_reduce&quot;,
+  &quot;actual&quot;: &quot;dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNTS_INTERMEDIATE_REDUCE&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2&quot;,
+      &quot;explanation&quot;: &quot;Give 75% docetaxel and carboplatin according to the dose-reduction pathway.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00722 · Intermediate ANC selected reduction 1.49 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Intermediate ANC selected reduction 1.49&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 1.49,
+    &quot;platelets&quot;: 101,
+    &quot;gcsf_strategy&quot;: &quot;dose_reduction&quot;
+  },
+  &quot;expected&quot;: &quot;dose_reduce&quot;,
+  &quot;actual&quot;: &quot;dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNTS_INTERMEDIATE_REDUCE&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2&quot;,
+      &quot;explanation&quot;: &quot;Give 75% docetaxel and carboplatin according to the dose-reduction pathway.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00722 · Count table decimal/equality gap 1.495 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Count table decimal/equality gap 1.495&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 1.495,
+    &quot;platelets&quot;: 101,
+    &quot;gcsf_strategy&quot;: &quot;dose_reduction&quot;
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNT_SOURCE_EQUALITY&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;The source table leaves exact ANC 1.5, platelets 100 and the decimal interval above ANC 1.49 unassigned. Resolve with consultant/pharmacy; do not silently use a full-dose or delay row.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source table leaves exact ANC 1.5, platelets 100 and the decimal interval above ANC 1.49 unassigned. Resolve with consultant/pharmacy; do not silently use a full-dose or delay row.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source table leaves exact ANC 1.5, platelets 100 and the decimal interval above ANC 1.49 unassigned. Resolve with consultant/pharmacy; do not silently use a full-dose or delay row.&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Count table decimal/equality gap 1.5 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Count table decimal/equality gap 1.5&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 1.5,
+    &quot;platelets&quot;: 101,
+    &quot;gcsf_strategy&quot;: &quot;dose_reduction&quot;
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNT_SOURCE_EQUALITY&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;The source table leaves exact ANC 1.5, platelets 100 and the decimal interval above ANC 1.49 unassigned. Resolve with consultant/pharmacy; do not silently use a full-dose or delay row.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source table leaves exact ANC 1.5, platelets 100 and the decimal interval above ANC 1.49 unassigned. Resolve with consultant/pharmacy; do not silently use a full-dose or delay row.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source table leaves exact ANC 1.5, platelets 100 and the decimal interval above ANC 1.49 unassigned. Resolve with consultant/pharmacy; do not silently use a full-dose or delay row.&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Exact platelet gap · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Exact platelet gap&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;platelets&quot;: 100
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNT_SOURCE_EQUALITY&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;The source table leaves exact ANC 1.5, platelets 100 and the decimal interval above ANC 1.49 unassigned. Resolve with consultant/pharmacy; do not silently use a full-dose or delay row.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source table leaves exact ANC 1.5, platelets 100 and the decimal interval above ANC 1.49 unassigned. Resolve with consultant/pharmacy; do not silently use a full-dose or delay row.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source table leaves exact ANC 1.5, platelets 100 and the decimal interval above ANC 1.49 unassigned. Resolve with consultant/pharmacy; do not silently use a full-dose or delay row.&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Missing count strategy · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Missing count strategy&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 1.2
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNTS_INTERMEDIATE_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;ANC is in the source adjustment band. Confirm platelets and choose the consultant-approved dose-reduction or G-CSF pathway; no automatic full dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;ANC is in the source adjustment band. Confirm platelets and choose the consultant-approved dose-reduction or G-CSF pathway; no automatic full dose.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;ANC is in the source adjustment band. Confirm platelets and choose the consultant-approved dose-reduction or G-CSF pathway; no automatic full dose.&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Baseline ANC threshold · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Baseline ANC threshold&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;assessment_stage&quot;: &quot;baseline&quot;,
+    &quot;anc&quot;: 1.49
+  },
+  &quot;expected&quot;: &quot;contraindicated&quot;,
+  &quot;actual&quot;: &quot;contraindicated&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;BASELINE_ANC&quot;,
+      &quot;source&quot;: &quot;page 4&quot;,
+      &quot;explanation&quot;: &quot;The source excludes pretreatment ANC below 1.5; distinguish this from subsequent-cycle adjustment options.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;COUNTS_INTERMEDIATE_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;ANC is in the source adjustment band. Confirm platelets and choose the consultant-approved dose-reduction or G-CSF pathway; no automatic full dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Carboplatin GFR contraindication 0 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Carboplatin GFR contraindication 0&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;gfr_ml_min&quot;: 0
+  },
+  &quot;expected&quot;: &quot;contraindicated&quot;,
+  &quot;actual&quot;: &quot;contraindicated&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;GFR_20_OR_LESS&quot;,
+      &quot;source&quot;: &quot;page 6 · Table Table 4&quot;,
+      &quot;explanation&quot;: &quot;Do not administer carboplatin when GFR is 20 mL/min or less.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Carboplatin GFR contraindication 20 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Carboplatin GFR contraindication 20&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;gfr_ml_min&quot;: 20
+  },
+  &quot;expected&quot;: &quot;contraindicated&quot;,
+  &quot;actual&quot;: &quot;contraindicated&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;GFR_20_OR_LESS&quot;,
+      &quot;source&quot;: &quot;page 6 · Table Table 4&quot;,
+      &quot;explanation&quot;: &quot;Do not administer carboplatin when GFR is 20 mL/min or less.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Carboplatin caution · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Carboplatin caution&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;gfr_ml_min&quot;: 20.01
+  },
+  &quot;expected&quot;: &quot;proceed_with_caution&quot;,
+  &quot;actual&quot;: &quot;proceed_with_caution&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;GFR_20_TO30&quot;,
+      &quot;source&quot;: &quot;page 6 · Table Table 4&quot;,
+      &quot;explanation&quot;: &quot;Carboplatin requires extreme caution at GFR &gt;20 to 30 mL/min; obtain consultant/pharmacy review.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00722 · Baseline HER2 LVEF criterion · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Baseline HER2 LVEF criterion&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;assessment_stage&quot;: &quot;baseline&quot;,
+    &quot;lvef_percent&quot;: 54.99
+  },
+  &quot;expected&quot;: &quot;contraindicated&quot;,
+  &quot;actual&quot;: &quot;contraindicated&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;BASELINE_LVEF_BELOW55&quot;,
+      &quot;source&quot;: &quot;page 3&quot;,
+      &quot;explanation&quot;: &quot;Pretreatment LVEF is below the encoded eligibility value of 55%; obtain consultant/cardiology review.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Cardiac decline · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Cardiac decline&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;lvef_percent&quot;: 49.99,
+    &quot;lvef_drop_points&quot;: 10
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LVEF_WITHHOLD&quot;,
+      &quot;source&quot;: &quot;page 7 · Table Table 6&quot;,
+      &quot;explanation&quot;: &quot;Withhold trastuzumab and pertuzumab for at least 3 weeks and repeat LVEF assessment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Cardiac context missing · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Cardiac context missing&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;lvef_percent&quot;: 49
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LOW_LVEF_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 6&quot;,
+      &quot;explanation&quot;: &quot;Low LVEF needs prompt cardiac review; establish the absolute fall from pretreatment before applying the two-part withholding rule.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Low LVEF needs prompt cardiac review; establish the absolute fall from pretreatment before applying the two-part withholding rule.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Low LVEF needs prompt cardiac review; establish the absolute fall from pretreatment before applying the two-part withholding rule.&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · FN restart needs recovery · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;FN restart needs recovery&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;febrile_neutropenia_event_number&quot;: 1,
+    &quot;gcsf_strategy&quot;: &quot;dose_reduction&quot;
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;FN_RECOVERY_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 2–3&quot;,
+      &quot;explanation&quot;: &quot;Establish current count recovery and the chosen G-CSF strategy before applying a post-febrile-neutropenia dose. No dose is inferred from event number alone.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_GCSF_STRATEGY_CONTEXT_REQUIRED&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2 · page 5 · Table Table 3&quot;,
+      &quot;explanation&quot;: &quot;Haematological management strategy Dose-reduction pathway reaches an encoded threshold, but the final action also depends on ANC (×10⁹/L), Platelets (×10⁹/L). Do not treat this as clearance.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Establish current count recovery and the chosen G-CSF strategy before applying a post-febrile-neutropenia dose. No dose is inferred from event number alone.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Establish current count recovery and the chosen G-CSF strategy before applying a post-febrile-neutropenia dose. No dose is inferred from event number alone.&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Current cytopenia prevents FN restart · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Current cytopenia prevents FN restart&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 0.8,
+    &quot;platelets&quot;: 80,
+    &quot;febrile_neutropenia_event_number&quot;: 1,
+    &quot;gcsf_strategy&quot;: &quot;dose_reduction&quot;
+  },
+  &quot;expected&quot;: &quot;delay_then_dose_reduce&quot;,
+  &quot;actual&quot;: &quot;delay_then_dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;COUNTS_LOW_REDUCE&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2&quot;,
+      &quot;explanation&quot;: &quot;Delay until ANC &gt;1.5 and platelets &gt;100, then give 75% docetaxel and carboplatin.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;COUNTS_LOW_IMMEDIATE_DELAY&quot;,
+      &quot;source&quot;: &quot;page 5 · Table Table 2&quot;,
+      &quot;explanation&quot;: &quot;Delay docetaxel and carboplatin for low counts. Enter the selected haematological management strategy to refine the post-recovery dose plan.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Severe neuropathy on lower dose · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Severe neuropathy on lower dose&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;neuropathy_grade&quot;: 3,
+    &quot;current_docetaxel_dose&quot;: &quot;60&quot;
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;NEUROPATHY_GT2_AT60&quot;,
+      &quot;source&quot;: &quot;page 7 · Table Table 6&quot;,
+      &quot;explanation&quot;: &quot;Discontinue docetaxel if grade &gt;2 neuropathy continues at 60 mg/m².&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Severe neuropathy missing actual dose · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Severe neuropathy missing actual dose&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;neuropathy_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOCETAXEL_NEURO_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 6&quot;,
+      &quot;explanation&quot;: &quot;Grade &gt;2 neuropathy needs docetaxel adjustment. Establish the current dose; ongoing toxicity at 60 mg/m² requires discontinuation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Grade &gt;2 neuropathy needs docetaxel adjustment. Establish the current dose; ongoing toxicity at 60 mg/m² requires discontinuation.&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Severe stomatitis no lower level · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Severe stomatitis no lower level&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;stomatitis_grade&quot;: 3,
+    &quot;current_docetaxel_dose&quot;: &quot;50&quot;
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOCETAXEL_STOMATITIS_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 6&quot;,
+      &quot;explanation&quot;: &quot;Severe stomatitis needs review of the actual docetaxel dose. The source provides 75→60→50 mg/m² and no further reduction.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Docetaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Severe stomatitis needs review of the actual docetaxel dose. The source provides 75→60→50 mg/m² and no further reduction.&quot;
+    }
+  ]
+}</pre></details><details><summary>00722 · Antibody reloading gap · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00722&quot;,
+  &quot;case&quot;: &quot;Antibody reloading gap&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;weeks_since_last_dose&quot;: 6
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;MISSED_DOSE_RELOAD&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 1&quot;,
+      &quot;explanation&quot;: &quot;A ≥6-week gap requires the source reloading schedule for both HER2 antibodies. Confirm the administration record and current prescription.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;A ≥6-week gap requires the source reloading schedule for both HER2 antibodies. Confirm the administration record and current prescription.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;A ≥6-week gap requires the source reloading schedule for both HER2 antibodies. Confirm the administration record and current prescription.&quot;
+    }
+  ]
+}</pre></details><details><summary>00726 · Maintenance cardiac threshold 39.99 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Maintenance cardiac threshold 39.99&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;lvef_percent&quot;: 39.99,
+    &quot;lvef_drop_points&quot;: 10
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LVEF_WITHHOLD_LOW&quot;,
+      &quot;source&quot;: &quot;page 4 · Table Table 3&quot;,
+      &quot;explanation&quot;: &quot;Withhold pertuzumab and trastuzumab for at least 3 weeks and repeat LVEF assessment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00726 · Maintenance cardiac threshold 40 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Maintenance cardiac threshold 40&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;lvef_percent&quot;: 40,
+    &quot;lvef_drop_points&quot;: 10
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LVEF_WITHHOLD_40_45&quot;,
+      &quot;source&quot;: &quot;page 4 · Table Table 3&quot;,
+      &quot;explanation&quot;: &quot;Withhold pertuzumab and trastuzumab for at least 3 weeks and repeat LVEF assessment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00726 · Maintenance cardiac threshold 45 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Maintenance cardiac threshold 45&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;lvef_percent&quot;: 45,
+    &quot;lvef_drop_points&quot;: 10
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LVEF_WITHHOLD_40_45&quot;,
+      &quot;source&quot;: &quot;page 4 · Table Table 3&quot;,
+      &quot;explanation&quot;: &quot;Withhold pertuzumab and trastuzumab for at least 3 weeks and repeat LVEF assessment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00726 · Missing cardiac fall · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Missing cardiac fall&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;lvef_percent&quot;: 44
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LVEF_DROP_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;Current LVEF is in the 40–45% band. The absolute fall from pretreatment is needed to apply the withholding criterion.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Current LVEF is in the 40–45% band. The absolute fall from pretreatment is needed to apply the withholding criterion.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Current LVEF is in the 40–45% band. The absolute fall from pretreatment is needed to apply the withholding criterion.&quot;
+    }
+  ]
+}</pre></details><details><summary>00726 · Baseline maintenance eligibility · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Baseline maintenance eligibility&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;assessment_stage&quot;: &quot;baseline&quot;,
+    &quot;lvef_percent&quot;: 49
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;BASELINE_LVEF&quot;,
+      &quot;source&quot;: &quot;page 2&quot;,
+      &quot;explanation&quot;: &quot;Starting eligibility requires LVEF ≥50%; this differs from the on-treatment withholding criteria.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Starting eligibility requires LVEF ≥50%; this differs from the on-treatment withholding criteria.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Starting eligibility requires LVEF ≥50%; this differs from the on-treatment withholding criteria.&quot;
+    }
+  ]
+}</pre></details><details><summary>00726 · Different maintenance vs TCHP threshold · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Different maintenance vs TCHP threshold&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;lvef_percent&quot;: 46,
+    &quot;lvef_drop_points&quot;: 10
+  },
+  &quot;expected&quot;: &quot;no inappropriate rule&quot;,
+  &quot;actual&quot;: &quot;proceed_with_caution&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PARTIAL_LVEF_PERCENT_CONTEXT_REQUIRED&quot;,
+      &quot;source&quot;: &quot;page 2&quot;,
+      &quot;explanation&quot;: &quot;Current LVEF (%) 46 reaches an encoded threshold, but the final action also depends on Assessment stage. Do not treat this as clearance.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00726 · Symptomatic HF · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Symptomatic HF&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;symptomatic_heart_failure&quot;: true
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;SYMPTOMATIC_HEART_FAILURE&quot;,
+      &quot;source&quot;: &quot;page 4 · Table Table 3&quot;,
+      &quot;explanation&quot;: &quot;Discontinue treatment for symptomatic heart failure and obtain urgent cardiology review.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00726 · Reloading gap · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Reloading gap&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;weeks_since_last_dose&quot;: 6
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;MISSED_DOSE_RELOAD&quot;,
+      &quot;source&quot;: &quot;page 3 · Table Table 1&quot;,
+      &quot;explanation&quot;: &quot;The interval is 6 weeks or longer: re-administer the pertuzumab 840 mg and trastuzumab 8 mg/kg loading doses, then resume the 3-weekly maintenance schedule.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The interval is 6 weeks or longer: re-administer the pertuzumab 840 mg and trastuzumab 8 mg/kg loading doses, then resume the 3-weekly maintenance schedule.&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Trastuzumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The interval is 6 weeks or longer: re-administer the pertuzumab 840 mg and trastuzumab 8 mg/kg loading doses, then resume the 3-weekly maintenance schedule.&quot;
+    }
+  ]
+}</pre></details><details><summary>00726 · Infusion bronchospasm · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00726&quot;,
+  &quot;case&quot;: &quot;Infusion bronchospasm&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;bronchospasm_or_ards&quot;: true
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PERTUZUMAB_BRONCHOSPASM&quot;,
+      &quot;source&quot;: &quot;page 5&quot;,
+      &quot;explanation&quot;: &quot;Permanently discontinue pertuzumab for infusion-related bronchospasm/ARDS; urgently manage the reaction and review the other components separately.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pertuzumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Blood-count interruption 0.49 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Blood-count interruption 0.49&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc_x10e9_l&quot;: 0.49
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;HAEM_GRADE3_HOLD&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;Suspend abemaciclib until blood toxicity recovers to grade ≤2. First grade 3 permits the same dose; recurrent grade 3 or grade 4 needs the next lower dose after recovery. No restart dose is calculated while toxicity is active.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Blood-count interruption 0.5 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Blood-count interruption 0.5&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc_x10e9_l&quot;: 0.5
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;HAEM_GRADE3_HOLD&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;Suspend abemaciclib until blood toxicity recovers to grade ≤2. First grade 3 permits the same dose; recurrent grade 3 or grade 4 needs the next lower dose after recovery. No restart dose is calculated while toxicity is active.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Blood-count interruption 0.99 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Blood-count interruption 0.99&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc_x10e9_l&quot;: 0.99
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;HAEM_GRADE3_HOLD&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;Suspend abemaciclib until blood toxicity recovers to grade ≤2. First grade 3 permits the same dose; recurrent grade 3 or grade 4 needs the next lower dose after recovery. No restart dose is calculated while toxicity is active.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Baseline counts differ from ongoing · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Baseline counts differ from ongoing&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;assessment_stage&quot;: &quot;baseline&quot;,
+    &quot;anc_x10e9_l&quot;: 1.49
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;BASELINE_anc_x10e9_l&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;Below the source recommended starting blood-count threshold; assess before initiation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Below the source recommended starting blood-count threshold; assess before initiation.&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Initial G2 diarrhoea duration absent · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Initial G2 diarrhoea duration absent&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;diarrhoea_grade&quot;: 2
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DIARRHOEA_G2_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Establish duration and recurrence now; start the prescribed antidiarrhoeal/fluid plan. Do not assume the 24-hour interruption threshold has or has not been reached.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Establish duration and recurrence now; start the prescribed antidiarrhoeal/fluid plan. Do not assume the 24-hour interruption threshold has or has not been reached.&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Initial G2 diarrhoea below 24h · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Initial G2 diarrhoea below 24h&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;diarrhoea_grade&quot;: 2,
+    &quot;diarrhoea_hours&quot;: 23.99,
+    &quot;diarrhoea_persistent_recurrent&quot;: false
+  },
+  &quot;expected&quot;: &quot;no inappropriate rule&quot;,
+  &quot;actual&quot;: &quot;proceed_with_caution&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00619 · G2 diarrhoea unresolved 24 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;G2 diarrhoea unresolved 24&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;diarrhoea_grade&quot;: 2,
+    &quot;diarrhoea_hours&quot;: 24
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DIARRHOEA_GRADE2_PLUS&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt unresolved grade 2 diarrhoea at 24 hours or persistent/recurrent grade 2 despite support. First episode may resume at the same dose after recovery; persistent/recurrent toxicity needs reduction.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · G2 diarrhoea unresolved 48 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;G2 diarrhoea unresolved 48&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;diarrhoea_grade&quot;: 2,
+    &quot;diarrhoea_hours&quot;: 48
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DIARRHOEA_GRADE2_PLUS&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt unresolved grade 2 diarrhoea at 24 hours or persistent/recurrent grade 2 despite support. First episode may resume at the same dose after recovery; persistent/recurrent toxicity needs reduction.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Recurrent G2 despite support · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Recurrent G2 despite support&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;diarrhoea_grade&quot;: 2,
+    &quot;diarrhoea_hours&quot;: 8,
+    &quot;diarrhoea_persistent_recurrent&quot;: true
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DIARRHOEA_GRADE2_PLUS&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt unresolved grade 2 diarrhoea at 24 hours or persistent/recurrent grade 2 despite support. First episode may resume at the same dose after recovery; persistent/recurrent toxicity needs reduction.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Severe diarrhoea 3 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Severe diarrhoea 3&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;diarrhoea_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DIARRHOEA_SEVERE&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt abemaciclib, assess hydration/infection and treat diarrhoea. After recovery to grade ≤1, restart at the next lower dose with the team.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Severe diarrhoea 4 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Severe diarrhoea 4&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;diarrhoea_grade&quot;: 4
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DIARRHOEA_SEVERE&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt abemaciclib, assess hydration/infection and treat diarrhoea. After recovery to grade ≤1, restart at the next lower dose with the team.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Hospitalised diarrhoea · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Hospitalised diarrhoea&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;diarrhoea_hospitalisation&quot;: true
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DIARRHOEA_SEVERE&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt abemaciclib, assess hydration/infection and treat diarrhoea. After recovery to grade ≤1, restart at the next lower dose with the team.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Growth-factor minimum interval · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Growth-factor minimum interval&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;growth_factors_required&quot;: true,
+    &quot;hours_since_growth_factor&quot;: 47.99,
+    &quot;haematological_toxicity_grade&quot;: 1
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;GROWTH_FACTOR_HOLD&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;Allow at least 48 hours after the last growth-factor dose AND recovery to grade ≤2. At restart use the next lower dose unless this toxicity already prompted reduction.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Growth-factor recovery context · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Growth-factor recovery context&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;growth_factors_required&quot;: true,
+    &quot;hours_since_growth_factor&quot;: 48
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;GROWTH_FACTOR_RECOVERY_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;The 48-hour interval alone does not establish recovery. Confirm haematological grade ≤2 and actual prior dose before restarting.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The 48-hour interval alone does not establish recovery. Confirm haematological grade ≤2 and actual prior dose before restarting.&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Liver grade 3 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Liver grade 3&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ast_uln_multiple&quot;: 5.01
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;HEPATIC_GRADE3_PLUS&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Interrupt until transaminases recover to baseline or grade 1; then use the next lower dose. Grade 4 and combined bilirubin criteria require discontinuation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Liver grade 4 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Liver grade 4&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ast_uln_multiple&quot;: 20.01
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;HEPATIC_G4&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Grade 4 transaminase toxicity requires discontinuation of abemaciclib.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;HEPATIC_GRADE3_PLUS&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Interrupt until transaminases recover to baseline or grade 1; then use the next lower dose. Grade 4 and combined bilirubin criteria require discontinuation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Combined liver injury confirmed · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Combined liver injury confirmed&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ast_uln_multiple&quot;: 3.01,
+    &quot;bilirubin_uln_multiple&quot;: 2.01,
+    &quot;cholestasis_absent&quot;: true
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DILI_STOP&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;ALT/AST &gt;3 ×ULN with bilirubin &gt;2 ×ULN without cholestasis meets the source discontinuation criterion.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;DILI_HOLD&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Combined ALT/AST and bilirubin elevation requires urgent liver-injury assessment; confirm cholestasis status.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · VTE all grades · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;VTE all grades&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;vte&quot;: true
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;VTE_HOLD&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 7&quot;,
+      &quot;explanation&quot;: &quot;Suspend abemaciclib for VTE of any grade, treat the event and consider resumption only when clinically stable.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Severe lung inflammation · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Severe lung inflammation&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ild_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ILD_G34&quot;,
+      &quot;source&quot;: &quot;page 4 · Table 6&quot;,
+      &quot;explanation&quot;: &quot;Discontinue abemaciclib for grade 3–4 ILD/pneumonitis and arrange urgent assessment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Child C frequency review · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Child C frequency review&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;child_pugh_class&quot;: &quot;C&quot;
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;CHILD_PUGH_C&quot;,
+      &quot;source&quot;: &quot;page 3 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;Child–Pugh C changes abemaciclib frequency to once daily. Confirm the current tablet strength and concurrent toxicity/interaction adjustments; do not simply halve a displayed twice-daily dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Child–Pugh C changes abemaciclib frequency to once daily. Confirm the current tablet strength and concurrent toxicity/interaction adjustments; do not simply halve a displayed twice-daily dose.&quot;
+    }
+  ]
+}</pre></details><details><summary>00619 · Wrong setting · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00619&quot;,
+  &quot;case&quot;: &quot;Wrong setting&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;metastatic_disease&quot;: true
+  },
+  &quot;expected&quot;: &quot;contraindicated&quot;,
+  &quot;actual&quot;: &quot;contraindicated&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;EXCLUSION_metastatic_disease&quot;,
+      &quot;source&quot;: &quot;page 2&quot;,
+      &quot;explanation&quot;: &quot;This is an exclusion in the adjuvant abemaciclib source; obtain consultant review.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Abemaciclib&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Neutropenia interruption 0.49 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Neutropenia interruption 0.49&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 0.49
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ANC_G4&quot;,
+      &quot;source&quot;: &quot;page 4&quot;,
+      &quot;explanation&quot;: &quot;Interrupt until recovery to grade ≤2, then resume one dose level lower. Withhold now; select any restart dose only after verified recovery and actual-dose review.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Neutropenia interruption 0.5 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Neutropenia interruption 0.5&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 0.5
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ANC_G3_FIRST&quot;,
+      &quot;source&quot;: &quot;page 4&quot;,
+      &quot;explanation&quot;: &quot;Interrupt ribociclib until ANC recovers to at least 1.0. Establish whether this is the first or a recurrent grade 3 episode before selecting the restart dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Neutropenia interruption 0.99 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Neutropenia interruption 0.99&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 0.99
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ANC_G3_FIRST&quot;,
+      &quot;source&quot;: &quot;page 4&quot;,
+      &quot;explanation&quot;: &quot;Interrupt ribociclib until ANC recovers to at least 1.0. Establish whether this is the first or a recurrent grade 3 episode before selecting the restart dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Recovered final dose level · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Recovered final dose level&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc&quot;: 1,
+    &quot;dose_level&quot;: 200,
+    &quot;recurrent_grade3&quot;: true
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;BELOW200&quot;,
+      &quot;source&quot;: &quot;page 3&quot;,
+      &quot;explanation&quot;: &quot;If a further dose reduction below 200 mg/day is required, discontinue treatment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · QT interruption 480.01 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;QT interruption 480.01&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;assessment_stage&quot;: &quot;ongoing&quot;,
+    &quot;qtc_f&quot;: 480.01
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;QT_480&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt ribociclib for QTcF &gt;480 ms. Correct reversible causes, repeat ECG and establish recurrence before any restart; do not calculate a restart dose from this reading alone. Current manufacturer SmPC distinguishes metastatic from early-breast restart and includes recurrent &gt;500 ms discontinuation. NCCP v6 differs; reconcile with oncology/pharmacy before restart.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · QT interruption 500 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;QT interruption 500&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;assessment_stage&quot;: &quot;ongoing&quot;,
+    &quot;qtc_f&quot;: 500
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;QT_480&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt ribociclib for QTcF &gt;480 ms. Correct reversible causes, repeat ECG and establish recurrence before any restart; do not calculate a restart dose from this reading alone. Current manufacturer SmPC distinguishes metastatic from early-breast restart and includes recurrent &gt;500 ms discontinuation. NCCP v6 differs; reconcile with oncology/pharmacy before restart.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · QT interruption 500.01 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;QT interruption 500.01&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;assessment_stage&quot;: &quot;ongoing&quot;,
+    &quot;qtc_f&quot;: 500.01
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;QT_500&quot;,
+      &quot;source&quot;: &quot;page 6&quot;,
+      &quot;explanation&quot;: &quot;QTcF &gt;500 ms requires interruption and urgent ECG review. The source specifies the lower-dose restart branch after at least two separate &gt;500 ms ECGs and recovery below 481 ms. Check current SmPC and recurrence before restart. Current manufacturer SmPC distinguishes metastatic from early-breast restart and includes recurrent &gt;500 ms discontinuation. NCCP v6 differs; reconcile with oncology/pharmacy before restart.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;QT_480&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt ribociclib for QTcF &gt;480 ms. Correct reversible causes, repeat ECG and establish recurrence before any restart; do not calculate a restart dose from this reading alone. Current manufacturer SmPC distinguishes metastatic from early-breast restart and includes recurrent &gt;500 ms discontinuation. NCCP v6 differs; reconcile with oncology/pharmacy before restart.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Baseline QT equality · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Baseline QT equality&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;assessment_stage&quot;: &quot;baseline&quot;,
+    &quot;qtc_f&quot;: 450
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;QT_BASELINE&quot;,
+      &quot;source&quot;: &quot;page 2&quot;,
+      &quot;explanation&quot;: &quot;Starting eligibility requires QTcF &lt;450 ms. Review ECG, reversible causes and interacting medicines before initiation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · QT assessment stage missing · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;QT assessment stage missing&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;qtc_f&quot;: 460
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;QT_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 2&quot;,
+      &quot;explanation&quot;: &quot;Confirm whether this is a starting or on-treatment ECG: the baseline entry cutoff differs from the interruption cutoff.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Confirm whether this is a starting or on-treatment ECG: the baseline entry cutoff differs from the interruption cutoff.&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · On-treatment QT exact 480 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;On-treatment QT exact 480&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;assessment_stage&quot;: &quot;ongoing&quot;,
+    &quot;qtc_f&quot;: 480
+  },
+  &quot;expected&quot;: &quot;no inappropriate rule&quot;,
+  &quot;actual&quot;: &quot;proceed_with_caution&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00525 · Serious arrhythmia · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Serious arrhythmia&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;qtc_f&quot;: 501,
+    &quot;qtc_serious_arrhythmia&quot;: true
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;QT_ARRHYTHMIA&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;The source QT criterion together with serious arrhythmia requires permanent discontinuation and urgent cardiac management.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;QT_500&quot;,
+      &quot;source&quot;: &quot;page 6&quot;,
+      &quot;explanation&quot;: &quot;QTcF &gt;500 ms requires interruption and urgent ECG review. The source specifies the lower-dose restart branch after at least two separate &gt;500 ms ECGs and recovery below 481 ms. Check current SmPC and recurrence before restart. Current manufacturer SmPC distinguishes metastatic from early-breast restart and includes recurrent &gt;500 ms discontinuation. NCCP v6 differs; reconcile with oncology/pharmacy before restart.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;QT_480&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;Interrupt ribociclib for QTcF &gt;480 ms. Correct reversible causes, repeat ECG and establish recurrence before any restart; do not calculate a restart dose from this reading alone. Current manufacturer SmPC distinguishes metastatic from early-breast restart and includes recurrent &gt;500 ms discontinuation. NCCP v6 differs; reconcile with oncology/pharmacy before restart.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Serious arrhythmia with delta · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Serious arrhythmia with delta&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;qtc_change_ms&quot;: 60.01,
+    &quot;qtc_serious_arrhythmia&quot;: true
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;QT_ARRHYTHMIA&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 5&quot;,
+      &quot;explanation&quot;: &quot;The source QT criterion together with serious arrhythmia requires permanent discontinuation and urgent cardiac management.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Liver G2 baseline context absent · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Liver G2 baseline context absent&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ast_alt_grade&quot;: 2
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LIVER_G2_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Baseline grade is required for this grade 2 liver branch; the source treats baseline grade 2 differently. Do not assume it was normal.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Baseline grade is required for this grade 2 liver branch; the source treats baseline grade 2 differently. Do not assume it was normal.&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · New G2 liver toxicity · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;New G2 liver toxicity&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ast_alt_grade&quot;: 2,
+    &quot;baseline_liver_grade&quot;: 0
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LIVER_G2_BASELINE_LOW&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Interrupt until return to the baseline grade. First grade 2 may resume at the same dose; recurrent grade 2 needs a lower dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Baseline G2 alone is not automatic interruption · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Baseline G2 alone is not automatic interruption&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ast_alt_grade&quot;: 2,
+    &quot;baseline_liver_grade&quot;: 2
+  },
+  &quot;expected&quot;: &quot;no inappropriate rule&quot;,
+  &quot;actual&quot;: &quot;proceed_with_caution&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PARTIAL_AST_ALT_GRADE_CONTEXT_REQUIRED&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;AST/ALT elevation grade (CTCAE) Grade 2 — &gt;3 to 5 × ULN reaches an encoded threshold, but the final action also depends on Bilirubin elevated with AST/ALT abnormality, Highest ALT or AST multiple of ULN, Recurrent grade 3 transaminase toxicity. Do not treat this as clearance.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00525 · G3 liver toxicity · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;G3 liver toxicity&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ast_uln_multiple&quot;: 5.01
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LIVER_G3&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Interrupt for grade 3 transaminase toxicity until recovery to baseline; select the next lower dose after review. Recurrent grade 3 requires discontinuation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Recurrent G3 liver toxicity · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Recurrent G3 liver toxicity&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ast_alt_grade&quot;: 3,
+    &quot;recurrent_liver_grade3&quot;: true
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LIVER_G3_RECURRENT&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Discontinue ribociclib for recurrent grade 3 hepatobiliary toxicity.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;LIVER_G3&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Interrupt for grade 3 transaminase toxicity until recovery to baseline; select the next lower dose after review. Recurrent grade 3 requires discontinuation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · DILI numeric thresholds · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;DILI numeric thresholds&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ast_uln_multiple&quot;: 3.01,
+    &quot;bilirubin_uln_multiple&quot;: 2.01,
+    &quot;cholestasis_absent&quot;: true
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;LIVER_DILI&quot;,
+      &quot;source&quot;: &quot;page 5&quot;,
+      &quot;explanation&quot;: &quot;Discontinue for AST/ALT elevation with bilirubin elevation consistent with severe drug-induced liver injury criteria.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;LIVER_DILI_UNRESOLVED&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Urgently assess combined liver-test elevations; confirm cholestasis status and apply the source discontinuation criterion when absent.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;LIVER_G2_CONTEXT&quot;,
+      &quot;source&quot;: &quot;page 5 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Baseline grade is required for this grade 2 liver branch; the source treats baseline grade 2 differently. Do not assume it was normal.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Severe renal tablet-strength review · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Severe renal tablet-strength review&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;renal_band&quot;: &quot;lt30&quot;
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;CRCL_LT30&quot;,
+      &quot;source&quot;: &quot;page 4&quot;,
+      &quot;explanation&quot;: &quot;NCCP specifies 33% of the original 600 mg starting dose; confirm the tablet-strength dose (usually 200 mg) with pharmacy. Do not treat 198 mg as a dispensable dose or automatically increase an already reduced dose.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00525 · Hepatic tablet-strength review · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Hepatic tablet-strength review&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;child_pugh&quot;: &quot;B&quot;
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;CHILDPUGH_BC&quot;,
+      &quot;source&quot;: &quot;page 4&quot;,
+      &quot;explanation&quot;: &quot;NCCP specifies 67% of the original 600 mg dose; confirm the tablet-strength dose (usually 400 mg) with pharmacy. Do not calculate 402 mg or automatically increase a previously reduced dose.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00525 · Current NCCP eligibility inconsistency · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Current NCCP eligibility inconsistency&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;pre_perimenopausal&quot;: true
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;SOURCE_ELIGIBILITY_CONFLICT&quot;,
+      &quot;source&quot;: &quot;page 1&quot;,
+      &quot;explanation&quot;: &quot;Source page 1 includes pre/perimenopausal patients with ovarian suppression and prior endocrine therapy, but page 2 retains narrower postmenopausal/untreated eligibility wording. Resolve the intended indication and endocrine partner with the consultant; do not automatically exclude or clear.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Source page 1 includes pre/perimenopausal patients with ovarian suppression and prior endocrine therapy, but page 2 retains narrower postmenopausal/untreated eligibility wording. Resolve the intended indication and endocrine partner with the consultant; do not automatically exclude or clear.&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Lung inflammation 2 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Lung inflammation 2&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ild_grade&quot;: 2
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ILD_G2&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 6&quot;,
+      &quot;explanation&quot;: &quot;Interrupt ribociclib and assess symptomatic grade 2 ILD. NCCP table 6 labels grade 2 as asymptomatic and specifies recovery &lt;1; current manufacturer table uses symptomatic grade 2 and recovery ≤1. Resolve this discrepancy before any lower-dose restart.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Lung inflammation 3 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Lung inflammation 3&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ild_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ILD_G34&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 6&quot;,
+      &quot;explanation&quot;: &quot;Discontinue ribociclib for grade 3–4 ILD/pneumonitis.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Lung inflammation 4 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Lung inflammation 4&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;ild_grade&quot;: 4
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ILD_G34&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 6&quot;,
+      &quot;explanation&quot;: &quot;Discontinue ribociclib for grade 3–4 ILD/pneumonitis.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00525 · Other grade4 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00525&quot;,
+  &quot;case&quot;: &quot;Other grade4&quot;,
+  &quot;profile&quot;: &quot;default&quot;,
+  &quot;inputs&quot;: {
+    &quot;nonhaem_toxicity_grade&quot;: 4
+  },
+  &quot;expected&quot;: &quot;discontinue&quot;,
+  &quot;actual&quot;: &quot;discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;NONHAEM_G4&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 7&quot;,
+      &quot;explanation&quot;: &quot;Discontinue ribociclib for grade 4 other toxicity.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;NONHAEM_G3&quot;,
+      &quot;source&quot;: &quot;page 6&quot;,
+      &quot;explanation&quot;: &quot;Interrupt grade 3 other toxicity until grade ≤1. First grade 3 may resume at the same dose; recurrence needs reduction. Grade 4 requires discontinuation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Ribociclib&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Taxane/carbo Day1 counts 0.99/100 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Taxane/carbo Day1 counts 0.99/100&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;cycle_number&quot;: 2,
+    &quot;day_number&quot;: 1,
+    &quot;anc_x10e9_l&quot;: 0.99,
+    &quot;platelets_x10e9_l&quot;: 100
+  },
+  &quot;expected&quot;: &quot;delay&quot;,
+  &quot;actual&quot;: &quot;delay&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;C1_4_D1_COUNTS_DELAY&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 1&quot;,
+      &quot;explanation&quot;: &quot;Cycles 2–4 Day 1: ANC &lt;1 or platelets &lt;75 requires delay for recovery, up to the source maximum of three weeks.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_DAY_NUMBER_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Taxane/carbo Day1 counts 2/74.99 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Taxane/carbo Day1 counts 2/74.99&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;cycle_number&quot;: 2,
+    &quot;day_number&quot;: 1,
+    &quot;anc_x10e9_l&quot;: 2,
+    &quot;platelets_x10e9_l&quot;: 74.99
+  },
+  &quot;expected&quot;: &quot;delay&quot;,
+  &quot;actual&quot;: &quot;delay&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;C1_4_D1_COUNTS_DELAY&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 1&quot;,
+      &quot;explanation&quot;: &quot;Cycles 2–4 Day 1: ANC &lt;1 or platelets &lt;75 requires delay for recovery, up to the source maximum of three weeks.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_DAY_NUMBER_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Carboplatin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Taxane/carbo Day1 counts 1/75 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Taxane/carbo Day1 counts 1/75&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;cycle_number&quot;: 2,
+    &quot;day_number&quot;: 1,
+    &quot;anc_x10e9_l&quot;: 1,
+    &quot;platelets_x10e9_l&quot;: 75
+  },
+  &quot;expected&quot;: &quot;proceed_with_caution&quot;,
+  &quot;actual&quot;: &quot;proceed_with_caution&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;C1_4_D1_COUNTS_PROCEED&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 1&quot;,
+      &quot;explanation&quot;: &quot;ANC is &gt;=1.0 and platelets are &gt;=75 on day 1.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_DAY_NUMBER_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00857 · Weekly paclitaxel omission 8/anc_x10e9_l · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Weekly paclitaxel omission 8/anc_x10e9_l&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_8_or_15&quot;,
+  &quot;inputs&quot;: {
+    &quot;day_number&quot;: 8,
+    &quot;anc_x10e9_l&quot;: 0.49
+  },
+  &quot;expected&quot;: &quot;omit&quot;,
+  &quot;actual&quot;: &quot;omit&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;C1_4_D8_15_OMIT_PACLITAXEL&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 1&quot;,
+      &quot;explanation&quot;: &quot;Day 8 or 15: ANC &lt;0.5 or platelets &lt;50 requires omission of that paclitaxel dose.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_DAY_NUMBER_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Treatment day Day 8 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Omit component&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Weekly paclitaxel omission 8/platelets_x10e9_l · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Weekly paclitaxel omission 8/platelets_x10e9_l&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_8_or_15&quot;,
+  &quot;inputs&quot;: {
+    &quot;day_number&quot;: 8,
+    &quot;platelets_x10e9_l&quot;: 49.99
+  },
+  &quot;expected&quot;: &quot;omit&quot;,
+  &quot;actual&quot;: &quot;omit&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;C1_4_D8_15_OMIT_PACLITAXEL&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 1&quot;,
+      &quot;explanation&quot;: &quot;Day 8 or 15: ANC &lt;0.5 or platelets &lt;50 requires omission of that paclitaxel dose.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_DAY_NUMBER_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Treatment day Day 8 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Omit component&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Weekly paclitaxel omission 15/anc_x10e9_l · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Weekly paclitaxel omission 15/anc_x10e9_l&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_8_or_15&quot;,
+  &quot;inputs&quot;: {
+    &quot;day_number&quot;: 15,
+    &quot;anc_x10e9_l&quot;: 0.49
+  },
+  &quot;expected&quot;: &quot;omit&quot;,
+  &quot;actual&quot;: &quot;omit&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;C1_4_D8_15_OMIT_PACLITAXEL&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 1&quot;,
+      &quot;explanation&quot;: &quot;Day 8 or 15: ANC &lt;0.5 or platelets &lt;50 requires omission of that paclitaxel dose.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_DAY_NUMBER_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Treatment day Day 15 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Omit component&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Weekly paclitaxel omission 15/platelets_x10e9_l · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Weekly paclitaxel omission 15/platelets_x10e9_l&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_8_or_15&quot;,
+  &quot;inputs&quot;: {
+    &quot;day_number&quot;: 15,
+    &quot;platelets_x10e9_l&quot;: 49.99
+  },
+  &quot;expected&quot;: &quot;omit&quot;,
+  &quot;actual&quot;: &quot;omit&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;C1_4_D8_15_OMIT_PACLITAXEL&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 1&quot;,
+      &quot;explanation&quot;: &quot;Day 8 or 15: ANC &lt;0.5 or platelets &lt;50 requires omission of that paclitaxel dose.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_DAY_NUMBER_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Treatment day Day 15 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Omit component&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · AC counts 1.5/91 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;AC counts 1.5/91&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc_x10e9_l&quot;: 1.5,
+    &quot;platelets_x10e9_l&quot;: 91
+  },
+  &quot;expected&quot;: &quot;proceed_with_caution&quot;,
+  &quot;actual&quot;: &quot;proceed_with_caution&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;AC_COUNTS_100_PERCENT&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;AC Day 1: ANC ≥1.5 AND platelets &gt;90 permits 100% within the assessed count domain.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00857 · AC counts 1.49/90 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;AC counts 1.49/90&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc_x10e9_l&quot;: 1.49,
+    &quot;platelets_x10e9_l&quot;: 90
+  },
+  &quot;expected&quot;: &quot;dose_reduce&quot;,
+  &quot;actual&quot;: &quot;dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;AC_COUNTS_75_PERCENT&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;AC Day 1: ANC 1–1.49 AND platelets 70–90 maps to 75%; the source allows considering G-CSF rather than reduction for neutropenia.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Cyclophosphamide&quot;,
+      &quot;action&quot;: &quot;Use 75% of protocol dose&quot;,
+      &quot;dose&quot;: &quot;450 mg/m²&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Use 75% of protocol dose&quot;,
+      &quot;dose&quot;: &quot;45 mg/m²&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · AC counts 0.99/91 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;AC counts 0.99/91&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc_x10e9_l&quot;: 0.99,
+    &quot;platelets_x10e9_l&quot;: 91
+  },
+  &quot;expected&quot;: &quot;delay&quot;,
+  &quot;actual&quot;: &quot;delay&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;AC_COUNTS_DELAY&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;AC Day 1: ANC &lt;1 OR platelets &lt;70 requires delay.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Cyclophosphamide&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · AC counts 1.5/69.99 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;AC counts 1.5/69.99&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc_x10e9_l&quot;: 1.5,
+    &quot;platelets_x10e9_l&quot;: 69.99
+  },
+  &quot;expected&quot;: &quot;delay&quot;,
+  &quot;actual&quot;: &quot;delay&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;AC_COUNTS_DELAY&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;AC Day 1: ANC &lt;1 OR platelets &lt;70 requires delay.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Cyclophosphamide&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Delay treatment&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · AC counts 1.5/90 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;AC counts 1.5/90&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc_x10e9_l&quot;: 1.5,
+    &quot;platelets_x10e9_l&quot;: 90
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;AC_COUNTS_UNLISTED_COMBINATION&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;The entered ANC/platelet combination is not explicitly represented by a row in NCCP Table 2.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00857 · AC counts 1.495/95 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;AC counts 1.495/95&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;anc_x10e9_l&quot;: 1.495,
+    &quot;platelets_x10e9_l&quot;: 95
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;AC_COUNTS_UNLISTED_COMBINATION&quot;,
+      &quot;source&quot;: &quot;page 6 · Table 2&quot;,
+      &quot;explanation&quot;: &quot;The entered ANC/platelet combination is not explicitly represented by a row in NCCP Table 2.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00857 · Paclitaxel bilirubin 1.255 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Paclitaxel bilirubin 1.255&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ratio_uln&quot;: 2,
+    &quot;bilirubin_ratio_uln&quot;: 1.255
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PACLI_BILI_GAP1&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;Source bilirubin bands leave values between 1.25 and 1.26 ×ULN unassigned. Confirm the component dose with pharmacy.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Source bilirubin bands leave values between 1.25 and 1.26 ×ULN unassigned. Confirm the component dose with pharmacy.&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Paclitaxel bilirubin 1.26 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Paclitaxel bilirubin 1.26&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ratio_uln&quot;: 2,
+    &quot;bilirubin_ratio_uln&quot;: 1.26
+  },
+  &quot;expected&quot;: &quot;dose_reduce&quot;,
+  &quot;actual&quot;: &quot;dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PACLITAXEL_HEPATIC_60&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;ALT &lt;10 ×ULN AND bilirubin 1.26–2 ×ULN maps to paclitaxel 60 mg/m².&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Use protocol dose&quot;,
+      &quot;dose&quot;: &quot;60 mg/m²&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Paclitaxel bilirubin 2.005 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Paclitaxel bilirubin 2.005&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ratio_uln&quot;: 2,
+    &quot;bilirubin_ratio_uln&quot;: 2.005
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PACLI_BILI_GAP2&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;Source bilirubin bands leave values between 2.00 and 2.01 ×ULN unassigned. Confirm the component dose with pharmacy.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Source bilirubin bands leave values between 2.00 and 2.01 ×ULN unassigned. Confirm the component dose with pharmacy.&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Paclitaxel bilirubin 2.01 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Paclitaxel bilirubin 2.01&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ratio_uln&quot;: 2,
+    &quot;bilirubin_ratio_uln&quot;: 2.01
+  },
+  &quot;expected&quot;: &quot;dose_reduce&quot;,
+  &quot;actual&quot;: &quot;dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PACLITAXEL_HEPATIC_40&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;ALT &lt;10 ×ULN AND bilirubin 2.01–5 ×ULN maps to paclitaxel 40 mg/m².&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Use protocol dose&quot;,
+      &quot;dose&quot;: &quot;40 mg/m²&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Paclitaxel bilirubin 5.01 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Paclitaxel bilirubin 5.01&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ratio_uln&quot;: 2,
+    &quot;bilirubin_ratio_uln&quot;: 5.01
+  },
+  &quot;expected&quot;: &quot;contraindicated&quot;,
+  &quot;actual&quot;: &quot;contraindicated&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PACLITAXEL_HEPATIC_CONTRAINDICATED&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;ALT ≥10 ×ULN OR bilirubin &gt;5 ×ULN contraindicates paclitaxel.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Paclitaxel&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Doxorubicin bilirubin gap 50.01 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Doxorubicin bilirubin gap 50.01&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;bilirubin_umol_l&quot;: 50.01
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOXO_BILI_GAP&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;The source says 20–50 then &gt;51–86 µmol/L; the interval above 50 through 51 needs clarification. Confirm the component dose with pharmacy.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source says 20–50 then &gt;51–86 µmol/L; the interval above 50 through 51 needs clarification. Confirm the component dose with pharmacy.&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Doxorubicin bilirubin gap 51 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Doxorubicin bilirubin gap 51&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;bilirubin_umol_l&quot;: 51
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOXO_BILI_GAP&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;The source says 20–50 then &gt;51–86 µmol/L; the interval above 50 through 51 needs clarification. Confirm the component dose with pharmacy.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source says 20–50 then &gt;51–86 µmol/L; the interval above 50 through 51 needs clarification. Confirm the component dose with pharmacy.&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Doxorubicin bilirubin 20 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Doxorubicin bilirubin 20&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;bilirubin_umol_l&quot;: 20
+  },
+  &quot;expected&quot;: &quot;dose_reduce&quot;,
+  &quot;actual&quot;: &quot;dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOXORUBICIN_HEPATIC_50&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;Bilirubin 20–50 µmol/L maps to 50% of the original doxorubicin dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Use 50% of protocol dose&quot;,
+      &quot;dose&quot;: &quot;30 mg/m²&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Doxorubicin bilirubin 50 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Doxorubicin bilirubin 50&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;bilirubin_umol_l&quot;: 50
+  },
+  &quot;expected&quot;: &quot;dose_reduce&quot;,
+  &quot;actual&quot;: &quot;dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOXORUBICIN_HEPATIC_50&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;Bilirubin 20–50 µmol/L maps to 50% of the original doxorubicin dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Use 50% of protocol dose&quot;,
+      &quot;dose&quot;: &quot;30 mg/m²&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Doxorubicin bilirubin 51.01 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Doxorubicin bilirubin 51.01&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;bilirubin_umol_l&quot;: 51.01
+  },
+  &quot;expected&quot;: &quot;dose_reduce&quot;,
+  &quot;actual&quot;: &quot;dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOXORUBICIN_HEPATIC_25&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;Bilirubin &gt;51–86 µmol/L maps to 25% of the original doxorubicin dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Use 25% of protocol dose&quot;,
+      &quot;dose&quot;: &quot;15 mg/m²&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Doxorubicin bilirubin 86 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Doxorubicin bilirubin 86&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;bilirubin_umol_l&quot;: 86
+  },
+  &quot;expected&quot;: &quot;dose_reduce&quot;,
+  &quot;actual&quot;: &quot;dose_reduce&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOXORUBICIN_HEPATIC_25&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;Bilirubin &gt;51–86 µmol/L maps to 25% of the original doxorubicin dose.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Use 25% of protocol dose&quot;,
+      &quot;dose&quot;: &quot;15 mg/m²&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Doxorubicin bilirubin 86.01 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Doxorubicin bilirubin 86.01&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;bilirubin_umol_l&quot;: 86.01
+  },
+  &quot;expected&quot;: &quot;contraindicated&quot;,
+  &quot;actual&quot;: &quot;contraindicated&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOXORUBICIN_HEPATIC_NOT_RECOMMENDED&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;Doxorubicin is not recommended for bilirubin &gt;86 µmol/L or Child–Pugh C.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Cyclophosphamide renal decimal gap · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Cyclophosphamide renal decimal gap&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;crcl_ml_min&quot;: 29.5
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;CYCLO_RENAL_GAP&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;The source lists 10–29 and ≥30 mL/min; do not silently round a decimal result. Confirm the component dose with pharmacy.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;DOXORUBICIN_RENAL_STANDARD&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;CrCl &gt;10 mL/min requires no doxorubicin renal adjustment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Cyclophosphamide&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source lists 10–29 and ≥30 mL/min; do not silently round a decimal result. Confirm the component dose with pharmacy.&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Exact doxorubicin renal gap · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Exact doxorubicin renal gap&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;crcl_ml_min&quot;: 10
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;DOXO_RENAL_EQUALITY&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;The source doxorubicin renal rows are &gt;10 and &lt;10; exact 10 requires review.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;CYCLOPHOSPHAMIDE_RENAL_75&quot;,
+      &quot;source&quot;: &quot;page 7 · Table 3&quot;,
+      &quot;explanation&quot;: &quot;CrCl 10–29 mL/min: consider 75% of the original cyclophosphamide dose; confirm the prescription.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Cyclophosphamide&quot;,
+      &quot;action&quot;: &quot;Use 75% of protocol dose&quot;,
+      &quot;dose&quot;: &quot;450 mg/m²&quot;
+    },
+    {
+      &quot;component&quot;: &quot;Doxorubicin&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;The source doxorubicin renal rows are &gt;10 and &lt;10; exact 10 requires review.&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · No paclitaxel hepatic rule outside phase neoadjuvant_cycles_5_to_8_day_1 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;No paclitaxel hepatic rule outside phase neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ratio_uln&quot;: 12,
+    &quot;bilirubin_ratio_uln&quot;: 6
+  },
+  &quot;expected&quot;: &quot;no inappropriate rule&quot;,
+  &quot;actual&quot;: &quot;partial_context_required&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PARTIAL_ALT_RATIO_ULN_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;ALT / highest transaminase 12 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_BILIRUBIN_RATIO_ULN_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Bilirubin 6 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00857 · No paclitaxel hepatic rule outside phase adjuvant_pembrolizumab · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;No paclitaxel hepatic rule outside phase adjuvant_pembrolizumab&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;alt_ratio_uln&quot;: 12,
+    &quot;bilirubin_ratio_uln&quot;: 6
+  },
+  &quot;expected&quot;: &quot;no inappropriate rule&quot;,
+  &quot;actual&quot;: &quot;partial_context_required&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PARTIAL_ALT_RATIO_ULN_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;ALT / highest transaminase 12 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_BILIRUBIN_RATIO_ULN_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Bilirubin 6 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00857 · No AC hepatic rule in taxane phase · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;No AC hepatic rule in taxane phase&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;bilirubin_umol_l&quot;: 90
+  },
+  &quot;expected&quot;: &quot;no inappropriate rule&quot;,
+  &quot;actual&quot;: &quot;partial_context_required&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PARTIAL_BILIRUBIN_UMOL_L_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Bilirubin 90 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00857 · Immune pneumonitis G2 neoadjuvant_cycles_1_to_4_day_1 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune pneumonitis G2 neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_pneumonitis_grade&quot;: 2
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_PNEUMONITIS_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Withhold pembrolizumab for grade 2 pneumonitis and manage with the immune-toxicity team.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune pneumonitis severe neoadjuvant_cycles_1_to_4_day_1 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune pneumonitis severe neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_pneumonitis_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_PNEUMONITIS_STOP&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Permanently stop for grade 3–4 or recurrent grade 2 pneumonitis.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune pneumonitis G2 neoadjuvant_cycles_5_to_8_day_1 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune pneumonitis G2 neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_pneumonitis_grade&quot;: 2
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_PNEUMONITIS_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Withhold pembrolizumab for grade 2 pneumonitis and manage with the immune-toxicity team.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune pneumonitis severe neoadjuvant_cycles_5_to_8_day_1 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune pneumonitis severe neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_5_to_8_day_1&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_pneumonitis_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_PNEUMONITIS_STOP&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Permanently stop for grade 3–4 or recurrent grade 2 pneumonitis.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune pneumonitis G2 adjuvant_pembrolizumab · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune pneumonitis G2 adjuvant_pembrolizumab&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_pneumonitis_grade&quot;: 2
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_PNEUMONITIS_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Withhold pembrolizumab for grade 2 pneumonitis and manage with the immune-toxicity team.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune pneumonitis severe adjuvant_pembrolizumab · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune pneumonitis severe adjuvant_pembrolizumab&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_pneumonitis_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_PNEUMONITIS_STOP&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Permanently stop for grade 3–4 or recurrent grade 2 pneumonitis.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Recurrent immune pneumonitis · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Recurrent immune pneumonitis&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_recurrent_pneumonitis_g2&quot;: true
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_PNEUMONITIS_STOP&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Permanently stop for grade 3–4 or recurrent grade 2 pneumonitis.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune colitis G3 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune colitis G3&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_colitis_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_COLITIS_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Withhold for grade 2–3 colitis; assess severity, hydration and infection urgently.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune colitis G4 · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune colitis G4&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_colitis_grade&quot;: 4
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_COLITIS_STOP&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Grade 4 or recurrent grade 3 colitis requires permanent discontinuation.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PEMBRO_COLITIS_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Withhold for grade 2–3 colitis; assess severity, hydration and infection urgently.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune hepatitis exact threshold · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune hepatitis exact threshold&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_hepatitis_ast_alt_uln&quot;: 5
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_HEPATITIS_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Withhold for source grade 2 immune hepatitis. Immune attribution must be assessed separately from chemotherapy organ-function adjustment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune hepatitis above threshold · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune hepatitis above threshold&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_hepatitis_ast_alt_uln&quot;: 5.01
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_HEPATITIS_STOP&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Source grade ≥3 immune hepatitis, AST/ALT &gt;5 ×ULN or bilirubin &gt;3 ×ULN requires permanent discontinuation.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PEMBRO_HEPATITIS_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Withhold for source grade 2 immune hepatitis. Immune attribution must be assessed separately from chemotherapy organ-function adjustment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Suspected SJS · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Suspected SJS&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_sjs_ten_suspected&quot;: true
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_SKIN_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Withhold for grade 3 skin toxicity or suspected SJS/TEN; urgent specialist assessment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Confirmed SJS · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Confirmed SJS&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_sjs_ten_confirmed&quot;: true
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_SKIN_STOP&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Grade 4 skin toxicity or confirmed SJS/TEN requires permanent discontinuation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Uncontrolled endocrine toxicity · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Uncontrolled endocrine toxicity&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_adrenal_grade&quot;: 2
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_ENDOCRINE_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Withhold uncontrolled source endocrine toxicity until stabilised on appropriate treatment; severe/symptomatic cases need urgent care.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Endocrine recovery still needs review · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Endocrine recovery still needs review&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_adrenal_grade&quot;: 2,
+    &quot;pembro_hormones_controlled&quot;: true
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_ENDOCRINE_RESTART_REVIEW&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Confirm improvement to grade ≤2, hormone control and any required steroid taper before considering continuation.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Clinical review&quot;,
+      &quot;dose&quot;: &quot;Confirm improvement to grade ≤2, hormone control and any required steroid taper before considering continuation.&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune DKA · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune DKA&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_dka&quot;: true
+  },
+  &quot;expected&quot;: &quot;withhold&quot;,
+  &quot;actual&quot;: &quot;withhold&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_DIABETES_HOLD&quot;,
+      &quot;source&quot;: &quot;page 8 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Immune type 1 diabetes with ketoacidosis or severe hyperglycaemia requires withholding and urgent metabolic treatment.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Withhold now&quot;,
+      &quot;dose&quot;: &quot;No dose now&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Severe myocarditis · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Severe myocarditis&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_myocarditis_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;permanently_discontinue&quot;,
+  &quot;actual&quot;: &quot;permanently_discontinue&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_OTHER_STOP&quot;,
+      &quot;source&quot;: &quot;page 9 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Apply the permanent-stop branch for severe cardiac/neurological immune toxicity, grade 3–4 infusion reaction, or grade 4/recurrent grade 3 other immune toxicity.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PEMBRO_CARDIONEURO_REVIEW&quot;,
+      &quot;source&quot;: &quot;page 9 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Suspected immune cardiac or neurological toxicity requires immediate specialist assessment and withholding; a lower entered grade does not establish safety.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Discontinue&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Previous permanent-stop precludes postoperative restart · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Previous permanent-stop precludes postoperative restart&quot;,
+  &quot;profile&quot;: &quot;adjuvant_pembrolizumab&quot;,
+  &quot;inputs&quot;: {
+    &quot;pembro_prior_permanent_stop&quot;: true
+  },
+  &quot;expected&quot;: &quot;contraindicated&quot;,
+  &quot;actual&quot;: &quot;contraindicated&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;PEMBRO_ADJUVANT_EXCLUSION&quot;,
+      &quot;source&quot;: &quot;page 1&quot;,
+      &quot;explanation&quot;: &quot;Do not continue postoperative pembrolizumab after progression or neoadjuvant toxicity requiring permanent stopping.&quot;
+    }
+  ],
+  &quot;components&quot;: [
+    {
+      &quot;component&quot;: &quot;Pembrolizumab&quot;,
+      &quot;action&quot;: &quot;Do not administer&quot;,
+      &quot;dose&quot;: &quot;Not to be administered&quot;
+    }
+  ]
+}</pre></details><details><summary>00857 · Immune pneumonitis on weekly visit · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Immune pneumonitis on weekly visit&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_8_or_15&quot;,
+  &quot;inputs&quot;: {
+    &quot;day_number&quot;: 8,
+    &quot;pembro_pneumonitis_grade&quot;: 3
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;WEEKLY_VISIT_IMMUNE_TOXICITY_REVIEW&quot;,
+      &quot;source&quot;: &quot;page 8–9 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;Urgent senior assessment of the recorded immune toxicity is required before the weekly treatment decision. Pembrolizumab is not scheduled on this day; its interruption/permanent-stop criteria still require review. Do not infer that paclitaxel is safe to give from the absence of a pembrolizumab dose today.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_DAY_NUMBER_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Treatment day Day 8 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details><details><summary>00857 · Active immune event on weekly visit · PASS</summary><pre>{
+  &quot;code&quot;: &quot;00857&quot;,
+  &quot;case&quot;: &quot;Active immune event on weekly visit&quot;,
+  &quot;profile&quot;: &quot;neoadjuvant_cycles_1_to_4_day_8_or_15&quot;,
+  &quot;inputs&quot;: {
+    &quot;day_number&quot;: 15,
+    &quot;active_pembrolizumab_irae&quot;: true
+  },
+  &quot;expected&quot;: &quot;consultant_review&quot;,
+  &quot;actual&quot;: &quot;consultant_review&quot;,
+  &quot;pass&quot;: true,
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ACTIVE_PEMBROLIZUMAB_IRAE_REQUIRES_DETAILED_REVIEW&quot;,
+      &quot;source&quot;: &quot;pages 8, 9 · Table 4&quot;,
+      &quot;explanation&quot;: &quot;An active pembrolizumab immune-related adverse event was recorded. Use the toxicity-specific NCCP pathway and obtain senior clinical review before treatment.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;PARTIAL_DAY_NUMBER_RECORDED&quot;,
+      &quot;source&quot;: &quot;No standalone rule encoded&quot;,
+      &quot;explanation&quot;: &quot;Treatment day Day 15 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context.&quot;
+    }
+  ],
+  &quot;components&quot;: []
+}</pre></details></html>

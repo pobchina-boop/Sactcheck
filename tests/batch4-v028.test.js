@@ -77,7 +77,7 @@ result = assess("00726", { lvef_percent: 39 });
 assert.strictEqual(result.actionType, "withhold", "Pertuzumab/trastuzumab should be withheld below 40% LVEF");
 
 result = assess("00726", { weeks_since_last_dose: 6 });
-assert.strictEqual(result.actionType, "proceed_with_caution", "A gap of at least six weeks should prompt reloading-dose guidance");
+assert.strictEqual(result.actionType, "consultant_review", "A gap of at least six weeks requires prescription/reloading review");
 assert.ok(result.findings.some(finding => finding.ruleId === "MISSED_DOSE_RELOAD"));
 
 result = assess("00831", { child_pugh_class: "B" });
