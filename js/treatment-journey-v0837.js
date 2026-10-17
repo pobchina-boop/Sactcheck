@@ -2239,6 +2239,1241 @@ const definitions={
         "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       }
     ]
+  },
+  "00200": {
+    "code": "00200",
+    "release": "0.83.9",
+    "checked": "2026-10-17",
+    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Trastuzumab IV · every 3 weeks: the whole pathway",
+    "setting": "HER2-positive early or metastatic breast cancer",
+    "summary": "IV trastuzumab every 21 days. Early breast cancer: complete one year total, allowing for earlier trastuzumab. Metastatic disease: continue while beneficial and tolerated; no automatic one-year stop.",
+    "stages": [
+      "Before treatment",
+      "First cycles",
+      "Around 12 weeks",
+      "Continuing treatment",
+      "Completion / change"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm setting, prior doses and formulation",
+          "IV trastuzumab every 3 weeks",
+          "Review benefit, symptoms and heart function",
+          "Early: complete one year total. Metastatic: ongoing review.",
+          "Early: completed year if applicable. Metastatic: review whether to continue or change."
+        ],
+        "source_ids": [
+          "00200"
+        ],
+        "note": "Duration follows the indication, not the number of columns."
+      },
+      {
+        "label": "Surgery",
+        "kind": "local",
+        "cells": [
+          "Early: surgery may precede or follow initial systemic therapy",
+          "Neoadjuvant route: reassess before planned surgery",
+          "MDT reviews recovery and pathology",
+          "Early: continue prescribed postoperative HER2 plan",
+          "Local follow-up as indicated"
+        ],
+        "source_ids": [
+          "early"
+        ],
+        "note": "This component card does not prescribe a complete chemotherapy or surgical pathway."
+      },
+      {
+        "label": "Radiotherapy",
+        "kind": "local",
+        "cells": [
+          "Assess indication and planned site",
+          "Early: usually after chemotherapy; coordinate surgery",
+          "May overlap trastuzumab continuation if agreed",
+          "Early: RT may overlap trastuzumab continuation, when agreed.",
+          "Radiation effects and surveillance follow the local plan"
+        ],
+        "source_ids": [
+          "early",
+          "metastatic"
+        ],
+        "note": "No mandatory sequential or concurrent RT course is implied."
+      },
+      {
+        "label": "Blood tests",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal, liver",
+          "Repeat according to the team / companion regimen",
+          "According to the team / companion regimen",
+          "Repeat according to the team / companion regimen",
+          "Follow abnormalities and the next treatment plan"
+        ],
+        "source_ids": [
+          "00200"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Heart checks",
+        "kind": "heart",
+        "cells": [
+          "Baseline echo / MUGA; cardiac assessment",
+          "Symptoms can trigger earlier checks",
+          "Echo / MUGA every 12 weeks; around C5 for uninterrupted 21-day cycles",
+          "Repeat every 12 weeks; 4–8 weeks may be needed with impairment",
+          "Trastuzumab: six-monthly cardiac checks to 24 months after stopping; see follow-up detail."
+        ],
+        "source_ids": [
+          "00200",
+          "smpc"
+        ],
+        "note": "Elapsed time takes precedence over illustrative cycle numbers."
+      },
+      {
+        "label": "Scans / markers",
+        "kind": "imaging",
+        "cells": [
+          "Define baseline sites and scan purpose",
+          "Review symptoms at each visit",
+          "Metastatic response imaging if due; not an automatic early-breast CT",
+          "Individualised response or breast surveillance plan",
+          "Early: breast surveillance, symptom-led additional tests. Metastatic: agreed response scans, commonly every 2–4 months; markers are supplementary."
+        ],
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "note": "Markers never replace the complete clinical assessment."
+      },
+      {
+        "label": "Endocrine / bone health",
+        "kind": "local",
+        "cells": [
+          "Check hormone receptor status and endocrine indication",
+          "Endocrine timing coordinated with the wider plan",
+          "DEXA if indicated by endocrine / fracture risk",
+          "May overlap trastuzumab when clinically appropriate",
+          "Longer endocrine and bone follow-up can outlast HER2 treatment"
+        ],
+        "source_ids": [
+          "early",
+          "bone"
+        ],
+        "note": "Conditional pathway only; endocrine medicines are not generated by this component card."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "Baseline FBC, renal and liver profile; repeat blood tests according to the team / companion-regimen plan (NCCP does not assign a universal interval here)",
+        "why": "Results help determine whether treatment can proceed.",
+        "action": "The team confirms booking, results and next dose.",
+        "source_ids": [
+          "00200"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Echo / MUGA",
+        "when": "Echo / MUGA every 12 weeks; around C5 for uninterrupted 21-day cycles",
+        "why": "Heart function can change without symptoms.",
+        "action": "Keep the booked scan; report symptoms between scans.",
+        "source_ids": [
+          "00200",
+          "smpc"
+        ],
+        "clinical": "EMA trastuzumab information: cardiac assessment every 6 months after stopping, until 24 months; after anthracyclines in early disease, yearly to 5 years or longer if function falls."
+      },
+      {
+        "title": "Cancer imaging and markers",
+        "when": "Early disease: planned breast surveillance; no routine CT or tumour-marker screening for recurrence without symptoms. Metastatic disease: response imaging on an agreed schedule, commonly every 2–4 months; earlier for new concerns.",
+        "why": "Use the result for a specific clinical decision.",
+        "action": "Ask which scan is planned and who reviews it.",
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Booking and result ownership",
+        "when": "At initiation, each review and handover",
+        "why": "A recommended test can be missed without a named owner.",
+        "action": "Record booking owner, result reviewer, due window and escalation route.",
+        "source_ids": [
+          "00200"
+        ],
+        "clinical": "This educational map does not record completed appointments or interpret absent results as normal."
+      }
+    ],
+    "clinical_notes": [
+      "Cycle examples assume no delays and count from the first dose of this schedule. If switching route or continuing previous HER2 treatment, preserve the existing echo due date. Tests are scheduled by elapsed time and clinical need; the team owns booking and result review. NCCP remains 12-weekly during treatment, including maintenance; a longer interval needs an explicit individual specialist plan.",
+      "Columns show sequence, not equal durations.",
+      "Oncotype / recurrence-score triage is not implied for these HER2-positive regimens."
+    ],
+    "sources": [
+      {
+        "id": "00200",
+        "title": "NCCP 00200 v8 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6330/200_Trastuzumab_21days_Ubeecpc.pdf"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · response assessment",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Herceptin product information · cardiac assessment and formulation",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "HERA · early-breast evidence (2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28215665/"
+      }
+    ]
+  },
+  "00201": {
+    "code": "00201",
+    "release": "0.83.9",
+    "checked": "2026-10-17",
+    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Trastuzumab IV · weekly · metastatic: the whole pathway",
+    "setting": "HER2-positive metastatic breast cancer",
+    "summary": "IV trastuzumab every 7 days, continuing while beneficial and tolerated. This weekly NCCP card is for metastatic disease, without a fixed one-year course.",
+    "stages": [
+      "Before treatment",
+      "First cycles",
+      "Around 12 weeks",
+      "Continuing treatment",
+      "Completion / change"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm setting, prior doses and formulation",
+          "Weekly IV trastuzumab",
+          "Review benefit, symptoms and heart function",
+          "Continue while beneficial and tolerated",
+          "Early: completed year if applicable. Metastatic: review whether to continue or change."
+        ],
+        "source_ids": [
+          "00201"
+        ],
+        "note": "Duration follows the indication, not the number of columns."
+      },
+      {
+        "label": "Surgery",
+        "kind": "local",
+        "cells": [
+          "Local procedures only if indicated",
+          "No automatic curative surgical sequence",
+          "Coordinate procedures with oncology",
+          "Symptom / site-specific decisions",
+          "Local follow-up as indicated"
+        ],
+        "source_ids": [
+          "metastatic"
+        ],
+        "note": "This component card does not prescribe a complete chemotherapy or surgical pathway."
+      },
+      {
+        "label": "Radiotherapy",
+        "kind": "local",
+        "cells": [
+          "Assess indication and planned site",
+          "Timing depends on the clinical need",
+          "Agree any hold / continuation with radiation oncology",
+          "RT is site / symptom directed. Agree any treatment hold with both teams.",
+          "Radiation effects and surveillance follow the local plan"
+        ],
+        "source_ids": [
+          "early",
+          "metastatic"
+        ],
+        "note": "No mandatory sequential or concurrent RT course is implied."
+      },
+      {
+        "label": "Blood tests",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal, liver",
+          "Repeat according to the team / companion regimen",
+          "According to the team / companion regimen",
+          "Repeat according to the team / companion regimen",
+          "Follow abnormalities and the next treatment plan"
+        ],
+        "source_ids": [
+          "00201"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Heart checks",
+        "kind": "heart",
+        "cells": [
+          "Baseline echo / MUGA; cardiac assessment",
+          "Symptoms can trigger earlier checks",
+          "Echo / MUGA every 12 weeks; around C13 for an uninterrupted weekly course",
+          "Repeat every 12 weeks; 4–8 weeks may be needed with impairment",
+          "Trastuzumab: six-monthly cardiac checks to 24 months after stopping; see follow-up detail."
+        ],
+        "source_ids": [
+          "00201",
+          "smpc"
+        ],
+        "note": "Elapsed time takes precedence over illustrative cycle numbers."
+      },
+      {
+        "label": "Scans / markers",
+        "kind": "imaging",
+        "cells": [
+          "Define baseline sites and scan purpose",
+          "Review symptoms at each visit",
+          "Metastatic response imaging if due; not an automatic early-breast CT",
+          "Individualised response or breast surveillance plan",
+          "Response scans commonly every 2–4 months; individualise. Markers supplement clinical review and imaging."
+        ],
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "note": "Markers never replace the complete clinical assessment."
+      },
+      {
+        "label": "Endocrine / bone health",
+        "kind": "local",
+        "cells": [
+          "Check hormone receptor status and endocrine indication",
+          "Endocrine timing coordinated with the wider plan",
+          "DEXA if indicated by endocrine / fracture risk",
+          "May overlap trastuzumab when clinically appropriate",
+          "Longer endocrine and bone follow-up can outlast HER2 treatment"
+        ],
+        "source_ids": [
+          "early",
+          "bone"
+        ],
+        "note": "Conditional pathway only; endocrine medicines are not generated by this component card."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "Baseline FBC, renal and liver profile; repeat blood tests according to the team / companion-regimen plan (NCCP does not assign a universal interval here)",
+        "why": "Results help determine whether treatment can proceed.",
+        "action": "The team confirms booking, results and next dose.",
+        "source_ids": [
+          "00201"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Echo / MUGA",
+        "when": "Echo / MUGA every 12 weeks; around C13 for an uninterrupted weekly course",
+        "why": "Heart function can change without symptoms.",
+        "action": "Keep the booked scan; report symptoms between scans.",
+        "source_ids": [
+          "00201",
+          "smpc"
+        ],
+        "clinical": "EMA trastuzumab information: cardiac assessment every 6 months after stopping, until 24 months; after anthracyclines in early disease, yearly to 5 years or longer if function falls."
+      },
+      {
+        "title": "Cancer imaging and markers",
+        "when": "Response imaging commonly every 2–4 months, adapted to sites, disease course and treatment. A new symptom can need earlier imaging. Tumour markers may supplement assessment, never determine a treatment change alone.",
+        "why": "Use the result for a specific clinical decision.",
+        "action": "Ask which scan is planned and who reviews it.",
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Booking and result ownership",
+        "when": "At initiation, each review and handover",
+        "why": "A recommended test can be missed without a named owner.",
+        "action": "Record booking owner, result reviewer, due window and escalation route.",
+        "source_ids": [
+          "00201"
+        ],
+        "clinical": "This educational map does not record completed appointments or interpret absent results as normal."
+      }
+    ],
+    "clinical_notes": [
+      "Cycle examples assume no delays and count from the first dose of this schedule. If switching route or continuing previous HER2 treatment, preserve the existing echo due date. Tests are scheduled by elapsed time and clinical need; the team owns booking and result review. NCCP remains 12-weekly during treatment, including maintenance; a longer interval needs an explicit individual specialist plan.",
+      "Columns show sequence, not equal durations.",
+      "Oncotype / recurrence-score triage is not implied for these HER2-positive regimens."
+    ],
+    "sources": [
+      {
+        "id": "00201",
+        "title": "NCCP 00201 v6 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6540/201_v6_Trastuzumab_IV_7_days.pdf"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · response assessment",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Herceptin product information · cardiac assessment and formulation",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Weekly trastuzumab · historical monotherapy study (1999)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10561337/"
+      }
+    ]
+  },
+  "00272": {
+    "code": "00272",
+    "release": "0.83.9",
+    "checked": "2026-10-17",
+    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Trastuzumab SC · metastatic: the whole pathway",
+    "setting": "HER2-positive metastatic breast cancer · SC component",
+    "summary": "Trastuzumab 600 mg under the skin every 21 days, without a loading dose, while beneficial and tolerated. Any taxane or endocrine partner follows a separate prescription and monitoring plan.",
+    "stages": [
+      "Before treatment",
+      "First cycles",
+      "Around 12 weeks",
+      "Continuing treatment",
+      "Completion / change"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm setting, prior doses and formulation",
+          "SC trastuzumab every 3 weeks",
+          "Review benefit, symptoms and heart function",
+          "Continue while beneficial and tolerated",
+          "Early: completed year if applicable. Metastatic: review whether to continue or change."
+        ],
+        "source_ids": [
+          "00272"
+        ],
+        "note": "Duration follows the indication, not the number of columns."
+      },
+      {
+        "label": "Surgery",
+        "kind": "local",
+        "cells": [
+          "Local procedures only if indicated",
+          "No automatic curative surgical sequence",
+          "Coordinate procedures with oncology",
+          "Symptom / site-specific decisions",
+          "Local follow-up as indicated"
+        ],
+        "source_ids": [
+          "metastatic"
+        ],
+        "note": "This component card does not prescribe a complete chemotherapy or surgical pathway."
+      },
+      {
+        "label": "Radiotherapy",
+        "kind": "local",
+        "cells": [
+          "Assess indication and planned site",
+          "Timing depends on the clinical need",
+          "Agree any hold / continuation with radiation oncology",
+          "RT is site / symptom directed. Agree any treatment hold with both teams.",
+          "Radiation effects and surveillance follow the local plan"
+        ],
+        "source_ids": [
+          "early",
+          "metastatic"
+        ],
+        "note": "No mandatory sequential or concurrent RT course is implied."
+      },
+      {
+        "label": "Blood tests",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal, liver",
+          "Every 6 weeks",
+          "SC: week 12 is another six-week blood point; T-DM1: every cycle",
+          "Every 6 weeks",
+          "Follow abnormalities and the next treatment plan"
+        ],
+        "source_ids": [
+          "00272"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Heart checks",
+        "kind": "heart",
+        "cells": [
+          "Baseline echo / MUGA; cardiac assessment",
+          "Symptoms can trigger earlier checks",
+          "Echo / MUGA every 12 weeks; around C5 for uninterrupted 21-day cycles",
+          "Repeat every 12 weeks; 4–8 weeks may be needed with impairment",
+          "Trastuzumab: six-monthly cardiac checks to 24 months after stopping; see follow-up detail."
+        ],
+        "source_ids": [
+          "00272",
+          "smpc"
+        ],
+        "note": "Elapsed time takes precedence over illustrative cycle numbers."
+      },
+      {
+        "label": "Scans / markers",
+        "kind": "imaging",
+        "cells": [
+          "Define baseline sites and scan purpose",
+          "Review symptoms at each visit",
+          "Metastatic response imaging if due; not an automatic early-breast CT",
+          "Individualised response or breast surveillance plan",
+          "Response scans commonly every 2–4 months; individualise. Markers supplement clinical review and imaging."
+        ],
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "note": "Markers never replace the complete clinical assessment."
+      },
+      {
+        "label": "Endocrine / bone health",
+        "kind": "local",
+        "cells": [
+          "Check hormone receptor status and endocrine indication",
+          "Endocrine timing coordinated with the wider plan",
+          "DEXA if indicated by endocrine / fracture risk",
+          "May overlap trastuzumab when clinically appropriate",
+          "Longer endocrine and bone follow-up can outlast HER2 treatment"
+        ],
+        "source_ids": [
+          "early",
+          "bone"
+        ],
+        "note": "Conditional pathway only; endocrine medicines are not generated by this component card."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, renal and liver profile every 6 weeks (around C3, C5, C7 if on time)",
+        "why": "Results help determine whether treatment can proceed.",
+        "action": "The team confirms booking, results and next dose.",
+        "source_ids": [
+          "00272"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Echo / MUGA",
+        "when": "Echo / MUGA every 12 weeks; around C5 for uninterrupted 21-day cycles",
+        "why": "Heart function can change without symptoms.",
+        "action": "Keep the booked scan; report symptoms between scans.",
+        "source_ids": [
+          "00272",
+          "smpc"
+        ],
+        "clinical": "EMA trastuzumab information: cardiac assessment every 6 months after stopping, until 24 months; after anthracyclines in early disease, yearly to 5 years or longer if function falls."
+      },
+      {
+        "title": "Cancer imaging and markers",
+        "when": "Response imaging commonly every 2–4 months, adapted to sites, disease course and treatment. A new symptom can need earlier imaging. Tumour markers may supplement assessment, never determine a treatment change alone.",
+        "why": "Use the result for a specific clinical decision.",
+        "action": "Ask which scan is planned and who reviews it.",
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Booking and result ownership",
+        "when": "At initiation, each review and handover",
+        "why": "A recommended test can be missed without a named owner.",
+        "action": "Record booking owner, result reviewer, due window and escalation route.",
+        "source_ids": [
+          "00272"
+        ],
+        "clinical": "This educational map does not record completed appointments or interpret absent results as normal."
+      }
+    ],
+    "clinical_notes": [
+      "Cycle examples assume no delays and count from the first dose of this schedule. If switching route or continuing previous HER2 treatment, preserve the existing echo due date. Tests are scheduled by elapsed time and clinical need; the team owns booking and result review. NCCP remains 12-weekly during treatment, including maintenance; a longer interval needs an explicit individual specialist plan.",
+      "Columns show sequence, not equal durations.",
+      "Oncotype / recurrence-score triage is not implied for these HER2-positive regimens."
+    ],
+    "sources": [
+      {
+        "id": "00272",
+        "title": "NCCP 00272 v4 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6694/272_v4_Trastuzumab_SC_21days_MBC.pdf"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · response assessment",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Herceptin product information · cardiac assessment and formulation",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "HannaH · formulation comparison (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22884505/"
+      }
+    ]
+  },
+  "00285": {
+    "code": "00285",
+    "release": "0.83.9",
+    "checked": "2026-10-17",
+    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Trastuzumab SC · early breast cancer: the whole pathway",
+    "setting": "HER2-positive early breast cancer · SC component",
+    "summary": "Trastuzumab 600 mg under the skin every 21 days, without a loading dose, to complete one year total. Previous IV or combination-treatment trastuzumab counts towards that year; a route switch does not start a new year.",
+    "stages": [
+      "Before treatment",
+      "First cycles",
+      "Around 12 weeks",
+      "Continuing treatment",
+      "Completion / change"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm setting, prior doses and formulation",
+          "SC trastuzumab every 3 weeks",
+          "Review benefit, symptoms and heart function",
+          "Complete one year total of trastuzumab",
+          "Early: completed year if applicable. Metastatic: review whether to continue or change."
+        ],
+        "source_ids": [
+          "00285"
+        ],
+        "note": "Duration follows the indication, not the number of columns."
+      },
+      {
+        "label": "Surgery",
+        "kind": "local",
+        "cells": [
+          "Early: surgery may precede or follow initial systemic therapy",
+          "Neoadjuvant route: reassess before planned surgery",
+          "MDT reviews recovery and pathology",
+          "Early: continue prescribed postoperative HER2 plan",
+          "Local follow-up as indicated"
+        ],
+        "source_ids": [
+          "early"
+        ],
+        "note": "This component card does not prescribe a complete chemotherapy or surgical pathway."
+      },
+      {
+        "label": "Radiotherapy",
+        "kind": "local",
+        "cells": [
+          "Assess indication and planned site",
+          "Early: usually after chemotherapy; coordinate surgery",
+          "May overlap trastuzumab continuation if agreed",
+          "Early: RT may overlap trastuzumab continuation, when agreed.",
+          "Radiation effects and surveillance follow the local plan"
+        ],
+        "source_ids": [
+          "early",
+          "metastatic"
+        ],
+        "note": "No mandatory sequential or concurrent RT course is implied."
+      },
+      {
+        "label": "Blood tests",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal, liver",
+          "Every 6 weeks",
+          "SC: week 12 is another six-week blood point; T-DM1: every cycle",
+          "Every 6 weeks",
+          "Follow abnormalities and the next treatment plan"
+        ],
+        "source_ids": [
+          "00285"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Heart checks",
+        "kind": "heart",
+        "cells": [
+          "Baseline echo / MUGA; cardiac assessment",
+          "Symptoms can trigger earlier checks",
+          "Echo / MUGA every 12 weeks; around C5 for uninterrupted 21-day cycles",
+          "Repeat every 12 weeks; 4–8 weeks may be needed with impairment",
+          "Trastuzumab: six-monthly cardiac checks to 24 months after stopping; see follow-up detail."
+        ],
+        "source_ids": [
+          "00285",
+          "smpc"
+        ],
+        "note": "Elapsed time takes precedence over illustrative cycle numbers."
+      },
+      {
+        "label": "Scans / markers",
+        "kind": "imaging",
+        "cells": [
+          "Define baseline sites and scan purpose",
+          "Review symptoms at each visit",
+          "Metastatic response imaging if due; not an automatic early-breast CT",
+          "Individualised response or breast surveillance plan",
+          "Breast surveillance; additional scans / markers are not routine in symptom-free early disease."
+        ],
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "note": "Markers never replace the complete clinical assessment."
+      },
+      {
+        "label": "Endocrine / bone health",
+        "kind": "local",
+        "cells": [
+          "Check hormone receptor status and endocrine indication",
+          "Endocrine timing coordinated with the wider plan",
+          "DEXA if indicated by endocrine / fracture risk",
+          "May overlap trastuzumab when clinically appropriate",
+          "Longer endocrine and bone follow-up can outlast HER2 treatment"
+        ],
+        "source_ids": [
+          "early",
+          "bone"
+        ],
+        "note": "Conditional pathway only; endocrine medicines are not generated by this component card."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, renal and liver profile every 6 weeks (around C3, C5, C7 if on time)",
+        "why": "Results help determine whether treatment can proceed.",
+        "action": "The team confirms booking, results and next dose.",
+        "source_ids": [
+          "00285"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Echo / MUGA",
+        "when": "Echo / MUGA every 12 weeks; around C5 for uninterrupted 21-day cycles",
+        "why": "Heart function can change without symptoms.",
+        "action": "Keep the booked scan; report symptoms between scans.",
+        "source_ids": [
+          "00285",
+          "smpc"
+        ],
+        "clinical": "EMA trastuzumab information: cardiac assessment every 6 months after stopping, until 24 months; after anthracyclines in early disease, yearly to 5 years or longer if function falls."
+      },
+      {
+        "title": "Cancer imaging and markers",
+        "when": "Early disease: breast surveillance arranged after local treatment; routine CT / tumour markers are not recommended for asymptomatic recurrence screening.",
+        "why": "Use the result for a specific clinical decision.",
+        "action": "Ask which scan is planned and who reviews it.",
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Booking and result ownership",
+        "when": "At initiation, each review and handover",
+        "why": "A recommended test can be missed without a named owner.",
+        "action": "Record booking owner, result reviewer, due window and escalation route.",
+        "source_ids": [
+          "00285"
+        ],
+        "clinical": "This educational map does not record completed appointments or interpret absent results as normal."
+      }
+    ],
+    "clinical_notes": [
+      "Cycle examples assume no delays and count from the first dose of this schedule. If switching route or continuing previous HER2 treatment, preserve the existing echo due date. Tests are scheduled by elapsed time and clinical need; the team owns booking and result review. NCCP remains 12-weekly during treatment, including maintenance; a longer interval needs an explicit individual specialist plan.",
+      "Columns show sequence, not equal durations.",
+      "Oncotype / recurrence-score triage is not implied for these HER2-positive regimens."
+    ],
+    "sources": [
+      {
+        "id": "00285",
+        "title": "NCCP 00285 v4 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · response assessment",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Herceptin product information · cardiac assessment and formulation",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "HannaH · formulation comparison (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22884505/"
+      }
+    ]
+  },
+  "00206": {
+    "code": "00206",
+    "release": "0.83.9",
+    "checked": "2026-10-17",
+    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Trastuzumab emtansine (T-DM1) · metastatic: the whole pathway",
+    "setting": "Previously treated HER2-positive unresectable locally advanced or metastatic breast cancer",
+    "summary": "T-DM1 3.6 mg/kg IV every 21 days, adjusted if required, until progression or unacceptable toxicity. This metastatic course has no fixed 14-cycle endpoint; the postoperative early-breast regimen is a different card.",
+    "stages": [
+      "Before treatment",
+      "First cycles",
+      "Around 12 weeks",
+      "Continuing treatment",
+      "Completion / change"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm setting, prior doses and formulation",
+          "T-DM1 IV every 3 weeks",
+          "Review benefit, symptoms and heart function",
+          "Continue while beneficial and tolerated",
+          "Early: completed year if applicable. Metastatic: review whether to continue or change."
+        ],
+        "source_ids": [
+          "00206"
+        ],
+        "note": "Duration follows the indication, not the number of columns."
+      },
+      {
+        "label": "Surgery",
+        "kind": "local",
+        "cells": [
+          "Local procedures only if indicated",
+          "No automatic curative surgical sequence",
+          "Coordinate procedures with oncology",
+          "Symptom / site-specific decisions",
+          "Local follow-up as indicated"
+        ],
+        "source_ids": [
+          "metastatic"
+        ],
+        "note": "This component card does not prescribe a complete chemotherapy or surgical pathway."
+      },
+      {
+        "label": "Radiotherapy",
+        "kind": "local",
+        "cells": [
+          "Assess indication and planned site",
+          "Timing depends on the clinical need",
+          "Agree any hold / continuation with radiation oncology",
+          "RT is site / symptom directed. Agree any treatment hold with both teams.",
+          "Radiation effects and surveillance follow the local plan"
+        ],
+        "source_ids": [
+          "early",
+          "metastatic"
+        ],
+        "note": "No mandatory sequential or concurrent RT course is implied."
+      },
+      {
+        "label": "Blood tests",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal, liver",
+          "Before every cycle",
+          "SC: week 12 is another six-week blood point; T-DM1: every cycle",
+          "Before every cycle",
+          "Follow abnormalities and the next treatment plan"
+        ],
+        "source_ids": [
+          "00206"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Heart checks",
+        "kind": "heart",
+        "cells": [
+          "Baseline echo / MUGA; cardiac assessment",
+          "Symptoms can trigger earlier checks",
+          "Echo / MUGA every 12 weeks; around C5 for uninterrupted 21-day cycles",
+          "Repeat every 12 weeks; 4–8 weeks may be needed with impairment",
+          "Follow-up depends on cardiac findings and the next treatment plan."
+        ],
+        "source_ids": [
+          "00206",
+          "smpc"
+        ],
+        "note": "Elapsed time takes precedence over illustrative cycle numbers."
+      },
+      {
+        "label": "Scans / markers",
+        "kind": "imaging",
+        "cells": [
+          "Define baseline sites and scan purpose",
+          "Review symptoms at each visit",
+          "Metastatic response imaging if due; not an automatic early-breast CT",
+          "Individualised response or breast surveillance plan",
+          "Response scans commonly every 2–4 months; individualise. Markers supplement clinical review and imaging."
+        ],
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "note": "Markers never replace the complete clinical assessment."
+      },
+      {
+        "label": "Endocrine / bone health",
+        "kind": "local",
+        "cells": [
+          "Check hormone receptor status and endocrine indication",
+          "Endocrine timing coordinated with the wider plan",
+          "DEXA if indicated by endocrine / fracture risk",
+          "May overlap trastuzumab when clinically appropriate",
+          "Longer endocrine and bone follow-up can outlast HER2 treatment"
+        ],
+        "source_ids": [
+          "early",
+          "bone"
+        ],
+        "note": "Conditional pathway only; endocrine medicines are not generated by this component card."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, renal and liver profile before every cycle",
+        "why": "Results help determine whether treatment can proceed.",
+        "action": "The team confirms booking, results and next dose.",
+        "source_ids": [
+          "00206"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Echo / MUGA",
+        "when": "Echo / MUGA every 12 weeks; around C5 for uninterrupted 21-day cycles",
+        "why": "Heart function can change without symptoms.",
+        "action": "Keep the booked scan; report symptoms between scans.",
+        "source_ids": [
+          "00206",
+          "smpc"
+        ],
+        "clinical": "Agree follow-up of cardiac, liver, platelet and nerve effects at any treatment change; no universal post-T-DM1 scan calendar is assigned here."
+      },
+      {
+        "title": "Cancer imaging and markers",
+        "when": "Response imaging commonly every 2–4 months, adapted to sites, disease course and treatment. A new symptom can need earlier imaging. Tumour markers may supplement assessment, never determine a treatment change alone.",
+        "why": "Use the result for a specific clinical decision.",
+        "action": "Ask which scan is planned and who reviews it.",
+        "source_ids": [
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "clinical": ""
+      },
+      {
+        "title": "Booking and result ownership",
+        "when": "At initiation, each review and handover",
+        "why": "A recommended test can be missed without a named owner.",
+        "action": "Record booking owner, result reviewer, due window and escalation route.",
+        "source_ids": [
+          "00206"
+        ],
+        "clinical": "This educational map does not record completed appointments or interpret absent results as normal."
+      }
+    ],
+    "clinical_notes": [
+      "Cycle examples assume no delays and count from the first dose of this schedule. If switching route or continuing previous HER2 treatment, preserve the existing echo due date. Tests are scheduled by elapsed time and clinical need; the team owns booking and result review. NCCP remains 12-weekly during treatment, including maintenance; a longer interval needs an explicit individual specialist plan.",
+      "Columns show sequence, not equal durations.",
+      "Oncotype / recurrence-score triage is not implied for these HER2-positive regimens."
+    ],
+    "sources": [
+      {
+        "id": "00206",
+        "title": "NCCP 00206 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6547/206_Trastuzumab_Emtansine_21days.pdf"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · response assessment",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Kadcyla product information · metastatic toxicity table",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EMILIA · original analysis (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23020162/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

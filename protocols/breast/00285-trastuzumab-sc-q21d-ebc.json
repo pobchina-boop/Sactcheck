@@ -2,14 +2,14 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00285-v4",
   "file_name": "00285-trastuzumab-sc-q21d-ebc.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00285",
     "nccp_version": 4,
     "tumour_group": "Breast",
     "title": "Trastuzumab Subcutaneous 21 days – Early Breast Cancer",
     "short_title": "Trastuzumab SC q21d EBC",
-    "indication": "HER2-positive early breast cancer treated every 21 days for one year or until recurrence/unacceptable toxicity.",
+    "indication": "HER2-positive early breast cancer · SC component",
     "regimen_reimbursement_code": "00785a",
     "published_date": "2022-12-20",
     "review_date": "2029-04-12",
@@ -21,7 +21,7 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.83.9",
     "validation": {
       "source_document_checked": true,
       "software_tests_completed": true,
@@ -32,7 +32,7 @@
       "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "treatment_setting": [
-      "adjuvant"
+      "early"
     ],
     "catalogue_section": "targeted_her2_therapy",
     "catalogue_section_label": "Targeted & HER2 therapies",
@@ -55,19 +55,25 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
+      "reconciled_release": "0.83.9",
+      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "clinical_use_authorised": false
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00285-v4"
+    "canonical_protocol_id": "nccp-00285-v4",
+    "source_checked_date": "2026-10-17",
+    "schedule_summary": "SC fixed dose; no loading. Companion drugs require their own regimen rules.",
+    "audit_limitations": [
+      "Other cancer medicines in combination indications require the complete combination protocol; this card encodes trastuzumab only.",
+      "Independent clinical and pharmacy validation pending."
+    ],
+    "source_version_verified_date": "2026-10-17"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -83,111 +89,118 @@
   ],
   "treatment_phases": [
     {
-      "phase_id": "treatment",
+      "phase_id": "trastuzumab",
+      "name": "Trastuzumab component",
       "cycle_length_days": 21,
-      "cycles": [],
       "administration": [
         {
-          "day": 1,
-          "order": 1,
           "drug": "trastuzumab",
           "dose": {
-            "value": "600 mg",
-            "unit": "fixed dose"
+            "value": 600,
+            "unit": "mg"
           },
-          "route": "SC",
-          "administration_note": "Observe for 30 minutes after first SC injection and 15 minutes after subsequent injections."
+          "day": 1,
+          "route": "SC injection",
+          "notes": "SC fixed dose; no loading. Companion drugs require their own regimen rules."
         }
-      ]
+      ],
+      "label": "Trastuzumab component"
     }
   ],
   "input_definitions": {
-    "indication_id": {
-      "label": "Indication",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "00285a",
-          "label": "HER2-positive early breast cancer treated every 21 days for one year or until recurrence/unacceptable toxicity."
-        }
-      ],
-      "demo_value": "00285a",
-      "ui_section": "treatment_context",
-      "always_show": true,
-      "input_role": "context"
-    },
-    "assessment_type": {
+    "assessment_stage": {
       "label": "Assessment stage",
       "type": "select",
+      "demo_value": "baseline",
       "required": false,
+      "always_show": true,
+      "input_role": "context",
       "options": [
         {
-          "value": "pre_treatment",
-          "label": "Pre-treatment assessment"
+          "value": "baseline",
+          "label": "Before starting"
+        },
+        {
+          "value": "ongoing",
+          "label": "During treatment"
         }
-      ],
-      "demo_value": "pre_treatment",
-      "ui_section": "treatment_context",
-      "always_show": true,
-      "input_role": "context"
+      ]
     },
-    "cycle_number": {
-      "label": "Cycle number",
+    "ecog": {
+      "label": "ECOG performance status",
       "type": "number",
-      "required": false,
-      "min": 1,
-      "max": 200,
-      "step": 1,
-      "demo_value": 1,
-      "ui_section": "treatment_context",
-      "always_show": true,
-      "input_role": "context"
-    },
-    "lvef_percent": {
-      "label": "Current LVEF (%)",
-      "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 100,
-      "step": 1,
-      "demo_value": 55,
-      "ui_section": "labs",
-      "unit": "%",
-      "input_role": "decision"
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 4
     },
-    "lvef_drop_points": {
-      "label": "Absolute LVEF fall from pretreatment value (percentage points)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "demo_value": 0,
-      "ui_section": "labs",
-      "unit": "percentage points",
-      "input_role": "decision"
-    },
-    "symptomatic_heart_failure": {
-      "label": "Symptomatic heart failure",
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
-    "clinically_significant_cardiac_disease": {
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "her2_positive": {
+      "label": "Validated HER2-positive tumour",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "indication_eligible": {
+      "label": "Full NCCP indication / prior-treatment eligibility confirmed",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "significant_cardiac_disease": {
       "label": "Clinically significant cardiac disease",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "cardiac_monitoring_overdue": {
+      "label": "Required echo / MUGA result overdue or unavailable",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "hypersensitivity_grade": {
-      "label": "Infusion/hypersensitivity reaction grade",
+      "label": "Hypersensitivity reaction",
       "type": "select",
+      "demo_value": 0,
       "required": false,
+      "always_show": true,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -215,52 +228,125 @@
           "ctcae_grade": 4
         }
       ],
-      "demo_value": 0,
-      "ui_section": "clinical",
+      "unit": "CTCAE grade",
       "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Document timing, symptoms, need to interrupt treatment, response to symptomatic therapy, recurrence, hospitalisation and any airway or haemodynamic compromise.",
+      "ctcae_category": "allergic_reaction",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "baseline_lvef_percent": {
+      "label": "Baseline LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 100
+    },
+    "lvef_percent": {
+      "label": "Current LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 100
+    },
+    "lvef_drop_points": {
+      "label": "Fall from baseline LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "percentage points",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 100
+    },
+    "treatment_setting": {
+      "label": "Treatment setting",
+      "type": "select",
+      "demo_value": "early",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "early",
+          "label": "Early breast cancer"
+        },
+        {
+          "value": "metastatic",
+          "label": "Metastatic breast cancer"
+        }
+      ]
+    },
+    "symptomatic_heart_failure": {
+      "label": "Symptomatic heart failure",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
-    "relevant_drug_hypersensitivity": {
-      "label": "Relevant drug hypersensitivity before treatment",
+    "severe_dyspnoea_at_rest": {
+      "label": "Severe dyspnoea at rest from advanced malignancy / comorbidity",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
-    "pregnancy": {
-      "label": "Pregnant",
+    "concurrent_anthracycline": {
+      "label": "Concurrent anthracycline planned",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "breastfeeding": {
-      "label": "Breastfeeding",
-      "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
+      "always_show": true,
       "input_role": "decision"
     },
     "fbc_clinical_concern": {
-      "label": "FBC abnormality requiring clinical review",
+      "label": "Blood-count abnormality requiring clinical review",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
-      "help": "The protocol requires FBC monitoring but does not define a numerical ANC/platelet hold threshold.",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "days_overdue": {
+      "label": "Days late for planned trastuzumab dose",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "days_since_last_dose": {
+      "label": "Days since the last SC trastuzumab administration",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
       "input_role": "decision"
     }
   },
   "required_inputs": [],
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "report_unassessed_coverage_gap",
+    "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -280,148 +366,489 @@
     ],
     "rules": [
       {
-        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "relevant_drug_hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "rule_id": "ALLERGY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "trastuzumab"
           ],
-          "recommendation": "Do not administer; obtain consultant review."
+          "recommendation": "Relevant drug / excipient allergy: do not administer. SC trastuzumab also contains hyaluronidase."
         },
+        "explanation": "Relevant drug / excipient allergy: do not administer. SC trastuzumab also contains hyaluronidase.",
         "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Relevant hypersensitivity is an exclusion."
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 2
+        }
       },
       {
-        "rule_id": "EXCLUSION_PREGNANCY_BREASTFEEDING",
-        "any": [
-          {
-            "field": "pregnancy",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "breastfeeding",
-            "operator": "==",
-            "value": true
-          }
-        ],
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "trastuzumab"
-          ],
-          "recommendation": "Do not administer during pregnancy or breastfeeding; urgent consultant review required."
+        "rule_id": "PREGNANCY_REVIEW",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
         },
-        "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Pregnancy and breastfeeding are exclusions."
-      },
-      {
-        "rule_id": "CARDIAC_DISEASE_EXCLUSION",
-        "field": "clinically_significant_cardiac_disease",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "trastuzumab"
-          ],
-          "recommendation": "Do not proceed without consultant/cardiology review."
-        },
-        "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Clinically significant cardiac disease is an exclusion."
-      },
-      {
-        "rule_id": "LVEF_WITHHOLD",
-        "all": [
-          {
-            "field": "lvef_percent",
-            "operator": "<",
-            "value": 50
-          },
-          {
-            "field": "lvef_drop_points",
-            "operator": ">=",
-            "value": 10
-          }
-        ],
         "action": {
           "type": "withhold",
           "components": [
             "trastuzumab"
           ],
-          "recommendation": "Withhold trastuzumab and repeat LVEF after approximately 3 weeks. If no improvement or further decline, consider discontinuation and refer to cardiology."
+          "recommendation": "Do not proceed without urgent oncology / obstetric risk-benefit review. Pregnancy is not labelled an absolute SmPC contraindication; fetal harm is possible."
         },
+        "explanation": "Do not proceed without urgent oncology / obstetric risk-benefit review. Pregnancy is not labelled an absolute SmPC contraindication; fetal harm is possible.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "LVEF fall ≥10 points from baseline and to below 50% requires withholding."
+          "document": "herceptin EMA SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf",
+          "page": 2,
+          "section": "4.6"
+        }
       },
       {
-        "rule_id": "SYMPTOMATIC_HEART_FAILURE",
-        "field": "symptomatic_heart_failure",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "trastuzumab"
-          ],
-          "recommendation": "Consider discontinuation and refer urgently to cardiology."
+        "rule_id": "LACTATION_REVIEW",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
         },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Symptomatic heart failure requires consultant/cardiology review and possible discontinuation."
-      },
-      {
-        "rule_id": "HYPERSENSITIVITY_G4",
-        "field": "hypersensitivity_grade",
-        "operator": ">=",
-        "value": 4,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "trastuzumab"
-          ],
-          "recommendation": "Permanently discontinue for Grade 4 hypersensitivity."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade 4 hypersensitivity requires discontinuation."
-      },
-      {
-        "rule_id": "FBC_CLINICAL_REVIEW",
-        "field": "fbc_clinical_concern",
-        "operator": "==",
-        "value": true,
         "action": {
           "type": "consultant_review",
           "components": [
             "trastuzumab"
           ],
-          "recommendation": "Review clinically. Trastuzumab may continue during reversible chemotherapy-induced myelosuppression with careful monitoring."
+          "recommendation": "Breastfeeding must be stopped during treatment and for 7 months after the final dose; discuss the individual plan before treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Breastfeeding must be stopped during treatment and for 7 months after the final dose; discuss the individual plan before treatment.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "herceptin EMA SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf",
+          "page": 2,
+          "section": "4.6"
+        }
+      },
+      {
+        "rule_id": "ECOG_REVIEW",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 3
         },
-        "explanation": "No numerical trastuzumab-specific cytopenia threshold is specified."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Outside the NCCP performance-status population: consultant review required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside the NCCP performance-status population: consultant review required.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "HER2_REQUIRED",
+        "when": {
+          "field": "her2_positive",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "The source requires validated HER2-positive disease. Reconcile tumour testing before selecting this regimen.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The source requires validated HER2-positive disease. Reconcile tumour testing before selecting this regimen.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "INDICATION_REVIEW",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "The full source indication / prior treatment criteria have not been confirmed. Review the regimen choice.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The full source indication / prior treatment criteria have not been confirmed. Review the regimen choice.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "CARDIAC_DISEASE",
+        "when": {
+          "field": "significant_cardiac_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Clinically significant cardiac disease is an NCCP exclusion; do not administer without specialist reassessment of the treatment plan."
+        },
+        "explanation": "Clinically significant cardiac disease is an NCCP exclusion; do not administer without specialist reassessment of the treatment plan.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "ECHO_UNAVAILABLE",
+        "when": {
+          "field": "cardiac_monitoring_overdue",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Required cardiac monitoring is unavailable. Arrange the result and documented consultant decision before the next administration; do not assume normal function.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Required cardiac monitoring is unavailable. Arrange the result and documented consultant decision before the next administration; do not assume normal function.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "REACTION_G4",
+        "when": {
+          "field": "hypersensitivity_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Grade 4 hypersensitivity: discontinue and manage the reaction urgently."
+        },
+        "explanation": "Grade 4 hypersensitivity: discontinue and manage the reaction urgently.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "SETTING_MISMATCH",
+        "when": {
+          "field": "treatment_setting",
+          "operator": "==",
+          "value": "metastatic"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "This NCCP card covers early breast cancer. Use the setting-specific regimen; do not transfer duration or partner-drug rules.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "This NCCP card covers early breast cancer. Use the setting-specific regimen; do not transfer duration or partner-drug rules.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "EBC_BASELINE_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "exists"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Baseline LVEF below 50% is outside the source early-breast initiation population. Obtain oncology / cardiology review before starting."
+        },
+        "explanation": "Baseline LVEF below 50% is outside the source early-breast initiation population. Obtain oncology / cardiology review before starting.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "EBC_BASELINE_BORDERLINE",
+        "when": {
+          "all": [
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "exists"
+            },
+            {
+              "all": [
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": "<=",
+                  "value": 55
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "The early-breast source specifies LVEF >55%; 50–55% requires clinical judgement. Confirm the cardiac plan before initiation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The early-breast source specifies LVEF >55%; 50–55% requires clinical judgement. Confirm the cardiac plan before initiation.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "LVEF_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": ">=",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Hold for LVEF <50% AND fall ≥10 percentage points. Repeat after 3 weeks; consider discontinuation if not improved / further decline and refer to cardiology."
+        },
+        "explanation": "Hold for LVEF <50% AND fall ≥10 percentage points. Repeat after 3 weeks; consider discontinuation if not improved / further decline and refer to cardiology.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "LVEF_CHANGE_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Current LVEF is below 50%. Obtain the baseline change to interpret the combined hold rule; do not infer a small fall.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Current LVEF is below 50%. Obtain the baseline change to interpret the combined hold rule; do not infer a small fall.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "HF",
+        "when": {
+          "field": "symptomatic_heart_failure",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Withhold for urgent assessment. NCCP says consider discontinuation for symptomatic heart failure; the final decision requires oncology / cardiology review."
+        },
+        "explanation": "Withhold for urgent assessment. NCCP says consider discontinuation for symptomatic heart failure; the final decision requires oncology / cardiology review.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DYSPNOEA_REST",
+        "when": {
+          "field": "severe_dyspnoea_at_rest",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Severe dyspnoea at rest from advanced malignancy / comorbidity is a product contraindication. Urgent clinical review."
+        },
+        "explanation": "Severe dyspnoea at rest from advanced malignancy / comorbidity is a product contraindication. Urgent clinical review.",
+        "source": {
+          "document": "herceptin EMA SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf",
+          "page": 3,
+          "section": "4.3"
+        }
+      },
+      {
+        "rule_id": "ANTHRACYCLINE_OVERLAP",
+        "when": {
+          "field": "concurrent_anthracycline",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Do not give concurrently with an anthracycline under this card. Review the complete source-specific regimen and cardiac risk before administration."
+        },
+        "explanation": "Do not give concurrently with an anthracycline under this card. Review the complete source-specific regimen and cardiac risk before administration.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "FBC_REVIEW",
+        "when": {
+          "field": "fbc_clinical_concern",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Reversible chemotherapy-induced myelosuppression does not itself mandate a trastuzumab dose reduction. Review complications and any companion chemotherapy separately.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Reversible chemotherapy-induced myelosuppression does not itself mandate a trastuzumab dose reduction. Review complications and any companion chemotherapy separately.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "SC_LATE",
+        "when": {
+          "field": "days_overdue",
+          "operator": ">",
+          "value": 0
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Give the missed SC 600 mg dose as soon as clinically appropriate. No loading dose; reset appointments to preserve at least 3 weeks between SC administrations.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Give the missed SC 600 mg dose as soon as clinically appropriate. No loading dose; reset appointments to preserve at least 3 weeks between SC administrations.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "SC_INTERVAL_TOO_SHORT",
+        "when": {
+          "field": "days_since_last_dose",
+          "operator": "<",
+          "value": 21
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "The interval between SC trastuzumab administrations must be at least 3 weeks. Do not use an IV loading or catch-up dose."
+        },
+        "explanation": "The interval between SC trastuzumab administrations must be at least 3 weeks. Do not use an IV loading or catch-up dose.",
+        "source": {
+          "document": "NCCP 00285 v4",
+          "url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
+          "page": 2
+        }
       }
     ]
   },

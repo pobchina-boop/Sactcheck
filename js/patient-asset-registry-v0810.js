@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.83.8';
-  const CONTENT_RELEASE='0.83.8';
+  const RELEASE='0.83.9';
+  const CONTENT_RELEASE='0.83.9';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00200':{"title": "Trastuzumab IV \u00b7 every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00201':{"title": "Trastuzumab IV \u00b7 weekly \u00b7 metastatic", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00272':{"title": "Trastuzumab SC \u00b7 metastatic", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00285':{"title": "Trastuzumab SC \u00b7 early breast cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00206':{"title": "Trastuzumab emtansine (T-DM1) \u00b7 metastatic", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00485':{title:"Dose-dense AC \u2192 weekly paclitaxel",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
     '00815':{title:"Weekly paclitaxel + trastuzumab \u2192 trastuzumab continuation",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
     '00659':{title:"Adjuvant trastuzumab emtansine (T-DM1)",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},

@@ -157,7 +157,7 @@ for (const [protocolCode, expected] of Object.entries(expectedSourceResolutions)
   assert.equal(metadata.review_date || metadata.last_reviewed_date, expected.review, `${protocolCode}: review date mismatch.`);
   assert.equal(metadata.source_url, expected.url, `${protocolCode}: source URL mismatch.`);
   assert.equal(metadata.source_version_verified, true, `${protocolCode}: source version is not marked verified.`);
-  assert.equal(metadata.source_version_verified_date, CHECK_DATE, `${protocolCode}: source verification date mismatch.`);
+  assert.equal(metadata.source_version_verified_date, ['00200','00201','00206','00272','00285'].includes(protocolCode) ? '2026-10-17' : CHECK_DATE, `${protocolCode}: source verification date mismatch.`);
 }
 
 const context = { console };

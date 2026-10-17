@@ -5,14 +5,15 @@ const regimens={
     "protocol_id": "nccp-00200-vcurrent",
     "settings": [
       "adjuvant",
+      "maintenance",
       "advanced"
     ],
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6330/200_Trastuzumab_21days_Ubeecpc.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive early or metastatic breast cancer; full indication remains a clinician decision"
   },
   "00201": {
     "code": "00201",
@@ -23,9 +24,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6540/201_v6_Trastuzumab_IV_7_days.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive metastatic breast cancer; full indication remains a clinician decision"
   },
   "00202": {
     "code": "00202",
@@ -62,9 +63,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6547/206_Trastuzumab_Emtansine_21days.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Previously treated HER2-positive unresectable locally advanced or metastatic breast cancer; full indication remains a clinician decision"
   },
   "00217": {
     "code": "00217",
@@ -230,14 +231,15 @@ const regimens={
     "code": "00272",
     "protocol_id": "nccp-00272-v4",
     "settings": [
-      "advanced"
+      "advanced",
+      "maintenance"
     ],
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6694/272_v4_Trastuzumab_SC_21days_MBC.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive metastatic breast cancer · SC component; full indication remains a clinician decision"
   },
   "00278": {
     "code": "00278",
@@ -257,14 +259,16 @@ const regimens={
     "code": "00285",
     "protocol_id": "nccp-00285-v4",
     "settings": [
-      "adjuvant"
+      "neoadjuvant",
+      "adjuvant",
+      "maintenance"
     ],
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6700/285_v4_Trastuzumab_SC_21days_EBC.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive early breast cancer · SC component; full indication remains a clinician decision"
   },
   "00316": {
     "code": "00316",
