@@ -486,6 +486,10 @@
     const specific = componentChange(action, component) || {};
     const merged = { ...action, ...specific };
 
+    // Source conflicts and unresolved current-dose history must not become a
+    // numeric restart merely because a reference dose also appears in JSON.
+    if (merged.dose_calculation === "specialist_review") return null;
+
     if (specific.discontinue || merged.type === "permanently_discontinue" || merged.type === "discontinue" || merged.type === "cease" || merged.type === "contraindicated") {
       return { kind: "stop", label: merged.type === "contraindicated" ? "Do not administer" : "Discontinue", precise: true };
     }
@@ -655,7 +659,7 @@
     const hasQuantifiedFuture = Boolean(parsed?.precise);
     const explicitReview = type === "consultant_review" && finding.action?.show_in_dose_actions === true;
     if (!isImmediatePrecise && !hasQuantifiedFuture && !explicitReview && !["withhold_then_reduce", "delay_then_dose_reduce"].includes(type)) return null;
-    if (["withhold_then_reduce", "delay_then_dose_reduce"].includes(type) && !hasQuantifiedFuture) return null;
+    // An immediate hold remains actionable even when the restart dose needs review.
 
     let actionLabel = immediateAction(finding);
     let protocolDose = explicitReview ? (finding.action.recommendation || "Individualised clinical decision required") : "";
@@ -666,7 +670,9 @@
     }
     if (["permanently_discontinue", "contraindicated", "discontinue", "cease", "omit"].includes(type)) protocolDose = "Not to be administered";
     if (["withhold", "delay"].includes(type)) protocolDose = "No dose now";
+    if (["withhold_then_reduce", "delay_then_dose_reduce"].includes(type) && !hasQuantifiedFuture) protocolDose = finding.action?.recommendation || "No dose now; confirm recovery and the subsequent dose with the treating team";
     let rank = ACTION_RANK[type] || 50;
+    if (finding.action?.block_numeric_dose) rank = Math.max(rank, 80);
     if (parsed?.kind === "stop" || parsed?.kind === "omit") {
       protocolDose = "Not to be administered";
       rank = Math.max(rank, parsed.kind === "stop" ? ACTION_RANK.discontinue : ACTION_RANK.omit);
@@ -696,8 +702,14 @@
   }
 
   function buildModificationModel(protocol, result, suppliedModel) {
-    const model = suppliedModel || buildModel(protocol || {});
+    let model = suppliedModel || buildModel(protocol || {});
     if (!result || !Array.isArray(result.findings)) return { rows: [], labTriggered: false, title: "" };
+    // Explicit treatment-phase IDs select the correct reference dose when a
+    // medicine changes frequency between combination and continuation.
+    const phaseId = result.inputs?.treatment_phase;
+    const variant = protocol.metadata?.dose_schedule_variants?.[phaseId]?.[result.inputs?.trastuzumab_schedule];
+    const currentPhase = model.allPhases.find(p => p.id === (variant || phaseId));
+    if (currentPhase) model = {...model, allPhases:[currentPhase,...model.allPhases.filter(p=>p!==currentPhase)]};
     const actions = [];
     result.findings
       .filter(finding => !finding.domainAssessment && !["proceed", "proceed_with_caution", "partial_context_required"].includes(String(finding.actionType || "")))

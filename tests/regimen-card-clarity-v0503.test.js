@@ -54,6 +54,6 @@ assert.strictEqual(clinicalRulesAfter, clinicalRulesBefore);
 const docetaxel = require(path.join(root, "protocols/breast/00204-pertuzumab-trastuzumab-docetaxel.json"));
 const decorated = Attribution.decorate(docetaxel);
 assert.strictEqual(decorated.input_definitions.neuropathy_grade.label, "Peripheral neuropathy grade (Docetaxel)");
-assert.strictEqual(decorated.input_definitions.hypersensitivity_grade.label, "Infusion/hypersensitivity reaction grade");
+assert.strictEqual(decorated.input_definitions.trastuzumab_hypersensitivity_grade.label, "HER2-treatment hypersensitivity");
 
 console.log(`v0.51.0 card clarity tests passed: ${allHaem.length} Haematology cycles standardised, ${attributedFields} toxicity labels attributed across ${attributedProtocols} protocols.`);

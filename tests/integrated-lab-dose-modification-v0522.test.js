@@ -44,31 +44,33 @@ const acModel = Dose.buildModel(ac);
 assert.strictEqual(acModel.phases[0].components[0].dose, '60 mg/m²');
 assert.strictEqual(acModel.phases[0].components[1].dose, '600 mg/m²');
 
-let result = Engine.assess(ac, { anc: 1.2, platelets: 80 }, {});
+let result = Engine.assess(ac, { anc_x10e9_l: 1.2, platelets_x10e9_l: 80 }, {});
 let modification = Dose.buildModificationModel(ac, result, acModel);
-assert.strictEqual(modification.title, 'Protocol dose modification applies');
+assert.strictEqual(modification.title, 'Protocol dose action applies');
 assert.strictEqual(modification.labTriggered, true);
 assert.deepStrictEqual(
-  modification.rows.map(row => [row.component, row.protocolDose]).sort(),
-  [['Cyclophosphamide', '450 mg/m²'], ['Doxorubicin', '45 mg/m²']]
+  modification.rows.map(row => [row.component, row.actionLabel]).sort(),
+  [['Cyclophosphamide', 'Clinical review'], ['Doxorubicin', 'Clinical review']]
 );
+assert(modification.rows.every(row => /75% AC.*G-CSF/.test(row.protocolDose)), 'Keep both source options visible instead of silently selecting 75%.');
 
-result = Engine.assess(ac, { egfr: 'renal_0_9' }, {});
+result = Engine.assess(ac, { crcl_ml_min: 9 }, {});
 modification = Dose.buildModificationModel(ac, result, acModel);
 assert.strictEqual(modification.rows[0].component, 'Cyclophosphamide');
 assert.strictEqual(modification.rows[0].protocolDose, '300 mg/m²');
-assert(modification.rows[0].trigger.includes('<10 mL/min'));
+assert(modification.rows[0].trigger.includes('Creatinine clearance (not indexed eGFR): 9'));
 
-result = Engine.assess(ac, { anc: 1.2, platelets: 80, bilirubin_uln_multiple: 4 }, {});
+result = Engine.assess(ac, { anc_x10e9_l: 1.2, platelets_x10e9_l: 80, bilirubin_umol_l: 90 }, {});
 modification = Dose.buildModificationModel(ac, result, acModel);
 const doxorubicin = modification.rows.find(row => row.component === 'Doxorubicin');
 const cyclophosphamide = modification.rows.find(row => row.component === 'Cyclophosphamide');
 assert.strictEqual(doxorubicin.actionLabel, 'Omit component');
 assert.strictEqual(doxorubicin.protocolDose, 'Not to be administered');
 assert.strictEqual(doxorubicin.allActions.length, 2, 'The more restrictive action must govern without hiding the other triggered dose rule.');
-assert.strictEqual(cyclophosphamide.protocolDose, '450 mg/m²');
+assert.strictEqual(cyclophosphamide.actionLabel, 'Clinical review');
+assert.match(cyclophosphamide.protocolDose, /75% AC.*G-CSF/);
 
-result = Engine.assess(ac, { anc: 0.8 }, {});
+result = Engine.assess(ac, { anc_x10e9_l: 0.8 }, {});
 modification = Dose.buildModificationModel(ac, result, acModel);
 assert(modification.rows.every(row => row.protocolDose === 'No dose now'));
 

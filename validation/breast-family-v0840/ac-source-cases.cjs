@@ -1,0 +1,123 @@
+'use strict';
+// Source-derived acceptance harness. This file never writes application files.
+// Run: node /workspace/scratch/aa44ad62d693/v0840-audits/ac-source-cases.cjs
+// Optional SACT_REPO_ROOT and AC_SOURCE_CASES_OUTPUT allow integration elsewhere.
+const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),crypto=require('crypto');
+const ROOT=process.env.SACT_REPO_ROOT||path.resolve(__dirname,'../..');
+const E=require(path.join(ROOT,'js/assessment-engine')),D=require(path.join(ROOT,'js/protocol-dose-schedule'));
+const auditFile=fs.existsSync(path.join(__dirname,'ac-audit.json'))?path.join(__dirname,'ac-audit.json'):path.join(ROOT,'validation/breast-family-v0840/ac-audit.json');
+const audit=JSON.parse(fs.readFileSync(auditFile));
+const codes=['00252','00260','00278','00316','00432','00433','00745'];
+const her2=new Set(['00316','00432','00433','00745']),old=new Set(['00252','00278']),weeklyTable=new Set(['00260','00432','00433']),ddTable=new Set(['00278','00316','00745']);
+const P=Object.fromEntries(codes.map(c=>[c,JSON.parse(fs.readFileSync(path.join(ROOT,'protocols/breast',fs.readdirSync(path.join(ROOT,'protocols/breast')).find(f=>f.startsWith(c+'-')))))]));
+const records=[];let originalCount=0;
+const eq=(x,y,msg)=>assert.deepEqual(x,y,msg),ok=(x,msg)=>assert(x,msg);
+const ftext=f=>(f.explanation||f.action?.recommendation||'');
+const real=r=>r.findings.filter(f=>!f.domainAssessment&&!String(f.ruleId||'').startsWith('PARTIAL_'));
+const comps=f=>Array.isArray(f.action?.components)?f.action.components:[f.action?.components].filter(Boolean);
+const matches=(f,component)=>!component||comps(f).includes(component)||comps(f).includes('whole_regimen');
+const holding=new Set(['contraindicated','withhold','withhold_then_reduce','delay','delay_then_dose_reduce','omit','discontinue','permanently_discontinue']);
+const reduction=new Set(['dose_reduce','dose_reduce_one_level','dose_reduce_two_levels','delay_then_dose_reduce','withhold_then_reduce']);
+function mustFinding(r,component,types,pattern){const found=real(r).find(f=>matches(f,component)&&(!types||types.includes(f.actionType))&&(!pattern||pattern.test(ftext(f)+' '+f.ruleId)));ok(found,`Missing ${component||'any'} finding ${types||''} ${pattern||''}; got ${real(r).map(f=>f.ruleId+':'+f.actionType).join(', ')}`);return found;}
+function noFinding(r,component,pred,msg){ok(!real(r).some(f=>matches(f,component)&&pred(f)),msg||'Unexpected component finding');}
+function noNumeric(d,component){for(const row of d.rows.filter(x=>!component||x.componentId===component)){ok(!row.quantified||/^Not to be administered$/i.test(row.protocolDose||''),`Unexpected quantified ${component} dose: ${row.protocolDose}`);ok(!/^\s*\d+(?:\.\d+)?\s*(?:mg|g\b|micro)/i.test(row.protocolDose||''),`Numeric dose displayed: ${row.protocolDose}`);}}
+function visibleReview(d,component,pattern){const row=d.rows.find(x=>x.componentId===component);ok(row,`No visible ${component} dose-action row`);ok(pattern.test([row.protocolDose,row.explanation,...(row.allActions||[]).map(a=>a.protocolDose+' '+a.explanation)].join(' ')),`Visible ${component} dose action lacks ${pattern}: ${row.protocolDose}`);return row;}
+function visibleHold(d,component){const row=d.rows.find(x=>x.componentId===component);ok(row&&holding.has(row.actionType),`No visible hold for ${component}`);noNumeric(d,component);}
+function sourcePercent(r,d,component,percent){const f=mustFinding(r,component,['dose_reduce','consultant_review'],new RegExp(percent+'\\s*%'));const row=visibleReview(d,component,new RegExp(percent+'\\s*%|'+(component==='doxorubicin'?60:600)*percent/100+'\\s*mg'));if(row.quantified){ok(String(row.protocolDose).startsWith(String((component==='doxorubicin'?60:600)*percent/100)+' '),`Unexpected ${percent}% dose ${row.protocolDose}`);}return f;}
+function bounded(r,d,component){mustFinding(r,component,['consultant_review'],/overlap|boundar|gap|between|unassigned|interpret/i);noNumeric(d,component);}
+function actionIsNotClearance(r){ok(!['proceed','proceed_with_caution'].includes(r.actionType),`Unsafe clearance-like overall action ${r.actionType}`);}
+function t(code,name,inputs,check,opts={}){let result,dose;const rec={code,name,inputs,kind:opts.kind||'additional'};try{result=E.assess(P[code],inputs);dose=D.buildModificationModel(P[code],result);if(!opts.allowInvalid){eq(result.errors,[],name);eq(result.invalid,[],name);}check(result,dose,P[code]);rec.pass=true;}catch(e){rec.pass=false;rec.error=e.message;}rec.actual=result?.actionType;rec.findings=result?.findings?.filter(f=>!f.domainAssessment).map(f=>({rule:f.ruleId,action:f.actionType,text:ftext(f)}));rec.doseActions=dose?.rows?.map(x=>({component:x.componentId,action:x.actionType,dose:x.protocolDose,reference:x.startingDose,quantified:x.quantified}));records.push(rec);return rec;}
+function native(code,x){const n={};const names={anc:'anc_x10e9_l',platelets:'platelets_x10e9_l',lvef:'lvef_percent',crcl:'crcl_ml_min',ast_uln:'ast_uln_multiple',alt_uln:'alt_uln_multiple',bilirubin_uln:'bilirubin_uln_multiple',assessment_type:'assessment_stage',lvef_current:'lvef_percent',lvef_fall_points:'lvef_drop_points',days_anc_below_0_5:'anc_below_0_5_days',other_toxicity_grade:'other_nonhaem_toxicity_grade',hypersensitivity_grade:'trastuzumab_hypersensitivity_grade',days_late:'days_overdue_trastuzumab'};for(const [k,v] of Object.entries(x)){if(k==='phase'){n.treatment_phase=v==='trastuzumab'?'paclitaxel':v==='trastuzumab_maintenance'?'continuation':v;if(code==='00252'&&v==='ac'){n.treatment_phase=P[code].input_definitions.treatment_phase.options.some(o=>o.value==='ac')?'ac':'combination';}}else if(k==='second_thrombocytopenia_delay')n.platelet_delay_count=v?2:0;else n[names[k]||k]=v;}if('days_late'in x)n.trastuzumab_schedule=code==='00745'?'q21':'weekly';return n;}
+function originalOracle(code,x,r,d){
+ const isOld=old.has(code),isWeekly=['00260','00432','00433','00745'].includes(code),is70=['00252','00260'].includes(code);
+ if(!Object.keys(x).length){eq(r.actionType,'incomplete');eq(real(r).length,0);eq(d.rows.length,0);return;}
+ if('prior_febrile_neutropenia'in x){
+  ok(P[code].input_definitions.prior_febrile_neutropenia,'A distinct prior-FN history input is required; do not substitute acute FN');
+  if(code==='00432'){const f=mustFinding(r,'doxorubicin',['consultant_review'],/previous FN|febrile/i);ok(!reduction.has(f.actionType),'00432 must not borrow a75% FN reduction');ok(/No universal 75%|does not.*75%|no.*percentage/i.test(ftext(f))||! /75\s*%/.test(ftext(f)),'00432 must not positively prescribe75% after FN');noNumeric(d);}else{mustFinding(r,'doxorubicin',['consultant_review','dose_reduce'],/75\s*%/);noNumeric(d);}
+  return;
+ }
+ if('second_thrombocytopenia_delay'in x){mustFinding(r,'doxorubicin',['consultant_review','dose_reduce'],/75\s*%/);noNumeric(d);return;}
+ if('ecog'in x){mustFinding(r,undefined,['consultant_review'],/performance|ECOG/i);actionIsNotClearance(r);return;}
+ if('hypersensitivity_grade'in x){mustFinding(r,'trastuzumab',['discontinue','permanently_discontinue'],/grade\s*4/i);visibleHold(d,'trastuzumab');return;}
+ if('symptomatic_heart_failure'in x){mustFinding(r,'trastuzumab',['withhold','discontinue'],/heart failure|cardia/i);visibleHold(d,'trastuzumab');return;}
+ if('days_late'in x){const load=code==='00745'?8:4,usual=code==='00745'?6:2,dose=x.days_late>7?load:usual;mustFinding(r,'trastuzumab',['consultant_review'],new RegExp('\\b'+dose+'\\s*mg/kg'));visibleReview(d,'trastuzumab',new RegExp('\\b'+dose+'\\s*mg/kg'));noNumeric(d);return;}
+ if('lvef_current'in x||'lvef_fall_points'in x){const hold=code==='00316'?x.lvef_fall_points>=10:x.lvef_current<50&&x.lvef_fall_points>=10;if(hold){mustFinding(r,'trastuzumab',['withhold'],/LVEF/i);visibleHold(d,'trastuzumab');}else{noFinding(r,'trastuzumab',f=>f.ruleId==='HER2_LVEF_HOLD','Incorrect combined LVEF hold');mustFinding(r,'trastuzumab',['consultant_review'],/LVEF/i);noNumeric(d);}return;}
+ if('lvef'in x){ok(r.findings.some(f=>/LVEF|cardia/i.test(ftext(f))&&holding.has(f.actionType)||f.actionType==='consultant_review'||f.actionType==='partial_context_required'),'Low LVEF must surface a cardiac finding / missing-context review');actionIsNotClearance(r);noNumeric(d);return;}
+ if('bilirubin_umol_l'in x){const v=x.bilirubin_umol_l;if(v<20){noFinding(r,'doxorubicin',f=>f.ruleId.startsWith('DOXO_BILI_'));}else if(isOld&&v===51||!isOld&&v>50&&v<51){bounded(r,d,'doxorubicin');}else if(v>(isOld?85:86)){mustFinding(r,'doxorubicin',['omit','contraindicated']);visibleHold(d,'doxorubicin');}else{sourcePercent(r,d,'doxorubicin',v<(isOld?51:51)?50:25);}return;}
+ if('crcl'in x){const v=x.crcl,cut20=['00252','00278','00433'].includes(code);if(v<10){if(isOld)sourcePercent(r,d,'cyclophosphamide',50);else{mustFinding(r,'cyclophosphamide',['omit','contraindicated'],/not recommended|omit/i);visibleHold(d,'cyclophosphamide');}}else if(v<= (cut20?20:29)){sourcePercent(r,d,'cyclophosphamide',75);}else if(!cut20&&v<30){bounded(r,d,'cyclophosphamide');}else{noFinding(r,'cyclophosphamide',f=>/^CYCLO_RENAL/.test(f.ruleId));}return;}
+ if('ast_uln'in x){sourcePercent(r,d,'doxorubicin',x.ast_uln>3?50:75);return;}
+ if('alt_uln'in x||'bilirubin_uln'in x){const a=x.alt_uln,b=x.bilirubin_uln;if(a>=10||b>5){mustFinding(r,'paclitaxel',['contraindicated','omit','withhold'],/not recommended|contraindicated/i);visibleHold(d,'paclitaxel');}else if(b>1.25&&b<1.26||b>2&&b<2.01){bounded(r,d,'paclitaxel');}else if(b>1.25&&a===undefined){mustFinding(r,'paclitaxel',['consultant_review'],/transaminase|ALT|context/i);noNumeric(d,'paclitaxel');}else if(b>1.25){const dose=isWeekly?(b<=2?60:40):(b<=2?135:90);mustFinding(r,'paclitaxel',['consultant_review','dose_reduce'],new RegExp('\\b'+dose+'\\s*mg/m'));visibleReview(d,'paclitaxel',new RegExp('\\b'+dose+'\\s*mg/m'));}else{noFinding(r,'paclitaxel',f=>f.ruleId.startsWith('PAC_HEP_')&&holding.has(f.actionType));}return;}
+ if('neuropathy_grade'in x){if(x.phase==='ac'){noFinding(r,'doxorubicin',f=>['discontinue','permanently_discontinue'].includes(f.actionType),'Taxane neuropathy must not discontinue AC');noFinding(r,'paclitaxel',f=>['discontinue','permanently_discontinue'].includes(f.actionType),'Do not emit an active taxane stop during AC');}else if(x.neuropathy_grade>=3){mustFinding(r,'paclitaxel',['discontinue']);visibleHold(d,'paclitaxel');}else{mustFinding(r,'paclitaxel',['consultant_review','dose_reduce'],/neuropathy/i);if(['00260','00432','00433'].includes(code))visibleReview(d,'paclitaxel',/10\s*mg\/m/);noNumeric(d,'paclitaxel');}return;}
+ if('other_toxicity_grade'in x){mustFinding(r,'paclitaxel',['withhold'],/grade|toxicity/i);visibleHold(d,'paclitaxel');ok(real(r).some(f=>/10\s*mg\/m/.test(ftext(f))),'Grade2 other-toxicity action must retain subsequent10mg/m² decrement');return;}
+ if('assessment_type'in x){if(code==='00252'){noFinding(r,undefined,f=>f.ruleId==='BASELINE_ANC');mustFinding(r,'doxorubicin',['consultant_review','dose_reduce'],/75\s*%/);}else mustFinding(r,undefined,['contraindicated'],/baseline.*ANC|ANC.*baseline/i);noNumeric(d);return;}
+ if('anc'in x||'platelets'in x){const a=x.anc,p=x.platelets,phase=x.phase;
+  if(phase==='trastuzumab_maintenance'){noFinding(r,'trastuzumab',f=>reduction.has(f.actionType)||holding.has(f.actionType),'Cytotoxic counts must not automatically reduce/hold antibody maintenance');noNumeric(d);return;}
+  if(!phase){if(a<1||p<70){mustFinding(r,undefined,['delay','withhold','delay_then_dose_reduce'],/count|ANC|platelet|neutro/i);noNumeric(d);}else{ok(!real(r).some(f=>f.actionType==='proceed'),'Single normal count must not issue regimen clearance');}return;}
+  if(phase==='ac'){
+   if(a<1||p<(is70?70:100)){mustFinding(r,'doxorubicin',['delay','withhold']);visibleHold(d,'doxorubicin');}
+   else if(is70&&(a>=1&&a<=1.49||p>=70&&p<=90)){mustFinding(r,'doxorubicin',['consultant_review','dose_reduce'],/75\s*%/);noNumeric(d);}
+   else if(ddTable.has(code)&&p===100){bounded(r,d,'doxorubicin');}
+   else{noFinding(r,'doxorubicin',f=>holding.has(f.actionType)||/AC_INTERMEDIATE|COUNT_100_BOUNDARY/.test(f.ruleId),'Full routine count row should not be held or reduced');}
+   return;
+  }
+  if(phase==='paclitaxel'){
+   if(a<1||p<90){mustFinding(r,'paclitaxel',['delay','withhold','delay_then_dose_reduce']);noNumeric(d,'paclitaxel');if(p<70||a<0.5&&x.days_anc_below_0_5>=7){mustFinding(r,'paclitaxel',['delay_then_dose_reduce','withhold_then_reduce'],/one.*level|80.*65.*50/i);visibleReview(d,'paclitaxel',/one.*level|80.*65.*50/i);}else if(a<0.5){noFinding(r,'paclitaxel',f=>f.ruleId==='PAC_SEVERE_COUNTS','Shorter/unknown ANC duration must not auto-assign>=7day reduction');}}
+   else if(p===90)bounded(r,d,'paclitaxel');
+   else noFinding(r,'paclitaxel',f=>holding.has(f.actionType)||reduction.has(f.actionType),'Routine weekly count row should not be held/reduced');return;
+  }
+ }
+ throw new Error('Unmapped original audit case '+JSON.stringify(x));
+}
+for(const c of codes){for(const [i,s] of audit.regimens[c].proposed_acceptance_cases.entries()){originalCount++;t(c,`source-${String(i+1).padStart(3,'0')}: ${s.expected}`,native(c,s.inputs),(r,d)=>originalOracle(c,s.inputs,r,d),{kind:'original-source-audit'});}}
+// Independently reviewed edge cases: actual visible doses and source-specific exclusions.
+for(const c of codes){
+ const ac=native(c,{phase:'ac'}).treatment_phase;
+ t(c,'Acute FN in AC produces a hold, never a caution-to-proceed',{treatment_phase:ac,febrile_neutropenia:true},(r,d)=>{mustFinding(r,'doxorubicin',['withhold','delay'],/febrile|\bFN\b/i);visibleHold(d,'doxorubicin');actionIsNotClearance(r);});
+ t(c,'Unknown phase does not erase acute FN',{febrile_neutropenia:true},(r,d)=>{mustFinding(r,undefined,['withhold','delay'],/febrile|\bFN\b/i);noNumeric(d);actionIsNotClearance(r);});
+ t(c,'Prior doxorubicin exposure plus planned dose requires reconciliation',{treatment_phase:ac,lifetime_doxorubicin_mg_m2:430,proposed_doxorubicin_mg_m2:60},(r,d)=>{mustFinding(r,'doxorubicin',['consultant_review','contraindicated'],/prior|cumulative|450|exposure/i);noNumeric(d,'doxorubicin');});
+ t(c,'450mg/m² lifetime limit',{treatment_phase:ac,lifetime_doxorubicin_mg_m2:450},(r,d)=>{mustFinding(r,'doxorubicin',['contraindicated'],/450/);visibleHold(d,'doxorubicin');});
+ if(c!=='00252')t(c,'Source breastfeeding exclusion',{breastfeeding:true},(r,d)=>{mustFinding(r,undefined,['contraindicated'],/exclusion|breastfeed/i);noNumeric(d);});
+ if(['00252','00260'].includes(c)){
+  t(c,'Do not import second-delay75% rule into70/90 AC table',{treatment_phase:ac,platelet_delay_count:2},r=>noFinding(r,'doxorubicin',f=>/second.*delay|after.*second/i.test(ftext(f)),'Unsourced second-delay rule'));
+  t(c,'Do not import platelet100 restart criterion',{treatment_phase:ac,restarting_after_count_delay:true,anc_x10e9_l:1.6,platelets_x10e9_l:95},r=>noFinding(r,'doxorubicin',f=>f.ruleId==='AC_RESTART_BOUNDARY','Wrong source restart rule'));
+ }
+ if(old.has(c))t(c,'Competing AST/bilirubin reductions are not automatically combined',{treatment_phase:ac,bilirubin_umol_l:30,ast_uln_multiple:2.5},(r,d)=>{mustFinding(r,'doxorubicin',['consultant_review'],/both|combin|reconcil/i);noNumeric(d,'doxorubicin');visibleReview(d,'doxorubicin',/combin|reconcil/i);});
+ if(c!=='00252'){
+  for(const grade of [2,3,4])t(c,'Other taxane toxicity grade'+grade,{treatment_phase:'paclitaxel',other_nonhaem_toxicity_grade:grade},(r,d)=>{if(grade>=3){mustFinding(r,'paclitaxel',['discontinue'],/grade|reaction/i);visibleHold(d,'paclitaxel');}else if(!['00278','00745'].includes(c)){mustFinding(r,'paclitaxel',['withhold'],/grade|toxicity/i);visibleHold(d,'paclitaxel');}});
+  for(const name of ['stomatitis_grade','skin_grade'])t(c,'Named grade3 taxane toxicity '+name,{treatment_phase:'paclitaxel',[name]:3},(r,d)=>{mustFinding(r,'paclitaxel',['discontinue'],/grade|reaction/i);visibleHold(d,'paclitaxel');});
+  t(c,'No numeric taxane re-escalation from hepatic table',{treatment_phase:'paclitaxel',alt_uln_multiple:2,bilirubin_uln_multiple:3,current_paclitaxel_mg_m2:30},(r,d)=>{mustFinding(r,'paclitaxel',['consultant_review'],/current|original|reconcil|re-escalat/i);noNumeric(d,'paclitaxel');visibleReview(d,'paclitaxel',/current|re-escalat|reconcil/i);});
+  t(c,'Dose-reduction rule cannot give a numeric dose beside a high hepatic stop',{treatment_phase:'paclitaxel',alt_uln_multiple:10,bilirubin_uln_multiple:3,current_paclitaxel_mg_m2:80},(r,d)=>{visibleHold(d,'paclitaxel');noNumeric(d,'paclitaxel');});
+  if(ddTable.has(c)){
+   t(c,'Taxane inherits second thrombocytopenia-delay source row',{treatment_phase:'paclitaxel',platelet_delay_count:2},(r,d)=>{mustFinding(r,'paclitaxel',['consultant_review','dose_reduce'],/75\s*%/);noNumeric(d,'paclitaxel');});
+   t(c,'Taxane restart ANC boundary is stricter than routine row',{treatment_phase:'paclitaxel',restarting_after_count_delay:true,anc_x10e9_l:1,platelets_x10e9_l:101},(r,d)=>{mustFinding(r,'paclitaxel',['consultant_review','delay','withhold'],/recover|restart|boundar/i);noNumeric(d,'paclitaxel');});
+  }
+  if(['00260','00278','00433','00745'].includes(c))t(c,'Severe hepatic source exclusion survives taxane phase',{assessment_stage:'baseline',treatment_phase:'paclitaxel',severe_hepatic_impairment:true},(r,d)=>{mustFinding(r,'paclitaxel',['contraindicated'],/hepatic|liver/i);visibleHold(d,'paclitaxel');});
+  if(c==='00432')t(c,'Severe hepatic caution survives taxane phase',{treatment_phase:'paclitaxel',severe_hepatic_impairment:true},(r,d)=>{mustFinding(r,'paclitaxel',['consultant_review','withhold'],/hepatic|liver/i);noNumeric(d,'paclitaxel');});
+ }
+}
+for(const c of her2){
+ const comboSchedule=c==='00745'?'q21':'weekly';
+ for(const phase of ['paclitaxel','continuation']){
+  const schedule=phase==='continuation'?'q21':comboSchedule,reference=schedule==='weekly'?2:6;
+  for(const late of [0,1,7,7.01,8])t(c,`${phase} ${schedule} overdue${late}`,{treatment_phase:phase,trastuzumab_schedule:schedule,days_overdue_trastuzumab:late},(r,d)=>{if(late===0){noFinding(r,'trastuzumab',f=>f.ruleId.startsWith('H_LATE_'));return;}const dose=late>7?(schedule==='weekly'?4:8):reference;const f=mustFinding(r,'trastuzumab',['consultant_review'],new RegExp('\\b'+dose+'\\s*mg/kg'));const row=visibleReview(d,'trastuzumab',new RegExp('\\b'+dose+'\\s*mg/kg'));ok(row.startingDose===reference+' mg/kg',`Incorrect active-phase reference ${row.startingDose}, wanted ${reference}mg/kg`);noNumeric(d,'trastuzumab');if(schedule==='q21'&&c!=='00745')ok(/herceptin|00200/i.test([f.source?.url,f.source?.document].join(' ')),'q21continuation requires00200/SmPC citation, not weekly combination-page3');});
+ }
+ t(c,'Antibody-only counts do not produce cytotoxic dose actions',{treatment_phase:'continuation',anc_x10e9_l:0.4,platelets_x10e9_l:50},(r,d)=>{noFinding(r,'trastuzumab',f=>holding.has(f.actionType)||reduction.has(f.actionType));ok(!d.rows.some(x=>['doxorubicin','cyclophosphamide','paclitaxel'].includes(x.componentId)),'Inactive chemotherapy actions in continuation');});
+ t(c,'AC does not emit an on-treatment trastuzumab hold',{treatment_phase:'ac',lvef_drop_points:11},r=>noFinding(r,'trastuzumab',f=>f.ruleId==='HER2_LVEF_HOLD','HER2 not yet started in AC; use future eligibility review'));
+ t(c,'Missing overdue schedule remains review',{treatment_phase:'paclitaxel',days_overdue_trastuzumab:8},(r,d)=>{mustFinding(r,'trastuzumab',['consultant_review'],/schedule|weekly|q21/i);noNumeric(d,'trastuzumab');});
+ for(const current of [49.99,50,50.01])for(const fall of [9.99,10,10.01])t(c,`LVEF boundary ${current}/${fall}`,{treatment_phase:'paclitaxel',lvef_percent:current,lvef_drop_points:fall},(r,d)=>{const mustHold=c==='00316'?fall>=10:current<50&&fall>=10;if(mustHold){mustFinding(r,'trastuzumab',['withhold'],/LVEF/i);visibleHold(d,'trastuzumab');}else noFinding(r,'trastuzumab',f=>f.ruleId==='HER2_LVEF_HOLD','Incorrect LVEF conjunction');});
+ if(c==='00433')for(const baseline of [49.99,50,55,55.01])t(c,'Baseline LVEF eligibility boundary'+baseline,{baseline_lvef_percent:baseline},(r,d)=>{if(baseline<50){mustFinding(r,'trastuzumab',['withhold','contraindicated'],/baseline|LVEF/i);noNumeric(d);}else if(baseline<=55){mustFinding(r,'trastuzumab',['consultant_review'],/55|50/i);noNumeric(d);}else noFinding(r,'trastuzumab',f=>f.ruleId==='HER2_BASELINE_BORDERLINE');});
+}
+t('00745','00745 weekly schedule cannot produce4/2 instructions',{treatment_phase:'paclitaxel',trastuzumab_schedule:'weekly',days_overdue_trastuzumab:8},(r,d)=>{ok(!P['00745'].input_definitions.trastuzumab_schedule.options.some(x=>x.value==='weekly'),'Unsupported weekly schedule remains selectable');noFinding(r,'trastuzumab',f=>/\b[24]\s*mg\/kg/.test(ftext(f)),'Unsupported weekly dose recommendation');noNumeric(d);},{allowInvalid:true});
+t('00745','Haemodialysis independently stops cyclophosphamide',{treatment_phase:'ac',haemodialysis:true},(r,d)=>{mustFinding(r,'cyclophosphamide',['omit','contraindicated'],/haemodialysis|dialysis/i);visibleHold(d,'cyclophosphamide');});
+t('00745','Pregnancy is an explicit source exclusion',{pregnancy:true},(r,d)=>{mustFinding(r,undefined,['contraindicated'],/exclusion|pregnan/i);noNumeric(d);});
+for(const delay of [14,14.01,15])t('00433','Taxane toxicity delay boundary'+delay,{treatment_phase:'paclitaxel',paclitaxel_delay_days:delay},(r,d)=>{if(delay>14){mustFinding(r,'paclitaxel',['discontinue'],/two weeks|delay/i);visibleHold(d,'paclitaxel');}else noFinding(r,'paclitaxel',f=>f.ruleId==='PAC_INTOLERANCE'&&f.actionType==='discontinue');});
+// Static schedules/citations are an important part of source traceability.
+for(const c of codes)t(c,'Static source schedule identity',{},(_r,_d,p)=>{const phases=p.treatment_phases,ac=phases.find(x=>x.phase_id==='ac');ok(ac,'AC phase missing');eq(ac.cycle_length_days,['00252','00260','00432'].includes(c)?21:14);eq(ac.cycles,[1,2,3,4]);eq(ac.administration.find(x=>x.drug==='doxorubicin').dose.value,60);eq(ac.administration.find(x=>x.drug==='cyclophosphamide').dose.value,600);ok(!ac.administration.some(x=>x.drug==='trastuzumab'),'Trastuzumab incorrectly overlaps AC');if(c!=='00252'){const tax=phases.find(x=>x.phase_id==='paclitaxel'),drug=tax.administration.find(x=>x.drug==='paclitaxel'),fortnight=['00278','00316'].includes(c);eq(tax.cycle_length_days,fortnight?14:21);eq(tax.cycles,[1,2,3,4]);if(['00278','00316','00745'].includes(c))ok(/14\s*days.*final AC/i.test(drug.notes),'Missing source14day transition');eq(drug.dose.value,fortnight?175:80);eq(drug.day,fortnight?[1]:[1,8,15]);if(her2.has(c)){const h=tax.administration.find(x=>x.drug==='trastuzumab');eq(h.dose.value,c==='00745'?6:2);ok(new RegExp('loading '+(c==='00745'?8:4)+' mg/kg').test(h.notes),'Missing source loading dose');eq(h.day,c==='00745'?[1]:fortnight?[1,8]:[1,8,15]);const continuation=phases.find(x=>x.phase_id==='continuation');eq(continuation.cycle_length_days,21);eq(continuation.administration.find(x=>x.drug==='trastuzumab').dose.value,6);ok(/one year.*from first trastuzumab dose/.test(continuation.administration.find(x=>x.drug==='trastuzumab').notes),'Total trastuzumab duration must start at first antibody dose');}}ok(p.rule_engine.rules.every(f=>f.source?.url&&f.source?.page),'Missing source URL/page');eq(p.metadata.validation.clinical_use_authorised,false);});
+const hashFile=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const reviewedFiles=['js/assessment-engine.js','js/protocol-dose-schedule.js',...codes.map(c=>'protocols/breast/'+fs.readdirSync(path.join(ROOT,'protocols/breast')).find(f=>f.startsWith(c+'-')))];
+const snapshotSha256=Object.fromEntries(reviewedFiles.map(f=>[f,hashFile(path.join(ROOT,f))]));
+const failed=records.filter(r=>!r.pass);const output=process.env.AC_SOURCE_CASES_OUTPUT||path.join(__dirname,'ac-source-cases-results.json');
+fs.writeFileSync(output,JSON.stringify({checkedAt:new Date().toISOString(),repository:ROOT,snapshotSha256,limitations:'Source-derived software checks; not human clinical validation, treatment authorisation, or exhaustive cross-product testing.',sourceAuditSha256:crypto.createHash('sha256').update(fs.readFileSync(auditFile)).digest('hex'),originalSourceCases:originalCount,totalCases:records.length,passed:records.length-failed.length,failed:failed.length,records},null,2)+'\n');
+console.log(`AC source audit: ${records.length-failed.length}/${records.length} passed (${originalCount} original source cases; ${records.length-originalCount} additional review/boundary cases).`);
+for(const f of failed)console.log(`FAIL ${f.code}: ${f.name}\n  ${f.error}`);
+console.log('Evidence: '+output);process.exitCode=failed.length?1:0;

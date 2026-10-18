@@ -1,0 +1,5218 @@
+{
+  "audit_date": "2026-10-17",
+  "scope": "Live NCCP PDF source reconciliation for seven related breast regimens. Research audit only; no clinical authorisation or independent human validation. No application files edited.",
+  "method": [
+    "Downloaded all seven PDFs from existing official HSE metadata URLs using Mozilla user agent; SHA256 retained.",
+    "Read extracted text in full; visually checked decision tables where glyphs, overlapping ranges or row scope might be lost.",
+    "Official web open independently resolved each mapped PDF. Public search coverage was poor; known current HSE breast catalogue also fetched for link verification.",
+    "Compared complete existing protocol inputs, phase structures and executable rules. Proposed cases are source-derived acceptance cases, not executed tests."
+  ],
+  "web_refs": {
+    "00252": "turn161view0",
+    "00260": "turn161view1",
+    "00278": "turn170view0",
+    "00316": "turn170view1",
+    "00432": "turn170view2",
+    "00433": "turn170view3",
+    "00745": "turn170view4"
+  },
+  "global_integrity_requirements": [
+    "Preserve each regimen-specific difference: component overlap does not make numerical thresholds interchangeable.",
+    "All fields optional. Evaluate any independently actionable supplied value. Missing phase/context must yield explicitly conditional component results or request for phase review, never assume AC or paclitaxel or maintenance.",
+    "A normal supplied value is only assessed for its domain; missing values remain unassessed and cannot authorise treatment.",
+    "Use absolute bilirubin micromol/L for doxorubicin tables and ALT/bilirubin ULN ratios for paclitaxel tables. Do not substitute eGFR for source CrCl without identified clinical calculation.",
+    "Do not apply cytotoxic haematology dose reductions to trastuzumab maintenance; trastuzumab tables explicitly allow continuation during reversible chemotherapy myelosuppression with monitoring.",
+    "Separate source-listed baseline eligibility from later-cycle thresholds and distinguish current febrile neutropenia emergency from history driving next-cycle reduction.",
+    "Show source ambiguity or gap visibly and require consultant/pharmacy interpretation; do not silently round decimal values or inherit thresholds from a different protocol.",
+    "Routine CT/TAP, tumour markers, DEXA and a universal post-therapy scan schedule are not specified in these regimen PDFs. A longitudinal map must label any supplemental guideline schedule and context separately.",
+    "RT timing after cytotoxic chemotherapy is explicit for 00252. Other PDFs do not prescribe a full surgery/radiation/endocrine sequence; do not assert an exact additional sequence as an NCCP statement."
+  ],
+  "regimens": {
+    "00252": {
+      "code": "00252",
+      "source": {
+        "code": "00252",
+        "path": "/workspace/scratch/aa44ad62d693/sactcheck-v0840/protocols/breast/00252-ac-doxorubicin-cyclophosphamide.json",
+        "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+        "sha256": "22d33040d18840afcd47cac9fe525adf12c3d3c673cc861dd209dfa18e60d1b6",
+        "bytes": 410076,
+        "version": "7",
+        "version_amendment_date": "2026-05-22",
+        "last_clinical_review_date_if_distinguished": "2021-05-12",
+        "review_due_or_policy": "as_required_since_2026-05-20",
+        "pages": 5,
+        "checked_date": "2026-10-17",
+        "full_text_path": "/workspace/scratch/aa44ad62d693/v0840-sources/ac/00252.txt"
+      },
+      "indications": {
+        "settings": [
+          "adjuvant"
+        ],
+        "disease": "High-risk node-negative or node-positive breast cancer",
+        "biomarker": "No mandatory receptor subtype criterion specified in this regimen PDF",
+        "codes": [
+          "00252a"
+        ]
+      },
+      "eligibility": [
+        "ECOG 0–2",
+        "Listed indication",
+        "Consultant Medical Oncologist initiation"
+      ],
+      "exclusions": [
+        "Relevant regimen-drug/excipient hypersensitivity",
+        "CHF/LVEF<50% or other significant heart disease"
+      ],
+      "cautions": [],
+      "phases": [
+        {
+          "id": "ac",
+          "drugs": [
+            {
+              "name": "doxorubicin",
+              "dose": 60,
+              "unit": "mg/m2",
+              "route": "IV push",
+              "duration_minutes": 15
+            },
+            {
+              "name": "cyclophosphamide",
+              "dose": 600,
+              "unit": "mg/m2",
+              "route": "IV infusion",
+              "diluent": "250mL NaCl0.9%",
+              "duration_minutes": 30,
+              "alternative": "IV bolus5–10minutes"
+            }
+          ],
+          "days": [
+            1
+          ],
+          "cycle_days": 21,
+          "cycles": 4,
+          "nominal_weeks_including_final_recovery": 12.0,
+          "doxorubicin_lifetime_cumulative_limit_mg_m2": 450
+        }
+      ],
+      "monitoring": {
+        "baseline": [
+          "FBC",
+          "Renal profile",
+          "Liver profile",
+          "ECG"
+        ],
+        "blood_repeat": "FBC/renal/liver profile listed as regular tests; exact frequency not quantified in PDF",
+        "baseline_echo": "MUGA/ECHO if age>65years or clinically indicated; LVEF>50% for doxorubicin",
+        "repeat_echo": "When clinically indicated",
+        "peripheral_neuropathy": "Not explicitly scheduled in tests section",
+        "disease_monitoring": "Treatment-plan/consultant-directed; no fixed CT/marker schedule stated",
+        "echo_cycle_mapping": null
+      },
+      "dose_tables": [
+        {
+          "name": "1:AC haematology",
+          "page": 2,
+          "rows": [
+            {
+              "condition": "ANC>=1.5; platelets>90",
+              "action": "100%",
+              "component": "AC"
+            },
+            {
+              "condition": "ANC1–1.49; platelets70–90",
+              "action": "75%; consider G-CSF for neutrophil support instead of dose reduction",
+              "component": "AC"
+            },
+            {
+              "condition": "ANC<1; platelets<70",
+              "action": "Delay",
+              "component": "AC"
+            }
+          ],
+          "notes": [
+            "Table does not print AND/OR between cell values. Safely surface each supplied low domain and preserve source row; do not require both low values before warning."
+          ]
+        },
+        {
+          "name": "Renal/hepatic:doxorubicin",
+          "page": 2,
+          "rows": [
+            {
+              "condition": "Renal impairment",
+              "action": "No dose reduction required; severe impairment clinical decision",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin20–51micromol/L",
+              "action": "50%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin51–85micromol/L",
+              "action": "25%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin>85micromol/L",
+              "action": "Omit",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "AST2–3xnormal",
+              "action": "75%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "AST>3xULN",
+              "action": "50%",
+              "component": "Doxorubicin"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Renal/hepatic:cyclophosphamide",
+          "page": 2,
+          "rows": [
+            {
+              "condition": "CrCl>20mL/min",
+              "action": "100%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl10–20mL/min",
+              "action": "75%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl<10mL/min",
+              "action": "50%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Severe hepatic impairment",
+              "action": "Clinical decision",
+              "component": "Cyclophosphamide"
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "ambiguities": [
+        "Doxorubicin bilirubin51 lies in both50% and25% bands. Source does not specify how bilirubin and AST reductions combine. Flag51 and competing actions for review; do not multiply reductions or silently infer a choice."
+      ],
+      "operational_logistics": [
+        "Doxorubicin/cyclophosphamide are day-unitIVtreatments; no take-home infusionpump specified.",
+        "Doxorubicin cumulative lifetime450mg/m2requires prioranthracycline history/risk review. Four fullACdoses total240mg/m2, a calculation rather than an extra source threshold.",
+        "Venousaccess should be agreedwithteam; source doesnot mandate implantedport/PICC or an exact insertion/removal date. Doxorubicin extravasation is important.",
+        "If radiotherapy required, source explicitly places it after chemotherapycompletion."
+      ],
+      "supportive_care": {
+        "emetogenic_phases": [
+          {
+            "phase": "ac",
+            "risk": "high",
+            "source_note": "00252individual doxorubicin high/cyclophosphamide moderate; AC combination high in linked national classification"
+          }
+        ],
+        "gcsf": "May use prophylacticG-CSF to reduce haematological toxicity; localpolicy",
+        "hydration": "Source advises2–3litres onday1for cyclophosphamide; patient-facing instruction must respect individual fluid restrictions/teamadvice",
+        "ac_premedication": "No additional infusion premedication usually required; this is separate from high-risk antiemetic prophylaxis"
+      },
+      "existing_encoding": {
+        "path": "protocols/breast/00252-ac-doxorubicin-cyclophosphamide.json",
+        "rule_count": 11,
+        "input_ids": [
+          "assessment_type",
+          "cycle_number",
+          "anc",
+          "platelets",
+          "egfr",
+          "bilirubin_uln_multiple",
+          "alt_uln_multiple",
+          "neuropathy_grade",
+          "diarrhoea_grade",
+          "stomatitis_grade",
+          "active_infection",
+          "hypersensitivity",
+          "pregnancy",
+          "breastfeeding",
+          "lvef_percent",
+          "ast_uln_multiple"
+        ],
+        "has_structured_treatment_phases": true
+      },
+      "discrepancies": [
+        {
+          "severity": "high",
+          "id": "platelet_threshold",
+          "current": "PLATELETS_LOW delays<75",
+          "source": "Delay<70;70–90belongs75%row.70–74wronglydelayed."
+        },
+        {
+          "severity": "high",
+          "id": "intermediate_counts",
+          "current": "Requires bothANC1–1.49andplatelets70–90",
+          "source": "Singleactionablecytopenia must not vanish; printedtable has noAND/OR andrequires domain-specific interpretation."
+        },
+        {
+          "severity": "high",
+          "id": "doxo_bilirubin",
+          "current": "Omitwhenbilirubin>3xULN",
+          "source": "Absolute20–51/51–85/>85micromol/L; ratio>3isnot sourced. Missing50%/25%bands."
+        },
+        {
+          "severity": "high",
+          "id": "cyclo_renal",
+          "current": "Only<10versus>=10band;labels combineeGFR/CrCl",
+          "source": "NeedsCrCl>20/10–20/<10with100/75/50%."
+        },
+        {
+          "severity": "high",
+          "id": "ast",
+          "current": "ASTinputcontextonly; noASTrule",
+          "source": "AST2–3normal75%;>3ULN50%doxorubicin."
+        },
+        {
+          "severity": "medium",
+          "id": "unsupported_rule_attribution",
+          "current": "Pregnancy/breastfeedingexclusionandgrade3diarrhoea/mucositiswithhold/reduceclaimNCCPpages2/5",
+          "source": "Those specific rulesnotin00252PDF; obtaincorrectseparatesourceorclearlylabelclinicalreview, donotcite nonexistenttable."
+        },
+        {
+          "severity": "medium",
+          "id": "source_page",
+          "current": "Severalbloodrulescitepage4andtoxicitiespage5",
+          "source": "Blood/renal/hepaticonpage2; correctcitations."
+        },
+        {
+          "severity": "medium",
+          "id": "missing_eligibility",
+          "current": "NoECOG/significantheartdisease/cumulativedoxorubicinassessment",
+          "source": "Exposeappropriateoptionaleligibility/historyreview."
+        }
+      ],
+      "proposed_acceptance_cases": [
+        {
+          "inputs": {},
+          "expected": "All domains unassessed; no normal assumptions or treatment clearance"
+        },
+        {
+          "inputs": {
+            "anc": 0.4
+          },
+          "expected": "Actionable lowANC warning without requiringplatelets/cycle/date; phase-specific text ifneeded"
+        },
+        {
+          "inputs": {
+            "anc": 2
+          },
+          "expected": "ANC-onlyresult; platelets/hepatic/cardiacremainunassessed"
+        },
+        {
+          "inputs": {
+            "platelets": 69
+          },
+          "expected": "Delaycytotoxiccomponent; no other input required"
+        },
+        {
+          "inputs": {
+            "assessment_type": "baseline",
+            "anc": 1.4
+          },
+          "expected": "No inventedbaseline1.5exclusion; AC75%row/review"
+        },
+        {
+          "inputs": {
+            "lvef": 49
+          },
+          "expected": "Cardiacexclusionor00432caution; clinicianreview notclearance"
+        },
+        {
+          "inputs": {
+            "ecog": 3
+          },
+          "expected": "OutsideECOG0–2eligibility; consultantreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 0.99
+          },
+          "expected": "Delay"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1.0
+          },
+          "expected": "75%row / G-CSF alternative conditionalonotherdomains"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1.49
+          },
+          "expected": "75%row"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1.5,
+            "platelets": 91
+          },
+          "expected": "Full-dosecountsrowonly"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 70
+          },
+          "expected": "75%row; not<70delay"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 74
+          },
+          "expected": "75%row; old<75delaybugremoved"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 90
+          },
+          "expected": "00252:75%row;00260:explicitoverlapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 19.9
+          },
+          "expected": "Doxorubicin:belowlistedreductionrange"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 20
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50.9
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 51
+          },
+          "expected": "Doxorubicin:ambiguousoverlapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 51.1
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 85
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 85.1
+          },
+          "expected": "Doxorubicin:omit/notrecommended"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 9.9
+          },
+          "expected": "Cyclo50%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 10
+          },
+          "expected": "Cyclo75%/consider75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20.1
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 29.5
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 30
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "ast_uln": 2
+          },
+          "expected": "Doxo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "ast_uln": 3
+          },
+          "expected": "Doxo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "ast_uln": 3.01
+          },
+          "expected": "Doxo50%"
+        }
+      ]
+    },
+    "00260": {
+      "code": "00260",
+      "source": {
+        "code": "00260",
+        "path": "/workspace/scratch/aa44ad62d693/sactcheck-v0840/protocols/breast/00260-ac-followed-by-weekly-paclitaxel.json",
+        "url": "https://healthservice.hse.ie/documents/6364/260_v7_AC-T.pdf",
+        "sha256": "3f89c0c88966ddb484c353fcb8493cf41aa010ea89605548ff89453a3d27184d",
+        "bytes": 887342,
+        "version": "7",
+        "version_amendment_date": "2025-08-22",
+        "last_clinical_review_date_if_distinguished": null,
+        "review_due_or_policy": "2030-08-22",
+        "pages": 6,
+        "checked_date": "2026-10-17",
+        "full_text_path": "/workspace/scratch/aa44ad62d693/v0840-sources/ac/00260.txt"
+      },
+      "indications": {
+        "settings": [
+          "adjuvant",
+          "neoadjuvant"
+        ],
+        "disease": "High-risk node-negative or node-positive breast cancer",
+        "biomarker": "No mandatory receptor subtype criterion specified in this regimen PDF",
+        "codes": [
+          "00260a"
+        ]
+      },
+      "eligibility": [
+        "ECOG 0–2",
+        "Listed indication",
+        "Consultant Medical Oncologist initiation"
+      ],
+      "exclusions": [
+        "Relevant regimen-drug/excipient hypersensitivity",
+        "CHF/LVEF<50% or other significant heart disease",
+        "Baseline ANC<1.5 ×10^9/L",
+        "Breastfeeding",
+        "Severe hepatic impairment"
+      ],
+      "cautions": [],
+      "phases": [
+        {
+          "id": "ac",
+          "drugs": [
+            {
+              "name": "doxorubicin",
+              "dose": 60,
+              "unit": "mg/m2",
+              "route": "IV push",
+              "duration_minutes": 15
+            },
+            {
+              "name": "cyclophosphamide",
+              "dose": 600,
+              "unit": "mg/m2",
+              "route": "IV infusion",
+              "diluent": "250mL NaCl0.9%",
+              "duration_minutes": 30,
+              "alternative": "IV bolus5–10minutes"
+            }
+          ],
+          "days": [
+            1
+          ],
+          "cycle_days": 21,
+          "cycles": 4,
+          "nominal_weeks_including_final_recovery": 12.0,
+          "doxorubicin_lifetime_cumulative_limit_mg_m2": 450
+        },
+        {
+          "id": "paclitaxel",
+          "dose": 80,
+          "unit": "mg/m2",
+          "route": "IV infusion",
+          "diluent_ml": 250,
+          "diluent": "NaCl0.9%",
+          "duration_minutes": 60,
+          "days": [
+            1,
+            8,
+            15
+          ],
+          "cycle_days": 21,
+          "cycles": 4,
+          "total_administrations": 12,
+          "nominal_weeks_including_final_recovery": 12,
+          "starts_after_final_ac_days": null,
+          "start_note": "Sequence specified; transition interval not separately explicit in source"
+        }
+      ],
+      "monitoring": {
+        "baseline": [
+          "FBC",
+          "Renal profile",
+          "Liver profile",
+          "ECG"
+        ],
+        "blood_repeat": "FBC/renal/liver profile listed as regular tests; exact frequency not quantified in PDF",
+        "baseline_echo": "Source groups ECG/MUGA/ECHO with age>65years and clinically-indicated wording; LVEF>50% for doxorubicin. Syntax ambiguous.",
+        "repeat_echo": "When clinically indicated",
+        "peripheral_neuropathy": "As clinically indicated",
+        "disease_monitoring": "Treatment-plan/consultant-directed; no fixed CT/marker schedule stated",
+        "echo_cycle_mapping": null
+      },
+      "dose_tables": [
+        {
+          "name": "2:AC haematology",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "ANC>=1.5; platelets>=90",
+              "action": "100%",
+              "component": "AC"
+            },
+            {
+              "condition": "ANC1–1.49; platelets70–90",
+              "action": "75%; G-CSF alternative for neutrophil support",
+              "component": "AC"
+            },
+            {
+              "condition": "ANC<1; platelets<70",
+              "action": "Delay",
+              "component": "AC"
+            }
+          ],
+          "notes": [
+            "No explicit logical conjunction printed. Platelets90 appears in both100% and75% rows; flag boundary rather than silently choose."
+          ]
+        },
+        {
+          "name": "Paclitaxel reduction levels",
+          "page": 2,
+          "rows": [
+            {
+              "condition": "Starting / first / second reduction",
+              "action": "80 /65 /50mg/m2",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel haematology",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "ANC>=1 AND platelets>=90",
+              "action": "100%",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ANC0.5–0.99 AND/OR platelets70–90",
+              "action": "Delay; consider dose reduction at subsequent cycle",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ANC<0.5 for>=7days AND/OR platelets<70",
+              "action": "Delay; after recovery reduce one dose level",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Febrile neutropenia",
+              "action": "Consider G-CSF",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": [
+            "Platelets90 overlaps full-dose and delay rows; do not silently auto-proceed.",
+            "ANC<0.5 for shorter/unknown duration is not assigned the automatic one-level reduction; low ANC still requires hold/review.",
+            "Do not confuse dose-level80→65→50 with separate adverse-event10mg/m2 decrements."
+          ]
+        },
+        {
+          "name": "Renal/hepatic:doxorubicin",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "Renal impairment",
+              "action": "No dose reduction required; severe impairment clinical decision",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Haemodialysis",
+              "action": "75% original dose may be considered",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin20–50micromol/L",
+              "action": "50%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin51–86micromol/L",
+              "action": "25%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin>86micromol/L OR Child-PughC",
+              "action": "Omit",
+              "component": "Doxorubicin"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Renal/hepatic:cyclophosphamide",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "CrCl>=30mL/min",
+              "action": "100%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl10–29mL/min",
+              "action": "75%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl<10mL/min",
+              "action": "Not recommended/omit; if unavoidable consider50% original dose",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Severe hepatic impairment",
+              "action": "Not recommended because reduced efficacy risk",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Mild/moderate hepatic impairment",
+              "action": "No adjustment expected",
+              "component": "Cyclophosphamide"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel hepatic",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "ALT<10xULN AND bilirubin<=1.25xULN",
+              "action": "80mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin1.26–2xULN",
+              "action": "60mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin2.01–5xULN",
+              "action": "40mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT>=10xULN OR bilirubin>5xULN",
+              "action": "Not recommended",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Renal impairment including haemodialysis",
+              "action": "No dose adjustment expected/necessary",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel adverse events",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Grade2motor/sensory neuropathy",
+              "action": "Decrease10mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Other grade2non-haematological toxicity",
+              "action": "Hold until<=grade1; subsequent doses minus10mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Grade>=3reaction",
+              "action": "Discontinue",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Cannot tolerate after2reductions",
+              "action": "Treating clinician discussion about continuation",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "ambiguities": [
+        "Doxorubicin integer-labelled20–50 and51–86 bands leave continuous-value gap50<bilirubin<51; use explicit review/rounding-policy confirmation. No AST reduction is printed in this updated table.",
+        "CrCl10–29 and>=30 integer-labelled bands leave29<CrCl<30 undefined for continuous values; confirm clinical rounding/band interpretation instead of silently treating as normal.",
+        "Paclitaxel bilirubin bands leave1.25<ratio<1.26 and2<ratio<2.01 gaps. Both ALT and bilirubin are needed for a numerical hepatic dose; either high exclusion alone remains actionable. Missing ALT must not infer ALT<10."
+      ],
+      "operational_logistics": [
+        "Doxorubicin/cyclophosphamide are day-unitIVtreatments; no take-home infusionpump specified.",
+        "Doxorubicin cumulative lifetime450mg/m2requires prioranthracycline history/risk review. Four fullACdoses total240mg/m2, a calculation rather than an extra source threshold.",
+        "Venousaccess should be agreedwithteam; source doesnot mandate implantedport/PICC or an exact insertion/removal date. Doxorubicin extravasation is important.",
+        "Paclitaxel non-PVCcontainer/set with0.22micrometreinlinefilter; concentration0.3–1.2mg/mL.",
+        "SeparateACandtaxane phase calendars, antiemetic scripts and symptom maps. Never show12weeklydoses as12three-weekcycles."
+      ],
+      "supportive_care": {
+        "emetogenic_phases": [
+          {
+            "phase": "ac",
+            "risk": "high",
+            "source_note": "Explicit high AC risk"
+          },
+          {
+            "phase": "paclitaxel",
+            "risk": "low"
+          }
+        ],
+        "gcsf": "May use prophylacticG-CSF to reduce haematological toxicity; localpolicy",
+        "hydration": "Source advises2–3litres onday1for cyclophosphamide; patient-facing instruction must respect individual fluid restrictions/teamadvice",
+        "ac_premedication": "No additional infusion premedication usually required; this is separate from high-risk antiemetic prophylaxis",
+        "paclitaxel_premedication": {
+          "first_dose": {
+            "dexamethasone": "8mgIV30minbefore",
+            "chlorphenamine": "10mgIV30minbefore",
+            "famotidine": "20mgIV30minbefore"
+          },
+          "later": "Weekly:day8onwards no routine dexamethasone in suggested table; add for risk/priorreaction underconsultantguidance. Continuechlorphenamine; famotidine may be omitted after noHSR underguidance.",
+          "note": "Famotidine omission risk described as unknown; monitor closely and followlocalpolicy. SevereHSR requires acute management, not automatic rechallenge."
+        },
+        "taxane_pain": "Analgesic cover may be considered for myalgia/arthralgia;00278describes onset2–3days and resolutionwithindays."
+      },
+      "existing_encoding": {
+        "path": "protocols/breast/00260-ac-followed-by-weekly-paclitaxel.json",
+        "rule_count": 5,
+        "input_ids": [
+          "anc_x10e9_l",
+          "platelets_x10e9_l",
+          "hb_g_dl",
+          "treatment_phase",
+          "febrile_neutropenia",
+          "neuropathy_grade"
+        ],
+        "has_structured_treatment_phases": false
+      },
+      "discrepancies": [
+        {
+          "severity": "high",
+          "id": "missing_domains",
+          "current": "OnlyANC,platelets,Hb,phase,FN,neuropathyinputs;4–5rules",
+          "source": "Noexecutablefullrenal/hepatic,baselineeligibility,HSR,cardiac,phase-specifictoxicities ormisseddoseassessment."
+        },
+        {
+          "severity": "high",
+          "id": "phase_not_used",
+          "current": "Treatmentphaseinputexistsbutno ruleconditionusesit",
+          "source": "Phase-awarethresholds/componentsneeded; unknownphase conditionalreview."
+        },
+        {
+          "severity": "high",
+          "id": "neuropathy",
+          "current": "Allgrade>=2onlyconsultantreviewwhole_regimen",
+          "source": "Grade2agent-specificreduction/delay;grade>=3paclitaxeldiscontinue."
+        },
+        {
+          "severity": "medium",
+          "id": "structured_schedule",
+          "current": "No treatment_phases",
+          "source": "PopulateexplicitAC→taxanewithdistinctintervals,doselevels,timelinesandsupport."
+        },
+        {
+          "severity": "high",
+          "id": "generic_counts_review",
+          "current": "IntermediateANC0.5–1.49orplatelets70–99onlyconsultantreviewevenwhenphaseknown",
+          "source": "Somevaluesmandatedelay/reduce;othersmeetphase-specificthresholds.00432ACANCthreshold1.0not1.5;00260AC75%rowneeded."
+        },
+        {
+          "severity": "high",
+          "id": "fn_action",
+          "current": "FNtriggersdose_reducewhole_regimen",
+          "source": "TaxaneFNrowconsiderG-CSF,not automatic unspecifiedwhole-regimendosereduction."
+        },
+        {
+          "severity": "medium",
+          "id": "invalid_phase",
+          "current": "Trastuzumabmaintenanceoptionpresent",
+          "source": "Neitherregimencontainstrastuzumab;removeoption."
+        }
+      ],
+      "proposed_acceptance_cases": [
+        {
+          "inputs": {},
+          "expected": "All domains unassessed; no normal assumptions or treatment clearance"
+        },
+        {
+          "inputs": {
+            "anc": 0.4
+          },
+          "expected": "Actionable lowANC warning without requiringplatelets/cycle/date; phase-specific text ifneeded"
+        },
+        {
+          "inputs": {
+            "anc": 2
+          },
+          "expected": "ANC-onlyresult; platelets/hepatic/cardiacremainunassessed"
+        },
+        {
+          "inputs": {
+            "platelets": 69
+          },
+          "expected": "Delaycytotoxiccomponent; no other input required"
+        },
+        {
+          "inputs": {
+            "assessment_type": "baseline",
+            "anc": 1.4
+          },
+          "expected": "BaselineANCexclusion"
+        },
+        {
+          "inputs": {
+            "lvef": 49
+          },
+          "expected": "Cardiacexclusionor00432caution; clinicianreview notclearance"
+        },
+        {
+          "inputs": {
+            "ecog": 3
+          },
+          "expected": "OutsideECOG0–2eligibility; consultantreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 0.99
+          },
+          "expected": "Delay"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1.0
+          },
+          "expected": "75%row / G-CSF alternative conditionalonotherdomains"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1.49
+          },
+          "expected": "75%row"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1.5,
+            "platelets": 91
+          },
+          "expected": "Full-dosecountsrowonly"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 70
+          },
+          "expected": "75%row; not<70delay"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 74
+          },
+          "expected": "75%row; old<75delaybugremoved"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 90
+          },
+          "expected": "00252:75%row;00260:explicitoverlapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 19.9
+          },
+          "expected": "Doxorubicin:belowlistedreductionrange"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 20
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50.5
+          },
+          "expected": "Doxorubicin:gapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 51
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86.1
+          },
+          "expected": "Doxorubicin:omit/notrecommended"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 9.9
+          },
+          "expected": "Cyclonotrecommended/omit;50%onlyif unavoidablewithreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 10
+          },
+          "expected": "Cyclo75%/consider75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20.1
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 29.5
+          },
+          "expected": "Gapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 30
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 9.99,
+            "bilirubin_uln": 1.25
+          },
+          "expected": "80mg/m2hepaticrow"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 10
+          },
+          "expected": "Paclitaxelnotrecommendedwithoutneedingbilirubin"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 5.01
+          },
+          "expected": "PaclitaxelnotrecommendedwithoutneedingALT"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.255
+          },
+          "expected": "Sourcegapreview; notsilentlyround"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.26
+          },
+          "expected": "60mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2
+          },
+          "expected": "60mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.005
+          },
+          "expected": "Sourcegapreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.01
+          },
+          "expected": "40mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 5
+          },
+          "expected": "40mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 2
+          },
+          "expected": "MissingALT:conditionalrowonly,nofinalhepaticdose"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 2
+          },
+          "expected": "Decrease10mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 3
+          },
+          "expected": "Discontinuepaclitaxel"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "neuropathy_grade": 3
+          },
+          "expected": "Do not automaticallydiscontinueACbytaxanerule; neuropathyreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 1,
+            "platelets": 91
+          },
+          "expected": "Full-dosecountsrow"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 0.5
+          },
+          "expected": "Delay/considerreduction"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 0.49,
+            "days_anc_below_0_5": 7
+          },
+          "expected": "Delayandonelevelreductionafterrecovery"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 0.49,
+            "days_anc_below_0_5": 6
+          },
+          "expected": "Hold/review; no automatic>=7dayreductionclaim"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "platelets": 90
+          },
+          "expected": "Overlappingrows:explicitreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "platelets": 70
+          },
+          "expected": "Delay/considerreduction"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "platelets": 69
+          },
+          "expected": "Delayandonelevelreduction"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "other_toxicity_grade": 2
+          },
+          "expected": "Holduntil<=1thendecrease10mg/m2"
+        }
+      ]
+    },
+    "00278": {
+      "code": "00278",
+      "source": {
+        "code": "00278",
+        "path": "/workspace/scratch/aa44ad62d693/sactcheck-v0840/protocols/breast/00278-dose-dense-ac-paclitaxel-14-day.json",
+        "url": "https://healthservice.hse.ie/documents/6696/278_v7_Dose_DenseAC-T_Pacli_14_day.pdf",
+        "sha256": "8f1bbe7479a2c770770078c728fefb41b4c36503a0ed244c655531640303bf96",
+        "bytes": 781198,
+        "version": "7",
+        "version_amendment_date": "2023-09-22",
+        "last_clinical_review_date_if_distinguished": null,
+        "review_due_or_policy": "2027-06-12",
+        "pages": 7,
+        "checked_date": "2026-10-17",
+        "full_text_path": "/workspace/scratch/aa44ad62d693/v0840-sources/ac/00278.txt"
+      },
+      "indications": {
+        "settings": [
+          "adjuvant",
+          "neoadjuvant"
+        ],
+        "disease": "High-risk node-negative or node-positive breast cancer",
+        "biomarker": "No mandatory receptor subtype criterion specified in this regimen PDF",
+        "codes": [
+          "00278a",
+          "00278b"
+        ]
+      },
+      "eligibility": [
+        "ECOG 0–2",
+        "Listed indication",
+        "Consultant Medical Oncologist initiation"
+      ],
+      "exclusions": [
+        "Relevant regimen-drug/excipient hypersensitivity",
+        "CHF/LVEF<50% or other significant heart disease",
+        "Baseline ANC<1.5 ×10^9/L",
+        "Breastfeeding",
+        "Severe hepatic impairment"
+      ],
+      "cautions": [],
+      "phases": [
+        {
+          "id": "ac",
+          "drugs": [
+            {
+              "name": "doxorubicin",
+              "dose": 60,
+              "unit": "mg/m2",
+              "route": "IV push",
+              "duration_minutes": null
+            },
+            {
+              "name": "cyclophosphamide",
+              "dose": 600,
+              "unit": "mg/m2",
+              "route": "IV infusion",
+              "diluent": "250mL NaCl0.9%",
+              "duration_minutes": 30,
+              "alternative": "IV bolus5–10minutes"
+            }
+          ],
+          "days": [
+            1
+          ],
+          "cycle_days": 14,
+          "cycles": 4,
+          "nominal_weeks_including_final_recovery": 8.0,
+          "doxorubicin_lifetime_cumulative_limit_mg_m2": 450
+        },
+        {
+          "id": "paclitaxel",
+          "dose": 175,
+          "unit": "mg/m2",
+          "route": "IV infusion",
+          "diluent_ml": 500,
+          "diluent": "NaCl0.9%",
+          "duration_minutes": 180,
+          "days": [
+            1
+          ],
+          "cycle_days": 14,
+          "cycles": 4,
+          "total_administrations": 4,
+          "nominal_weeks_including_final_recovery": 8,
+          "starts_after_final_ac_days": 14,
+          "start_note": "Starts14days after final AC dose"
+        }
+      ],
+      "monitoring": {
+        "baseline": [
+          "FBC",
+          "Renal profile",
+          "Liver profile",
+          "ECG"
+        ],
+        "blood_repeat": "FBC/renal/liver profile prior to each cycle",
+        "baseline_echo": "MUGA/ECHO if age>65years or clinically indicated; LVEF>50% for doxorubicin",
+        "repeat_echo": "When clinically indicated",
+        "peripheral_neuropathy": "Not explicitly scheduled in tests section",
+        "disease_monitoring": "Treatment-plan/consultant-directed; no fixed CT/marker schedule stated",
+        "echo_cycle_mapping": null
+      },
+      "dose_tables": [
+        {
+          "name": "1:haematology",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "ANC>=1 AND platelets>100",
+              "action": "100%",
+              "component": "All cytotoxics"
+            },
+            {
+              "condition": "ANC<1 AND platelets>=100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>=100 give100%",
+              "component": "All cytotoxics"
+            },
+            {
+              "condition": "ANC>=1 AND platelets<100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>=100 give100%; after second delay reduce to75%",
+              "component": "All cytotoxics"
+            },
+            {
+              "condition": "Febrile neutropenia",
+              "action": "75% current and subsequent doses",
+              "component": "Cytotoxic phase; not automatic trastuzumab reduction"
+            }
+          ],
+          "notes": [
+            "Recovery >= glyphs verified visually; plain-text extraction incorrectly returns >.",
+            "Second-delay75% wording is physically in thrombocytopenia row, not a universal all-causes rule.",
+            "Both ANC and platelets below threshold is not an explicit combined row; both low findings still require withholding/review, not no action."
+          ]
+        },
+        {
+          "name": "Renal/hepatic:doxorubicin",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "Renal impairment",
+              "action": "No dose reduction required; severe impairment clinical decision",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin20–51micromol/L",
+              "action": "50%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin51–85micromol/L",
+              "action": "25%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin>85micromol/L",
+              "action": "Omit",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "AST2–3xnormal",
+              "action": "75%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "AST>3xULN",
+              "action": "50%",
+              "component": "Doxorubicin"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Renal/hepatic:cyclophosphamide",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "CrCl>20mL/min",
+              "action": "100%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl10–20mL/min",
+              "action": "75%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl<10mL/min",
+              "action": "50%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Severe hepatic impairment",
+              "action": "Clinical decision",
+              "component": "Cyclophosphamide"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel hepatic",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "ALT<10xULN AND bilirubin<=1.25xULN",
+              "action": "175mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin1.26–2xULN",
+              "action": "135mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin2.01–5xULN",
+              "action": "90mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT>=10xULN OR bilirubin>5xULN",
+              "action": "Not recommended",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Renal impairment",
+              "action": "No dose adjustment expected/necessary",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel adverse events",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Grade2motor/sensory neuropathy",
+              "action": "Dose reduction or delay may be required",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Grade>=3reaction",
+              "action": "Discontinue",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "ambiguities": [
+        "Routine full-dose platelets threshold is>100 but low-platelet row<100 and ANC-low row>=100. Exactly100 with ANC>=1 is not covered by routine rows; recovery text differs. Explicit boundary review is needed.",
+        "Doxorubicin bilirubin51 lies in both50% and25% bands. Source does not specify how bilirubin and AST reductions combine. Flag51 and competing actions for review; do not multiply reductions or silently infer a choice.",
+        "Paclitaxel bilirubin bands leave1.25<ratio<1.26 and2<ratio<2.01 gaps. Both ALT and bilirubin are needed for a numerical hepatic dose; either high exclusion alone remains actionable. Missing ALT must not infer ALT<10."
+      ],
+      "operational_logistics": [
+        "Doxorubicin/cyclophosphamide are day-unitIVtreatments; no take-home infusionpump specified.",
+        "Doxorubicin cumulative lifetime450mg/m2requires prioranthracycline history/risk review. Four fullACdoses total240mg/m2, a calculation rather than an extra source threshold.",
+        "Venousaccess should be agreedwithteam; source doesnot mandate implantedport/PICC or an exact insertion/removal date. Doxorubicin extravasation is important.",
+        "Paclitaxel non-PVCcontainer/set with0.22micrometreinlinefilter; concentration0.3–1.2mg/mL.",
+        "SeparateACandtaxane phase calendars, antiemetic scripts and symptom maps. Never show12weeklydoses as12three-weekcycles."
+      ],
+      "supportive_care": {
+        "emetogenic_phases": [
+          {
+            "phase": "ac",
+            "risk": "high",
+            "source_note": "Explicit high AC risk"
+          },
+          {
+            "phase": "paclitaxel",
+            "risk": "low"
+          }
+        ],
+        "gcsf": "Required with all dose-dense chemotherapy cycles; source permits standard or pegylated form; product/day perlocalpolicy",
+        "hydration": "Source advises2–3litres onday1for cyclophosphamide; patient-facing instruction must respect individual fluid restrictions/teamadvice",
+        "ac_premedication": "No additional infusion premedication usually required; this is separate from high-risk antiemetic prophylaxis",
+        "paclitaxel_premedication": {
+          "first_dose": {
+            "dexamethasone": "20mgoral approximately12and6hoursbefore OR20mgIV30minbefore",
+            "chlorphenamine": "10mgIV30minbefore",
+            "famotidine": "20mgIV30minbefore"
+          },
+          "later": "Dexamethasone may be reduced/omitted after noHSR underconsultantguidance; ifaprepitant added considerdexamethasone12mgontreatmentday. Famotidine may be omitted after noHSR underguidance.",
+          "note": "Famotidine omission risk described as unknown; monitor closely and followlocalpolicy. SevereHSR requires acute management, not automatic rechallenge."
+        },
+        "taxane_pain": "Analgesic cover may be considered for myalgia/arthralgia;00278describes onset2–3days and resolutionwithindays."
+      },
+      "existing_encoding": {
+        "path": "protocols/breast/00278-dose-dense-ac-paclitaxel-14-day.json",
+        "rule_count": 4,
+        "input_ids": [
+          "anc_x10e9_l",
+          "platelets_x10e9_l",
+          "hb_g_dl",
+          "treatment_phase",
+          "febrile_neutropenia",
+          "neuropathy_grade"
+        ],
+        "has_structured_treatment_phases": false
+      },
+      "discrepancies": [
+        {
+          "severity": "high",
+          "id": "missing_domains",
+          "current": "OnlyANC,platelets,Hb,phase,FN,neuropathyinputs;4–5rules",
+          "source": "Noexecutablefullrenal/hepatic,baselineeligibility,HSR,cardiac,phase-specifictoxicities ormisseddoseassessment."
+        },
+        {
+          "severity": "high",
+          "id": "phase_not_used",
+          "current": "Treatmentphaseinputexistsbutno ruleconditionusesit",
+          "source": "Phase-awarethresholds/componentsneeded; unknownphase conditionalreview."
+        },
+        {
+          "severity": "high",
+          "id": "neuropathy",
+          "current": "Allgrade>=2onlyconsultantreviewwhole_regimen",
+          "source": "Grade2agent-specificreduction/delay;grade>=3paclitaxeldiscontinue."
+        },
+        {
+          "severity": "medium",
+          "id": "structured_schedule",
+          "current": "No treatment_phases",
+          "source": "PopulateexplicitAC→taxanewithdistinctintervals,doselevels,timelinesandsupport."
+        },
+        {
+          "severity": "high",
+          "id": "platelets100",
+          "current": "COUNTS_PROCEEDuses>=100",
+          "source": "Routinefull-doseprinted>100;exact100requiresclarification."
+        },
+        {
+          "severity": "medium",
+          "id": "invalid_phase",
+          "current": "Trastuzumabmaintenanceoptionpresent",
+          "source": "Neitherregimencontainstrastuzumab;removeoption."
+        }
+      ],
+      "proposed_acceptance_cases": [
+        {
+          "inputs": {},
+          "expected": "All domains unassessed; no normal assumptions or treatment clearance"
+        },
+        {
+          "inputs": {
+            "anc": 0.4
+          },
+          "expected": "Actionable lowANC warning without requiringplatelets/cycle/date; phase-specific text ifneeded"
+        },
+        {
+          "inputs": {
+            "anc": 2
+          },
+          "expected": "ANC-onlyresult; platelets/hepatic/cardiacremainunassessed"
+        },
+        {
+          "inputs": {
+            "platelets": 69
+          },
+          "expected": "Delaycytotoxiccomponent; no other input required"
+        },
+        {
+          "inputs": {
+            "assessment_type": "baseline",
+            "anc": 1.4
+          },
+          "expected": "BaselineANCexclusion"
+        },
+        {
+          "inputs": {
+            "lvef": 49
+          },
+          "expected": "Cardiacexclusionor00432caution; clinicianreview notclearance"
+        },
+        {
+          "inputs": {
+            "ecog": 3
+          },
+          "expected": "OutsideECOG0–2eligibility; consultantreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 0.99
+          },
+          "expected": "Delay1weekorlonger"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1,
+            "platelets": 101
+          },
+          "expected": "Initialcountsfull-doserow; do notreuseasafter-delayANC>1criterion"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 100
+          },
+          "expected": "Boundaryreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 99
+          },
+          "expected": "Delay"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "second_thrombocytopenia_delay": true
+          },
+          "expected": "75%afterrecoverypath"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "prior_febrile_neutropenia": true
+          },
+          "expected": "75%current/subsequentcytotoxicdoses"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 19.9
+          },
+          "expected": "Doxorubicin:belowlistedreductionrange"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 20
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50.9
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 51
+          },
+          "expected": "Doxorubicin:ambiguousoverlapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 51.1
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 85
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 85.1
+          },
+          "expected": "Doxorubicin:omit/notrecommended"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 9.9
+          },
+          "expected": "Cyclo50%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 10
+          },
+          "expected": "Cyclo75%/consider75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20.1
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 29.5
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 30
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "ast_uln": 2
+          },
+          "expected": "Doxo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "ast_uln": 3
+          },
+          "expected": "Doxo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "ast_uln": 3.01
+          },
+          "expected": "Doxo50%"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 9.99,
+            "bilirubin_uln": 1.25
+          },
+          "expected": "175mg/m2hepaticrow"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 10
+          },
+          "expected": "Paclitaxelnotrecommendedwithoutneedingbilirubin"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 5.01
+          },
+          "expected": "PaclitaxelnotrecommendedwithoutneedingALT"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.255
+          },
+          "expected": "Sourcegapreview; notsilentlyround"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.26
+          },
+          "expected": "135mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2
+          },
+          "expected": "135mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.005
+          },
+          "expected": "Sourcegapreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.01
+          },
+          "expected": "90mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 5
+          },
+          "expected": "90mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 2
+          },
+          "expected": "MissingALT:conditionalrowonly,nofinalhepaticdose"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 2
+          },
+          "expected": "Reduce/delayreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 3
+          },
+          "expected": "Discontinuepaclitaxel"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "neuropathy_grade": 3
+          },
+          "expected": "Do not automaticallydiscontinueACbytaxanerule; neuropathyreview"
+        }
+      ]
+    },
+    "00316": {
+      "code": "00316",
+      "source": {
+        "code": "00316",
+        "path": "/workspace/scratch/aa44ad62d693/sactcheck-v0840/protocols/breast/00316-ddac-paclitaxel-14-day-trastuzumab.json",
+        "url": "https://healthservice.hse.ie/documents/6717/316_v6_Dose_Dense_AC-TH.pdf",
+        "sha256": "b00917f16a13a37263654c9352c56e2eb77e705d9910a0a66ec86ba6c0599645",
+        "bytes": 981609,
+        "version": "6",
+        "version_amendment_date": "2025-05-13",
+        "last_clinical_review_date_if_distinguished": null,
+        "review_due_or_policy": "2030-05-13",
+        "pages": 7,
+        "checked_date": "2026-10-17",
+        "full_text_path": "/workspace/scratch/aa44ad62d693/v0840-sources/ac/00316.txt"
+      },
+      "indications": {
+        "settings": [
+          "adjuvant",
+          "neoadjuvant"
+        ],
+        "disease": "High-risk node-negative or node-positive breast cancer",
+        "biomarker": "HER2 overexpression or gene amplification confirmed by validated assay",
+        "codes": [
+          "00316a",
+          "00316b"
+        ]
+      },
+      "eligibility": [
+        "ECOG 0–2",
+        "Listed indication",
+        "Consultant Medical Oncologist initiation",
+        "HER2 status confirmed with an accurate validated assay"
+      ],
+      "exclusions": [
+        "Relevant regimen-drug/excipient hypersensitivity",
+        "CHF/LVEF<50% or other significant heart disease",
+        "Baseline ANC<1.5 ×10^9/L",
+        "Breastfeeding"
+      ],
+      "cautions": [],
+      "phases": [
+        {
+          "id": "ac",
+          "drugs": [
+            {
+              "name": "doxorubicin",
+              "dose": 60,
+              "unit": "mg/m2",
+              "route": "IV push",
+              "duration_minutes": 15
+            },
+            {
+              "name": "cyclophosphamide",
+              "dose": 600,
+              "unit": "mg/m2",
+              "route": "IV infusion",
+              "diluent": "250mL NaCl0.9%",
+              "duration_minutes": 30,
+              "alternative": "IV bolus5–10minutes"
+            }
+          ],
+          "days": [
+            1
+          ],
+          "cycle_days": 14,
+          "cycles": 4,
+          "nominal_weeks_including_final_recovery": 8.0,
+          "doxorubicin_lifetime_cumulative_limit_mg_m2": 450
+        },
+        {
+          "id": "paclitaxel",
+          "dose": 175,
+          "unit": "mg/m2",
+          "route": "IV infusion",
+          "diluent_ml": 500,
+          "diluent": "NaCl0.9%",
+          "duration_minutes": 180,
+          "days": [
+            1
+          ],
+          "cycle_days": 14,
+          "cycles": 4,
+          "total_administrations": 4,
+          "nominal_weeks_including_final_recovery": 8,
+          "starts_after_final_ac_days": 14,
+          "start_note": "Starts14days after final AC dose",
+          "concurrent_trastuzumab": {
+            "route": "IV",
+            "loading_mg_kg": 4,
+            "maintenance_mg_kg": 2,
+            "days": [
+              1,
+              8
+            ],
+            "cycle_days": 14,
+            "loading_duration_minutes": 90,
+            "maintenance_duration_minutes": 30,
+            "diluent": "250mL NaCl0.9%",
+            "starts": "First taxane administration (overallcycle5)",
+            "not_with_ac": true
+          }
+        },
+        {
+          "id": "trastuzumab_continuation",
+          "route": "IV",
+          "dose_mg_kg": 6,
+          "cycle_days": 21,
+          "source_reference": "NCCP00200",
+          "duration": "Complete one year of trastuzumab therapy from first trastuzumab dose; not a fresh year after chemotherapy",
+          "starts_after_taxane_phase": true
+        }
+      ],
+      "monitoring": {
+        "baseline": [
+          "FBC",
+          "Renal profile",
+          "Liver profile",
+          "ECG"
+        ],
+        "blood_repeat": "FBC/renal/liver profile prior to each cycle",
+        "baseline_echo": "Not listed in baseline subsection (only bloods/ECG); cardiac eligibility and on-treatment cardiac monitoring still apply; use separately attributed SmPC for baseline HER2 cardiac assessment",
+        "repeat_echo": "MUGA/ECHO every12weeks; if cardiac impairment signs, checks every4–8weeks may be more appropriate",
+        "peripheral_neuropathy": "As clinically indicated",
+        "disease_monitoring": "Treatment-plan/consultant-directed; no fixed CT/marker schedule stated",
+        "echo_cycle_mapping": "Illustrative elapsed-time mapping only:12weeks corresponds to12 weekly trastuzumab intervals (next weekly dose13),4 q21d intervals (next q21d dose5),or6 q14d intervals. If trastuzumab starts at overallcycle5, count from documented baseline/pre-HER2 checkpoint; never reset the due date silently at phase transition."
+      },
+      "dose_tables": [
+        {
+          "name": "1:haematology",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "ANC>=1 AND platelets>100",
+              "action": "100%",
+              "component": "All cytotoxics"
+            },
+            {
+              "condition": "ANC<1 AND platelets>=100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>=100 give100%",
+              "component": "All cytotoxics"
+            },
+            {
+              "condition": "ANC>=1 AND platelets<100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>=100 give100%; after second delay reduce to75%",
+              "component": "All cytotoxics"
+            },
+            {
+              "condition": "Febrile neutropenia",
+              "action": "75% current and subsequent doses",
+              "component": "Cytotoxic phase; not automatic trastuzumab reduction"
+            }
+          ],
+          "notes": [
+            "Recovery >= glyphs verified visually; plain-text extraction incorrectly returns >.",
+            "Second-delay75% wording is physically in thrombocytopenia row, not a universal all-causes rule.",
+            "Both ANC and platelets below threshold is not an explicit combined row; both low findings still require withholding/review, not no action."
+          ]
+        },
+        {
+          "name": "Renal/hepatic:doxorubicin",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Renal impairment",
+              "action": "No dose reduction required; severe impairment clinical decision",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Haemodialysis",
+              "action": "75% original dose may be considered",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin20–50micromol/L",
+              "action": "50%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin51–86micromol/L",
+              "action": "25%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin>86micromol/L OR Child-PughC",
+              "action": "Omit",
+              "component": "Doxorubicin"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Renal/hepatic:cyclophosphamide",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "CrCl>=30mL/min",
+              "action": "100%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl10–29mL/min",
+              "action": "75%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl<10mL/min",
+              "action": "Not recommended/omit; if unavoidable consider50% original dose",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Severe hepatic impairment",
+              "action": "Not recommended because reduced efficacy risk",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Mild/moderate hepatic impairment",
+              "action": "No adjustment expected",
+              "component": "Cyclophosphamide"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel hepatic",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "ALT<10xULN AND bilirubin<=1.25xULN",
+              "action": "175mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin1.26–2xULN",
+              "action": "135mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin2.01–5xULN",
+              "action": "90mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT>=10xULN OR bilirubin>5xULN",
+              "action": "Not recommended",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Renal impairment including haemodialysis",
+              "action": "No dose adjustment expected/necessary",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel adverse events",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Grade2motor/sensory neuropathy",
+              "action": "Dose reduction or delay may be required",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Other grade2non-haematological toxicity",
+              "action": "Hold until<=grade1; subsequent doses minus10mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Grade>=3reaction",
+              "action": "Discontinue",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Cannot tolerate after2reductions",
+              "action": "Treating clinician discussion about continuation",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab adverse events",
+          "page": 5,
+          "rows": [
+            {
+              "condition": "LVEFfall>=10percentagepoints",
+              "action": "Withhold; repeatLVEF~3weeks; no improvement/further decline:consider discontinue and consultant/cardiology review",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Symptomatic heart failure",
+              "action": "Consider discontinue; cardiology review; clinical decision",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "CTCAEgrade4hypersensitivity",
+              "action": "Discontinue",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Reversible chemotherapy-induced myelosuppression",
+              "action": "May continue with careful neutropenia-complication monitoring",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab renal/hepatic",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Renal/hepatic impairment",
+              "action": "Probably no dose reduction necessary",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab missed dose",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "Dose overdue<=7days",
+              "action": "Give usual2mg/kg promptly; source says resume previous schedule",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Dose overdue>7days",
+              "action": "Clinician-directed reload4mg/kg over~90min; then2mg/kg every7days from that point",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": [
+            "Late days measured from scheduled dose date, not time since last infusion. Phase-specific: weekly4/2must not be used after switching toq21dcontinuation; follow00200. CurrentSmPC timing may differ from source previous-schedule wording and must be separately reconciled."
+          ]
+        }
+      ],
+      "ambiguities": [
+        "Hypersensitivity exclusions list doxorubicin/cyclophosphamide/paclitaxel but omit naming trastuzumab; trastuzumab adverse-event table still explicitly stops for grade4 hypersensitivity. Do not imply trastuzumab hypersensitivity is safe.",
+        "Routine full-dose platelets threshold is>100 but low-platelet row<100 and ANC-low row>=100. Exactly100 with ANC>=1 is not covered by routine rows; recovery text differs. Explicit boundary review is needed.",
+        "Doxorubicin integer-labelled20–50 and51–86 bands leave continuous-value gap50<bilirubin<51; use explicit review/rounding-policy confirmation. No AST reduction is printed in this updated table.",
+        "CrCl10–29 and>=30 integer-labelled bands leave29<CrCl<30 undefined for continuous values; confirm clinical rounding/band interpretation instead of silently treating as normal.",
+        "Paclitaxel bilirubin bands leave1.25<ratio<1.26 and2<ratio<2.01 gaps. Both ALT and bilirubin are needed for a numerical hepatic dose; either high exclusion alone remains actionable. Missing ALT must not infer ALT<10.",
+        "Trastuzumab LVEFhold table omits currentLVEF<50% requirement found in00432/00433/00745/SmPC. Preserve and label this stricter00316source exception; do not silently harmonise."
+      ],
+      "operational_logistics": [
+        "Doxorubicin/cyclophosphamide are day-unitIVtreatments; no take-home infusionpump specified.",
+        "Doxorubicin cumulative lifetime450mg/m2requires prioranthracycline history/risk review. Four fullACdoses total240mg/m2, a calculation rather than an extra source threshold.",
+        "Venousaccess should be agreedwithteam; source doesnot mandate implantedport/PICC or an exact insertion/removal date. Doxorubicin extravasation is important.",
+        "Paclitaxel non-PVCcontainer/set with0.22micrometreinlinefilter; concentration0.3–1.2mg/mL.",
+        "SeparateACandtaxane phase calendars, antiemetic scripts and symptom maps. Never show12weeklydoses as12three-weekcycles.",
+        "Trastuzumab begins alongside taxane, afterAC; then continues aftercytotoxictherapy.",
+        "FirstIVtrastuzumab90mininfusion and observation at least6hoursfromstart; later30minif tolerated and at least2hoursfromstart; localpolicy deviations must be explicit.",
+        "Trastuzumab incompatiblewithglucose; useNaCl0.9%.",
+        "Firsttrastuzumab-to-completion is oneyear total; do not count an additionalyear frommaintenance handover."
+      ],
+      "supportive_care": {
+        "emetogenic_phases": [
+          {
+            "phase": "ac",
+            "risk": "high",
+            "source_note": "Explicit high AC risk"
+          },
+          {
+            "phase": "paclitaxel",
+            "risk": "low"
+          },
+          {
+            "phase": "trastuzumab_continuation",
+            "risk": "minimal"
+          }
+        ],
+        "gcsf": "Required with all dose-dense chemotherapy cycles; source permits standard or pegylated form; product/day perlocalpolicy",
+        "hydration": "Source advises2–3litres onday1for cyclophosphamide; patient-facing instruction must respect individual fluid restrictions/teamadvice",
+        "ac_premedication": "No additional infusion premedication usually required; this is separate from high-risk antiemetic prophylaxis",
+        "paclitaxel_premedication": {
+          "first_dose": {
+            "dexamethasone": "20mgoral approximately12and6hoursbefore OR20mgIV30minbefore",
+            "chlorphenamine": "10mgIV30minbefore",
+            "famotidine": "20mgIV30minbefore"
+          },
+          "later": "Dexamethasone may be reduced/omitted after noHSR underconsultantguidance; ifaprepitant added considerdexamethasone12mgontreatmentday. Famotidine may be omitted after noHSR underguidance.",
+          "note": "Famotidine omission risk described as unknown; monitor closely and followlocalpolicy. SevereHSR requires acute management, not automatic rechallenge."
+        },
+        "taxane_pain": "Analgesic cover may be considered for myalgia/arthralgia;00278describes onset2–3days and resolutionwithindays."
+      },
+      "existing_encoding": {
+        "path": "protocols/breast/00316-ddac-paclitaxel-14-day-trastuzumab.json",
+        "rule_count": 4,
+        "input_ids": [
+          "anc_x10e9_l",
+          "platelets_x10e9_l",
+          "hb_g_dl",
+          "treatment_phase",
+          "febrile_neutropenia",
+          "neuropathy_grade"
+        ],
+        "has_structured_treatment_phases": false
+      },
+      "discrepancies": [
+        {
+          "severity": "high",
+          "id": "missing_domains",
+          "current": "OnlyANC,platelets,Hb,phase,FN,neuropathyinputs;4–5rules",
+          "source": "Noexecutablefullrenal/hepatic,baselineeligibility,HSR,cardiac,phase-specifictoxicities ormisseddoseassessment."
+        },
+        {
+          "severity": "high",
+          "id": "phase_not_used",
+          "current": "Treatmentphaseinputexistsbutno ruleconditionusesit",
+          "source": "Phase-awarethresholds/componentsneeded; unknownphase conditionalreview."
+        },
+        {
+          "severity": "high",
+          "id": "neuropathy",
+          "current": "Allgrade>=2onlyconsultantreviewwhole_regimen",
+          "source": "Grade2agent-specificreduction/delay;grade>=3paclitaxeldiscontinue."
+        },
+        {
+          "severity": "medium",
+          "id": "structured_schedule",
+          "current": "No treatment_phases",
+          "source": "PopulateexplicitAC→taxane→trastuzumabcontinuationwithdistinctintervals,doselevels,timelinesandsupport."
+        },
+        {
+          "severity": "high",
+          "id": "platelets100",
+          "current": "COUNTS_PROCEEDuses>=100",
+          "source": "Routinefull-doseprinted>100;exact100requiresclarification."
+        },
+        {
+          "severity": "high",
+          "id": "trastuzumab_components",
+          "current": "Cytotoxiccount/FNactionsto whole_regimen includingmaintenance",
+          "source": "Do notreducetrastuzumabforcytotoxiccounts;explicittrastuzumabcardiac/HSR/missed-dosepathneeded."
+        }
+      ],
+      "proposed_acceptance_cases": [
+        {
+          "inputs": {},
+          "expected": "All domains unassessed; no normal assumptions or treatment clearance"
+        },
+        {
+          "inputs": {
+            "anc": 0.4
+          },
+          "expected": "Actionable lowANC warning without requiringplatelets/cycle/date; phase-specific text ifneeded"
+        },
+        {
+          "inputs": {
+            "anc": 2
+          },
+          "expected": "ANC-onlyresult; platelets/hepatic/cardiacremainunassessed"
+        },
+        {
+          "inputs": {
+            "platelets": 69
+          },
+          "expected": "Delaycytotoxiccomponent; no other input required"
+        },
+        {
+          "inputs": {
+            "assessment_type": "baseline",
+            "anc": 1.4
+          },
+          "expected": "BaselineANCexclusion"
+        },
+        {
+          "inputs": {
+            "lvef": 49
+          },
+          "expected": "Cardiacexclusionor00432caution; clinicianreview notclearance"
+        },
+        {
+          "inputs": {
+            "ecog": 3
+          },
+          "expected": "OutsideECOG0–2eligibility; consultantreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 0.99
+          },
+          "expected": "Delay1weekorlonger"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1,
+            "platelets": 101
+          },
+          "expected": "Initialcountsfull-doserow; do notreuseasafter-delayANC>1criterion"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 100
+          },
+          "expected": "Boundaryreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 99
+          },
+          "expected": "Delay"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "second_thrombocytopenia_delay": true
+          },
+          "expected": "75%afterrecoverypath"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "prior_febrile_neutropenia": true
+          },
+          "expected": "75%current/subsequentcytotoxicdoses"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 19.9
+          },
+          "expected": "Doxorubicin:belowlistedreductionrange"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 20
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50.5
+          },
+          "expected": "Doxorubicin:gapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 51
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86.1
+          },
+          "expected": "Doxorubicin:omit/notrecommended"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 9.9
+          },
+          "expected": "Cyclonotrecommended/omit;50%onlyif unavoidablewithreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 10
+          },
+          "expected": "Cyclo75%/consider75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20.1
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 29.5
+          },
+          "expected": "Gapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 30
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 9.99,
+            "bilirubin_uln": 1.25
+          },
+          "expected": "175mg/m2hepaticrow"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 10
+          },
+          "expected": "Paclitaxelnotrecommendedwithoutneedingbilirubin"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 5.01
+          },
+          "expected": "PaclitaxelnotrecommendedwithoutneedingALT"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.255
+          },
+          "expected": "Sourcegapreview; notsilentlyround"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.26
+          },
+          "expected": "135mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2
+          },
+          "expected": "135mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.005
+          },
+          "expected": "Sourcegapreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.01
+          },
+          "expected": "90mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 5
+          },
+          "expected": "90mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 2
+          },
+          "expected": "MissingALT:conditionalrowonly,nofinalhepaticdose"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 2
+          },
+          "expected": "Reduce/delayreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 3
+          },
+          "expected": "Discontinuepaclitaxel"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "neuropathy_grade": 3
+          },
+          "expected": "Do not automaticallydiscontinueACbytaxanerule; neuropathyreview"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 55
+          },
+          "expected": "00316hold;othercodesnoautomatictwo-partcardiactableholdbutreviewtrend"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 49
+          },
+          "expected": "Hold/repeat~3weeks"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 50
+          },
+          "expected": "00316hold;othersdonotmeet<50condition"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_current": 45
+          },
+          "expected": "Missingbaseline/drop:flaglowLVEFandclinicalreview; do notassumefall"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "hypersensitivity_grade": 4
+          },
+          "expected": "Discontinuetrastuzumab"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "symptomatic_heart_failure": true
+          },
+          "expected": "Considerdiscontinueandcardiologyreview"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "days_late": 7
+          },
+          "expected": "Usual2mg/kgpromptly(source-specificschedule)"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "days_late": 8
+          },
+          "expected": "Reload4mg/kgandrescheduleat7days"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab_maintenance",
+            "anc": 0.8
+          },
+          "expected": "Do not applycytotoxic25%reduction; reversiblemyelosuppressiontrastuzumabcontinuationconditionalandreview"
+        }
+      ]
+    },
+    "00432": {
+      "code": "00432",
+      "source": {
+        "code": "00432",
+        "path": "/workspace/scratch/aa44ad62d693/sactcheck-v0840/protocols/breast/00432-ac-weekly-paclitaxel-trastuzumab.json",
+        "url": "https://healthservice.hse.ie/documents/6470/432_v5_AC-TH_weekly.pdf",
+        "sha256": "debd9a5ddc8f27b826fcf0e67f50a5abadb3b1382ce6fd80f1eb979cdcefe6dc",
+        "bytes": 928405,
+        "version": "5",
+        "version_amendment_date": "2025-08-11",
+        "last_clinical_review_date_if_distinguished": null,
+        "review_due_or_policy": "2030-08-11",
+        "pages": 8,
+        "checked_date": "2026-10-17",
+        "full_text_path": "/workspace/scratch/aa44ad62d693/v0840-sources/ac/00432.txt"
+      },
+      "indications": {
+        "settings": [
+          "adjuvant",
+          "neoadjuvant"
+        ],
+        "disease": "High-risk node-negative or node-positive breast cancer",
+        "biomarker": "HER2 overexpression or gene amplification confirmed by validated assay",
+        "codes": [
+          "00432a",
+          "00432b"
+        ]
+      },
+      "eligibility": [
+        "ECOG 0–2",
+        "Listed indication",
+        "Consultant Medical Oncologist initiation",
+        "HER2 status confirmed with an accurate validated assay"
+      ],
+      "exclusions": [
+        "Relevant regimen-drug/excipient hypersensitivity",
+        "Severe dyspnoea at rest due to advanced malignancy or requiring supplementary oxygen",
+        "Baseline ANC<1.5 ×10^9/L",
+        "Breastfeeding"
+      ],
+      "cautions": [
+        "CHF/LVEF<50% or clinically significant heart disease; symptomatic ventricular arrhythmia/CHF/MI within previous12months",
+        "Severe hepatic impairment"
+      ],
+      "phases": [
+        {
+          "id": "ac",
+          "drugs": [
+            {
+              "name": "doxorubicin",
+              "dose": 60,
+              "unit": "mg/m2",
+              "route": "IV push",
+              "duration_minutes": 15
+            },
+            {
+              "name": "cyclophosphamide",
+              "dose": 600,
+              "unit": "mg/m2",
+              "route": "IV infusion",
+              "diluent": "250mL NaCl0.9%",
+              "duration_minutes": 30,
+              "alternative": "IV bolus5–10minutes"
+            }
+          ],
+          "days": [
+            1
+          ],
+          "cycle_days": 21,
+          "cycles": 4,
+          "nominal_weeks_including_final_recovery": 12.0,
+          "doxorubicin_lifetime_cumulative_limit_mg_m2": 450
+        },
+        {
+          "id": "paclitaxel",
+          "dose": 80,
+          "unit": "mg/m2",
+          "route": "IV infusion",
+          "diluent_ml": 250,
+          "diluent": "NaCl0.9%",
+          "duration_minutes": 60,
+          "days": [
+            1,
+            8,
+            15
+          ],
+          "cycle_days": 21,
+          "cycles": 4,
+          "total_administrations": 12,
+          "nominal_weeks_including_final_recovery": 12,
+          "starts_after_final_ac_days": null,
+          "start_note": "Sequence specified; transition interval not separately explicit in source",
+          "concurrent_trastuzumab": {
+            "route": "IV",
+            "loading_mg_kg": 4,
+            "maintenance_mg_kg": 2,
+            "days": [
+              1,
+              8,
+              15
+            ],
+            "cycle_days": 21,
+            "loading_duration_minutes": 90,
+            "maintenance_duration_minutes": 30,
+            "diluent": "250mL NaCl0.9%",
+            "starts": "First taxane administration (overallcycle5)",
+            "not_with_ac": true
+          }
+        },
+        {
+          "id": "trastuzumab_continuation",
+          "route": "IV",
+          "dose_mg_kg": 6,
+          "cycle_days": 21,
+          "source_reference": "NCCP00200",
+          "duration": "Complete one year of trastuzumab therapy from first trastuzumab dose; not a fresh year after chemotherapy",
+          "starts_after_taxane_phase": true
+        }
+      ],
+      "monitoring": {
+        "baseline": [
+          "FBC",
+          "Renal profile",
+          "Liver profile",
+          "ECG"
+        ],
+        "blood_repeat": "FBC/renal/liver profile listed as regular tests; exact frequency not quantified in PDF",
+        "baseline_echo": "MUGA/ECHO if age>65years or clinically indicated; LVEF>50% for doxorubicin",
+        "repeat_echo": "MUGA/ECHO every12weeks; if cardiac impairment signs, checks every4–8weeks may be more appropriate",
+        "peripheral_neuropathy": "As clinically indicated",
+        "disease_monitoring": "Treatment-plan/consultant-directed; no fixed CT/marker schedule stated",
+        "echo_cycle_mapping": "Illustrative elapsed-time mapping only:12weeks corresponds to12 weekly trastuzumab intervals (next weekly dose13),4 q21d intervals (next q21d dose5),or6 q14d intervals. If trastuzumab starts at overallcycle5, count from documented baseline/pre-HER2 checkpoint; never reset the due date silently at phase transition."
+      },
+      "dose_tables": [
+        {
+          "name": "1:haematology",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "ANC>=1 AND platelets>=100",
+              "action": "100%",
+              "component": "AC"
+            },
+            {
+              "condition": "ANC<1 AND platelets>=100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>=100 give100%",
+              "component": "AC"
+            },
+            {
+              "condition": "ANC>=1 AND platelets<100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>=100 give100%; after second delay reduce to75%",
+              "component": "AC"
+            }
+          ],
+          "notes": [
+            "Recovery >= glyphs verified visually; plain-text extraction incorrectly returns >.",
+            "Second-delay75% wording is physically in thrombocytopenia row, not a universal all-causes rule.",
+            "Both ANC and platelets below threshold is not an explicit combined row; both low findings still require withholding/review, not no action."
+          ]
+        },
+        {
+          "name": "Paclitaxel reduction levels",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Starting / first / second reduction",
+              "action": "80 /65 /50mg/m2",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel haematology",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "ANC>=1 AND platelets>=90",
+              "action": "100%",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ANC0.5–0.99 AND/OR platelets70–90",
+              "action": "Delay; consider dose reduction at subsequent cycle",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ANC<0.5 for>=7days AND/OR platelets<70",
+              "action": "Delay; after recovery reduce one dose level",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Severe haematology row",
+              "action": "Consider G-CSF",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": [
+            "Platelets90 overlaps full-dose and delay rows; do not silently auto-proceed.",
+            "ANC<0.5 for shorter/unknown duration is not assigned the automatic one-level reduction; low ANC still requires hold/review.",
+            "Do not confuse dose-level80→65→50 with separate adverse-event10mg/m2 decrements."
+          ]
+        },
+        {
+          "name": "Renal/hepatic:doxorubicin",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Renal impairment",
+              "action": "No dose reduction required; severe impairment clinical decision",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Haemodialysis",
+              "action": "75% original dose may be considered",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin20–50micromol/L",
+              "action": "50%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin51–86micromol/L",
+              "action": "25%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin>86micromol/L OR Child-PughC",
+              "action": "Omit",
+              "component": "Doxorubicin"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Renal/hepatic:cyclophosphamide",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "CrCl>=30mL/min",
+              "action": "100%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl10–29mL/min",
+              "action": "75%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl<10mL/min",
+              "action": "Not recommended/omit; if unavoidable consider50% original dose",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Severe hepatic impairment",
+              "action": "Not recommended because reduced efficacy risk",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Mild/moderate hepatic impairment",
+              "action": "No adjustment expected",
+              "component": "Cyclophosphamide"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel hepatic",
+          "page": 5,
+          "rows": [
+            {
+              "condition": "ALT<10xULN AND bilirubin<=1.25xULN",
+              "action": "80mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin1.26–2xULN",
+              "action": "60mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin2.01–5xULN",
+              "action": "40mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT>=10xULN OR bilirubin>5xULN",
+              "action": "Not recommended",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Renal impairment including haemodialysis",
+              "action": "No dose adjustment expected/necessary",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel adverse events",
+          "page": 5,
+          "rows": [
+            {
+              "condition": "Grade2motor/sensory neuropathy",
+              "action": "Decrease10mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Other grade2non-haematological toxicity",
+              "action": "Hold until<=grade1; subsequent doses minus10mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Grade>=3reaction",
+              "action": "Discontinue",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Cannot tolerate after2reductions",
+              "action": "Treating clinician discussion about continuation",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab adverse events",
+          "page": 5,
+          "rows": [
+            {
+              "condition": "LVEFfall>=10percentagepoints from baseline AND currentLVEF<50%",
+              "action": "Withhold; repeatLVEF~3weeks; no improvement/further decline:consider discontinue and consultant/cardiology review",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Symptomatic heart failure",
+              "action": "Consider discontinue; cardiology review; clinical decision",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "CTCAEgrade4hypersensitivity",
+              "action": "Discontinue",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Reversible chemotherapy-induced myelosuppression",
+              "action": "May continue with careful neutropenia-complication monitoring",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab renal/hepatic",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Renal/hepatic impairment",
+              "action": "Probably no dose reduction necessary",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab missed dose",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "Dose overdue<=7days",
+              "action": "Give usual2mg/kg promptly; source says resume previous schedule",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Dose overdue>7days",
+              "action": "Clinician-directed reload4mg/kg over~90min; then2mg/kg every7days from that point",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": [
+            "Late days measured from scheduled dose date, not time since last infusion. Phase-specific: weekly4/2must not be used after switching toq21dcontinuation; follow00200. CurrentSmPC timing may differ from source previous-schedule wording and must be separately reconciled."
+          ]
+        }
+      ],
+      "ambiguities": [
+        "Doxorubicin integer-labelled20–50 and51–86 bands leave continuous-value gap50<bilirubin<51; use explicit review/rounding-policy confirmation. No AST reduction is printed in this updated table.",
+        "CrCl10–29 and>=30 integer-labelled bands leave29<CrCl<30 undefined for continuous values; confirm clinical rounding/band interpretation instead of silently treating as normal.",
+        "Paclitaxel bilirubin bands leave1.25<ratio<1.26 and2<ratio<2.01 gaps. Both ALT and bilirubin are needed for a numerical hepatic dose; either high exclusion alone remains actionable. Missing ALT must not infer ALT<10."
+      ],
+      "operational_logistics": [
+        "Doxorubicin/cyclophosphamide are day-unitIVtreatments; no take-home infusionpump specified.",
+        "Doxorubicin cumulative lifetime450mg/m2requires prioranthracycline history/risk review. Four fullACdoses total240mg/m2, a calculation rather than an extra source threshold.",
+        "Venousaccess should be agreedwithteam; source doesnot mandate implantedport/PICC or an exact insertion/removal date. Doxorubicin extravasation is important.",
+        "Paclitaxel non-PVCcontainer/set with0.22micrometreinlinefilter; concentration0.3–1.2mg/mL.",
+        "SeparateACandtaxane phase calendars, antiemetic scripts and symptom maps. Never show12weeklydoses as12three-weekcycles.",
+        "Trastuzumab begins alongside taxane, afterAC; then continues aftercytotoxictherapy.",
+        "FirstIVtrastuzumab90mininfusion and observation at least6hoursfromstart; later30minif tolerated and at least2hoursfromstart; localpolicy deviations must be explicit.",
+        "Trastuzumab incompatiblewithglucose; useNaCl0.9%.",
+        "Firsttrastuzumab-to-completion is oneyear total; do not count an additionalyear frommaintenance handover."
+      ],
+      "supportive_care": {
+        "emetogenic_phases": [
+          {
+            "phase": "ac",
+            "risk": "high",
+            "source_note": "Explicit high AC risk"
+          },
+          {
+            "phase": "paclitaxel",
+            "risk": "low"
+          },
+          {
+            "phase": "trastuzumab_continuation",
+            "risk": "minimal"
+          }
+        ],
+        "gcsf": "May use prophylacticG-CSF to reduce haematological toxicity; localpolicy",
+        "hydration": "Source advises2–3litres onday1for cyclophosphamide; patient-facing instruction must respect individual fluid restrictions/teamadvice",
+        "ac_premedication": "No additional infusion premedication usually required; this is separate from high-risk antiemetic prophylaxis",
+        "paclitaxel_premedication": {
+          "first_dose": {
+            "dexamethasone": "8mgIV30minbefore",
+            "chlorphenamine": "10mgIV30minbefore",
+            "famotidine": "20mgIV30minbefore"
+          },
+          "later": "Weekly:day8onwards no routine dexamethasone in suggested table; add for risk/priorreaction underconsultantguidance. Continuechlorphenamine; famotidine may be omitted after noHSR underguidance.",
+          "note": "Famotidine omission risk described as unknown; monitor closely and followlocalpolicy. SevereHSR requires acute management, not automatic rechallenge."
+        },
+        "taxane_pain": "Analgesic cover may be considered for myalgia/arthralgia;00278describes onset2–3days and resolutionwithindays."
+      },
+      "existing_encoding": {
+        "path": "protocols/breast/00432-ac-weekly-paclitaxel-trastuzumab.json",
+        "rule_count": 5,
+        "input_ids": [
+          "anc_x10e9_l",
+          "platelets_x10e9_l",
+          "hb_g_dl",
+          "treatment_phase",
+          "febrile_neutropenia",
+          "neuropathy_grade"
+        ],
+        "has_structured_treatment_phases": false
+      },
+      "discrepancies": [
+        {
+          "severity": "high",
+          "id": "missing_domains",
+          "current": "OnlyANC,platelets,Hb,phase,FN,neuropathyinputs;4–5rules",
+          "source": "Noexecutablefullrenal/hepatic,baselineeligibility,HSR,cardiac,phase-specifictoxicities ormisseddoseassessment."
+        },
+        {
+          "severity": "high",
+          "id": "phase_not_used",
+          "current": "Treatmentphaseinputexistsbutno ruleconditionusesit",
+          "source": "Phase-awarethresholds/componentsneeded; unknownphase conditionalreview."
+        },
+        {
+          "severity": "high",
+          "id": "neuropathy",
+          "current": "Allgrade>=2onlyconsultantreviewwhole_regimen",
+          "source": "Grade2agent-specificreduction/delay;grade>=3paclitaxeldiscontinue."
+        },
+        {
+          "severity": "medium",
+          "id": "structured_schedule",
+          "current": "No treatment_phases",
+          "source": "PopulateexplicitAC→taxane→trastuzumabcontinuationwithdistinctintervals,doselevels,timelinesandsupport."
+        },
+        {
+          "severity": "high",
+          "id": "generic_counts_review",
+          "current": "IntermediateANC0.5–1.49orplatelets70–99onlyconsultantreviewevenwhenphaseknown",
+          "source": "Somevaluesmandatedelay/reduce;othersmeetphase-specificthresholds.00432ACANCthreshold1.0not1.5;00260AC75%rowneeded."
+        },
+        {
+          "severity": "medium",
+          "id": "fn_attribution",
+          "current": "FNautomaticdose_reduce",
+          "source": "NoexplicitFNroworautomatic75%FNruleinthisPDF;cannotborrow00433."
+        },
+        {
+          "severity": "high",
+          "id": "trastuzumab_components",
+          "current": "Cytotoxiccount/FNactionsto whole_regimen includingmaintenance",
+          "source": "Do notreducetrastuzumabforcytotoxiccounts;explicittrastuzumabcardiac/HSR/missed-dosepathneeded."
+        }
+      ],
+      "proposed_acceptance_cases": [
+        {
+          "inputs": {},
+          "expected": "All domains unassessed; no normal assumptions or treatment clearance"
+        },
+        {
+          "inputs": {
+            "anc": 0.4
+          },
+          "expected": "Actionable lowANC warning without requiringplatelets/cycle/date; phase-specific text ifneeded"
+        },
+        {
+          "inputs": {
+            "anc": 2
+          },
+          "expected": "ANC-onlyresult; platelets/hepatic/cardiacremainunassessed"
+        },
+        {
+          "inputs": {
+            "platelets": 69
+          },
+          "expected": "Delaycytotoxiccomponent; no other input required"
+        },
+        {
+          "inputs": {
+            "assessment_type": "baseline",
+            "anc": 1.4
+          },
+          "expected": "BaselineANCexclusion"
+        },
+        {
+          "inputs": {
+            "lvef": 49
+          },
+          "expected": "Cardiacexclusionor00432caution; clinicianreview notclearance"
+        },
+        {
+          "inputs": {
+            "ecog": 3
+          },
+          "expected": "OutsideECOG0–2eligibility; consultantreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 0.99
+          },
+          "expected": "Delay1weekorlonger"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1,
+            "platelets": 101
+          },
+          "expected": "Initialcountsfull-doserow; do notreuseasafter-delayANC>1criterion"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 100
+          },
+          "expected": "Routineplateletdomainmeets100threshold"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 99
+          },
+          "expected": "Delay"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "second_thrombocytopenia_delay": true
+          },
+          "expected": "75%afterrecoverypath"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "prior_febrile_neutropenia": true
+          },
+          "expected": "No fabricated75%FNrule;source-specificreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 19.9
+          },
+          "expected": "Doxorubicin:belowlistedreductionrange"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 20
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50.5
+          },
+          "expected": "Doxorubicin:gapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 51
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86.1
+          },
+          "expected": "Doxorubicin:omit/notrecommended"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 9.9
+          },
+          "expected": "Cyclonotrecommended/omit;50%onlyif unavoidablewithreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 10
+          },
+          "expected": "Cyclo75%/consider75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20.1
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 29.5
+          },
+          "expected": "Gapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 30
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 9.99,
+            "bilirubin_uln": 1.25
+          },
+          "expected": "80mg/m2hepaticrow"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 10
+          },
+          "expected": "Paclitaxelnotrecommendedwithoutneedingbilirubin"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 5.01
+          },
+          "expected": "PaclitaxelnotrecommendedwithoutneedingALT"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.255
+          },
+          "expected": "Sourcegapreview; notsilentlyround"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.26
+          },
+          "expected": "60mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2
+          },
+          "expected": "60mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.005
+          },
+          "expected": "Sourcegapreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.01
+          },
+          "expected": "40mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 5
+          },
+          "expected": "40mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 2
+          },
+          "expected": "MissingALT:conditionalrowonly,nofinalhepaticdose"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 2
+          },
+          "expected": "Decrease10mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 3
+          },
+          "expected": "Discontinuepaclitaxel"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "neuropathy_grade": 3
+          },
+          "expected": "Do not automaticallydiscontinueACbytaxanerule; neuropathyreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 1,
+            "platelets": 91
+          },
+          "expected": "Full-dosecountsrow"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 0.5
+          },
+          "expected": "Delay/considerreduction"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 0.49,
+            "days_anc_below_0_5": 7
+          },
+          "expected": "Delayandonelevelreductionafterrecovery"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 0.49,
+            "days_anc_below_0_5": 6
+          },
+          "expected": "Hold/review; no automatic>=7dayreductionclaim"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "platelets": 90
+          },
+          "expected": "Overlappingrows:explicitreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "platelets": 70
+          },
+          "expected": "Delay/considerreduction"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "platelets": 69
+          },
+          "expected": "Delayandonelevelreduction"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "other_toxicity_grade": 2
+          },
+          "expected": "Holduntil<=1thendecrease10mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 55
+          },
+          "expected": "00316hold;othercodesnoautomatictwo-partcardiactableholdbutreviewtrend"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 49
+          },
+          "expected": "Hold/repeat~3weeks"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 50
+          },
+          "expected": "00316hold;othersdonotmeet<50condition"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_current": 45
+          },
+          "expected": "Missingbaseline/drop:flaglowLVEFandclinicalreview; do notassumefall"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "hypersensitivity_grade": 4
+          },
+          "expected": "Discontinuetrastuzumab"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "symptomatic_heart_failure": true
+          },
+          "expected": "Considerdiscontinueandcardiologyreview"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "days_late": 7
+          },
+          "expected": "Usual2mg/kgpromptly(source-specificschedule)"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "days_late": 8
+          },
+          "expected": "Reload4mg/kgandrescheduleat7days"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab_maintenance",
+            "anc": 0.8
+          },
+          "expected": "Do not applycytotoxic25%reduction; reversiblemyelosuppressiontrastuzumabcontinuationconditionalandreview"
+        }
+      ]
+    },
+    "00433": {
+      "code": "00433",
+      "source": {
+        "code": "00433",
+        "path": "/workspace/scratch/aa44ad62d693/sactcheck-v0840/protocols/breast/00433-ddac-weekly-paclitaxel-trastuzumab.json",
+        "url": "https://healthservice.hse.ie/documents/6471/433_v6_Dose_Dense_AC-TH_Weekly.pdf",
+        "sha256": "829eb066952ceb575974d27f3da778bc52908ff2e48ad80a5d48042e0145eafd",
+        "bytes": 941535,
+        "version": "6",
+        "version_amendment_date": "2025-06-13",
+        "last_clinical_review_date_if_distinguished": null,
+        "review_due_or_policy": "2030-06-13",
+        "pages": 8,
+        "checked_date": "2026-10-17",
+        "full_text_path": "/workspace/scratch/aa44ad62d693/v0840-sources/ac/00433.txt"
+      },
+      "indications": {
+        "settings": [
+          "adjuvant",
+          "neoadjuvant"
+        ],
+        "disease": "High-risk node-negative or node-positive breast cancer",
+        "biomarker": "HER2 overexpression or gene amplification confirmed by validated assay",
+        "codes": [
+          "00433a",
+          "00433b"
+        ]
+      },
+      "eligibility": [
+        "ECOG 0–2",
+        "Listed indication",
+        "Consultant Medical Oncologist initiation",
+        "HER2 status confirmed with an accurate validated assay",
+        "EBC trastuzumab: LVEF>55%; source footnote notes trials using >=50% and requires clinical judgement between these ranges"
+      ],
+      "exclusions": [
+        "Relevant regimen-drug/excipient hypersensitivity",
+        "CHF/LVEF<50% or other significant heart disease",
+        "Baseline ANC<1.5 ×10^9/L",
+        "Breastfeeding",
+        "Severe hepatic impairment"
+      ],
+      "cautions": [],
+      "phases": [
+        {
+          "id": "ac",
+          "drugs": [
+            {
+              "name": "doxorubicin",
+              "dose": 60,
+              "unit": "mg/m2",
+              "route": "IV push",
+              "duration_minutes": 15
+            },
+            {
+              "name": "cyclophosphamide",
+              "dose": 600,
+              "unit": "mg/m2",
+              "route": "IV infusion",
+              "diluent": "250mL NaCl0.9%",
+              "duration_minutes": 30,
+              "alternative": "IV bolus5–10minutes"
+            }
+          ],
+          "days": [
+            1
+          ],
+          "cycle_days": 14,
+          "cycles": 4,
+          "nominal_weeks_including_final_recovery": 8.0,
+          "doxorubicin_lifetime_cumulative_limit_mg_m2": 450
+        },
+        {
+          "id": "paclitaxel",
+          "dose": 80,
+          "unit": "mg/m2",
+          "route": "IV infusion",
+          "diluent_ml": 250,
+          "diluent": "NaCl0.9%",
+          "duration_minutes": 60,
+          "days": [
+            1,
+            8,
+            15
+          ],
+          "cycle_days": 21,
+          "cycles": 4,
+          "total_administrations": 12,
+          "nominal_weeks_including_final_recovery": 12,
+          "starts_after_final_ac_days": null,
+          "start_note": "Sequence specified; transition interval not separately explicit in source",
+          "concurrent_trastuzumab": {
+            "route": "IV",
+            "loading_mg_kg": 4,
+            "maintenance_mg_kg": 2,
+            "days": [
+              1,
+              8,
+              15
+            ],
+            "cycle_days": 21,
+            "loading_duration_minutes": 90,
+            "maintenance_duration_minutes": 30,
+            "diluent": "250mL NaCl0.9%",
+            "starts": "First taxane administration (overallcycle5)",
+            "not_with_ac": true
+          }
+        },
+        {
+          "id": "trastuzumab_continuation",
+          "route": "IV",
+          "dose_mg_kg": 6,
+          "cycle_days": 21,
+          "source_reference": "NCCP00200",
+          "duration": "Complete one year of trastuzumab therapy from first trastuzumab dose; not a fresh year after chemotherapy",
+          "starts_after_taxane_phase": true
+        }
+      ],
+      "monitoring": {
+        "baseline": [
+          "FBC",
+          "Renal profile",
+          "Liver profile",
+          "ECG"
+        ],
+        "blood_repeat": "FBC/renal/liver profile listed as regular tests; exact frequency not quantified in PDF",
+        "baseline_echo": "MUGA/ECHO if age>65years or clinically indicated; LVEF>50% for doxorubicin",
+        "repeat_echo": "When clinically indicated",
+        "peripheral_neuropathy": "As clinically indicated",
+        "disease_monitoring": "Treatment-plan/consultant-directed; no fixed CT/marker schedule stated",
+        "echo_cycle_mapping": null
+      },
+      "dose_tables": [
+        {
+          "name": "1:haematology",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "ANC>=1 AND platelets>=100",
+              "action": "100%",
+              "component": "AC"
+            },
+            {
+              "condition": "ANC<1 AND platelets>=100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>=100 give100%",
+              "component": "AC"
+            },
+            {
+              "condition": "ANC>=1 AND platelets<100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>100 give100%; after second delay reduce to75%",
+              "component": "AC"
+            },
+            {
+              "condition": "Febrile neutropenia",
+              "action": "75% current and subsequent doses",
+              "component": "Cytotoxic phase; not automatic trastuzumab reduction"
+            }
+          ],
+          "notes": [
+            "Recovery >= glyphs verified visually; plain-text extraction incorrectly returns >.",
+            "Second-delay75% wording is physically in thrombocytopenia row, not a universal all-causes rule.",
+            "Both ANC and platelets below threshold is not an explicit combined row; both low findings still require withholding/review, not no action."
+          ]
+        },
+        {
+          "name": "Paclitaxel reduction levels",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Starting / first / second reduction",
+              "action": "80 /65 /50mg/m2",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel haematology",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "ANC>=1 AND platelets>=90",
+              "action": "100%",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ANC0.5–0.99 AND/OR platelets70–90",
+              "action": "Delay; consider dose reduction at subsequent cycle",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ANC<0.5 for>=7days AND/OR platelets<70",
+              "action": "Delay; after recovery reduce one dose level",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Severe haematology row",
+              "action": "Consider G-CSF",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": [
+            "Platelets90 overlaps full-dose and delay rows; do not silently auto-proceed.",
+            "ANC<0.5 for shorter/unknown duration is not assigned the automatic one-level reduction; low ANC still requires hold/review.",
+            "Do not confuse dose-level80→65→50 with separate adverse-event10mg/m2 decrements."
+          ]
+        },
+        {
+          "name": "Renal/hepatic:doxorubicin",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Renal impairment",
+              "action": "No dose reduction required; severe impairment clinical decision",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Haemodialysis",
+              "action": "75% original dose may be considered",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin20–50micromol/L",
+              "action": "50%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin51–86micromol/L",
+              "action": "25%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin>86micromol/L OR Child-PughC",
+              "action": "Omit",
+              "component": "Doxorubicin"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Renal/hepatic:cyclophosphamide",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "CrCl>20mL/min",
+              "action": "100%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl10–20mL/min",
+              "action": "75%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl<10mL/min",
+              "action": "Not recommended/omit; if unavoidable consider50% original dose",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Severe hepatic impairment",
+              "action": "Not recommended because reduced efficacy risk",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Mild/moderate hepatic impairment",
+              "action": "No adjustment expected",
+              "component": "Cyclophosphamide"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel hepatic",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "ALT<10xULN AND bilirubin<=1.25xULN",
+              "action": "80mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin1.26–2xULN",
+              "action": "60mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin2.01–5xULN",
+              "action": "40mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT>=10xULN OR bilirubin>5xULN",
+              "action": "Not recommended",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Renal impairment including haemodialysis",
+              "action": "No dose adjustment expected/necessary",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel adverse events",
+          "page": 5,
+          "rows": [
+            {
+              "condition": "Grade2motor/sensory neuropathy",
+              "action": "Decrease10mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Other grade2non-haematological toxicity",
+              "action": "Hold until<=grade1; subsequent doses minus10mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Grade>=3reaction",
+              "action": "Discontinue",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Cannot tolerate after2reductions OR delay>2weeks",
+              "action": "Discontinue",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab adverse events",
+          "page": 5,
+          "rows": [
+            {
+              "condition": "LVEFfall>=10percentagepoints from baseline AND currentLVEF<50%",
+              "action": "Withhold; repeatLVEF~3weeks; no improvement/further decline:consider discontinue and consultant/cardiology review",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Symptomatic heart failure",
+              "action": "Consider discontinue; cardiology review; clinical decision",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "CTCAEgrade4hypersensitivity",
+              "action": "Discontinue",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Reversible chemotherapy-induced myelosuppression",
+              "action": "May continue with careful neutropenia-complication monitoring",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab renal/hepatic",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Renal/hepatic impairment",
+              "action": "Probably no dose reduction necessary",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab missed dose",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "Dose overdue<=7days",
+              "action": "Give usual2mg/kg promptly; source says resume previous schedule",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Dose overdue>7days",
+              "action": "Clinician-directed reload4mg/kg over~90min; then2mg/kg every7days from that point",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": [
+            "Late days measured from scheduled dose date, not time since last infusion. Phase-specific: weekly4/2must not be used after switching toq21dcontinuation; follow00200. CurrentSmPC timing may differ from source previous-schedule wording and must be separately reconciled."
+          ]
+        }
+      ],
+      "ambiguities": [
+        "Tests subsection has only clinically-indicated MUGA/ECHO/ECG and no12-week interval. Do not cite the regimen itself for a fixed3-month schedule; supplement with current trastuzumab SmPC or cardio-oncology guideline, explicitly attributed.",
+        "Doxorubicin integer-labelled20–50 and51–86 bands leave continuous-value gap50<bilirubin<51; use explicit review/rounding-policy confirmation. No AST reduction is printed in this updated table.",
+        "2025 table retains>20/10–20 renal bands for cyclophosphamide while other2025 AC-TH sources use>=30/10–29. Preserve00433 source-specific thresholds. Doxorubicin omit row also carries an asterisk that appears to point to50%-if-unavoidable footnote; do not automatically apply that exception to doxorubicin without consultant/pharmacy clarification.",
+        "Paclitaxel bilirubin bands leave1.25<ratio<1.26 and2<ratio<2.01 gaps. Both ALT and bilirubin are needed for a numerical hepatic dose; either high exclusion alone remains actionable. Missing ALT must not infer ALT<10."
+      ],
+      "operational_logistics": [
+        "Doxorubicin/cyclophosphamide are day-unitIVtreatments; no take-home infusionpump specified.",
+        "Doxorubicin cumulative lifetime450mg/m2requires prioranthracycline history/risk review. Four fullACdoses total240mg/m2, a calculation rather than an extra source threshold.",
+        "Venousaccess should be agreedwithteam; source doesnot mandate implantedport/PICC or an exact insertion/removal date. Doxorubicin extravasation is important.",
+        "Paclitaxel non-PVCcontainer/set with0.22micrometreinlinefilter; concentration0.3–1.2mg/mL.",
+        "SeparateACandtaxane phase calendars, antiemetic scripts and symptom maps. Never show12weeklydoses as12three-weekcycles.",
+        "Trastuzumab begins alongside taxane, afterAC; then continues aftercytotoxictherapy.",
+        "FirstIVtrastuzumab90mininfusion and observation at least6hoursfromstart; later30minif tolerated and at least2hoursfromstart; localpolicy deviations must be explicit.",
+        "Trastuzumab incompatiblewithglucose; useNaCl0.9%.",
+        "Firsttrastuzumab-to-completion is oneyear total; do not count an additionalyear frommaintenance handover."
+      ],
+      "supportive_care": {
+        "emetogenic_phases": [
+          {
+            "phase": "ac",
+            "risk": "high",
+            "source_note": "Explicit high AC risk"
+          },
+          {
+            "phase": "paclitaxel",
+            "risk": "low"
+          },
+          {
+            "phase": "trastuzumab_continuation",
+            "risk": "minimal"
+          }
+        ],
+        "gcsf": "Required with all dose-dense ACcycles. Weeklypaclitaxel is not dose-dense AC and is not automatically assigned obligatoryG-CSF by this statement; subsequent use per toxicity/localpolicy.",
+        "hydration": "Source advises2–3litres onday1for cyclophosphamide; patient-facing instruction must respect individual fluid restrictions/teamadvice",
+        "ac_premedication": "No additional infusion premedication usually required; this is separate from high-risk antiemetic prophylaxis",
+        "paclitaxel_premedication": {
+          "first_dose": {
+            "dexamethasone": "8mgIV30minbefore",
+            "chlorphenamine": "10mgIV30minbefore",
+            "famotidine": "20mgIV30minbefore"
+          },
+          "later": "Weekly:day8onwards no routine dexamethasone in suggested table; add for risk/priorreaction underconsultantguidance. Continuechlorphenamine; famotidine may be omitted after noHSR underguidance.",
+          "note": "Famotidine omission risk described as unknown; monitor closely and followlocalpolicy. SevereHSR requires acute management, not automatic rechallenge."
+        },
+        "taxane_pain": "Analgesic cover may be considered for myalgia/arthralgia;00278describes onset2–3days and resolutionwithindays."
+      },
+      "existing_encoding": {
+        "path": "protocols/breast/00433-ddac-weekly-paclitaxel-trastuzumab.json",
+        "rule_count": 4,
+        "input_ids": [
+          "anc_x10e9_l",
+          "platelets_x10e9_l",
+          "hb_g_dl",
+          "treatment_phase",
+          "febrile_neutropenia",
+          "neuropathy_grade"
+        ],
+        "has_structured_treatment_phases": false
+      },
+      "discrepancies": [
+        {
+          "severity": "high",
+          "id": "missing_domains",
+          "current": "OnlyANC,platelets,Hb,phase,FN,neuropathyinputs;4–5rules",
+          "source": "Noexecutablefullrenal/hepatic,baselineeligibility,HSR,cardiac,phase-specifictoxicities ormisseddoseassessment."
+        },
+        {
+          "severity": "high",
+          "id": "phase_not_used",
+          "current": "Treatmentphaseinputexistsbutno ruleconditionusesit",
+          "source": "Phase-awarethresholds/componentsneeded; unknownphase conditionalreview."
+        },
+        {
+          "severity": "high",
+          "id": "neuropathy",
+          "current": "Allgrade>=2onlyconsultantreviewwhole_regimen",
+          "source": "Grade2agent-specificreduction/delay;grade>=3paclitaxeldiscontinue."
+        },
+        {
+          "severity": "medium",
+          "id": "structured_schedule",
+          "current": "No treatment_phases",
+          "source": "PopulateexplicitAC→taxane→trastuzumabcontinuationwithdistinctintervals,doselevels,timelinesandsupport."
+        },
+        {
+          "severity": "high",
+          "id": "weekly_platelets",
+          "current": "Whole-regimendelayplatelets<100",
+          "source": "Taxanetableuses90/70boundaries;91–99arewronglydelayed."
+        },
+        {
+          "severity": "high",
+          "id": "trastuzumab_components",
+          "current": "Cytotoxiccount/FNactionsto whole_regimen includingmaintenance",
+          "source": "Do notreducetrastuzumabforcytotoxiccounts;explicittrastuzumabcardiac/HSR/missed-dosepathneeded."
+        }
+      ],
+      "proposed_acceptance_cases": [
+        {
+          "inputs": {},
+          "expected": "All domains unassessed; no normal assumptions or treatment clearance"
+        },
+        {
+          "inputs": {
+            "anc": 0.4
+          },
+          "expected": "Actionable lowANC warning without requiringplatelets/cycle/date; phase-specific text ifneeded"
+        },
+        {
+          "inputs": {
+            "anc": 2
+          },
+          "expected": "ANC-onlyresult; platelets/hepatic/cardiacremainunassessed"
+        },
+        {
+          "inputs": {
+            "platelets": 69
+          },
+          "expected": "Delaycytotoxiccomponent; no other input required"
+        },
+        {
+          "inputs": {
+            "assessment_type": "baseline",
+            "anc": 1.4
+          },
+          "expected": "BaselineANCexclusion"
+        },
+        {
+          "inputs": {
+            "lvef": 49
+          },
+          "expected": "Cardiacexclusionor00432caution; clinicianreview notclearance"
+        },
+        {
+          "inputs": {
+            "ecog": 3
+          },
+          "expected": "OutsideECOG0–2eligibility; consultantreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 0.99
+          },
+          "expected": "Delay1weekorlonger"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1,
+            "platelets": 101
+          },
+          "expected": "Initialcountsfull-doserow; do notreuseasafter-delayANC>1criterion"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 100
+          },
+          "expected": "Routineplateletdomainmeets100threshold"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 99
+          },
+          "expected": "Delay"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "second_thrombocytopenia_delay": true
+          },
+          "expected": "75%afterrecoverypath"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "prior_febrile_neutropenia": true
+          },
+          "expected": "75%current/subsequentcytotoxicdoses"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 19.9
+          },
+          "expected": "Doxorubicin:belowlistedreductionrange"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 20
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50.5
+          },
+          "expected": "Doxorubicin:gapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 51
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86.1
+          },
+          "expected": "Doxorubicin:omit/notrecommended"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 9.9
+          },
+          "expected": "Cyclonotrecommended/omit;50%onlyif unavoidablewithreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 10
+          },
+          "expected": "Cyclo75%/consider75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20.1
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 29.5
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 30
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 9.99,
+            "bilirubin_uln": 1.25
+          },
+          "expected": "80mg/m2hepaticrow"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 10
+          },
+          "expected": "Paclitaxelnotrecommendedwithoutneedingbilirubin"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 5.01
+          },
+          "expected": "PaclitaxelnotrecommendedwithoutneedingALT"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.255
+          },
+          "expected": "Sourcegapreview; notsilentlyround"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.26
+          },
+          "expected": "60mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2
+          },
+          "expected": "60mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.005
+          },
+          "expected": "Sourcegapreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.01
+          },
+          "expected": "40mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 5
+          },
+          "expected": "40mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 2
+          },
+          "expected": "MissingALT:conditionalrowonly,nofinalhepaticdose"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 2
+          },
+          "expected": "Decrease10mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 3
+          },
+          "expected": "Discontinuepaclitaxel"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "neuropathy_grade": 3
+          },
+          "expected": "Do not automaticallydiscontinueACbytaxanerule; neuropathyreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 1,
+            "platelets": 91
+          },
+          "expected": "Full-dosecountsrow"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 0.5
+          },
+          "expected": "Delay/considerreduction"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 0.49,
+            "days_anc_below_0_5": 7
+          },
+          "expected": "Delayandonelevelreductionafterrecovery"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "anc": 0.49,
+            "days_anc_below_0_5": 6
+          },
+          "expected": "Hold/review; no automatic>=7dayreductionclaim"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "platelets": 90
+          },
+          "expected": "Overlappingrows:explicitreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "platelets": 70
+          },
+          "expected": "Delay/considerreduction"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "platelets": 69
+          },
+          "expected": "Delayandonelevelreduction"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "other_toxicity_grade": 2
+          },
+          "expected": "Holduntil<=1thendecrease10mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 55
+          },
+          "expected": "00316hold;othercodesnoautomatictwo-partcardiactableholdbutreviewtrend"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 49
+          },
+          "expected": "Hold/repeat~3weeks"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 50
+          },
+          "expected": "00316hold;othersdonotmeet<50condition"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_current": 45
+          },
+          "expected": "Missingbaseline/drop:flaglowLVEFandclinicalreview; do notassumefall"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "hypersensitivity_grade": 4
+          },
+          "expected": "Discontinuetrastuzumab"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "symptomatic_heart_failure": true
+          },
+          "expected": "Considerdiscontinueandcardiologyreview"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "days_late": 7
+          },
+          "expected": "Usual2mg/kgpromptly(source-specificschedule)"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "days_late": 8
+          },
+          "expected": "Reload4mg/kgandrescheduleat7days"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab_maintenance",
+            "anc": 0.8
+          },
+          "expected": "Do not applycytotoxic25%reduction; reversiblemyelosuppressiontrastuzumabcontinuationconditionalandreview"
+        }
+      ]
+    },
+    "00745": {
+      "code": "00745",
+      "source": {
+        "code": "00745",
+        "path": "/workspace/scratch/aa44ad62d693/sactcheck-v0840/protocols/breast/00745-ddac-weekly-paclitaxel-trastuzumab-q21d.json",
+        "url": "https://healthservice.hse.ie/documents/6624/745_v2a_DDAC_TH_21_day.pdf",
+        "sha256": "1e672a37f958483379fc6af967d8c04ed3396426a43cd53cee322fd92bb60596",
+        "bytes": 1082850,
+        "version": "2a",
+        "version_amendment_date": "2025-04-22",
+        "last_clinical_review_date_if_distinguished": "2024-04-25",
+        "review_due_or_policy": "2029-04-25",
+        "pages": 8,
+        "checked_date": "2026-10-17",
+        "full_text_path": "/workspace/scratch/aa44ad62d693/v0840-sources/ac/00745.txt"
+      },
+      "indications": {
+        "settings": [
+          "adjuvant",
+          "neoadjuvant"
+        ],
+        "disease": "High-risk node-negative or node-positive breast cancer",
+        "biomarker": "HER2 overexpression or gene amplification confirmed by validated assay",
+        "codes": [
+          "00745a",
+          "00745b"
+        ]
+      },
+      "eligibility": [
+        "ECOG 0–2",
+        "Listed indication",
+        "Consultant Medical Oncologist initiation",
+        "HER2 status confirmed with an accurate validated assay"
+      ],
+      "exclusions": [
+        "Relevant regimen-drug/excipient hypersensitivity",
+        "CHF/LVEF<50% or other significant heart disease",
+        "Baseline ANC<1.5 ×10^9/L",
+        "Breastfeeding",
+        "Severe hepatic impairment",
+        "Pregnancy"
+      ],
+      "cautions": [],
+      "phases": [
+        {
+          "id": "ac",
+          "drugs": [
+            {
+              "name": "doxorubicin",
+              "dose": 60,
+              "unit": "mg/m2",
+              "route": "IV push",
+              "duration_minutes": 15
+            },
+            {
+              "name": "cyclophosphamide",
+              "dose": 600,
+              "unit": "mg/m2",
+              "route": "IV infusion",
+              "diluent": "250mL NaCl0.9%",
+              "duration_minutes": 30,
+              "alternative": "IV bolus5–10minutes"
+            }
+          ],
+          "days": [
+            1
+          ],
+          "cycle_days": 14,
+          "cycles": 4,
+          "nominal_weeks_including_final_recovery": 8.0,
+          "doxorubicin_lifetime_cumulative_limit_mg_m2": 450
+        },
+        {
+          "id": "paclitaxel",
+          "dose": 80,
+          "unit": "mg/m2",
+          "route": "IV infusion",
+          "diluent_ml": 250,
+          "diluent": "NaCl0.9%",
+          "duration_minutes": 60,
+          "days": [
+            1,
+            8,
+            15
+          ],
+          "cycle_days": 21,
+          "cycles": 4,
+          "total_administrations": 12,
+          "nominal_weeks_including_final_recovery": 12,
+          "starts_after_final_ac_days": 14,
+          "start_note": "Starts14days after final AC dose",
+          "concurrent_trastuzumab": {
+            "route": "IV",
+            "loading_mg_kg": 8,
+            "maintenance_mg_kg": 6,
+            "days": [
+              1
+            ],
+            "cycle_days": 21,
+            "loading_duration_minutes": 90,
+            "maintenance_duration_minutes": 30,
+            "diluent": "250mL NaCl0.9%",
+            "starts": "First taxane administration (overallcycle5)",
+            "not_with_ac": true
+          }
+        },
+        {
+          "id": "trastuzumab_continuation",
+          "route": "IV",
+          "dose_mg_kg": 6,
+          "cycle_days": 21,
+          "source_reference": "NCCP00200",
+          "duration": "Complete one year of trastuzumab therapy from first trastuzumab dose; not a fresh year after chemotherapy",
+          "starts_after_taxane_phase": true
+        }
+      ],
+      "monitoring": {
+        "baseline": [
+          "FBC",
+          "Renal profile",
+          "Liver profile",
+          "ECG"
+        ],
+        "blood_repeat": "FBC/renal/liver profile prior to each cycle",
+        "baseline_echo": "MUGA/ECHO at baseline; LVEF>50% for doxorubicin and trastuzumab",
+        "repeat_echo": "MUGA/ECHO every12weeks; if cardiac impairment signs, checks every4–8weeks may be more appropriate",
+        "peripheral_neuropathy": "Not explicitly scheduled in tests section",
+        "disease_monitoring": "Treatment-plan/consultant-directed; no fixed CT/marker schedule stated",
+        "echo_cycle_mapping": "Illustrative elapsed-time mapping only:12weeks corresponds to12 weekly trastuzumab intervals (next weekly dose13),4 q21d intervals (next q21d dose5),or6 q14d intervals. If trastuzumab starts at overallcycle5, count from documented baseline/pre-HER2 checkpoint; never reset the due date silently at phase transition."
+      },
+      "dose_tables": [
+        {
+          "name": "1:haematology",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "ANC>=1 AND platelets>100",
+              "action": "100%",
+              "component": "All cytotoxics"
+            },
+            {
+              "condition": "ANC<1 AND platelets>=100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>=100 give100%",
+              "component": "All cytotoxics"
+            },
+            {
+              "condition": "ANC>=1 AND platelets<100",
+              "action": "Delay1week or longer; after recovery ANC>1 and platelets>100 give100%; after second delay reduce to75%",
+              "component": "All cytotoxics"
+            },
+            {
+              "condition": "Febrile neutropenia",
+              "action": "75% current and subsequent doses",
+              "component": "Cytotoxic phase; not automatic trastuzumab reduction"
+            }
+          ],
+          "notes": [
+            "Recovery >= glyphs verified visually; plain-text extraction incorrectly returns >.",
+            "Second-delay75% wording is physically in thrombocytopenia row, not a universal all-causes rule.",
+            "Both ANC and platelets below threshold is not an explicit combined row; both low findings still require withholding/review, not no action."
+          ]
+        },
+        {
+          "name": "Renal/hepatic:doxorubicin",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "CrCl>10 or<10mL/min",
+              "action": "No dose adjustment needed/expected respectively; exact10omitted by printed boundaries",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Haemodialysis",
+              "action": "75% original dose may be considered",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin20–50micromol/L",
+              "action": "50%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin51–86micromol/L",
+              "action": "25%",
+              "component": "Doxorubicin"
+            },
+            {
+              "condition": "Bilirubin>86micromol/L OR Child-PughC",
+              "action": "Not recommended",
+              "component": "Doxorubicin"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Renal/hepatic:cyclophosphamide",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "CrCl>=30mL/min",
+              "action": "100%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl10–29mL/min",
+              "action": "Consider75%",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "CrCl<10mL/min",
+              "action": "Not recommended/omit; if unavoidable consider50% original dose",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Severe hepatic impairment",
+              "action": "Not recommended because reduced efficacy risk",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Mild/moderate hepatic impairment",
+              "action": "No adjustment expected",
+              "component": "Cyclophosphamide"
+            },
+            {
+              "condition": "Haemodialysis",
+              "action": "Not recommended; if unavoidable consider50% original dose",
+              "component": "Cyclophosphamide"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel hepatic",
+          "page": 5,
+          "rows": [
+            {
+              "condition": "ALT<10xULN AND bilirubin<=1.25xULN",
+              "action": "80mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin1.26–2xULN",
+              "action": "60mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT<10xULN AND bilirubin2.01–5xULN",
+              "action": "40mg/m2",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "ALT>=10xULN OR bilirubin>5xULN",
+              "action": "Not recommended",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Renal impairment including haemodialysis",
+              "action": "No dose adjustment expected/necessary",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Paclitaxel adverse events",
+          "page": 5,
+          "rows": [
+            {
+              "condition": "Grade2motor/sensory neuropathy",
+              "action": "Dose reduction or delay may be required",
+              "component": "Paclitaxel"
+            },
+            {
+              "condition": "Grade>=3reaction",
+              "action": "Discontinue",
+              "component": "Paclitaxel"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab adverse events",
+          "page": 5,
+          "rows": [
+            {
+              "condition": "LVEFfall>=10percentagepoints from baseline AND currentLVEF<50%",
+              "action": "Withhold; repeatLVEF~3weeks; no improvement/further decline:consider discontinue and consultant/cardiology review",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Symptomatic heart failure",
+              "action": "Consider discontinue; cardiology review; clinical decision",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "CTCAEgrade4hypersensitivity",
+              "action": "Discontinue",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Reversible chemotherapy-induced myelosuppression",
+              "action": "May continue with careful neutropenia-complication monitoring",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab renal/hepatic",
+          "page": 4,
+          "rows": [
+            {
+              "condition": "Renal/hepatic impairment",
+              "action": "No adjustment expected including dialysis",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": []
+        },
+        {
+          "name": "Trastuzumab missed dose",
+          "page": 3,
+          "rows": [
+            {
+              "condition": "Dose overdue<=7days",
+              "action": "Give usual6mg/kg promptly; source says resume previous schedule",
+              "component": "Trastuzumab"
+            },
+            {
+              "condition": "Dose overdue>7days",
+              "action": "Clinician-directed reload8mg/kg over~90min; then6mg/kg every21days from that point",
+              "component": "Trastuzumab"
+            }
+          ],
+          "notes": [
+            "Late days measured from scheduled dose date, not time since last infusion. Phase-specific: weekly4/2must not be used after switching toq21dcontinuation; follow00200. CurrentSmPC timing may differ from source previous-schedule wording and must be separately reconciled."
+          ]
+        }
+      ],
+      "ambiguities": [
+        "Hypersensitivity exclusions list doxorubicin/cyclophosphamide/paclitaxel but omit naming trastuzumab; trastuzumab adverse-event table still explicitly stops for grade4 hypersensitivity. Do not imply trastuzumab hypersensitivity is safe.",
+        "Routine full-dose platelets threshold is>100 but low-platelet row<100 and ANC-low row>=100. Exactly100 with ANC>=1 is not covered by routine rows; recovery text differs. Explicit boundary review is needed.",
+        "Doxorubicin integer-labelled20–50 and51–86 bands leave continuous-value gap50<bilirubin<51; use explicit review/rounding-policy confirmation. No AST reduction is printed in this updated table.",
+        "CrCl10–29 and>=30 integer-labelled bands leave29<CrCl<30 undefined for continuous values; confirm clinical rounding/band interpretation instead of silently treating as normal.",
+        "Paclitaxel bilirubin bands leave1.25<ratio<1.26 and2<ratio<2.01 gaps. Both ALT and bilirubin are needed for a numerical hepatic dose; either high exclusion alone remains actionable. Missing ALT must not infer ALT<10."
+      ],
+      "operational_logistics": [
+        "Doxorubicin/cyclophosphamide are day-unitIVtreatments; no take-home infusionpump specified.",
+        "Doxorubicin cumulative lifetime450mg/m2requires prioranthracycline history/risk review. Four fullACdoses total240mg/m2, a calculation rather than an extra source threshold.",
+        "Venousaccess should be agreedwithteam; source doesnot mandate implantedport/PICC or an exact insertion/removal date. Doxorubicin extravasation is important.",
+        "Paclitaxel non-PVCcontainer/set with0.22micrometreinlinefilter; concentration0.3–1.2mg/mL.",
+        "SeparateACandtaxane phase calendars, antiemetic scripts and symptom maps. Never show12weeklydoses as12three-weekcycles.",
+        "Trastuzumab begins alongside taxane, afterAC; then continues aftercytotoxictherapy.",
+        "FirstIVtrastuzumab90mininfusion and observation at least6hoursfromstart; later30minif tolerated and at least2hoursfromstart; localpolicy deviations must be explicit.",
+        "Trastuzumab incompatiblewithglucose; useNaCl0.9%.",
+        "Firsttrastuzumab-to-completion is oneyear total; do not count an additionalyear frommaintenance handover."
+      ],
+      "supportive_care": {
+        "emetogenic_phases": [
+          {
+            "phase": "ac",
+            "risk": "high",
+            "source_note": "Explicit high AC risk"
+          },
+          {
+            "phase": "paclitaxel",
+            "risk": "low"
+          },
+          {
+            "phase": "trastuzumab_continuation",
+            "risk": "minimal"
+          }
+        ],
+        "gcsf": "Required with all dose-dense ACcycles. Weeklypaclitaxel is not dose-dense AC and is not automatically assigned obligatoryG-CSF by this statement; subsequent use per toxicity/localpolicy.",
+        "hydration": "Source advises2–3litres onday1for cyclophosphamide; patient-facing instruction must respect individual fluid restrictions/teamadvice",
+        "ac_premedication": "No additional infusion premedication usually required; this is separate from high-risk antiemetic prophylaxis",
+        "paclitaxel_premedication": {
+          "first_dose": {
+            "dexamethasone": "8mgIV30minbefore",
+            "chlorphenamine": "10mgIV30minbefore",
+            "famotidine": "20mgIV30minbefore"
+          },
+          "later": "Weekly:day8onwards no routine dexamethasone in suggested table; add for risk/priorreaction underconsultantguidance. Continuechlorphenamine; famotidine may be omitted after noHSR underguidance.",
+          "note": "Famotidine omission risk described as unknown; monitor closely and followlocalpolicy. SevereHSR requires acute management, not automatic rechallenge."
+        },
+        "taxane_pain": "Analgesic cover may be considered for myalgia/arthralgia;00278describes onset2–3days and resolutionwithindays."
+      },
+      "existing_encoding": {
+        "path": "protocols/breast/00745-ddac-weekly-paclitaxel-trastuzumab-q21d.json",
+        "rule_count": 4,
+        "input_ids": [
+          "anc_x10e9_l",
+          "platelets_x10e9_l",
+          "hb_g_dl",
+          "treatment_phase",
+          "febrile_neutropenia",
+          "neuropathy_grade"
+        ],
+        "has_structured_treatment_phases": false
+      },
+      "discrepancies": [
+        {
+          "severity": "high",
+          "id": "missing_domains",
+          "current": "OnlyANC,platelets,Hb,phase,FN,neuropathyinputs;4–5rules",
+          "source": "Noexecutablefullrenal/hepatic,baselineeligibility,HSR,cardiac,phase-specifictoxicities ormisseddoseassessment."
+        },
+        {
+          "severity": "high",
+          "id": "phase_not_used",
+          "current": "Treatmentphaseinputexistsbutno ruleconditionusesit",
+          "source": "Phase-awarethresholds/componentsneeded; unknownphase conditionalreview."
+        },
+        {
+          "severity": "high",
+          "id": "neuropathy",
+          "current": "Allgrade>=2onlyconsultantreviewwhole_regimen",
+          "source": "Grade2agent-specificreduction/delay;grade>=3paclitaxeldiscontinue."
+        },
+        {
+          "severity": "medium",
+          "id": "structured_schedule",
+          "current": "No treatment_phases",
+          "source": "PopulateexplicitAC→taxane→trastuzumabcontinuationwithdistinctintervals,doselevels,timelinesandsupport."
+        },
+        {
+          "severity": "high",
+          "id": "platelets100",
+          "current": "COUNTS_PROCEEDuses>=100",
+          "source": "Routinefull-doseprinted>100;exact100requiresclarification."
+        },
+        {
+          "severity": "high",
+          "id": "trastuzumab_components",
+          "current": "Cytotoxiccount/FNactionsto whole_regimen includingmaintenance",
+          "source": "Do notreducetrastuzumabforcytotoxiccounts;explicittrastuzumabcardiac/HSR/missed-dosepathneeded."
+        }
+      ],
+      "proposed_acceptance_cases": [
+        {
+          "inputs": {},
+          "expected": "All domains unassessed; no normal assumptions or treatment clearance"
+        },
+        {
+          "inputs": {
+            "anc": 0.4
+          },
+          "expected": "Actionable lowANC warning without requiringplatelets/cycle/date; phase-specific text ifneeded"
+        },
+        {
+          "inputs": {
+            "anc": 2
+          },
+          "expected": "ANC-onlyresult; platelets/hepatic/cardiacremainunassessed"
+        },
+        {
+          "inputs": {
+            "platelets": 69
+          },
+          "expected": "Delaycytotoxiccomponent; no other input required"
+        },
+        {
+          "inputs": {
+            "assessment_type": "baseline",
+            "anc": 1.4
+          },
+          "expected": "BaselineANCexclusion"
+        },
+        {
+          "inputs": {
+            "lvef": 49
+          },
+          "expected": "Cardiacexclusionor00432caution; clinicianreview notclearance"
+        },
+        {
+          "inputs": {
+            "ecog": 3
+          },
+          "expected": "OutsideECOG0–2eligibility; consultantreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 0.99
+          },
+          "expected": "Delay1weekorlonger"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "anc": 1,
+            "platelets": 101
+          },
+          "expected": "Initialcountsfull-doserow; do notreuseasafter-delayANC>1criterion"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 100
+          },
+          "expected": "Boundaryreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "platelets": 99
+          },
+          "expected": "Delay"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "second_thrombocytopenia_delay": true
+          },
+          "expected": "75%afterrecoverypath"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "prior_febrile_neutropenia": true
+          },
+          "expected": "75%current/subsequentcytotoxicdoses"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 19.9
+          },
+          "expected": "Doxorubicin:belowlistedreductionrange"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 20
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50
+          },
+          "expected": "Doxorubicin:50%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 50.5
+          },
+          "expected": "Doxorubicin:gapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 51
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86
+          },
+          "expected": "Doxorubicin:25%sourceband"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "bilirubin_umol_l": 86.1
+          },
+          "expected": "Doxorubicin:omit/notrecommended"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 9.9
+          },
+          "expected": "Cyclonotrecommended/omit;50%onlyif unavoidablewithreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 10
+          },
+          "expected": "Cyclo75%/consider75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 20.1
+          },
+          "expected": "Cyclo75%"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 29.5
+          },
+          "expected": "Gapreview"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "crcl": 30
+          },
+          "expected": "Cyclo100%"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 9.99,
+            "bilirubin_uln": 1.25
+          },
+          "expected": "80mg/m2hepaticrow"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 10
+          },
+          "expected": "Paclitaxelnotrecommendedwithoutneedingbilirubin"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 5.01
+          },
+          "expected": "PaclitaxelnotrecommendedwithoutneedingALT"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.255
+          },
+          "expected": "Sourcegapreview; notsilentlyround"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 1.26
+          },
+          "expected": "60mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2
+          },
+          "expected": "60mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.005
+          },
+          "expected": "Sourcegapreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 2.01
+          },
+          "expected": "40mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "alt_uln": 1,
+            "bilirubin_uln": 5
+          },
+          "expected": "40mg/m2"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "bilirubin_uln": 2
+          },
+          "expected": "MissingALT:conditionalrowonly,nofinalhepaticdose"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 2
+          },
+          "expected": "Reduce/delayreview"
+        },
+        {
+          "inputs": {
+            "phase": "paclitaxel",
+            "neuropathy_grade": 3
+          },
+          "expected": "Discontinuepaclitaxel"
+        },
+        {
+          "inputs": {
+            "phase": "ac",
+            "neuropathy_grade": 3
+          },
+          "expected": "Do not automaticallydiscontinueACbytaxanerule; neuropathyreview"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 55
+          },
+          "expected": "00316hold;othercodesnoautomatictwo-partcardiactableholdbutreviewtrend"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 49
+          },
+          "expected": "Hold/repeat~3weeks"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_fall_points": 10,
+            "lvef_current": 50
+          },
+          "expected": "00316hold;othersdonotmeet<50condition"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "lvef_current": 45
+          },
+          "expected": "Missingbaseline/drop:flaglowLVEFandclinicalreview; do notassumefall"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "hypersensitivity_grade": 4
+          },
+          "expected": "Discontinuetrastuzumab"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "symptomatic_heart_failure": true
+          },
+          "expected": "Considerdiscontinueandcardiologyreview"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "days_late": 7
+          },
+          "expected": "Usual6mg/kgpromptly(source-specificschedule)"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab",
+            "days_late": 8
+          },
+          "expected": "Reload8mg/kgandrescheduleat21days"
+        },
+        {
+          "inputs": {
+            "phase": "trastuzumab_maintenance",
+            "anc": 0.8
+          },
+          "expected": "Do not applycytotoxic25%reduction; reversiblemyelosuppressiontrastuzumabcontinuationconditionalandreview"
+        }
+      ]
+    }
+  },
+  "case_count": 328,
+  "catalogue_verification": {
+    "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/breast-sact-regimens/",
+    "checked_date": "2026-10-17",
+    "all_seven_exact_pdf_links_present": true,
+    "sha256": "23483dbbc4ba33653467f8ecbaaa353a0d095ec9c47f32d02a98916eea8c7ff0"
+  },
+  "human_readable_summary": "/workspace/scratch/aa44ad62d693/v0840-audits/ac-audit-summary.md"
+}

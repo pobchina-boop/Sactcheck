@@ -43,10 +43,10 @@ for (const entry of catalogue.protocols) {
 }
 
 assert.strictEqual(catalogue.protocols.length, 376);
-// v0.83.9 adds metastatic T-DM1 schedule and its source dose-level table.
-assert.strictEqual(usefulCoverage, 103);
-assert.strictEqual(scheduleCoverage, 97);
-assert.strictEqual(doseLevelCoverage, 36);
+// v0.84.0 adds complete source-specific phases and removes unsupported legacy dose ladders.
+assert.strictEqual(usefulCoverage, 113);
+assert.strictEqual(scheduleCoverage, 109);
+assert.strictEqual(doseLevelCoverage, 40);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');
@@ -62,7 +62,9 @@ assert.deepStrictEqual(
 
 const paclitaxelCombination = require(path.join(root, 'protocols/breast/00507-pertuzumab-trastuzumab-paclitaxel.json'));
 const paclitaxelModel = DoseSchedule.buildModel(paclitaxelCombination);
-assert.strictEqual(paclitaxelModel.phases.length, 0, 'A partial single-component schedule must not be presented as the full combination regimen schedule.');
+assert.strictEqual(paclitaxelModel.phases.length, 2);
+assert.deepStrictEqual(paclitaxelModel.phases[0].components.map(c=>c.id), ['pertuzumab','trastuzumab','paclitaxel']);
+assert.deepStrictEqual(paclitaxelModel.phases[1].components.map(c=>c.id), ['pertuzumab','trastuzumab']);
 assert.strictEqual(paclitaxelModel.doseLevels[0].levels[1].dose, '65 mg/m²');
 
 const olaparib = require(path.join(root, 'protocols/shared/00588-olaparib-tablet-monotherapy.json'));

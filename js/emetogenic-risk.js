@@ -59,6 +59,8 @@
 
   function resolvePhase(record, supportive, profileId) {
     const profiles = supportive.phase_profiles || record.phase_profiles || {};
+    const exactKey = supportive.phase_aliases?.[profileId] || profileId;
+    if (exactKey && profiles[exactKey]) return { ...profiles[exactKey], phaseKey: exactKey, phaseResolved: true };
     const key = phaseKey(profileId);
     if (key && profiles[key]) return { ...profiles[key], phaseKey: key, phaseResolved: true };
     return { phaseKey: key, phaseResolved: false, phaseProfiles: profiles };
@@ -74,12 +76,12 @@
     const supportive = protocol.supportive_care || {};
     const record = mapping.protocols?.[codeFor(protocol)] || {};
     const baseLevel = normaliseLevel(supportive.emetogenic_risk || metadata.emetogenic_risk || record.level);
-    const phase = baseLevel === "phase_dependent" ? resolvePhase(record, supportive, options.profileId) : {};
+    const phase = baseLevel === "phase_dependent" ? resolvePhase(record, supportive, options.treatmentPhase || options.profileId) : {};
     const level = phase.phaseResolved ? normaliseLevel(phase.level) : baseLevel;
     const levelDefinition = mapping.levels?.[level] || mapping.levels?.[baseLevel] || {};
     const scriptId = phase.phaseResolved
       ? phase.script_id
-      : supportive.script_id || metadata.supportive_script_id || record.script_id || levelDefinition.default_script_id || null;
+      : baseLevel === "phase_dependent" ? null : supportive.script_id || metadata.supportive_script_id || record.script_id || levelDefinition.default_script_id || null;
     const script = scriptRecord(scriptId);
     const tumourContext = String(options.tumourGroup || metadata.tumour_group || "").toLowerCase();
     const nationalGuidanceUrl = /haem|lymph|myeloma|leuka/.test(tumourContext)

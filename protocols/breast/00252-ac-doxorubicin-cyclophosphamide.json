@@ -5,11 +5,11 @@
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00252",
-    "nccp_version": 7,
+    "nccp_version": "7",
     "tumour_group": "Breast",
     "title": "Doxorubicin and Cyclophosphamide (AC 60/600) Therapy – 21 day",
     "short_title": "AC (Doxorubicin/Cyclophosphamide)",
-    "indication": "Adjuvant treatment of high-risk node-negative or node-positive breast cancer.",
+    "indication": "Adjuvant breast cancer",
     "regimen_reimbursement_code": "00252a",
     "published_date": "2015-04-29",
     "review_date": "2021-05-12",
@@ -28,7 +28,7 @@
       "combination_sact"
     ],
     "cytotoxic": true,
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.84.0",
     "source_title_exact": "DOXOrubicin and cycloPHOSphamide (AC 60/600) Therapy – 21 day",
     "display_title_normalised": true,
     "display_title_normalisation_version": "0.41.1",
@@ -49,22 +49,55 @@
     "validation": {
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true,
+      "software_tests_completed": false,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
+      "reconciled_release": "0.84.0",
+      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "clinical_use_authorised": false
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00252-v7"
+    "canonical_protocol_id": "nccp-00252-v7",
+    "source_checked_date": "2026-10-17",
+    "source_version_verified_date": "2026-10-17",
+    "audit_limitations": [
+      "Doxorubicin bilirubin51 lies in both50% and25% bands. Source does not specify how bilirubin and AST reductions combine. Flag51 and competing actions for review; do not multiply reductions or silently infer a choice.",
+      "Educational / software source reconciliation is not consultant, pharmacy or clinical-use authorisation."
+    ],
+    "audited_eligibility": [
+      "ECOG 0–2",
+      "Listed indication",
+      "Consultant Medical Oncologist initiation"
+    ],
+    "source_monitoring": {
+      "baseline": [
+        "FBC",
+        "Renal profile",
+        "Liver profile",
+        "ECG"
+      ],
+      "blood_repeat": "FBC/renal/liver profile listed as regular tests; exact frequency not quantified in PDF",
+      "baseline_echo": "MUGA/ECHO if age>65years or clinically indicated; LVEF>50% for doxorubicin",
+      "repeat_echo": "When clinically indicated",
+      "peripheral_neuropathy": "Not explicitly scheduled in tests section",
+      "disease_monitoring": "Treatment-plan/consultant-directed; no fixed CT/marker schedule stated",
+      "echo_cycle_mapping": null
+    },
+    "support_source_page": 0,
+    "schedule_summary": "Doxorubicin and cyclophosphamide on Day 1 every 21 days for four cycles. Any subsequent taxane follows a separately agreed regimen.",
+    "treatment_setting": [
+      "adjuvant"
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -75,310 +108,524 @@
   "indications": [
     {
       "code": "00252a",
-      "description": "Adjuvant treatment of high-risk node-negative or node-positive breast cancer."
+      "description": "Adjuvant High-risk node-negative or node-positive breast cancer",
+      "tumour_groups": [
+        "Breast"
+      ],
+      "indication_id": "00252a",
+      "reimbursement_codes": [
+        "00252a"
+      ]
     }
   ],
   "treatment_phases": [
     {
       "phase_id": "ac",
+      "name": "AC chemotherapy",
+      "label": "AC chemotherapy",
       "cycle_length_days": 21,
-      "cycles": [
-        1,
-        2,
-        3,
-        4
-      ],
       "administration": [
         {
-          "day": 1,
-          "order": 1,
           "drug": "doxorubicin",
           "dose": {
             "value": 60,
             "unit": "mg/m2"
           },
+          "day": 1,
           "route": "IV push"
         },
         {
-          "day": 1,
-          "order": 2,
           "drug": "cyclophosphamide",
           "dose": {
             "value": 600,
             "unit": "mg/m2"
           },
+          "day": 1,
           "route": "IV infusion"
         }
+      ],
+      "cycles": [
+        1,
+        2,
+        3,
+        4
       ]
     }
   ],
   "input_definitions": {
-    "assessment_type": {
-      "label": "Assessment type",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "pre_treatment",
-          "label": "Pre-treatment assessment"
-        }
-      ],
-      "demo_value": "pre_treatment",
-      "always_show": true,
-      "input_role": "context"
-    },
-    "cycle_number": {
-      "label": "Cycle number",
+    "anc_x10e9_l": {
+      "label": "ANC",
       "type": "number",
-      "required": false,
-      "min": 1,
-      "max": 100,
-      "step": 1,
-      "demo_value": 1,
-      "always_show": true,
-      "input_role": "context"
-    },
-    "anc": {
-      "label": "ANC (×10⁹/L)",
-      "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 50,
       "step": 0.01,
       "unit": "×10⁹/L",
-      "demo_value": 2.0,
+      "always_show": true,
       "input_role": "decision"
     },
-    "platelets": {
-      "label": "Platelets (×10⁹/L)",
+    "platelets_x10e9_l": {
+      "label": "Platelets",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 2000,
-      "step": 1,
+      "step": 0.01,
       "unit": "×10⁹/L",
-      "demo_value": 200,
+      "always_show": true,
       "input_role": "decision"
     },
-    "egfr": {
-      "label": "eGFR / CrCl category",
+    "treatment_phase": {
+      "label": "Current phase",
       "type": "select",
+      "demo_value": "combination",
       "required": false,
-      "unit": "mL/min",
-      "demo_value": "renal_10_plus",
+      "always_show": true,
+      "input_role": "context",
       "options": [
         {
-          "value": "renal_0_9",
-          "label": "<10 mL/min",
-          "decision_value": 4,
-          "range_min_inclusive": 0,
-          "range_max_inclusive": 9
+          "value": "combination",
+          "label": "Chemotherapy / combination"
+        }
+      ]
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "demo_value": "baseline",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before starting"
         },
         {
-          "value": "renal_10_plus",
-          "label": ">=10 mL/min",
-          "decision_value": 10,
-          "range_min_inclusive": 10,
-          "range_max_inclusive": null
+          "value": "ongoing",
+          "label": "During treatment"
         }
-      ],
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "source": "Encoded rule thresholds",
-        "exact_value_required": false
-      },
-      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation.",
-      "input_role": "decision"
+      ]
     },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin (× ULN)",
+    "ecog": {
+      "label": "ECOG performance status",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 20,
       "step": 0.01,
-      "unit": "× ULN",
-      "demo_value": 1.0,
-      "input_role": "decision"
-    },
-    "alt_uln_multiple": {
-      "label": "ALT (× ULN)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 50,
-      "step": 0.01,
-      "unit": "× ULN",
-      "demo_value": 1.0,
-      "input_role": "context"
-    },
-    "neuropathy_grade": {
-      "label": "Peripheral neuropathy grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
-      "input_role": "context"
-    },
-    "diarrhoea_grade": {
-      "label": "Diarrhoea grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated.",
-      "input_role": "decision"
-    },
-    "stomatitis_grade": {
-      "label": "Stomatitis / mucositis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
-      "input_role": "decision"
-    },
-    "active_infection": {
-      "label": "Active clinically significant infection",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 4
     },
     "hypersensitivity": {
-      "label": "Relevant drug hypersensitivity",
+      "label": "Relevant drug/excipient hypersensitivity",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "pregnancy": {
       "label": "Pregnant",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
-    "lvef_percent": {
-      "label": "LVEF (%)",
+    "alt_uln_multiple": {
+      "label": "ALT / ULN",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 100,
-      "step": 1,
-      "demo_value": 60,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
       "input_role": "decision"
     },
     "ast_uln_multiple": {
-      "label": "AST (× ULN)",
+      "label": "AST / ULN",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 50,
       "step": 0.01,
-      "demo_value": 1.0,
-      "input_role": "context"
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "alp_uln_multiple": {
+      "label": "ALP / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (not indexed eGFR)",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "always_show": true,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Retain exact measured creatinine clearance so decimal gaps between the source bands are surfaced for review rather than rounded into a dose band."
+      }
+    },
+    "anc_below_0_5_days": {
+      "label": "Duration of ANC below 0.5",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "febrile_neutropenia": {
+      "label": "Febrile neutropenia",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "indication_eligible": {
+      "label": "Full NCCP indication / prior-treatment criteria confirmed",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "neuropathy",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "other_nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "stomatitis_grade": {
+      "label": "Stomatitis",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "skin_grade": {
+      "label": "Skin toxicity",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin (absolute)",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "µmol/L",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "lifetime_doxorubicin_mg_m2": {
+      "label": "Prior cumulative doxorubicin exposure",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "proposed_doxorubicin_mg_m2": {
+      "label": "Proposed additional doxorubicin dose",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "lvef_percent": {
+      "label": "Current LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "platelet_delay_count": {
+      "label": "Previous thrombocytopenia-related delays",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "significant_heart_disease": {
+      "label": "Clinically significant heart disease",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "child_pugh_c": {
+      "label": "Child-Pugh C",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "proposed_dose_crosses_anthracycline_limit": {
+      "label": "Proposed dose would exceed lifetime anthracycline limit",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "restarting_after_count_delay": {
+      "label": "Restart after a count-related delay",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "prior_febrile_neutropenia": {
+      "label": "Previous FN episode; acute illness resolved",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "report_unassessed_coverage_gap",
+    "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -386,262 +633,991 @@
       "cease",
       "omit",
       "withhold_then_reduce",
-      "withhold",
       "delay_then_dose_reduce",
+      "withhold",
       "delay",
-      "consultant_review",
       "dose_reduce_two_levels",
       "dose_reduce_one_level",
       "dose_reduce",
+      "consultant_review",
       "proceed_with_caution",
       "proceed"
     ],
     "rules": [
       {
-        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "rule_id": "ALLERGY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "doxorubicin",
             "cyclophosphamide"
           ],
-          "recommendation": "Do not administer this regimen; obtain consultant review."
+          "recommendation": "Relevant drug / excipient allergy: do not administer; identify the responsible drug."
         },
+        "explanation": "Relevant drug / excipient allergy: do not administer; identify the responsible drug.",
         "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Relevant hypersensitivity is an exclusion."
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 1
+        }
       },
       {
-        "rule_id": "EXCLUSION_PREGNANCY_LACTATION",
-        "any": [
-          {
-            "field": "pregnancy",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "breastfeeding",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "rule_id": "INDICATION",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "doxorubicin",
             "cyclophosphamide"
           ],
-          "recommendation": "Do not administer; urgent consultant review required."
+          "recommendation": "Full NCCP indication or prior-treatment criteria are not confirmed. Review regimen selection.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Full NCCP indication or prior-treatment criteria are not confirmed. Review regimen selection.",
         "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Pregnancy or breastfeeding is an exclusion/caution for this regimen."
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 1
+        }
       },
       {
-        "rule_id": "ACTIVE_INFECTION",
-        "field": "active_infection",
-        "operator": "==",
-        "value": true,
+        "rule_id": "ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide"
+          ],
+          "recommendation": "Outside the source performance-status population; consultant review required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside the source performance-status population; consultant review required.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "PREGNANCY_REVIEW",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide"
+          ],
+          "recommendation": "Pregnancy requires urgent specialist risk-benefit review before administration; the source-specific exclusions and medicine information must be checked.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Pregnancy requires urgent specialist risk-benefit review before administration; the source-specific exclusions and medicine information must be checked.",
+        "source": {
+          "document": "Clinical safety review prompt; not an encoded NCCP pregnancy dose table",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "LACTATION_REVIEW",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide"
+          ],
+          "recommendation": "Breastfeeding requires specialist medicine review before treatment; follow regimen exclusions and product information.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Breastfeeding requires specialist medicine review before treatment; follow regimen exclusions and product information.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "AC_LOW_COUNTS",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 70
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide"
+          ],
+          "recommendation": "Delay AC and review recovery. Source minimum platelets is 70 for the hold band."
+        },
+        "explanation": "Delay AC and review recovery. Source minimum platelets is 70 for the hold band.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "AC_INTERMEDIATE",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": "<=",
+                      "value": 1.49
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 70
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": "<=",
+                      "value": 90
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide"
+          ],
+          "recommendation": "Source intermediate row describes 75% AC, with G-CSF an alternative for neutrophil support. Review both domains and the source row; a single abnormal value must not disappear.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source intermediate row describes 75% AC, with G-CSF an alternative for neutrophil support. Review both domains and the source row; a single abnormal value must not disappear.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "AC_ANC_GAP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">",
+                  "value": 1.49
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cyclophosphamide"
+          ],
+          "recommendation": "ANC lies between printed bands; confirm interpretation rather than silently rounding.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ANC lies between printed bands; confirm interpretation rather than silently rounding.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "AC_CARDIAC",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "lvef_percent",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "field": "significant_heart_disease",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Source cardiac caution / exclusion: do not administer without specialist assessment of the anthracycline plan."
+        },
+        "explanation": "Source cardiac caution / exclusion: do not administer without specialist assessment of the anthracycline plan.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "AC_LVEF_50",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "==",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Source requires LVEF >50 for doxorubicin while some exclusion lists say <50. Resolve exactly 50 before treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source requires LVEF >50 for doxorubicin while some exclusion lists say <50. Resolve exactly 50 before treatment.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "DOXO_CUMULATIVE",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "lifetime_doxorubicin_mg_m2",
+                  "operator": ">=",
+                  "value": 450
+                },
+                {
+                  "field": "proposed_dose_crosses_anthracycline_limit",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "The 450 mg/m² source lifetime limit is reached or would be exceeded. Reconcile all prior anthracyclines, planned dose and cardiac risk."
+        },
+        "explanation": "The 450 mg/m² source lifetime limit is reached or would be exceeded. Reconcile all prior anthracyclines, planned dose and cardiac risk.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "DOXO_PRIOR_EXPOSURE",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "lifetime_doxorubicin_mg_m2",
+              "operator": ">",
+              "value": 0
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Reconcile prior exposure plus the proposed dose against the lifetime limit before administration; a prior value below 450 alone does not establish remaining eligibility.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Reconcile prior exposure plus the proposed dose against the lifetime limit before administration; a prior value below 450 alone does not establish remaining eligibility.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "DOXO_BILI_50",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 20
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Source bilirubin band: 50% of original doxorubicin dose; reconcile competing reductions.",
+          "dose_percent": 50
+        },
+        "explanation": "Source bilirubin band: 50% of original doxorubicin dose; reconcile competing reductions.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOXO_BILI_25",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 51
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 85
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Source bilirubin band: 25% of original doxorubicin dose; reconcile competing reductions.",
+          "dose_percent": 25
+        },
+        "explanation": "Source bilirubin band: 25% of original doxorubicin dose; reconcile competing reductions.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOXO_BILI_BOUNDARY",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "==",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Overlapping / unassigned bilirubin boundary in the printed source. Do not infer a dose by rounding.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Overlapping / unassigned bilirubin boundary in the printed source. Do not infer a dose by rounding.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOXO_BILI_OMIT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 85
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Doxorubicin not recommended / omit at this source hepatic threshold."
+        },
+        "explanation": "Doxorubicin not recommended / omit at this source hepatic threshold.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOXO_AST_2_3",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": "<=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Source AST row: 75% original dose. Do not multiply with bilirubin reductions; resolve combined abnormalities with pharmacy.",
+          "dose_percent": 75
+        },
+        "explanation": "Source AST row: 75% original dose. Do not multiply with bilirubin reductions; resolve combined abnormalities with pharmacy.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOXO_AST_GT3",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Source AST row: 50% original dose. Do not multiply with bilirubin reductions; resolve combined abnormalities with pharmacy.",
+          "dose_percent": 50
+        },
+        "explanation": "Source AST row: 50% original dose. Do not multiply with bilirubin reductions; resolve combined abnormalities with pharmacy.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "CYCLO_RENAL_75",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 20
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "Source renal band: consider 75% of original cyclophosphamide; verify renal method and clinical context.",
+          "dose_percent": 75
+        },
+        "explanation": "Source renal band: consider 75% of original cyclophosphamide; verify renal method and clinical context.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "CYCLO_RENAL_LT10",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "Source specifies 50% original dose below CrCl 10.",
+          "dose_percent": 50
+        },
+        "explanation": "Source specifies 50% original dose below CrCl 10.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "CYCLO_HEPATIC",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "severe_hepatic_impairment",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "Severe hepatic impairment requires a clinical decision.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe hepatic impairment requires a clinical decision.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "AC_ACUTE_FN",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "withhold",
           "components": [
             "doxorubicin",
             "cyclophosphamide"
           ],
-          "recommendation": "Withhold and assess/treat infection; discuss with consultant."
+          "recommendation": "Acute febrile neutropenia needs urgent assessment and treatment interruption. This safety action does not assign an unsourced percentage reduction; determine recovery and G-CSF with the treating team."
         },
+        "explanation": "Acute febrile neutropenia needs urgent assessment and treatment interruption. This safety action does not assign an unsourced percentage reduction; determine recovery and G-CSF with the treating team.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Clinically significant infection requires review before treatment."
+          "document": "Clinical safety hold for acute FN; NCCP source provides chemotherapy / support context",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
       },
       {
-        "rule_id": "ANC_LOW",
-        "field": "anc",
-        "operator": "<",
-        "value": 1.0,
+        "rule_id": "DOXO_COMBINED_HEPATIC",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">=",
+                  "value": 20
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "delay",
-          "components": [
-            "doxorubicin",
-            "cyclophosphamide"
-          ],
-          "recommendation": "Delay treatment and repeat FBC; discuss dose modification with consultant."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ANC below treatment threshold."
-      },
-      {
-        "rule_id": "PLATELETS_LOW",
-        "field": "platelets",
-        "operator": "<",
-        "value": 75,
-        "action": {
-          "type": "delay",
-          "components": [
-            "doxorubicin",
-            "cyclophosphamide"
-          ],
-          "recommendation": "Delay treatment and repeat FBC; discuss dose modification with consultant."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Platelets below treatment threshold."
-      },
-      {
-        "rule_id": "DIARRHOEA_G3PLUS",
-        "field": "diarrhoea_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "doxorubicin",
-            "cyclophosphamide"
-          ],
-          "recommendation": "Withhold until recovery and consider dose reduction according to the NCCP table."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe diarrhoea requires withholding and dose review."
-      },
-      {
-        "rule_id": "STOMATITIS_G3PLUS",
-        "field": "stomatitis_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "doxorubicin",
-            "cyclophosphamide"
-          ],
-          "recommendation": "Withhold until recovery and consider dose reduction according to the NCCP table."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe mucositis requires withholding and dose review."
-      },
-      {
-        "rule_id": "LVEF_LOW",
-        "field": "lvef_percent",
-        "operator": "<",
-        "value": 50,
-        "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "doxorubicin"
           ],
-          "recommendation": "Do not administer doxorubicin; consultant cardiotoxicity review required."
+          "recommendation": "Both bilirubin and AST reductions apply, but the source does not define their combination. Consultant/pharmacy reconciliation is required; no numeric dose is selected.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Both bilirubin and AST reductions apply, but the source does not define their combination. Consultant/pharmacy reconciliation is required; no numeric dose is selected.",
         "source": {
-          "page": 1,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "LVEF <50% is an exclusion."
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
       },
       {
-        "rule_id": "AC_COUNTS_REDUCE",
-        "all": [
-          {
-            "field": "anc",
-            "operator": "between_inclusive",
-            "value": [
-              1,
-              1.49
-            ]
-          },
-          {
-            "field": "platelets",
-            "operator": "between_inclusive",
-            "value": [
-              70,
-              90
-            ]
-          }
-        ],
+        "rule_id": "PREVIOUS_FN",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "prior_febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "doxorubicin",
             "cyclophosphamide"
           ],
-          "recommendation": "Consider 75% dose for both drugs or G-CSF support per NCCP."
+          "recommendation": "Review previous FN and recovery, G-CSF and the phase-specific source. No universal 75% rule is assigned by this source.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Review previous FN and recovery, G-CSF and the phase-specific source. No universal 75% rule is assigned by this source.",
         "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Intermediate cytopenias trigger dose reduction."
-      },
-      {
-        "rule_id": "DOXO_BILI_HIGH",
-        "field": "bilirubin_uln_multiple",
-        "operator": ">",
-        "value": 3,
-        "action": {
-          "type": "omit",
-          "components": [
-            "doxorubicin"
-          ],
-          "recommendation": "Omit doxorubicin and obtain consultant review."
-        },
-        "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Marked hyperbilirubinaemia."
-      },
-      {
-        "rule_id": "CYCLO_RENAL_LT10",
-        "field": "egfr",
-        "operator": "<",
-        "value": 10,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cyclophosphamide"
-          ],
-          "recommendation": "Use approximately 50% cyclophosphamide dose; consultant/pharmacy verification required."
-        },
-        "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe renal impairment requires reduction."
+          "document": "NCCP 00252 v7",
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+          "page": 2
+        }
       }
     ]
   },
   "output_templates": {
-    "proceed": "No encoded contraindication or hold criterion was triggered. Complete normal prescribing and pharmacy checks.",
-    "coverage_gap": "One or more potentially relevant fields were not assessed."
+    "proceed": "No encoded action was triggered by the supplied values. Unassessed domains and the full prescribing review remain outstanding.",
+    "coverage_gap": "Only entered values were assessed. Missing phase, history or results are not assumed normal.",
+    "consultant_review": "Review the component-specific findings and source uncertainty before treatment.",
+    "contraindicated": "Do not administer the affected component(s); review the findings and exact regimen context.",
+    "discontinue": "Discontinue the affected component(s) identified below and obtain treating-clinician review.",
+    "withhold": "Withhold the affected component(s) and assess the reported problem.",
+    "delay": "Delay the affected component(s) pending source-defined recovery and review.",
+    "dose_reduce": "A component-specific dose modification applies; verify the original and current doses before prescribing."
   },
   "supportive_care": {
     "emetogenic_risk": "high",
-    "script_id": "nccp-parenteral-high",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source": "NCCP regimen and antiemetic classification; phase-specific source review v0.84.0",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Anthracycline/cyclophosphamide combination is high emetogenic risk in NCCP V6 Table 7.",
+    "mapping_basis": "AC: high; taxane: low; TC: moderate; carboplatin AUC 6 combination: high; HER2-only continuation: minimal. Use only the active phase.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
+    "summary": "See the phase-specific drafts in patient/00252/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
+    "script_id": "nccp-parenteral-high",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
   }

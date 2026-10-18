@@ -76,7 +76,7 @@ for (const { file, data } of prostate) {
   assert(Number(data.metadata.source_document_pages) > 0, `${code} lacks source-document page metadata.`);
   assert(Array.isArray(data.metadata.treatment_class) && data.metadata.treatment_class.length, `${code} lacks treatment-class metadata.`);
   assert(data.metadata.catalogue_section, `${code} lacks a catalogue section.`);
-  assert(data.treatment && Object.keys(data.treatment).length, `${code} lacks an encoded treatment schedule.`);
+  assert((data.treatment && Object.keys(data.treatment).length) || data.treatment_phases?.length, `${code} lacks an encoded treatment schedule.`);
   assert(Array.isArray(data.rule_engine?.rules) && data.rule_engine.rules.length, `${code} lacks encoded decision rules.`);
   assert(data.supportive_care?.script_id, `${code} lacks a supportive-care/antiemetic script mapping.`);
   assert(riskMap.protocols[code], `${code} is missing from the central supportive-care map.`);

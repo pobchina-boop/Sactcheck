@@ -9,7 +9,7 @@
     "tumour_group": "Breast",
     "title": "Docetaxel, Carboplatin, Trastuzumab SC and Pertuzumab",
     "short_title": "TCH(SC)P",
-    "indication": "Neoadjuvant treatment of HER2-positive locally advanced, inflammatory or high-risk early breast cancer.",
+    "indication": "HER2-positive neoadjuvant breast cancer",
     "regimen_reimbursement_code": "00731a",
     "published_date": "2022-04-22",
     "review_date": "2028-08-10",
@@ -21,7 +21,7 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.84.0",
     "icd10": "C50",
     "treatment_setting": [
       "neoadjuvant"
@@ -31,7 +31,9 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "source_document_checked": true,
+      "software_tests_completed": false
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -59,19 +61,57 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
+      "reconciled_release": "0.84.0",
+      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "clinical_use_authorised": false
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00731-v2"
+    "canonical_protocol_id": "nccp-00731-v2",
+    "source_checked_date": "2026-10-17",
+    "source_version_verified_date": "2026-10-17",
+    "audit_limitations": [
+      "Source hepatic / boundary ambiguities are explicit review actions.",
+      "Independent clinical and pharmacy validation pending.",
+      "Educational / software source reconciliation is not consultant, pharmacy or clinical-use authorisation."
+    ],
+    "audited_eligibility": [
+      "ecog: 0–1",
+      "baseline_anc: >=1.5",
+      "baseline_lvef: >=55%",
+      "her2: Validated assay",
+      "organ_function: Adequate"
+    ],
+    "source_monitoring": {
+      "echo_baseline": "LVEF assessment before starting HER2-directed treatment; see specific source wording.",
+      "echo_ongoing": "ECHO/MUGA every 12 weeks and at completion; consider every 4–8 weeks if cardiac impairment.",
+      "q21_cycle_illustration": [
+        1,
+        5,
+        9,
+        13,
+        17
+      ],
+      "timing_caveat": "Cycle 1 is baseline. Later cycle landmarks assume uninterrupted 21-day cycles; elapsed 12-week intervals govern after delays.",
+      "disease_imaging": "Individual treatment plan and consultant direction; no universal fixed CT interval in these regimen PDFs.",
+      "absent_routine_requirements": [
+        "ECG",
+        "DEXA",
+        "tumour markers"
+      ],
+      "other_pathways": "DEXA may be indicated by a separate endocrine/ovarian-suppression pathway, not automatically by this HER2 regimen.",
+      "bloods_baseline": "HER2, GFR assessment, FBC, renal and liver profile.",
+      "bloods_regular": "FBC, renal and liver profile before each cycle.",
+      "warfarin_only": "INR before treatment, every 2 weeks for first 3 months, then monthly if stable.",
+      "hearing_neuropathy": "Regular neurological/hearing assessment especially previous platinum, high dose, older age; audiometry if concomitant ototoxic drugs."
+    },
+    "support_source_page": 0,
+    "schedule_summary": "Six 21-day cycles before surgery: IV pertuzumab, fixed-dose trastuzumab under the skin, IV docetaxel and IV carboplatin. Surgery and pathology guide the postoperative HER2 plan. This is not the combined Phesgo injection."
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -81,455 +121,768 @@
   },
   "indications": [
     {
-      "code": "00722a",
-      "description": "Neoadjuvant treatment of adult patients with HER2-positive locally advanced, inflammatory or early breast cancer at high risk of recurrence."
+      "code": "00731a",
+      "description": "Adult HER2-positive locally advanced, inflammatory or high-risk early breast cancer.",
+      "tumour_groups": [
+        "Breast"
+      ],
+      "indication_id": "00731a",
+      "reimbursement_codes": [
+        "00731a"
+      ]
     }
   ],
   "treatment_phases": [
     {
-      "phase_id": "treatment",
+      "phase_id": "combination",
+      "name": "TCHP · subcutaneous trastuzumab",
+      "label": "TCHP · subcutaneous trastuzumab",
       "cycle_length_days": 21,
       "administration": [
         {
-          "day": 1,
-          "order": 1,
           "drug": "pertuzumab",
           "dose": {
-            "value": "loading then maintenance",
+            "value": 420,
             "unit": "mg"
           },
-          "route": "IV infusion"
+          "day": 1,
+          "route": "IV infusion",
+          "notes": "Initial loading 840 mg IV; subsequent 420 mg IV every 21 days."
         },
         {
-          "day": 1,
-          "order": 2,
           "drug": "trastuzumab",
           "dose": {
             "value": 600,
             "unit": "mg"
           },
-          "route": "SC"
+          "day": 1,
+          "route": "SC injection",
+          "notes": "No loading dose."
         },
         {
-          "day": 1,
-          "order": 3,
           "drug": "docetaxel",
           "dose": {
             "value": 75,
             "unit": "mg/m2"
           },
-          "route": "IV infusion"
+          "day": 1,
+          "route": "IV infusion",
+          "notes": ""
         },
         {
-          "day": 1,
-          "order": 4,
           "drug": "carboplatin",
           "dose": {
             "value": 6,
             "unit": "AUC"
           },
-          "route": "IV infusion"
+          "day": 1,
+          "route": "IV infusion",
+          "notes": "Calvert dose requires the protocol-specific verified renal method; no automatic creatinine substitution."
         }
+      ],
+      "cycles": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
       ]
     }
   ],
   "input_definitions": {
-    "indication_id": {
-      "label": "Indication",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "00722a",
-          "label": "Neoadjuvant treatment of adult patients with HER2-positive locally advanced, inflammatory or early breast cancer at high risk of recurrence."
-        }
-      ],
-      "demo_value": "00722a",
-      "ui_section": "treatment_context",
-      "always_show": true,
-      "input_role": "context"
-    },
-    "assessment_type": {
-      "label": "Assessment stage",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "pre_treatment",
-          "label": "Pre-treatment assessment"
-        }
-      ],
-      "demo_value": "pre_treatment",
-      "ui_section": "treatment_context",
-      "always_show": true,
-      "input_role": "context"
-    },
-    "cycle_number": {
-      "label": "Cycle number",
+    "anc_x10e9_l": {
+      "label": "ANC",
       "type": "number",
+      "demo_value": 2,
       "required": false,
-      "min": 1,
-      "max": 200,
-      "step": 1,
-      "demo_value": 1,
-      "ui_section": "treatment_context",
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
       "always_show": true,
-      "input_role": "context"
+      "input_role": "decision"
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "treatment_phase": {
+      "label": "Current phase",
+      "type": "select",
+      "demo_value": "combination",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "combination",
+          "label": "Chemotherapy / combination"
+        }
+      ]
     },
     "assessment_stage": {
-      "label": "Treatment assessment context",
+      "label": "Assessment stage",
       "type": "select",
+      "demo_value": "baseline",
       "required": false,
+      "always_show": true,
+      "input_role": "context",
       "options": [
         {
           "value": "baseline",
-          "label": "Baseline eligibility"
+          "label": "Before starting"
         },
         {
           "value": "ongoing",
-          "label": "Ongoing cycle assessment"
+          "label": "During treatment"
         }
-      ],
-      "demo_value": "ongoing",
-      "ui_section": "treatment_context",
+      ]
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
       "always_show": true,
-      "input_role": "decision"
+      "input_role": "decision",
+      "max": 4
     },
-    "gcsf_strategy": {
-      "label": "Haematological management strategy",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "dose_reduction",
-          "label": "Dose-reduction pathway"
-        },
-        {
-          "value": "gcsf",
-          "label": "Maintain regimen with G-CSF pathway"
-        }
-      ],
-      "demo_value": "gcsf",
-      "ui_section": "treatment_context",
-      "help": "The source provides alternative dose-reduction and G-CSF strategies.",
-      "input_role": "decision"
-    },
-    "anc": {
-      "label": "ANC (×10⁹/L)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 50,
-      "step": 0.01,
-      "demo_value": 2.0,
-      "ui_section": "labs",
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "platelets": {
-      "label": "Platelets (×10⁹/L)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 2000,
-      "step": 1,
-      "demo_value": 200,
-      "ui_section": "labs",
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "febrile_neutropenia_event_number": {
-      "label": "Febrile neutropenia event number",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "No previous event"
-        },
-        {
-          "value": 1,
-          "label": "First event"
-        },
-        {
-          "value": 2,
-          "label": "Second event"
-        },
-        {
-          "value": 3,
-          "label": "Third or later event"
-        }
-      ],
-      "demo_value": 0,
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "gfr_ml_min": {
-      "label": "GFR (mL/min)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 250,
-      "step": 1,
-      "demo_value": 90,
-      "ui_section": "labs",
-      "unit": "mL/min",
-      "renal_input": {
-        "mode": "exact_continuous",
-        "exact_value_required": true,
-        "reason": "Required for carboplatin Calvert dosing and renal safety assessment."
-      },
-      "assessment_guidance": "Enter the verified continuous GFR/CrCl used for carboplatin dosing. The app will apply encoded renal thresholds; confirm the Calvert calculation and local dosing policy independently.",
-      "input_role": "decision"
-    },
-    "bilirubin_abnormal": {
-      "label": "Bilirubin above the laboratory normal range",
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "AST or ALT (× ULN)",
-      "type": "number",
       "required": false,
-      "min": 0,
-      "max": 50,
-      "step": 0.01,
-      "demo_value": 1,
-      "ui_section": "labs",
-      "unit": "× ULN",
-      "input_role": "decision"
-    },
-    "alk_phos_uln_multiple": {
-      "label": "Alkaline phosphatase (× ULN)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 50,
-      "step": 0.01,
-      "demo_value": 1,
-      "ui_section": "labs",
-      "unit": "× ULN",
-      "input_role": "decision"
-    },
-    "lvef_percent": {
-      "label": "Current LVEF (%)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "demo_value": 60,
-      "ui_section": "labs",
-      "unit": "%",
-      "input_role": "decision"
-    },
-    "lvef_drop_points": {
-      "label": "Absolute LVEF fall from pretreatment value (percentage points)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "demo_value": 0,
-      "ui_section": "labs",
-      "unit": "percentage points",
-      "input_role": "decision"
-    },
-    "symptomatic_heart_failure": {
-      "label": "Symptomatic heart failure",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "neuropathy_grade": {
-      "label": "Peripheral neuropathy grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ui_section": "clinical",
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
-      "input_role": "decision"
-    },
-    "stomatitis_grade": {
-      "label": "Stomatitis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ui_section": "clinical",
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
-      "input_role": "decision"
-    },
-    "current_docetaxel_dose": {
-      "label": "Current docetaxel dose level",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "75",
-          "label": "75 mg/m²"
-        },
-        {
-          "value": "60",
-          "label": "60 mg/m²"
-        },
-        {
-          "value": "50",
-          "label": "50 mg/m²"
-        }
-      ],
-      "demo_value": "75",
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "hypersensitivity_grade": {
-      "label": "Hypersensitivity / anaphylaxis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ui_section": "clinical",
-      "ctcae_version": "5.0",
-      "ctcae_category": "hypersensitivity_anaphylaxis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess bronchospasm, urticaria, angioedema, hypotension, airway compromise, treatment route and hospitalisation. Anaphylaxis or life-threatening hypersensitivity requires immediate emergency treatment.",
-      "input_role": "decision"
-    },
-    "relevant_drug_hypersensitivity": {
-      "label": "Relevant drug hypersensitivity before treatment",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
+      "always_show": true,
       "input_role": "decision"
     },
     "pregnancy": {
       "label": "Pregnant",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
-    "clinically_significant_cardiac_disease": {
+    "alt_uln_multiple": {
+      "label": "ALT / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "ast_uln_multiple": {
+      "label": "AST / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "alp_uln_multiple": {
+      "label": "ALP / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (not indexed eGFR)",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "always_show": true,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Retain exact measured creatinine clearance so decimal gaps between the source bands are surfaced for review rather than rounded into a dose band."
+      }
+    },
+    "anc_below_0_5_days": {
+      "label": "Duration of ANC below 0.5",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "febrile_neutropenia": {
+      "label": "Febrile neutropenia",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "indication_eligible": {
+      "label": "Full NCCP indication / prior-treatment criteria confirmed",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "neuropathy",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "other_nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "stomatitis_grade": {
+      "label": "Stomatitis",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "skin_grade": {
+      "label": "Skin toxicity",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "baseline_lvef_percent": {
+      "label": "Baseline LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 100
+    },
+    "lvef_percent": {
+      "label": "Current LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 100
+    },
+    "lvef_drop_points": {
+      "label": "Fall from baseline LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "percentage points",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 100
+    },
+    "days_overdue_trastuzumab": {
+      "label": "Days late after the planned trastuzumab dose",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "her2_positive": {
+      "label": "HER2-positive tumour confirmed",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "symptomatic_heart_failure": {
+      "label": "Symptomatic heart failure",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "significant_cardiac_disease": {
       "label": "Clinically significant cardiac disease",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
-    "active_infection": {
-      "label": "Active clinically significant infection",
+    "cardiac_monitoring_overdue": {
+      "label": "Required cardiac assessment unavailable / overdue",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "severe_dyspnoea_at_rest": {
+      "label": "Severe dyspnoea at rest / requiring oxygen",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "trastuzumab_hypersensitivity_grade": {
+      "label": "HER2-treatment hypersensitivity",
+      "type": "select",
+      "demo_value": 0,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "allergic_reaction",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "days_since_last_antibody": {
+      "label": "Days since last antibody administration",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "trastuzumab_discontinued": {
+      "label": "Trastuzumab has been discontinued",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "days_since_last_sc_trastuzumab": {
+      "label": "Days since last SC trastuzumab",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "gfr_ml_min": {
+      "label": "Verified GFR for carboplatin (unindexed)",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "always_show": true,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Verified unindexed GFR is needed for carboplatin renal safety and the separately checked Calvert calculation."
+      }
+    },
+    "fn_episode_count": {
+      "label": "FN episode number",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "hepatic_delay_days": {
+      "label": "Duration of hepatic delay",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "creatinine_result_age_hours": {
+      "label": "Age of creatinine result",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "hours",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "creatinine_percent_reference": {
+      "label": "Creatinine as % of isotope-GFR reference",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "The exact percentage relative to the isotope-GFR reference creatinine identifies whether repeat measurement is required; this is not an eGFR dose band."
+      }
+    },
+    "count_strategy": {
+      "label": "Source count-management strategy",
+      "type": "select",
+      "demo_value": "dose_reduction",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "dose_reduction",
+          "label": "Dose-reduction strategy"
+        },
+        {
+          "value": "gcsf",
+          "label": "G-CSF strategy"
+        }
+      ]
+    },
+    "gfr_method": {
+      "label": "Renal measurement used",
+      "type": "select",
+      "demo_value": "estimated",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "estimated",
+          "label": "Estimated GFR"
+        },
+        {
+          "value": "isotope",
+          "label": "Isotope measured GFR"
+        }
+      ]
+    },
+    "hepatic_not_recovered": {
+      "label": "Liver abnormality has not recovered",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "current_docetaxel_mg_m2": {
+      "label": "Actual current docetaxel dose",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "toxicity_persists_at_reduced_dose": {
+      "label": "This toxicity persists / recurs at the reduced dose",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "uncontrolled_hypertension": {
+      "label": "Uncontrolled hypertension",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "severe_persistent_diarrhoea": {
+      "label": "Severe / prolonged diarrhoea not improving with treatment",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "pertuzumab_anaphylaxis_bronchospasm_ards": {
+      "label": "Pertuzumab-associated anaphylaxis, bronchospasm or ARDS",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     }
   },
   "required_inputs": [],
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "Evaluate only supplied values; do not infer missing values. Context and eligibility fields remain optional during partial assessment unless a specific decision rule requires them.",
+    "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -537,22 +890,24 @@
       "cease",
       "omit",
       "withhold_then_reduce",
-      "withhold",
       "delay_then_dose_reduce",
+      "withhold",
       "delay",
-      "consultant_review",
       "dose_reduce_two_levels",
       "dose_reduce_one_level",
       "dose_reduce",
+      "consultant_review",
       "proceed_with_caution",
       "proceed"
     ],
     "rules": [
       {
-        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "relevant_drug_hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "rule_id": "ALLERGY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
@@ -561,976 +916,2403 @@
             "trastuzumab",
             "pertuzumab"
           ],
-          "recommendation": "Do not administer TCHP; obtain consultant review."
+          "recommendation": "Relevant drug / excipient allergy: do not administer; identify the responsible drug."
         },
+        "explanation": "Relevant drug / excipient allergy: do not administer; identify the responsible drug.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Relevant hypersensitivity is an exclusion."
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 4
+        }
       },
       {
-        "rule_id": "EXCLUSION_PREGNANCY_BREASTFEEDING",
-        "any": [
-          {
-            "field": "pregnancy",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "breastfeeding",
-            "operator": "==",
-            "value": true
-          }
-        ],
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "docetaxel",
-            "carboplatin",
-            "trastuzumab",
-            "pertuzumab"
-          ],
-          "recommendation": "Do not administer TCHP during pregnancy or breastfeeding; urgent consultant review required."
+        "rule_id": "INDICATION",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
         },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Pregnancy and breastfeeding are exclusions."
-      },
-      {
-        "rule_id": "CARDIAC_DISEASE_EXCLUSION",
-        "field": "clinically_significant_cardiac_disease",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "trastuzumab",
-            "pertuzumab"
-          ],
-          "recommendation": "Do not proceed with HER2-directed treatment without consultant/cardiology review."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Clinically significant cardiac disease is an exclusion."
-      },
-      {
-        "rule_id": "ACTIVE_INFECTION_REVIEW",
-        "field": "active_infection",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "docetaxel",
-            "carboplatin",
-            "trastuzumab",
-            "pertuzumab"
-          ],
-          "recommendation": "Withhold treatment and assess/treat the infection before proceeding."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Clinically significant infection requires review before systemic treatment."
-      },
-      {
-        "rule_id": "BASELINE_LVEF_BELOW55",
-        "all": [
-          {
-            "field": "assessment_stage",
-            "operator": "==",
-            "value": "baseline"
-          },
-          {
-            "field": "lvef_percent",
-            "operator": "<",
-            "value": 55
-          }
-        ],
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "trastuzumab",
-            "pertuzumab"
-          ],
-          "recommendation": "Pretreatment LVEF is below the encoded eligibility value of 55%; obtain consultant/cardiology review."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Pretreatment LVEF should be at least 55%."
-      },
-      {
-        "rule_id": "BASELINE_NEUROPATHY_G2_PLUS",
-        "all": [
-          {
-            "field": "assessment_stage",
-            "operator": "==",
-            "value": "baseline"
-          },
-          {
-            "field": "neuropathy_grade",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "docetaxel"
-          ],
-          "recommendation": "Baseline grade 2 or greater sensory/motor neuropathy is an exclusion for this regimen."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Baseline grade 2 or greater neuropathy is excluded."
-      },
-      {
-        "rule_id": "COUNTS_LOW_IMMEDIATE_DELAY",
-        "any": [
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1.0
-          },
-          {
-            "field": "platelets",
-            "operator": "<=",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "delay",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay docetaxel and carboplatin for low counts. Enter the selected haematological management strategy to refine the post-recovery dose plan."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ANC below 1.0 or platelets 100 or below requires an immediate treatment delay; the selected G-CSF or dose-reduction pathway refines subsequent dosing."
-      },
-      {
-        "rule_id": "COUNTS_INTERMEDIATE_REDUCE",
-        "all": [
-          {
-            "field": "anc",
-            "operator": ">=",
-            "value": 1.0
-          },
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Give 75% docetaxel and carboplatin according to the dose-reduction pathway."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ANC 1.0–1.49 with platelets >100 uses 75% doses in the dose-reduction pathway."
-      },
-      {
-        "rule_id": "COUNTS_INTERMEDIATE_GCSF",
-        "all": [
-          {
-            "field": "anc",
-            "operator": ">=",
-            "value": 1.0
-          },
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          }
-        ],
-        "action": {
-          "type": "proceed_with_caution",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "The encoded G-CSF option permits 100% regimen with G-CSF support; confirm the selected strategy with the consultant."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "The source includes a 100% regimen plus G-CSF option."
-      },
-      {
-        "rule_id": "COUNTS_LOW_REDUCE",
-        "all": [
-          {
-            "any": [
-              {
-                "field": "anc",
-                "operator": "<",
-                "value": 1.0
-              },
-              {
-                "field": "platelets",
-                "operator": "<=",
-                "value": 100
-              }
-            ]
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          }
-        ],
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay until ANC >1.5 and platelets >100, then give 75% docetaxel and carboplatin."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Low Day 1 counts require delay and 75% dosing in the dose-reduction pathway."
-      },
-      {
-        "rule_id": "COUNTS_LOW_GCSF",
-        "all": [
-          {
-            "any": [
-              {
-                "field": "anc",
-                "operator": "<",
-                "value": 1.0
-              },
-              {
-                "field": "platelets",
-                "operator": "<=",
-                "value": 100
-              }
-            ]
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          }
-        ],
-        "action": {
-          "type": "delay",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay until ANC >1.5 and platelets >100, then resume 100% regimen with the selected G-CSF strategy."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Low Day 1 counts require delay before the 100% plus G-CSF option."
-      },
-      {
-        "rule_id": "FN_FIRST_REDUCE",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": "==",
-            "value": 1
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "For a first febrile-neutropenia event, give 75% of the previous cycle dose when counts have recovered."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "First febrile-neutropenia event: 75% dose-reduction option."
-      },
-      {
-        "rule_id": "FN_SECOND_REDUCE",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": "==",
-            "value": 2
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "dose_reduce_two_levels",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "For a second febrile-neutropenia event, give 50% of the original cycle dose when counts have recovered."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Second febrile-neutropenia event: 50% of original dose."
-      },
-      {
-        "rule_id": "FN_THIRD_REDUCE",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Discontinue the regimen or switch to the G-CSF pathway after a third febrile-neutropenia event."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Third event: discontinue or switch strategy."
-      },
-      {
-        "rule_id": "FN_FIRST_GCSF",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": "==",
-            "value": 1
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "proceed_with_caution",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "After a first febrile-neutropenia event and count recovery, give 100% of the regimen using the G-CSF pathway."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "First event in the G-CSF option retains 100% regimen dosing."
-      },
-      {
-        "rule_id": "FN_SECOND_GCSF",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": "==",
-            "value": 2
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "After a second febrile-neutropenia event and count recovery, give 75% of the regimen using the G-CSF pathway."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Second event in the G-CSF option uses 75% regimen dosing."
-      },
-      {
-        "rule_id": "FN_THIRD_GCSF",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "dose_reduce_two_levels",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "After a third febrile-neutropenia event and count recovery, give 50% of the regimen using the G-CSF pathway."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Third event in the G-CSF option uses 50% regimen dosing."
-      },
-      {
-        "rule_id": "GFR_20_OR_LESS",
-        "field": "gfr_ml_min",
-        "operator": "<=",
-        "value": 20,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "carboplatin"
-          ],
-          "recommendation": "Do not administer carboplatin when GFR is 20 mL/min or less."
-        },
-        "source": {
-          "page": 6,
-          "table": "Table 4",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Carboplatin should not be administered at GFR ≤20 mL/min."
-      },
-      {
-        "rule_id": "GFR_20_TO30",
-        "all": [
-          {
-            "field": "gfr_ml_min",
-            "operator": ">",
-            "value": 20
-          },
-          {
-            "field": "gfr_ml_min",
-            "operator": "<=",
-            "value": 30
-          }
-        ],
-        "action": {
-          "type": "proceed_with_caution",
-          "components": [
-            "carboplatin"
-          ],
-          "recommendation": "Carboplatin requires extreme caution at GFR >20 to 30 mL/min; obtain consultant/pharmacy review."
-        },
-        "source": {
-          "page": 6,
-          "table": "Table 4",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "The source advises extreme caution at GFR 20–30 mL/min."
-      },
-      {
-        "rule_id": "BILIRUBIN_ABNORMAL",
-        "field": "bilirubin_abnormal",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "delay",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay chemotherapy for up to 2 weeks for abnormal bilirubin; if no recovery, stop chemotherapy. Trastuzumab may continue after consultant review."
-        },
-        "source": {
-          "page": 6,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Abnormal bilirubin requires chemotherapy delay and reassessment."
-      },
-      {
-        "rule_id": "DOCETAXEL_HEPATIC_REDUCE_A",
-        "all": [
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": ">",
-            "value": 2.5
-          },
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": "<=",
-            "value": 2.5
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel"
-          ],
-          "recommendation": "Reduce docetaxel from 75 to 60 mg/m²."
-        },
-        "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "AST/ALT >2.5–5×ULN with alkaline phosphatase ≤2.5×ULN requires docetaxel 60 mg/m²."
-      },
-      {
-        "rule_id": "DOCETAXEL_HEPATIC_REDUCE_B",
-        "all": [
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": ">",
-            "value": 2.5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel"
-          ],
-          "recommendation": "Reduce docetaxel from 75 to 60 mg/m²."
-        },
-        "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Combined transaminase and alkaline-phosphatase elevation requires docetaxel 60 mg/m²."
-      },
-      {
-        "rule_id": "DOCETAXEL_HEPATIC_DELAY",
-        "all": [
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": ">",
-            "value": 5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": ">",
-            "value": 5
-          }
-        ],
-        "action": {
-          "type": "delay",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay chemotherapy for a maximum of 2 weeks; discontinue chemotherapy if values do not recover."
-        },
-        "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "The explicit Table 5 combination of AST/ALT >5×ULN and alkaline phosphatase >5×ULN requires delay."
-      },
-      {
-        "rule_id": "DOCETAXEL_HEPATIC_UNLISTED_HIGH_TRANSAMINASES",
-        "all": [
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": ">",
-            "value": 5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          }
-        ],
         "action": {
           "type": "consultant_review",
           "components": [
             "docetaxel",
-            "carboplatin"
+            "carboplatin",
+            "trastuzumab",
+            "pertuzumab"
           ],
-          "recommendation": "This liver-test combination is not explicitly tabulated in Table 5; obtain consultant/pharmacy review before chemotherapy."
+          "recommendation": "Full NCCP indication or prior-treatment criteria are not confirmed. Review regimen selection.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Full NCCP indication or prior-treatment criteria are not confirmed. Review regimen selection.",
         "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Avoid extrapolating an unlisted hepatic combination."
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 1
+        }
       },
       {
-        "rule_id": "DOCETAXEL_HEPATIC_UNLISTED_HIGH_ALP",
-        "all": [
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": ">",
-            "value": 5
-          },
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          }
-        ],
+        "rule_id": "ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 1
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "docetaxel",
-            "carboplatin"
+            "carboplatin",
+            "trastuzumab",
+            "pertuzumab"
           ],
-          "recommendation": "This liver-test combination is not explicitly tabulated in Table 5; obtain consultant/pharmacy review before chemotherapy."
+          "recommendation": "Outside the source performance-status population; consultant review required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Outside the source performance-status population; consultant review required.",
         "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Avoid extrapolating an unlisted hepatic combination."
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 2
+        }
       },
       {
-        "rule_id": "LVEF_WITHHOLD",
-        "all": [
-          {
-            "field": "lvef_percent",
-            "operator": "<",
-            "value": 50
-          },
-          {
-            "field": "lvef_drop_points",
-            "operator": ">=",
-            "value": 10
-          }
-        ],
+        "rule_id": "PREGNANCY_REVIEW",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel",
+            "carboplatin",
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "This is an explicit NCCP exclusion. Do not administer before specialist review of an alternative treatment plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "This is an explicit NCCP exclusion. Do not administer before specialist review of an alternative treatment plan.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "LACTATION_REVIEW",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel",
+            "carboplatin",
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "This is an explicit NCCP exclusion. Do not administer before specialist review of an alternative treatment plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "This is an explicit NCCP exclusion. Do not administer before specialist review of an alternative treatment plan.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "BASELINE_ANC",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel",
+            "carboplatin",
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Below the source baseline ANC inclusion / exclusion threshold. Ongoing count rules are separate."
+        },
+        "explanation": "Below the source baseline ANC inclusion / exclusion threshold. Ongoing count rules are separate.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HER2_LVEF_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": ">=",
+              "value": 10
+            }
+          ]
+        },
         "action": {
           "type": "withhold",
           "components": [
             "trastuzumab",
             "pertuzumab"
           ],
-          "recommendation": "Withhold trastuzumab and pertuzumab for at least 3 weeks and repeat LVEF assessment."
+          "recommendation": "Hold for LVEF <50% AND a fall ≥10 percentage points. Repeat within about 3 weeks; no improvement / further decline requires consultant and cardiology review."
         },
+        "explanation": "Hold for LVEF <50% AND a fall ≥10 percentage points. Repeat within about 3 weeks; no improvement / further decline requires consultant and cardiology review.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "LVEF <50% with a fall of at least 10 points requires withholding."
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
       },
       {
-        "rule_id": "SYMPTOMATIC_HEART_FAILURE",
-        "field": "symptomatic_heart_failure",
-        "operator": "==",
-        "value": true,
+        "rule_id": "HER2_LVEF_REVIEW",
+        "when": {
+          "any": [
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": ">=",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "HER2_HF",
+        "when": {
+          "field": "symptomatic_heart_failure",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "discontinue",
           "components": [
             "trastuzumab",
             "pertuzumab"
           ],
-          "recommendation": "Discontinue trastuzumab and pertuzumab for symptomatic heart failure and obtain urgent cardiology review."
+          "recommendation": "Symptomatic heart failure: discontinue and refer for urgent cardiac assessment."
         },
+        "explanation": "Symptomatic heart failure: discontinue and refer for urgent cardiac assessment.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Symptomatic heart failure requires discontinuation."
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
       },
       {
-        "rule_id": "HYPERSENSITIVITY_G4",
-        "field": "hypersensitivity_grade",
-        "operator": ">=",
-        "value": 4,
+        "rule_id": "HER2_REACTION_G4",
+        "when": {
+          "field": "trastuzumab_hypersensitivity_grade",
+          "operator": "==",
+          "value": 4
+        },
         "action": {
           "type": "discontinue",
           "components": [
             "trastuzumab",
             "pertuzumab"
           ],
-          "recommendation": "Discontinue HER2-directed treatment for grade 4 hypersensitivity/anaphylaxis."
+          "recommendation": "Grade 4 hypersensitivity: discontinue the implicated treatment and manage urgently."
         },
+        "explanation": "Grade 4 hypersensitivity: discontinue the implicated treatment and manage urgently.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade 4 hypersensitivity requires discontinuation."
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
       },
       {
-        "rule_id": "NEUROPATHY_GT2_AT75",
-        "all": [
-          {
-            "field": "neuropathy_grade",
-            "operator": ">",
-            "value": 2
-          },
-          {
-            "field": "current_docetaxel_dose",
-            "operator": "==",
-            "value": "75"
-          }
-        ],
+        "rule_id": "HER2_REACTION_G3",
+        "when": {
+          "field": "trastuzumab_hypersensitivity_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Interrupt and urgently assess a severe infusion reaction; the source grade-4 discontinuation rule must not be relabelled grade 3."
+        },
+        "explanation": "Interrupt and urgently assess a severe infusion reaction; the source grade-4 discontinuation rule must not be relabelled grade 3.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "HER2_MONITORING",
+        "when": {
+          "field": "cardiac_monitoring_overdue",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Required cardiac results are missing or overdue. Arrange assessment and a documented treatment decision; never assume normal function.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Required cardiac results are missing or overdue. Arrange assessment and a documented treatment decision; never assume normal function.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "HER2_STATUS",
+        "when": {
+          "field": "her2_positive",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Validated HER2 positivity is required. Reconcile testing and regimen choice.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Validated HER2 positivity is required. Reconcile testing and regimen choice.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "HER2_BASELINE_LOW",
+        "when": {
+          "field": "baseline_lvef_percent",
+          "operator": "<",
+          "value": 55
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Below the source baseline LVEF eligibility; specialist cardiac assessment before starting."
+        },
+        "explanation": "Below the source baseline LVEF eligibility; specialist cardiac assessment before starting.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "HER2_CARDIAC_DISEASE",
+        "when": {
+          "field": "significant_cardiac_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Clinically significant cardiac disease is a source caution / exclusion. Reconcile the individual cardiac plan before administration."
+        },
+        "explanation": "Clinically significant cardiac disease is a source caution / exclusion. Reconcile the individual cardiac plan before administration.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HER2_DYSPNOEA",
+        "when": {
+          "field": "severe_dyspnoea_at_rest",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Severe dyspnoea at rest requires urgent review and is a trastuzumab product contraindication."
+        },
+        "explanation": "Severe dyspnoea at rest requires urgent review and is a trastuzumab product contraindication.",
+        "source": {
+          "document": "EMA Herceptin SmPC section 4.3",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "STOP_PERTUZUMAB_WITH_H",
+        "when": {
+          "field": "trastuzumab_discontinued",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "Stop pertuzumab if trastuzumab is discontinued."
+        },
+        "explanation": "Stop pertuzumab if trastuzumab is discontinued.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "ANTIBODY_RELOAD",
+        "when": {
+          "field": "days_since_last_antibody",
+          "operator": ">=",
+          "value": 42
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Interval ≥6 weeks: reload pertuzumab 840 mg IV; trastuzumab remains 600 mg SC with no loading dose. Confirm history, current cardiac review and observation. Do not reset prior chemotherapy reductions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Interval ≥6 weeks: reload pertuzumab 840 mg IV; trastuzumab remains 600 mg SC with no loading dose. Confirm history, current cardiac review and observation. Do not reset prior chemotherapy reductions.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "ANTIBODY_WITHIN6",
+        "when": {
+          "all": [
+            {
+              "field": "days_since_last_antibody",
+              "operator": ">",
+              "value": 21
+            },
+            {
+              "field": "days_since_last_antibody",
+              "operator": "<",
+              "value": 42
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Less than six weeks between administrations: usual maintenance antibody doses as soon as clinically appropriate; check source schedule and reset appointments with the team.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Less than six weeks between administrations: usual maintenance antibody doses as soon as clinically appropriate; check source schedule and reset appointments with the team.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "SC_MIN_INTERVAL",
+        "when": {
+          "field": "days_since_last_sc_trastuzumab",
+          "operator": "<",
+          "value": 21
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "SC trastuzumab requires at least 21 days between injections. Fixed 600 mg, no loading dose."
+        },
+        "explanation": "SC trastuzumab requires at least 21 days between injections. Fixed 600 mg, no loading dose.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "SC_LATE",
+        "when": {
+          "field": "days_overdue_trastuzumab",
+          "operator": ">",
+          "value": 0
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Give missed SC 600 mg as soon as clinically appropriate, then preserve a minimum 21-day interval. No IV reloading dose applies.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Give missed SC 600 mg as soon as clinically appropriate, then preserve a minimum 21-day interval. No IV reloading dose applies.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "TCH_COUNTS_LOW",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Delay chemotherapy until ANC ≥1.5 and platelets ≥100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab."
+        },
+        "explanation": "Delay chemotherapy until ANC ≥1.5 and platelets ≥100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_INTERMEDIATE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<=",
+                  "value": 1.49
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_INTERMEDIATE_75",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": "<=",
+                      "value": 1.49
+                    }
+                  ]
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 100
+                },
+                {
+                  "field": "count_strategy",
+                  "operator": "==",
+                  "value": "dose_reduction"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Source dose-reduction strategy: 75% chemotherapy; confirm recovery / prior events.",
+          "dose_percent": 75
+        },
+        "explanation": "Source dose-reduction strategy: 75% chemotherapy; confirm recovery / prior events.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_INTERMEDIATE_GCSF",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": "<=",
+                      "value": 1.49
+                    }
+                  ]
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 100
+                },
+                {
+                  "field": "count_strategy",
+                  "operator": "==",
+                  "value": "gcsf"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Source G-CSF strategy permits 100% chemotherapy with confirmed growth-factor support; verify all other safety domains.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source G-CSF strategy permits 100% chemotherapy with confirmed growth-factor support; verify all other safety domains.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_ANC_GAP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">",
+                  "value": 1.49
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "ANC lies between the printed decimal bands; confirm interpretation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ANC lies between the printed decimal bands; confirm interpretation.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_FN",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Treat FN urgently; recovery and episode / strategy determine the subsequent dose. First: 75% previous or full with G-CSF; second: 50% original or 75% with G-CSF; third: stop / switch strategy, or 50% within G-CSF strategy."
+        },
+        "explanation": "Treat FN urgently; recovery and episode / strategy determine the subsequent dose. First: 75% previous or full with G-CSF; second: 50% original or 75% with G-CSF; third: stop / switch strategy, or 50% within G-CSF strategy.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_FN_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "fn_episode_count",
+              "operator": ">=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "CARBO_GFR_STOP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "gfr_ml_min",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Do not administer carboplatin at GFR ≤20 mL/min."
+        },
+        "explanation": "Do not administer carboplatin at GFR ≤20 mL/min.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "CARBO_GFR_CAUTION",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "gfr_ml_min",
+                  "operator": ">",
+                  "value": 20
+                },
+                {
+                  "field": "gfr_ml_min",
+                  "operator": "<=",
+                  "value": 30
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "GFR >20–30: extreme caution and oncology / pharmacy review.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "GFR >20–30: extreme caution and oncology / pharmacy review.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "CARBO_CRCL_RISK",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "CrCl <60 increases myelosuppression risk; verify renal method, dose and monitoring.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "CrCl <60 increases myelosuppression risk; verify renal method, dose and monitoring.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "CARBO_OLD_CREATININE",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "gfr_method",
+                  "operator": "==",
+                  "value": "estimated"
+                },
+                {
+                  "field": "creatinine_result_age_hours",
+                  "operator": ">",
+                  "value": 48
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Estimated-GFR dosing requires a creatinine result within 48 hours; obtain current renal assessment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Estimated-GFR dosing requires a creatinine result within 48 hours; obtain current renal assessment.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "CARBO_CREATININE_RISE",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "gfr_method",
+                  "operator": "==",
+                  "value": "isotope"
+                },
+                {
+                  "field": "creatinine_percent_reference",
+                  "operator": ">",
+                  "value": 110
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Creatinine >110% of isotope-GFR reference: reassess renal dose calculation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Creatinine >110% of isotope-GFR reference: reassess renal dose calculation.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "TCH_BILIRUBIN",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Abnormal bilirubin: delay chemotherapy up to two weeks; if no recovery, stop chemotherapy. Trastuzumab continuation needs a separate clinical decision."
+        },
+        "explanation": "Abnormal bilirubin: delay chemotherapy up to two weeks; if no recovery, stop chemotherapy. Trastuzumab continuation needs a separate clinical decision.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "TCH_LIVER_DELAY",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "field": "ast_uln_multiple",
+                      "operator": ">",
+                      "value": 5
+                    },
+                    {
+                      "field": "alt_uln_multiple",
+                      "operator": ">",
+                      "value": 5
+                    }
+                  ]
+                },
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Both transaminases and ALP above 5: delay up to two weeks, stop chemotherapy if not recovered. Coordinate accompanying drugs; do not automatically clear antibodies."
+        },
+        "explanation": "Both transaminases and ALP above 5: delay up to two weeks, stop chemotherapy if not recovered. Coordinate accompanying drugs; do not automatically clear antibodies.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TCH_LIVER_UNMAPPED",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "field": "ast_uln_multiple",
+                      "operator": ">",
+                      "value": 5
+                    },
+                    {
+                      "field": "alt_uln_multiple",
+                      "operator": ">",
+                      "value": 5
+                    }
+                  ]
+                },
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "High single liver axis may be unassigned by this matrix. Resolve with the full table; do not infer normal dosing.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "High single liver axis may be unassigned by this matrix. Resolve with the full table; do not infer normal dosing.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TCH_DOC_LIVER_60",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "all": [
+                        {
+                          "any": [
+                            {
+                              "all": [
+                                {
+                                  "field": "alt_uln_multiple",
+                                  "operator": ">",
+                                  "value": 2.5
+                                },
+                                {
+                                  "field": "alt_uln_multiple",
+                                  "operator": "<=",
+                                  "value": 5
+                                }
+                              ]
+                            },
+                            {
+                              "all": [
+                                {
+                                  "field": "ast_uln_multiple",
+                                  "operator": ">",
+                                  "value": 2.5
+                                },
+                                {
+                                  "field": "ast_uln_multiple",
+                                  "operator": "<=",
+                                  "value": 5
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "field": "alp_uln_multiple",
+                          "operator": "<=",
+                          "value": 2.5
+                        }
+                      ]
+                    },
+                    {
+                      "all": [
+                        {
+                          "any": [
+                            {
+                              "all": [
+                                {
+                                  "field": "alt_uln_multiple",
+                                  "operator": ">",
+                                  "value": 1.5
+                                },
+                                {
+                                  "field": "alt_uln_multiple",
+                                  "operator": "<=",
+                                  "value": 5
+                                }
+                              ]
+                            },
+                            {
+                              "all": [
+                                {
+                                  "field": "ast_uln_multiple",
+                                  "operator": ">",
+                                  "value": 1.5
+                                },
+                                {
+                                  "field": "ast_uln_multiple",
+                                  "operator": "<=",
+                                  "value": 5
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "field": "alp_uln_multiple",
+                          "operator": ">",
+                          "value": 2.5
+                        },
+                        {
+                          "field": "alp_uln_multiple",
+                          "operator": "<=",
+                          "value": 5
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "<=",
+                  "value": 5
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": "<=",
+                  "value": 5
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<=",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Source liver matrix: 75 →60 mg/m². Confirm current dose, both transaminases and accompanying-drug delay instructions. Stable abnormalities do not trigger repeated reductions; recovery may permit source-directed re-escalation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source liver matrix: 75 →60 mg/m². Confirm current dose, both transaminases and accompanying-drug delay instructions. Stable abnormalities do not trigger repeated reductions; recovery may permit source-directed re-escalation.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "TCH_LIVER_PERSISTENT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "hepatic_delay_days",
+                  "operator": ">=",
+                  "value": 14
+                },
+                {
+                  "field": "hepatic_not_recovered",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "No recovery after the source maximum two-week hepatic delay: stop chemotherapy; reassess HER2 plan separately."
+        },
+        "explanation": "No recovery after the source maximum two-week hepatic delay: stop chemotherapy; reassess HER2 plan separately.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "DOC_NEURO",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": ">",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Neuropathy >2: reduce to 60 mg/m²; if persistent at 60, discontinue docetaxel.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Neuropathy >2: reduce to 60 mg/m²; if persistent at 60, discontinue docetaxel.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "DOC_NEURO_75",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "current_docetaxel_mg_m2",
+                  "operator": "==",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
             "docetaxel"
           ],
-          "recommendation": "Reduce docetaxel to 60 mg/m² for grade >2 peripheral neuropathy."
+          "recommendation": "Reduce docetaxel to 60 mg/m² after assessment of this toxicity.",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          }
         },
+        "explanation": "Reduce docetaxel to 60 mg/m² after assessment of this toxicity.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade >2 neuropathy requires docetaxel reduction to 60 mg/m²."
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
       },
       {
-        "rule_id": "NEUROPATHY_GT2_AT60",
-        "all": [
-          {
-            "field": "neuropathy_grade",
-            "operator": ">",
-            "value": 2
-          },
-          {
-            "field": "current_docetaxel_dose",
-            "operator": "==",
-            "value": "60"
-          }
-        ],
+        "rule_id": "DOC_NEURO_PERSISTENT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "current_docetaxel_mg_m2",
+                  "operator": "==",
+                  "value": 60
+                },
+                {
+                  "field": "toxicity_persists_at_reduced_dose",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "discontinue",
           "components": [
             "docetaxel"
           ],
-          "recommendation": "Discontinue docetaxel if grade >2 neuropathy continues at 60 mg/m²."
+          "recommendation": "This toxicity persists at 60 mg/m²: discontinue docetaxel."
         },
+        "explanation": "This toxicity persists at 60 mg/m²: discontinue docetaxel.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Persistent grade >2 neuropathy at 60 mg/m² requires docetaxel discontinuation."
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
       },
       {
-        "rule_id": "STOMATITIS_G3_AT75",
-        "all": [
-          {
-            "field": "stomatitis_grade",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "current_docetaxel_dose",
-            "operator": "==",
-            "value": "75"
-          }
-        ],
+        "rule_id": "DOC_MOUTH",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "stomatitis_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Stomatitis ≥3: reduce to 60 mg/m²; check the exact source before a further reduction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Stomatitis ≥3: reduce to 60 mg/m²; check the exact source before a further reduction.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "DOC_MOUTH_75",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "stomatitis_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "current_docetaxel_mg_m2",
+                  "operator": "==",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
             "docetaxel"
           ],
-          "recommendation": "Reduce docetaxel to 60 mg/m² for grade 3 or greater stomatitis."
+          "recommendation": "Stomatitis pathway: 75 →60 mg/m²; no further planned reduction beyond 50.",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          }
         },
+        "explanation": "Stomatitis pathway: 75 →60 mg/m²; no further planned reduction beyond 50.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade ≥3 stomatitis requires docetaxel reduction."
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
       },
       {
-        "rule_id": "STOMATITIS_G3_AT60",
-        "all": [
-          {
-            "field": "stomatitis_grade",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "current_docetaxel_dose",
-            "operator": "==",
-            "value": "60"
-          }
-        ],
+        "rule_id": "DOC_MOUTH_60",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "stomatitis_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "current_docetaxel_mg_m2",
+                  "operator": "==",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
             "docetaxel"
           ],
-          "recommendation": "Reduce docetaxel from 60 to 50 mg/m²; no further reduction is planned."
+          "recommendation": "Stomatitis pathway: 60 →50 mg/m²; no further planned reduction beyond 50.",
+          "dose": {
+            "value": 50,
+            "unit": "mg/m2"
+          }
         },
+        "explanation": "Stomatitis pathway: 60 →50 mg/m²; no further planned reduction beyond 50.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "DOC_SKIN",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "skin_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
         },
-        "explanation": "Recurrent grade ≥3 stomatitis at 60 mg/m² requires reduction to 50 mg/m²."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Severe skin toxicity requires source-specific review. Grade-3 source rows and current dose determine reduction; do not extrapolate an unqualified grade-4 percentage.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe skin toxicity requires source-specific review. Grade-3 source rows and current dose determine reduction; do not extrapolate an unqualified grade-4 percentage.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "BASELINE_NEUROPATHY",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel",
+            "carboplatin",
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Baseline grade ≥2 neuropathy is an exclusion in 00731."
+        },
+        "explanation": "Baseline grade ≥2 neuropathy is an exclusion in 00731.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HYPERTENSION",
+        "when": {
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel",
+            "carboplatin",
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Uncontrolled hypertension is a source exclusion; review before initiation."
+        },
+        "explanation": "Uncontrolled hypertension is a source exclusion; review before initiation.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "SEVERE_HEPATIC_EXCLUSION",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "severe_hepatic_impairment",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review the exact component and any HER2-only plan separately."
+        },
+        "explanation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review the exact component and any HER2-only plan separately.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "TCH_FN_dose_reduction_1",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 100
+                    }
+                  ]
+                },
+                {
+                  "field": "fn_episode_count",
+                  "operator": "==",
+                  "value": 1
+                },
+                {
+                  "field": "count_strategy",
+                  "operator": "==",
+                  "value": "dose_reduction"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "After FN episode 1, recovered counts and the selected dose reduction pathway: 75% of the PREVIOUS chemotherapy dose. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After FN episode 1, recovered counts and the selected dose reduction pathway: 75% of the PREVIOUS chemotherapy dose. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_FN_dose_reduction_2",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 100
+                    }
+                  ]
+                },
+                {
+                  "field": "fn_episode_count",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "count_strategy",
+                  "operator": "==",
+                  "value": "dose_reduction"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "After FN episode 2, recovered counts and the selected dose reduction pathway: 50% of the ORIGINAL chemotherapy dose. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After FN episode 2, recovered counts and the selected dose reduction pathway: 50% of the ORIGINAL chemotherapy dose. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_FN_dose_reduction_3",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 100
+                    }
+                  ]
+                },
+                {
+                  "field": "fn_episode_count",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "count_strategy",
+                  "operator": "==",
+                  "value": "dose_reduction"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "After FN episode 3, recovered counts and the selected dose reduction pathway: stop chemotherapy or switch to the confirmed G-CSF strategy. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After FN episode 3, recovered counts and the selected dose reduction pathway: stop chemotherapy or switch to the confirmed G-CSF strategy. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_FN_gcsf_1",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 100
+                    }
+                  ]
+                },
+                {
+                  "field": "fn_episode_count",
+                  "operator": "==",
+                  "value": 1
+                },
+                {
+                  "field": "count_strategy",
+                  "operator": "==",
+                  "value": "gcsf"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "After FN episode 1, recovered counts and the selected gcsf pathway: 100% chemotherapy with G-CSF. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After FN episode 1, recovered counts and the selected gcsf pathway: 100% chemotherapy with G-CSF. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_FN_gcsf_2",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 100
+                    }
+                  ]
+                },
+                {
+                  "field": "fn_episode_count",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "count_strategy",
+                  "operator": "==",
+                  "value": "gcsf"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "After FN episode 2, recovered counts and the selected gcsf pathway: 75% chemotherapy with G-CSF. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After FN episode 2, recovered counts and the selected gcsf pathway: 75% chemotherapy with G-CSF. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "TCH_FN_gcsf_3",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 100
+                    }
+                  ]
+                },
+                {
+                  "field": "fn_episode_count",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "count_strategy",
+                  "operator": "==",
+                  "value": "gcsf"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "carboplatin"
+          ],
+          "recommendation": "After FN episode 3, recovered counts and the selected gcsf pathway: 50% chemotherapy with G-CSF. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After FN episode 3, recovered counts and the selected gcsf pathway: 50% chemotherapy with G-CSF. Verify acute illness has resolved and the actual previous/original doses; this is a conditional restart plan.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PERTUZUMAB_DIARRHOEA",
+        "when": {
+          "field": "severe_persistent_diarrhoea",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "Severe / prolonged diarrhoea not improving: consider interruption until controlled, with urgent fluids / electrolyte / symptom assessment. Restart only after treating-team review."
+        },
+        "explanation": "Severe / prolonged diarrhoea not improving: consider interruption until controlled, with urgent fluids / electrolyte / symptom assessment. Restart only after treating-team review.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "PERTUZUMAB_SEVERE_REACTION",
+        "when": {
+          "field": "pertuzumab_anaphylaxis_bronchospasm_ards",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "Permanently discontinue pertuzumab for anaphylaxis, bronchospasm or ARDS; manage urgently."
+        },
+        "explanation": "Permanently discontinue pertuzumab for anaphylaxis, bronchospasm or ARDS; manage urgently.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "DOC_CURRENT_DOSE_RECONCILE",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "current_docetaxel_mg_m2",
+                  "operator": "<",
+                  "value": 60
+                },
+                {
+                  "any": [
+                    {
+                      "field": "stomatitis_grade",
+                      "operator": ">=",
+                      "value": 3
+                    },
+                    {
+                      "field": "neuropathy_grade",
+                      "operator": ">",
+                      "value": 2
+                    },
+                    {
+                      "field": "skin_grade",
+                      "operator": ">=",
+                      "value": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "The actual current docetaxel dose is already below the source reference dose. Do not re-escalate automatically; reconcile previous reductions and the next action with oncology / pharmacy.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The actual current docetaxel dose is already below the source reference dose. Do not re-escalate automatically; reconcile previous reductions and the next action with oncology / pharmacy.",
+        "source": {
+          "document": "NCCP 00731 v2",
+          "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+          "page": 3
+        }
       }
     ]
   },
   "output_templates": {
-    "proceed": "No encoded contraindication, hold, dose-modification or treatment-context criterion was triggered. Complete normal prescribing, clinical and pharmacy checks.",
-    "coverage_gap": "One or more potentially relevant protocol domains were not assessed."
+    "proceed": "No encoded action was triggered by the supplied values. Unassessed domains and the full prescribing review remain outstanding.",
+    "coverage_gap": "Only entered values were assessed. Missing phase, history or results are not assumed normal.",
+    "consultant_review": "Review the component-specific findings and source uncertainty before treatment.",
+    "contraindicated": "Do not administer the affected component(s); review the findings and exact regimen context.",
+    "discontinue": "Discontinue the affected component(s) identified below and obtain treating-clinician review.",
+    "withhold": "Withhold the affected component(s) and assess the reported problem.",
+    "delay": "Delay the affected component(s) pending source-defined recovery and review.",
+    "dose_reduce": "A component-specific dose modification applies; verify the original and current doses before prescribing."
   },
   "supportive_care": {
     "emetogenic_risk": "high",
-    "script_id": "nccp-parenteral-high",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source": "NCCP regimen and antiemetic classification; phase-specific source review v0.84.0",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "TCHP-type regimen with carboplatin used at the protocol treatment dose; mapped to high-risk prophylaxis pending local pharmacy validation.",
-    "mapping_confidence": "moderate",
+    "mapping_basis": "AC: high; taxane: low; TC: moderate; carboplatin AUC 6 combination: high; HER2-only continuation: minimal. Use only the active phase.",
+    "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
+    "summary": "See the phase-specific drafts in patient/00731/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
+    "script_id": "nccp-parenteral-high",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
   }

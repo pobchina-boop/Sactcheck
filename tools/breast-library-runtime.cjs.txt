@@ -4,7 +4,7 @@ const ids=['breastSetting','breastReceptor','breastSuite'];
 const val=id=>root.document?.getElementById(id)?.value||'all';
 function codeForCard(card){return (card.dataset.jsonProtocolId||'').match(/nccp-(\d{5})-/)?.[1]||'';}
 function sync(tumour,domain){const panel=root.document?.getElementById('breastLibraryFilters');if(panel)panel.hidden=tumour!=='Breast'||domain==='haem';}
-function matchesReceptor(d,receptor){return receptor==='all'||d.receptors.includes(receptor)||(receptor==='hrpos-her2pos'&&d.receptors.includes('her2pos'));}
+function matchesReceptor(d,receptor){return receptor==='all'||d.receptors.includes('any')||d.receptors.includes(receptor)||(receptor==='hrpos-her2pos'&&d.receptors.includes('her2pos'));}
 function matchesCard(card,tumour,domain){if(tumour!=='Breast'||domain==='haem')return true;const active=ids.some(id=>val(id)!=='all');if(!active)return true;const d=regimens[codeForCard(card)];if(!d||!(card.dataset.tumour||'').split(',').includes('Breast'))return false;return (val('breastSetting')==='all'||d.settings.includes(val('breastSetting')))&&matchesReceptor(d,val('breastReceptor'))&&(val('breastSuite')==='all'||d.longitudinal);}
 function init(){for(const id of ids)root.document.getElementById(id)?.addEventListener('change',()=>root.filterRegimens?.());root.document.getElementById('clearBreastFilters')?.addEventListener('click',()=>{ids.forEach(id=>{const e=root.document.getElementById(id);if(e)e.value='all';});root.filterRegimens?.();});}
 root.SACTCheckBreastLibrary=Object.freeze({version:'0.83.7',regimens,sync,matchesReceptor,matchesCard,codeForCard});

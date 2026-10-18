@@ -14,6 +14,18 @@ const riskMap = readJson("data/emetogenic-risk-map.json");
 const index = readJson("protocols/index.json");
 const classificationBaseline = readJson("V0630_EMETOGENIC_CLASSIFICATION_SNAPSHOT.json");
 const clinicalCoreBaseline = readJson("V0630_CLINICAL_CORE_HASHES.json");
+// NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
+const familyPhases = {
+  '00260':{ac:'high',paclitaxel:'low'}, '00278':{ac:'high',paclitaxel:'low'},
+  '00316':{ac:'high',paclitaxel:'low',continuation:'minimal'},
+  '00432':{ac:'high',paclitaxel:'low',continuation:'minimal'},
+  '00433':{ac:'high',paclitaxel:'low',continuation:'minimal'},
+  '00745':{ac:'high',paclitaxel:'low',continuation:'minimal'},
+  '00258':{combination:'high',continuation:'minimal'},
+  '00204':{combination:'low',continuation:'minimal'},
+  '00507':{combination:'low',continuation:'minimal'},
+  '00512':{combination:'low',continuation:'minimal'}
+};
 const resolver = fs.readFileSync(path.join(root, "js", "emetogenic-risk.js"), "utf8");
 const ui = fs.readFileSync(path.join(root, "js", "generic-assessment-ui.js"), "utf8");
 
@@ -84,9 +96,10 @@ for (const record of index.protocols || []) {
     const expectedRisk = pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
       ? correctionByPath[relative]
       : (baseline.emetogenic_risk ?? null);
-    assert.strictEqual(sc.emetogenic_risk ?? null, expectedRisk, `${relative} emetogenic risk changed outside approved source reconciliation`);
+    const auditedPhases = familyPhases[md.nccp_regimen_code];
+    assert.strictEqual(sc.emetogenic_risk ?? null, auditedPhases ? 'phase_dependent' : expectedRisk, `${relative} emetogenic risk changed outside approved source reconciliation`);
     const phaseLevels = Object.fromEntries(Object.entries(sc.phase_profiles || {}).map(([k, v]) => [k, v?.emetogenic_risk ?? v?.level]));
-    assert.deepStrictEqual(phaseLevels, baseline.phase_levels || {}, `${relative} phase risk classification changed`);
+    assert.deepStrictEqual(phaseLevels, auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);
   }
   for (const [label, url] of [["supportive", sc.supportive_medications_pdf_url], ["metadata", md.antiemetic_proforma_url]]) {
     if (!url) continue;
@@ -139,6 +152,20 @@ if (fs.existsSync(localDir)) {
   context.globalThis = context;
   vm.runInNewContext(resolver, context);
   await context.SACTCheckEmetogenicRisk.load("data/emetogenic-risk-map.json");
+  for (const [code, phases] of Object.entries(familyPhases)) {
+    const record = index.protocols.find(p=>String(p.nccp_regimen_code || p.code || p.id).includes(code) || p.path.includes('/'+code+'-'));
+    const protocol = readJson(record.path), risk = context.SACTCheckEmetogenicRisk;
+    assert.strictEqual(risk.get(protocol).level, 'phase_dependent');
+    assert.strictEqual(risk.get(protocol).scriptId, null, 'No old whole-course script without a selected phase');
+    assert.strictEqual(risk.get(protocol).subsequentDays, null);
+    for (const [phase, level] of Object.entries(phases)) {
+      const selected=risk.get(protocol,{treatmentPhase:phase});
+      assert.strictEqual(selected.level,level,code+'/'+phase);
+      assert.strictEqual(selected.scriptId,'nccp-parenteral-'+level);
+    }
+    for (const [alias,phase] of Object.entries(protocol.supportive_care.phase_aliases || {})) assert.strictEqual(risk.get(protocol,{treatmentPhase:alias}).level,phases[phase]);
+    assert.strictEqual(risk.get(protocol,{treatmentPhase:'unknown'}).scriptId,null);
+  }
 
   const breast = context.SACTCheckEmetogenicRisk.get({
     metadata: { nccp_regimen_code: "TESTMED", tumour_group: "Breast" },

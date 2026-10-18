@@ -414,42 +414,8 @@
     history.replaceState(null, "", "#jsonAssessmentScreen");
   }
 
-  function renderProtocolInformation(protocol) {
-    const metadata = protocol.metadata || {};
-    const validation = metadata.validation || {};
-    const validationComplete = Boolean(
-      validation.consultant_reviewed &&
-      validation.oncology_pharmacy_reviewed &&
-      validation.software_tests_completed &&
-      validation.clinical_use_authorised
-    );
-
-    document.getElementById("jsonProtocolTitle").textContent = Engine.getProtocolTitle(protocol);
-    const aliases = root.SACTCheckDrugAliases?.forProtocol(protocol) || [];
-    document.getElementById("jsonProtocolAliases").textContent = aliases.length ? aliases.join(" · ") : "None mapped";
-    document.getElementById("jsonProtocolCode").textContent = `${Engine.getProtocolCode(protocol)}${metadata.nccp_version ? ` / ${metadata.nccp_version}` : ""}`;
-    const primaryTumour = typeof metadata.tumour_group === "string" ? metadata.tumour_group.trim() : "";
-    const listedTumours = asArray(metadata.tumour_groups).map(value => String(value).trim()).filter(Boolean);
-    const displayedTumours = primaryTumour && listedTumours.length && !listedTumours.includes(primaryTumour)
-      ? [primaryTumour]
-      : (listedTumours.length ? listedTumours : (primaryTumour ? [primaryTumour] : []));
-    const contextualTumour = activeTumourGroup !== "all" && displayedTumours.includes(activeTumourGroup)
-      ? `${activeTumourGroup}${displayedTumours.length > 1 ? " (shared protocol)" : ""}`
-      : (displayedTumours.join(" · ") || "Uncategorised");
-    document.getElementById("jsonProtocolTumour").textContent = contextualTumour;
-    document.getElementById("jsonProtocolStatus").textContent = metadata.encoding_maturity?.label || humanise(protocol.status || "not specified");
-    const deterministicRules = asArray(protocol.rule_engine?.rules).length;
-    const iraeReferenceRules = asArray(protocol.pembrolizumab_irae_rules?.rules).length;
-    document.getElementById("jsonProtocolRuleCount").textContent = iraeReferenceRules
-      ? `${deterministicRules} deterministic + ${iraeReferenceRules} irAE reference`
-      : String(deterministicRules);
-    document.getElementById("jsonProtocolValidation").textContent = validationComplete ? "Validated" : "Pending formal validation";
-    document.getElementById("jsonProtocolIndication").textContent = root.SACTCheckProtocolContext?.descriptionForTissue?.(
-      protocol, activeTumourGroup, { scope: "assessment" }
-    ) || metadata.indication || indicationSummary(protocol);
-    root.SACTCheckNccpChangeTracker?.renderProtocolStatus?.(protocol);
-
-    const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId, tumourGroup: activeTumourGroup }) || {
+  function renderSupportiveRisk(protocol, treatmentPhase) {
+    const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId, treatmentPhase, tumourGroup: activeTumourGroup }) || {
       level: "pending",
       label: "Supportive-care mapping requires review",
       className: "emetogenic-pending",
@@ -491,6 +457,45 @@
       supportiveSummary.innerHTML = detailRows.join("");
       supportiveSummary.className = `supportive-care-summary ${risk.className}`;
     }
+
+  }
+
+  function renderProtocolInformation(protocol) {
+    const metadata = protocol.metadata || {};
+    const validation = metadata.validation || {};
+    const validationComplete = Boolean(
+      validation.consultant_reviewed &&
+      validation.oncology_pharmacy_reviewed &&
+      validation.software_tests_completed &&
+      validation.clinical_use_authorised
+    );
+
+    document.getElementById("jsonProtocolTitle").textContent = Engine.getProtocolTitle(protocol);
+    const aliases = root.SACTCheckDrugAliases?.forProtocol(protocol) || [];
+    document.getElementById("jsonProtocolAliases").textContent = aliases.length ? aliases.join(" · ") : "None mapped";
+    document.getElementById("jsonProtocolCode").textContent = `${Engine.getProtocolCode(protocol)}${metadata.nccp_version ? ` / ${metadata.nccp_version}` : ""}`;
+    const primaryTumour = typeof metadata.tumour_group === "string" ? metadata.tumour_group.trim() : "";
+    const listedTumours = asArray(metadata.tumour_groups).map(value => String(value).trim()).filter(Boolean);
+    const displayedTumours = primaryTumour && listedTumours.length && !listedTumours.includes(primaryTumour)
+      ? [primaryTumour]
+      : (listedTumours.length ? listedTumours : (primaryTumour ? [primaryTumour] : []));
+    const contextualTumour = activeTumourGroup !== "all" && displayedTumours.includes(activeTumourGroup)
+      ? `${activeTumourGroup}${displayedTumours.length > 1 ? " (shared protocol)" : ""}`
+      : (displayedTumours.join(" · ") || "Uncategorised");
+    document.getElementById("jsonProtocolTumour").textContent = contextualTumour;
+    document.getElementById("jsonProtocolStatus").textContent = metadata.encoding_maturity?.label || humanise(protocol.status || "not specified");
+    const deterministicRules = asArray(protocol.rule_engine?.rules).length;
+    const iraeReferenceRules = asArray(protocol.pembrolizumab_irae_rules?.rules).length;
+    document.getElementById("jsonProtocolRuleCount").textContent = iraeReferenceRules
+      ? `${deterministicRules} deterministic + ${iraeReferenceRules} irAE reference`
+      : String(deterministicRules);
+    document.getElementById("jsonProtocolValidation").textContent = validationComplete ? "Validated" : "Pending formal validation";
+    document.getElementById("jsonProtocolIndication").textContent = root.SACTCheckProtocolContext?.descriptionForTissue?.(
+      protocol, activeTumourGroup, { scope: "assessment" }
+    ) || metadata.indication || indicationSummary(protocol);
+    root.SACTCheckNccpChangeTracker?.renderProtocolStatus?.(protocol);
+
+    renderSupportiveRisk(protocol);
 
     root.SACTCheckProtocolDoseSchedule?.prepare?.(protocol);
     root.SACTCheckRegimenKnowledgeBase?.prepare?.(protocol);
@@ -889,6 +894,7 @@
   function updateConditionalInputs() {
     if (!activeProtocol) return;
     const rawInputs = collectRawInputs(true);
+    renderSupportiveRisk(activeProtocol, rawInputs.treatment_phase);
     const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, rawInputs);
 
     definitions.forEach(definition => {

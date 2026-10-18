@@ -1,0 +1,2382 @@
+{
+  "checked_at": "2026-10-17T11:22:21.596Z",
+  "repo": "/workspace/scratch/aa44ad62d693/sactcheck-v0840",
+  "total": 116,
+  "passed": 116,
+  "failed": 0,
+  "cases": [
+    {
+      "name": "source fixture 1: delay",
+      "code": "00202",
+      "input": {
+        "anc_x10e9_l": 1.49
+      },
+      "source_note": "p2 Table1: ANC below1.5 delay; singlevalue sufficient.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "DOC_ANC_LOW",
+          "action": "delay",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 2: delay",
+      "code": "00202",
+      "input": {
+        "anc_x10e9_l": 0.4
+      },
+      "source_note": "p2 Table1/eligibility: severe lowANC cannot be unassessed solely because duration missing; duration refines reduction.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "DOC_ANC_LOW",
+          "action": "delay",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 3: no_anc_delay",
+      "code": "00202",
+      "input": {
+        "anc_x10e9_l": 1.5
+      },
+      "source_note": "p2 Table1: ANC>=1.5 meets count threshold only; no whole-regimen clearance.",
+      "actual": "proceed_with_caution",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "source fixture 4: dose_reduce",
+      "code": "00202",
+      "input": {
+        "febrile_neutropenia": true
+      },
+      "source_note": "p2 Table1: FN reduction independent of current ANC/dose entry; acute illness may require hold before restart.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "DOC_FN_REDUCTION",
+          "action": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Treat the acute event and confirm recovery. Subsequent source ladder is 100 →75 →60 mg/m²."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 5: delay_then_dose_reduce",
+      "code": "00202",
+      "input": {
+        "anc_x10e9_l": 0.4,
+        "anc_below_0_5_days": 8
+      },
+      "source_note": "p2 Table1: ANC<0.5 for >1week triggers reduction.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "DOC_FN_REDUCTION",
+          "action": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Treat the acute event and confirm recovery. Subsequent source ladder is 100 →75 →60 mg/m²."
+        },
+        {
+          "id": "DOC_ANC_LOW",
+          "action": "delay",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction."
+        },
+        {
+          "id": "DOC_PROLONGED_HISTORY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "A documented ANC <0.5 episode lasting more than one week affects the subsequent dose even after counts recover: source ladder 100 →75 →60 mg/m². Confirm recovery and actual dose before restarting."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 6: not_recommended",
+      "code": "00202",
+      "input": {
+        "bilirubin_uln_multiple": 1.51
+      },
+      "source_note": "p3 Table2: bilirubin>1.5 independently sufficient; no AST/ALP required.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "DOC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold."
+        },
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 7: not_recommended",
+      "code": "00202",
+      "input": {
+        "ast_uln_multiple": 10.01
+      },
+      "source_note": "p3 Table2: AST>10 independently sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "DOC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold."
+        },
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 8: not_recommended",
+      "code": "00202",
+      "input": {
+        "alp_uln_multiple": 6.01
+      },
+      "source_note": "p3 Table2: ALP>6 independently sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "DOC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold."
+        },
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 9: dose_reduce",
+      "code": "00202",
+      "input": {
+        "bilirubin_uln_multiple": 1,
+        "ast_uln_multiple": 2,
+        "alp_uln_multiple": 3
+      },
+      "source_note": "p3 Table2: complete75% conjunction; percentage originaldose, retain consider wording.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 10: consultant_review",
+      "code": "00202",
+      "input": {
+        "bilirubin_uln_multiple": 1.2,
+        "ast_uln_multiple": 6,
+        "alp_uln_multiple": 4
+      },
+      "source_note": "p3 Table2: ambiguous50% row; do not claim fully determinedautomaticdose.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 11: consultant_review",
+      "code": "00202",
+      "input": {
+        "alp_uln_multiple": 6
+      },
+      "source_note": "p3 Table2 exact6 excludedfrom<6and>6, so explicitgapreview.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 12: delay",
+      "code": "00203",
+      "input": {
+        "anc_x10e9_l": 1.49
+      },
+      "source_note": "p2 Table1: ANC below1.5 delay; singlevalue sufficient.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "DOC_ANC_LOW",
+          "action": "delay",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 13: delay",
+      "code": "00203",
+      "input": {
+        "anc_x10e9_l": 0.4
+      },
+      "source_note": "p2 Table1/eligibility: severe lowANC cannot be unassessed solely because duration missing; duration refines reduction.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "DOC_ANC_LOW",
+          "action": "delay",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 14: no_anc_delay",
+      "code": "00203",
+      "input": {
+        "anc_x10e9_l": 1.5
+      },
+      "source_note": "p2 Table1: ANC>=1.5 meets count threshold only; no whole-regimen clearance.",
+      "actual": "proceed_with_caution",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "source fixture 15: dose_reduce",
+      "code": "00203",
+      "input": {
+        "febrile_neutropenia": true
+      },
+      "source_note": "p2 Table1: FN reduction independent of current ANC/dose entry; acute illness may require hold before restart.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "DOC_FN_REDUCTION",
+          "action": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Treat the acute event and confirm recovery. Subsequent source ladder is 75 →60 mg/m²; discontinue if recurrence at the lower dose."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 16: delay_then_dose_reduce",
+      "code": "00203",
+      "input": {
+        "anc_x10e9_l": 0.4,
+        "anc_below_0_5_days": 8
+      },
+      "source_note": "p2 Table1: ANC<0.5 for >1week triggers reduction.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "DOC_FN_REDUCTION",
+          "action": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Treat the acute event and confirm recovery. Subsequent source ladder is 75 →60 mg/m²; discontinue if recurrence at the lower dose."
+        },
+        {
+          "id": "DOC_ANC_LOW",
+          "action": "delay",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction."
+        },
+        {
+          "id": "DOC_PROLONGED_HISTORY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "A documented ANC <0.5 episode lasting more than one week affects the subsequent dose even after counts recover: source ladder 75 →60 mg/m²; recurrence at the lower dose requires discontinuation. Confirm recovery and actual dose before restarting."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 17: not_recommended",
+      "code": "00203",
+      "input": {
+        "bilirubin_uln_multiple": 1.51
+      },
+      "source_note": "p3 Table2: bilirubin>1.5 independently sufficient; no AST/ALP required.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "DOC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold."
+        },
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 18: not_recommended",
+      "code": "00203",
+      "input": {
+        "ast_uln_multiple": 10.01
+      },
+      "source_note": "p3 Table2: AST>10 independently sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "DOC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold."
+        },
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 19: not_recommended",
+      "code": "00203",
+      "input": {
+        "alp_uln_multiple": 6.01
+      },
+      "source_note": "p3 Table2: ALP>6 independently sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "DOC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold."
+        },
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 20: dose_reduce",
+      "code": "00203",
+      "input": {
+        "bilirubin_uln_multiple": 1,
+        "ast_uln_multiple": 2,
+        "alp_uln_multiple": 3
+      },
+      "source_note": "p3 Table2: complete75% conjunction; percentage originaldose, retain consider wording.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 21: consultant_review",
+      "code": "00203",
+      "input": {
+        "bilirubin_uln_multiple": 1.2,
+        "ast_uln_multiple": 6,
+        "alp_uln_multiple": 4
+      },
+      "source_note": "p3 Table2: ambiguous50% row; do not claim fully determinedautomaticdose.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 22: consultant_review",
+      "code": "00203",
+      "input": {
+        "alp_uln_multiple": 6
+      },
+      "source_note": "p3 Table2 exact6 excludedfrom<6and>6, so explicitgapreview.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "DOC_HEP_AMBIGUITY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 23: dose_reduce",
+      "code": "00202",
+      "input": {
+        "neuropathy_grade": 3,
+        "current_docetaxel_mg_m2": 100
+      },
+      "source_note": "p3 Table3: merged skin/neuropathy action100→75, notdirect60.",
+      "actual": "dose_reduce",
+      "findings": [
+        {
+          "id": "DOC_NEURO_100",
+          "action": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Reduce docetaxel from 100 to 75 mg/m² for this toxicity after clinical review."
+        },
+        {
+          "id": "DOC_NEURO",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Source ladder for neuropathy is 100 →75 →60 mg/m²; stomatitis grade 3/4 reduces to 60 mg/m²."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 24: dose_reduce",
+      "code": "00202",
+      "input": {
+        "neuropathy_grade": 3,
+        "current_docetaxel_mg_m2": 75
+      },
+      "source_note": "p3 Table3: neuropathy reduction75→60.",
+      "actual": "dose_reduce",
+      "findings": [
+        {
+          "id": "DOC_NEURO_75",
+          "action": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Reduce docetaxel from 75 to 60 mg/m² for this toxicity after clinical review."
+        },
+        {
+          "id": "DOC_NEURO",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Source ladder for neuropathy is 100 →75 →60 mg/m²; stomatitis grade 3/4 reduces to 60 mg/m²."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 25: dose_reduce",
+      "code": "00202",
+      "input": {
+        "stomatitis_grade": 3
+      },
+      "source_note": "p3 Table3: grade3/4 stomatitis60mg/m².",
+      "actual": "dose_reduce",
+      "findings": [
+        {
+          "id": "DOC_MOUTH_60",
+          "action": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Grade 3/4 stomatitis: docetaxel 60 mg/m² in the source table; review current dose and recovery."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 26: monitoring_only",
+      "code": "00203",
+      "input": {
+        "platelets_x10e9_l": 99
+      },
+      "source_note": "No publishedplatelet100dose threshold; do not invent one.",
+      "actual": "partial_context_required",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "source fixture 27: discontinue",
+      "code": "00203",
+      "input": {
+        "neuropathy_grade": 3,
+        "current_docetaxel_mg_m2": 60
+      },
+      "source_note": "p3 Table3: toxicitypersistsat60→discontinue.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "DOC_NEURO",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Neuropathy >2: reduce to 60 mg/m²; if persistent at 60, discontinue docetaxel."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 28: discontinue",
+      "code": "00203",
+      "input": {
+        "febrile_neutropenia": true,
+        "current_docetaxel_mg_m2": 60
+      },
+      "source_note": "p2 Table1: FNcontinuesatlowerdose→discontinue.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "DOC_FN_REDUCTION",
+          "action": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Treat the acute event and confirm recovery. Subsequent source ladder is 75 →60 mg/m²; discontinue if recurrence at the lower dose."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 29: delay",
+      "code": "00250",
+      "input": {
+        "platelets_x10e9_l": 99
+      },
+      "source_note": "p2 Table1: platelets<100 independentlytriggerdelay;75%afterrecovery.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "TC_PLT",
+          "action": "delay",
+          "components": [
+            "docetaxel",
+            "cyclophosphamide"
+          ],
+          "explanation": "Platelets below 100: delay at least one week; source specifies 75% after recovery ANC >1 and platelets ≥100."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 30: delay",
+      "code": "00250",
+      "input": {
+        "anc_x10e9_l": 0.99
+      },
+      "source_note": "p2 Table1: lowANC independentlyactionable; missingplateletsdoesnotblock.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "TC_ANC",
+          "action": "delay",
+          "components": [
+            "docetaxel",
+            "cyclophosphamide"
+          ],
+          "explanation": "ANC below 1: delay at least one week; recovery ANC >1 and platelets ≥100."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 31: no_count_delay",
+      "code": "00250",
+      "input": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 100
+      },
+      "source_note": "p2 Table1: initialcountrow>=1and>=100; notoverallclearance.",
+      "actual": "proceed_with_caution",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "source fixture 32: dose_reduce",
+      "code": "00250",
+      "input": {
+        "fn_episode_count": 1,
+        "anc_x10e9_l": 1.1,
+        "platelets_x10e9_l": 101
+      },
+      "source_note": "p2 Table2: FNepisode-dependentoption; strict>1and>100recovery.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "TC_FN_EPISODE_1",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel",
+            "cyclophosphamide"
+          ],
+          "explanation": "After FN episode 1, source specifies 75% previous dose, only after recovery. Source FN restart requires ANC >1 and platelets >100; exact boundary values need review."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 33: dose_reduce",
+      "code": "00250",
+      "input": {
+        "fn_episode_count": 2,
+        "anc_x10e9_l": 1.1,
+        "platelets_x10e9_l": 101
+      },
+      "source_note": "p2 Table2: FNepisode-dependentoption; strict>1and>100recovery.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "TC_FN_EPISODE_2",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel",
+            "cyclophosphamide"
+          ],
+          "explanation": "After FN episode 2, source specifies 50% original dose, only after recovery. Source FN restart requires ANC >1 and platelets >100; exact boundary values need review."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 34: discontinue",
+      "code": "00250",
+      "input": {
+        "fn_episode_count": 3,
+        "anc_x10e9_l": 1.1,
+        "platelets_x10e9_l": 101
+      },
+      "source_note": "p2 Table2: FNepisode-dependentoption; strict>1and>100recovery.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "TC_FN_THIRD",
+          "action": "discontinue",
+          "components": [
+            "docetaxel",
+            "cyclophosphamide"
+          ],
+          "explanation": "Third FN episode: discontinue under the source table."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 35: dose_reduce",
+      "code": "00250",
+      "input": {
+        "crcl_ml_min": 29
+      },
+      "source_note": "p3 Table3: CrCl10–29 consider75%original.",
+      "actual": "dose_reduce",
+      "findings": [
+        {
+          "id": "TC_CYCLO_RENAL",
+          "action": "dose_reduce",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "explanation": "Consider 75% original cyclophosphamide at CrCl 10–29."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 36: no_renal_reduction",
+      "code": "00250",
+      "input": {
+        "crcl_ml_min": 30
+      },
+      "source_note": "p3 Table3: CrCl>=30norenaladjustment.",
+      "actual": "proceed_with_caution",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "source fixture 37: not_recommended",
+      "code": "00250",
+      "input": {
+        "crcl_ml_min": 9.9
+      },
+      "source_note": "p3 Table3: <10notrecommended;50%onlyifunavoidable.",
+      "actual": "omit",
+      "findings": [
+        {
+          "id": "TC_CYCLO_RENAL_LOW",
+          "action": "omit",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "explanation": "Not recommended below CrCl 10 or on haemodialysis; unavoidable 50% dosing requires specialist review."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 38: not_recommended",
+      "code": "00250",
+      "input": {
+        "haemodialysis": true
+      },
+      "source_note": "p3 Table3: HDnotrecommended;50%onlyifunavoidable.",
+      "actual": "omit",
+      "findings": [
+        {
+          "id": "TC_CYCLO_RENAL_LOW",
+          "action": "omit",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "explanation": "Not recommended below CrCl 10 or on haemodialysis; unavoidable 50% dosing requires specialist review."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 39: contraindicated",
+      "code": "00250",
+      "input": {
+        "assessment_stage": "baseline",
+        "neuropathy_grade": 2
+      },
+      "source_note": "p1 exclusions: baselinegrade>=2neuropathy.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "TC_BASELINE_NEURO",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel",
+            "cyclophosphamide"
+          ],
+          "explanation": "Baseline neuropathy grade ≥2 is an exclusion in this TC source."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 40: dose_reduce",
+      "code": "00250",
+      "input": {
+        "stomatitis_grade": 3,
+        "current_docetaxel_mg_m2": 75
+      },
+      "source_note": "p3 Table4: docetaxel60; noautomaticcyclophosphamidemodification.",
+      "actual": "dose_reduce",
+      "findings": [
+        {
+          "id": "DOC_MOUTH_75",
+          "action": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Reduce docetaxel to 60 mg/m² after assessment of this toxicity."
+        },
+        {
+          "id": "DOC_MOUTH",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Stomatitis ≥3: reduce to 60 mg/m²; check the exact source before a further reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 41: delay",
+      "code": "00512",
+      "input": {
+        "anc_x10e9_l": 0.99
+      },
+      "source_note": "PaclitaxelhaematologyTable2; singlevaluewithoutcycle/dose sufficient.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "PAC_ANC_LOW",
+          "action": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Hold low-ANC paclitaxel now; establish duration and recovery before deciding reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 42: delay",
+      "code": "00512",
+      "input": {
+        "platelets_x10e9_l": 89
+      },
+      "source_note": "Table2platelets70–90delay; nottrastuzumabautomatic hold.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "PAC_PLT_LOW",
+          "action": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Delay paclitaxel for platelets below 90; below 70 requires reduction after recovery."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 43: no_count_delay",
+      "code": "00512",
+      "input": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 90,
+        "assessment_stage": "ongoing"
+      },
+      "source_note": "Table2explicit>=90fullrow; exact90overlapresolvedthroughfullrow.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_PLT_90_OVERLAP",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Platelets 90 appears in both the full-dose and delay rows. Resolve the source overlap before treatment."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 44: delay_then_dose_reduce",
+      "code": "00512",
+      "input": {
+        "platelets_x10e9_l": 69
+      },
+      "source_note": "Table2PLT<70delayandonelevelreductionadvice; currentdoseoptional.",
+      "actual": "delay_then_dose_reduce",
+      "findings": [
+        {
+          "id": "PAC_SEVERE_COUNTS",
+          "action": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Delay until recovery, then reduce one source level (80 →65 →50 mg/m²); consider G-CSF. The actual current dose and recovery must be reviewed before restart."
+        },
+        {
+          "id": "PAC_PLT_LOW",
+          "action": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Delay paclitaxel for platelets below 90; below 70 requires reduction after recovery."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 45: delay_then_dose_reduce",
+      "code": "00512",
+      "input": {
+        "febrile_neutropenia": true
+      },
+      "source_note": "Table2FNsharesmergeddelay/reductioncell; considerGCSF; doseoptional.",
+      "actual": "delay_then_dose_reduce",
+      "findings": [
+        {
+          "id": "PAC_FN",
+          "action": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Delay and treat febrile neutropenia urgently; reduce one level after recovery and consider G-CSF."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 46: dose_reduce",
+      "code": "00512",
+      "input": {
+        "neuropathy_grade": 2
+      },
+      "source_note": "ToxicityTable4: singlegrade2inputmustyield10mg/m²decrementadvice.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_NEURO_G2",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Grade 2 neuropathy: reduce 10 mg/m² from the actual current paclitaxel dose, distinct from the haematological dose ladder."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 47: discontinue",
+      "code": "00512",
+      "input": {
+        "neuropathy_grade": 3
+      },
+      "source_note": "ToxicityTable4: >=grade3reactiondiscontinue.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "PAC_NEURO_G3",
+          "action": "discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Grade ≥3 reaction / non-haematological toxicity: discontinue paclitaxel under the source table; assess urgently."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 48: withhold_then_reduce",
+      "code": "00512",
+      "input": {
+        "other_nonhaem_toxicity_grade": 2
+      },
+      "source_note": "ToxicityTable4: holduntil<=1andreduce10; nohistoryrequirement.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "PAC_OTHER_G2",
+          "action": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Hold until grade ≤1, then consider a 10 mg/m² reduction from the actual current dose. Review the source dose-level / adverse-event instructions."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 49: contraindicated",
+      "code": "00512",
+      "input": {
+        "alt_uln_multiple": 10
+      },
+      "source_note": "HepaticTable3: >=10 independently sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "PAC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Paclitaxel is not recommended / contraindicated at this hepatic threshold."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 50: contraindicated",
+      "code": "00512",
+      "input": {
+        "bilirubin_uln_multiple": 5.01
+      },
+      "source_note": "HepaticTable3: bilirubin>5 independently sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "PAC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Paclitaxel is not recommended / contraindicated at this hepatic threshold."
+        },
+        {
+          "id": "PAC_HEP_MISSING",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Obtain the required transaminase context before interpreting this hepatic dose band."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 51: dose_reduce",
+      "code": "00512",
+      "input": {
+        "alt_uln_multiple": 9,
+        "bilirubin_uln_multiple": 2
+      },
+      "source_note": "HepaticTable3:1.26–2→75%original.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_HEP_60",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Source hepatic band is 75% of the ORIGINAL prescribed dose; 60 mg/m² applies to the standard starting schedule only. Reconcile the documented original and actual current dose; no automatic re-escalation after a prior reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 52: dose_reduce",
+      "code": "00512",
+      "input": {
+        "alt_uln_multiple": 9,
+        "bilirubin_uln_multiple": 2.01
+      },
+      "source_note": "HepaticTable3:2.01–5→50%original.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_HEP_40",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Source hepatic band is 50% of the ORIGINAL prescribed dose; 40 mg/m² applies to the standard starting schedule only. Reconcile the documented original and actual current dose; no automatic re-escalation after a prior reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 53: contraindicated",
+      "code": "00512",
+      "input": {
+        "assessment_stage": "baseline",
+        "anc_x10e9_l": 1.49
+      },
+      "source_note": "Exclusions: baselineANC<1.5,distinctfromon-treatment1.0.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "BASELINE_ANC",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel",
+            "trastuzumab"
+          ],
+          "explanation": "Below the source baseline ANC inclusion / exclusion threshold. Ongoing count rules are separate."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 54: delay",
+      "code": "00621",
+      "input": {
+        "anc_x10e9_l": 0.99
+      },
+      "source_note": "PaclitaxelhaematologyTable2; singlevaluewithoutcycle/dose sufficient.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "PAC_ANC_LOW",
+          "action": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Hold low-ANC paclitaxel now; establish duration and recovery before deciding reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 55: delay",
+      "code": "00621",
+      "input": {
+        "platelets_x10e9_l": 89
+      },
+      "source_note": "Table2platelets70–90delay; nottrastuzumabautomatic hold.",
+      "actual": "delay",
+      "findings": [
+        {
+          "id": "PAC_PLT_LOW",
+          "action": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Delay paclitaxel for platelets below 90; below 70 requires reduction after recovery."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 56: no_count_delay",
+      "code": "00621",
+      "input": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 90,
+        "assessment_stage": "ongoing"
+      },
+      "source_note": "Table2explicit>=90fullrow; exact90overlapresolvedthroughfullrow.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_PLT_90_OVERLAP",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Platelets 90 appears in both the full-dose and delay rows. Resolve the source overlap before treatment."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 57: delay_then_dose_reduce",
+      "code": "00621",
+      "input": {
+        "platelets_x10e9_l": 69
+      },
+      "source_note": "Table2PLT<70delayandonelevelreductionadvice; currentdoseoptional.",
+      "actual": "delay_then_dose_reduce",
+      "findings": [
+        {
+          "id": "PAC_SEVERE_COUNTS",
+          "action": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Delay until recovery, then reduce one source level (80 →65 →50 mg/m²); consider G-CSF. The actual current dose and recovery must be reviewed before restart."
+        },
+        {
+          "id": "PAC_PLT_LOW",
+          "action": "delay",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Delay paclitaxel for platelets below 90; below 70 requires reduction after recovery."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 58: delay_then_dose_reduce",
+      "code": "00621",
+      "input": {
+        "febrile_neutropenia": true
+      },
+      "source_note": "Table2FNsharesmergeddelay/reductioncell; considerGCSF; doseoptional.",
+      "actual": "delay_then_dose_reduce",
+      "findings": [
+        {
+          "id": "PAC_FN",
+          "action": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Delay and treat febrile neutropenia urgently; reduce one level after recovery and consider G-CSF."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 59: dose_reduce",
+      "code": "00621",
+      "input": {
+        "neuropathy_grade": 2
+      },
+      "source_note": "ToxicityTable4: singlegrade2inputmustyield10mg/m²decrementadvice.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_NEURO_G2",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Grade 2 neuropathy: reduce 10 mg/m² from the actual current paclitaxel dose, distinct from the haematological dose ladder."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 60: discontinue",
+      "code": "00621",
+      "input": {
+        "neuropathy_grade": 3
+      },
+      "source_note": "ToxicityTable4: >=grade3reactiondiscontinue.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "PAC_NEURO_G3",
+          "action": "discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Grade ≥3 reaction / non-haematological toxicity: discontinue paclitaxel under the source table; assess urgently."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 61: withhold_then_reduce",
+      "code": "00621",
+      "input": {
+        "other_nonhaem_toxicity_grade": 2
+      },
+      "source_note": "ToxicityTable4: holduntil<=1andreduce10; nohistoryrequirement.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "PAC_OTHER_G2",
+          "action": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Hold until grade ≤1, then consider a 10 mg/m² reduction from the actual current dose. Review the source dose-level / adverse-event instructions."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 62: contraindicated",
+      "code": "00621",
+      "input": {
+        "alt_uln_multiple": 10
+      },
+      "source_note": "HepaticTable3: >=10 independently sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "PAC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Paclitaxel is not recommended / contraindicated at this hepatic threshold."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 63: contraindicated",
+      "code": "00621",
+      "input": {
+        "bilirubin_uln_multiple": 5.01
+      },
+      "source_note": "HepaticTable3: bilirubin>5 independently sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "PAC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Paclitaxel is not recommended / contraindicated at this hepatic threshold."
+        },
+        {
+          "id": "PAC_HEP_MISSING",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Obtain the required transaminase context before interpreting this hepatic dose band."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 64: dose_reduce",
+      "code": "00621",
+      "input": {
+        "alt_uln_multiple": 9,
+        "bilirubin_uln_multiple": 2
+      },
+      "source_note": "HepaticTable3:1.26–2→75%original.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_HEP_MISSING",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Obtain the required transaminase context before interpreting this hepatic dose band."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 65: dose_reduce",
+      "code": "00621",
+      "input": {
+        "alt_uln_multiple": 9,
+        "bilirubin_uln_multiple": 2.01
+      },
+      "source_note": "HepaticTable3:2.01–5→50%original.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_HEP_MISSING",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Obtain the required transaminase context before interpreting this hepatic dose band."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 66: contraindicated",
+      "code": "00621",
+      "input": {
+        "assessment_stage": "baseline",
+        "anc_x10e9_l": 1.49
+      },
+      "source_note": "Exclusions: baselineANC<1.5,distinctfromon-treatment1.0.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "BASELINE_ANC",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Below the source baseline ANC inclusion / exclusion threshold. Ongoing count rules are separate."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 67: contraindicated",
+      "code": "00621",
+      "input": {
+        "ast_uln_multiple": 10,
+        "alt_uln_multiple": 1
+      },
+      "source_note": "Table3usestransaminases: ASTabnormalitymustnotbemissedbyALT-onlyimplementation.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "PAC_HEP_STOP",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Paclitaxel is not recommended / contraindicated at this hepatic threshold."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 68: withhold",
+      "code": "00512",
+      "input": {
+        "lvef_percent": 49,
+        "lvef_drop_points": 10
+      },
+      "source_note": "p4Table5: conjunctivecriterionmet;repeatLVEF3weeks.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "HER2_LVEF_HOLD",
+          "action": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "explanation": "Hold for LVEF <50% AND a fall ≥10 percentage points. Repeat within about 3 weeks; no improvement / further decline requires consultant and cardiology review."
+        },
+        {
+          "id": "HER2_LVEF_REVIEW",
+          "action": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 69: consultant_review",
+      "code": "00512",
+      "input": {
+        "lvef_percent": 49,
+        "lvef_drop_points": 9
+      },
+      "source_note": "p4Table5: conjunctionnotmet;lowLVEFstillconcerning,review,notfalsedefinitivehold.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "HER2_LVEF_REVIEW",
+          "action": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 70: consultant_review",
+      "code": "00512",
+      "input": {
+        "lvef_percent": 55,
+        "lvef_drop_points": 10
+      },
+      "source_note": "p4Table5: declinealoneinsufficientforthecombinedholdrule;review.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "HER2_LVEF_REVIEW",
+          "action": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 71: consultant_review",
+      "code": "00512",
+      "input": {
+        "lvef_percent": 49
+      },
+      "source_note": "Missingbaselinecomparison; partialcardiacreviewmustnotdisappear.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "HER2_LVEF_REVIEW",
+          "action": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 72: consultant_review",
+      "code": "00512",
+      "input": {
+        "assessment_stage": "baseline",
+        "baseline_lvef_percent": 52
+      },
+      "source_note": "p2eligibilityLVEF>55;50–55clinicaljudgement.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "HER2_BASELINE_BORDERLINE",
+          "action": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "explanation": "Source specifies baseline LVEF >55%; the 50–55% trial range requires clinical judgement, not automatic eligibility."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 73: consultant_review",
+      "code": "00512",
+      "input": {
+        "symptomatic_heart_failure": true
+      },
+      "source_note": "p4Table5considerdiscontinuation/cardiology,clinicaldecision.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "HER2_HF",
+          "action": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "explanation": "Symptomatic heart failure: hold and obtain urgent cardiology / oncology review; source says consider discontinuation, not an automatic permanent-stop rule."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "source fixture 74: discontinue",
+      "code": "00512",
+      "input": {
+        "trastuzumab_hypersensitivity_grade": 4
+      },
+      "source_note": "p4Table5grade4hypersensitivitydiscontinue.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "HER2_REACTION_G4",
+          "action": "discontinue",
+          "components": [
+            "trastuzumab"
+          ],
+          "explanation": "Grade 4 hypersensitivity: discontinue the implicated treatment and manage urgently."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Blank input remains incomplete",
+      "code": "00202",
+      "input": {},
+      "source_note": "Missing values are not normal and do not constitute assessment.",
+      "actual": "incomplete",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "Blank input remains incomplete",
+      "code": "00203",
+      "input": {},
+      "source_note": "Missing values are not normal and do not constitute assessment.",
+      "actual": "incomplete",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "Blank input remains incomplete",
+      "code": "00250",
+      "input": {},
+      "source_note": "Missing values are not normal and do not constitute assessment.",
+      "actual": "incomplete",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "Blank input remains incomplete",
+      "code": "00512",
+      "input": {},
+      "source_note": "Missing values are not normal and do not constitute assessment.",
+      "actual": "incomplete",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "Blank input remains incomplete",
+      "code": "00621",
+      "input": {},
+      "source_note": "Missing values are not normal and do not constitute assessment.",
+      "actual": "incomplete",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "TC baseline ANC1.2 is not an invented1.5 exclusion",
+      "code": "00250",
+      "input": {
+        "assessment_stage": "baseline",
+        "anc_x10e9_l": 1.2
+      },
+      "source_note": "NCCP00250v9 has no separate baseline ANC1.5 exclusion.",
+      "actual": "proceed_with_caution",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "Severe hepatic impairment acts without numeric liver values",
+      "code": "00202",
+      "input": {
+        "severe_hepatic_impairment": true
+      },
+      "source_note": "Explicit source hepatic exclusion; standalone clinical input is sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "SEVERE_HEPATIC_EXCLUSION",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review the exact component and any HER2-only plan separately."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Severe hepatic impairment acts without numeric liver values",
+      "code": "00203",
+      "input": {
+        "severe_hepatic_impairment": true
+      },
+      "source_note": "Explicit source hepatic exclusion; standalone clinical input is sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "SEVERE_HEPATIC_EXCLUSION",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review the exact component and any HER2-only plan separately."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Severe hepatic impairment acts without numeric liver values",
+      "code": "00512",
+      "input": {
+        "severe_hepatic_impairment": true
+      },
+      "source_note": "Explicit source hepatic exclusion; standalone clinical input is sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "SEVERE_HEPATIC_EXCLUSION",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review the exact component and any HER2-only plan separately."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Severe hepatic impairment acts without numeric liver values",
+      "code": "00621",
+      "input": {
+        "severe_hepatic_impairment": true
+      },
+      "source_note": "Explicit source hepatic exclusion; standalone clinical input is sufficient.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "SEVERE_HEPATIC_EXCLUSION",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review the exact component and any HER2-only plan separately."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Named stomatitis_grade grade2 acts independently",
+      "code": "00512",
+      "input": {
+        "stomatitis_grade": 2
+      },
+      "source_note": "Paclitaxel Table4 non-haematological toxicity must include exposed named inputs.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "PAC_NAMED_G2",
+          "action": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Other grade 2 non-haematological toxicity: hold until ≤grade 1, then source-specific dose review."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Named stomatitis_grade grade3 acts independently",
+      "code": "00512",
+      "input": {
+        "stomatitis_grade": 3
+      },
+      "source_note": "Paclitaxel Table4 non-haematological toxicity must include exposed named inputs.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "PAC_NAMED_G3",
+          "action": "discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Grade ≥3 non-haematological reaction: discontinue paclitaxel per source table."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Named skin_grade grade2 acts independently",
+      "code": "00512",
+      "input": {
+        "skin_grade": 2
+      },
+      "source_note": "Paclitaxel Table4 non-haematological toxicity must include exposed named inputs.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "PAC_NAMED_G2",
+          "action": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Other grade 2 non-haematological toxicity: hold until ≤grade 1, then source-specific dose review."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Named skin_grade grade3 acts independently",
+      "code": "00512",
+      "input": {
+        "skin_grade": 3
+      },
+      "source_note": "Paclitaxel Table4 non-haematological toxicity must include exposed named inputs.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "PAC_NAMED_G3",
+          "action": "discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Grade ≥3 non-haematological reaction: discontinue paclitaxel per source table."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Named stomatitis_grade grade2 acts independently",
+      "code": "00621",
+      "input": {
+        "stomatitis_grade": 2
+      },
+      "source_note": "Paclitaxel Table4 non-haematological toxicity must include exposed named inputs.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "PAC_NAMED_G2",
+          "action": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Other grade 2 non-haematological toxicity: hold until ≤grade 1, then source-specific dose review."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Named stomatitis_grade grade3 acts independently",
+      "code": "00621",
+      "input": {
+        "stomatitis_grade": 3
+      },
+      "source_note": "Paclitaxel Table4 non-haematological toxicity must include exposed named inputs.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "PAC_NAMED_G3",
+          "action": "discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Grade ≥3 non-haematological reaction: discontinue paclitaxel per source table."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Named skin_grade grade2 acts independently",
+      "code": "00621",
+      "input": {
+        "skin_grade": 2
+      },
+      "source_note": "Paclitaxel Table4 non-haematological toxicity must include exposed named inputs.",
+      "actual": "withhold",
+      "findings": [
+        {
+          "id": "PAC_NAMED_G2",
+          "action": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Other grade 2 non-haematological toxicity: hold until ≤grade 1, then source-specific dose review."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Named skin_grade grade3 acts independently",
+      "code": "00621",
+      "input": {
+        "skin_grade": 3
+      },
+      "source_note": "Paclitaxel Table4 non-haematological toxicity must include exposed named inputs.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "PAC_NAMED_G3",
+          "action": "discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Grade ≥3 non-haematological reaction: discontinue paclitaxel per source table."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Paclitaxel hepatic band cannot numerically increase an already reduced dose",
+      "code": "00512",
+      "input": {
+        "alt_uln_multiple": 9,
+        "bilirubin_uln_multiple": 2,
+        "current_paclitaxel_mg_m2": 50
+      },
+      "source_note": "Source75%original-dose basis; existing50mg/m² requires reconciliation.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_HEP_60",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Source hepatic band is 75% of the ORIGINAL prescribed dose; 60 mg/m² applies to the standard starting schedule only. Reconcile the documented original and actual current dose; no automatic re-escalation after a prior reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Paclitaxel second hepatic band cannot increase an already lower dose",
+      "code": "00621",
+      "input": {
+        "alt_uln_multiple": 9,
+        "ast_uln_multiple": 1,
+        "bilirubin_uln_multiple": 3,
+        "current_paclitaxel_mg_m2": 30
+      },
+      "source_note": "Source50%original-dose basis; no upward dose tile.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_HEP_40",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Source hepatic band is 50% of the ORIGINAL prescribed dose; 40 mg/m² applies to the standard starting schedule only. Reconcile the documented original and actual current dose; no automatic re-escalation after a prior reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Docetaxel stomatitis target cannot increase current dose",
+      "code": "00202",
+      "input": {
+        "stomatitis_grade": 3,
+        "current_docetaxel_mg_m2": 50
+      },
+      "source_note": "Source60mg/m² reference does not authorise re-escalating an existing lower dose.",
+      "actual": "dose_reduce",
+      "findings": [
+        {
+          "id": "DOC_MOUTH_60",
+          "action": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Grade 3/4 stomatitis: docetaxel 60 mg/m² in the source table; review current dose and recovery."
+        },
+        {
+          "id": "DOC_CURRENT_DOSE_RECONCILE",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "The actual current docetaxel dose is already below the source reference dose. Do not re-escalate automatically; reconcile previous reductions and the next action with oncology / pharmacy."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Docetaxel100 source does not inherit docetaxel75 cessation rule",
+      "code": "00202",
+      "input": {
+        "neuropathy_grade": 3,
+        "current_docetaxel_mg_m2": 60,
+        "toxicity_persists_at_reduced_dose": true
+      },
+      "source_note": "00202Table3 stops its ladder at60 without a persistent-at60 cessation instruction.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "DOC_NEURO",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Source ladder for neuropathy is 100 →75 →60 mg/m²; stomatitis grade 3/4 reduces to 60 mg/m²."
+        },
+        {
+          "id": "DOC_NEURO_PERSISTENT",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Persistent neuropathy at 60 mg/m²: source supplies no further numeric reduction / cessation row here. Obtain consultant review; do not borrow another regimen’s stop rule."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Persistent grade3 docetaxel skin toxicity at60 stops affected drug",
+      "code": "00203",
+      "input": {
+        "skin_grade": 3,
+        "current_docetaxel_mg_m2": 60,
+        "toxicity_persists_at_reduced_dose": true
+      },
+      "source_note": "00203Table3/00250Table4 expressly discontinue if these reactions persist at60.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "DOC_SKIN_AT60",
+          "action": "discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Persistent grade 3 skin toxicity at 60 mg/m²: discontinue docetaxel."
+        },
+        {
+          "id": "DOC_SKIN",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Severe skin toxicity requires source-specific review. Grade-3 source rows and current dose determine reduction; do not extrapolate an unqualified grade-4 percentage."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Persistent grade3 docetaxel skin toxicity at60 stops affected drug",
+      "code": "00250",
+      "input": {
+        "skin_grade": 3,
+        "current_docetaxel_mg_m2": 60,
+        "toxicity_persists_at_reduced_dose": true
+      },
+      "source_note": "00203Table3/00250Table4 expressly discontinue if these reactions persist at60.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "DOC_SKIN_AT60",
+          "action": "discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Persistent grade 3 skin toxicity at 60 mg/m²: discontinue docetaxel."
+        },
+        {
+          "id": "DOC_SKIN",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Severe skin toxicity requires source-specific review. Grade-3 source rows and current dose determine reduction; do not extrapolate an unqualified grade-4 percentage."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Persistent neuropathy at60 stops affected docetaxel",
+      "code": "00203",
+      "input": {
+        "neuropathy_grade": 3,
+        "current_docetaxel_mg_m2": 60,
+        "toxicity_persists_at_reduced_dose": true,
+        "assessment_stage": "ongoing"
+      },
+      "source_note": "Source cessation with the required recurrence context supplied.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "DOC_NEURO_PERSISTENT",
+          "action": "discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "This toxicity persists at 60 mg/m²: discontinue docetaxel."
+        },
+        {
+          "id": "DOC_NEURO",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Neuropathy >2: reduce to 60 mg/m²; if persistent at 60, discontinue docetaxel."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Persistent neuropathy at60 stops affected docetaxel",
+      "code": "00250",
+      "input": {
+        "neuropathy_grade": 3,
+        "current_docetaxel_mg_m2": 60,
+        "toxicity_persists_at_reduced_dose": true,
+        "assessment_stage": "ongoing"
+      },
+      "source_note": "Source cessation with the required recurrence context supplied.",
+      "actual": "discontinue",
+      "findings": [
+        {
+          "id": "DOC_NEURO_PERSISTENT",
+          "action": "discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "This toxicity persists at 60 mg/m²: discontinue docetaxel."
+        },
+        {
+          "id": "DOC_NEURO",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Neuropathy >2: reduce to 60 mg/m²; if persistent at 60, discontinue docetaxel."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Antibody continuation does not inherit completed paclitaxel rules",
+      "code": "00512",
+      "input": {
+        "treatment_phase": "continuation",
+        "assessment_stage": "baseline",
+        "anc_x10e9_l": 0.9
+      },
+      "source_note": "The source permits continued trastuzumab during reversible chemotherapy myelosuppression; other toxicity needs separate context.",
+      "actual": "proceed_with_caution",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "Antibody continuation does not inherit completed paclitaxel rules",
+      "code": "00512",
+      "input": {
+        "treatment_phase": "continuation",
+        "stomatitis_grade": 3
+      },
+      "source_note": "The source permits continued trastuzumab during reversible chemotherapy myelosuppression; other toxicity needs separate context.",
+      "actual": "proceed_with_caution",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "Antibody continuation does not inherit completed paclitaxel rules",
+      "code": "00512",
+      "input": {
+        "treatment_phase": "continuation",
+        "severe_hepatic_impairment": true
+      },
+      "source_note": "The source permits continued trastuzumab during reversible chemotherapy myelosuppression; other toxicity needs separate context.",
+      "actual": "proceed_with_caution",
+      "findings": [],
+      "pass": true
+    },
+    {
+      "name": "Explicit reproductive exclusion is encoded",
+      "code": "00250",
+      "input": {
+        "pregnancy": true
+      },
+      "source_note": "These exact NCCP sources list the supplied condition as an exclusion.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "PREGNANCY_REVIEW",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel",
+            "cyclophosphamide"
+          ],
+          "explanation": "This is an explicit NCCP exclusion. Do not administer before specialist review of an alternative treatment plan."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Explicit reproductive exclusion is encoded",
+      "code": "00250",
+      "input": {
+        "breastfeeding": true
+      },
+      "source_note": "These exact NCCP sources list the supplied condition as an exclusion.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "LACTATION_REVIEW",
+          "action": "contraindicated",
+          "components": [
+            "docetaxel",
+            "cyclophosphamide"
+          ],
+          "explanation": "This is an explicit NCCP exclusion. Do not administer before specialist review of an alternative treatment plan."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Explicit reproductive exclusion is encoded",
+      "code": "00621",
+      "input": {
+        "breastfeeding": true
+      },
+      "source_note": "These exact NCCP sources list the supplied condition as an exclusion.",
+      "actual": "contraindicated",
+      "findings": [
+        {
+          "id": "LACTATION_REVIEW",
+          "action": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "This is an explicit NCCP exclusion. Do not administer before specialist review of an alternative treatment plan."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Historic prolonged neutropenia is recognised after ANC recovery",
+      "code": "00203",
+      "input": {
+        "anc_x10e9_l": 2,
+        "anc_below_0_5_days": 8
+      },
+      "source_note": "The source reduction applies after recovery, not only while the present ANC remains<0.5.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "DOC_PROLONGED_HISTORY",
+          "action": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "A documented ANC <0.5 episode lasting more than one week affects the subsequent dose even after counts recover: source ladder 75 →60 mg/m²; recurrence at the lower dose requires discontinuation. Confirm recovery and actual dose before restarting."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Historic prolonged neutropenia is recognised after ANC recovery",
+      "code": "00621",
+      "input": {
+        "anc_x10e9_l": 2,
+        "anc_below_0_5_days": 8
+      },
+      "source_note": "The source reduction applies after recovery, not only while the present ANC remains<0.5.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_PROLONGED_HISTORY",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "A documented ANC <0.5 episode lasting at least seven days requires one dose-level reduction after recovery (80 →65 →50 mg/m²), even if current ANC has recovered. Verify actual dose and recovery before restarting."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Both LVEFs supplied cannot silently clear the11-point fall",
+      "code": "00512",
+      "input": {
+        "lvef_percent": 49,
+        "baseline_lvef_percent": 60
+      },
+      "source_note": "Source conjugate criterion is knowable from both LVEFs; review is safe if arithmetic awaits explicit comparison.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "HER2_LVEF_REVIEW",
+          "action": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Complete transaminase context retains original-dose hepatic percentage",
+      "code": "00621",
+      "input": {
+        "alt_uln_multiple": 9,
+        "ast_uln_multiple": 1,
+        "bilirubin_uln_multiple": 2
+      },
+      "source_note": "00621Table3 percentage is conditional on the completed transaminase domain; a missing other transaminase is separately reviewed.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_HEP_60",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Source hepatic band is 75% of the ORIGINAL prescribed dose; 60 mg/m² applies to the standard starting schedule only. Reconcile the documented original and actual current dose; no automatic re-escalation after a prior reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Complete transaminase context retains original-dose hepatic percentage",
+      "code": "00621",
+      "input": {
+        "alt_uln_multiple": 9,
+        "ast_uln_multiple": 1,
+        "bilirubin_uln_multiple": 3
+      },
+      "source_note": "00621Table3 percentage is conditional on the completed transaminase domain; a missing other transaminase is separately reviewed.",
+      "actual": "consultant_review",
+      "findings": [
+        {
+          "id": "PAC_HEP_40",
+          "action": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "explanation": "Source hepatic band is 50% of the ORIGINAL prescribed dose; 40 mg/m² applies to the standard starting schedule only. Reconcile the documented original and actual current dose; no automatic re-escalation after a prior reduction."
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "Current NCCP source versions agree; existing stable identities remain code-correct",
+      "pass": true
+    },
+    {
+      "name": "00203 exact indication suffixes and disease mapping",
+      "pass": true
+    },
+    {
+      "name": "00621 exact indication suffixes, without copied00226 entries",
+      "pass": true
+    },
+    {
+      "name": "00621 days1,8,15 and week4 break",
+      "pass": true
+    },
+    {
+      "name": "00512 has combination and antibody-only completion",
+      "pass": true
+    }
+  ]
+}

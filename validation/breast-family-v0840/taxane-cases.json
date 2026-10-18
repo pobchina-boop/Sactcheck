@@ -1,0 +1,1023 @@
+{
+  "source": "Independent source-derived expectations; not generated from new application rules.",
+  "field_notes": {
+    "febrile_neutropenia": "boolean",
+    "symptomatic_heart_failure": "boolean",
+    "trastuzumab_hypersensitivity_grade": "integer0–4"
+  },
+  "harness_notes": [
+    "expected_action describes the clinical source outcome; allowed_actions lists semantically acceptable engine states where action names differ.",
+    "no_anc_delay, no_count_delay, no_renal_reduction and monitoring_only are negative assertions: forbidden_actions must not trigger for that domain. They do not assert overall treatment clearance.",
+    "expected_components are affected components, not permission to treat the others.",
+    "Dose wording matters: consider, original-versus-previous basis and review exceptions must be checked in output text."
+  ],
+  "cases": [
+    {
+      "code": "00202",
+      "input": {
+        "anc_x10e9_l": 1.49
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1: ANC below1.5 delay; singlevalue sufficient."
+    },
+    {
+      "code": "00202",
+      "input": {
+        "anc_x10e9_l": 0.4
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1/eligibility: severe lowANC cannot be unassessed solely because duration missing; duration refines reduction."
+    },
+    {
+      "code": "00202",
+      "input": {
+        "anc_x10e9_l": 1.5
+      },
+      "expected_action": "no_anc_delay",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1: ANC>=1.5 meets count threshold only; no whole-regimen clearance.",
+      "forbidden_actions": [
+        "delay"
+      ]
+    },
+    {
+      "code": "00202",
+      "input": {
+        "febrile_neutropenia": true
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1: FN reduction independent of current ANC/dose entry; acute illness may require hold before restart.",
+      "allowed_actions": [
+        "dose_reduce",
+        "delay_then_dose_reduce",
+        "withhold_then_reduce"
+      ]
+    },
+    {
+      "code": "00202",
+      "input": {
+        "anc_x10e9_l": 0.4,
+        "anc_below_0_5_days": 8
+      },
+      "expected_action": "delay_then_dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1: ANC<0.5 for >1week triggers reduction.",
+      "allowed_actions": [
+        "delay_then_dose_reduce",
+        "withhold_then_reduce",
+        "dose_reduce"
+      ]
+    },
+    {
+      "code": "00202",
+      "input": {
+        "bilirubin_uln_multiple": 1.51
+      },
+      "expected_action": "not_recommended",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: bilirubin>1.5 independently sufficient; no AST/ALP required.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "consultant_review"
+      ]
+    },
+    {
+      "code": "00202",
+      "input": {
+        "ast_uln_multiple": 10.01
+      },
+      "expected_action": "not_recommended",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: AST>10 independently sufficient.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "consultant_review"
+      ]
+    },
+    {
+      "code": "00202",
+      "input": {
+        "alp_uln_multiple": 6.01
+      },
+      "expected_action": "not_recommended",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: ALP>6 independently sufficient.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "consultant_review"
+      ]
+    },
+    {
+      "code": "00202",
+      "input": {
+        "bilirubin_uln_multiple": 1,
+        "ast_uln_multiple": 2,
+        "alp_uln_multiple": 3
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: complete75% conjunction; percentage originaldose, retain consider wording.",
+      "expected_dose_percent": 75
+    },
+    {
+      "code": "00202",
+      "input": {
+        "bilirubin_uln_multiple": 1.2,
+        "ast_uln_multiple": 6,
+        "alp_uln_multiple": 4
+      },
+      "expected_action": "consultant_review",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: ambiguous50% row; do not claim fully determinedautomaticdose."
+    },
+    {
+      "code": "00202",
+      "input": {
+        "alp_uln_multiple": 6
+      },
+      "expected_action": "consultant_review",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2 exact6 excludedfrom<6and>6, so explicitgapreview."
+    },
+    {
+      "code": "00203",
+      "input": {
+        "anc_x10e9_l": 1.49
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1: ANC below1.5 delay; singlevalue sufficient."
+    },
+    {
+      "code": "00203",
+      "input": {
+        "anc_x10e9_l": 0.4
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1/eligibility: severe lowANC cannot be unassessed solely because duration missing; duration refines reduction."
+    },
+    {
+      "code": "00203",
+      "input": {
+        "anc_x10e9_l": 1.5
+      },
+      "expected_action": "no_anc_delay",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1: ANC>=1.5 meets count threshold only; no whole-regimen clearance.",
+      "forbidden_actions": [
+        "delay"
+      ]
+    },
+    {
+      "code": "00203",
+      "input": {
+        "febrile_neutropenia": true
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1: FN reduction independent of current ANC/dose entry; acute illness may require hold before restart.",
+      "allowed_actions": [
+        "dose_reduce",
+        "delay_then_dose_reduce",
+        "withhold_then_reduce"
+      ]
+    },
+    {
+      "code": "00203",
+      "input": {
+        "anc_x10e9_l": 0.4,
+        "anc_below_0_5_days": 8
+      },
+      "expected_action": "delay_then_dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1: ANC<0.5 for >1week triggers reduction.",
+      "allowed_actions": [
+        "delay_then_dose_reduce",
+        "withhold_then_reduce",
+        "dose_reduce"
+      ]
+    },
+    {
+      "code": "00203",
+      "input": {
+        "bilirubin_uln_multiple": 1.51
+      },
+      "expected_action": "not_recommended",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: bilirubin>1.5 independently sufficient; no AST/ALP required.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "consultant_review"
+      ]
+    },
+    {
+      "code": "00203",
+      "input": {
+        "ast_uln_multiple": 10.01
+      },
+      "expected_action": "not_recommended",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: AST>10 independently sufficient.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "consultant_review"
+      ]
+    },
+    {
+      "code": "00203",
+      "input": {
+        "alp_uln_multiple": 6.01
+      },
+      "expected_action": "not_recommended",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: ALP>6 independently sufficient.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "consultant_review"
+      ]
+    },
+    {
+      "code": "00203",
+      "input": {
+        "bilirubin_uln_multiple": 1,
+        "ast_uln_multiple": 2,
+        "alp_uln_multiple": 3
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: complete75% conjunction; percentage originaldose, retain consider wording.",
+      "expected_dose_percent": 75
+    },
+    {
+      "code": "00203",
+      "input": {
+        "bilirubin_uln_multiple": 1.2,
+        "ast_uln_multiple": 6,
+        "alp_uln_multiple": 4
+      },
+      "expected_action": "consultant_review",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2: ambiguous50% row; do not claim fully determinedautomaticdose."
+    },
+    {
+      "code": "00203",
+      "input": {
+        "alp_uln_multiple": 6
+      },
+      "expected_action": "consultant_review",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table2 exact6 excludedfrom<6and>6, so explicitgapreview."
+    },
+    {
+      "code": "00202",
+      "input": {
+        "neuropathy_grade": 3,
+        "current_docetaxel_mg_m2": 100
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table3: merged skin/neuropathy action100→75, notdirect60.",
+      "expected_dose_mg_m2": 75
+    },
+    {
+      "code": "00202",
+      "input": {
+        "neuropathy_grade": 3,
+        "current_docetaxel_mg_m2": 75
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table3: neuropathy reduction75→60.",
+      "expected_dose_mg_m2": 60
+    },
+    {
+      "code": "00202",
+      "input": {
+        "stomatitis_grade": 3
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table3: grade3/4 stomatitis60mg/m².",
+      "expected_dose_mg_m2": 60
+    },
+    {
+      "code": "00203",
+      "input": {
+        "platelets_x10e9_l": 99
+      },
+      "expected_action": "monitoring_only",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "No publishedplatelet100dose threshold; do not invent one.",
+      "forbidden_actions": [
+        "delay",
+        "dose_reduce",
+        "contraindicated"
+      ]
+    },
+    {
+      "code": "00203",
+      "input": {
+        "neuropathy_grade": 3,
+        "current_docetaxel_mg_m2": 60
+      },
+      "expected_action": "discontinue",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table3: toxicitypersistsat60→discontinue."
+    },
+    {
+      "code": "00203",
+      "input": {
+        "febrile_neutropenia": true,
+        "current_docetaxel_mg_m2": 60
+      },
+      "expected_action": "discontinue",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p2 Table1: FNcontinuesatlowerdose→discontinue."
+    },
+    {
+      "code": "00250",
+      "input": {
+        "platelets_x10e9_l": 99
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "docetaxel",
+        "cyclophosphamide"
+      ],
+      "source_note": "p2 Table1: platelets<100 independentlytriggerdelay;75%afterrecovery.",
+      "expected_restart_percent": 75
+    },
+    {
+      "code": "00250",
+      "input": {
+        "anc_x10e9_l": 0.99
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "docetaxel",
+        "cyclophosphamide"
+      ],
+      "source_note": "p2 Table1: lowANC independentlyactionable; missingplateletsdoesnotblock."
+    },
+    {
+      "code": "00250",
+      "input": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 100
+      },
+      "expected_action": "no_count_delay",
+      "expected_components": [
+        "docetaxel",
+        "cyclophosphamide"
+      ],
+      "source_note": "p2 Table1: initialcountrow>=1and>=100; notoverallclearance.",
+      "forbidden_actions": [
+        "delay"
+      ]
+    },
+    {
+      "code": "00250",
+      "input": {
+        "fn_episode_count": 1,
+        "anc_x10e9_l": 1.1,
+        "platelets_x10e9_l": 101
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel",
+        "cyclophosphamide"
+      ],
+      "source_note": "p2 Table2: FNepisode-dependentoption; strict>1and>100recovery.",
+      "expected_dose_basis": "previous",
+      "expected_dose_percent": 75
+    },
+    {
+      "code": "00250",
+      "input": {
+        "fn_episode_count": 2,
+        "anc_x10e9_l": 1.1,
+        "platelets_x10e9_l": 101
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel",
+        "cyclophosphamide"
+      ],
+      "source_note": "p2 Table2: FNepisode-dependentoption; strict>1and>100recovery.",
+      "expected_dose_basis": "original",
+      "expected_dose_percent": 50
+    },
+    {
+      "code": "00250",
+      "input": {
+        "fn_episode_count": 3,
+        "anc_x10e9_l": 1.1,
+        "platelets_x10e9_l": 101
+      },
+      "expected_action": "discontinue",
+      "expected_components": [
+        "docetaxel",
+        "cyclophosphamide"
+      ],
+      "source_note": "p2 Table2: FNepisode-dependentoption; strict>1and>100recovery.",
+      "expected_dose_basis": null,
+      "expected_dose_percent": null
+    },
+    {
+      "code": "00250",
+      "input": {
+        "crcl_ml_min": 29
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "cyclophosphamide"
+      ],
+      "source_note": "p3 Table3: CrCl10–29 consider75%original.",
+      "expected_dose_percent": 75
+    },
+    {
+      "code": "00250",
+      "input": {
+        "crcl_ml_min": 30
+      },
+      "expected_action": "no_renal_reduction",
+      "expected_components": [
+        "cyclophosphamide"
+      ],
+      "source_note": "p3 Table3: CrCl>=30norenaladjustment.",
+      "forbidden_actions": [
+        "dose_reduce",
+        "contraindicated"
+      ]
+    },
+    {
+      "code": "00250",
+      "input": {
+        "crcl_ml_min": 9.9
+      },
+      "expected_action": "not_recommended",
+      "expected_components": [
+        "cyclophosphamide"
+      ],
+      "source_note": "p3 Table3: <10notrecommended;50%onlyifunavoidable.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "consultant_review"
+      ]
+    },
+    {
+      "code": "00250",
+      "input": {
+        "haemodialysis": true
+      },
+      "expected_action": "not_recommended",
+      "expected_components": [
+        "cyclophosphamide"
+      ],
+      "source_note": "p3 Table3: HDnotrecommended;50%onlyifunavoidable.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "consultant_review"
+      ]
+    },
+    {
+      "code": "00250",
+      "input": {
+        "assessment_stage": "baseline",
+        "neuropathy_grade": 2
+      },
+      "expected_action": "contraindicated",
+      "expected_components": [
+        "docetaxel",
+        "cyclophosphamide"
+      ],
+      "source_note": "p1 exclusions: baselinegrade>=2neuropathy."
+    },
+    {
+      "code": "00250",
+      "input": {
+        "stomatitis_grade": 3,
+        "current_docetaxel_mg_m2": 75
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "docetaxel"
+      ],
+      "source_note": "p3 Table4: docetaxel60; noautomaticcyclophosphamidemodification.",
+      "expected_dose_mg_m2": 60
+    },
+    {
+      "code": "00512",
+      "input": {
+        "anc_x10e9_l": 0.99
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "PaclitaxelhaematologyTable2; singlevaluewithoutcycle/dose sufficient."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "platelets_x10e9_l": 89
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Table2platelets70–90delay; nottrastuzumabautomatic hold."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 90,
+        "assessment_stage": "ongoing"
+      },
+      "expected_action": "no_count_delay",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Table2explicit>=90fullrow; exact90overlapresolvedthroughfullrow.",
+      "forbidden_actions": [
+        "delay"
+      ]
+    },
+    {
+      "code": "00512",
+      "input": {
+        "platelets_x10e9_l": 69
+      },
+      "expected_action": "delay_then_dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Table2PLT<70delayandonelevelreductionadvice; currentdoseoptional.",
+      "allowed_actions": [
+        "delay_then_dose_reduce",
+        "withhold_then_reduce",
+        "delay"
+      ]
+    },
+    {
+      "code": "00512",
+      "input": {
+        "febrile_neutropenia": true
+      },
+      "expected_action": "delay_then_dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Table2FNsharesmergeddelay/reductioncell; considerGCSF; doseoptional.",
+      "allowed_actions": [
+        "delay_then_dose_reduce",
+        "withhold_then_reduce",
+        "delay"
+      ]
+    },
+    {
+      "code": "00512",
+      "input": {
+        "neuropathy_grade": 2
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "ToxicityTable4: singlegrade2inputmustyield10mg/m²decrementadvice.",
+      "expected_dose_change_mg_m2": -10
+    },
+    {
+      "code": "00512",
+      "input": {
+        "neuropathy_grade": 3
+      },
+      "expected_action": "discontinue",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "ToxicityTable4: >=grade3reactiondiscontinue."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "other_nonhaem_toxicity_grade": 2
+      },
+      "expected_action": "withhold_then_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "ToxicityTable4: holduntil<=1andreduce10; nohistoryrequirement.",
+      "allowed_actions": [
+        "withhold_then_reduce",
+        "withhold",
+        "delay"
+      ]
+    },
+    {
+      "code": "00512",
+      "input": {
+        "alt_uln_multiple": 10
+      },
+      "expected_action": "contraindicated",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "HepaticTable3: >=10 independently sufficient."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "bilirubin_uln_multiple": 5.01
+      },
+      "expected_action": "contraindicated",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "HepaticTable3: bilirubin>5 independently sufficient."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "alt_uln_multiple": 9,
+        "bilirubin_uln_multiple": 2
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "HepaticTable3:1.26–2→75%original.",
+      "expected_dose_percent": 75
+    },
+    {
+      "code": "00512",
+      "input": {
+        "alt_uln_multiple": 9,
+        "bilirubin_uln_multiple": 2.01
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "HepaticTable3:2.01–5→50%original.",
+      "expected_dose_percent": 50
+    },
+    {
+      "code": "00512",
+      "input": {
+        "assessment_stage": "baseline",
+        "anc_x10e9_l": 1.49
+      },
+      "expected_action": "contraindicated",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Exclusions: baselineANC<1.5,distinctfromon-treatment1.0.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "delay"
+      ]
+    },
+    {
+      "code": "00621",
+      "input": {
+        "anc_x10e9_l": 0.99
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "PaclitaxelhaematologyTable2; singlevaluewithoutcycle/dose sufficient."
+    },
+    {
+      "code": "00621",
+      "input": {
+        "platelets_x10e9_l": 89
+      },
+      "expected_action": "delay",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Table2platelets70–90delay; nottrastuzumabautomatic hold."
+    },
+    {
+      "code": "00621",
+      "input": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 90,
+        "assessment_stage": "ongoing"
+      },
+      "expected_action": "no_count_delay",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Table2explicit>=90fullrow; exact90overlapresolvedthroughfullrow.",
+      "forbidden_actions": [
+        "delay"
+      ]
+    },
+    {
+      "code": "00621",
+      "input": {
+        "platelets_x10e9_l": 69
+      },
+      "expected_action": "delay_then_dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Table2PLT<70delayandonelevelreductionadvice; currentdoseoptional.",
+      "allowed_actions": [
+        "delay_then_dose_reduce",
+        "withhold_then_reduce",
+        "delay"
+      ]
+    },
+    {
+      "code": "00621",
+      "input": {
+        "febrile_neutropenia": true
+      },
+      "expected_action": "delay_then_dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Table2FNsharesmergeddelay/reductioncell; considerGCSF; doseoptional.",
+      "allowed_actions": [
+        "delay_then_dose_reduce",
+        "withhold_then_reduce",
+        "delay"
+      ]
+    },
+    {
+      "code": "00621",
+      "input": {
+        "neuropathy_grade": 2
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "ToxicityTable4: singlegrade2inputmustyield10mg/m²decrementadvice.",
+      "expected_dose_change_mg_m2": -10
+    },
+    {
+      "code": "00621",
+      "input": {
+        "neuropathy_grade": 3
+      },
+      "expected_action": "discontinue",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "ToxicityTable4: >=grade3reactiondiscontinue."
+    },
+    {
+      "code": "00621",
+      "input": {
+        "other_nonhaem_toxicity_grade": 2
+      },
+      "expected_action": "withhold_then_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "ToxicityTable4: holduntil<=1andreduce10; nohistoryrequirement.",
+      "allowed_actions": [
+        "withhold_then_reduce",
+        "withhold",
+        "delay"
+      ]
+    },
+    {
+      "code": "00621",
+      "input": {
+        "alt_uln_multiple": 10
+      },
+      "expected_action": "contraindicated",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "HepaticTable3: >=10 independently sufficient."
+    },
+    {
+      "code": "00621",
+      "input": {
+        "bilirubin_uln_multiple": 5.01
+      },
+      "expected_action": "contraindicated",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "HepaticTable3: bilirubin>5 independently sufficient."
+    },
+    {
+      "code": "00621",
+      "input": {
+        "alt_uln_multiple": 9,
+        "bilirubin_uln_multiple": 2
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "HepaticTable3:1.26–2→75%original.",
+      "expected_dose_percent": 75
+    },
+    {
+      "code": "00621",
+      "input": {
+        "alt_uln_multiple": 9,
+        "bilirubin_uln_multiple": 2.01
+      },
+      "expected_action": "dose_reduce",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "HepaticTable3:2.01–5→50%original.",
+      "expected_dose_percent": 50
+    },
+    {
+      "code": "00621",
+      "input": {
+        "assessment_stage": "baseline",
+        "anc_x10e9_l": 1.49
+      },
+      "expected_action": "contraindicated",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Exclusions: baselineANC<1.5,distinctfromon-treatment1.0.",
+      "allowed_actions": [
+        "contraindicated",
+        "withhold",
+        "delay"
+      ]
+    },
+    {
+      "code": "00621",
+      "input": {
+        "ast_uln_multiple": 10,
+        "alt_uln_multiple": 1
+      },
+      "expected_action": "contraindicated",
+      "expected_components": [
+        "paclitaxel"
+      ],
+      "source_note": "Table3usestransaminases: ASTabnormalitymustnotbemissedbyALT-onlyimplementation."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "lvef_percent": 49,
+        "lvef_drop_points": 10
+      },
+      "expected_action": "withhold",
+      "expected_components": [
+        "trastuzumab"
+      ],
+      "source_note": "p4Table5: conjunctivecriterionmet;repeatLVEF3weeks."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "lvef_percent": 49,
+        "lvef_drop_points": 9
+      },
+      "expected_action": "consultant_review",
+      "expected_components": [
+        "trastuzumab"
+      ],
+      "source_note": "p4Table5: conjunctionnotmet;lowLVEFstillconcerning,review,notfalsedefinitivehold."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "lvef_percent": 55,
+        "lvef_drop_points": 10
+      },
+      "expected_action": "consultant_review",
+      "expected_components": [
+        "trastuzumab"
+      ],
+      "source_note": "p4Table5: declinealoneinsufficientforthecombinedholdrule;review."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "lvef_percent": 49
+      },
+      "expected_action": "consultant_review",
+      "expected_components": [
+        "trastuzumab"
+      ],
+      "source_note": "Missingbaselinecomparison; partialcardiacreviewmustnotdisappear."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "assessment_stage": "baseline",
+        "baseline_lvef_percent": 52
+      },
+      "expected_action": "consultant_review",
+      "expected_components": [
+        "trastuzumab"
+      ],
+      "source_note": "p2eligibilityLVEF>55;50–55clinicaljudgement."
+    },
+    {
+      "code": "00512",
+      "input": {
+        "symptomatic_heart_failure": true
+      },
+      "expected_action": "consultant_review",
+      "expected_components": [
+        "trastuzumab"
+      ],
+      "source_note": "p4Table5considerdiscontinuation/cardiology,clinicaldecision.",
+      "allowed_actions": [
+        "consultant_review",
+        "withhold"
+      ]
+    },
+    {
+      "code": "00512",
+      "input": {
+        "trastuzumab_hypersensitivity_grade": 4
+      },
+      "expected_action": "discontinue",
+      "expected_components": [
+        "trastuzumab"
+      ],
+      "source_note": "p4Table5grade4hypersensitivitydiscontinue."
+    }
+  ]
+}

@@ -35,11 +35,11 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6541/202_v7_Docetaxel_100_21_day.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+    "basis": "Locally advanced or metastatic breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00204": {
     "code": "00204",
@@ -50,9 +50,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6545/204_v11_PertuzumabTrasDoc.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive metastatic or unresectable locally recurrent breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00206": {
     "code": "00206",
@@ -100,11 +100,11 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6353/250_DOCEtaxel-cycloPHOS_TC.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Adjuvant high-risk node-positive or node-negative operable breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00252": {
     "code": "00252",
@@ -113,11 +113,11 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Adjuvant breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00253": {
     "code": "00253",
@@ -156,9 +156,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6362/258_v9_TCH.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive adjuvant breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00260": {
     "code": "00260",
@@ -168,11 +168,11 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6364/260_v7_AC-T.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "neoadjuvant or adjuvant high-risk breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00262": {
     "code": "00262",
@@ -249,11 +249,11 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6696/278_v7_Dose_DenseAC-T_Pacli_14_day.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "neoadjuvant or adjuvant high-risk breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00285": {
     "code": "00285",
@@ -280,9 +280,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6717/316_v6_Dose_Dense_AC-TH.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00322": {
     "code": "00322",
@@ -458,9 +458,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6470/432_v5_AC-TH_weekly.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00433": {
     "code": "00433",
@@ -472,9 +472,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6471/433_v6_Dose_Dense_AC-TH_Weekly.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00485": {
     "code": "00485",
@@ -499,9 +499,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive metastatic or unresectable locally recurrent breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00512": {
     "code": "00512",
@@ -512,9 +512,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Adjuvant HER2-positive, node-negative breast cancer with tumour ≤3 cm; receptor eligibility and full indication require clinical confirmation"
   },
   "00525": {
     "code": "00525",
@@ -657,9 +657,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive neoadjuvant breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00734": {
     "code": "00734",
@@ -723,9 +723,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6624/745_v2a_DDAC_TH_21_day.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer; receptor eligibility and full indication require clinical confirmation"
   },
   "00749": {
     "code": "00749",
@@ -975,11 +975,11 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6543/203_DOCEtaxel_75-21day.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Source-defined breast, lung, gastric, gynaecological and castration-sensitive prostate cancer (including high-risk nonmetastatic prostate disease); receptor eligibility and full indication require clinical confirmation"
   },
   "00226": {
     "code": "00226",
@@ -1001,11 +1001,11 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6688/621_V3_Paclitaxel_80.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6854/621_V3_Paclitaxel_80_zanF78k.pdf",
+    "basis": "Source-defined advanced gastric, breast, ovarian, small-cell lung or bladder indications; receptor eligibility and full indication require clinical confirmation"
   },
   "00251": {
     "code": "00251",
@@ -1116,7 +1116,7 @@ const ids=['breastSetting','breastReceptor','breastSuite'];
 const val=id=>root.document?.getElementById(id)?.value||'all';
 function codeForCard(card){return (card.dataset.jsonProtocolId||'').match(/nccp-(\d{5})-/)?.[1]||'';}
 function sync(tumour,domain){const panel=root.document?.getElementById('breastLibraryFilters');if(panel)panel.hidden=tumour!=='Breast'||domain==='haem';}
-function matchesReceptor(d,receptor){return receptor==='all'||d.receptors.includes(receptor)||(receptor==='hrpos-her2pos'&&d.receptors.includes('her2pos'));}
+function matchesReceptor(d,receptor){return receptor==='all'||d.receptors.includes('any')||d.receptors.includes(receptor)||(receptor==='hrpos-her2pos'&&d.receptors.includes('her2pos'));}
 function matchesCard(card,tumour,domain){if(tumour!=='Breast'||domain==='haem')return true;const active=ids.some(id=>val(id)!=='all');if(!active)return true;const d=regimens[codeForCard(card)];if(!d||!(card.dataset.tumour||'').split(',').includes('Breast'))return false;return (val('breastSetting')==='all'||d.settings.includes(val('breastSetting')))&&matchesReceptor(d,val('breastReceptor'))&&(val('breastSuite')==='all'||d.longitudinal);}
 function init(){for(const id of ids)root.document.getElementById(id)?.addEventListener('change',()=>root.filterRegimens?.());root.document.getElementById('clearBreastFilters')?.addEventListener('click',()=>{ids.forEach(id=>{const e=root.document.getElementById(id);if(e)e.value='all';});root.filterRegimens?.();});}
 root.SACTCheckBreastLibrary=Object.freeze({version:'0.83.7',regimens,sync,matchesReceptor,matchesCard,codeForCard});

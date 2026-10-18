@@ -2,21 +2,20 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00202-v7",
   "file_name": "00202-docetaxel-100-21-day.json",
-  "status": "source_reconciled_rule_encoding_pending_independent_validation",
+  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00202",
-    "nccp_version": "7",
+    "nccp_version": "8",
     "tumour_group": "Breast",
     "title": "Docetaxel Monotherapy 100 mg/m² – 21 day",
     "short_title": "Docetaxel 100",
-    "indication": "Locally advanced or metastatic breast cancer.",
+    "indication": "Locally advanced or metastatic breast cancer",
     "icd10": "C50",
-    "source_document_pages": 7,
-    "source_url": "https://healthservice.hse.ie/documents/6541/202_v7_Docetaxel_100_21_day.pdf",
-    "sactcheck_encoding_version": "0.68.0",
+    "source_document_pages": 5,
+    "source_url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+    "sactcheck_encoding_version": "0.84.0",
     "treatment_setting": [
-      "locally_advanced",
-      "metastatic"
+      "advanced"
     ],
     "catalog": {
       "enabled": true
@@ -26,7 +25,7 @@
     },
     "validation": {
       "source_document_checked": true,
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
@@ -57,19 +56,41 @@
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
-    "source_checked_date": "2026-08-15",
+    "source_checked_date": "2026-10-17",
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
       "source_reconciled": true,
+      "reconciled_release": "0.84.0",
+      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "reconciled_release": "0.68.0",
-      "reconciled_date": "2026-08-15",
-      "scope_note": "Rebuilt against NCCP 00202 Version 7 with ANC, renal uncertainty, hepatic and adverse event pathways. Platelets remain visible for monitoring but no unsupported platelet dose rule is encoded."
+      "clinical_use_authorised": false
     },
-    "canonical_protocol_id": "nccp-00202-v7"
+    "canonical_protocol_id": "nccp-00202-v7",
+    "source_version_verified_date": "2026-10-17",
+    "audit_limitations": [
+      "Source hepatic / boundary ambiguities are explicit review actions.",
+      "Independent clinical and pharmacy validation pending.",
+      "Educational / software source reconciliation is not consultant, pharmacy or clinical-use authorisation."
+    ],
+    "audited_eligibility": [
+      "ECOG0–2",
+      "Appropriate source indication"
+    ],
+    "source_monitoring": {
+      "baseline": [
+        "FBC",
+        "renal profile",
+        "liver profile"
+      ],
+      "ongoing": [
+        "FBC, renal and liver profile before each21-day cycle"
+      ],
+      "imaging": "Response assessment per disease and consultant plan; no fixed CT interval or routine echo/ECG/DXA specified in these monotherapy regimens."
+    },
+    "support_source_page": 0,
+    "schedule_summary": "Docetaxel 100 mg/m² by IV infusion on Day 1 every 21 days, with dose changes when needed. The number of cycles follows benefit, tolerance and the agreed treatment plan."
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -80,452 +101,1266 @@
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
       "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
       "unit": "×10⁹/L",
-      "demo_value": 2
+      "always_show": true,
+      "input_role": "decision"
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "step": 1,
-      "always_show": true,
-      "input_role": "monitoring",
+      "step": 0.01,
       "unit": "×10⁹/L",
-      "demo_value": 200
+      "always_show": true,
+      "input_role": "monitoring"
     },
-    "hb_g_dl": {
-      "label": "Haemoglobin",
+    "treatment_phase": {
+      "label": "Current phase",
+      "type": "select",
+      "demo_value": "combination",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "combination",
+          "label": "Chemotherapy / combination"
+        }
+      ]
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "demo_value": "baseline",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before starting"
+        },
+        {
+          "value": "ongoing",
+          "label": "During treatment"
+        }
+      ]
+    },
+    "ecog": {
+      "label": "ECOG performance status",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "step": 0.1,
+      "step": 0.01,
+      "unit": "",
       "always_show": true,
-      "input_role": "monitoring",
-      "unit": "g/dL",
-      "demo_value": 12
+      "input_role": "decision",
+      "max": 4
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "alt_uln_multiple": {
+      "label": "ALT / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "ast_uln_multiple": {
+      "label": "AST / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "alp_uln_multiple": {
+      "label": "ALP / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / ULN",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (not indexed eGFR)",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "always_show": true,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true,
+        "reason": "Retain exact measured creatinine clearance so decimal gaps between the source bands are surfaced for review rather than rounded into a dose band."
+      }
+    },
+    "anc_below_0_5_days": {
+      "label": "Duration of ANC below 0.5",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia",
       "type": "boolean",
+      "demo_value": false,
       "required": false,
       "always_show": true,
-      "input_role": "decision",
-      "demo_value": false
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "indication_eligible": {
+      "label": "Full NCCP indication / prior-treatment criteria confirmed",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
       "type": "select",
+      "demo_value": 0,
       "required": false,
+      "always_show": true,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         }
       ],
-      "always_show": true,
-      "input_role": "decision",
       "unit": "CTCAE grade",
       "ctcae_version": "5.0",
-      "demo_value": 0,
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "ctcae_category": "neuropathy",
-      "assessment_guidance": "Assess sensory and motor symptoms, gait, dexterity and impact on instrumental or self care activities."
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
     },
-    "anc_below_0_5_more_than_7_days": {
-      "label": "ANC below 0.5 ×10⁹/L for more than 7 days",
-      "type": "boolean",
-      "required": false,
-      "always_show": true,
-      "input_role": "decision",
-      "demo_value": false
-    },
-    "renal_impairment_severity": {
-      "label": "Renal impairment severity",
+    "other_nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity",
       "type": "select",
+      "demo_value": 0,
       "required": false,
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "mild",
-          "label": "Mild"
-        },
-        {
-          "value": "moderate",
-          "label": "Moderate"
-        },
-        {
-          "value": "severe",
-          "label": "Severe"
-        }
-      ],
       "always_show": true,
       "input_role": "decision",
-      "demo_value": "none"
-    },
-    "alp_uln_multiple": {
-      "label": "ALP multiple of ULN",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "× ULN",
-      "demo_value": 1
-    },
-    "ast_alt_uln_multiple": {
-      "label": "Highest AST or ALT multiple of ULN",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "× ULN",
-      "demo_value": 1
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin multiple of ULN",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "× ULN",
-      "demo_value": 1
-    },
-    "skin_reaction_grade": {
-      "label": "Skin reaction grade",
-      "type": "select",
-      "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         }
       ],
-      "always_show": true,
-      "input_role": "decision",
       "unit": "CTCAE grade",
       "ctcae_version": "5.0",
-      "demo_value": 0,
-      "ctcae_category": "cutaneous",
-      "assessment_guidance": "Use the most specific CTCAE skin term available and assess body surface area, symptoms, mucosal or systemic involvement and functional impact."
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
     },
     "stomatitis_grade": {
-      "label": "Stomatitis grade",
+      "label": "Stomatitis",
       "type": "select",
+      "demo_value": 0,
       "required": false,
+      "always_show": true,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
         }
       ],
-      "always_show": true,
-      "input_role": "decision",
       "unit": "CTCAE grade",
       "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "skin_grade": {
+      "label": "Skin toxicity",
+      "type": "select",
       "demo_value": 0,
-      "ctcae_category": "mucositis",
-      "assessment_guidance": "Assess pain, ulceration, oral intake and nutritional consequences."
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Grade 0 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Grade 1 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Grade 2 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Grade 3 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 — use the linked CTCAE descriptor for this toxicity and assess functional impact."
+        }
+      ],
+      "unit": "CTCAE grade",
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "current_docetaxel_mg_m2": {
+      "label": "Actual current docetaxel dose",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "toxicity_persists_at_reduced_dose": {
+      "label": "This toxicity persists / recurs at the reduced dose",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
-  "assessment_profiles": [
-    {
-      "id": "default",
-      "label": "Rapid partial assessment",
-      "required_inputs": [],
-      "context": {}
-    }
-  ],
   "output_templates": {
-    "proceed": "Entered values meet an encoded treatment threshold for the assessed component(s).",
-    "delay": "Entered values trigger an encoded delay threshold. Reassess according to the NCCP protocol.",
-    "dose_reduce": "An encoded dose-modification threshold is triggered. Consultant review is required.",
-    "consultant_review": "The entered result lies in a phase-dependent or non-deterministic range. Confirm the treatment phase and review the official NCCP protocol."
+    "proceed": "No encoded action was triggered by the supplied values. Unassessed domains and the full prescribing review remain outstanding.",
+    "coverage_gap": "Only entered values were assessed. Missing phase, history or results are not assumed normal.",
+    "consultant_review": "Review the component-specific findings and source uncertainty before treatment.",
+    "contraindicated": "Do not administer the affected component(s); review the findings and exact regimen context.",
+    "discontinue": "Discontinue the affected component(s) identified below and obtain treating-clinician review.",
+    "withhold": "Withhold the affected component(s) and assess the reported problem.",
+    "delay": "Delay the affected component(s) pending source-defined recovery and review.",
+    "dose_reduce": "A component-specific dose modification applies; verify the original and current doses before prescribing."
   },
   "rule_engine": {
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "DOC202_ANC_LT1_5",
+        "rule_id": "ALLERGY",
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1.5
-        },
-        "action": {
-          "type": "delay",
-          "message": "ANC below 1.5 ×10⁹/L: delay docetaxel until recovery.",
-          "components": [
-            "docetaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 2, Table 1"
-        },
-        "explanation": "ANC below 1.5 ×10⁹/L: delay docetaxel until recovery."
-      },
-      {
-        "id": "DOC202_FN",
-        "when": {
-          "field": "febrile_neutropenia",
+          "field": "hypersensitivity",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "dose_reduce",
-          "message": "Febrile neutropenia: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable.",
+          "type": "contraindicated",
           "components": [
             "docetaxel"
-          ]
+          ],
+          "recommendation": "Relevant drug / excipient allergy: do not administer; identify the responsible drug."
         },
+        "explanation": "Relevant drug / excipient allergy: do not administer; identify the responsible drug.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 2, Table 1"
-        },
-        "explanation": "Febrile neutropenia: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable."
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 2
+        }
       },
       {
-        "id": "DOC202_PROLONGED_SEVERE_NEUTROPENIA",
+        "rule_id": "INDICATION",
         "when": {
-          "field": "anc_below_0_5_more_than_7_days",
+          "field": "indication_eligible",
           "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "ANC below 0.5 ×10⁹/L for more than one week: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable.",
-          "components": [
-            "docetaxel"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 2, Table 1"
-        },
-        "explanation": "ANC below 0.5 ×10⁹/L for more than one week: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable."
-      },
-      {
-        "id": "DOC202_SEVERE_RENAL",
-        "when": {
-          "field": "renal_impairment_severity",
-          "operator": "==",
-          "value": "severe"
+          "value": false
         },
         "action": {
           "type": "consultant_review",
-          "message": "Severe renal impairment: the NCCP source states that data are unavailable. Review with the Consultant and oncology pharmacy.",
           "components": [
             "docetaxel"
-          ]
+          ],
+          "recommendation": "Full NCCP indication or prior-treatment criteria are not confirmed. Review regimen selection.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Full NCCP indication or prior-treatment criteria are not confirmed. Review regimen selection.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 2"
-        },
-        "explanation": "Severe renal impairment: the NCCP source states that data are unavailable. Review with the Consultant and oncology pharmacy."
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 1
+        }
       },
       {
-        "id": "DOC202_HEPATIC_75",
+        "rule_id": "ECOG",
         "when": {
-          "all": [
-            {
-              "field": "alp_uln_multiple",
-              "operator": ">",
-              "value": 2.5
-            },
-            {
-              "field": "ast_alt_uln_multiple",
-              "operator": ">",
-              "value": 1.5
-            }
-          ]
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
         },
         "action": {
-          "type": "dose_reduce",
-          "message": "ALP above 2.5 × ULN with AST or ALT above 1.5 × ULN: use docetaxel 75 mg/m² in the encoded NCCP pathway.",
+          "type": "consultant_review",
           "components": [
             "docetaxel"
-          ]
+          ],
+          "recommendation": "Outside the source performance-status population; consultant review required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Outside the source performance-status population; consultant review required.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 2"
-        },
-        "explanation": "ALP above 2.5 × ULN with AST or ALT above 1.5 × ULN: use docetaxel 75 mg/m² in the encoded NCCP pathway."
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 2
+        }
       },
       {
-        "id": "DOC202_HEPATIC_STOP",
+        "rule_id": "PREGNANCY_REVIEW",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Pregnancy requires urgent specialist risk-benefit review before administration; the source-specific exclusions and medicine information must be checked.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Pregnancy requires urgent specialist risk-benefit review before administration; the source-specific exclusions and medicine information must be checked.",
+        "source": {
+          "document": "Clinical safety review prompt; not an encoded NCCP pregnancy dose table",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "LACTATION_REVIEW",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "This is an explicit NCCP exclusion. Do not administer before specialist review of an alternative treatment plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "This is an explicit NCCP exclusion. Do not administer before specialist review of an alternative treatment plan.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BASELINE_ANC",
         "when": {
           "all": [
             {
               "any": [
                 {
-                  "field": "alp_uln_multiple",
-                  "operator": ">",
-                  "value": 6
+                  "field": "treatment_phase",
+                  "operator": "missing"
                 },
                 {
-                  "field": "ast_alt_uln_multiple",
-                  "operator": ">",
-                  "value": 3.5
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
                 }
               ]
             },
             {
-              "field": "bilirubin_uln_multiple",
+              "all": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Below the source baseline ANC inclusion / exclusion threshold. Ongoing count rules are separate."
+        },
+        "explanation": "Below the source baseline ANC inclusion / exclusion threshold. Ongoing count rules are separate.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOC_HEP_STOP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 10
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">",
+                  "value": 10
+                },
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 6
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold."
+        },
+        "explanation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_HEP_AMBIGUITY",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                },
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_NEURO",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "neuropathy_grade",
               "operator": ">",
-              "value": 1
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Source ladder for neuropathy is 100 →75 →60 mg/m²; stomatitis grade 3/4 reduces to 60 mg/m².",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source ladder for neuropathy is 100 →75 →60 mg/m²; stomatitis grade 3/4 reduces to 60 mg/m².",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_NEURO_100",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "current_docetaxel_mg_m2",
+                  "operator": "==",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Reduce docetaxel from 100 to 75 mg/m² for this toxicity after clinical review.",
+          "dose": {
+            "value": 75,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Reduce docetaxel from 100 to 75 mg/m² for this toxicity after clinical review.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_NEURO_75",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "current_docetaxel_mg_m2",
+                  "operator": "==",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Reduce docetaxel from 75 to 60 mg/m² for this toxicity after clinical review.",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Reduce docetaxel from 75 to 60 mg/m² for this toxicity after clinical review.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_NEURO_PERSISTENT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "current_docetaxel_mg_m2",
+                  "operator": "==",
+                  "value": 60
+                },
+                {
+                  "field": "toxicity_persists_at_reduced_dose",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Persistent neuropathy at 60 mg/m²: source supplies no further numeric reduction / cessation row here. Obtain consultant review; do not borrow another regimen’s stop rule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Persistent neuropathy at 60 mg/m²: source supplies no further numeric reduction / cessation row here. Obtain consultant review; do not borrow another regimen’s stop rule.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_MOUTH_60",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "stomatitis_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Grade 3/4 stomatitis: docetaxel 60 mg/m² in the source table; review current dose and recovery.",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Grade 3/4 stomatitis: docetaxel 60 mg/m² in the source table; review current dose and recovery.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_SKIN",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "skin_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Severe skin toxicity requires source-specific review. Grade-3 source rows and current dose determine reduction; do not extrapolate an unqualified grade-4 percentage.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe skin toxicity requires source-specific review. Grade-3 source rows and current dose determine reduction; do not extrapolate an unqualified grade-4 percentage.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_ANC_LOW",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction."
+        },
+        "explanation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOC_FN_REDUCTION",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "febrile_neutropenia",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": "<",
+                      "value": 0.5
+                    },
+                    {
+                      "field": "anc_below_0_5_days",
+                      "operator": ">",
+                      "value": 7
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
         "action": {
           "type": "withhold",
-          "message": "Marked hepatic dysfunction with bilirubin above ULN: stop docetaxel unless strictly indicated and discuss with a Consultant.",
           "components": [
             "docetaxel"
-          ]
+          ],
+          "recommendation": "Treat the acute event and confirm recovery. Subsequent source ladder is 100 →75 →60 mg/m²."
         },
+        "explanation": "Treat the acute event and confirm recovery. Subsequent source ladder is 100 →75 →60 mg/m².",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 2"
-        },
-        "explanation": "Marked hepatic dysfunction with bilirubin above ULN: stop docetaxel unless strictly indicated and discuss with a Consultant.",
-        "priority": 96
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 2
+        }
       },
       {
-        "id": "DOC202_SKIN_G3",
+        "rule_id": "SEVERE_HEPATIC_EXCLUSION",
         "when": {
-          "field": "skin_reaction_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "Grade 3 skin reaction: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable.",
-          "components": [
-            "docetaxel"
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "severe_hepatic_impairment",
+              "operator": "==",
+              "value": true
+            }
           ]
         },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 3"
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review the exact component and any HER2-only plan separately."
         },
-        "explanation": "Grade 3 skin reaction: reduce docetaxel from 100 to 75 mg/m², and from 75 to 60 mg/m² where applicable."
+        "explanation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review the exact component and any HER2-only plan separately.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 2
+        }
       },
       {
-        "id": "DOC202_NEURO_GT2",
+        "rule_id": "DOC_PROLONGED_HISTORY",
         "when": {
-          "field": "neuropathy_grade",
-          "operator": ">",
-          "value": 2
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "Peripheral neuropathy above grade 2: decrease docetaxel to 60 mg/m².",
-          "components": [
-            "docetaxel"
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "anc_below_0_5_days",
+              "operator": ">",
+              "value": 7
+            }
           ]
         },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 3"
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "A documented ANC <0.5 episode lasting more than one week affects the subsequent dose even after counts recover: source ladder 100 →75 →60 mg/m². Confirm recovery and actual dose before restarting.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
-        "explanation": "Peripheral neuropathy above grade 2: decrease docetaxel to 60 mg/m²."
+        "explanation": "A documented ANC <0.5 episode lasting more than one week affects the subsequent dose even after counts recover: source ladder 100 →75 →60 mg/m². Confirm recovery and actual dose before restarting.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 2
+        }
       },
       {
-        "id": "DOC202_STOMATITIS_G3",
+        "rule_id": "DOC_CURRENT_DOSE_RECONCILE",
         "when": {
-          "field": "stomatitis_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "Grade 3 or 4 stomatitis: decrease docetaxel to 60 mg/m².",
-          "components": [
-            "docetaxel"
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "current_docetaxel_mg_m2",
+                  "operator": "<",
+                  "value": 60
+                },
+                {
+                  "any": [
+                    {
+                      "field": "stomatitis_grade",
+                      "operator": ">=",
+                      "value": 3
+                    },
+                    {
+                      "field": "neuropathy_grade",
+                      "operator": ">",
+                      "value": 2
+                    },
+                    {
+                      "field": "skin_grade",
+                      "operator": ">=",
+                      "value": 3
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 3"
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "The actual current docetaxel dose is already below the source reference dose. Do not re-escalate automatically; reconcile previous reductions and the next action with oncology / pharmacy.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
-        "explanation": "Grade 3 or 4 stomatitis: decrease docetaxel to 60 mg/m²."
+        "explanation": "The actual current docetaxel dose is already below the source reference dose. Do not re-escalate automatically; reconcile previous reductions and the next action with oncology / pharmacy.",
+        "source": {
+          "document": "NCCP 00202 v8",
+          "url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+          "page": 3
+        }
       }
+    ],
+    "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase.",
+    "actions_ranked_most_to_least_restrictive": [
+      "permanently_discontinue",
+      "contraindicated",
+      "discontinue",
+      "cease",
+      "omit",
+      "withhold_then_reduce",
+      "delay_then_dose_reduce",
+      "withhold",
+      "delay",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
+      "dose_reduce",
+      "consultant_review",
+      "proceed_with_caution",
+      "proceed"
     ]
   },
   "supportive_care": {
     "emetogenic_risk": "low",
-    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
-    "script_id": "nccp-parenteral-low",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "mapping_source": "NCCP regimen and antiemetic classification; phase-specific source review v0.84.0",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Highest active parenteral component is low emetogenic risk in NCCP V6 Table 7.",
+    "mapping_basis": "AC: high; taxane: low; TC: moderate; carboplatin AUC 6 combination: high; HER2-only continuation: minimal. Use only the active phase.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
-    "breakthrough_profile_id": "nccp-breakthrough-general"
-  }
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "summary": "See the phase-specific drafts in patient/00202/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
+    "script_id": "nccp-parenteral-low",
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "combination",
+      "name": "Docetaxel 100 mg/m² · every 3 weeks",
+      "label": "Docetaxel 100 mg/m² · every 3 weeks",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "docetaxel",
+          "dose": {
+            "value": 100,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV infusion",
+          "notes": ""
+        }
+      ]
+    }
+  ],
+  "indications": [
+    {
+      "code": "00202a",
+      "description": "Locally advanced or metastatic breast cancer",
+      "tumour_groups": [
+        "Breast"
+      ],
+      "indication_id": "00202a",
+      "reimbursement_codes": [
+        "00202a"
+      ]
+    }
+  ]
 }
