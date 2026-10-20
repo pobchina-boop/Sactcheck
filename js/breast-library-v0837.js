@@ -798,9 +798,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6659/785_v3_Pertuzumab_trastuzumab_Phesgo.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Completed the chemotherapy component of dual HER2 treatment for metastatic or locally recurrent unresectable disease."
   },
   "00789": {
     "code": "00789",
@@ -811,9 +811,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6447/789_v3_TCHP_Phesgo.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive early, locally advanced or inflammatory breast cancer at high risk of recurrence, receiving neoadjuvant treatment."
   },
   "00790": {
     "code": "00790",
@@ -824,9 +824,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6442/790_v3_Phesgo_PACLitaxel_CARBOplatin.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive early, locally advanced or inflammatory breast cancer at high risk of recurrence, receiving neoadjuvant treatment."
   },
   "00794": {
     "code": "00794",
@@ -851,9 +851,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6419/796_v4_PertuzumabTrasDoc_Phesgo.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "No prior anti-HER2 therapy or chemotherapy for metastatic disease."
   },
   "00797": {
     "code": "00797",
@@ -864,9 +864,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "No prior anti-HER2 therapy or chemotherapy for metastatic disease. This paclitaxel alternative requires docetaxel intolerance, significant toxicity or clinical unsuitability; NCCP identifies this combination as unlicensed in Ireland and requires the local unlicensed-use consent process."
   },
   "00798": {
     "code": "00798",

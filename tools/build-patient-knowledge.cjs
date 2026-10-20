@@ -44,6 +44,7 @@ function contents(d){return `<aside class="pk-contents"><div><div class="pk-eyeb
 
 for(const file of profiles){
   const d=JSON.parse(fs.readFileSync(path.join(root,'data/patient-knowledge',file)));
+  if(process.env.SACT_SUITE_CODES&&!process.env.SACT_SUITE_CODES.split(',').includes(d.code))continue;
   if(d.service_kind==='targeted'){fs.mkdirSync(path.join(root,'patient',d.code),{recursive:true});require('./targeted-patient-suite-v0849.cjs').buildKnowledge(d,writeOutput);continue;}
   if(d.service_kind==='endocrine'){fs.mkdirSync(path.join(root,'patient',d.code),{recursive:true});require('./endocrine-patient-suite-v0842.cjs').buildKnowledge(d,writeOutput);continue;}
   assert.equal(d.schema_version,1); for(const c of d.chapters||[])for(const b of c.items)for(const id of b.source_ids)assert(d.sources.some(s=>s.id===id),`Unknown source ${id}`);assert.match(d.code,/^\d{5}$/);assert(Number.isInteger(d.cycle_days)&&d.cycle_days>=1&&d.cycle_days<=56,'cycle length must be 1–56 days');

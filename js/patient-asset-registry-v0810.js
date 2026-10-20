@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.11';
-  const CONTENT_RELEASE='0.84.9';
+  const RELEASE='0.84.12';
+  const CONTENT_RELEASE='0.84.12';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00797':{"title": "Phesgo + weekly paclitaxel", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00796':{"title": "Phesgo + docetaxel", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00790':{"title": "TRAIN-2 with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00789':{"title": "TCHP with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00785':{"title": "Phesgo maintenance", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00588':{"title": "Olaparib · adjuvant breast treatment", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Breast adjuvant 00588h only"},
     '00794':{"title": "Sacituzumab govitecan (Trodelvy)", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00776':{"title": "Trastuzumab deruxtecan (Enhertu) · every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
