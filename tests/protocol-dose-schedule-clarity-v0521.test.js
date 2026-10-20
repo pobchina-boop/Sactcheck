@@ -43,10 +43,11 @@ for (const entry of catalogue.protocols) {
 }
 
 assert.strictEqual(catalogue.protocols.length, 376);
-// v0.84.0 adds complete source-specific phases and removes unsupported legacy dose ladders.
-assert.strictEqual(usefulCoverage, 113);
-assert.strictEqual(scheduleCoverage, 109);
-assert.strictEqual(doseLevelCoverage, 40);
+// v0.84.1 adds five complete source-specific schedules and four supported dose ladders.
+// PLD reductions depend on the toxicity/history pathway, so no generic ladder is inferred.
+assert.strictEqual(usefulCoverage, 118);
+assert.strictEqual(scheduleCoverage, 114);
+assert.strictEqual(doseLevelCoverage, 44);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');

@@ -87,11 +87,11 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6565/230_v7_nab-PACLitaxel.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Metastatic breast cancer in adults after failed first-line treatment for metastatic disease when standard anthracycline-containing therapy is not indicated."
   },
   "00250": {
     "code": "00250",
@@ -678,14 +678,14 @@ const regimens={
     "code": "00736",
     "protocol_id": "nccp-00736-v2",
     "settings": [
-      "unspecified"
+      "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6619/736_v2_nab-PACLitaxel_weekly.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Metastatic breast cancer after anthracycline failure or when anthracyclines are unsuitable; this regimen is intended when hypersensitivity or intolerance prevents standard paclitaxel. It is an off-label schedule."
   },
   "00738": {
     "code": "00738",
@@ -707,11 +707,11 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6623/743_v3_eriBULin_Monotherapy_28_day.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Locally advanced or metastatic breast cancer after at least one chemotherapy regimen for advanced disease; prior anthracycline and taxane unless unsuitable. The 28-day posology is unlicensed and needs informed consent and local approval."
   },
   "00745": {
     "code": "00745",
@@ -1040,11 +1040,11 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Metastatic breast cancer; advanced ovarian cancer after failed first-line platinum chemotherapy; metastatic soft-tissue sarcoma; or recurrent / advanced endometrial cancer. Eligibility differs by cancer type."
   },
   "00259": {
     "code": "00259",
@@ -1079,11 +1079,11 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6564/228_eriBULin.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Advanced breast cancer after at least one chemotherapy regimen for advanced disease, with prior anthracycline and taxane unless unsuitable; or adult unresectable liposarcoma after anthracycline unless unsuitable."
   },
   "00215": {
     "code": "00215",

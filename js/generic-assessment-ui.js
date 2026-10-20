@@ -762,14 +762,14 @@
       </details>` : "";
     return `
       <details class="ctcae-guide" data-ctcae-guide="${escapeHtml(definition.id)}"${openAttribute}>
-        <summary>${options.compactSummary ? "CTCAE guide" : `${escapeHtml(guide.version)} grading — ${escapeHtml(guide.term)}`}</summary>
+        <summary>${options.compactSummary ? (guide.sourceSpecific ? "Source grading guide" : "CTCAE guide") : `${escapeHtml(guide.version)} grading — ${escapeHtml(guide.term)}`}</summary>
         <div class="ctcae-guide-body">
           <p><strong>How to assess:</strong> ${escapeHtml(guide.guidance)}</p>
           ${guide.note ? `<p class="ctcae-version-note"><strong>Version note:</strong> ${escapeHtml(guide.note)}</p>` : ""}
           <ol class="ctcae-grade-list">${renderGradeRows(guide.grades)}</ol>
           ${related}
           ${comparison}
-          <p class="subtle">Use the exact named CTCAE adverse-event term. <a href="${escapeHtml(guide.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the ${escapeHtml(guide.sourceLabel)} source</a>.</p>
+          <p class="subtle">${guide.sourceSpecific ? "Use the grading criteria in the named regimen/product source." : "Use the exact named CTCAE adverse-event term."} <a href="${escapeHtml(guide.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the ${escapeHtml(guide.sourceLabel)} source</a>.</p>
         </div>
       </details>`;
   }

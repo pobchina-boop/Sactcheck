@@ -1,0 +1,991 @@
+{
+  "checked_date": "2026-10-18",
+  "regimens": {
+    "00228": {
+      "source_url": "https://healthservice.hse.ie/documents/6564/228_eriBULin.pdf",
+      "source_version": "8",
+      "source_pages": 6,
+      "sha256": "f114a79c5c7d4058dddc067cd1a6290ae00cb12ecb42944b14aad8f02870d292",
+      "source_checked_date": "2026-10-18",
+      "original_rule_count": 16,
+      "audited_rule_count": 32,
+      "original_rules": [
+        {
+          "id": "ECOG_OUTSIDE_SOURCE_RANGE",
+          "priority": 8,
+          "when": {
+            "field": "ecog",
+            "operator": ">",
+            "value": 2
+          },
+          "action": {
+            "type": "consultant_review",
+            "components": [
+              "whole_regimen"
+            ],
+            "message": "ECOG above 2 is outside the usual source eligibility range; verify the indication and current NCCP regimen."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Eligibility section"
+          },
+          "explanation": "ECOG above 2 is outside the usual source eligibility range; verify the indication and current NCCP regimen."
+        },
+        {
+          "id": "HYPERSENSITIVITY",
+          "priority": 10,
+          "when": {
+            "field": "hypersensitivity",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "contraindicated",
+            "components": [
+              "whole_regimen"
+            ],
+            "message": "Known hypersensitivity to a regimen component triggers the source exclusion pathway."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Exclusions section"
+          },
+          "explanation": "Known hypersensitivity to a regimen component triggers the source exclusion pathway."
+        },
+        {
+          "id": "PREGNANCY_BREASTFEEDING",
+          "priority": 10,
+          "when": {
+            "any": [
+              {
+                "field": "pregnancy",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "field": "breastfeeding",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          "action": {
+            "type": "contraindicated",
+            "components": [
+              "whole_regimen"
+            ],
+            "message": "Pregnancy or breastfeeding is outside the routine source pathway."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Eligibility/exclusions section"
+          },
+          "explanation": "Pregnancy or breastfeeding is outside the routine source pathway."
+        },
+        {
+          "id": "ERIB_ANC_LT1",
+          "priority": 10,
+          "when": {
+            "field": "anc_x10e9_l",
+            "operator": "<",
+            "value": 1
+          },
+          "action": {
+            "type": "delay",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Day 1 or Day 8: ANC <1.0 ×10⁹/L requires delay/omission until recovery."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Day 1 or Day 8: ANC <1.0 ×10⁹/L requires delay/omission until recovery."
+        },
+        {
+          "id": "ERIB_PLT_LT75",
+          "priority": 10,
+          "when": {
+            "field": "platelets_x10e9_l",
+            "operator": "<",
+            "value": 75
+          },
+          "action": {
+            "type": "delay",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Day 1 or Day 8: platelets <75 ×10⁹/L require delay/omission until recovery."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Day 1 or Day 8: platelets <75 ×10⁹/L require delay/omission until recovery."
+        },
+        {
+          "id": "ERIB_NONHAEM_G3",
+          "priority": 10,
+          "when": {
+            "field": "other_nonhaem_toxicity_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          "action": {
+            "type": "delay",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Day 1 or Day 8: Grade 3–4 non-haematological toxicity requires delay until recovery."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Day 1 or Day 8: Grade 3–4 non-haematological toxicity requires delay until recovery."
+        },
+        {
+          "id": "ERIB_PROLONGED_NEUT",
+          "priority": 9,
+          "when": {
+            "field": "prolonged_anc_below_0_5_over_7d",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "dose_reduce_one_level",
+            "components": [
+              "eribulin"
+            ],
+            "message": "ANC <0.5 ×10⁹/L for >7 days: reduce eribulin by one dose level."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "ANC <0.5 ×10⁹/L for >7 days: reduce eribulin by one dose level."
+        },
+        {
+          "id": "ERIB_FN",
+          "priority": 9,
+          "when": {
+            "field": "febrile_neutropenia",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "dose_reduce_one_level",
+            "components": [
+              "eribulin"
+            ],
+            "message": "ANC <1.0 ×10⁹/L with fever/infection: reduce eribulin by one dose level."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "ANC <1.0 ×10⁹/L with fever/infection: reduce eribulin by one dose level."
+        },
+        {
+          "id": "ERIB_PLT25",
+          "priority": 9,
+          "when": {
+            "field": "platelets_below_25_previous_cycle",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "dose_reduce_one_level",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Platelets <25 ×10⁹/L: reduce eribulin by one dose level."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Platelets <25 ×10⁹/L: reduce eribulin by one dose level."
+        },
+        {
+          "id": "ERIB_PLT50_BLEED",
+          "priority": 9,
+          "when": {
+            "field": "platelets_below_50_with_bleeding_or_transfusion",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "dose_reduce_one_level",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Platelets <50 ×10⁹/L with bleeding/transfusion: reduce eribulin by one dose level."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Platelets <50 ×10⁹/L with bleeding/transfusion: reduce eribulin by one dose level."
+        },
+        {
+          "id": "ERIB_RENAL_LT50",
+          "priority": 8,
+          "when": {
+            "field": "eribulin_renal_band",
+            "operator": "==",
+            "value": "lt50"
+          },
+          "action": {
+            "type": "dose_reduce",
+            "components": [
+              "eribulin"
+            ],
+            "message": "CrCl <50 mL/min: administer 80% eribulin."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "CrCl <50 mL/min: administer 80% eribulin."
+        },
+        {
+          "id": "ERIB_HD",
+          "priority": 9,
+          "when": {
+            "field": "eribulin_renal_band",
+            "operator": "==",
+            "value": "dialysis"
+          },
+          "action": {
+            "type": "dose_reduce",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Haemodialysis: consider 80% eribulin with specialist review."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Haemodialysis: consider 80% eribulin with specialist review."
+        },
+        {
+          "id": "ERIB_CP_A",
+          "priority": 8,
+          "when": {
+            "field": "child_pugh",
+            "operator": "==",
+            "value": "A"
+          },
+          "action": {
+            "type": "dose_reduce",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Child-Pugh A: administer 80% eribulin."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Child-Pugh A: administer 80% eribulin."
+        },
+        {
+          "id": "ERIB_CP_B",
+          "priority": 9,
+          "when": {
+            "field": "child_pugh",
+            "operator": "==",
+            "value": "B"
+          },
+          "action": {
+            "type": "dose_reduce",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Child-Pugh B: administer 50% eribulin."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Child-Pugh B: administer 50% eribulin."
+        },
+        {
+          "id": "ERIB_CP_C",
+          "priority": 10,
+          "when": {
+            "field": "child_pugh",
+            "operator": "==",
+            "value": "C"
+          },
+          "action": {
+            "type": "contraindicated",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Child-Pugh C: eribulin is not recommended."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Child-Pugh C: eribulin is not recommended."
+        },
+        {
+          "id": "ERIB_PREV_G34",
+          "priority": 9,
+          "when": {
+            "field": "previous_grade_3_4_nonhaem",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "dose_reduce_one_level",
+            "components": [
+              "eribulin"
+            ],
+            "message": "Previous Grade 3–4 non-haematological toxicity: reduce by one dose level."
+          },
+          "source": {
+            "document": "Current official NCCP regimen",
+            "page": "Dose modification section"
+          },
+          "explanation": "Previous Grade 3–4 non-haematological toxicity: reduce by one dose level."
+        }
+      ],
+      "original_input_names": [
+        "ecog",
+        "hypersensitivity",
+        "pregnancy",
+        "breastfeeding",
+        "anc_x10e9_l",
+        "platelets_x10e9_l",
+        "febrile_neutropenia",
+        "active_infection",
+        "mucositis_grade",
+        "other_nonhaem_toxicity_grade",
+        "neuropathy_grade",
+        "assessment_day",
+        "eribulin_renal_band",
+        "child_pugh",
+        "prolonged_anc_below_0_5_over_7d",
+        "platelets_below_25_previous_cycle",
+        "platelets_below_50_with_bleeding_or_transfusion",
+        "previous_grade_3_4_nonhaem"
+      ],
+      "findings": [
+        {
+          "finding": "Initial versus ongoing count thresholds and missing-stage protection",
+          "page": "1–2",
+          "change": "Separate ANC1.5/platelets>100 baseline from ANC1/platelets75 treatment-day; unsafe standalone counts act without a stage."
+        },
+        {
+          "finding": "Named severe toxicity and prior-event partial inputs were incompletely assessed",
+          "page": "2–3",
+          "change": "Neuropathy/mucositis and qualifying historic events act independently; missing current dose/recurrence remains explicit review."
+        },
+        {
+          "finding": "Recurrence dose ladder must not infer recurrence from a reduced current dose alone",
+          "page": "3 Tables1/3",
+          "change": "Add recurrence confirmation,0.97/0.62 targets and consider-discontinuation review; prevent re-escalation."
+        },
+        {
+          "finding": "Cardiac/exclusion and monitoring coverage",
+          "page": "2;00743pp4–5;EMA§4.4",
+          "change": "Encode congenital QT, breastfeeding, hypersensitivity, risk-directed ECG, electrolytes;00228 significant CV exclusion remains code-specific."
+        },
+        {
+          "finding": "Organ impairment percentages are original-dose instructions",
+          "page": "3 Table2",
+          "change": "Retain source percentages with specialist dose reconciliation; dialysis remains may-consider; numeric dose calculation disabled for ambiguous current-dose/concurrent contexts."
+        },
+        {
+          "finding": "Drug base/salt and cycle schedule are distinct",
+          "page": "1",
+          "change": "1.23mg/m² eribulin base, days1/8 q21; not1.4mg/m² salt substitution."
+        },
+        {
+          "finding": "Breast indication omitted; card reduced to sarcoma",
+          "page": 1,
+          "change": "Restore00228a breast and00228b liposarcoma with prior-treatment/suitability caveats."
+        },
+        {
+          "finding": "CrCl exactly50 unspecified; old ≥50 input overclaimed >50 source row",
+          "page": "3 Table2",
+          "change": "New measured input and gt50/eq50 bands; equality/legacy ambiguous band explicitly reviewed."
+        },
+        {
+          "finding": "Footer/version-control mismatch",
+          "page": "1/6",
+          "change": "Preserve stable footerv8 identity; record v9review-schedule-only entry dated20May2026."
+        },
+        {
+          "finding": "Visible dose model must resolve safety/review actions above future numeric targets",
+          "page": "3 Tables1–3",
+          "change": "Review actions explicitly block numeric component dose; tests inspect primary displayed rows and assert no numeric restart during hold or unresolved organ impairment. Source conditional future dose remains explained separately."
+        }
+      ],
+      "source_limitations": [
+        "Independent consultant and oncology pharmacy validation pending; source reconciliation is not clinical-use authorisation.",
+        "Renal/hepatic percentages refer to the original dose; prior reductions and competing pathways require specialist reconciliation.",
+        "NCCP cycle-start blood tests supplemented by EMA SmPC FBC before every dose; ECG is risk-triggered, not a universal fixed-cycle schedule.",
+        "Current PDF footer states version 8, while its change log records version 9 dated 20/05/2026 for review-schedule amendment only; protocol identity remains nccp-00228-v8.",
+        "Table 2 lists CrCl >50 and <50 but leaves exactly 50 mL/min unspecified; equality and legacy ge50 input require review."
+      ],
+      "clinical_validation": "Independent consultant and oncology pharmacy validation pending",
+      "monitoring": {
+        "baseline": [
+          "FBC, renal and liver profile (NCCP p2)",
+          "Potassium, calcium and magnesium: correct low levels before treatment (EMA SmPC §4.4; NCCP00743 p4)",
+          "ECG when heart failure, bradyarrhythmia, QT-prolonging medicines or electrolyte abnormalities are present (NCCP p2)"
+        ],
+        "regular": [
+          "FBC, renal and liver profile at the start of each cycle (NCCP p2)",
+          "FBC before every eribulin dose, including day 8 (EMA SmPC §4.4); confirm treatment-day counts and toxicity before dosing",
+          "Periodic potassium, calcium and magnesium; ECG when risk factors or clinical indications require it",
+          "Assess neuropathy, infection, mucositis and other toxicity before each dose"
+        ],
+        "disease": "Scans and other response tests follow the consultant treatment plan. These sources do not mandate a fixed CT, tumour-marker, echo or DXA interval.",
+        "additional_therapy": "If trastuzumab is separately prescribed, add its own cardiac imaging and scheduling plan; this is not routine eribulin-only monitoring."
+      },
+      "supplemental_source": {
+        "url": "https://www.ema.europa.eu/en/documents/product-information/halaven-epar-product-information_en.pdf",
+        "sections": [
+          "4.4",
+          "4.6",
+          "4.8"
+        ],
+        "checked_date": "2026-10-18",
+        "sha256": "31249ef6210ad802092fdf0a12213640c232c7a0e17f9862972975afd370495d"
+      },
+      "software_verification": {
+        "source_scenarios_passed": 205,
+        "source_scenarios_total": 205,
+        "protocol_validator_tests_passed": 381,
+        "clinical_validation": "pending"
+      }
+    },
+    "00743": {
+      "source_url": "https://healthservice.hse.ie/documents/6623/743_v3_eriBULin_Monotherapy_28_day.pdf",
+      "source_version": "3",
+      "source_pages": 5,
+      "sha256": "8d2cf187c0615e07a2d9e6a146fd09ea915255128467c09e59003e09c5717077",
+      "source_checked_date": "2026-10-18",
+      "original_rule_count": 13,
+      "audited_rule_count": 32,
+      "original_rules": [
+        {
+          "id": "ERI743_INITIAL_ANC_LT1_5",
+          "when": {
+            "all": [
+              {
+                "field": "assessment_phase",
+                "operator": "==",
+                "value": "initial_eligibility"
+              },
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.5
+              }
+            ]
+          },
+          "action": {
+            "type": "withhold",
+            "message": "Initial eligibility ANC below 1.5 ×10⁹/L is outside the NCCP eligibility criterion.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Pages 1 to 2, Eligibility"
+          },
+          "explanation": "Initial eligibility ANC below 1.5 ×10⁹/L is outside the NCCP eligibility criterion.",
+          "priority": 96
+        },
+        {
+          "id": "ERI743_INITIAL_PLT_LE100",
+          "when": {
+            "all": [
+              {
+                "field": "assessment_phase",
+                "operator": "==",
+                "value": "initial_eligibility"
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<=",
+                "value": 100
+              }
+            ]
+          },
+          "action": {
+            "type": "withhold",
+            "message": "Initial eligibility platelets at or below 100 ×10⁹/L are outside the NCCP eligibility criterion.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Pages 1 to 2, Eligibility"
+          },
+          "explanation": "Initial eligibility platelets at or below 100 ×10⁹/L are outside the NCCP eligibility criterion.",
+          "priority": 96
+        },
+        {
+          "id": "ERI743_DAY_ANC_LT1",
+          "when": {
+            "all": [
+              {
+                "field": "assessment_phase",
+                "operator": "==",
+                "value": "treatment_day"
+              },
+              {
+                "field": "anc_x10e9_l",
+                "operator": "<",
+                "value": 1.0
+              }
+            ]
+          },
+          "action": {
+            "type": "delay",
+            "message": "On Day 1 or Day 15, ANC below 1.0 ×10⁹/L requires delay of eribulin.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 2, Dose modifications"
+          },
+          "explanation": "On Day 1 or Day 15, ANC below 1.0 ×10⁹/L requires delay of eribulin."
+        },
+        {
+          "id": "ERI743_DAY_PLT_LT75",
+          "when": {
+            "all": [
+              {
+                "field": "assessment_phase",
+                "operator": "==",
+                "value": "treatment_day"
+              },
+              {
+                "field": "platelets_x10e9_l",
+                "operator": "<",
+                "value": 75
+              }
+            ]
+          },
+          "action": {
+            "type": "delay",
+            "message": "On Day 1 or Day 15, platelets below 75 ×10⁹/L require delay of eribulin.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 2, Dose modifications"
+          },
+          "explanation": "On Day 1 or Day 15, platelets below 75 ×10⁹/L require delay of eribulin."
+        },
+        {
+          "id": "ERI743_DAY_NONHAEM_G34",
+          "when": {
+            "all": [
+              {
+                "field": "assessment_phase",
+                "operator": "==",
+                "value": "treatment_day"
+              },
+              {
+                "field": "current_nonhaem_toxicity_grade",
+                "operator": ">=",
+                "value": 3
+              }
+            ]
+          },
+          "action": {
+            "type": "delay",
+            "message": "Current grade 3 or 4 non haematological toxicity requires delay of eribulin.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 2, Dose modifications"
+          },
+          "explanation": "Current grade 3 or 4 non haematological toxicity requires delay of eribulin."
+        },
+        {
+          "id": "ERI743_TRIGGER_AT_1_23",
+          "when": {
+            "all": [
+              {
+                "field": "current_eribulin_dose_level",
+                "operator": "==",
+                "value": "1.23"
+              },
+              {
+                "any": [
+                  {
+                    "field": "anc_below_0_5_more_than_7_days",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "anc_below_1_with_fever_or_infection",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "platelets_below_25",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "platelet_bleeding_or_transfusion",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "previous_cycle_grade34_nonhaem",
+                    "operator": "==",
+                    "value": true
+                  }
+                ]
+              }
+            ]
+          },
+          "action": {
+            "type": "dose_reduce",
+            "message": "A source specified severe toxicity trigger at 1.23 mg/m² requires subsequent eribulin dose reduction to 0.97 mg/m². Do not re escalate after reduction.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 3, Tables 1 and 3"
+          },
+          "explanation": "A source specified severe toxicity trigger at 1.23 mg/m² requires subsequent eribulin dose reduction to 0.97 mg/m². Do not re escalate after reduction.",
+          "priority": 90
+        },
+        {
+          "id": "ERI743_TRIGGER_AT_0_97",
+          "when": {
+            "all": [
+              {
+                "field": "current_eribulin_dose_level",
+                "operator": "==",
+                "value": "0.97"
+              },
+              {
+                "any": [
+                  {
+                    "field": "anc_below_0_5_more_than_7_days",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "anc_below_1_with_fever_or_infection",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "platelets_below_25",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "platelet_bleeding_or_transfusion",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "previous_cycle_grade34_nonhaem",
+                    "operator": "==",
+                    "value": true
+                  }
+                ]
+              }
+            ]
+          },
+          "action": {
+            "type": "dose_reduce",
+            "message": "Recurrence of a source specified severe toxicity trigger despite 0.97 mg/m² requires subsequent eribulin dose reduction to 0.62 mg/m². Do not re escalate after reduction.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 3, Tables 1 and 3"
+          },
+          "explanation": "Recurrence of a source specified severe toxicity trigger despite 0.97 mg/m² requires subsequent eribulin dose reduction to 0.62 mg/m². Do not re escalate after reduction.",
+          "priority": 91
+        },
+        {
+          "id": "ERI743_TRIGGER_AT_0_62",
+          "when": {
+            "all": [
+              {
+                "field": "current_eribulin_dose_level",
+                "operator": "==",
+                "value": "0.62"
+              },
+              {
+                "any": [
+                  {
+                    "field": "anc_below_0_5_more_than_7_days",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "anc_below_1_with_fever_or_infection",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "platelets_below_25",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "platelet_bleeding_or_transfusion",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "previous_cycle_grade34_nonhaem",
+                    "operator": "==",
+                    "value": true
+                  }
+                ]
+              }
+            ]
+          },
+          "action": {
+            "type": "consultant_review",
+            "message": "Recurrence of a source specified severe toxicity trigger despite 0.62 mg/m²: the NCCP pathway advises considering discontinuation.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 3, Tables 1 and 3"
+          },
+          "explanation": "Recurrence of a source specified severe toxicity trigger despite 0.62 mg/m²: the NCCP pathway advises considering discontinuation.",
+          "priority": 92
+        },
+        {
+          "id": "ERI743_CRCL_LT50",
+          "when": {
+            "field": "crcl_ml_min",
+            "operator": "==",
+            "value": "lt50"
+          },
+          "action": {
+            "type": "dose_reduce",
+            "message": "CrCl below 50 mL/min: use 80% of the original eribulin dose.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 3, Table 2"
+          },
+          "explanation": "CrCl below 50 mL/min: use 80% of the original eribulin dose."
+        },
+        {
+          "id": "ERI743_HD",
+          "when": {
+            "field": "haemodialysis",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "consultant_review",
+            "message": "Haemodialysis: 80% of the original eribulin dose may be considered. Confirm with the Consultant and oncology pharmacy.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 3, Table 2"
+          },
+          "explanation": "Haemodialysis: 80% of the original eribulin dose may be considered. Confirm with the Consultant and oncology pharmacy."
+        },
+        {
+          "id": "ERI743_CP_A",
+          "when": {
+            "field": "child_pugh_class",
+            "operator": "==",
+            "value": "A"
+          },
+          "action": {
+            "type": "dose_reduce",
+            "message": "Mild hepatic impairment, Child Pugh A: use 80% of the original eribulin dose.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 3, Table 2"
+          },
+          "explanation": "Mild hepatic impairment, Child Pugh A: use 80% of the original eribulin dose."
+        },
+        {
+          "id": "ERI743_CP_B",
+          "when": {
+            "field": "child_pugh_class",
+            "operator": "==",
+            "value": "B"
+          },
+          "action": {
+            "type": "dose_reduce",
+            "message": "Moderate hepatic impairment, Child Pugh B: use 50% of the original eribulin dose.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 3, Table 2"
+          },
+          "explanation": "Moderate hepatic impairment, Child Pugh B: use 50% of the original eribulin dose."
+        },
+        {
+          "id": "ERI743_CP_C",
+          "when": {
+            "field": "child_pugh_class",
+            "operator": "==",
+            "value": "C"
+          },
+          "action": {
+            "type": "contraindicated",
+            "message": "Severe hepatic impairment, Child Pugh C: eribulin is not recommended in the NCCP source.",
+            "components": [
+              "eribulin"
+            ]
+          },
+          "source": {
+            "document": "Current official NCCP regimen PDF",
+            "page": "Page 3, Table 2"
+          },
+          "explanation": "Severe hepatic impairment, Child Pugh C: eribulin is not recommended in the NCCP source.",
+          "priority": 98
+        }
+      ],
+      "original_input_names": [
+        "anc_x10e9_l",
+        "platelets_x10e9_l",
+        "hb_g_dl",
+        "febrile_neutropenia",
+        "neuropathy_grade",
+        "assessment_phase",
+        "current_eribulin_dose_level",
+        "anc_below_0_5_more_than_7_days",
+        "anc_below_1_with_fever_or_infection",
+        "platelets_below_25",
+        "platelet_bleeding_or_transfusion",
+        "crcl_ml_min",
+        "haemodialysis",
+        "child_pugh_class",
+        "current_nonhaem_toxicity_grade",
+        "previous_cycle_grade34_nonhaem"
+      ],
+      "findings": [
+        {
+          "finding": "Initial versus ongoing count thresholds and missing-stage protection",
+          "page": "1–2",
+          "change": "Separate ANC1.5/platelets>100 baseline from ANC1/platelets75 treatment-day; unsafe standalone counts act without a stage."
+        },
+        {
+          "finding": "Named severe toxicity and prior-event partial inputs were incompletely assessed",
+          "page": "2–3",
+          "change": "Neuropathy/mucositis and qualifying historic events act independently; missing current dose/recurrence remains explicit review."
+        },
+        {
+          "finding": "Recurrence dose ladder must not infer recurrence from a reduced current dose alone",
+          "page": "3 Tables1/3",
+          "change": "Add recurrence confirmation,0.97/0.62 targets and consider-discontinuation review; prevent re-escalation."
+        },
+        {
+          "finding": "Cardiac/exclusion and monitoring coverage",
+          "page": "2;00743pp4–5;EMA§4.4",
+          "change": "Encode congenital QT, breastfeeding, hypersensitivity, risk-directed ECG, electrolytes;00228 significant CV exclusion remains code-specific."
+        },
+        {
+          "finding": "Organ impairment percentages are original-dose instructions",
+          "page": "3 Table2",
+          "change": "Retain source percentages with specialist dose reconciliation; dialysis remains may-consider; numeric dose calculation disabled for ambiguous current-dose/concurrent contexts."
+        },
+        {
+          "finding": "Drug base/salt and cycle schedule are distinct",
+          "page": "1",
+          "change": "1.23mg/m² eribulin base, days1/15 q28; not1.4mg/m² salt substitution."
+        },
+        {
+          "finding": "Wrong source page count and absent off-label posology context",
+          "page": "1/5",
+          "change": "Correct7→5pages; add unlicensed28-day consent/DTC note."
+        },
+        {
+          "finding": "Visible dose model must resolve safety/review actions above future numeric targets",
+          "page": "3 Tables1–3",
+          "change": "Review actions explicitly block numeric component dose; tests inspect primary displayed rows and assert no numeric restart during hold or unresolved organ impairment. Source conditional future dose remains explained separately."
+        }
+      ],
+      "source_limitations": [
+        "Independent consultant and oncology pharmacy validation pending; source reconciliation is not clinical-use authorisation.",
+        "Renal/hepatic percentages refer to the original dose; prior reductions and competing pathways require specialist reconciliation.",
+        "NCCP cycle-start blood tests supplemented by EMA SmPC FBC before every dose; ECG is risk-triggered, not a universal fixed-cycle schedule.",
+        "The 28-day posology is unlicensed in Ireland: patient information/consent and local Drugs and Therapeutics Committee acknowledgement apply."
+      ],
+      "clinical_validation": "Independent consultant and oncology pharmacy validation pending",
+      "monitoring": {
+        "baseline": [
+          "FBC, renal and liver profile (NCCP p2)",
+          "Potassium, calcium and magnesium: correct low levels before treatment (EMA SmPC §4.4; NCCP00743 p4)",
+          "ECG when heart failure, bradyarrhythmia, QT-prolonging medicines or electrolyte abnormalities are present (NCCP p2)"
+        ],
+        "regular": [
+          "FBC, renal and liver profile at the start of each cycle (NCCP p2)",
+          "FBC before every eribulin dose, including day 15 (EMA SmPC §4.4); confirm treatment-day counts and toxicity before dosing",
+          "Periodic potassium, calcium and magnesium; ECG when risk factors or clinical indications require it",
+          "Assess neuropathy, infection, mucositis and other toxicity before each dose"
+        ],
+        "disease": "Scans and other response tests follow the consultant treatment plan. These sources do not mandate a fixed CT, tumour-marker, echo or DXA interval.",
+        "additional_therapy": "If trastuzumab is separately prescribed, add its own cardiac imaging and scheduling plan; this is not routine eribulin-only monitoring."
+      },
+      "supplemental_source": {
+        "url": "https://www.ema.europa.eu/en/documents/product-information/halaven-epar-product-information_en.pdf",
+        "sections": [
+          "4.4",
+          "4.6",
+          "4.8"
+        ],
+        "checked_date": "2026-10-18",
+        "sha256": "31249ef6210ad802092fdf0a12213640c232c7a0e17f9862972975afd370495d"
+      },
+      "software_verification": {
+        "source_scenarios_passed": 205,
+        "source_scenarios_total": 205,
+        "protocol_validator_tests_passed": 381,
+        "clinical_validation": "pending"
+      }
+    }
+  }
+}

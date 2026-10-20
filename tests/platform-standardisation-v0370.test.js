@@ -152,10 +152,11 @@ for (const { file, data } of protocols) {
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
       const folfoxSourceDiarrhoea = (['00447','00733'].includes(code)) && ['diarrhoea_current_grade','diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
-      assert.equal(def.ctcae_version, folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
+      const pldSource = code === '00205' && ['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field);
+      if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
-      assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
+      if(!pldSource) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
       const sourceHfs = ['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field);
@@ -194,6 +195,9 @@ for (const { file, data } of protocols) {
       assert.equal(def.type, 'number', `${code}/${field} exact renal field must remain numerical`);
       assert.equal(def.renal_input?.exact_value_required, true, `${code}/${field} exact renal field must declare why a continuous value is required`);
       assert(String(def.renal_input?.reason || '').length >= 20, `${code}/${field} exact renal field lacks a source-specific rationale`);
+    } else if (mode === 'source_threshold_numeric') {
+      assert(['00205','00228','00230','00736','00743'].includes(code),`${code}: numeric threshold entry requires an audited source`);
+      assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);assert.equal(def.renal_input.source_url,metadata.source_url);assert(def.renal_input.reason.length>=20);
     } else {
       renalBandFields += 1;
       assert.equal(mode, 'protocol_specific_band', `${code}/${field} tiered renal rule must declare protocol-specific bands`);

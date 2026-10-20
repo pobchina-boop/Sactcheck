@@ -382,21 +382,23 @@
       },
       "inputs": {
         "renal": [
-          "renal_impairment_severity"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
           "alp_uln_multiple",
-          "ast_alt_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment"
         ]
       },
       "rules": {
-        "renal": [
-          "DOC202_SEVERE_RENAL"
-        ],
+        "renal": [],
         "hepatic": [
-          "DOC202_HEPATIC_75",
-          "DOC202_HEPATIC_STOP"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ]
       },
       "mismatches": []
@@ -406,7 +408,7 @@
       "protocol_id": "nccp-00203-v7",
       "path": "protocols/breast/00203-docetaxel-75-21-day.json",
       "title": "Docetaxel Monotherapy 75 mg/m² – 21 day cycle",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -416,17 +418,24 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
         "hepatic": [
-          "hepatic_band"
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
-          "HEPATIC_75",
-          "HEPATIC_50",
-          "HEPATIC_STOP"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ]
       },
       "mismatches": []
@@ -436,7 +445,7 @@
       "protocol_id": "nccp-00204-v11",
       "path": "protocols/breast/00204-pertuzumab-trastuzumab-docetaxel.json",
       "title": "Pertuzumab, Trastuzumab and Docetaxel Therapy – 21 day cycle",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -446,16 +455,22 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
         "hepatic": [
-          "significant_hepatic_dysfunction",
-          "ast_alt_uln",
-          "bilirubin_uln"
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
+          "(unnamed)",
           "(unnamed)",
           "(unnamed)"
         ]
@@ -477,21 +492,36 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
         "hepatic": [
           "bilirubin_uln_multiple",
-          "pld_bilirubin_band"
+          "pld_bilirubin_band",
+          "bilirubin_umol_l"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "PLD_RENAL",
+          "PLD_DIALYSIS"
+        ],
         "hepatic": [
-          "PLD_BILI_GT4_3",
-          "PLD_BILI_GT2_5",
-          "PLD_BILI_GT1",
+          "PLD_HEP_GT86",
+          "PLD_BILI_CONFLICT_lt20",
+          "PLD_BILI_CONFLICT_20_50",
+          "PLD_BILI_CONFLICT_gap50_51",
+          "PLD_BILI_CONFLICT_51_86",
+          "PLD_BILI_CONFLICT_gt86",
+          "PLD_HEP_CONCURRENT_20_50",
+          "PLD_HEP_CONCURRENT_51_86",
+          "PLD_HEP_CURRENT_LOWER_20_50",
+          "PLD_HEP_CURRENT_LOWER_51_86",
           "OF590_00205_PLD_BILI_20_50",
           "OF590_00205_PLD_BILI_51_86",
-          "OF590_00205_PLD_BILI_GT86"
+          "PLD_HEP_GAP",
+          "PLD_HEP_ULN_ONLY"
         ]
       },
       "mismatches": []
@@ -1142,10 +1172,10 @@
       "protocol_id": "nccp-00228-v8",
       "path": "protocols/breast/00228-eribulin-monotherapy.json",
       "title": "Eribulin Monotherapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
-        "renal": true,
-        "hepatic": true
+        "renal": false,
+        "hepatic": false
       },
       "monitoring_mentions": {
         "renal": true,
@@ -1153,21 +1183,27 @@
       },
       "inputs": {
         "renal": [
-          "eribulin_renal_band"
+          "eribulin_renal_band",
+          "creatinine_clearance_ml_min"
         ],
         "hepatic": [
-          "child_pugh"
+          "child_pugh",
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "bilirubin_uln_multiple"
         ]
       },
       "rules": {
         "renal": [
-          "ERIB_RENAL_LT50",
-          "ERIB_HD"
+          "ERI00228_RENAL_LT50",
+          "ERI00228_DIALYSIS",
+          "ERI00228_CRCL50_BOUNDARY"
         ],
         "hepatic": [
-          "ERIB_CP_A",
-          "ERIB_CP_B",
-          "ERIB_CP_C"
+          "ERI00228_CHILD_PUGH_A",
+          "ERI00228_CHILD_PUGH_B",
+          "ERI00228_CHILD_PUGH_C",
+          "ERI00228_LFT_RISK"
         ]
       },
       "mismatches": []
@@ -1177,24 +1213,32 @@
       "protocol_id": "nccp-00230-v7",
       "path": "protocols/breast/00230-nab-paclitaxel-q21d.json",
       "title": "nab-Paclitaxel Monotherapy - 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
         "hepatic": [
           "hepatic_impairment"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
         "hepatic": [
+          "(unnamed)",
           "(unnamed)"
         ]
       },
@@ -1735,7 +1779,7 @@
       "protocol_id": "nccp-00250-v8",
       "path": "protocols/breast/00250-docetaxel-cyclophosphamide.json",
       "title": "Docetaxel / Cyclophosphamide (TC) Therapy – 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1746,18 +1790,26 @@
       },
       "inputs": {
         "renal": [
-          "egfr"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
           "bilirubin_uln_multiple",
-          "alt_uln_multiple"
+          "severe_hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [
+          "(unnamed)",
+          "(unnamed)",
           "(unnamed)"
         ],
         "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
           "(unnamed)"
         ]
       },
@@ -1799,7 +1851,7 @@
       "protocol_id": "nccp-00252-v7",
       "path": "protocols/breast/00252-ac-doxorubicin-cyclophosphamide.json",
       "title": "Doxorubicin and Cyclophosphamide (AC 60/600) Therapy – 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1810,19 +1862,32 @@
       },
       "inputs": {
         "renal": [
-          "egfr"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
-          "bilirubin_uln_multiple",
           "alt_uln_multiple",
-          "ast_uln_multiple"
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment",
+          "bilirubin_umol_l",
+          "child_pugh_c"
         ]
       },
       "rules": {
         "renal": [
+          "(unnamed)",
           "(unnamed)"
         ],
         "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
           "(unnamed)"
         ]
       },
@@ -1942,7 +2007,7 @@
       "protocol_id": "nccp-00258-v9",
       "path": "protocols/breast/00258-tch-docetaxel-carboplatin-trastuzumab.json",
       "title": "Docetaxel, Carboplatin and Trastuzumab (TCH) – 21 days",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1952,12 +2017,40 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis",
+          "gfr_ml_min",
+          "creatinine_result_age_hours",
+          "creatinine_percent_reference",
+          "gfr_method"
+        ],
+        "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment",
+          "hepatic_delay_days",
+          "hepatic_not_recovered"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
+        "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ]
       },
       "mismatches": []
     },
@@ -1998,7 +2091,7 @@
       "protocol_id": "nccp-00260-v7",
       "path": "protocols/breast/00260-ac-followed-by-weekly-paclitaxel.json",
       "title": "AC 21-day followed by weekly Paclitaxel (AC-T)",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -2008,12 +2101,43 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
+        "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment",
+          "bilirubin_umol_l",
+          "child_pugh_c"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
+        "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ]
       },
       "mismatches": []
     },
@@ -2470,7 +2594,7 @@
       "protocol_id": "nccp-00278-v7",
       "path": "protocols/breast/00278-dose-dense-ac-paclitaxel-14-day.json",
       "title": "Dose-dense AC followed by Paclitaxel 175 mg/m² every 14 days",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -2480,12 +2604,44 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
+        "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment",
+          "bilirubin_umol_l",
+          "child_pugh_c"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
+        "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ]
       },
       "mismatches": []
     },
@@ -3265,7 +3421,7 @@
       "protocol_id": "nccp-00316-v6",
       "path": "protocols/breast/00316-ddac-paclitaxel-14-day-trastuzumab.json",
       "title": "Dose-dense AC followed by Paclitaxel every 14 days and Trastuzumab",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3275,12 +3431,42 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
+        "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment",
+          "bilirubin_umol_l",
+          "child_pugh_c"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
+        "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ]
       },
       "mismatches": []
     },
@@ -5652,7 +5838,7 @@
       "protocol_id": "nccp-00432-v5",
       "path": "protocols/breast/00432-ac-weekly-paclitaxel-trastuzumab.json",
       "title": "AC followed by weekly Paclitaxel and weekly Trastuzumab (AC-TH)",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -5662,12 +5848,43 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
+        "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment",
+          "bilirubin_umol_l",
+          "child_pugh_c"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
+        "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ]
       },
       "mismatches": []
     },
@@ -5676,7 +5893,7 @@
       "protocol_id": "nccp-00433-v6",
       "path": "protocols/breast/00433-ddac-weekly-paclitaxel-trastuzumab.json",
       "title": "Dose-dense AC followed by weekly Paclitaxel and weekly Trastuzumab",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -5686,12 +5903,42 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
+        "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment",
+          "bilirubin_umol_l",
+          "child_pugh_c"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
+        "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ]
       },
       "mismatches": []
     },
@@ -7061,7 +7308,7 @@
       "protocol_id": "nccp-00507-v6",
       "path": "protocols/breast/00507-pertuzumab-trastuzumab-paclitaxel.json",
       "title": "Pertuzumab, Trastuzumab and Weekly Paclitaxel - 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7071,16 +7318,23 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
         "hepatic": [
-          "severe_hepatic_impairment",
-          "alt_ratio_uln",
-          "bilirubin_ratio_uln"
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
           "(unnamed)",
           "(unnamed)",
           "(unnamed)",
@@ -7176,7 +7430,7 @@
       "protocol_id": "nccp-00512-v5",
       "path": "protocols/breast/00512-paclitaxel-trastuzumab-weekly.json",
       "title": "Paclitaxel 80 mg/m² and Trastuzumab Therapy – 7 day (12 weeks)",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -7187,16 +7441,28 @@
       },
       "inputs": {
         "renal": [
-          "egfr"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
           "bilirubin_uln_multiple",
-          "alt_uln_multiple"
+          "severe_hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [],
-        "hepatic": []
+        "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ]
       },
       "mismatches": []
     },
@@ -9062,7 +9328,7 @@
       "protocol_id": "nccp-00621-v9",
       "path": "protocols/breast/00621-paclitaxel-weekly-3-of-4.json",
       "title": "Paclitaxel 80 mg/m² Days 1, 8 and 15 – 28 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9072,16 +9338,23 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
         "hepatic": [
-          "severe_hepatic_impairment",
-          "alt_ratio_uln",
-          "bilirubin_ratio_uln"
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [],
         "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
           "(unnamed)",
           "(unnamed)",
           "(unnamed)",
@@ -10383,7 +10656,7 @@
       "protocol_id": "nccp-00731-v2",
       "path": "protocols/breast/00731-tch-subcutaneous-p.json",
       "title": "Docetaxel, Carboplatin, Trastuzumab SC and Pertuzumab",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -10394,15 +10667,28 @@
       },
       "inputs": {
         "renal": [
-          "gfr_ml_min"
+          "crcl_ml_min",
+          "haemodialysis",
+          "gfr_ml_min",
+          "creatinine_result_age_hours",
+          "creatinine_percent_reference",
+          "gfr_method"
         ],
         "hepatic": [
-          "bilirubin_abnormal",
-          "alt_ast_uln_multiple"
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment",
+          "hepatic_delay_days",
+          "hepatic_not_recovered"
         ]
       },
       "rules": {
         "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
           "(unnamed)",
           "(unnamed)"
         ],
@@ -10544,24 +10830,38 @@
       "protocol_id": "nccp-00736-v2",
       "path": "protocols/breast/00736-nab-paclitaxel-weekly.json",
       "title": "nab-Paclitaxel Weekly Monotherapy - 28 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
         "hepatic": [
-          "hepatic_impairment"
+          "hepatic_impairment",
+          "severe_hepatic_impairment",
+          "bilirubin_uln_multiple",
+          "ast_uln_multiple"
         ]
       },
       "rules": {
-        "renal": [],
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
         "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
           "(unnamed)"
         ]
       },
@@ -10678,27 +10978,32 @@
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
           "crcl_ml_min",
-          "haemodialysis"
+          "haemodialysis",
+          "creatinine_clearance_ml_min"
         ],
         "hepatic": [
-          "child_pugh_class"
+          "child_pugh_class",
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "bilirubin_uln_multiple"
         ]
       },
       "rules": {
         "renal": [
-          "ERI743_CRCL_LT50",
-          "ERI743_HD"
+          "ERI00743_RENAL_LT50",
+          "ERI00743_DIALYSIS"
         ],
         "hepatic": [
-          "ERI743_CP_A",
-          "ERI743_CP_B",
-          "ERI743_CP_C"
+          "ERI00743_CHILD_PUGH_A",
+          "ERI00743_CHILD_PUGH_B",
+          "ERI00743_CHILD_PUGH_C",
+          "ERI00743_LFT_RISK"
         ]
       },
       "mismatches": []
@@ -10708,7 +11013,7 @@
       "protocol_id": "nccp-00745-v2a",
       "path": "protocols/breast/00745-ddac-weekly-paclitaxel-trastuzumab-q21d.json",
       "title": "Dose-dense AC followed by weekly Paclitaxel and Trastuzumab every 21 days",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -10718,12 +11023,44 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis"
+        ],
+        "hepatic": [
+          "alt_uln_multiple",
+          "ast_uln_multiple",
+          "alp_uln_multiple",
+          "bilirubin_uln_multiple",
+          "severe_hepatic_impairment",
+          "bilirubin_umol_l",
+          "child_pugh_c"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
+        "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ]
       },
       "mismatches": []
     },

@@ -579,6 +579,10 @@
     return match ? Number(match[1]) : null;
   }
 
+  function sourceSpecific(definition) {
+    return Boolean(String(definition?.grading_source_label || "").trim());
+  }
+
   function explicitVersion(definition) {
     return String(definition?.ctcae_version || "").trim();
   }
@@ -590,12 +594,14 @@
   }
 
   function versionFor(definition, category) {
+    if (sourceSpecific(definition)) return String(definition.grading_source_label).trim();
     if (explicitVersion(definition)) return `CTCAE v${explicitVersion(definition)}`;
     if (HEMATOLOGY_CATEGORIES.has(category)) return "CTCAE v6.0";
     return "CTCAE v5.0";
   }
 
   function sourceFor(definition, category) {
+    if (sourceSpecific(definition)) return String(definition.grading_source_url || "").trim();
     if (definition?.ctcae_source_url) return definition.ctcae_source_url;
     return HEMATOLOGY_CATEGORIES.has(category) && explicitVersion(definition) !== "5.0" ? SOURCE_URL_V6 : SOURCE_URL_V5;
   }
@@ -603,6 +609,7 @@
   function descriptor(definition, option) {
     if (isEcogDefinition(definition)) return "";
     if (option?.description) return String(option.description);
+    if (sourceSpecific(definition)) return "Refer to the grading criteria in the named regimen/product source.";
     const grade = numericGrade(option?.ctcae_grade ?? option?.value, option?.label);
     if (grade === null) return "";
     const category = categoryFor(definition);
@@ -626,6 +633,7 @@
   }
 
   function versionNote(category, definition) {
+    if (sourceSpecific(definition)) return definition.source_grading_note || "These are source-specific grading criteria; do not silently reinterpret them as a CTCAE version.";
     if (explicitVersion(definition) === "5.0") return "This field is explicitly tied to CTCAE v5.0 metadata in the encoded protocol. The current NCI release is v6.0, but SACTCheck will not silently reinterpret a source rule against a different CTCAE version.";
     if (category === "neutrophil_count_decreased" || category === "neutropenia_with_fever") return "Version caution: CTCAE v6.0 changed the ANC bands. Grade 4 is now ANC <0.1 ×10⁹/L; in CTCAE v5.0, Grade 4 was ANC <0.5 ×10⁹/L. The educational grade must not silently redefine an NCCP action written against an earlier version.";
     if (category === "thrombocytopenia") return "Version caution: CTCAE v6.0 changed severe thrombocytopenia grading. Grade 3 now extends to <10 ×10⁹/L (or transfusion indicated), and Grade 4 is <10 ×10⁹/L or life-threatening consequences; CTCAE v5.0 used <25 ×10⁹/L for Grade 4.";
@@ -635,6 +643,7 @@
   }
 
   function comparisonFor(category, definition) {
+    if (sourceSpecific(definition)) return null;
     if (explicitVersion(definition) === "5.0") return null;
     if (!["neutrophil_count_decreased", "thrombocytopenia", "lymphopenia", "neutropenia_with_fever"].includes(category)) return null;
     const mapped = category === "neutropenia_with_fever" ? "neutrophil_count_decreased" : category;
@@ -669,6 +678,7 @@
   }
 
   function gradeForValue(definition, rawValue) {
+    if (sourceSpecific(definition)) return null;
     if (rawValue === undefined || rawValue === null || rawValue === "") return null;
     let value = Number(rawValue);
     if (!Number.isFinite(value) || value < 0) return null;
@@ -757,11 +767,11 @@
   function guide(definition) {
     if (isEcogDefinition(definition)) return null;
     const category = categoryFor(definition);
-    const hasCtcae = definition?.ctcae_version || /grade|ctcae/i.test(normalise(definition)) || supportsHaematologyGuide(definition, category);
+    const hasCtcae = sourceSpecific(definition) || definition?.ctcae_version || /grade|ctcae/i.test(normalise(definition)) || supportsHaematologyGuide(definition, category);
     if (!hasCtcae) return null;
     const options = Array.isArray(definition?.options) && definition.options.length
       ? definition.options
-      : [0, 1, 2, 3, 4].map(value => ({ value, label: `Grade ${value}` }));
+      : sourceSpecific(definition) ? [] : [0, 1, 2, 3, 4].map(value => ({ value, label: `Grade ${value}` }));
     const grades = options
       .map(option => ({
         grade: numericGrade(option?.ctcae_grade ?? option?.value, option?.label),
@@ -771,6 +781,7 @@
       .filter(item => item.grade !== null && item.grade >= 0 && item.grade <= 4);
     return {
       version: versionFor(definition, category),
+      sourceSpecific: sourceSpecific(definition),
       term: TERM_LABELS[category] || definition?.label || "Named adverse event",
       category,
       guidance: definition?.assessment_guidance || DEFAULT_GUIDANCE[category] || DEFAULT_GUIDANCE.generic,
@@ -779,8 +790,8 @@
       grades,
       note: versionNote(category, definition),
       comparison: comparisonFor(category, definition),
-      related: relatedFor(category),
-      calculable: isCalculableCategory(category)
+      related: sourceSpecific(definition) ? [] : relatedFor(category),
+      calculable: !sourceSpecific(definition) && isCalculableCategory(category)
     };
   }
 

@@ -81,7 +81,7 @@ const sourceReconciled = ["00202","00815","00423","00377","00378","00381","00262
 for (const code of sourceReconciled) {
   const p = protocol(code);
   assert.strictEqual(p.metadata.encoding_maturity.source_reconciled, true, `${code} source reconciliation flag`);
-  assert.strictEqual(p.metadata.encoding_maturity.reconciled_release, code==="00202"?"0.84.0":code==="00815"?"0.83.8":"0.68.0", `${code} reconciliation release`);
+  assert.strictEqual(p.metadata.encoding_maturity.reconciled_release, code==="00743"?"0.84.1":code==="00202"?"0.84.0":code==="00815"?"0.83.8":"0.68.0", `${code} reconciliation release`);
 }
 
 // Source fidelity sentinels from the v0.68.0 audit remediation.
@@ -125,8 +125,11 @@ assert.strictEqual(result.actionType, "delay");
 result = assess("00743", { child_pugh_class: "C" });
 assert.strictEqual(result.actionType, "contraindicated");
 result = assess("00743", { current_eribulin_dose_level: "0.97", anc_below_0_5_more_than_7_days: true });
+assert.strictEqual(result.actionType, "consultant_review");
+assert(result.findings.some(f => f.ruleId === "ERI00743_RECURRENCE_UNCONFIRMED_0_97"));
+result = assess("00743", { current_eribulin_dose_level: "0.97", anc_below_0_5_more_than_7_days: true, toxicity_recurred_at_reduced_dose: true });
 assert.strictEqual(result.actionType, "dose_reduce");
-assert(result.findings.some(f => f.ruleId === "ERI743_TRIGGER_AT_0_97"));
+assert(result.findings.some(f => f.ruleId === "ERI00743_RECURRENCE_0_97"));
 
 result = assess("00749", { assessment_phase: "cycle_day_8_15", anc_x10e9_l: 0.8 });
 assert.strictEqual(result.actionType, "dose_reduce");
