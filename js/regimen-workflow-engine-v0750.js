@@ -47,6 +47,7 @@
   let pdfPromise=null;
   let activeProtocol=null;
   let activeManifest=null;
+  let panelRequest=0;
 
   function asArray(value){
     if(value===undefined||value===null||value==="") return [];
@@ -210,8 +211,8 @@
     };
   }
 
-  function agentSupportForProtocol(protocol,data){
-    const names=componentNames(protocol).map(normaliseDrug);
+  function agentSupportForProtocol(protocol,data,activeMedicines){
+    const names=(activeMedicines||componentNames(protocol)).map(normaliseDrug);
     const matches=[];
     Object.entries(data?.local_agent_proformas||{}).forEach(([id,item])=>{
       const agents=asArray(item?.match_agents).map(normaliseDrug);
@@ -273,8 +274,8 @@
     };
   }
 
-  function interactionOverrides(protocol,data){
-    const components=componentNames(protocol).map(normaliseDrug);
+  function interactionOverrides(protocol,data,activeMedicines){
+    const components=(activeMedicines||componentNames(protocol)).map(normaliseDrug);
     return asArray(data?.interaction_rules).filter(rule=>
       asArray(rule.match_agents).some(agent=>components.includes(normaliseDrug(agent)))
     ).map(rule=>({
@@ -336,13 +337,32 @@
     };
   }
 
-  function buildManifest(protocol,data,riskRecord={}){
+  function supportPhaseChoices(protocol,data){
+    const entry=data?.supportive_phase_selectors?.[nccpCodeFor(protocol)];
+    // Exact protocol binding: an assessment-profile alias is not a prescribing phase.
+    return entry?.protocol_id===protocol?.protocol_id && String(entry.source_version)===String(protocol?.metadata?.nccp_version)?entry.phases:[];
+  }
+
+  function buildManifest(protocol,data,riskRecord={},supportPhaseId=""){
     if(!protocol) throw new Error("A protocol is required.");
     const metadata=protocol.metadata||{};
-    const supportive=chooseAntiemeticPlan(protocol,data,riskRecord);
-    const agentSupport=agentSupportForProtocol(protocol,data);
+    const choices=supportPhaseChoices(protocol,data);
+    const phase=choices.find(item=>item.id===supportPhaseId);
+    // Never classify a selected phase using the whole regimen's drug list.
+    if(choices.length||riskRecord.baseLevel==="phase_dependent"||riskRecord.level==="phase_dependent"){
+      riskRecord={...riskRecord,baseLevel:"phase_dependent",level:"phase_dependent",phaseResolved:false};
+    }
+    let supportive=chooseAntiemeticPlan(protocol,data,riskRecord);
+    if(phase){
+      supportive=planWithSources(phase.plan_id,data.antiemetic_plans[phase.plan_id],data);
+      // Phase scripts use the national schedule, not a conflicting legacy local proforma.
+      supportive={...supportive,local_prescription_items:[],localPrescriptionSource:null,
+        local_adjunct_note:"",warnings:[...(supportive.warnings||[]),...phase.notes]};
+      riskRecord={...riskRecord,level:supportive.risk_level,label:supportive.label,phaseResolved:true,phaseKey:phase.id};
+    }
+    const agentSupport=agentSupportForProtocol(protocol,data,phase?.active_medicines);
     if(supportive) supportive.agentSupport=agentSupport;
-    const interactions=interactionOverrides(protocol,data);
+    const interactions=interactionOverrides(protocol,data,phase?.active_medicines);
     const extra=resolveExtravasation(protocol,data);
 
     return {
@@ -353,7 +373,9 @@
       title:metadata.short_title||metadata.title||protocol.protocol_id||"SACT regimen",
       indication:metadata.indication||"",
       sourceUrl:metadata.source_url||"",
-      components:componentNames(protocol),
+      components:phase?.active_medicines||componentNames(protocol),
+      supportPhase:phase||null,
+      supportPhaseChoices:choices,
       emetogenic:riskRecord,
       supportiveCare:supportive,
       interactionOverrides:interactions,
@@ -392,7 +414,7 @@
       level:protocol?.supportive_care?.emetogenic_risk||protocol?.metadata?.emetogenic_risk||"pending",
       label:"Emetogenic risk requires review"
     };
-    return buildManifest(protocol,data,risk);
+    return buildManifest(protocol,data,risk,options.supportPhase);
   }
 
   function ensureCss(){
@@ -441,19 +463,25 @@
     return viewer;
   }
 
-  async function openSupportivePdf(protocol){
-    const phaseSelector=root.SACTCheckPatientAssets?.runtimeUrl?.(protocol,'supportive-care-selector');
+  async function openSupportivePdf(protocol,options={}){
+    const phaseSelector=patientAssets()?.runtimeUrl?.(protocol,'supportive-care-selector');
     if(phaseSelector){root.open?.(phaseSelector,'_blank','noopener');return phaseSelector;}
-    const dedicated=root.SACTCheckPatientAssets?.runtimeUrl?.(protocol,'supportive-care');
+    const dedicated=patientAssets()?.runtimeUrl?.(protocol,'supportive-care');
     if(dedicated){root.open?.(dedicated,'_blank','noopener');return dedicated;}
+    const risk=root.SACTCheckEmetogenicRisk?.get?.(protocol)||{};
+    if(!options.supportPhase && (risk.baseLevel==="phase_dependent"||risk.level==="phase_dependent"||protocol?.supportive_care?.emetogenic_risk==="phase_dependent")){
+      return open(protocol,{focusSupport:true});
+    }
     const viewer=openPdfPlaceholder();
     try{
-      const [manifest,pdf,data]=await Promise.all([resolve(protocol),ensurePdf(),load()]);
+      const [manifest,data]=await Promise.all([resolve(protocol,options),load()]);
       if(manifest.supportiveCare.status!=="available"){
         try{viewer?.close?.();}catch(_){}
+        if(manifest.supportiveCare.status==="phase_review_required") return open(protocol,{focusSupport:true});
         root.alert?.(manifest.supportiveCare.message||"A single supportive-care template cannot be generated for this regimen.");
         return null;
       }
+      const pdf=await ensurePdf();
       const payload={manifest,sources:data.sources,generatedAt:new Date().toISOString()};
       return pdf.openInViewer(payload,viewer);
     }catch(error){
@@ -470,6 +498,7 @@
   }
 
   function closePanel(){
+    panelRequest++;
     const overlay=root?.document?.getElementById("regimenWorkflowOverlay");
     if(overlay) overlay.hidden=true;
     root.document?.body?.classList?.remove("workflow-panel-open");
@@ -552,6 +581,17 @@
     </div>`;
   }
 
+  function renderSupportPhaseSelector(manifest){
+    const choices=manifest.supportPhaseChoices||[];
+    if(!choices.length) return "";
+    return `<div class="workflow-support-script"><label for="workflowSupportPhase"><strong>Treatment phase / visit</strong></label>
+      <select id="workflowSupportPhase" style="display:block;width:100%;padding:12px;margin:8px 0" aria-describedby="workflowSupportPhaseHint">
+        <option value="">Choose the phase / visit...</option>
+        ${choices.map(phase=>`<option value="${esc(phase.id)}" ${manifest.supportPhase?.id===phase.id?"selected":""}>${esc(phase.label)}</option>`).join("")}
+      </select><p id="workflowSupportPhaseHint">Select the treatment being given. Each script applies only to that phase / visit; no dates are required.</p>
+      ${manifest.supportPhase?`<p><strong>Selected medicines:</strong> ${manifest.supportPhase.active_medicines.map(esc).join(", ")}</p><ul>${manifest.supportPhase.notes.map(note=>`<li>${esc(note)}</li>`).join("")}</ul>`:""}</div>`;
+  }
+
   function renderPanel(manifest){
     const body=root.document.getElementById("workflowPanelBody");
     if(!body) return;
@@ -594,8 +634,10 @@
           <div class="workflow-module-icon">Rx</div>
           <div><span>Supportive care</span><h3>${esc(risk.label||supportive.label||"Antiemetic support")}</h3><p>${esc(supportive.label||supportive.message||"Regimen-derived supportive care")}</p></div>
           ${moduleStatus(supportive.status)}
+          ${renderSupportPhaseSelector(manifest)}
           ${renderSupportiveScript(manifest)}
-          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||root.SACTCheckPatientAssets?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${root.SACTCheckPatientAssets?.relativePath?.(activeProtocol,'supportive-care')?"Open supportive-care review":"Open prescribing support"}</button>
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"Open supportive-care review":manifest.supportPhase?"Open selected phase script":"Open prescribing support"}</button>
+          ${supportive.status==="phase_review_required"&&!manifest.supportPhaseChoices.length&&!patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?`<p>A verified phase-specific script is not yet available for this regimen. <a href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the NCCP regimen for phase/day guidance</a>.</p>`:""}
           <a class="workflow-source-link" href="${esc(dataCache?.sources?.nccp_antiemetic_v8?.url||"")}" target="_blank" rel="noopener noreferrer">NCCP antiemetic source ↗</a>
         </article>
 
@@ -649,7 +691,10 @@
     });
     body.querySelector("[data-workflow-support]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
-      openSupportivePdf(protocol);
+      openSupportivePdf(protocol,{supportPhase:manifest.supportPhase?.id});
+    });
+    body.querySelector("#workflowSupportPhase")?.addEventListener("change",event=>{
+      open(activeProtocol,{supportPhase:event.target.value,focusSupport:true});
     });
     body.querySelector("[data-workflow-patient-guide]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
@@ -665,8 +710,10 @@
   }
 
   async function open(protocol,options={}){
+    ensureCss();
     const overlay=ensurePanel();
     if(!overlay||!protocol) return;
+    const request=++panelRequest;
     activeProtocol=protocol;
     root.__v0740ActiveProtocol=protocol; // Preserve context for workflow-linked services.
     const body=root.document.getElementById("workflowPanelBody");
@@ -674,9 +721,17 @@
     overlay.hidden=false;
     root.document.body.classList.add("workflow-panel-open");
     try{
-      activeManifest=await resolve(protocol,options);
+      const manifest=await resolve(protocol,options);
+      if(request!==panelRequest) return;
+      activeManifest=manifest;
       renderPanel(activeManifest);
+      if(options.focusSupport){
+        const target=body.querySelector("#workflowSupportPhase")||body.querySelector("[data-workflow-support]");
+        target?.scrollIntoView?.({block:"center"});
+        target?.focus?.();
+      }
     }catch(error){
+      if(request!==panelRequest) return;
       body.innerHTML=`<div class="workflow-error"><strong>Workflow could not be generated.</strong><p>${esc(error.message)}</p></div>`;
     }
   }

@@ -72,10 +72,18 @@
     p.text(`v${RELEASE}`,W-M-35,H-35,{size:7.5,bold:true,c:RGB.white});
     p.y=H-103;
 
-    p.text(manifest.title||"SACT regimen",M,p.y,{size:15,bold:true,c:RGB.navy});
-    p.y-=17;
+    if(manifest.supportPhase){
+      p.y=p.para(manifest.title||"SACT regimen",M,p.y,CW,{size:12,bold:true,leading:15,c:RGB.navy,max:3})-3;
+    }else{
+      p.text(manifest.title||"SACT regimen",M,p.y,{size:15,bold:true,c:RGB.navy});
+      p.y-=17;
+    }
     p.text(`NCCP ${manifest.nccpCode||"-"}${manifest.nccpVersion?` | Version ${manifest.nccpVersion}`:""}`,M,p.y,{size:8,bold:true,c:RGB.muted});
     p.y-=18;
+    if(manifest.supportPhase){
+      p.y=p.para(`SELECTED PHASE: ${manifest.supportPhase.label}`,M,p.y,CW,{size:9,bold:true,leading:12,c:RGB.teal})-3;
+      p.y=p.para(`Active medicines: ${(manifest.components||[]).join(", ")}. Day 1 below means the selected treatment visit.`,M,p.y,CW,{size:8,leading:10,c:RGB.muted})-8;
+    }
 
     p.rect(M,p.y-38,CW,40,RGB.pale);
     p.text("Patient name: ____________________________________",M+8,p.y-10,{size:8});
@@ -170,7 +178,8 @@
   function filename(payload){
     const m=payload?.manifest||{};
     const code=ascii(m.nccpCode||"regimen").replace(/[^A-Za-z0-9_-]/g,"_");
-    return `SACTCheck_Supportive_Care_NCCP_${code}.pdf`;
+    const phase=payload?.manifest?.supportPhase?.id;
+    return `SACTCheck_Supportive_Care_NCCP_${code}${phase?"_"+String(phase).replace(/[^a-z0-9_-]/gi,""):""}.pdf`;
   }
   function openInViewer(payload,targetWindow=null){
     const data=buildPdf(payload),file=filename(payload);
