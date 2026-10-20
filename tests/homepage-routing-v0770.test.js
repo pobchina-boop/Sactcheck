@@ -4,17 +4,18 @@ const assert=require("assert");
 const read=p=>fs.readFileSync(p,"utf8");
 const html=read("index.html");
 const release=read("js/sactcheck-release.js");
-const patient=read("js/patient-support-v0750.js");
+const patient=require("../js/patient-asset-registry-v0810.js");
 const build=read("tools/build-pages-site.js");
-const study=read("js/study-release.js");
-assert(release.includes('RELEASE="0.78.0"'),"canonical release missing");
-assert(html.includes('Regimen-specific oncology information pipeline'),"mission-led homepage missing");
+// Exercise current direct-entry/modal behaviour instead of matching a removed helper.
+require("./landing-ui-v0823.test.cjs");
+const version=JSON.parse(read("package.json")).version;
+assert(release.includes(`RELEASE="${version}"`),"canonical release must match package version");
+assert(html.includes('Operationalising NCCP protocols at the point of care.'),"mission-led homepage missing");
 assert(!html.includes('Launch SACTCheck Engine'),"legacy launch gate still visible");
-assert(study.includes('function shouldAutoOpen() { return false; }'),"welcome modal still auto-opens");
 for(const code of ["00209","00831"]){
-  assert(patient.includes(`https://sactcheck.com/patient/${code}/`) || patient.includes('https://sactcheck.com/patient/${code}/'),`canonical patient route ${code} missing`);
+  assert.equal(patient.publicUrl(code),`https://sactcheck.com/patient/${code}/`,`canonical patient route ${code} missing`);
   assert(fs.existsSync(`patient/${code}/index.html`),`source patient alias ${code} missing`);
   assert(fs.existsSync(`docs/patient/${code}/index.html`),`legacy patient route ${code} missing`);
 }
 assert(build.includes('"patient"'),"Pages build does not publish patient aliases");
-console.log("v0.78.0 homepage/routing compatibility checks passed");
+console.log("Current homepage/routing compatibility checks passed");
