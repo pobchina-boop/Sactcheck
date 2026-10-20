@@ -1,0 +1,2128 @@
+{
+  "purpose": "Independent expectations, not executed tests. Source gaps deliberately yield review, not inventedproceed. Expectedaction names are semantic oracles, not exactengineidentifiers.",
+  "checked_date": "2026-10-20",
+  "units": {
+    "anc_x10e9_l": "10^9/L",
+    "platelets_x10e9_l": "10^9/L",
+    "gfr_ml_min": "mL/min",
+    "crcl_ml_min": "mL/min",
+    "bilirubin_umol_l": "micromol/L"
+  },
+  "cases": [
+    {
+      "id": "00348-001",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.01,
+        "platelets_x10e9_l": 101
+      },
+      "expected": {
+        "action": "full_dose_haematology_domain",
+        "note": "Both source thresholds strictly exceeded",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-002",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 101
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "ANC exactly1 is absent from the printed table",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-003",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 0.99,
+        "platelets_x10e9_l": 101
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Delay at least1week;100% after source count recovery",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-004",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.01,
+        "platelets_x10e9_l": 100
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Platelets exactly100 absent from printed table",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-005",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.01,
+        "platelets_x10e9_l": 99
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Delay at least1week; source platelet-delay row",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-006",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 100
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Both exact-equality boundaries unlisted",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-007",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 0.9,
+        "platelets_x10e9_l": 90
+      },
+      "expected": {
+        "action": "delay_and_review",
+        "note": "Both low; do not infer a dose from an unlisted combination",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-008",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.5,
+        "platelets_x10e9_l": 90
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Must not use the copied75% or>90 threshold",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-009",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.2,
+        "platelets_x10e9_l": 120
+      },
+      "expected": {
+        "action": "full_dose_haematology_domain",
+        "note": "ActualddAC does not requireANC>=1.5",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-010",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "platelets_x10e9_l": 99
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Single abnormal value sufficient; missingANC remainsunassessed",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-011",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 0.9
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Single abnormalANC sufficient; missingplatelets unassessed",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-012",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "platelets_x10e9_l": 99,
+        "haematological_delay_occurrence": 2
+      },
+      "expected": {
+        "action": "delay_then_75_percent",
+        "note": "Source platelet-delay row; reduce after second delay and count recovery",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-013",
+      "regimen": "00348",
+      "phase": "unknown",
+      "inputs": {
+        "anc_x10e9_l": 1.1,
+        "platelets_x10e9_l": 95
+      },
+      "expected": {
+        "action": "phase_review",
+        "note": "Cannot choose between weekly/platinum andddAC count rules; no definitive dose",
+        "source_physical_page": null,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-014",
+      "regimen": "00348",
+      "phase": "unknown",
+      "inputs": {
+        "bilirubin_umol_l": 40
+      },
+      "expected": {
+        "action": "phase_review",
+        "note": "Do not report doxorubicin50% unlessAC is active",
+        "source_physical_page": null,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-015",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {},
+      "expected": {
+        "action": "unassessed",
+        "note": "No value supplied does not meanproceed",
+        "source_physical_page": null,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-016",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 19.9
+      },
+      "expected": {
+        "action": "do_not_administer_carboplatin",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-017",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 20
+      },
+      "expected": {
+        "action": "do_not_administer_carboplatin",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-018",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 20.01
+      },
+      "expected": {
+        "action": "extreme_caution",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-019",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 30
+      },
+      "expected": {
+        "action": "extreme_caution",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-020",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 30.01
+      },
+      "expected": {
+        "action": "no_low_gfr_stop_trigger",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-021",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 125
+      },
+      "expected": {
+        "action": "calvert_target_check",
+        "note": "Target must matchNCCP schedule",
+        "source_physical_page": 2,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "target_auc": 6,
+          "calculated_mg": 900
+        }
+      }
+    },
+    {
+      "id": "00348-022",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 140
+      },
+      "expected": {
+        "action": "calvert_cap_check",
+        "note": "GFR capped125 in this source; source dosing review applies",
+        "source_physical_page": 2,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "target_auc": 6,
+          "gfr_cap_ml_min": 125,
+          "calculated_mg": 900
+        }
+      }
+    },
+    {
+      "id": "00348-023",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 1.25
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 80
+        }
+      }
+    },
+    {
+      "id": "00348-024",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 1.26
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 60
+        }
+      }
+    },
+    {
+      "id": "00348-025",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 2
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 60
+        }
+      }
+    },
+    {
+      "id": "00348-026",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 2.01
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 40
+        }
+      }
+    },
+    {
+      "id": "00348-027",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 5
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 40
+        }
+      }
+    },
+    {
+      "id": "00348-028",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 10,
+        "bilirubin_ratio_uln": 1
+      },
+      "expected": {
+        "action": "paclitaxel_not_recommended",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-029",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 1,
+        "bilirubin_ratio_uln": 5.01
+      },
+      "expected": {
+        "action": "paclitaxel_not_recommended",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-030",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 1,
+        "bilirubin_ratio_uln": 1.255
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-031",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 1,
+        "bilirubin_ratio_uln": 2.005
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-032",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 10
+      },
+      "expected": {
+        "action": "paclitaxel_not_recommended",
+        "note": "OR stop applies even withoutbilirubin",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-033",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "bilirubin_ratio_uln": 1
+      },
+      "expected": {
+        "action": "partial_await_alt",
+        "note": "Do not inferALT<10 frommissingALT",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-034",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 20
+      },
+      "expected": {
+        "action": "doxorubicin_dose_domain",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 50
+        }
+      }
+    },
+    {
+      "id": "00348-035",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 50
+      },
+      "expected": {
+        "action": "doxorubicin_dose_domain",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 50
+        }
+      }
+    },
+    {
+      "id": "00348-036",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 50.5
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-037",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 51
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-038",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 51.01
+      },
+      "expected": {
+        "action": "doxorubicin_dose_domain",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 25
+        }
+      }
+    },
+    {
+      "id": "00348-039",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 86
+      },
+      "expected": {
+        "action": "doxorubicin_dose_domain",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 25
+        }
+      }
+    },
+    {
+      "id": "00348-040",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 86.01
+      },
+      "expected": {
+        "action": "omit_doxorubicin",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-041",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "child_pugh_class": "C"
+      },
+      "expected": {
+        "action": "omit_doxorubicin",
+        "note": "Independent source stop",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-042",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 30
+      },
+      "expected": {
+        "action": "cyclophosphamide_dose_domain",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 100
+        }
+      }
+    },
+    {
+      "id": "00348-043",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 29
+      },
+      "expected": {
+        "action": "cyclophosphamide_dose_domain",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 75
+        }
+      }
+    },
+    {
+      "id": "00348-044",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 10
+      },
+      "expected": {
+        "action": "cyclophosphamide_dose_domain",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 75
+        }
+      }
+    },
+    {
+      "id": "00348-045",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 9.99
+      },
+      "expected": {
+        "action": "cyclophosphamide_not_recommended",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-046",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 29.5
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-047",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "hepatic_impairment_severity": "severe"
+      },
+      "expected": {
+        "action": "cyclophosphamide_not_recommended",
+        "note": "Reduced efficacy concern; not a fabricatedbilirubin threshold",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-048",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "haemodialysis": true
+      },
+      "expected": {
+        "action": "consider_doxorubicin_75_percent",
+        "note": "Dialysis dose needsexplicitconsultantreview; no automaticfull-dose rule",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-049",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "neuropathy_grade": 2,
+        "neuropathy_occurrence": 1
+      },
+      "expected": {
+        "action": "reduce_paclitaxel_10_mg_m2",
+        "note": "Firstoccurrence",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-050",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "neuropathy_grade": 2,
+        "neuropathy_persistent_or_second_occurrence": true
+      },
+      "expected": {
+        "action": "further_reduce_paclitaxel_10_mg_m2",
+        "note": "Furtherrelative reduction",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-051",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "other_non_haematological_toxicity_grade": 2
+      },
+      "expected": {
+        "action": "hold_until_grade_le1_then_reduce_10_mg_m2",
+        "note": "Othergrade2",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-052",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_non_haematological_toxicity_grade": 3
+      },
+      "expected": {
+        "action": "discontinue_paclitaxel",
+        "note": "Grade3reactionmust override reduction-only outcome",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-053",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_dose_reduction_count": 2,
+        "intolerable_toxicity_after_reductions": true
+      },
+      "expected": {
+        "action": "discontinue_paclitaxel",
+        "note": "Source says cannot tolerate after2, notonly count>2",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-054",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_dose_reduction_count": 2,
+        "intolerable_toxicity_after_reductions": false
+      },
+      "expected": {
+        "action": "no_count_only_discontinuation",
+        "note": "Count2 alone doesnot establishintolerance",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-055",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_delay_days": 14
+      },
+      "expected": {
+        "action": "no_duration_only_discontinuation",
+        "note": "Source says greaterthan2weeks",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-056",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_delay_days": 14.1
+      },
+      "expected": {
+        "action": "discontinue_paclitaxel",
+        "note": "Delay>2weeks",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-057",
+      "regimen": "00348",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "neuropathy_grade": 2,
+        "neuropathy_occurrence": 1
+      },
+      "expected": {
+        "action": "no_paclitaxel_dose_action",
+        "note": "Paclitaxel not activeinAC; still assesssymptom clinically",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-058",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "bilirubin_umol_l": 40
+      },
+      "expected": {
+        "action": "no_doxorubicin_dose_action",
+        "note": "Doxorubicin not activeintaxanephase; bilirubin stillrelevant usingpaclitaxelULN context",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-059",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.01,
+        "platelets_x10e9_l": 101
+      },
+      "expected": {
+        "action": "full_dose_haematology_domain",
+        "note": "Both source thresholds strictly exceeded",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-060",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 101
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "ANC exactly1 is absent from the printed table",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-061",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 0.99,
+        "platelets_x10e9_l": 101
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Delay at least1week;100% after source count recovery",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-062",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.01,
+        "platelets_x10e9_l": 100
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Platelets exactly100 absent from printed table",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-063",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.01,
+        "platelets_x10e9_l": 99
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Delay at least1week; source platelet-delay row",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-064",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 100
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Both exact-equality boundaries unlisted",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-065",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 0.9,
+        "platelets_x10e9_l": 90
+      },
+      "expected": {
+        "action": "delay_and_review",
+        "note": "Both low; do not infer a dose from an unlisted combination",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-066",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.5,
+        "platelets_x10e9_l": 90
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Must not use the copied75% or>90 threshold",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-067",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 1.2,
+        "platelets_x10e9_l": 120
+      },
+      "expected": {
+        "action": "full_dose_haematology_domain",
+        "note": "ActualddAC does not requireANC>=1.5",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-068",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "platelets_x10e9_l": 99
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Single abnormal value sufficient; missingANC remainsunassessed",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-069",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "anc_x10e9_l": 0.9
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Single abnormalANC sufficient; missingplatelets unassessed",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-070",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "platelets_x10e9_l": 99,
+        "haematological_delay_occurrence": 2
+      },
+      "expected": {
+        "action": "delay_then_75_percent",
+        "note": "Source platelet-delay row; reduce after second delay and count recovery",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-071",
+      "regimen": "00734",
+      "phase": "unknown",
+      "inputs": {
+        "anc_x10e9_l": 1.1,
+        "platelets_x10e9_l": 95
+      },
+      "expected": {
+        "action": "phase_review",
+        "note": "Cannot choose between weekly/platinum andddAC count rules; no definitive dose",
+        "source_physical_page": null,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-072",
+      "regimen": "00734",
+      "phase": "unknown",
+      "inputs": {
+        "bilirubin_umol_l": 40
+      },
+      "expected": {
+        "action": "phase_review",
+        "note": "Do not report doxorubicin50% unlessAC is active",
+        "source_physical_page": null,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-073",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {},
+      "expected": {
+        "action": "unassessed",
+        "note": "No value supplied does not meanproceed",
+        "source_physical_page": null,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-074",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 19.9
+      },
+      "expected": {
+        "action": "do_not_administer_carboplatin",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-075",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 20
+      },
+      "expected": {
+        "action": "do_not_administer_carboplatin",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-076",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 20.01
+      },
+      "expected": {
+        "action": "extreme_caution",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-077",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 30
+      },
+      "expected": {
+        "action": "extreme_caution",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-078",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 30.01
+      },
+      "expected": {
+        "action": "no_low_gfr_stop_trigger",
+        "note": "Carboplatin renal band only; not general clearance",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-079",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 125
+      },
+      "expected": {
+        "action": "calvert_target_check",
+        "note": "Target must matchNCCP schedule",
+        "source_physical_page": 2,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "target_auc": 2,
+          "calculated_mg": 300
+        }
+      }
+    },
+    {
+      "id": "00734-080",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "gfr_ml_min": 140
+      },
+      "expected": {
+        "action": "calvert_cap_check",
+        "note": "GFR capped125 in this source; source dosing review applies",
+        "source_physical_page": 2,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "target_auc": 2,
+          "gfr_cap_ml_min": 125,
+          "calculated_mg": 300
+        }
+      }
+    },
+    {
+      "id": "00734-081",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 1.25
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 80
+        }
+      }
+    },
+    {
+      "id": "00734-082",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 1.26
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 60
+        }
+      }
+    },
+    {
+      "id": "00734-083",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 2
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 60
+        }
+      }
+    },
+    {
+      "id": "00734-084",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 2.01
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 40
+        }
+      }
+    },
+    {
+      "id": "00734-085",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 9.99,
+        "bilirubin_ratio_uln": 5
+      },
+      "expected": {
+        "action": "paclitaxel_dose_domain",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "mg_m2": 40
+        }
+      }
+    },
+    {
+      "id": "00734-086",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 10,
+        "bilirubin_ratio_uln": 1
+      },
+      "expected": {
+        "action": "paclitaxel_not_recommended",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-087",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 1,
+        "bilirubin_ratio_uln": 5.01
+      },
+      "expected": {
+        "action": "paclitaxel_not_recommended",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-088",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 1,
+        "bilirubin_ratio_uln": 1.255
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-089",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 1,
+        "bilirubin_ratio_uln": 2.005
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Source paclitaxel hepatic bands; do not apply toAC",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-090",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "alt_ratio_uln": 10
+      },
+      "expected": {
+        "action": "paclitaxel_not_recommended",
+        "note": "OR stop applies even withoutbilirubin",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-091",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "bilirubin_ratio_uln": 1
+      },
+      "expected": {
+        "action": "partial_await_alt",
+        "note": "Do not inferALT<10 frommissingALT",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-092",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 20
+      },
+      "expected": {
+        "action": "doxorubicin_dose_domain",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 50
+        }
+      }
+    },
+    {
+      "id": "00734-093",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 50
+      },
+      "expected": {
+        "action": "doxorubicin_dose_domain",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 50
+        }
+      }
+    },
+    {
+      "id": "00734-094",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 50.5
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-095",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 51
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-096",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 51.01
+      },
+      "expected": {
+        "action": "doxorubicin_dose_domain",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 25
+        }
+      }
+    },
+    {
+      "id": "00734-097",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 86
+      },
+      "expected": {
+        "action": "doxorubicin_dose_domain",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 25
+        }
+      }
+    },
+    {
+      "id": "00734-098",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "bilirubin_umol_l": 86.01
+      },
+      "expected": {
+        "action": "doxorubicin_not_recommended",
+        "note": "Preserve source >51 lowerbound and exact units",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-099",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "child_pugh_class": "C"
+      },
+      "expected": {
+        "action": "doxorubicin_not_recommended",
+        "note": "Independent source stop",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-100",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 30
+      },
+      "expected": {
+        "action": "cyclophosphamide_dose_domain",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 100
+        }
+      }
+    },
+    {
+      "id": "00734-101",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 29
+      },
+      "expected": {
+        "action": "consider_cyclophosphamide_dose",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 75
+        }
+      }
+    },
+    {
+      "id": "00734-102",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 10
+      },
+      "expected": {
+        "action": "consider_cyclophosphamide_dose",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false,
+        "dose": {
+          "percent": 75
+        }
+      }
+    },
+    {
+      "id": "00734-103",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 9.99
+      },
+      "expected": {
+        "action": "cyclophosphamide_not_recommended",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-104",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 29.5
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Do not silentlyround; <10 mayconsider50% onlyif unavoidable",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-105",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "hepatic_impairment_severity": "severe"
+      },
+      "expected": {
+        "action": "cyclophosphamide_not_recommended",
+        "note": "Reduced efficacy concern; not a fabricatedbilirubin threshold",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-106",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "haemodialysis": true
+      },
+      "expected": {
+        "action": "consider_doxorubicin_75_percent",
+        "note": "Dialysis dose needsexplicitconsultantreview; no automaticfull-dose rule",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-107",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "neuropathy_grade": 2,
+        "neuropathy_occurrence": 1
+      },
+      "expected": {
+        "action": "reduce_paclitaxel_10_mg_m2",
+        "note": "Firstoccurrence",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-108",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "neuropathy_grade": 2,
+        "neuropathy_persistent_or_second_occurrence": true
+      },
+      "expected": {
+        "action": "further_reduce_paclitaxel_10_mg_m2",
+        "note": "Furtherrelative reduction",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-109",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "other_non_haematological_toxicity_grade": 2
+      },
+      "expected": {
+        "action": "hold_until_grade_le1_then_reduce_10_mg_m2",
+        "note": "Othergrade2",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-110",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_non_haematological_toxicity_grade": 3
+      },
+      "expected": {
+        "action": "discontinue_paclitaxel",
+        "note": "Grade3reactionmust override reduction-only outcome",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-111",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_dose_reduction_count": 2,
+        "intolerable_toxicity_after_reductions": true
+      },
+      "expected": {
+        "action": "discontinue_paclitaxel",
+        "note": "Source says cannot tolerate after2, notonly count>2",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-112",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_dose_reduction_count": 2,
+        "intolerable_toxicity_after_reductions": false
+      },
+      "expected": {
+        "action": "no_count_only_discontinuation",
+        "note": "Count2 alone doesnot establishintolerance",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-113",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_delay_days": 14
+      },
+      "expected": {
+        "action": "no_duration_only_discontinuation",
+        "note": "Source says greaterthan2weeks",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-114",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "paclitaxel_delay_days": 14.1
+      },
+      "expected": {
+        "action": "discontinue_paclitaxel",
+        "note": "Delay>2weeks",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-115",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "neuropathy_grade": 2,
+        "neuropathy_occurrence": 1
+      },
+      "expected": {
+        "action": "no_paclitaxel_dose_action",
+        "note": "Paclitaxel not activeinAC; still assesssymptom clinically",
+        "source_physical_page": 6,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-116",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "bilirubin_umol_l": 40
+      },
+      "expected": {
+        "action": "no_doxorubicin_dose_action",
+        "note": "Doxorubicin not activeintaxanephase; bilirubin stillrelevant usingpaclitaxelULN context",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-117",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "anc_x10e9_l": 1
+      },
+      "expected": {
+        "action": "full_anc_domain",
+        "note": "IndependentANC band appliesbothdrugs everyweekly dose",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-118",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "anc_x10e9_l": 0.99
+      },
+      "expected": {
+        "action": "delay",
+        "note": "IndependentANC band appliesbothdrugs everyweekly dose",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-119",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "anc_x10e9_l": 0.5
+      },
+      "expected": {
+        "action": "delay",
+        "note": "IndependentANC band appliesbothdrugs everyweekly dose",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-120",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "anc_x10e9_l": 0.499
+      },
+      "expected": {
+        "action": "delay_consider_25_percent_reduction",
+        "note": "IndependentANC band appliesbothdrugs everyweekly dose",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-121",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "platelets_x10e9_l": 100
+      },
+      "expected": {
+        "action": "full_platelet_domain",
+        "note": "Independentplateletband; normalANC notassumed",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-122",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "platelets_x10e9_l": 99.9
+      },
+      "expected": {
+        "action": "clinician_discretion_if_well",
+        "note": "Independentplateletband; normalANC notassumed",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-123",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "platelets_x10e9_l": 75
+      },
+      "expected": {
+        "action": "clinician_discretion_if_well",
+        "note": "Independentplateletband; normalANC notassumed",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-124",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "platelets_x10e9_l": 74.9
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Independentplateletband; normalANC notassumed",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-125",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "platelets_x10e9_l": 50
+      },
+      "expected": {
+        "action": "delay",
+        "note": "Independentplateletband; normalANC notassumed",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-126",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "platelets_x10e9_l": 49.9
+      },
+      "expected": {
+        "action": "delay_consider_25_percent_reduction",
+        "note": "Independentplateletband; normalANC notassumed",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-127",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "day_number": 1,
+        "anc_x10e9_l": 0.4
+      },
+      "expected": {
+        "action": "delay_both_drugs_consider_25_percent_reduction",
+        "note": "Notpaclitaxel-onlyomission",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-128",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "day_number": 8,
+        "anc_x10e9_l": 0.4
+      },
+      "expected": {
+        "action": "delay_both_drugs_consider_25_percent_reduction",
+        "note": "Notpaclitaxel-onlyomission",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-129",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "day_number": 15,
+        "anc_x10e9_l": 0.4
+      },
+      "expected": {
+        "action": "delay_both_drugs_consider_25_percent_reduction",
+        "note": "Notpaclitaxel-onlyomission",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-130",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "febrile_neutropenia": true
+      },
+      "expected": {
+        "action": "delay_consider_25_percent_reduction",
+        "note": "ClinicalacuteFNalso requiresurgentcare; thisonly representsdosemodification",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-131",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "haematological_delay_days": 15
+      },
+      "expected": {
+        "action": "delay_consider_50_percent_or_cease",
+        "note": "Prolongedrecoverygreaterthan2weeks",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-132",
+      "regimen": "00734",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "haematological_delay_occurrence": 3
+      },
+      "expected": {
+        "action": "delay_consider_50_percent_or_cease",
+        "note": "Thirdmyelosuppressiondelay",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-133",
+      "regimen": "00734",
+      "phase": "baseline",
+      "inputs": {
+        "anc_x10e9_l": 1.5
+      },
+      "expected": {
+        "action": "source_gap_review",
+        "note": "Eligibility>1.5butexclusion<1.5;exactboundaryneedsreview",
+        "source_physical_page": 3,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00734-134",
+      "regimen": "00734",
+      "phase": "dose_dense_ac",
+      "inputs": {
+        "crcl_ml_min": 10
+      },
+      "expected": {
+        "action": "doxorubicin_source_gap_review",
+        "note": "Source>10and<10 omitexact10; cyclophosphamide10bandseparatelyapplies",
+        "source_physical_page": 5,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-135",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "cycle_number": 2,
+        "day_number": 1,
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 90
+      },
+      "expected": {
+        "action": "full_dose_haematology_domain",
+        "note": "Exactinclusiveboundaries",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-136",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "cycle_number": 2,
+        "day_number": 1,
+        "anc_x10e9_l": 0.99,
+        "platelets_x10e9_l": 90
+      },
+      "expected": {
+        "action": "delay",
+        "note": "ANC<1",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-137",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "cycle_number": 2,
+        "day_number": 1,
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 89
+      },
+      "expected": {
+        "action": "delay_and_source_wording_review",
+        "note": "Ambiguousprinted<70\u201390 cannotmeanproceed",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-138",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "cycle_number": 1,
+        "day_number": 1,
+        "anc_x10e9_l": 1.1,
+        "platelets_x10e9_l": 100
+      },
+      "expected": {
+        "action": "baseline_source_review",
+        "note": "Table2labelledcycles2\u20134",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-139",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "cycle_number": 2,
+        "day_number": 8,
+        "anc_x10e9_l": 0.4
+      },
+      "expected": {
+        "action": "source_specific_review",
+        "note": "No00348D8counttable; removeimportedomitthreshold",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    },
+    {
+      "id": "00348-140",
+      "regimen": "00348",
+      "phase": "taxane_platinum",
+      "inputs": {
+        "cycle_number": 2,
+        "day_number": 15,
+        "platelets_x10e9_l": 49
+      },
+      "expected": {
+        "action": "source_specific_review",
+        "note": "No00348D15counttable; notautomaticcopiedomission",
+        "source_physical_page": 4,
+        "whole_regimen_clearance": false
+      }
+    }
+  ]
+}

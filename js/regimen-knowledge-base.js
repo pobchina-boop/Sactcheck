@@ -51,7 +51,7 @@
         return response.json();
       })
       .then(async payload => {
-        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json", "data/regimen-knowledge-base-v0849-addendum.json", "data/regimen-knowledge-base-v08412-addendum.json"]) {
+        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json", "data/regimen-knowledge-base-v0849-addendum.json", "data/regimen-knowledge-base-v08412-addendum.json", "data/regimen-knowledge-base-v08413-addendum.json"]) {
         const response = await fetch(extraUrl, { cache: "no-store" });
         if (!response.ok) throw new Error(`Could not load regimen knowledge (${response.status}).`);
         const extra = await response.json();
@@ -348,6 +348,7 @@
         <div class="regimen-information-actions">${official}</div>
       </section>
 
+      ${root.SACTCheckTreatmentEvidence?.render(regimenProfile)||""}
       ${overview}
       ${regimenProfile?.reference_links?.length ? `<section class="regimen-information-section"><h3>Regimen sources and patient resources</h3><div class="regimen-information-actions">${regimenProfile.reference_links.map(item => publicationLink(item, item.label)).join("")}</div></section>` : ""}
       ${patientSelection}
@@ -364,10 +365,10 @@
         ${missingComponents.length ? `<p class="regimen-info-note"><strong>Not yet mapped:</strong> ${escapeHtml(missingComponents.join(" · "))}</p>` : ""}
       </section>
 
-      <section class="regimen-information-section">
+      ${regimenProfile?.evidence_at_a_glance ? "" : `<section class="regimen-information-section">
         ${sectionHeadMarkup(evidenceSectionNumber, "Evidence supporting this regimen and indication", "Primary publications provide context. The current NCCP protocol remains the operational source.")}
         ${evidence.length ? `<div class="regimen-evidence-list">${evidence.map(evidenceMarkup).join("")}</div>` : '<div class="regimen-info-empty"><strong>No evidence mapping is available yet.</strong><p>The official NCCP protocol remains available above. Evidence records are being added in controlled batches.</p></div>'}
-      </section>
+      </section>`}
 
       <aside class="regimen-information-boundary">
         <strong>Decision support and educational boundary</strong>

@@ -39,17 +39,13 @@ check(()=>assert.doesNotMatch(read('css/regimen-workflow-v0720.css'),/content:"P
 const edits=['contact-text-changes.json','contact-pdf-changes.json'].flatMap(n=>JSON.parse(read('validation/interface-v0844/'+n)));
 for(const edit of edits)check(()=>{
  let content=fs.readFileSync(path.join(root,edit.path));
- // v0.84.9 only adds a dedicated dispatch and five codes to this builder.
- // Strip those exact additions to keep the original contact migration byte-protected.
- if(edit.path==='tools/build-complete-pathways.cjs')content=Buffer.from(content.toString()
-  // Remove only the reviewed v0.84.12 additions; keep the original contact-content hash.
-  .replace("codes=['00797','00796','00790','00789','00785',", "codes=[")
-  .replace(" if(process.env.SACT_SUITE_CODES&&!process.env.SACT_SUITE_CODES.split(',').includes(code))continue;\n",'')
-  .replaceAll("'0.84.1','0.84.12'","'0.84.1'")
-  .replace("if(authoredRelease==='0.84.12')s=s.replace('</head>','<link rel=\"stylesheet\" href=\"../../assets/patient/phesgo-print-v08412.css\"></head>');",'')
-  .replace("d.suite_release==='0.83.9'||d.suite_release==='0.84.12'","d.suite_release==='0.83.9'")
-  .replace("codes=['00588','00794','00776','00322','00414',", "codes=[")
-  .replace(" if(d.service_kind==='targeted'){require('./targeted-patient-suite-v0849.cjs').buildSuite(d,{anatomy,write});continue;}\n",''));
- assert.equal(crypto.createHash('sha256').update(content).digest('hex'),edit.after,edit.path);
+ // v0.84.13 deliberately revises the generator and 00857; retain exact scoped fixtures.
+ if(edit.path==='tools/build-complete-pathways.cjs'){
+  const revision=JSON.parse(read('validation/tnbc-v08413/builder-revision.json'));
+  assert.equal(revision.original_contact_migration_hash,edit.after);
+  assert.equal(crypto.createHash('sha256').update(content).digest('hex'),revision.after);
+  assert(content.toString().includes('Insert numbers here'));
+ }else assert.equal(crypto.createHash('sha256').update(content).digest('hex'),require('./helpers/retrospective-v08413.cjs').expectedHash(edit.path,edit.after),edit.path);
+
 });
 console.log(`${checks} interface, source-range boundary, partial-input, steroid context, export and contact-migration checks passed.`);

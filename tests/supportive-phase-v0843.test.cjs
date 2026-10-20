@@ -77,6 +77,9 @@ function harness(){
 const settle=()=>new Promise(resolve=>setImmediate(resolve));
 (async()=>{
  const h=harness();
+ // Preserve the historical dynamic fallback tests after these regimens migrate to dedicated suites.
+ const authoredRegistry=h.ctx.SACTCheckPatientAssets;
+ h.ctx.SACTCheckPatientAssets={...authoredRegistry,relativePath:(p,a)=>['00348','00734'].includes(String(p.metadata.nccp_regimen_code).padStart(5,'0'))&&a.startsWith('supportive-care')?null:authoredRegistry.relativePath(p,a),runtimeUrl:(p,a)=>['00348','00734'].includes(String(p.metadata.nccp_regimen_code).padStart(5,'0'))&&a.startsWith('supportive-care')?null:authoredRegistry.runtimeUrl(p,a)};
  const card={dataset:{jsonProtocolId:byCode('00348').protocol_id}};
  const badge={closest:()=>card};
  h.events.click({target:{closest:()=>badge},preventDefault(){},stopImmediatePropagation(){}});await settle();
@@ -101,7 +104,8 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
  check(h.ids.get('workflowPanelBody').innerHTML.includes('00734')&&!h.ids.get('workflowPanelBody').innerHTML.includes('value="paclitaxel_days8_15"'),'Late response cannot replace latest regimen');
  const pending=h.ctx.SACTCheckRegimenWorkflow.open(byCode('00348'));h.ids.get('regimenWorkflowOverlay').emit('keydown',{key:'Escape'});await pending;
  check(h.ids.get('regimenWorkflowOverlay').hidden,'Closing pending panel keeps it closed');
- for(const code of ['00252','00260','00278','00485','00857']){
+ h.ctx.SACTCheckPatientAssets=authoredRegistry;
+ for(const code of ['00252','00260','00278','00485','00857','00348','00734','00858','00860','00861']){
   await h.ctx.SACTCheckRegimenWorkflow.openSupportivePdf(byCode(code));
   check(h.opened.at(-1).url.endsWith('/patient/'+code+'/supportive-care.html'),code+' retains dedicated phase selector');
   check(fs.existsSync(path.join(root,'patient',code,'supportive-care.html')),'Dedicated selector exists');

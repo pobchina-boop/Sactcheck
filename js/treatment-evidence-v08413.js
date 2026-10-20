@@ -1,0 +1,31 @@
+/* Clinician knowledge only. Patient pages never load this module or its evidence data. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.SACTCheckTreatmentEvidence=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+  'use strict';
+  const endpoints={
+    OS:{name:'Overall survival',family:'survival',icon:'◷',definition:'Time to death from any cause, from the study-defined starting point.'},
+    PFS:{name:'Progression-free survival',family:'progression',icon:'◫',definition:'Time to progression or death; preserve the study assessment criteria.'},
+    EFS:{name:'Event-free survival',family:'events',icon:'◇',definition:'Time to a study-defined event. Check the exact events included; this is not interchangeable with DFS.'},
+    DFS:{name:'Disease-free survival',family:'events',icon:'◇',definition:'Time to disease recurrence or other events specified by the study, including death where defined.'},
+    iDFS:{name:'Invasive disease-free survival',family:'events',icon:'◇',definition:'Time to the invasive-disease events and deaths defined by the study; review the full composite definition.'},
+    ORR:{name:'Objective response rate',family:'response',icon:'◎',definition:'Proportion meeting objective response criteria, generally complete plus partial responses. Not an estimate of cure.'},
+    pCR:{name:'Pathological complete response',family:'response',icon:'⌕',definition:'Complete pathological response under the study definition. Specify the examined sites and residual-disease criteria; not proof of cure.'},
+    QoL:{name:'Quality of life',family:'wellbeing',icon:'♧',definition:'Specify the instrument, domain, time point, score direction and clinically meaningful threshold where established.'}
+  };
+  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const list=xs=>(xs||[]).filter(Boolean).map(x=>`<li>${esc(x)}</li>`).join('');
+  const url=x=>/^https:\/\//i.test(x||'')?esc(x):'';
+  function sources(xs){return (xs||[]).filter(s=>url(s.url)).map(s=>`<a href="${url(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.label||'Primary source')}</a>`).join(' · ');}
+  function outcome(e){
+    const k=endpoints[e.endpoint];if(!k)return '';
+    const numeric=Number.isFinite(e.intervention_value)&&Number.isFinite(e.comparator_value);
+    const delta=numeric?Math.round((e.intervention_value-e.comparator_value)*100)/100:null;
+    const unit=e.unit==='%'?'percentage points':e.unit;
+    return `<article class="evidence-outcome evidence-${k.family}" data-endpoint="${esc(e.endpoint)}"><header><span class="endpoint-symbol" aria-hidden="true">${k.icon}</span><div><strong>${esc(e.endpoint)}</strong><span>${esc(k.name)}</span></div></header><p class="evidence-metric">${esc(e.metric)}</p>${numeric?`<dl class="evidence-arm-values"><div><dt>${esc(e.intervention_label||'Intervention')}</dt><dd>${esc(e.intervention_value)}${esc(e.unit)}</dd></div><div><dt>${esc(e.comparator_label||'Comparator')}</dt><dd>${esc(e.comparator_value)}${esc(e.unit)}</dd></div></dl><p class="evidence-difference">Difference: ${delta>0?'+':''}${esc(delta)} ${esc(unit)}${e.timepoint?' at '+esc(e.timepoint):''}</p>`:`<p>${esc(e.result_text)}</p>`}<p class="evidence-interpretation"><strong>${esc(e.interpretation)}</strong></p><p class="evidence-maturity">${esc(e.analysis_status)}${e.followup?' · '+esc(e.followup):''}</p><details><summary>Definition, uncertainty and source</summary><p>${esc(e.definition||k.definition)}</p>${e.hr?`<p>HR ${esc(e.hr)}${e.ci?' (95% CI '+esc(e.ci)+')':''}</p>`:''}${e.limitations?`<p>${esc(e.limitations)}</p>`:''}<p>${sources(e.sources)}</p></details></article>`;
+  }
+  function render(profile){
+    const r=profile?.treatment_rationale,e=profile?.evidence_at_a_glance;if(!r&&!e)return '';
+    return `<section class="regimen-information-section treatment-rationale" data-clinician-evidence="true">${r?`<h3>Why this regimen?</h3><p class="treatment-rationale-summary">${esc(r.summary)}</p><dl class="treatment-position"><div><dt>Treatment setting</dt><dd>${esc(r.setting)}</dd></div><div><dt>Line / previous treatment</dt><dd>${esc(r.line)}</dd></div></dl><details><summary>Selection factors and alternatives</summary><ul>${list(r.factors)}</ul><h4>Alternatives and trade-offs</h4><ul>${list(r.alternatives)}</ul><p>${esc(r.limitations)}</p><p>${sources(r.sources)}</p></details>`:''}${e?`<h3>Evidence at a glance</h3><p><strong>${esc(e.trial)}</strong> · ${esc(e.population)}</p><p>${esc(e.comparison)}</p>${e.applicability?`<p class="evidence-applicability">${esc(e.applicability)}</p>`:''}<div class="evidence-outcome-grid">${(e.endpoints||[]).slice(0,2).map(outcome).join('')}</div>${(e.endpoints||[]).length>2?`<details><summary>Additional outcomes</summary><div class="evidence-outcome-grid">${e.endpoints.slice(2).map(outcome).join('')}</div></details>`:''}${e.qualitative_result?`<p>${esc(e.qualitative_result)}</p>`:''}<details class="endpoint-key"><summary>Endpoint key and interpretation</summary><dl>${Object.entries(endpoints).map(([id,k])=>`<div class="evidence-${k.family}"><dt><span class="endpoint-symbol" aria-hidden="true">${k.icon}</span> ${esc(id)} · ${esc(k.name)}</dt><dd>${esc(k.definition)}</dd></div>`).join('')}</dl><p>Colour identifies the endpoint family. Effect size, statistical interpretation and maturity are separate. Median differences are not an individual's expected added lifespan. Do not rank regimens using results from separate trials.</p></details>${e.limitations?.length?`<details><summary>Applicability and evidence limitations</summary><ul>${list(e.limitations)}</ul></details>`:''}<p class="evidence-provenance">Sources checked ${esc(e.checked)} · ${sources(e.sources)}</p>`:''}</section>`;
+  }
+  const renderWithHarms=profile=>{let html=render(profile);const harms=profile?.evidence_at_a_glance?.harms;return harms?html.replace('<details class="endpoint-key">',`<p class="evidence-harms"><strong>Toxicity context.</strong> ${esc(harms)}</p><details class="endpoint-key">`):html;};
+  return {render:renderWithHarms,outcome,endpoints};
+});

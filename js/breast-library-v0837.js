@@ -311,9 +311,9 @@ const regimens={
     "receptors": [
       "tnbc"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6812/348_Carboplatin_AUC_6_and_weekly_Paclitaxel_80mgm2.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Neoadjuvant treatment of triple-negative breast carcinoma."
   },
   "00350": {
     "code": "00350",
@@ -687,9 +687,9 @@ const regimens={
     "receptors": [
       "tnbc"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6605/734_CARBOplatin_AUC2weekly__Paclitaxel_TNBC_v3.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Neoadjuvant treatment of triple-negative breast carcinoma."
   },
   "00736": {
     "code": "00736",
@@ -907,7 +907,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6450/857_v3_Pembro_Carbo_5_Pacli_80_AC60_600.pdf",
-    "basis": "NCCP source audit 2026-10-17"
+    "basis": "Pembrolizumab in combination with chemotherapy as neoadjuvant treatment, then continued as monotherapy as adjuvant treatment after surgery, for adults with locally advanced or early-stage triple-negative breast cancer at high risk of recurrence."
   },
   "00858": {
     "code": "00858",
@@ -919,9 +919,9 @@ const regimens={
     "receptors": [
       "tnbc"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6451/858_v3_Pembro_Carbo_1.5_Pacli_80_AC60_600_.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Pembrolizumab in combination with chemotherapy as neoadjuvant treatment, then continued as monotherapy as adjuvant treatment after surgery, for adults with locally advanced or early-stage triple-negative breast cancer at high risk of recurrence."
   },
   "00860": {
     "code": "00860",
@@ -933,9 +933,9 @@ const regimens={
     "receptors": [
       "tnbc"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6452/860_v2_Pembro_Carbo_AUC_5_Pacli_80_DDAC.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Neoadjuvant pembrolizumab plus chemotherapy followed by adjuvant pembrolizumab for high-risk early or locally advanced TNBC."
   },
   "00861": {
     "code": "00861",
@@ -947,9 +947,9 @@ const regimens={
     "receptors": [
       "tnbc"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6453/861_v2_Pembro_Carbo_AUC_1.5_Pacli_80_DDAC.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Neoadjuvant pembrolizumab plus chemotherapy followed by adjuvant pembrolizumab for high-risk early or locally advanced TNBC."
   },
   "00892": {
     "code": "00892",

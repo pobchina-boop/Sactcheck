@@ -16,6 +16,7 @@ const classificationBaseline = readJson("V0630_EMETOGENIC_CLASSIFICATION_SNAPSHO
 const clinicalCoreBaseline = readJson("V0630_CLINICAL_CORE_HASHES.json");
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
 const familyPhases = {
+  '00858':{taxane_platinum:'moderate',ac:'high',adjuvant:'minimal'},'00860':{taxane_platinum:'high',ac:'high',paclitaxel_only:'low',adjuvant:'minimal'},'00861':{taxane_platinum:'moderate',ac:'high',adjuvant:'minimal'},'00348':{taxane_platinum:'high',ac:'high',paclitaxel_only:'low'},'00734':{taxane_platinum:'moderate',ac:'high'},
   '00260':{ac:'high',paclitaxel:'low'}, '00278':{ac:'high',paclitaxel:'low'},
   '00316':{ac:'high',paclitaxel:'low',continuation:'minimal'},
   '00432':{ac:'high',paclitaxel:'low',continuation:'minimal'},
@@ -82,7 +83,8 @@ for (const record of index.protocols || []) {
   const sc = protocol.supportive_care || {};
   const md = protocol.metadata || {};
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
-  if (baseline) {
+  if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
+  else if (baseline) {
     const correctionByPath = {
       "gastrointestinal/00225-panitumumab-6-mg-kg-therapy.json": "low",
       "gastrointestinal/00586-capecitabine-825-mg-m2-and-radiotherapy-7-day.json": "oral_minimal_low",
@@ -161,7 +163,7 @@ if (fs.existsSync(localDir)) {
     for (const [phase, level] of Object.entries(phases)) {
       const selected=risk.get(protocol,{treatmentPhase:phase});
       assert.strictEqual(selected.level,level,code+'/'+phase);
-      assert.strictEqual(selected.scriptId,'nccp-parenteral-'+level);
+      assert.strictEqual(selected.scriptId,['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level);
     }
     for (const [alias,phase] of Object.entries(protocol.supportive_care.phase_aliases || {})) assert.strictEqual(risk.get(protocol,{treatmentPhase:alias}).level,phases[phase]);
     assert.strictEqual(risk.get(protocol,{treatmentPhase:'unknown'}).scriptId,null);

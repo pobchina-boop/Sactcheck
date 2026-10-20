@@ -226,183 +226,171 @@ const definitions={
     ]
   },
   "00857": {
-    "title": "Pembrolizumab and chemotherapy: the whole breast pathway",
-    "setting": "Neoadjuvant → surgery → adjuvant · triple-negative early breast cancer",
-    "summary": "This is NCCP 00857: four 3-week cycles of carboplatin/weekly paclitaxel with pembrolizumab, then four 3-week AC cycles with pembrolizumab, surgery, and postoperative pembrolizumab when appropriate.",
+    "code": "00857",
+    "release": "0.84.13",
+    "checked": "2026-10-20",
+    "status": "Source reconciled; independent oncology, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pembrolizumab 200 mg + carboplatin AUC 5 / paclitaxel → AC: the whole pathway",
+    "setting": "Triple-negative breast cancer · neoadjuvant and adjuvant immunotherapy",
+    "summary": "Phase 1: four 21-day cycles; paclitaxel on Days 1, 8 and 15, carboplatin on Day 1. Phase 2: four AC cycles every 21 days. Pembrolizumab 200 mg every 21 days during chemotherapy; after surgery, nine 21-day doses or five 42-day doses (400 mg). See the whole-treatment map for monitoring and sequencing.",
     "stages": [
-      "Before treatment",
-      "Phase 1 · about 12 weeks",
-      "Phase 2 · about 12 weeks",
-      "Surgery and pathology",
-      "Postoperative treatment",
-      "Follow-up"
+      "Before starting",
+      "Phase 1 · weeks 1–12",
+      "Before / during AC",
+      "Surgery / postoperative",
+      "After treatment"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Baseline and fertility discussion",
-          "Pembrolizumab + carboplatin D1; paclitaxel D1/8/15 ×4 cycles",
-          "Pembrolizumab + AC D1 every 3 weeks ×4",
-          "Recovery and treatment review",
-          "Pembrolizumab: 9 doses every 3 weeks OR 5 doses every 6 weeks",
-          "Immune effects can occur after the last dose"
+          "Confirm diagnosis and suitability",
+          "Four 21-day cycles: weekly paclitaxel; carboplatin AUC 5 Day 1. Pembrolizumab each cycle Day 1.",
+          "Four AC cycles every 21 days. Pembrolizumab each cycle Day 1.",
+          "Surgery → pathology; pembrolizumab: 200 mg q21 days ×9 OR 400 mg q42 days ×5, if appropriate",
+          "Review late effects and follow-up"
         ],
         "source_ids": [
           "00857"
         ],
+        "kind": "treatment",
         "note": ""
       },
       {
         "label": "Surgery",
-        "kind": "local",
         "cells": [
-          "Agree breast and lymph-node plan",
-          "Examine response during treatment",
-          "Image for surgical planning as needed",
-          "Lumpectomy OR mastectomy; lymph-node surgery as indicated",
-          "Wound and arm/shoulder recovery",
-          "Report new local symptoms"
+          "Discuss operation options",
+          "After systemic treatment",
+          "Plan after recovery",
+          "Lumpectomy or mastectomy as agreed",
+          "Surgical follow-up"
         ],
         "source_ids": [
-          "00857",
           "early",
           "neo"
         ],
-        "note": ""
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
       },
       {
         "label": "Radiotherapy",
-        "kind": "local",
         "cells": [
-          "Discuss likely indication",
-          "Not part of these chemotherapy cycles",
-          "Usually after chemotherapy and surgery",
-          "Decision based on surgery and pathology",
-          "If indicated: may overlap pembrolizumab under the agreed plan",
-          "Review late effects and symptoms"
+          "Assess indication",
+          "Not a routine concurrent chemotherapy phase",
+          "Plan with surgery / radiation teams",
+          "After surgery if indicated; may overlap pembrolizumab if agreed",
+          "Late-effect review"
         ],
         "source_ids": [
           "early"
         ],
-        "note": ""
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
       },
       {
-        "label": "Blood / immune checks",
-        "kind": "blood",
+        "label": "Blood tests",
         "cells": [
-          "Blood count, kidney/liver tests, glucose and thyroid tests",
-          "Bloods weekly in cycles 1–4; glucose each cycle",
-          "Bloods and glucose before each cycle",
-          "Continue endocrine/immune review around surgery",
-          "Bloods per pembrolizumab plan; thyroid every 3–6 weeks",
-          "Review unresolved or new immune symptoms"
+          "FBC, renal and liver; verify GFR",
+          "Weekly before planned doses",
+          "Before each 21-day AC cycle",
+          "Before each pembrolizumab cycle",
+          "Symptoms or abnormalities determine follow-up"
         ],
         "source_ids": [
           "00857"
         ],
-        "note": ""
+        "kind": "blood",
+        "note": "FBC, renal and liver tests weekly during the carboplatin/paclitaxel phase, then before every AC cycle. Continue the required blood tests before each postoperative pembrolizumab cycle."
       },
       {
-        "label": "Heart checks",
-        "kind": "heart",
+        "label": "ECG / echo",
         "cells": [
-          "Cardiac history / ECG; echo according to anthracycline risk",
-          "Review new cardiac symptoms",
-          "Doxorubicin exposure: additional monitoring by risk",
-          "Tell anaesthetic team about cardiac/immune problems",
-          "Cardiac assessment if symptoms or prior toxicity",
-          "Risk-based follow-up after anthracycline"
+          "ECG and cardiac risk review; echo if indicated",
+          "Symptoms prompt earlier assessment",
+          "Review before first doxorubicin; further echo by risk / symptoms",
+          "Review any cardiac symptoms or previous abnormalities",
+          "Risk-based cardiac follow-up"
         ],
         "source_ids": [
           "00857",
           "esc"
         ],
-        "note": ""
+        "kind": "heart",
+        "note": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65 or when clinically indicated. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway."
       },
       {
-        "label": "Cancer imaging",
-        "kind": "imaging",
+        "label": "Imaging / markers",
         "cells": [
-          "Breast imaging; stage as indicated",
-          "Clinical assessment; image if concern",
-          "Reassess for surgical planning",
-          "Pathology determines response",
-          "Agree remaining-breast surveillance",
-          "Annual mammography; no routine CT/markers if well"
+          "Breast/nodal imaging; staging as indicated",
+          "Clinical response review; image for concern",
+          "Assess response and plan surgery",
+          "Pathology review; agree next steps",
+          "Breast surveillance; no routine CT/markers when asymptomatic"
         ],
         "source_ids": [
-          "neo",
-          "early"
+          "early",
+          "neo"
         ],
-        "note": ""
+        "kind": "imaging",
+        "note": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening."
+      },
+      {
+        "label": "Thyroid / hormones",
+        "cells": [
+          "Thyroid baseline",
+          "Thyroid every 3–6 weeks",
+          "Continue immune monitoring",
+          "Continue while on pembrolizumab",
+          "Delayed immune symptoms still require review"
+        ],
+        "source_ids": [
+          "00857"
+        ],
+        "kind": "blood",
+        "note": "Baseline thyroid tests; thyroid monitoring every 3–6 weeks during pembrolizumab. Cortisol is checked when clinically indicated; tell the team about recent steroid use when results are interpreted. Immune side effects may appear after treatment ends."
       }
     ],
     "milestones": [
       {
-        "title": "Know when the chemotherapy changes",
-        "when": "After four 3-week cycles",
-        "why": "The weekly paclitaxel visits stop and the AC phase starts.",
-        "action": "Confirm which medicines and supportive medicines change.",
+        "title": "Blood tests",
+        "when": "FBC, renal and liver tests weekly during the carboplatin/paclitaxel phase, then before every AC cycle. Continue the required blood tests before each postoperative pembrolizumab cycle.",
+        "why": "Check safety before the planned dose.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
         "source_ids": [
           "00857"
         ],
-        "clinical": "This is q3-week AC 60/600. Do not substitute a dose-dense AC or pembrolizumab 400 mg neoadjuvant variant."
+        "clinical": "Actual dates and actions follow the individual plan."
       },
       {
-        "title": "Thyroid and other immune checks",
-        "when": "Thyroid tests every 3–6 weeks; glucose each cycle; other tests as indicated",
-        "why": "Pembrolizumab can inflame hormone glands and other organs.",
-        "action": "Report diarrhoea, breathlessness, severe fatigue, thirst, headache, rash or jaundice promptly.",
-        "source_ids": [
-          "00857"
-        ],
-        "clinical": "NCCP: cortisol as indicated. Grade-specific immune toxicity is handled separately from cytotoxic dose changes. Pembrolizumab is withheld/stopped, not dose-reduced."
-      },
-      {
-        "title": "Heart assessment around doxorubicin",
-        "when": "Before and during the anthracycline phase, according to risk",
-        "why": "Doxorubicin can affect the heart; ECG and echo answer different questions.",
-        "action": "Ask whether a baseline echo and follow-up cardiac tests are needed.",
+        "title": "ECG / cardiac review",
+        "when": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65 or when clinically indicated. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway.",
+        "why": "Check risk before and during anthracycline exposure.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
         "source_ids": [
           "00857",
           "esc"
         ],
-        "clinical": "NCCP specifies baseline ECG and echo/MUGA when >65 or clinically indicated, with LVEF >50% for doxorubicin. ESC recommends broader baseline echocardiographic assessment for anthracyclines and risk-based follow-up. Agree the local cardiac pathway."
+        "clinical": "Actual dates and actions follow the individual plan."
       },
       {
-        "title": "Postoperative medicines and radiotherapy",
-        "when": "After pathology and recovery",
-        "why": "The team combines recurrence-risk information, tolerance and the operation result.",
-        "action": "Ask whether radiotherapy overlaps the remaining pembrolizumab and which clinician coordinates the plan.",
+        "title": "Cancer imaging",
+        "when": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening.",
+        "why": "Assess response and plan local treatment.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
         "source_ids": [
-          "00857",
-          "early"
+          "early",
+          "neo"
         ],
-        "clinical": "Residual-disease or germline-BRCA-directed additions require separate indication review; this map does not automatically add capecitabine or olaparib."
-      },
-      {
-        "title": "Surveillance and lasting effects",
-        "when": "After early breast treatment",
-        "why": "Annual mammography of remaining breast tissue after treatment; the team sets the first date. The mastectomy side is not routinely mammographed. New symptoms need assessment between visits.",
-        "action": "Report new symptoms early, including after immunotherapy has stopped.",
-        "source_ids": [
-          "early"
-        ],
-        "clinical": "Routine CT, PET or tumour-marker blood tests are not recommended simply to look for recurrence after early breast treatment in someone without symptoms. Imaging is arranged for a clinical reason. DEXA is not routinely required solely because of pembrolizumab; assess if treatment causes menopause or another bone-risk indication arises."
+        "clinical": "Actual dates and actions follow the individual plan."
       }
     ],
     "clinical_notes": [
-      "TNBC does not have a routine adjuvant endocrine-therapy lane. Treatment-induced menopause still merits symptom and bone-health assessment.",
-      "The interval to surgery and radiation depends on recovery and the MDT plan. Columns show sequence, not equal lengths of time."
+      "Columns show sequence, not equal lengths.",
+      "After surgery: pembrolizumab 200 mg every 21 days for nine doses OR 400 mg every 42 days for five doses. These are alternative schedules, not consecutive courses. Progression preventing definitive surgery or unacceptable pembrolizumab toxicity changes this plan; postoperative treatment is not automatic.",
+      "No reminders or automated appointment booking are enabled."
     ],
-    "code": "00857",
-    "release": "0.83.7",
-    "checked": "2026-10-17",
-    "status": "Draft — independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
     "sources": [
       {
         "id": "00857",
@@ -420,9 +408,24 @@ const definitions={
         "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
       },
       {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
         "id": "neo",
         "title": "ASCO · neoadjuvant breast therapy and response assessment",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8274745/"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
       }
     ]
   },
@@ -11963,6 +11966,996 @@ const definitions={
         "id": "trial",
         "title": "TRAIN-2 · three-year follow-up",
         "url": "https://pubmed.ncbi.nlm.nih.gov/34014249/"
+      }
+    ]
+  },
+  "00858": {
+    "code": "00858",
+    "release": "0.84.13",
+    "checked": "2026-10-20",
+    "status": "Source reconciled; independent oncology, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pembrolizumab 200 mg + weekly carboplatin AUC 1.5 / paclitaxel → AC: the whole pathway",
+    "setting": "Triple-negative breast cancer · neoadjuvant and adjuvant immunotherapy",
+    "summary": "Phase 1: four 21-day cycles; paclitaxel on Days 1, 8 and 15, carboplatin on all three days. Phase 2: four AC cycles every 21 days. Pembrolizumab 200 mg every 21 days during chemotherapy; after surgery, nine 21-day doses or five 42-day doses (400 mg). See the whole-treatment map for monitoring and sequencing.",
+    "stages": [
+      "Before starting",
+      "Phase 1 · weeks 1–12",
+      "Before / during AC",
+      "Surgery / postoperative",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and suitability",
+          "Four 21-day cycles: weekly paclitaxel; carboplatin AUC 1.5 weekly. Pembrolizumab each cycle Day 1.",
+          "Four AC cycles every 21 days. Pembrolizumab each cycle Day 1.",
+          "Surgery → pathology; pembrolizumab: 200 mg q21 days ×9 OR 400 mg q42 days ×5, if appropriate",
+          "Review late effects and follow-up"
+        ],
+        "source_ids": [
+          "00858"
+        ],
+        "kind": "treatment",
+        "note": ""
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "Discuss operation options",
+          "After systemic treatment",
+          "Plan after recovery",
+          "Lumpectomy or mastectomy as agreed",
+          "Surgical follow-up"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Not a routine concurrent chemotherapy phase",
+          "Plan with surgery / radiation teams",
+          "After surgery if indicated; may overlap pembrolizumab if agreed",
+          "Late-effect review"
+        ],
+        "source_ids": [
+          "early"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, renal and liver; verify GFR",
+          "Weekly before planned doses",
+          "Before each 21-day AC cycle",
+          "Before each pembrolizumab cycle",
+          "Symptoms or abnormalities determine follow-up"
+        ],
+        "source_ids": [
+          "00858"
+        ],
+        "kind": "blood",
+        "note": "FBC, renal and liver tests weekly during the carboplatin/paclitaxel phase, then before every AC cycle. Continue the required blood tests before each postoperative pembrolizumab cycle."
+      },
+      {
+        "label": "ECG / echo",
+        "cells": [
+          "ECG and cardiac risk review; echo if indicated",
+          "Symptoms prompt earlier assessment",
+          "Review before first doxorubicin; further echo by risk / symptoms",
+          "Review any cardiac symptoms or previous abnormalities",
+          "Risk-based cardiac follow-up"
+        ],
+        "source_ids": [
+          "00858",
+          "esc"
+        ],
+        "kind": "heart",
+        "note": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65 or when clinically indicated. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway."
+      },
+      {
+        "label": "Imaging / markers",
+        "cells": [
+          "Breast/nodal imaging; staging as indicated",
+          "Clinical response review; image for concern",
+          "Assess response and plan surgery",
+          "Pathology review; agree next steps",
+          "Breast surveillance; no routine CT/markers when asymptomatic"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "imaging",
+        "note": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening."
+      },
+      {
+        "label": "Thyroid / hormones",
+        "cells": [
+          "Thyroid baseline",
+          "Thyroid every 3–6 weeks",
+          "Continue immune monitoring",
+          "Continue while on pembrolizumab",
+          "Delayed immune symptoms still require review"
+        ],
+        "source_ids": [
+          "00858"
+        ],
+        "kind": "blood",
+        "note": "Baseline thyroid tests; thyroid monitoring every 3–6 weeks during pembrolizumab. Cortisol is checked when clinically indicated; tell the team about recent steroid use when results are interpreted. Immune side effects may appear after treatment ends."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, renal and liver tests weekly during the carboplatin/paclitaxel phase, then before every AC cycle. Continue the required blood tests before each postoperative pembrolizumab cycle.",
+        "why": "Check safety before the planned dose.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00858"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "ECG / cardiac review",
+        "when": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65 or when clinically indicated. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway.",
+        "why": "Check risk before and during anthracycline exposure.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00858",
+          "esc"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening.",
+        "why": "Assess response and plan local treatment.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "Columns show sequence, not equal lengths.",
+      "After surgery: pembrolizumab 200 mg every 21 days for nine doses OR 400 mg every 42 days for five doses. These are alternative schedules, not consecutive courses. Progression preventing definitive surgery or unacceptable pembrolizumab toxicity changes this plan; postoperative treatment is not automatic.",
+      "No reminders or automated appointment booking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "00858",
+        "title": "NCCP 00858 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6451/858_v3_Pembro_Carbo_1.5_Pacli_80_AC60_600_.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "neo",
+        "title": "ASCO · neoadjuvant breast therapy and response assessment",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8274745/"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      }
+    ]
+  },
+  "00860": {
+    "code": "00860",
+    "release": "0.84.13",
+    "checked": "2026-10-20",
+    "status": "Source reconciled; independent oncology, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pembrolizumab 400 mg + carboplatin AUC 5 / paclitaxel → dose-dense AC: the whole pathway",
+    "setting": "Triple-negative breast cancer · neoadjuvant and adjuvant immunotherapy",
+    "summary": "Phase 1: four 21-day cycles; paclitaxel on Days 1, 8 and 15, carboplatin on Day 1. Phase 2: four AC cycles every 14 days. Pembrolizumab 400 mg on Day 1 of cycles 1, 3, 5 and 8; after surgery, every 42 days for five doses. See the whole-treatment map for monitoring and sequencing.",
+    "stages": [
+      "Before starting",
+      "Phase 1 · weeks 1–12",
+      "Before / during AC",
+      "Surgery / postoperative",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and suitability",
+          "Four 21-day cycles: weekly paclitaxel; carboplatin AUC 5 Day 1. Pembrolizumab C1 and C3 Day 1.",
+          "Four AC cycles every 14 days. G-CSF each cycle. Pembrolizumab C5 and C8 Day 1.",
+          "Surgery → pathology; pembrolizumab 400 mg every 42 days ×5 if appropriate",
+          "Review late effects and follow-up"
+        ],
+        "source_ids": [
+          "00860"
+        ],
+        "kind": "treatment",
+        "note": ""
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "Discuss operation options",
+          "After systemic treatment",
+          "Plan after recovery",
+          "Lumpectomy or mastectomy as agreed",
+          "Surgical follow-up"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Not a routine concurrent chemotherapy phase",
+          "Plan with surgery / radiation teams",
+          "After surgery if indicated; may overlap pembrolizumab if agreed",
+          "Late-effect review"
+        ],
+        "source_ids": [
+          "early"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, renal and liver; verify GFR",
+          "Weekly before planned doses",
+          "Before each 14-day AC cycle",
+          "Before each pembrolizumab cycle",
+          "Symptoms or abnormalities determine follow-up"
+        ],
+        "source_ids": [
+          "00860"
+        ],
+        "kind": "blood",
+        "note": "FBC, renal and liver tests weekly during the carboplatin/paclitaxel phase, then before every AC cycle. Continue the required blood tests before each postoperative pembrolizumab cycle."
+      },
+      {
+        "label": "ECG / echo",
+        "cells": [
+          "ECG and cardiac risk review; echo if indicated",
+          "Symptoms prompt earlier assessment",
+          "Review before first doxorubicin; further echo by risk / symptoms",
+          "Review any cardiac symptoms or previous abnormalities",
+          "Risk-based cardiac follow-up"
+        ],
+        "source_ids": [
+          "00860",
+          "esc"
+        ],
+        "kind": "heart",
+        "note": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway."
+      },
+      {
+        "label": "Imaging / markers",
+        "cells": [
+          "Breast/nodal imaging; staging as indicated",
+          "Clinical response review; image for concern",
+          "Assess response and plan surgery",
+          "Pathology review; agree next steps",
+          "Breast surveillance; no routine CT/markers when asymptomatic"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "imaging",
+        "note": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening."
+      },
+      {
+        "label": "Thyroid / hormones",
+        "cells": [
+          "Thyroid baseline; hepatitis screening per source",
+          "Thyroid every 3–6 weeks",
+          "Continue immune monitoring",
+          "Continue while on pembrolizumab",
+          "Delayed immune symptoms still require review"
+        ],
+        "source_ids": [
+          "00860"
+        ],
+        "kind": "blood",
+        "note": "Baseline thyroid tests; thyroid monitoring every 3–6 weeks during pembrolizumab. Cortisol is checked when clinically indicated; tell the team about recent steroid use when results are interpreted. Immune side effects may appear after treatment ends."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, renal and liver tests weekly during the carboplatin/paclitaxel phase, then before every AC cycle. Continue the required blood tests before each postoperative pembrolizumab cycle.",
+        "why": "Check safety before the planned dose.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00860"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "ECG / cardiac review",
+        "when": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway.",
+        "why": "Check risk before and during anthracycline exposure.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00860",
+          "esc"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening.",
+        "why": "Assess response and plan local treatment.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "Columns show sequence, not equal lengths.",
+      "After surgery: pembrolizumab 400 mg every 42 days for five doses, beginning six weeks after cycle 8 Day 1, subject to recovery, surgery and the oncology plan. Progression preventing definitive surgery or unacceptable pembrolizumab toxicity changes this plan; postoperative treatment is not automatic.",
+      "No reminders or automated appointment booking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "00860",
+        "title": "NCCP 00860 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6452/860_v2_Pembro_Carbo_AUC_5_Pacli_80_DDAC.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "neo",
+        "title": "ASCO · neoadjuvant breast therapy and response assessment",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8274745/"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      }
+    ]
+  },
+  "00861": {
+    "code": "00861",
+    "release": "0.84.13",
+    "checked": "2026-10-20",
+    "status": "Source reconciled; independent oncology, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pembrolizumab 400 mg + weekly carboplatin AUC 1.5 / paclitaxel → dose-dense AC: the whole pathway",
+    "setting": "Triple-negative breast cancer · neoadjuvant and adjuvant immunotherapy",
+    "summary": "Phase 1: four 21-day cycles; paclitaxel on Days 1, 8 and 15, carboplatin on all three days. Phase 2: four AC cycles every 14 days. Pembrolizumab 400 mg on Day 1 of cycles 1, 3, 5 and 8; after surgery, every 42 days for five doses. See the whole-treatment map for monitoring and sequencing.",
+    "stages": [
+      "Before starting",
+      "Phase 1 · weeks 1–12",
+      "Before / during AC",
+      "Surgery / postoperative",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and suitability",
+          "Four 21-day cycles: weekly paclitaxel; carboplatin AUC 1.5 weekly. Pembrolizumab C1 and C3 Day 1.",
+          "Four AC cycles every 14 days. G-CSF each cycle. Pembrolizumab C5 and C8 Day 1.",
+          "Surgery → pathology; pembrolizumab 400 mg every 42 days ×5 if appropriate",
+          "Review late effects and follow-up"
+        ],
+        "source_ids": [
+          "00861"
+        ],
+        "kind": "treatment",
+        "note": ""
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "Discuss operation options",
+          "After systemic treatment",
+          "Plan after recovery",
+          "Lumpectomy or mastectomy as agreed",
+          "Surgical follow-up"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Not a routine concurrent chemotherapy phase",
+          "Plan with surgery / radiation teams",
+          "After surgery if indicated; may overlap pembrolizumab if agreed",
+          "Late-effect review"
+        ],
+        "source_ids": [
+          "early"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, renal and liver; verify GFR",
+          "Weekly before planned doses",
+          "Before each 14-day AC cycle",
+          "Before each pembrolizumab cycle",
+          "Symptoms or abnormalities determine follow-up"
+        ],
+        "source_ids": [
+          "00861"
+        ],
+        "kind": "blood",
+        "note": "FBC, renal and liver tests weekly during the carboplatin/paclitaxel phase, then before every AC cycle. Continue the required blood tests before each postoperative pembrolizumab cycle."
+      },
+      {
+        "label": "ECG / echo",
+        "cells": [
+          "ECG and cardiac risk review; echo if indicated",
+          "Symptoms prompt earlier assessment",
+          "Review before first doxorubicin; further echo by risk / symptoms",
+          "Review any cardiac symptoms or previous abnormalities",
+          "Risk-based cardiac follow-up"
+        ],
+        "source_ids": [
+          "00861",
+          "esc"
+        ],
+        "kind": "heart",
+        "note": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway."
+      },
+      {
+        "label": "Imaging / markers",
+        "cells": [
+          "Breast/nodal imaging; staging as indicated",
+          "Clinical response review; image for concern",
+          "Assess response and plan surgery",
+          "Pathology review; agree next steps",
+          "Breast surveillance; no routine CT/markers when asymptomatic"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "imaging",
+        "note": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening."
+      },
+      {
+        "label": "Thyroid / hormones",
+        "cells": [
+          "Thyroid baseline; hepatitis screening per source",
+          "Thyroid every 3–6 weeks",
+          "Continue immune monitoring",
+          "Continue while on pembrolizumab",
+          "Delayed immune symptoms still require review"
+        ],
+        "source_ids": [
+          "00861"
+        ],
+        "kind": "blood",
+        "note": "Baseline thyroid tests; thyroid monitoring every 3–6 weeks during pembrolizumab. Cortisol is checked when clinically indicated; tell the team about recent steroid use when results are interpreted. Immune side effects may appear after treatment ends."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, renal and liver tests weekly during the carboplatin/paclitaxel phase, then before every AC cycle. Continue the required blood tests before each postoperative pembrolizumab cycle.",
+        "why": "Check safety before the planned dose.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00861"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "ECG / cardiac review",
+        "when": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway.",
+        "why": "Check risk before and during anthracycline exposure.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00861",
+          "esc"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening.",
+        "why": "Assess response and plan local treatment.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "Columns show sequence, not equal lengths.",
+      "After surgery: pembrolizumab 400 mg every 42 days for five doses, beginning six weeks after cycle 8 Day 1, subject to recovery, surgery and the oncology plan. Progression preventing definitive surgery or unacceptable pembrolizumab toxicity changes this plan; postoperative treatment is not automatic.",
+      "No reminders or automated appointment booking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "00861",
+        "title": "NCCP 00861 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6453/861_v2_Pembro_Carbo_AUC_1.5_Pacli_80_DDAC.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "neo",
+        "title": "ASCO · neoadjuvant breast therapy and response assessment",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8274745/"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      }
+    ]
+  },
+  "00348": {
+    "code": "00348",
+    "release": "0.84.13",
+    "checked": "2026-10-20",
+    "status": "Source reconciled; independent oncology, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "carboplatin AUC 6 / paclitaxel → dose-dense AC: the whole pathway",
+    "setting": "Triple-negative breast cancer · neoadjuvant chemotherapy",
+    "summary": "Phase 1: four 21-day cycles; paclitaxel on Days 1, 8 and 15, carboplatin on Day 1. Phase 2: four AC cycles every 14 days. Surgery and pathology determine the next step. See the whole-treatment map for monitoring and sequencing.",
+    "stages": [
+      "Before starting",
+      "Phase 1 · weeks 1–12",
+      "Before / during AC",
+      "Surgery / postoperative",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and suitability",
+          "Four 21-day cycles: weekly paclitaxel; carboplatin AUC 6 Day 1.",
+          "Four AC cycles every 14 days. G-CSF each cycle.",
+          "Surgery → pathology; individual further-treatment plan",
+          "Review late effects and follow-up"
+        ],
+        "source_ids": [
+          "00348"
+        ],
+        "kind": "treatment",
+        "note": ""
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "Discuss operation options",
+          "After systemic treatment",
+          "Plan after recovery",
+          "Lumpectomy or mastectomy as agreed",
+          "Surgical follow-up"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Not a routine concurrent chemotherapy phase",
+          "Plan with surgery / radiation teams",
+          "After surgery if indicated",
+          "Late-effect review"
+        ],
+        "source_ids": [
+          "early"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, renal and liver; verify GFR",
+          "Weekly before planned doses",
+          "Weekly throughout AC; review before each dose",
+          "Per surgery / recovery plan",
+          "Symptoms or abnormalities determine follow-up"
+        ],
+        "source_ids": [
+          "00348"
+        ],
+        "kind": "blood",
+        "note": "FBC, renal and liver tests weekly throughout chemotherapy, including review before each AC dose."
+      },
+      {
+        "label": "ECG / echo",
+        "cells": [
+          "ECG and cardiac risk review; echo if indicated",
+          "Symptoms prompt earlier assessment",
+          "Review before first doxorubicin; further echo by risk / symptoms",
+          "Review any cardiac symptoms or previous abnormalities",
+          "Risk-based cardiac follow-up"
+        ],
+        "source_ids": [
+          "00348",
+          "esc"
+        ],
+        "kind": "heart",
+        "note": "Baseline ECG under cardio-oncology guidance (not explicitly listed in NCCP 00348), and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65 or when clinically indicated. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway."
+      },
+      {
+        "label": "Imaging / markers",
+        "cells": [
+          "Breast/nodal imaging; staging as indicated",
+          "Clinical response review; image for concern",
+          "Assess response and plan surgery",
+          "Pathology review; agree next steps",
+          "Breast surveillance; no routine CT/markers when asymptomatic"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "imaging",
+        "note": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, renal and liver tests weekly throughout chemotherapy, including review before each AC dose.",
+        "why": "Check safety before the planned dose.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00348"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "ECG / cardiac review",
+        "when": "Baseline ECG under cardio-oncology guidance (not explicitly listed in NCCP 00348), and cardiac history/risk assessment. NCCP lists baseline echo/MUGA for age over 65 or when clinically indicated. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway.",
+        "why": "Check risk before and during anthracycline exposure.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00348",
+          "esc"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening.",
+        "why": "Assess response and plan local treatment.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "Columns show sequence, not equal lengths.",
+      "Surgery and pathology review follow chemotherapy. Further systemic treatment, radiotherapy and follow-up depend on the findings and the MDT plan; no routine postoperative immunotherapy is specified by this regimen.",
+      "No reminders or automated appointment booking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "00348",
+        "title": "NCCP 00348 v8a · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6812/348_Carboplatin_AUC_6_and_weekly_Paclitaxel_80mgm2.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "neo",
+        "title": "ASCO · neoadjuvant breast therapy and response assessment",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8274745/"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      }
+    ]
+  },
+  "00734": {
+    "code": "00734",
+    "release": "0.84.13",
+    "checked": "2026-10-20",
+    "status": "Source reconciled; independent oncology, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "weekly carboplatin AUC 2 / paclitaxel → dose-dense AC: the whole pathway",
+    "setting": "Triple-negative breast cancer · neoadjuvant chemotherapy",
+    "summary": "Phase 1: four 21-day cycles; paclitaxel on Days 1, 8 and 15, carboplatin on all three days. Phase 2: four AC cycles every 14 days. Surgery and pathology determine the next step. See the whole-treatment map for monitoring and sequencing.",
+    "stages": [
+      "Before starting",
+      "Phase 1 · weeks 1–12",
+      "Before / during AC",
+      "Surgery / postoperative",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and suitability",
+          "Four 21-day cycles: weekly paclitaxel; carboplatin AUC 2 weekly.",
+          "Four AC cycles every 14 days. G-CSF each cycle.",
+          "Surgery → pathology; individual further-treatment plan",
+          "Review late effects and follow-up"
+        ],
+        "source_ids": [
+          "00734"
+        ],
+        "kind": "treatment",
+        "note": ""
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "Discuss operation options",
+          "After systemic treatment",
+          "Plan after recovery",
+          "Lumpectomy or mastectomy as agreed",
+          "Surgical follow-up"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Not a routine concurrent chemotherapy phase",
+          "Plan with surgery / radiation teams",
+          "After surgery if indicated",
+          "Late-effect review"
+        ],
+        "source_ids": [
+          "early"
+        ],
+        "kind": "local",
+        "note": "Chemotherapy comes before surgery. The surgeon discusses lumpectomy or mastectomy as alternatives according to your situation. Radiotherapy, if indicated, follows surgery and recovery; timing is agreed by both teams. It is not automatically given at the same time as these chemotherapy phases."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, renal and liver; verify GFR",
+          "Weekly before planned doses",
+          "Weekly throughout AC; review before each dose",
+          "Per surgery / recovery plan",
+          "Symptoms or abnormalities determine follow-up"
+        ],
+        "source_ids": [
+          "00734"
+        ],
+        "kind": "blood",
+        "note": "FBC, renal and liver tests weekly throughout chemotherapy, including review before each AC dose."
+      },
+      {
+        "label": "ECG / echo",
+        "cells": [
+          "ECG and cardiac risk review; echo if indicated",
+          "Symptoms prompt earlier assessment",
+          "Review before first doxorubicin; further echo by risk / symptoms",
+          "Review any cardiac symptoms or previous abnormalities",
+          "Risk-based cardiac follow-up"
+        ],
+        "source_ids": [
+          "00734",
+          "esc"
+        ],
+        "kind": "heart",
+        "note": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA when clinically indicated. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway."
+      },
+      {
+        "label": "Imaging / markers",
+        "cells": [
+          "Breast/nodal imaging; staging as indicated",
+          "Clinical response review; image for concern",
+          "Assess response and plan surgery",
+          "Pathology review; agree next steps",
+          "Breast surveillance; no routine CT/markers when asymptomatic"
+        ],
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "kind": "imaging",
+        "note": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, renal and liver tests weekly throughout chemotherapy, including review before each AC dose.",
+        "why": "Check safety before the planned dose.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00734"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "ECG / cardiac review",
+        "when": "Baseline ECG and cardiac history/risk assessment. NCCP lists baseline echo/MUGA when clinically indicated. Recheck the cardiac assessment before starting doxorubicin; echo/MUGA during treatment is driven by symptoms, risk or the agreed cardio-oncology plan. There is no automatic three-monthly echo schedule for every person on this pathway.",
+        "why": "Check risk before and during anthracycline exposure.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "00734",
+          "esc"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Record baseline breast/nodal findings and stage with imaging appropriate to the presentation. Assess clinical response during neoadjuvant treatment and use the appropriate breast imaging before surgery or sooner for concern. There is no universal three-monthly CT schedule for this early-breast pathway. After local treatment, arrange the agreed breast surveillance; routine CT/PET and tumour markers are not asymptomatic recurrence screening.",
+        "why": "Assess response and plan local treatment.",
+        "action": "Agree the booking owner, result reviewer and plan if delayed.",
+        "source_ids": [
+          "early",
+          "neo"
+        ],
+        "clinical": "Actual dates and actions follow the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "Columns show sequence, not equal lengths.",
+      "Surgery and pathology review follow chemotherapy. Further systemic treatment, radiotherapy and follow-up depend on the findings and the MDT plan; no routine postoperative immunotherapy is specified by this regimen.",
+      "No reminders or automated appointment booking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "00734",
+        "title": "NCCP 00734 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6605/734_CARBOplatin_AUC2weekly__Paclitaxel_TNBC_v3.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "neo",
+        "title": "ASCO · neoadjuvant breast therapy and response assessment",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8274745/"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
       }
     ]
   }

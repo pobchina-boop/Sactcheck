@@ -1,0 +1,2658 @@
+{
+  "run_at": "2026-10-20T19:59:10.120Z",
+  "scope": "Targeted source-boundary and regression probes; not full clinical validation",
+  "hashes": {
+    "tools/reconcile-tnbc-v08413.py": "d160060d800a996760687b14975c57ce7705c4ee93fb799253eb3e8617539efa",
+    "tools/build-tnbc-v08413-content.py": "22ea14366e3482ef664b7b954a559c278858547903687b047fee435060f31345",
+    "protocols/breast/00348-carbo-auc6-paclitaxel-ddac.json": "0d040b8612d2953198f9e900874054c88a5dba1b310700b4b75d628e1ad5603b",
+    "protocols/breast/00734-weekly-carbo-paclitaxel-ddac.json": "650450778a0c33f8643587353dbe2a58cb3ff855cef9f2848a314ff3eb3f46c3"
+  },
+  "results": [
+    {
+      "id": "00348-severe-hepatic-baseline",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "baseline",
+        "severe_hepatic_impairment": true
+      },
+      "expect": "Taxane source severe hepatic exclusion / explicit review",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on Planned treatment day, Cycle number, ANC, Platelets, Previous febrile neutropenia requiring next-dose review, Duration ANC below 0.5, Previous platelet nadir, Bleeding with severe thrombocytopenia, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_SEVERE_HEPATIC_IMPAIRMENT_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Severe hepatic impairment Yes meets the encoded criterion or does not trigger the restrictive threshold in 1 assessed rule. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage Before starting was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00348-crcl40-taxane",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "crcl_ml_min": 40
+      },
+      "expect": "Carboplatin CrCl<60 myelosuppression-risk review",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on ANC, Platelets, Previous febrile neutropenia requiring next-dose review, Duration ANC below 0.5, Previous platelet nadir, Bleeding with severe thrombocytopenia, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CRCL_ML_MIN_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Creatinine clearance 40 meets the encoded criterion or does not trigger the restrictive threshold in 4 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00348-gfr20-taxane",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "gfr_ml_min": 20
+      },
+      "expect": "contraindicated carboplatin",
+      "actual": {
+        "actionType": "contraindicated",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CARBO_GFR_STOP",
+            "action": "contraindicated",
+            "components": [
+              "carboplatin"
+            ],
+            "text": "Do not administer carboplatin at GFR ≤20 mL/min."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_DAY_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "contraindicated",
+            "dose": "Not to be administered",
+            "rule": "CARBO_GFR_STOP"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-gfr20-ac",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "gfr_ml_min": 20
+      },
+      "expect": "No carboplatin rule; it is inactive",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 2 · dose-dense AC reaches an encoded threshold, but the final action also depends on ANC, Platelets, AC platelet-delay occurrence, Required dose-dense AC G-CSF plan missing, Creatinine clearance, Receiving haemodialysis, Bilirubin, Child–Pugh class, Severe hepatic impairment. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_GFR_ML_MIN_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Verified unindexed GFR 20 meets the encoded criterion or does not trigger the restrictive threshold in 5 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Planned treatment day Day 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Cycle number 5 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00348-ddac-anc-equality",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 150
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DDAC_EQUALITY",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "cyclophosphamide"
+            ],
+            "text": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_DAY_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Planned treatment day Day 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Cycle number 5 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "cyclophosphamide",
+            "action": "consultant_review",
+            "dose": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing.",
+            "rule": "DDAC_EQUALITY"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "dose": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing.",
+            "rule": "DDAC_EQUALITY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-ddac-plt-equality",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "anc_x10e9_l": 2,
+        "platelets_x10e9_l": 100
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DDAC_EQUALITY",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "cyclophosphamide"
+            ],
+            "text": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_DAY_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Planned treatment day Day 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Cycle number 5 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "cyclophosphamide",
+            "action": "consultant_review",
+            "dose": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing.",
+            "rule": "DDAC_EQUALITY"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "dose": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing.",
+            "rule": "DDAC_EQUALITY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-ddac-low",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "anc_x10e9_l": 0.99,
+        "platelets_x10e9_l": 99
+      },
+      "expect": "delay",
+      "actual": {
+        "actionType": "delay",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DDAC_LOW_COUNTS",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "cyclophosphamide"
+            ],
+            "text": "Delay at least one week until ANC >1 and platelets >100. Both low is handled conservatively; do not infer a safe dose."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_DAY_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Planned treatment day Day 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Cycle number 5 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "cyclophosphamide",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "DDAC_LOW_COUNTS"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "DDAC_LOW_COUNTS"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-hepatic-gap",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "alt_uln_multiple": 2,
+        "bilirubin_uln_multiple": 1.255
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PAC_HEP_GAP_1.25",
+            "action": "consultant_review",
+            "components": [
+              "paclitaxel"
+            ],
+            "text": "Fractional bilirubin lies between printed source bands; do not silently round into a dose."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ALT_ULN_MULTIPLE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "ALT 2 meets the encoded criterion or does not trigger the restrictive threshold in 5 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Fractional bilirubin lies between printed source bands; do not silently round into a dose.",
+            "rule": "PAC_HEP_GAP_1.25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-doxo-gap51",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "bilirubin_umol_l": 51
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DOXO_BILI_GAP",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "text": "Bilirubin >50–51 µmol/L lies in a printed source gap; clarify before dosing. Reconcile previous dosing and concurrent restrictions."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_DAY_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Planned treatment day Day 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Cycle number 5 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "dose": "Bilirubin >50–51 µmol/L lies in a printed source gap; clarify before dosing. Reconcile previous dosing and concurrent restrictions.",
+            "rule": "DOXO_BILI_GAP"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-cyclo-gap29_5",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "crcl_ml_min": 29.5
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CYCLO_RENAL_GAP",
+            "action": "consultant_review",
+            "components": [
+              "cyclophosphamide"
+            ],
+            "text": "CrCl is between printed 29 and 30 boundaries; clarify the dose rather than silently round."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_DAY_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Planned treatment day Day 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Cycle number 5 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "cyclophosphamide",
+            "action": "consultant_review",
+            "dose": "CrCl is between printed 29 and 30 boundaries; clarify the dose rather than silently round.",
+            "rule": "CYCLO_RENAL_GAP"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-neuropathy2",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "neuropathy_grade": 2
+      },
+      "expect": "consultant_review; no guessed dose",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PAC_NEURO_G2",
+            "action": "consultant_review",
+            "components": [
+              "paclitaxel"
+            ],
+            "text": "Neuropathy ≥2: first occurrence decreases paclitaxel by 10 mg/m²; persistent/second occurrence decreases a further 10 mg/m². Verify actual dose and history. Grade ≥3 has overlapping discontinuation wording and is held for review."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_DAY_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Neuropathy ≥2: first occurrence decreases paclitaxel by 10 mg/m²; persistent/second occurrence decreases a further 10 mg/m². Verify actual dose and history. Grade ≥3 has overlapping discontinuation wording and is held for review.",
+            "rule": "PAC_NEURO_G2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-neuropathy3",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "neuropathy_grade": 3
+      },
+      "expect": "withhold and source overlap review",
+      "actual": {
+        "actionType": "withhold",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PAC_NEURO_G3",
+            "action": "withhold",
+            "components": [
+              "paclitaxel"
+            ],
+            "text": "Grade ≥3 neuropathy: withhold and clarify overlapping neuropathy-reduction / grade ≥3 discontinuation rows before restart."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_DAY_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "paclitaxel",
+            "action": "withhold",
+            "dose": "No dose now",
+            "rule": "PAC_NEURO_G3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-two-reductions-only",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "paclitaxel_reduction_count": 2,
+        "intolerant_after_reductions": false
+      },
+      "expect": "No intolerance discontinuation solely for count2",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on ANC, Platelets, Previous febrile neutropenia requiring next-dose review, Duration ANC below 0.5, Previous platelet nadir, Bleeding with severe thrombocytopenia, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_PACLITAXEL_REDUCTION_COUNT_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Previous paclitaxel reductions 2 reaches an encoded threshold, but the final action also depends on Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_INTOLERANT_AFTER_REDUCTIONS_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Intolerant after two paclitaxel reductions No meets the encoded criterion or does not trigger the restrictive threshold in 1 assessed rule. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00348-two-reductions-intolerant",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "paclitaxel_reduction_count": 2,
+        "intolerant_after_reductions": true
+      },
+      "expect": "discontinue",
+      "actual": {
+        "actionType": "discontinue",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PAC_INTOLERANCE",
+            "action": "discontinue",
+            "components": [
+              "paclitaxel"
+            ],
+            "text": "Intolerable after two reductions or toxicity delay >2 weeks: discontinue paclitaxel."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_DAY_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "paclitaxel",
+            "action": "discontinue",
+            "dose": "Not to be administered",
+            "rule": "PAC_INTOLERANCE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-unknownphase-anc",
+      "code": "00348",
+      "inputs": {
+        "anc_x10e9_l": 0.5
+      },
+      "expect": "consultant_review phase context",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PHASE_NEEDED_anc_x10e9_l",
+            "action": "consultant_review",
+            "components": [
+              "carboplatin",
+              "paclitaxel",
+              "doxorubicin",
+              "cyclophosphamide"
+            ],
+            "text": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred."
+          }
+        ],
+        "domainFindings": [],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "consultant_review",
+            "dose": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred.",
+            "rule": "PHASE_NEEDED_anc_x10e9_l"
+          },
+          {
+            "component": "cyclophosphamide",
+            "action": "consultant_review",
+            "dose": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred.",
+            "rule": "PHASE_NEEDED_anc_x10e9_l"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "dose": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred.",
+            "rule": "PHASE_NEEDED_anc_x10e9_l"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred.",
+            "rule": "PHASE_NEEDED_anc_x10e9_l"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-unknownphase-severehepatic",
+      "code": "00348",
+      "inputs": {
+        "severe_hepatic_impairment": true
+      },
+      "expect": "Explicit phase context review; no implied normal severe hepatic domain",
+      "actual": {
+        "actionType": "partial_context_required",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_SEVERE_HEPATIC_IMPAIRMENT_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Severe hepatic impairment Yes reaches an encoded threshold, but the final action also depends on Active treatment phase. Do not treat this as clearance."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00348-unknownphase-dialysis",
+      "code": "00348",
+      "inputs": {
+        "haemodialysis": true
+      },
+      "expect": "Explicit phase context review",
+      "actual": {
+        "actionType": "partial_context_required",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_HAEMODIALYSIS_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Receiving haemodialysis Yes reaches an encoded threshold, but the final action also depends on Active treatment phase. Do not treat this as clearance."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00348-taxane-lvef49",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "lvef_percent": 49
+      },
+      "expect": "Source cardiac exclusion may need review; doxorubicin absent from active visit should be identified as future phase",
+      "actual": {
+        "actionType": "contraindicated",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "LVEF_LOW",
+            "action": "contraindicated",
+            "components": [
+              "doxorubicin"
+            ],
+            "text": "LVEF below 50% is outside the source cardiac requirement."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on ANC, Platelets, Previous febrile neutropenia requiring next-dose review, Duration ANC below 0.5, Previous platelet nadir, Bleeding with severe thrombocytopenia, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 reaches an encoded threshold, but the final action also depends on ANC, Platelets. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "doxorubicin",
+            "action": "contraindicated",
+            "dose": "Not to be administered",
+            "rule": "LVEF_LOW"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-severe-hepatic-baseline",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "baseline",
+        "severe_hepatic_impairment": true
+      },
+      "expect": "Taxane source severe hepatic exclusion / explicit review",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on ANC, Platelets, Previous febrile neutropenia requiring next-dose review, Myelosuppression delay occurrence, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Assessment stage Before starting reaches an encoded threshold, but the final action also depends on ANC. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_SEVERE_HEPATIC_IMPAIRMENT_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Severe hepatic impairment Yes meets the encoded criterion or does not trigger the restrictive threshold in 1 assessed rule. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00734-crcl40-taxane",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "crcl_ml_min": 40
+      },
+      "expect": "Carboplatin CrCl<60 myelosuppression-risk review",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on ANC, Platelets, Previous febrile neutropenia requiring next-dose review, Myelosuppression delay occurrence, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_CRCL_ML_MIN_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Creatinine clearance 40 meets the encoded criterion or does not trigger the restrictive threshold in 5 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00734-gfr20-taxane",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "gfr_ml_min": 20
+      },
+      "expect": "contraindicated carboplatin",
+      "actual": {
+        "actionType": "contraindicated",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CARBO_GFR_STOP",
+            "action": "contraindicated",
+            "components": [
+              "carboplatin"
+            ],
+            "text": "Do not administer carboplatin at GFR ≤20 mL/min."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "contraindicated",
+            "dose": "Not to be administered",
+            "rule": "CARBO_GFR_STOP"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-gfr20-ac",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "gfr_ml_min": 20
+      },
+      "expect": "No carboplatin rule; it is inactive",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 2 · dose-dense AC reaches an encoded threshold, but the final action also depends on ANC, Platelets, AC platelet-delay occurrence, Required dose-dense AC G-CSF plan missing, Creatinine clearance, Receiving haemodialysis, Bilirubin, Child–Pugh class, Severe hepatic impairment. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_GFR_ML_MIN_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Verified unindexed GFR 20 meets the encoded criterion or does not trigger the restrictive threshold in 5 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 5 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00734-ddac-anc-equality",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 150
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DDAC_EQUALITY",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "cyclophosphamide"
+            ],
+            "text": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 5 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "cyclophosphamide",
+            "action": "consultant_review",
+            "dose": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing.",
+            "rule": "DDAC_EQUALITY"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "dose": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing.",
+            "rule": "DDAC_EQUALITY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-ddac-plt-equality",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "anc_x10e9_l": 2,
+        "platelets_x10e9_l": 100
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DDAC_EQUALITY",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "cyclophosphamide"
+            ],
+            "text": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 5 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "cyclophosphamide",
+            "action": "consultant_review",
+            "dose": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing.",
+            "rule": "DDAC_EQUALITY"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "dose": "Exactly ANC 1 or platelets 100 is unassigned by the printed strict inequalities; clarify before dosing.",
+            "rule": "DDAC_EQUALITY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-ddac-low",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "anc_x10e9_l": 0.99,
+        "platelets_x10e9_l": 99
+      },
+      "expect": "delay",
+      "actual": {
+        "actionType": "delay",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DDAC_LOW_COUNTS",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "cyclophosphamide"
+            ],
+            "text": "Delay at least one week until ANC >1 and platelets >100. Both low is handled conservatively; do not infer a safe dose."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 5 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "cyclophosphamide",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "DDAC_LOW_COUNTS"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "DDAC_LOW_COUNTS"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-hepatic-gap",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "alt_uln_multiple": 2,
+        "bilirubin_uln_multiple": 1.255
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PAC_HEP_GAP_1.25",
+            "action": "consultant_review",
+            "components": [
+              "paclitaxel"
+            ],
+            "text": "Fractional bilirubin lies between printed source bands; do not silently round into a dose."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ALT_ULN_MULTIPLE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "ALT 2 meets the encoded criterion or does not trigger the restrictive threshold in 5 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Fractional bilirubin lies between printed source bands; do not silently round into a dose.",
+            "rule": "PAC_HEP_GAP_1.25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-doxo-gap51",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "bilirubin_umol_l": 51
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DOXO_BILI_GAP",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "text": "Bilirubin >50–51 µmol/L lies in a printed source gap; clarify before dosing. Reconcile previous dosing and concurrent restrictions."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 5 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "dose": "Bilirubin >50–51 µmol/L lies in a printed source gap; clarify before dosing. Reconcile previous dosing and concurrent restrictions.",
+            "rule": "DOXO_BILI_GAP"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-cyclo-gap29_5",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "ac",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "crcl_ml_min": 29.5
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CYCLO_RENAL_GAP",
+            "action": "consultant_review",
+            "components": [
+              "cyclophosphamide"
+            ],
+            "text": "CrCl is between printed 29 and 30 boundaries; clarify the dose rather than silently round."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 5 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "cyclophosphamide",
+            "action": "consultant_review",
+            "dose": "CrCl is between printed 29 and 30 boundaries; clarify the dose rather than silently round.",
+            "rule": "CYCLO_RENAL_GAP"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-neuropathy2",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "neuropathy_grade": 2
+      },
+      "expect": "consultant_review; no guessed dose",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PAC_NEURO_G2",
+            "action": "consultant_review",
+            "components": [
+              "paclitaxel"
+            ],
+            "text": "Neuropathy ≥2: first occurrence decreases paclitaxel by 10 mg/m²; persistent/second occurrence decreases a further 10 mg/m². Verify actual dose and history. Grade ≥3 has overlapping discontinuation wording and is held for review."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Neuropathy ≥2: first occurrence decreases paclitaxel by 10 mg/m²; persistent/second occurrence decreases a further 10 mg/m². Verify actual dose and history. Grade ≥3 has overlapping discontinuation wording and is held for review.",
+            "rule": "PAC_NEURO_G2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-neuropathy3",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "neuropathy_grade": 3
+      },
+      "expect": "withhold and source overlap review",
+      "actual": {
+        "actionType": "withhold",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PAC_NEURO_G3",
+            "action": "withhold",
+            "components": [
+              "paclitaxel"
+            ],
+            "text": "Grade ≥3 neuropathy: withhold and clarify overlapping neuropathy-reduction / grade ≥3 discontinuation rows before restart."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "paclitaxel",
+            "action": "withhold",
+            "dose": "No dose now",
+            "rule": "PAC_NEURO_G3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-two-reductions-only",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "paclitaxel_reduction_count": 2,
+        "intolerant_after_reductions": false
+      },
+      "expect": "No intolerance discontinuation solely for count2",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on ANC, Platelets, Previous febrile neutropenia requiring next-dose review, Myelosuppression delay occurrence, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PACLITAXEL_REDUCTION_COUNT_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Previous paclitaxel reductions 2 reaches an encoded threshold, but the final action also depends on Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_INTOLERANT_AFTER_REDUCTIONS_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Intolerant after two paclitaxel reductions No meets the encoded criterion or does not trigger the restrictive threshold in 1 assessed rule. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00734-two-reductions-intolerant",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "paclitaxel_reduction_count": 2,
+        "intolerant_after_reductions": true
+      },
+      "expect": "discontinue",
+      "actual": {
+        "actionType": "discontinue",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PAC_INTOLERANCE",
+            "action": "discontinue",
+            "components": [
+              "paclitaxel"
+            ],
+            "text": "Intolerable after two reductions or toxicity delay >2 weeks: discontinue paclitaxel."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "paclitaxel",
+            "action": "discontinue",
+            "dose": "Not to be administered",
+            "rule": "PAC_INTOLERANCE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-unknownphase-anc",
+      "code": "00734",
+      "inputs": {
+        "anc_x10e9_l": 0.5
+      },
+      "expect": "consultant_review phase context",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PHASE_NEEDED_anc_x10e9_l",
+            "action": "consultant_review",
+            "components": [
+              "carboplatin",
+              "paclitaxel",
+              "doxorubicin",
+              "cyclophosphamide"
+            ],
+            "text": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred."
+          }
+        ],
+        "domainFindings": [],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "consultant_review",
+            "dose": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred.",
+            "rule": "PHASE_NEEDED_anc_x10e9_l"
+          },
+          {
+            "component": "cyclophosphamide",
+            "action": "consultant_review",
+            "dose": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred.",
+            "rule": "PHASE_NEEDED_anc_x10e9_l"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "dose": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred.",
+            "rule": "PHASE_NEEDED_anc_x10e9_l"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Value recorded for a partial assessment. Confirm the active phase to apply the correct drugs and source table; missing phase is not inferred.",
+            "rule": "PHASE_NEEDED_anc_x10e9_l"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-unknownphase-severehepatic",
+      "code": "00734",
+      "inputs": {
+        "severe_hepatic_impairment": true
+      },
+      "expect": "Explicit phase context review; no implied normal severe hepatic domain",
+      "actual": {
+        "actionType": "partial_context_required",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_SEVERE_HEPATIC_IMPAIRMENT_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Severe hepatic impairment Yes reaches an encoded threshold, but the final action also depends on Active treatment phase. Do not treat this as clearance."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00734-unknownphase-dialysis",
+      "code": "00734",
+      "inputs": {
+        "haemodialysis": true
+      },
+      "expect": "Explicit phase context review",
+      "actual": {
+        "actionType": "partial_context_required",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_HAEMODIALYSIS_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Receiving haemodialysis Yes reaches an encoded threshold, but the final action also depends on Active treatment phase. Do not treat this as clearance."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00734-taxane-lvef49",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "lvef_percent": 49
+      },
+      "expect": "Source cardiac exclusion may need review; doxorubicin absent from active visit should be identified as future phase",
+      "actual": {
+        "actionType": "contraindicated",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "LVEF_LOW",
+            "action": "contraindicated",
+            "components": [
+              "doxorubicin"
+            ],
+            "text": "LVEF below 50% is outside the source cardiac requirement."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on ANC, Platelets, Previous febrile neutropenia requiring next-dose review, Myelosuppression delay occurrence, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Planned treatment day Day 1 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_RECORDED",
+            "action": "partial_context_required",
+            "text": "Cycle number 2 was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "doxorubicin",
+            "action": "contraindicated",
+            "dose": "Not to be administered",
+            "rule": "LVEF_LOW"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-weekly-anc-0.49",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 0.49
+      },
+      "expect": "delay_then_dose_reduce",
+      "actual": {
+        "actionType": "delay_then_dose_reduce",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "WEEKLY_SEVERE",
+            "action": "delay_then_dose_reduce",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Delay until recovery, then consider a 25% reduction of BOTH carboplatin and paclitaxel. Review previous doses and toxicity before prescribing."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "delay_then_dose_reduce",
+            "dose": "Delay until recovery, then consider a 25% reduction of BOTH carboplatin and paclitaxel. Review previous doses and toxicity before prescribing.",
+            "rule": "WEEKLY_SEVERE"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "delay_then_dose_reduce",
+            "dose": "Delay until recovery, then consider a 25% reduction of BOTH carboplatin and paclitaxel. Review previous doses and toxicity before prescribing.",
+            "rule": "WEEKLY_SEVERE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-weekly-anc-0.5",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 0.5
+      },
+      "expect": "delay",
+      "actual": {
+        "actionType": "delay",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "WEEKLY_ANC_DELAY",
+            "action": "delay",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Delay both weekly drugs until recovery; ANC is below 1."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "WEEKLY_ANC_DELAY"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "WEEKLY_ANC_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-weekly-anc-0.99",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 0.99
+      },
+      "expect": "delay",
+      "actual": {
+        "actionType": "delay",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "WEEKLY_ANC_DELAY",
+            "action": "delay",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Delay both weekly drugs until recovery; ANC is below 1."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "WEEKLY_ANC_DELAY"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "WEEKLY_ANC_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-weekly-anc-1",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 1
+      },
+      "expect": "No threshold restriction; partial only",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on Platelets, Previous febrile neutropenia requiring next-dose review, Myelosuppression delay occurrence, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ANC_X10E9_L_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 8 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00734-weekly-plt-49",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "platelets_x10e9_l": 49
+      },
+      "expect": "delay_then_dose_reduce",
+      "actual": {
+        "actionType": "delay_then_dose_reduce",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "WEEKLY_SEVERE",
+            "action": "delay_then_dose_reduce",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Delay until recovery, then consider a 25% reduction of BOTH carboplatin and paclitaxel. Review previous doses and toxicity before prescribing."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "delay_then_dose_reduce",
+            "dose": "Delay until recovery, then consider a 25% reduction of BOTH carboplatin and paclitaxel. Review previous doses and toxicity before prescribing.",
+            "rule": "WEEKLY_SEVERE"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "delay_then_dose_reduce",
+            "dose": "Delay until recovery, then consider a 25% reduction of BOTH carboplatin and paclitaxel. Review previous doses and toxicity before prescribing.",
+            "rule": "WEEKLY_SEVERE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-weekly-plt-50",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "platelets_x10e9_l": 50
+      },
+      "expect": "delay",
+      "actual": {
+        "actionType": "delay",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "WEEKLY_PLT_DELAY",
+            "action": "delay",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Delay both drugs until platelet recovery."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "WEEKLY_PLT_DELAY"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "WEEKLY_PLT_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-weekly-plt-74",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "platelets_x10e9_l": 74
+      },
+      "expect": "delay",
+      "actual": {
+        "actionType": "delay",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "WEEKLY_PLT_DELAY",
+            "action": "delay",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Delay both drugs until platelet recovery."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "WEEKLY_PLT_DELAY"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "WEEKLY_PLT_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-weekly-plt-75",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "platelets_x10e9_l": 75
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "WEEKLY_PLT_DISCRETION",
+            "action": "consultant_review",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Platelets 75–<100: source allows clinician discretion, with continuation only if clinically well. This is not automatic clearance."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "consultant_review",
+            "dose": "Platelets 75–<100: source allows clinician discretion, with continuation only if clinically well. This is not automatic clearance.",
+            "rule": "WEEKLY_PLT_DISCRETION"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Platelets 75–<100: source allows clinician discretion, with continuation only if clinically well. This is not automatic clearance.",
+            "rule": "WEEKLY_PLT_DISCRETION"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-weekly-plt-99",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "platelets_x10e9_l": 99
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "WEEKLY_PLT_DISCRETION",
+            "action": "consultant_review",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Platelets 75–<100: source allows clinician discretion, with continuation only if clinically well. This is not automatic clearance."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "consultant_review",
+            "dose": "Platelets 75–<100: source allows clinician discretion, with continuation only if clinically well. This is not automatic clearance.",
+            "rule": "WEEKLY_PLT_DISCRETION"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Platelets 75–<100: source allows clinician discretion, with continuation only if clinically well. This is not automatic clearance.",
+            "rule": "WEEKLY_PLT_DISCRETION"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-weekly-plt-100",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "platelets_x10e9_l": 100
+      },
+      "expect": "No threshold restriction; partial only",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on ANC, Previous febrile neutropenia requiring next-dose review, Myelosuppression delay occurrence, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_X10E9_L_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 7 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Assessment stage During treatment meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00348-lowcounts-day1",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 1,
+        "anc_x10e9_l": 0.4,
+        "platelets_x10e9_l": 40
+      },
+      "expect": "delay",
+      "actual": {
+        "actionType": "delay",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DAY1_ANC_DELAY",
+            "action": "delay",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Day 1: delay for count recovery; source maximum delay is three weeks. Reassess prior toxicity and doses."
+          },
+          {
+            "id": "DAY1_PLT_AMBIGUITY",
+            "action": "delay",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Platelets below 90: do not proceed. Source platelet reduction notation is ambiguous (<70–90); clarify the table and dose plan after recovery."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "DAY1_ANC_DELAY"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "delay",
+            "dose": "No dose now",
+            "rule": "DAY1_ANC_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-lowcounts-day8",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 8,
+        "anc_x10e9_l": 0.4,
+        "platelets_x10e9_l": 40
+      },
+      "expect": "consultant_review; no borrowed omit cutoff",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DAY_OR_CYCLE_UNSPECIFIED",
+            "action": "consultant_review",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "00348 supplies a cycles 2–4 Day 1 table only. It does not specify a separate baseline/Day 8/15 count table; review the actual visit with oncology/pharmacy, without borrowing another regimen threshold."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "consultant_review",
+            "dose": "00348 supplies a cycles 2–4 Day 1 table only. It does not specify a separate baseline/Day 8/15 count table; review the actual visit with oncology/pharmacy, without borrowing another regimen threshold.",
+            "rule": "DAY_OR_CYCLE_UNSPECIFIED"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "00348 supplies a cycles 2–4 Day 1 table only. It does not specify a separate baseline/Day 8/15 count table; review the actual visit with oncology/pharmacy, without borrowing another regimen threshold.",
+            "rule": "DAY_OR_CYCLE_UNSPECIFIED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-lowcounts-day15",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 2,
+        "day_number": 15,
+        "anc_x10e9_l": 0.4,
+        "platelets_x10e9_l": 40
+      },
+      "expect": "consultant_review; no borrowed omit cutoff",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DAY_OR_CYCLE_UNSPECIFIED",
+            "action": "consultant_review",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "00348 supplies a cycles 2–4 Day 1 table only. It does not specify a separate baseline/Day 8/15 count table; review the actual visit with oncology/pharmacy, without borrowing another regimen threshold."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "consultant_review",
+            "dose": "00348 supplies a cycles 2–4 Day 1 table only. It does not specify a separate baseline/Day 8/15 count table; review the actual visit with oncology/pharmacy, without borrowing another regimen threshold.",
+            "rule": "DAY_OR_CYCLE_UNSPECIFIED"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "00348 supplies a cycles 2–4 Day 1 table only. It does not specify a separate baseline/Day 8/15 count table; review the actual visit with oncology/pharmacy, without borrowing another regimen threshold.",
+            "rule": "DAY_OR_CYCLE_UNSPECIFIED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-outside-source-cycle1",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 1,
+        "day_number": 1,
+        "anc_x10e9_l": 0.4,
+        "platelets_x10e9_l": 40
+      },
+      "expect": "Explicit source scope/phase mismatch review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DAY_OR_CYCLE_UNSPECIFIED",
+            "action": "consultant_review",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "00348 supplies a cycles 2–4 Day 1 table only. It does not specify a separate baseline/Day 8/15 count table; review the actual visit with oncology/pharmacy, without borrowing another regimen threshold."
+          }
+        ],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "consultant_review",
+            "dose": "00348 supplies a cycles 2–4 Day 1 table only. It does not specify a separate baseline/Day 8/15 count table; review the actual visit with oncology/pharmacy, without borrowing another regimen threshold.",
+            "rule": "DAY_OR_CYCLE_UNSPECIFIED"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "00348 supplies a cycles 2–4 Day 1 table only. It does not specify a separate baseline/Day 8/15 count table; review the actual visit with oncology/pharmacy, without borrowing another regimen threshold.",
+            "rule": "DAY_OR_CYCLE_UNSPECIFIED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00348-outside-source-cycle5",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 5,
+        "day_number": 1,
+        "anc_x10e9_l": 0.4,
+        "platelets_x10e9_l": 40
+      },
+      "expect": "Explicit source scope/phase mismatch review",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on Previous febrile neutropenia requiring next-dose review, Duration ANC below 0.5, Previous platelet nadir, Bleeding with severe thrombocytopenia, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ANC_X10E9_L_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "ANC 0.4 reaches an encoded threshold, but the final action also depends on Previous febrile neutropenia requiring next-dose review, Duration ANC below 0.5, Previous platelet nadir, Bleeding with severe thrombocytopenia. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_X10E9_L_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Platelets 40 meets the encoded criterion or does not trigger the restrictive threshold in 5 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Planned treatment day Day 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Cycle number 5 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00348-outside-source-cycle0",
+      "code": "00348",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "ongoing",
+        "cycle_number": 0,
+        "day_number": 1,
+        "anc_x10e9_l": 0.4,
+        "platelets_x10e9_l": 40
+      },
+      "expect": "Explicit source scope/phase mismatch review",
+      "actual": {
+        "actionType": "proceed_with_caution",
+        "errors": [],
+        "invalid": [],
+        "findings": [],
+        "domainFindings": [
+          {
+            "id": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "Active treatment phase Phase 1 · carboplatin / paclitaxel reaches an encoded threshold, but the final action also depends on Previous febrile neutropenia requiring next-dose review, Duration ANC below 0.5, Previous platelet nadir, Bleeding with severe thrombocytopenia, Duration of haematological delay, Verified unindexed GFR, GFR method, Age of creatinine result, Creatinine versus isotope-time result, ALT, Bilirubin, Peripheral neuropathy, Other paclitaxel non-haematological toxicity, Previous paclitaxel reductions, Intolerant after two paclitaxel reductions, Paclitaxel delay for toxicity. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_ANC_X10E9_L_CONTEXT_REQUIRED",
+            "action": "partial_context_required",
+            "text": "ANC 0.4 reaches an encoded threshold, but the final action also depends on Previous febrile neutropenia requiring next-dose review, Duration ANC below 0.5, Previous platelet nadir, Bleeding with severe thrombocytopenia. Do not treat this as clearance."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_X10E9_L_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Platelets 40 meets the encoded criterion or does not trigger the restrictive threshold in 5 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_DAY_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Planned treatment day Day 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_CYCLE_NUMBER_NO_RESTRICTION",
+            "action": "proceed_with_caution",
+            "text": "Cycle number 0 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ASSESSMENT_STAGE_RECORDED",
+            "action": "partial_context_required",
+            "text": "Assessment stage During treatment was recorded. No standalone encoded action is attached to this field without another relevant clinical value or treatment context."
+          }
+        ],
+        "doseRows": []
+      }
+    },
+    {
+      "id": "00734-baseline-ANC1_5",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "baseline",
+        "anc_x10e9_l": 1.5
+      },
+      "expect": "consultant_review",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "BASELINE_PRINTED_GAP",
+            "action": "consultant_review",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Baseline source prints ANC >1.5 and platelets 75 without a comparator; confirm initiation eligibility. Do not infer a platelet threshold."
+          }
+        ],
+        "domainFindings": [],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "consultant_review",
+            "dose": "Baseline source prints ANC >1.5 and platelets 75 without a comparator; confirm initiation eligibility. Do not infer a platelet threshold.",
+            "rule": "BASELINE_PRINTED_GAP"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Baseline source prints ANC >1.5 and platelets 75 without a comparator; confirm initiation eligibility. Do not infer a platelet threshold.",
+            "rule": "BASELINE_PRINTED_GAP"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-baseline-ANC1_49",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "baseline",
+        "anc_x10e9_l": 1.49
+      },
+      "expect": "contraindicated",
+      "actual": {
+        "actionType": "contraindicated",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "BASELINE_ANC",
+            "action": "contraindicated",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Baseline ANC <1.5 is an NCCP initiation exclusion; this differs from ongoing count thresholds."
+          }
+        ],
+        "domainFindings": [],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "contraindicated",
+            "dose": "Not to be administered",
+            "rule": "BASELINE_ANC"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "contraindicated",
+            "dose": "Not to be administered",
+            "rule": "BASELINE_ANC"
+          }
+        ]
+      }
+    },
+    {
+      "id": "00734-baseline-platelet100",
+      "code": "00734",
+      "inputs": {
+        "treatment_phase": "taxane",
+        "assessment_stage": "baseline",
+        "platelets_x10e9_l": 100
+      },
+      "expect": "consultant_review missing comparator",
+      "actual": {
+        "actionType": "consultant_review",
+        "errors": [],
+        "invalid": [],
+        "findings": [
+          {
+            "id": "BASELINE_PRINTED_GAP",
+            "action": "consultant_review",
+            "components": [
+              "carboplatin",
+              "paclitaxel"
+            ],
+            "text": "Baseline source prints ANC >1.5 and platelets 75 without a comparator; confirm initiation eligibility. Do not infer a platelet threshold."
+          }
+        ],
+        "domainFindings": [],
+        "doseRows": [
+          {
+            "component": "carboplatin",
+            "action": "consultant_review",
+            "dose": "Baseline source prints ANC >1.5 and platelets 75 without a comparator; confirm initiation eligibility. Do not infer a platelet threshold.",
+            "rule": "BASELINE_PRINTED_GAP"
+          },
+          {
+            "component": "paclitaxel",
+            "action": "consultant_review",
+            "dose": "Baseline source prints ANC >1.5 and platelets 75 without a comparator; confirm initiation eligibility. Do not infer a platelet threshold.",
+            "rule": "BASELINE_PRINTED_GAP"
+          }
+        ]
+      }
+    }
+  ]
+}

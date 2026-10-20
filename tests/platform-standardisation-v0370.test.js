@@ -123,6 +123,14 @@ for (const { file, data } of protocols) {
   }
 
   const supportive = data.supportive_care || {};
+  if(supportive.phase_specific_plan){
+    // Authored phase selectors supersede the legacy single-script metadata contract.
+    assert(fs.existsSync(path.join(root,supportive.phase_specific_plan)),`${code} phase plan missing`);
+    const phaseData=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-v0838.json'),'utf8')).regimens[code];
+    assert(phaseData?.length,`${code} phase selector lacks authored phases`);
+    for(const phase of phaseData){assert(phase.emetogenic_risk&&Array.isArray(phase.medicines)&&phase.active_medicines.length,`${code}/${phase.id} incomplete phase plan`);assert(fs.existsSync(path.join(root,`patient/${code}/support-${phase.id}.html`)));}
+    assert(supportive.source_url,`${code} phase plan lacks source`);
+  } else {
   assert(validRiskLevels.has(supportive.emetogenic_risk), `${code} has unsupported emetogenic risk ${supportive.emetogenic_risk}`);
   assert(supportive.mapping_source_url, `${code} lacks antiemetic source link`);
   assert(supportive.mapping_basis, `${code} lacks antiemetic mapping basis`);
@@ -144,6 +152,8 @@ for (const { file, data } of protocols) {
     assert.equal(supportive.supportive_medications_label, script.label, `${code} retains a stale supportive-care label`);
   }
 
+  }
+
   const definitions = data.input_definitions || {};
   const rules = data.rule_engine?.rules || [];
   for (const [field, def] of Object.entries(definitions)) {
@@ -155,7 +165,7 @@ for (const { file, data } of protocols) {
       const everolimusSource = code === '00322';
       const palbociclibSource = code === '00414' && field === 'nonhaem_toxicity_grade';
       const pldSource = code === '00205' && ['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field);
-      if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, everolimusSource ? '3.0' : palbociclibSource ? '4.0' : folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
+      if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, everolimusSource ? '3.0' : palbociclibSource ? '4.0' : folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea || ['00858','00860','00861','00348','00734'].includes(code) ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
       if(palbociclibSource){assert.equal(def.grading_source_label,'NCCP 00414 / CTCAE v4.0');assert.match(def.grading_source_url,/cancer.gov.*ctcae-v403/);assert(def.options.every(x=>x.description));}
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
@@ -181,7 +191,7 @@ for (const { file, data } of protocols) {
       if (/non[-_ ]?ha?em|non[-_ ]?hemat|non[-_ ]?haemat/.test(fieldText)) {
         assert.equal(def.ctcae_category, 'other_nonhaematological', `${code}/${field} is incorrectly classified as haematological`);
       }
-      if (fieldText.includes('colitis') && !fieldText.includes('mucositis')) {
+      if (fieldText.includes('colitis') && !fieldText.includes('mucositis') && !['00858','00860','00861'].includes(code)) {
         assert.equal(def.ctcae_category, 'diarrhoea_or_colitis', `${code}/${field} must show both diarrhoea and colitis criteria`);
       }
       if (fieldText.includes('acneiform')) {

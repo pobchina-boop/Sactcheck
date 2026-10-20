@@ -45,9 +45,9 @@ for (const entry of catalogue.protocols) {
 assert.strictEqual(catalogue.protocols.length, 376);
 // v0.84.9 adds the four previously unstructured targeted schedules; olaparib gains its continuous schedule alongside its existing dose table.
 // PLD reductions depend on the toxicity/history pathway, so no generic ladder is inferred.
-assert.strictEqual(usefulCoverage, 127);
-assert.strictEqual(scheduleCoverage, 124);
-assert.strictEqual(doseLevelCoverage, 46);
+assert.strictEqual(usefulCoverage, 128);
+assert.strictEqual(scheduleCoverage, 126);
+assert.strictEqual(doseLevelCoverage, 45);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');

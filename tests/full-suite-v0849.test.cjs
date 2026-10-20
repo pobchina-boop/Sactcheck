@@ -41,7 +41,7 @@ for(const code of ['00322','00588']){const d=json(`data/patient-knowledge/${code
 const support=json('data/phase-support-v0838.json').regimens;assert(!support['00776'][0].medicines.some(m=>m.name==='Olanzapine'));assert(support['00794'].every(p=>p.medicines.some(m=>m.name==='Olanzapine')));assert(support['00588'][0].medicines.length===0);assert(JSON.stringify(support['00588']).includes('CYP3A'));
 // Old patient documents are byte-preserved, including the accepted gold-standard reference.
 const baseline=json('validation/targeted-breast-v0849/protected-patient-baseline.json').files;
-for(const [p,h] of Object.entries(baseline))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),h,'Unexpected prior-patient change '+p);
+for(const [p,h] of Object.entries(baseline))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),require('./helpers/retrospective-v08413.cjs').expectedHash(p,h),'Unexpected prior-patient change '+p);
 for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});
 console.log(`Targeted breast full suite: ${rules} source-linked rules, five complete suites, indication routing, relative timelines, day-specific support and ${Object.keys(baseline).length} preserved patient files passed.`);
 // Exercise the actual knowledge-base loader and renderer, including every addendum.

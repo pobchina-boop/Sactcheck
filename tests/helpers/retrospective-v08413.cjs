@@ -1,0 +1,2 @@
+const fs=require('fs'),path=require('path');
+exports.expectedHash=(file,original)=>{const m=JSON.parse(fs.readFileSync(path.join(__dirname,'../../validation/tnbc-v08413/retrospective-00857-hashes.json'),'utf8'));const change=m.files[file];if(!change)return original;if(!/^(patient|docs\/patient)\/00857\//.test(file)&&file!=='data/patient-knowledge/00857.json')throw Error('Unapproved migration '+file);if(change.before!==original)throw Error('Unexpected original hash '+file);return change.after;};

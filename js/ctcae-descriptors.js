@@ -782,7 +782,7 @@
     return {
       version: versionFor(definition, category),
       sourceSpecific: sourceSpecific(definition),
-      term: TERM_LABELS[category] || definition?.label || "Named adverse event",
+      term: sourceSpecific(definition) ? (definition.label || "Named source adverse event") : (TERM_LABELS[category] || definition?.label || "Named adverse event"),
       category,
       guidance: definition?.assessment_guidance || DEFAULT_GUIDANCE[category] || DEFAULT_GUIDANCE.generic,
       sourceUrl: sourceFor(definition, category),
