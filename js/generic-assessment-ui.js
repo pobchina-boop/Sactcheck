@@ -19,6 +19,7 @@
   let activeProfileId = null;
   let latestResult = null;
   let latestAssessmentId = "";
+  let assessmentSequence = 0;
   let latestLabCalculations = {};
   let activeTumourGroup = "all";
 
@@ -200,20 +201,10 @@
           <div id="jsonTreatmentContextGrid" class="compact-input-list"></div>
         </section>
 
-        <section class="assessment-admin-section">
-          <div class="section-heading"><h2>Assessment details</h2><span class="step">Optional documentation</span></div>
-          <div class="grid three">
-            <div>
-              <label for="jsonAssessmentId">Anonymous assessment ID</label>
-              <input id="jsonAssessmentId" value="JSON-DEMO-001" autocomplete="off">
-              <span class="hint">Do not enter a name, MRN or date of birth.</span>
-            </div>
-            <div id="jsonProfileWrapper">
-              <label for="jsonProfile">Assessment profile</label>
-              <select id="jsonProfile"></select>
-              <span class="hint">Select the treatment phase or assessment context.</span>
-            </div>
-          </div>
+        <section id="jsonProfileWrapper" class="assessment-profile-section" style="display:none">
+          <label for="jsonProfile">Assessment profile</label>
+          <select id="jsonProfile"></select>
+          <span class="hint">Select the treatment phase or assessment context.</span>
         </section>
 
         <div class="toolbar">
@@ -645,6 +636,14 @@
     }
   }
 
+  function presentationInputDefinitions(protocol, profileId, rawInputs = {}) {
+    // Remove the two routine immunotherapy cards from the form only.
+    // The engine retains every rule and continues to mark omitted domains unassessed.
+    return Engine.getInputDefinitions(protocol, profileId, rawInputs).filter(definition =>
+      !(isImmunotherapyBlood(definition) && ["glucose_mmol_l", "ketones_mmol_l"].includes(definition.id))
+    );
+  }
+
   function setLaboratoryDomain(domain, definitions) {
     const config = {
       haematology: ["jsonHaematologyDomain", "jsonHaematologyInputGrid", "jsonHaematologyCount"],
@@ -665,7 +664,7 @@
 
   function renderInputs(rawInputs = {}) {
     if (!activeProtocol) return;
-    const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, rawInputs);
+    const definitions = presentationInputDefinitions(activeProtocol, activeProfileId, rawInputs);
     const contextDefinitions = definitions.filter(isTreatmentContext);
     const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition));
     const laboratoryDefinitions = clinicalDefinitions.filter(definition => laboratoryDomain(definition) !== null);
@@ -717,7 +716,7 @@
     const labAdapter = LocalLab?.adapterFor(definition);
     if (labAdapter) {
       const settings = LocalLab.read();
-      return `<div class="lab-actual-inputs" data-lab-control-group="${escapeHtml(definition.id)}">${labAdapter.analytes.map(analyte => {
+      return `<div class="lab-actual-inputs" data-lab-analyte-count="${labAdapter.analytes.length}" data-lab-control-group="${escapeHtml(definition.id)}">${labAdapter.analytes.map(analyte => {
         const upper = settings[analyte.setting];
         return `<div class="lab-value-pair"><label for="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}">${escapeHtml(analyte.label)}</label><div class="lab-inline-control"><input id="jsonLab_${escapeHtml(definition.id)}_${escapeHtml(analyte.id)}" data-lab-target="${escapeHtml(definition.id)}" data-lab-analyte="${escapeHtml(analyte.id)}" data-type="number" type="number" min="0" step="any" placeholder="Enter value"${disabledAttribute}><span class="lab-inline-unit">${escapeHtml(analyte.unit)}</span></div><span class="hint" data-lab-reference="${escapeHtml(analyte.setting)}" data-lab-unit="${escapeHtml(analyte.unit)}">ULN ${escapeHtml(upper ?? "not set")} ${escapeHtml(analyte.unit)}</span></div>`;
       }).join("")}${labAdapter.referenceNote ? `<p class="hint">${escapeHtml(labAdapter.referenceNote)}</p>` : ""}<div class="lab-calculation-preview hidden" data-lab-preview="${escapeHtml(definition.id)}" aria-live="polite"></div></div>`;
@@ -904,7 +903,7 @@
     if (!activeProtocol) return;
     const rawInputs = collectRawInputs(true);
     renderSupportiveRisk(activeProtocol, rawInputs.treatment_phase);
-    const definitions = Engine.getInputDefinitions(activeProtocol, activeProfileId, rawInputs);
+    const definitions = presentationInputDefinitions(activeProtocol, activeProfileId, rawInputs);
 
     definitions.forEach(definition => {
       const wrapper = document.querySelector(`[data-input-wrapper="${cssEscape(definition.id)}"]`);
@@ -1139,7 +1138,8 @@
 
   function runAssessment() {
     if (!activeProtocol) return;
-    latestAssessmentId = document.getElementById("jsonAssessmentId").value.trim();
+    // An anonymous output reference requires no extra clinician input.
+    latestAssessmentId = "SACT-" + (root.crypto?.randomUUID?.() || `${Date.now().toString(36)}-${++assessmentSequence}`);
     const rawInputs = collectRawInputs();
     latestResult = Engine.assess(activeProtocol, rawInputs, { profileId: activeProfileId });
     root.SACTCheckProtocolDoseSchedule?.updateAssessment?.(latestResult);
