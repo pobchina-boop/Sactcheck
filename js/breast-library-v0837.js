@@ -127,11 +127,13 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "hrpos"
+      "hrpos-her2neg",
+      "hrpos-her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6357/253_Tamoxifen_Monotherapy.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Adjuvant or advanced oestrogen-receptor-positive breast cancer in pre- or postmenopausal women, within the exact NCCP eligibility criteria.",
+    "setting_qualifications": {}
   },
   "00254": {
     "code": "00254",
@@ -141,11 +143,13 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "hrpos"
+      "hrpos-her2neg",
+      "hrpos-her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6358/254_v5_Anastrazole.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Postmenopausal hormone-sensitive breast cancer in the NCCP adjuvant, switch-after-tamoxifen or advanced settings. The exact receptor and prior-treatment criteria remain a prescribing decision.",
+    "setting_qualifications": {}
   },
   "00258": {
     "code": "00258",
@@ -331,11 +335,13 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "hrpos"
+      "hrpos-her2neg",
+      "hrpos-her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6816/361_Fulvestrant_Therapy.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "The NCCP monotherapy card covers postmenopausal ER-positive locally advanced or metastatic breast cancer with relapse or progression in its specified prior anti-oestrogen setting. Companion CDK4/6 medicines require their own regimen.",
+    "setting_qualifications": {}
   },
   "00371": {
     "code": "00371",
@@ -343,30 +349,39 @@ const regimens={
     "settings": [
       "neoadjuvant",
       "adjuvant",
-      "extended",
       "advanced"
     ],
     "receptors": [
-      "hrpos"
+      "hrpos-her2neg",
+      "hrpos-her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Postmenopausal hormone-sensitive breast cancer in the specific NCCP early, extended, advanced or neoadjuvant indications. Neoadjuvant use has additional HER2-negative and treatment-suitability criteria; it is not inferred for every ER-positive cancer.",
+    "setting_qualifications": {
+      "neoadjuvant": "HER2-negative and exact NCCP suitability criteria apply"
+    },
+    "setting_receptors": {
+      "neoadjuvant": [
+        "hrpos-her2neg"
+      ]
+    }
   },
   "00376": {
     "code": "00376",
     "protocol_id": "nccp-00376-vcurrent",
     "settings": [
       "adjuvant",
-      "extended",
       "advanced"
     ],
     "receptors": [
-      "hrpos"
+      "hrpos-her2neg",
+      "hrpos-her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6568/376_Exemestane_therapy.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Postmenopausal ER-positive early breast cancer after two to three years of tamoxifen, or advanced breast cancer after progression following anti-oestrogen treatment, according to NCCP.",
+    "setting_qualifications": {}
   },
   "00377": {
     "code": "00377",
@@ -1116,8 +1131,8 @@ const ids=['breastSetting','breastReceptor','breastSuite'];
 const val=id=>root.document?.getElementById(id)?.value||'all';
 function codeForCard(card){return (card.dataset.jsonProtocolId||'').match(/nccp-(\d{5})-/)?.[1]||'';}
 function sync(tumour,domain){const panel=root.document?.getElementById('breastLibraryFilters');if(panel)panel.hidden=tumour!=='Breast'||domain==='haem';}
-function matchesReceptor(d,receptor){return receptor==='all'||d.receptors.includes('any')||d.receptors.includes(receptor)||(receptor==='hrpos-her2pos'&&d.receptors.includes('her2pos'));}
-function matchesCard(card,tumour,domain){if(tumour!=='Breast'||domain==='haem')return true;const active=ids.some(id=>val(id)!=='all');if(!active)return true;const d=regimens[codeForCard(card)];if(!d||!(card.dataset.tumour||'').split(',').includes('Breast'))return false;return (val('breastSetting')==='all'||d.settings.includes(val('breastSetting')))&&matchesReceptor(d,val('breastReceptor'))&&(val('breastSuite')==='all'||d.longitudinal);}
+function matchesReceptor(d,receptor){return receptor==='all'||d.receptors.includes('any')||d.receptors.includes(receptor)||(receptor==='hrpos-her2pos'&&d.receptors.includes('her2pos'))||(receptor==='her2pos'&&d.receptors.includes('hrpos-her2pos'));}
+function matchesCard(card,tumour,domain){if(tumour!=='Breast'||domain==='haem')return true;const active=ids.some(id=>val(id)!=='all');if(!active)return true;const d=regimens[codeForCard(card)];if(!d||!(card.dataset.tumour||'').split(',').includes('Breast'))return false;const setting=val('breastSetting'),receptor=val('breastReceptor'),specific=d.setting_receptors?.[setting];return (setting==='all'||d.settings.includes(setting))&&matchesReceptor(specific?{receptors:specific}:d,receptor)&&(val('breastSuite')==='all'||d.longitudinal);}
 function init(){for(const id of ids)root.document.getElementById(id)?.addEventListener('change',()=>root.filterRegimens?.());root.document.getElementById('clearBreastFilters')?.addEventListener('click',()=>{ids.forEach(id=>{const e=root.document.getElementById(id);if(e)e.value='all';});root.filterRegimens?.();});}
 root.SACTCheckBreastLibrary=Object.freeze({version:'0.83.7',regimens,sync,matchesReceptor,matchesCard,codeForCard});
 if(root.document?.readyState==='loading')root.document.addEventListener('DOMContentLoaded',init);else if(root.document)init();

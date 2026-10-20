@@ -51,7 +51,7 @@
         return response.json();
       })
       .then(async payload => {
-        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json"]) {
+        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json"]) {
         const response = await fetch(extraUrl, { cache: "no-store" });
         if (!response.ok) throw new Error(`Could not load regimen knowledge (${response.status}).`);
         const extra = await response.json();
@@ -273,7 +273,8 @@
       ${sectionHeadMarkup(number, "Monitoring and toxicity", "What should be actively reviewed around treatment; exact actions remain protocol-driven.")}
       <div class="regimen-module-grid">
         ${listCardMarkup("Baseline", module.baseline)}
-        ${listCardMarkup("Before each cycle", module.before_each_cycle)}
+        ${listCardMarkup(profile.schedule_kind === "continuous_oral" ? "During continuous treatment" : profile.schedule_kind === "loading_then_q28" ? "At injection reviews" : "Before each cycle", module.before_each_cycle)}
+        ${listCardMarkup("Ongoing monitoring", module.ongoing)}
         ${listCardMarkup("Priority toxicities", module.priority_toxicities, "regimen-module-primary")}
         ${listCardMarkup("Urgent review signals", module.urgent_review_signals, "regimen-module-alert")}
       </div>
@@ -286,7 +287,7 @@
     return `<section class="regimen-information-section regimen-module-section">
       ${sectionHeadMarkup(number, "Administration and practical workflow", "High-level delivery context; use the official protocol and local policies for execution.")}
       <div class="regimen-module-grid">
-        ${textCardMarkup("Cycle and sequence", module.cycle_and_sequence, "regimen-module-primary")}
+        ${textCardMarkup(profile.schedule_kind ? "Treatment schedule and sequence" : "Cycle and sequence", module.cycle_and_sequence, "regimen-module-primary")}
         ${listCardMarkup("Route and duration", module.route_and_duration)}
         ${listCardMarkup("Practical workflow", module.practical_workflow)}
         ${listCardMarkup("Observation and access", module.observation_and_access)}

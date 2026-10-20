@@ -43,10 +43,10 @@ for (const entry of catalogue.protocols) {
 }
 
 assert.strictEqual(catalogue.protocols.length, 376);
-// v0.84.1 adds five complete source-specific schedules and four supported dose ladders.
+// v0.84.2 adds five endocrine schedules to v0.84.1; no invented endocrine toxicity dose ladders.
 // PLD reductions depend on the toxicity/history pathway, so no generic ladder is inferred.
-assert.strictEqual(usefulCoverage, 118);
-assert.strictEqual(scheduleCoverage, 114);
+assert.strictEqual(usefulCoverage, 123);
+assert.strictEqual(scheduleCoverage, 119);
 assert.strictEqual(doseLevelCoverage, 44);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));

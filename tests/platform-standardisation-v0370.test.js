@@ -196,8 +196,10 @@ for (const { file, data } of protocols) {
       assert.equal(def.renal_input?.exact_value_required, true, `${code}/${field} exact renal field must declare why a continuous value is required`);
       assert(String(def.renal_input?.reason || '').length >= 20, `${code}/${field} exact renal field lacks a source-specific rationale`);
     } else if (mode === 'source_threshold_numeric') {
-      assert(['00205','00228','00230','00736','00743'].includes(code),`${code}: numeric threshold entry requires an audited source`);
-      assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);assert.equal(def.renal_input.source_url,metadata.source_url);assert(def.renal_input.reason.length>=20);
+      assert(['00205','00228','00230','00736','00743','00254','00371'].includes(code),`${code}: numeric threshold entry requires an audited source`);
+      assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);
+      const auditedSources=[metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)];
+      assert(auditedSources.includes(def.renal_input.source_url),`${code}/${field}: numeric renal source must be NCCP or an explicitly audited supplement`);assert(def.renal_input.reason.length>=20);
     } else {
       renalBandFields += 1;
       assert.equal(mode, 'protocol_specific_band', `${code}/${field} tiered renal rule must declare protocol-specific bands`);

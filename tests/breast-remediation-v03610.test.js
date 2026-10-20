@@ -12,7 +12,7 @@ const batch = [
 for (const f of batch) {
  const p=read(f);
  assert(!String(p.status).includes('placeholder'), `${f} still placeholder`);
- assert.strictEqual(p.metadata.sactcheck_encoding_version, f.startsWith('00204-') ? '0.84.0' : /^(00201|00206)-/.test(f) ? '0.83.9' : f.startsWith('00212-') ? '0.45.1' : '0.37.0');
+ assert.strictEqual(p.metadata.sactcheck_encoding_version, f.startsWith('00253-') ? '0.84.2' : f.startsWith('00204-') ? '0.84.0' : /^(00201|00206)-/.test(f) ? '0.83.9' : f.startsWith('00212-') ? '0.45.1' : '0.37.0');
  assert(Array.isArray(p.metadata.treatment_class) && p.metadata.treatment_class.length>0, `${f} missing treatment class`);
  assert(p.supportive_care && p.supportive_care.emetogenic_risk !== 'awaiting_proforma_mapping', `${f} missing emetogenic mapping`);
  assert(p.rule_engine.rules.length>=7, `${f} lacks gold-standard rule depth`);

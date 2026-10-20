@@ -1,0 +1,162 @@
+{
+  "release": "0.84.2",
+  "checked_date": "2026-10-18",
+  "scope": [
+    "00253",
+    "00361"
+  ],
+  "method": "Read current official NCCP PDFs via browser extraction; visually inspected page2 organ-function tables. Current EMA / manufacturer SmPC consulted for linked safety additions. Executed source-derived partial-input and displayed-dose checks.",
+  "sources": [
+    {
+      "code": "00253",
+      "url": "https://healthservice.hse.ie/documents/6357/253_Tamoxifen_Monotherapy.pdf",
+      "version": "6",
+      "pages": 4,
+      "table_visual_inspection": "Page2 organ-function table verified in PDF screenshot",
+      "source_pdf_bytes_available": false,
+      "limitation": "Direct PDF download unavailable in this environment; no invented PDF hash supplied."
+    },
+    {
+      "code": "00361",
+      "url": "https://healthservice.hse.ie/documents/6816/361_Fulvestrant_Therapy.pdf",
+      "version": "4",
+      "pages": 4,
+      "table_visual_inspection": "Page2 organ-function table verified in PDF screenshot",
+      "source_pdf_bytes_available": false,
+      "limitation": "Direct PDF download unavailable in this environment; no invented PDF hash supplied."
+    },
+    {
+      "name": "EMA Faslodex SmPC",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/faslodex-epar-product-information_en.pdf",
+      "sections": [
+        "4.1",
+        "4.2",
+        "4.3",
+        "4.4",
+        "4.5",
+        "4.6"
+      ]
+    },
+    {
+      "name": "Tamoxifen20mg manufacturer SmPC, Tillomed, updated12May2026",
+      "url": "https://www.medicines.org.uk/emc/product/11608/smpc",
+      "sections": [
+        "4.3",
+        "4.4",
+        "4.5",
+        "4.6"
+      ]
+    },
+    {
+      "name": "ACOG CommitteeOpinion601",
+      "url": "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2014/06/tamoxifen-and-uterine-cancer",
+      "use": "Annual clinical review is distinct from routine asymptomatic endometrial ultrasound/biopsy."
+    }
+  ],
+  "protocols": {
+    "00253": {
+      "file": "protocols/breast/00253-tamoxifen.json",
+      "rule_count": 27,
+      "sha256": "7d9291367d422a59290eea3941443f181f80542c654b0352d3f9254060827ebe"
+    },
+    "00361": {
+      "file": "protocols/breast/00361-fulvestrant-monotherapy.json",
+      "rule_count": 22,
+      "sha256": "23fb902ade61d2f3ecde3bbab7c809b4f58c1249bc16d71f79d8caaca39ddd7e"
+    }
+  },
+  "findings": [
+    {
+      "code": "00253",
+      "severity": "high",
+      "finding": "Significant past thromboembolic disease was not encoded as an NCCP exclusion; only active/recent VTE was considered.",
+      "change": "Added independent history exclusion, separate acute symptom pathway, and visible difference from the less restrictive product risk–benefit text.",
+      "source": "NCCP p1; manufacturer SmPC §4.4"
+    },
+    {
+      "code": "00253",
+      "severity": "high",
+      "finding": "Severe hepatic impairment previously produced only generic review without stating that treatment is not recommended.",
+      "change": "Withhold for review with the exact no-recommendation source position; mild/moderate and renal/dialysis no-adjustment pathways kept separate.",
+      "source": "NCCP p2 Table1"
+    },
+    {
+      "code": "00253",
+      "severity": "moderate",
+      "finding": "No current QT-risk assessment or follow-up ECG timing was available.",
+      "change": "Added risk-triggered ECG/electrolytes, repeat ECG at steady state (at least4weeks), and follow-up based on symptoms/interacting medicines; no invented QT numerical cutoff.",
+      "source": "NCCP p2; current manufacturer SmPC §4.4"
+    },
+    {
+      "code": "00253",
+      "severity": "moderate",
+      "finding": "Abnormal vaginal bleeding and generic CTCAE grade≥3 previously triggered an automatic treatment hold that NCCP does not specify.",
+      "change": "Prompt gynaecology/individual toxicity review; retained explicit acute clot/SCAR/hepatic/pregnancy safety restrictions.",
+      "source": "NCCP pp2–3"
+    },
+    {
+      "code": "00253",
+      "severity": "moderate",
+      "finding": "Medicine review lacked coumarin interaction/INR, concurrent anastrozole, CYP3A4 induction and surgical risk distinctions.",
+      "change": "Source-specific actions, no blanket warfarin contraindication for cancer treatment and no universal six-week perioperative stop rule.",
+      "source": "Manufacturer SmPC §§4.3–4.5"
+    },
+    {
+      "code": "00361",
+      "severity": "high",
+      "finding": "Only two legacy rules were present: generic grade3 haematology review and generic severe liver review. Child-Pugh B reduction was absent.",
+      "change": "Replaced with22source-linked rules; Child-Pugh B shows250mg peradministration and Child-Pugh C gives no-dose exclusion.",
+      "source": "NCCP pp1–3"
+    },
+    {
+      "code": "00361",
+      "severity": "high",
+      "finding": "Dose schedule had no structured loading/ongoing phases.",
+      "change": "Added500mg D1/D15 first28-daycycle, then D1q28 as currentNCCP; two5mL IMinjections taking1–2min each.",
+      "source": "NCCP p1"
+    },
+    {
+      "code": "00361",
+      "severity": "high",
+      "finding": "NCCP CPB250mg differs from EMA no adjustment for mild/moderate hepatic disease.",
+      "change": "Keep NCCP recommendation explicit with product discrepancy and mandatory Consultant/pharmacy reconciliation in displayed explanation.",
+      "source": "NCCP p2 Table1 versus EMA Faslodex §4.2"
+    },
+    {
+      "code": "00361",
+      "severity": "moderate",
+      "finding": "IM bleeding/anticoagulant caution and nerve injury warning were missing.",
+      "change": "Added named caution inputs; did not invent ANC or platelet hold thresholds. Numeric blood counts remain monitoring-only.",
+      "source": "NCCP pp1,3"
+    },
+    {
+      "code": "00361",
+      "severity": "moderate",
+      "finding": "Post-menopausal/ER/prior-endocrine eligibility and ECOG0–2 were not assessed.",
+      "change": "Independent optional eligibility checks, no absent-as-normal assumptions; keep narrower NCCP indications visibly distinct from broader EMA endocrine-naive licence.",
+      "source": "NCCP p1; EMA §4.1"
+    },
+    {
+      "code": "both",
+      "severity": "moderate",
+      "finding": "Source pagecounts incorrectly recorded6, with legacy source-maturity flags.",
+      "change": "Current PDFs both4pages; metadata sourcechecked2026-10-18; independent clinical and pharmacy approval flags remainfalse.",
+      "source": "CurrentNCCP PDFheaders and visualtablecheck"
+    }
+  ],
+  "validation": {
+    "scenario_count": 143,
+    "passed": 143,
+    "failed": 0,
+    "strict_schema_valid": true,
+    "independent_clinical_review_completed": false,
+    "independent_pharmacy_review_completed": false,
+    "clinical_use_authorised": false
+  },
+  "limits": [
+    "No interactive browser walkthrough in this delegated audit.",
+    "Drug-specific clinical scenarios do not validate individual patient treatment decisions.",
+    "NCCP/SmPC discrepancies require clinical/pharmacy reconciliation.",
+    "Other regimens and combination rules were not modified."
+  ]
+}

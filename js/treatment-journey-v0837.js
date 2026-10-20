@@ -8604,6 +8604,1162 @@ const definitions={
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7510449/"
       }
     ]
+  },
+  "00253": {
+    "code": "00253",
+    "release": "0.84.2",
+    "checked": "2026-10-18",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Tamoxifen · daily hormone therapy: the whole treatment pathway",
+    "setting": "ER-positive early or advanced breast cancer",
+    "summary": "Take tamoxifen once daily continuously. There is no planned week off. The prescriber confirms the duration for the treatment setting.",
+    "stages": [
+      "Before starting",
+      "First weeks",
+      "During treatment",
+      "Longer-term review",
+      "Change / completion"
+    ],
+    "lanes": [
+      {
+        "label": "Early: surgery / chemo",
+        "kind": "local",
+        "cells": [
+          "Surgery / pathology guide the plan",
+          "Any indicated chemotherapy first",
+          "Start endocrine after chemotherapy",
+          "Review recovery and lasting effects",
+          "Agree next endocrine decision"
+        ],
+        "source_ids": [
+          "ESMO_EBC2024"
+        ],
+        "note": "These steps apply only when indicated in the early / curative setting."
+      },
+      {
+        "label": "Early: radiotherapy",
+        "kind": "local",
+        "cells": [
+          "Decide if radiation is indicated",
+          "Usually after surgery and any chemo",
+          "AI may overlap; tamoxifen timing agreed",
+          "Complete RT / review local effects",
+          "Continue endocrine beyond RT if planned"
+        ],
+        "source_ids": [
+          "ESMO_EBC2024"
+        ],
+        "note": "In an early-breast pathway, chemotherapy, if indicated, precedes endocrine treatment. Surgery and its pathology guide adjuvant choices. Postoperative radiotherapy is usually delivered after recovery and any adjuvant chemotherapy; aromatase inhibitors may overlap radiotherapy under the agreed plan. Tamoxifen timing around radiotherapy is agreed by the treating teams. None of these additional treatments is automatically required by an endocrine prescription."
+      },
+      {
+        "label": "Early: endocrine medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm setting and prior treatment",
+          "Start daily tablets at agreed point",
+          "Continuous medicine between reviews",
+          "Review planned total course / extension",
+          "A review is not an automatic stop"
+        ],
+        "source_ids": [
+          "00253"
+        ],
+        "note": "For early breast cancer, discuss the initial endocrine course and a later decision about extending or changing treatment; some patients continue endocrine therapy to 10 years. Advanced treatment continues according to benefit and tolerance. A five-year review is not an automatic instruction to stop."
+      },
+      {
+        "label": "Advanced: medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm exact advanced indication",
+          "Daily tablets",
+          "Continue if beneficial",
+          "Review cancer control and tolerance",
+          "Agree next treatment / care"
+        ],
+        "source_ids": [
+          "00253"
+        ],
+        "note": "Take tamoxifen once daily continuously. There is no planned week off. The prescriber confirms the duration for the treatment setting."
+      },
+      {
+        "label": "Advanced: local treatment",
+        "kind": "local",
+        "cells": [
+          "Define any local-control / symptom need",
+          "Surgery / radiation only if indicated",
+          "Teams agree overlap or sequence",
+          "Review symptoms and local effects",
+          "Reassess goals if disease changes"
+        ],
+        "source_ids": [
+          "ESMO_MBC2023"
+        ],
+        "note": "Advanced-disease local treatment is individually selected; no automatic surgery or radiotherapy course is implied."
+      },
+      {
+        "label": "Safety checks",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal and liver profile",
+          "Review symptoms / interactions",
+          "Bloods when clinically indicated",
+          "Risk-based cardiac / other checks",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00253",
+          "smpc"
+        ],
+        "note": "Liver tests, INR, ophthalmology and ECG are repeated when clinically indicated. NCCP recommends an annual gynaecological examination; new abnormal vaginal bleeding needs prompt assessment. ECG is risk-based. For patients with QT risk, the cited tamoxifen product information recommends baseline ECG / electrolytes and repeat ECG after at least four weeks, with further checks as indicated. Routine echo surveillance is not required for tamoxifen alone."
+      },
+      {
+        "label": "Scans / bone health",
+        "kind": "imaging",
+        "cells": [
+          "Baseline disease and fracture assessment",
+          "Confirm which setting-specific rows apply",
+          "Keep agreed scan / DXA appointments",
+          "Early: mammography; advanced: response scans",
+          "Name who books and reviews results"
+        ],
+        "source_ids": [
+          "NICE_NG101",
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "note": "Assess personal fracture and menopausal risks. Tamoxifen has a different effect on bone from aromatase inhibitors; do not automatically copy an AI bone-density schedule. After curative treatment, annual mammography is generally used for remaining breast tissue: both breasts after conservation or the opposite breast after unilateral mastectomy. The mastectomy side is not routinely mammographed. Routine CT, bone scans and tumour markers are not recommended for asymptomatic early-breast surveillance. New symptoms need assessment between appointments. For advanced breast cancer, response assessment is generally every two to four months, adapted to disease pace, sites, symptoms and treatment. Indolent disease may be reviewed less often; new symptoms can prompt earlier scans. The team chooses the imaging method; this is not a universal three-month CT chest/abdomen/pelvis order."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Bloods and symptoms",
+        "when": "Baseline FBC, renal and liver profile; later blood tests are clinically indicated, not automatic chemotherapy-cycle tests. Annual gynaecological examination; report bleeding or visual changes promptly.",
+        "why": "Checks treatment safety.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00253"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Heart monitoring",
+        "when": "ECG is risk-based. For patients with QT risk, the cited tamoxifen product information recommends baseline ECG / electrolytes and repeat ECG after at least four weeks, with further checks as indicated. Routine echo surveillance is not required for tamoxifen alone.",
+        "why": "ECG and echo answer different questions.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00253",
+          "smpc"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Bone health",
+        "when": "Assess personal fracture and menopausal risks. Tamoxifen has a different effect on bone from aromatase inhibitors; do not automatically copy an AI bone-density schedule.",
+        "why": "Checks fracture risk and whether treatment is needed.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "NICE_NG101"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Cancer scans",
+        "when": "Early / curative: annual mammography of remaining breast tissue; no routine mammography on the mastectomy side, CT, bone scans or tumour markers if asymptomatic. Advanced: response assessment generally every 2–4 months, adapted to disease pace and symptoms; less often may suit indolent disease. The team selects imaging, not automatically CT chest/abdomen/pelvis. New symptoms can bring assessment forward.",
+        "why": "The treatment setting determines surveillance or response assessment.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Markers",
+        "when": "Tumour markers may supplement imaging and clinical assessment in advanced disease if they are informative, especially if elevated at baseline. They do not replace scans, and a marker change alone should not determine treatment failure. There is no universal fixed marker timetable.",
+        "why": "A marker result alone does not establish treatment failure.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ABC5_MARKERS"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      }
+    ],
+    "clinical_notes": [
+      "History of significant thromboembolic disease is an NCCP exclusion. Severe hepatic impairment is not recommended. Interactions, including potent CYP2D6 inhibitors, need medication review.",
+      "Tamoxifen is not contraception. Discuss non-hormonal contraception during treatment and for nine months after stopping, where relevant; absent periods do not prove infertility.",
+      "Columns show sequence, not equal durations. Select the early, preoperative or advanced pathway that actually applies."
+    ],
+    "sources": [
+      {
+        "id": "00253",
+        "title": "NCCP 00253 v6 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6357/253_Tamoxifen_Monotherapy.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "Tamoxifen manufacturer SmPC · emc",
+        "url": "https://www.medicines.org.uk/emc/product/11608/smpc"
+      },
+      {
+        "id": "EBCTCG_TAM2011",
+        "title": "EBCTCG: five years of adjuvant tamoxifen versus no tamoxifen",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21802721/"
+      },
+      {
+        "id": "ATLAS",
+        "title": "ATLAS: continuing tamoxifen to ten years versus stopping at five years",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23219286/"
+      },
+      {
+        "id": "ESMO_EBC2024",
+        "title": "Pan-Asian adapted ESMO early breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11145753/"
+      },
+      {
+        "id": "ESMO_MBC2023",
+        "title": "Pan-Asian adapted ESMO metastatic breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10186487/"
+      },
+      {
+        "id": "NICE_NG101",
+        "title": "NICE NG 101: early and locally advanced breast cancer",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "ABC5_MARKERS",
+        "title": "ESO-ESMO ABC 5 consensus: tumour-marker interpretation",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7510449/"
+      },
+      {
+        "id": "ACOG601",
+        "title": "ACOG Committee Opinion 601: tamoxifen and uterine cancer",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24848920/"
+      }
+    ]
+  },
+  "00254": {
+    "code": "00254",
+    "release": "0.84.2",
+    "checked": "2026-10-18",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Anastrozole · daily hormone therapy: the whole treatment pathway",
+    "setting": "Postmenopausal hormone-sensitive breast cancer",
+    "summary": "Take anastrozole once daily continuously. There is no planned week off. The treatment setting determines the intended duration.",
+    "stages": [
+      "Before starting",
+      "First weeks",
+      "During treatment",
+      "Longer-term review",
+      "Change / completion"
+    ],
+    "lanes": [
+      {
+        "label": "Early: surgery / chemo",
+        "kind": "local",
+        "cells": [
+          "Surgery / pathology guide the plan",
+          "Any indicated chemotherapy first",
+          "Start endocrine after chemotherapy",
+          "Review recovery and lasting effects",
+          "Agree next endocrine decision"
+        ],
+        "source_ids": [
+          "ESMO_EBC2024"
+        ],
+        "note": "These steps apply only when indicated in the early / curative setting."
+      },
+      {
+        "label": "Early: radiotherapy",
+        "kind": "local",
+        "cells": [
+          "Decide if radiation is indicated",
+          "Usually after surgery and any chemo",
+          "AI may overlap; tamoxifen timing agreed",
+          "Complete RT / review local effects",
+          "Continue endocrine beyond RT if planned"
+        ],
+        "source_ids": [
+          "ESMO_EBC2024",
+          "EVIQ_RT3650"
+        ],
+        "note": "In an early-breast pathway, chemotherapy, if indicated, precedes endocrine treatment. Surgery and its pathology guide adjuvant choices. Postoperative radiotherapy is usually delivered after recovery and any adjuvant chemotherapy; aromatase inhibitors may overlap radiotherapy under the agreed plan. Tamoxifen timing around radiotherapy is agreed by the treating teams. None of these additional treatments is automatically required by an endocrine prescription."
+      },
+      {
+        "label": "Early: endocrine medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm setting and prior treatment",
+          "Start daily tablets at agreed point",
+          "Continuous medicine between reviews",
+          "Review planned total course / extension",
+          "A review is not an automatic stop"
+        ],
+        "source_ids": [
+          "00254"
+        ],
+        "note": "In early breast cancer, the standard source course is five years of adjuvant endocrine treatment, including any planned switch from tamoxifen. A later extension decision depends on recurrence risk, tolerance and bone health. Advanced treatment continues according to benefit."
+      },
+      {
+        "label": "Advanced: medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm exact advanced indication",
+          "Daily tablets",
+          "Continue if beneficial",
+          "Review cancer control and tolerance",
+          "Agree next treatment / care"
+        ],
+        "source_ids": [
+          "00254"
+        ],
+        "note": "Take anastrozole once daily continuously. There is no planned week off. The treatment setting determines the intended duration."
+      },
+      {
+        "label": "Advanced: local treatment",
+        "kind": "local",
+        "cells": [
+          "Define any local-control / symptom need",
+          "Surgery / radiation only if indicated",
+          "Teams agree overlap or sequence",
+          "Review symptoms and local effects",
+          "Reassess goals if disease changes"
+        ],
+        "source_ids": [
+          "ESMO_MBC2023"
+        ],
+        "note": "Advanced-disease local treatment is individually selected; no automatic surgery or radiotherapy course is implied."
+      },
+      {
+        "label": "Safety checks",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal and liver profile",
+          "Review symptoms / interactions",
+          "Bloods when clinically indicated",
+          "Risk-based cardiac / other checks",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00254",
+          "smpc"
+        ],
+        "note": "Assess symptoms, adherence and bone health at reviews. Repeat lipids and other blood tests when clinically indicated. Bone-density timing follows baseline results and fracture risk. There is no routine ECG or echo schedule for anastrozole alone. Review cardiovascular risk factors and investigate cardiac symptoms when indicated."
+      },
+      {
+        "label": "Scans / bone health",
+        "kind": "imaging",
+        "cells": [
+          "Baseline disease and fracture assessment",
+          "Confirm which setting-specific rows apply",
+          "Keep agreed scan / DXA appointments",
+          "Early: mammography; advanced: response scans",
+          "Name who books and reviews results"
+        ],
+        "source_ids": [
+          "NICE_NG101",
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "note": "Offer baseline DXA when starting an adjuvant aromatase inhibitor if not already receiving adjuvant bisphosphonates; assess fracture risk and relevant previous results. Under the 2025 joint guidance, patients with a T-score above −2.0 and no additional risk factors generally have risk and bone density reassessed every one to two years. Patients on bone-protective treatment generally have BMD reassessed about every two years. Fracture, substantial bone loss or a change in risk can require earlier review. The clinician selects the interval and any bone treatment; these are not automatic yearly scans for everyone. After curative treatment, annual mammography is generally used for remaining breast tissue: both breasts after conservation or the opposite breast after unilateral mastectomy. The mastectomy side is not routinely mammographed. Routine CT, bone scans and tumour markers are not recommended for asymptomatic early-breast surveillance. New symptoms need assessment between appointments. For advanced breast cancer, response assessment is generally every two to four months, adapted to disease pace, sites, symptoms and treatment. Indolent disease may be reviewed less often; new symptoms can prompt earlier scans. The team chooses the imaging method; this is not a universal three-month CT chest/abdomen/pelvis order."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Bloods and symptoms",
+        "when": "Baseline FBC, renal and liver profile; later blood tests are clinically indicated, not automatic chemotherapy-cycle tests. Review symptoms, adherence, medicines and relevant menopause uncertainty.",
+        "why": "Checks treatment safety.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00254"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Heart monitoring",
+        "when": "There is no routine ECG or echo schedule for anastrozole alone. Review cardiovascular risk factors and investigate cardiac symptoms when indicated.",
+        "why": "ECG and echo answer different questions.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00254",
+          "smpc"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Bone health",
+        "when": "Adjuvant AI: offer baseline DXA unless already receiving adjuvant bisphosphonates. T-score above −2.0 with no additional risk factors: reassess risk / BMD every 1–2 years. On bone-protective treatment: generally about every 2 years. Fracture, substantial bone loss or changed risk may need earlier review; the team individualises the plan.",
+        "why": "Checks fracture risk and whether treatment is needed.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "NICE_NG101",
+          "AIBL2025"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Cancer scans",
+        "when": "Early / curative: annual mammography of remaining breast tissue; no routine mammography on the mastectomy side, CT, bone scans or tumour markers if asymptomatic. Advanced: response assessment generally every 2–4 months, adapted to disease pace and symptoms; less often may suit indolent disease. The team selects imaging, not automatically CT chest/abdomen/pelvis. New symptoms can bring assessment forward.",
+        "why": "The treatment setting determines surveillance or response assessment.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Markers",
+        "when": "Tumour markers may supplement imaging and clinical assessment in advanced disease if they are informative, especially if elevated at baseline. They do not replace scans, and a marker change alone should not determine treatment failure. There is no universal fixed marker timetable.",
+        "why": "A marker result alone does not establish treatment failure.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ABC5_MARKERS"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      }
+    ],
+    "clinical_notes": [
+      "A functioning premenopausal ovarian state is not compatible with AI monotherapy. Severe hepatic impairment is not recommended by NCCP; moderate impairment requires caution.",
+      "Confirm menopausal status rather than assuming that absent periods after chemotherapy mean permanent menopause. Any ovarian-suppression treatment must have its own prescribed schedule.",
+      "Columns show sequence, not equal durations. Select the early, preoperative or advanced pathway that actually applies."
+    ],
+    "sources": [
+      {
+        "id": "00254",
+        "title": "NCCP 00254 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6358/254_v5_Anastrazole.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "HPRA Anastrozole SmPC cited by NCCP",
+        "url": "https://assets.hpra.ie/products/Human/20912/Licence_PA0749-028-001_25072025123349.pdf"
+      },
+      {
+        "id": "ATAC10",
+        "title": "ATAC: ten-year analysis of anastrozole versus tamoxifen",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21087898/"
+      },
+      {
+        "id": "ESMO_EBC2024",
+        "title": "Pan-Asian adapted ESMO early breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11145753/"
+      },
+      {
+        "id": "ESMO_MBC2023",
+        "title": "Pan-Asian adapted ESMO metastatic breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10186487/"
+      },
+      {
+        "id": "NICE_NG101",
+        "title": "NICE NG 101: early and locally advanced breast cancer",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "ABC5_MARKERS",
+        "title": "ESO-ESMO ABC 5 consensus: tumour-marker interpretation",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7510449/"
+      },
+      {
+        "id": "AIBL2025",
+        "title": "IOF/CABS/ECTS/IEG/ESCEO/IMS/SIOG updated joint statement on aromatase-inhibitor-associated bone loss",
+        "url": "https://www.esceo.org/sites/esceo/files/pdf/1-s2.0-S2212137425000351-main.pdf"
+      },
+      {
+        "id": "EVIQ_RT3650",
+        "title": "eviQ 3650 v 6: adjuvant whole-breast radiotherapy",
+        "url": "https://www.eviq.org.au/radiation-oncology/breast/3650-breast-invasive-cancer-adjuvant-whole-breast"
+      }
+    ]
+  },
+  "00371": {
+    "code": "00371",
+    "release": "0.84.2",
+    "checked": "2026-10-18",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Letrozole · daily hormone therapy: the whole treatment pathway",
+    "setting": "Postmenopausal hormone-sensitive breast cancer; setting-specific pathways",
+    "summary": "Take letrozole once daily continuously. The prescriber confirms whether the aim is before surgery, after surgery, extended adjuvant treatment or advanced-disease control.",
+    "stages": [
+      "Before starting",
+      "First weeks",
+      "During treatment",
+      "Longer-term review",
+      "Change / completion"
+    ],
+    "lanes": [
+      {
+        "label": "Early: surgery / chemo",
+        "kind": "local",
+        "cells": [
+          "Surgery / pathology guide the plan",
+          "Any indicated chemotherapy first",
+          "Start endocrine after chemotherapy",
+          "Review recovery and lasting effects",
+          "Agree next endocrine decision"
+        ],
+        "source_ids": [
+          "ESMO_EBC2024"
+        ],
+        "note": "These steps apply only when indicated in the early / curative setting."
+      },
+      {
+        "label": "Early: radiotherapy",
+        "kind": "local",
+        "cells": [
+          "Decide if radiation is indicated",
+          "Usually after surgery and any chemo",
+          "AI may overlap; tamoxifen timing agreed",
+          "Complete RT / review local effects",
+          "Continue endocrine beyond RT if planned"
+        ],
+        "source_ids": [
+          "ESMO_EBC2024",
+          "EVIQ_RT3650"
+        ],
+        "note": "In an early-breast pathway, chemotherapy, if indicated, precedes endocrine treatment. Surgery and its pathology guide adjuvant choices. Postoperative radiotherapy is usually delivered after recovery and any adjuvant chemotherapy; aromatase inhibitors may overlap radiotherapy under the agreed plan. Tamoxifen timing around radiotherapy is agreed by the treating teams. None of these additional treatments is automatically required by an endocrine prescription."
+      },
+      {
+        "label": "Early: endocrine medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm setting and prior treatment",
+          "Start daily tablets at agreed point",
+          "Continuous medicine between reviews",
+          "Review planned total course / extension",
+          "A review is not an automatic stop"
+        ],
+        "source_ids": [
+          "00371"
+        ],
+        "note": "For the NCCP neoadjuvant pathway, reassess response during a four-to-eight-month course and discuss surgery or alternatives if response is inadequate. Adjuvant / extended duration and advanced-disease continuation follow separate plans."
+      },
+      {
+        "label": "Before surgery: letrozole",
+        "kind": "treatment",
+        "cells": [
+          "Confirm HR-positive / HER2-negative criteria",
+          "Start daily preoperative treatment",
+          "Response review during 4–8 months",
+          "Plan surgery; earlier if inadequate response",
+          "Pathology guides next treatment"
+        ],
+        "source_ids": [
+          "00371"
+        ],
+        "note": "Separate NCCP neoadjuvant indication; do not infer this pathway for every HR-positive cancer."
+      },
+      {
+        "label": "Advanced: medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm exact advanced indication",
+          "Daily tablets",
+          "Continue if beneficial",
+          "Review cancer control and tolerance",
+          "Agree next treatment / care"
+        ],
+        "source_ids": [
+          "00371"
+        ],
+        "note": "Take letrozole once daily continuously. The prescriber confirms whether the aim is before surgery, after surgery, extended adjuvant treatment or advanced-disease control."
+      },
+      {
+        "label": "Advanced: local treatment",
+        "kind": "local",
+        "cells": [
+          "Define any local-control / symptom need",
+          "Surgery / radiation only if indicated",
+          "Teams agree overlap or sequence",
+          "Review symptoms and local effects",
+          "Reassess goals if disease changes"
+        ],
+        "source_ids": [
+          "ESMO_MBC2023"
+        ],
+        "note": "Advanced-disease local treatment is individually selected; no automatic surgery or radiotherapy course is implied."
+      },
+      {
+        "label": "Safety checks",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal and liver profile",
+          "Review symptoms / interactions",
+          "Bloods when clinically indicated",
+          "Risk-based cardiac / other checks",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00371",
+          "smpc"
+        ],
+        "note": "FBC, renal / liver profile and lipids when clinically indicated. Review bone density during treatment and after treatment according to bone risk. Neoadjuvant response and surgical planning need explicit review milestones. There is no routine ECG or echo schedule for letrozole alone. Assess cardiovascular risk factors and new symptoms as clinically indicated."
+      },
+      {
+        "label": "Scans / bone health",
+        "kind": "imaging",
+        "cells": [
+          "Baseline disease and fracture assessment",
+          "Confirm which setting-specific rows apply",
+          "Keep agreed scan / DXA appointments",
+          "Early: mammography; advanced: response scans",
+          "Name who books and reviews results"
+        ],
+        "source_ids": [
+          "NICE_NG101",
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "note": "Offer baseline DXA when starting an adjuvant aromatase inhibitor if not already receiving adjuvant bisphosphonates; assess fracture risk and relevant previous results. Under the 2025 joint guidance, patients with a T-score above −2.0 and no additional risk factors generally have risk and bone density reassessed every one to two years. Patients on bone-protective treatment generally have BMD reassessed about every two years. Fracture, substantial bone loss or a change in risk can require earlier review. The clinician selects the interval and any bone treatment; these are not automatic yearly scans for everyone. After curative treatment, annual mammography is generally used for remaining breast tissue: both breasts after conservation or the opposite breast after unilateral mastectomy. The mastectomy side is not routinely mammographed. Routine CT, bone scans and tumour markers are not recommended for asymptomatic early-breast surveillance. New symptoms need assessment between appointments. For advanced breast cancer, response assessment is generally every two to four months, adapted to disease pace, sites, symptoms and treatment. Indolent disease may be reviewed less often; new symptoms can prompt earlier scans. The team chooses the imaging method; this is not a universal three-month CT chest/abdomen/pelvis order."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Bloods and symptoms",
+        "when": "Baseline FBC, renal and liver profile; later blood tests are clinically indicated, not automatic chemotherapy-cycle tests. Review symptoms, adherence, medicines and relevant menopause uncertainty.",
+        "why": "Checks treatment safety.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00371"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Heart monitoring",
+        "when": "There is no routine ECG or echo schedule for letrozole alone. Assess cardiovascular risk factors and new symptoms as clinically indicated.",
+        "why": "ECG and echo answer different questions.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00371",
+          "smpc"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Bone health",
+        "when": "Adjuvant AI: offer baseline DXA unless already receiving adjuvant bisphosphonates. T-score above −2.0 with no additional risk factors: reassess risk / BMD every 1–2 years. On bone-protective treatment: generally about every 2 years. Fracture, substantial bone loss or changed risk may need earlier review; the team individualises the plan.",
+        "why": "Checks fracture risk and whether treatment is needed.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "NICE_NG101",
+          "AIBL2025"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Cancer scans",
+        "when": "Early / curative: annual mammography of remaining breast tissue; no routine mammography on the mastectomy side, CT, bone scans or tumour markers if asymptomatic. Advanced: response assessment generally every 2–4 months, adapted to disease pace and symptoms; less often may suit indolent disease. The team selects imaging, not automatically CT chest/abdomen/pelvis. New symptoms can bring assessment forward.",
+        "why": "The treatment setting determines surveillance or response assessment.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Markers",
+        "when": "Tumour markers may supplement imaging and clinical assessment in advanced disease if they are informative, especially if elevated at baseline. They do not replace scans, and a marker change alone should not determine treatment failure. There is no universal fixed marker timetable.",
+        "why": "A marker result alone does not establish treatment failure.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ABC5_MARKERS"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      }
+    ],
+    "clinical_notes": [
+      "NCCP Child-Pugh C dosing is 2.5 mg every other day; this is not the same hepatic advice as anastrozole. The daily schedule shown is the usual dose and must be checked against the prescription.",
+      "AIs alone require a confirmed postmenopausal endocrine state. Ovarian suppression is a separate treatment plan and must not be assumed from this card.",
+      "Columns show sequence, not equal durations. Select the early, preoperative or advanced pathway that actually applies."
+    ],
+    "sources": [
+      {
+        "id": "00371",
+        "title": "NCCP 00371 v4 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "HPRA Letrozole SmPC cited by NCCP",
+        "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf"
+      },
+      {
+        "id": "BIG1_98",
+        "title": "BIG 1-98: letrozole and tamoxifen alone and in sequence",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22018631/"
+      },
+      {
+        "id": "MA17",
+        "title": "MA.17: letrozole following five years of tamoxifen",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16145047/"
+      },
+      {
+        "id": "P024",
+        "title": "P 024: preoperative letrozole versus tamoxifen",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11822750/"
+      },
+      {
+        "id": "ESMO_EBC2024",
+        "title": "Pan-Asian adapted ESMO early breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11145753/"
+      },
+      {
+        "id": "ESMO_MBC2023",
+        "title": "Pan-Asian adapted ESMO metastatic breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10186487/"
+      },
+      {
+        "id": "NICE_NG101",
+        "title": "NICE NG 101: early and locally advanced breast cancer",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "ABC5_MARKERS",
+        "title": "ESO-ESMO ABC 5 consensus: tumour-marker interpretation",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7510449/"
+      },
+      {
+        "id": "AIBL2025",
+        "title": "IOF/CABS/ECTS/IEG/ESCEO/IMS/SIOG updated joint statement on aromatase-inhibitor-associated bone loss",
+        "url": "https://www.esceo.org/sites/esceo/files/pdf/1-s2.0-S2212137425000351-main.pdf"
+      },
+      {
+        "id": "EVIQ_RT3650",
+        "title": "eviQ 3650 v 6: adjuvant whole-breast radiotherapy",
+        "url": "https://www.eviq.org.au/radiation-oncology/breast/3650-breast-invasive-cancer-adjuvant-whole-breast"
+      }
+    ]
+  },
+  "00376": {
+    "code": "00376",
+    "release": "0.84.2",
+    "checked": "2026-10-18",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Exemestane · daily hormone therapy: the whole treatment pathway",
+    "setting": "Postmenopausal ER-positive breast cancer after prior endocrine treatment",
+    "summary": "Take exemestane once daily continuously, preferably after a meal. There is no planned week off. Confirm the prior-treatment and duration plan.",
+    "stages": [
+      "Before starting",
+      "First weeks",
+      "During treatment",
+      "Longer-term review",
+      "Change / completion"
+    ],
+    "lanes": [
+      {
+        "label": "Early: surgery / chemo",
+        "kind": "local",
+        "cells": [
+          "Surgery / pathology guide the plan",
+          "Any indicated chemotherapy first",
+          "Start endocrine after chemotherapy",
+          "Review recovery and lasting effects",
+          "Agree next endocrine decision"
+        ],
+        "source_ids": [
+          "ESMO_EBC2024"
+        ],
+        "note": "These steps apply only when indicated in the early / curative setting."
+      },
+      {
+        "label": "Early: radiotherapy",
+        "kind": "local",
+        "cells": [
+          "Decide if radiation is indicated",
+          "Usually after surgery and any chemo",
+          "AI may overlap; tamoxifen timing agreed",
+          "Complete RT / review local effects",
+          "Continue endocrine beyond RT if planned"
+        ],
+        "source_ids": [
+          "ESMO_EBC2024",
+          "EVIQ_RT3650"
+        ],
+        "note": "In an early-breast pathway, chemotherapy, if indicated, precedes endocrine treatment. Surgery and its pathology guide adjuvant choices. Postoperative radiotherapy is usually delivered after recovery and any adjuvant chemotherapy; aromatase inhibitors may overlap radiotherapy under the agreed plan. Tamoxifen timing around radiotherapy is agreed by the treating teams. None of these additional treatments is automatically required by an endocrine prescription."
+      },
+      {
+        "label": "Early: endocrine medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm setting and prior treatment",
+          "Start daily tablets at agreed point",
+          "Continuous medicine between reviews",
+          "Review planned total course / extension",
+          "A review is not an automatic stop"
+        ],
+        "source_ids": [
+          "00376"
+        ],
+        "note": "In the NCCP adjuvant switch pathway, tamoxifen plus exemestane completes a total five-year endocrine course; an extension is a separate specialist decision. Advanced treatment continues while beneficial and tolerated."
+      },
+      {
+        "label": "Advanced: medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm exact advanced indication",
+          "Daily tablets",
+          "Continue if beneficial",
+          "Review cancer control and tolerance",
+          "Agree next treatment / care"
+        ],
+        "source_ids": [
+          "00376"
+        ],
+        "note": "Take exemestane once daily continuously, preferably after a meal. There is no planned week off. Confirm the prior-treatment and duration plan."
+      },
+      {
+        "label": "Advanced: local treatment",
+        "kind": "local",
+        "cells": [
+          "Define any local-control / symptom need",
+          "Surgery / radiation only if indicated",
+          "Teams agree overlap or sequence",
+          "Review symptoms and local effects",
+          "Reassess goals if disease changes"
+        ],
+        "source_ids": [
+          "ESMO_MBC2023"
+        ],
+        "note": "Advanced-disease local treatment is individually selected; no automatic surgery or radiotherapy course is implied."
+      },
+      {
+        "label": "Safety checks",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal and liver profile",
+          "Review symptoms / interactions",
+          "Bloods when clinically indicated",
+          "Risk-based cardiac / other checks",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00376",
+          "smpc"
+        ],
+        "note": "Review symptoms, adherence and bone health. Repeat bone density and lipids when indicated; assess other blood tests according to the clinical plan. There is no routine ECG or echo schedule for exemestane alone. Investigate symptoms and manage cardiovascular risk when indicated."
+      },
+      {
+        "label": "Scans / bone health",
+        "kind": "imaging",
+        "cells": [
+          "Baseline disease and fracture assessment",
+          "Confirm which setting-specific rows apply",
+          "Keep agreed scan / DXA appointments",
+          "Early: mammography; advanced: response scans",
+          "Name who books and reviews results"
+        ],
+        "source_ids": [
+          "NICE_NG101",
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "note": "Offer baseline DXA when starting an adjuvant aromatase inhibitor if not already receiving adjuvant bisphosphonates; assess fracture risk and relevant previous results. Under the 2025 joint guidance, patients with a T-score above −2.0 and no additional risk factors generally have risk and bone density reassessed every one to two years. Patients on bone-protective treatment generally have BMD reassessed about every two years. Fracture, substantial bone loss or a change in risk can require earlier review. The clinician selects the interval and any bone treatment; these are not automatic yearly scans for everyone. After curative treatment, annual mammography is generally used for remaining breast tissue: both breasts after conservation or the opposite breast after unilateral mastectomy. The mastectomy side is not routinely mammographed. Routine CT, bone scans and tumour markers are not recommended for asymptomatic early-breast surveillance. New symptoms need assessment between appointments. For advanced breast cancer, response assessment is generally every two to four months, adapted to disease pace, sites, symptoms and treatment. Indolent disease may be reviewed less often; new symptoms can prompt earlier scans. The team chooses the imaging method; this is not a universal three-month CT chest/abdomen/pelvis order."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Bloods and symptoms",
+        "when": "Baseline FBC, renal and liver profile; later blood tests are clinically indicated, not automatic chemotherapy-cycle tests. Review symptoms, adherence, medicines and relevant menopause uncertainty.",
+        "why": "Checks treatment safety.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00376"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Heart monitoring",
+        "when": "There is no routine ECG or echo schedule for exemestane alone. Investigate symptoms and manage cardiovascular risk when indicated.",
+        "why": "ECG and echo answer different questions.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00376",
+          "smpc"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Bone health",
+        "when": "Adjuvant AI: offer baseline DXA unless already receiving adjuvant bisphosphonates. T-score above −2.0 with no additional risk factors: reassess risk / BMD every 1–2 years. On bone-protective treatment: generally about every 2 years. Fracture, substantial bone loss or changed risk may need earlier review; the team individualises the plan.",
+        "why": "Checks fracture risk and whether treatment is needed.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "NICE_NG101",
+          "AIBL2025"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Cancer scans",
+        "when": "Early / curative: annual mammography of remaining breast tissue; no routine mammography on the mastectomy side, CT, bone scans or tumour markers if asymptomatic. Advanced: response assessment generally every 2–4 months, adapted to disease pace and symptoms; less often may suit indolent disease. The team selects imaging, not automatically CT chest/abdomen/pelvis. New symptoms can bring assessment forward.",
+        "why": "The treatment setting determines surveillance or response assessment.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Markers",
+        "when": "Tumour markers may supplement imaging and clinical assessment in advanced disease if they are informative, especially if elevated at baseline. They do not replace scans, and a marker change alone should not determine treatment failure. There is no universal fixed marker timetable.",
+        "why": "A marker result alone does not establish treatment failure.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ABC5_MARKERS"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      }
+    ],
+    "clinical_notes": [
+      "NCCP does not require a routine renal or hepatic dose reduction. This does not remove the need to assess organ dysfunction, interactions and tolerability.",
+      "Confirm the postmenopausal endocrine state. Any ovarian-suppression combination needs a separate prescription and monitoring plan.",
+      "Columns show sequence, not equal durations. Select the early, preoperative or advanced pathway that actually applies."
+    ],
+    "sources": [
+      {
+        "id": "00376",
+        "title": "NCCP 00376 v4 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6568/376_Exemestane_therapy.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "HPRA Exemestane SmPC cited by NCCP",
+        "url": "https://assets.hpra.ie/products/Human/23117/Licence_PA0822-111-001_09012025155108.pdf"
+      },
+      {
+        "id": "IES10",
+        "title": "Long-term follow-up of the Intergroup Exemestane Study",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28467729/"
+      },
+      {
+        "id": "ESMO_EBC2024",
+        "title": "Pan-Asian adapted ESMO early breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11145753/"
+      },
+      {
+        "id": "ESMO_MBC2023",
+        "title": "Pan-Asian adapted ESMO metastatic breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10186487/"
+      },
+      {
+        "id": "NICE_NG101",
+        "title": "NICE NG 101: early and locally advanced breast cancer",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "ABC5_MARKERS",
+        "title": "ESO-ESMO ABC 5 consensus: tumour-marker interpretation",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7510449/"
+      },
+      {
+        "id": "AIBL2025",
+        "title": "IOF/CABS/ECTS/IEG/ESCEO/IMS/SIOG updated joint statement on aromatase-inhibitor-associated bone loss",
+        "url": "https://www.esceo.org/sites/esceo/files/pdf/1-s2.0-S2212137425000351-main.pdf"
+      },
+      {
+        "id": "EVIQ_RT3650",
+        "title": "eviQ 3650 v 6: adjuvant whole-breast radiotherapy",
+        "url": "https://www.eviq.org.au/radiation-oncology/breast/3650-breast-invasive-cancer-adjuvant-whole-breast"
+      }
+    ]
+  },
+  "00361": {
+    "code": "00361",
+    "release": "0.84.2",
+    "checked": "2026-10-18",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Fulvestrant · injections every 4 weeks: the whole treatment pathway",
+    "setting": "Postmenopausal ER-positive locally advanced or metastatic breast cancer",
+    "summary": "NCCP schedule: 500 mg on Days 1 and 15 of the first 28-day cycle, then Day 1 of each 28-day cycle. This means Day 29 next, then every 28 days.",
+    "stages": [
+      "Before starting",
+      "First weeks",
+      "During treatment",
+      "Longer-term review",
+      "Change / completion"
+    ],
+    "lanes": [
+      {
+        "label": "Advanced: medicine",
+        "kind": "treatment",
+        "cells": [
+          "Confirm exact advanced indication",
+          "D1 and D15 loading visits",
+          "Next D29, then every 28 days",
+          "Review cancer control and tolerance",
+          "Agree next treatment / care"
+        ],
+        "source_ids": [
+          "00361"
+        ],
+        "note": "NCCP schedule: 500 mg on Days 1 and 15 of the first 28-day cycle, then Day 1 of each 28-day cycle. This means Day 29 next, then every 28 days."
+      },
+      {
+        "label": "Advanced: local treatment",
+        "kind": "local",
+        "cells": [
+          "Define any local-control / symptom need",
+          "Surgery / radiation only if indicated",
+          "Teams agree overlap or sequence",
+          "Review symptoms and local effects",
+          "Reassess goals if disease changes"
+        ],
+        "source_ids": [
+          "ESMO_MBC2023"
+        ],
+        "note": "Advanced-disease local treatment is individually selected; no automatic surgery or radiotherapy course is implied."
+      },
+      {
+        "label": "Safety checks",
+        "kind": "blood",
+        "cells": [
+          "Baseline FBC, renal and liver profile",
+          "Review symptoms / interactions",
+          "Bloods when clinically indicated",
+          "Risk-based cardiac / other checks",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00361",
+          "smpc"
+        ],
+        "note": "Liver profile as clinically indicated. At injection visits review symptoms, bleeding / bruising and injection-site or nerve symptoms; response imaging follows the cancer-control plan. There is no routine ECG or echo schedule for fulvestrant monotherapy. Monitoring required by a separately prescribed companion drug must be added from that regimen."
+      },
+      {
+        "label": "Scans / bone health",
+        "kind": "imaging",
+        "cells": [
+          "Baseline disease and fracture assessment",
+          "Confirm which setting-specific rows apply",
+          "Keep agreed scan / DXA appointments",
+          "Advanced response scans; risk-based bone care",
+          "Name who books and reviews results"
+        ],
+        "source_ids": [
+          "NICE_NG101",
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "note": "Assess personal fracture and osteoporosis risk. Fulvestrant does not carry an automatic AI DXA timetable; agree testing and repeat intervals when indicated. For advanced breast cancer, response assessment is generally every two to four months, adapted to disease pace, sites, symptoms and treatment. Indolent disease may be reviewed less often; new symptoms can prompt earlier scans. The team chooses the imaging method; this is not a universal three-month CT chest/abdomen/pelvis order."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Bloods and symptoms",
+        "when": "Baseline FBC, renal and liver profile; later blood tests are clinically indicated, not automatic chemotherapy-cycle tests. At injection visits, review bleeding, bruising and injection / nerve symptoms.",
+        "why": "Checks treatment safety.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00361"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Heart monitoring",
+        "when": "There is no routine ECG or echo schedule for fulvestrant monotherapy. Monitoring required by a separately prescribed companion drug must be added from that regimen.",
+        "why": "ECG and echo answer different questions.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "00361",
+          "smpc"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Bone health",
+        "when": "Assess personal fracture and osteoporosis risk. Fulvestrant does not carry an automatic AI DXA timetable; agree testing and repeat intervals when indicated.",
+        "why": "Checks fracture risk and whether treatment is needed.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "NICE_NG101"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Cancer scans",
+        "when": "Advanced: response assessment generally every 2–4 months, adapted to disease pace and symptoms; less often may suit indolent disease. The team selects imaging, not automatically CT chest/abdomen/pelvis. New symptoms can bring assessment forward.",
+        "why": "The treatment setting determines surveillance or response assessment.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ESMO_EBC2024",
+          "ESMO_MBC2023"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      },
+      {
+        "title": "Markers",
+        "when": "Tumour markers may supplement imaging and clinical assessment in advanced disease if they are informative, especially if elevated at baseline. They do not replace scans, and a marker change alone should not determine treatment failure. There is no universal fixed marker timetable.",
+        "why": "A marker result alone does not establish treatment failure.",
+        "action": "Agree the due window, booking owner and result reviewer. Report new symptoms between appointments.",
+        "source_ids": [
+          "ABC5_MARKERS"
+        ],
+        "clinical": "Reference guidance; no automatic appointment booking or treatment authorisation."
+      }
+    ],
+    "clinical_notes": [
+      "NCCP specifies 250 mg for Child-Pugh B, whereas EMA Faslodex product information describes no mild/moderate reduction with caution. The clinician and pharmacist must reconcile this source difference. Severe hepatic impairment is excluded.",
+      "Where relevant, effective contraception is needed during treatment and for two years after the final dose under the EMA product information. Pregnancy and breastfeeding are excluded.",
+      "Columns show sequence, not equal durations. Select the early, preoperative or advanced pathway that actually applies."
+    ],
+    "sources": [
+      {
+        "id": "00361",
+        "title": "NCCP 00361 v4 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6816/361_Fulvestrant_Therapy.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Faslodex product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/faslodex-epar-product-information_en.pdf"
+      },
+      {
+        "id": "CONFIRM_OS",
+        "title": "CONFIRM: final overall survival, fulvestrant 500 mg versus 250 mg",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24317176/"
+      },
+      {
+        "id": "FALCON_PFS",
+        "title": "FALCON: fulvestrant versus anastrozole in endocrine-naive advanced breast cancer",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27908454/"
+      },
+      {
+        "id": "FALCON_OS",
+        "title": "FALCON: prespecified final overall survival",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39772884/"
+      },
+      {
+        "id": "ESMO_EBC2024",
+        "title": "Pan-Asian adapted ESMO early breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11145753/"
+      },
+      {
+        "id": "ESMO_MBC2023",
+        "title": "Pan-Asian adapted ESMO metastatic breast cancer guidelines",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10186487/"
+      },
+      {
+        "id": "NICE_NG101",
+        "title": "NICE NG 101: early and locally advanced breast cancer",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "ABC5_MARKERS",
+        "title": "ESO-ESMO ABC 5 consensus: tumour-marker interpretation",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7510449/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
