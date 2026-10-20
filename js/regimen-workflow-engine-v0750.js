@@ -609,14 +609,14 @@
       <div class="workflow-module-grid">
         <article class="workflow-module assessment">
           <div class="workflow-module-icon">✓</div>
-          <div><span>Clinical</span><h3>Assess treatment</h3><p>Open the existing structured NCCP assessment engine.</p></div>
+          <div><span>Clinical</span><h3>Treatment assessment engine</h3><p>Open the existing structured NCCP assessment engine.</p></div>
           ${moduleStatus("available")}
           <button class="btn workflow-module-action" type="button" data-workflow-assess>Open assessment</button>
         </article>
 
         <article class="workflow-module consent">
           <div class="workflow-module-icon">✎</div>
-          <div><span>Clinic workflow</span><h3>Consent discussion support</h3><p>Generate the regimen-specific draft support PDF to use alongside the formal consent process.</p></div>
+          <div><span>Clinic workflow</span><h3>Consent generator</h3><p>Generate the regimen-specific draft support PDF to use alongside the formal consent process.</p></div>
           ${moduleStatus("review_required")}
           <button class="btn secondary workflow-module-action" type="button" data-workflow-consent>Generate draft consent support</button>
           <small class="workflow-module-note">Content is awaiting consultant and oncology-pharmacy review. Supports discussion; it does not replace formal consent, the national consent form or clinical judgement.</small>
@@ -624,7 +624,7 @@
 
         <article class="workflow-module knowledge">
           <div class="workflow-module-icon">▤</div>
-          <div><span>Clinic workflow</span><h3>Knowledge &amp; evidence</h3><p>Open the expanded regimen profile, including linked trials, outcomes and evidence context where available.</p></div>
+          <div><span>Clinic workflow</span><h3>Knowledge base &amp; evidence</h3><p>Open the expanded regimen profile, including linked trials, outcomes and evidence context where available.</p></div>
           ${moduleStatus(knowledgeProfile(activeProtocol)?"available":"content_check_required")}
           <button class="btn secondary workflow-module-action" type="button" data-workflow-knowledge>Open regimen profile</button>
           <small class="workflow-module-note">A profile marked for content check is still being expanded; confirm source details before relying on it.</small>
@@ -651,18 +651,20 @@
 
         <article class="workflow-module patient">
           <div class="workflow-module-icon">QR</div>
-          <div><span>Patient</span><h3>Patient information + Treatment Passport</h3><p>${dedicatedPatientPipeline(activeProtocol)?"Open the dedicated regimen-specific patient pipeline, visual guide and schedule-aware support.":"Open the regimen guide or print the generic wallet-sized card."} Patient details remain patient-agnostic in SACTCheck.</p></div>
+          <div><span>Patient</span><h3>Patient platform</h3><p>${dedicatedPatientPipeline(activeProtocol)?"Open the dedicated regimen-specific patient pipeline, visual guide and schedule-aware support.":"Open the regimen guide or print the generic wallet-sized card."} Patient details remain patient-agnostic in SACTCheck.</p></div>
           ${moduleStatus("available")}
-          <button class="btn secondary workflow-module-action" type="button" data-workflow-patient-guide>Open patient guide</button>
+          <div class="workflow-patient-actions">
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-patient-guide>Open patient platform</button>
           <button class="btn secondary workflow-module-action" type="button" data-workflow-passport-card>Open Treatment Passport</button>
           ${patientAssets()?.relativePath?.(activeProtocol,'knowledge')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'knowledge'))}" target="_blank" rel="noopener noreferrer">Complete patient reference + cycle timeline</a>`:''}
           ${patientAssets()?.relativePath?.(activeProtocol,'longitudinal')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'longitudinal'))}" target="_blank" rel="noopener noreferrer">Whole treatment journey · scans and monitoring</a>`:''}
           ${patientAssets()?.definitionFor?.(activeProtocol)?.sactCard?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'sact-card'))}" target="_blank" rel="noopener noreferrer">Treatment / contact card</a>`:''}
+          </div>
         </article>
 
         <article class="workflow-module source">
           <div class="workflow-module-icon">↗</div>
-          <div><span>Source</span><h3>Verify NCCP regimen</h3><p>Keep the current national regimen source visible at the point of care.</p></div>
+          <div><span>Source</span><h3>NCCP source</h3><p>Keep the current national regimen source visible at the point of care.</p></div>
           ${moduleStatus(manifest.sourceUrl?"available":"review_required")}
           ${manifest.sourceUrl?`<a class="btn secondary workflow-module-action" href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">Official NCCP PDF</a>`:""}
         </article>

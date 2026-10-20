@@ -113,7 +113,7 @@
   function ensureSafetyDock(){
     if(!is00568Page()||root.document.getElementById('wikiSafetyDock')) return;
     const dock=root.document.createElement('div');dock.id='wikiSafetyDock';dock.className='wiki-safety-dock';dock.setAttribute('aria-label','Quick patient safety links');
-    dock.innerHTML=`<details><summary>☎ Urgent contacts</summary><div class="wiki-safety-panel"><strong>Oncology contact numbers</strong><a href="tel:+353871819645">087 181 9645<small>Acute Oncology Service · Mon–Fri 8am–5pm</small></a><a href="tel:+353214922000">021 4922000<small>Sat / Sun / Bank Holiday 9am–5pm · ask for medical oncology</small></a><a href="#urgent">Evenings / overnight<small>Use your instructed GP out-of-hours / ED pathway</small></a><a class="emergency" href="tel:112">112 / 999<small>Severe breathing difficulty, collapse, seizure or severe chest pain</small></a></div></details><a href="#urgent">⚠ When to call</a><a href="#tools">Patient tools</a>`;
+    dock.innerHTML=`<details><summary>☎ Urgent contacts</summary><div class="wiki-safety-panel"><strong>Oncology contact numbers</strong><a href="#urgent">Insert numbers here<small>Your oncology team · daytime</small></a><a href="#urgent">Insert numbers here<small>Your oncology team · out of hours</small></a><a href="#urgent">Evenings / overnight<small>Use your instructed GP out-of-hours / ED pathway</small></a><a class="emergency" href="tel:112">112 / 999<small>Severe breathing difficulty, collapse, seizure or severe chest pain</small></a></div></details><a href="#urgent">⚠ When to call</a><a href="#tools">Patient tools</a>`;
     root.document.body.appendChild(dock);
     root.document.addEventListener('click',event=>{
       const details=dock.querySelector('details');

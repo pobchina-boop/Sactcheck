@@ -149,19 +149,6 @@ body.workflow-panel-open{overflow:hidden}
 .workflow-boundary{margin-top:8px;padding:8px 10px;font-size:9.5px}
 .workflow-alert{margin-top:8px;padding:9px 10px}
 
-/* concise action names — visual labels only; underlying controls/handlers remain unchanged */
-.workflow-module.assessment h3{font-size:0}.workflow-module.assessment h3::after{content:"Pre-treatment assessment engine";font-size:14px}
-.workflow-module.consent h3{font-size:0}.workflow-module.consent h3::after{content:"Consent generator";font-size:14px}
-.workflow-module.knowledge h3{font-size:0}.workflow-module.knowledge h3::after{content:"Knowledge base & evidence";font-size:14px}
-.workflow-module.patient h3{font-size:0}.workflow-module.patient h3::after{content:"Patient portal";font-size:14px}
-.workflow-module.source h3{font-size:0}.workflow-module.source h3::after{content:"Original NCCP regimen";font-size:14px}
-.workflow-module.patient [data-workflow-patient-guide]{font-size:0!important}.workflow-module.patient [data-workflow-patient-guide]::after{content:"Open portal";font-size:10px}
-.workflow-module.patient [data-workflow-passport-card]{font-size:0!important}.workflow-module.patient [data-workflow-passport-card]::after{content:"Passport";font-size:10px}
-.workflow-module.consent [data-workflow-consent]{font-size:0!important}.workflow-module.consent [data-workflow-consent]::after{content:"Open consent";font-size:10px}
-.workflow-module.assessment [data-workflow-assess]{font-size:0!important}.workflow-module.assessment [data-workflow-assess]::after{content:"Open";font-size:10px}
-.workflow-module.knowledge [data-workflow-knowledge]{font-size:0!important}.workflow-module.knowledge [data-workflow-knowledge]::after{content:"Open";font-size:10px}
-.workflow-module.supportive [data-workflow-support]{font-size:0!important}.workflow-module.supportive [data-workflow-support]::after{content:"Rx script";font-size:10px}
-
 @media(max-width:680px){
   .workflow-panel-body{padding:9px}
   .workflow-hero-card{padding:12px}
@@ -198,3 +185,15 @@ body.workflow-panel-open{overflow:hidden}
   .workflow-module>div:nth-of-type(2){min-width:0!important}
   .workflow-module-action,.workflow-module>.workflow-source-link{margin-left:auto!important}
 }
+
+/* v0.84.4: real labels, wrapping actions, no generated text overlays. */
+.workflow-panel{width:min(760px,96vw)}
+.workflow-module{flex-wrap:wrap!important}
+.workflow-module h3{overflow-wrap:anywhere;line-height:1.35!important}
+.workflow-module>div:nth-of-type(2){flex:1 1 180px;min-width:0!important}
+.workflow-module .workflow-module-action,.workflow-module>.workflow-source-link{white-space:normal;max-width:100%;overflow-wrap:anywhere}
+.workflow-module.patient{display:grid!important;grid-template-columns:27px minmax(0,1fr)!important;align-items:start!important}
+.workflow-module.patient>.workflow-patient-actions{grid-column:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%}
+.workflow-module.patient .workflow-module-action{display:flex!important;width:100%!important;min-width:0!important;margin:0!important;min-height:38px!important;font-size:12px!important;align-items:center}
+.workflow-module.patient [data-workflow-patient-guide]{grid-column:1/-1}
+@media(max-width:480px){.workflow-module.patient>.workflow-patient-actions{grid-template-columns:1fr}.workflow-module>.workflow-module-action{margin-left:35px!important}.workflow-module.supportive{flex-wrap:wrap!important}}

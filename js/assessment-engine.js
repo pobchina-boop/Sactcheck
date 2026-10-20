@@ -4,10 +4,10 @@
  * explainable output and copyable documentation.
  */
 (function (root, factory) {
-  const api = factory(root.SACTCheckRuleEngine || (typeof require === "function" ? require("./rule-engine.js") : null));
+  const api = factory(root.SACTCheckRuleEngine || (typeof require === "function" ? require("./rule-engine.js") : null), root.SACTCheckEndocrineContext || (typeof require === "function" ? require("./endocrine-context-v0844.js") : null));
   if (typeof module === "object" && module.exports) module.exports = api;
   root.SACTCheckAssessmentEngine = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (RuleEngine) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (RuleEngine, Endocrine) {
   "use strict";
 
   if (!RuleEngine) throw new Error("SACTCheckRuleEngine must load before SACTCheckAssessmentEngine.");
@@ -266,11 +266,13 @@
   function optionalImmunotherapyDefinitions(protocol) {
     if (!isImmunotherapyProtocol(protocol)) return [];
     return [
-      { id: "tsh_miu_l", label: "TSH", type: "number", step: "0.01", min: 0, unit: "mIU/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional immune-endocrine screening. CUH local reference range is applied in the interface.", demo_value: 1.2 },
+      { id: "tsh_miu_l", label: "TSH", type: "number", step: "0.01", min: 0, unit: "mIU/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional immune-endocrine screening. Source-labelled Irish laboratory reference ranges are shown in the interface; verify against the reporting laboratory.", demo_value: 1.2 },
       { id: "free_t4_pmol_l", label: "Free T4", type: "number", step: "0.1", min: 0, unit: "pmol/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional immune-endocrine screening. Interpret with TSH and the clinical picture.", demo_value: 12 },
       { id: "cortisol_nmol_l", label: "Cortisol", type: "number", step: "1", min: 0, unit: "nmol/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional and symptom-triggered. Interpretation depends on sampling time, steroid exposure and clinical context.", demo_value: 300 },
       { id: "cortisol_sample_time", label: "Cortisol sample time", type: "text", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional. Record the collection time when cortisol is entered.", demo_value: "09:00" },
-      { id: "acth_result", label: "ACTH result", type: "text", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional and symptom-triggered. Enter the reported result with local units if available.", demo_value: "Reported if clinically indicated" },
+      { id: "acth_result", label: "ACTH", type: "number", min: 0, step: "any", unit: "pg/mL", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Enter in pg/mL (equivalent to ng/L), as used by the linked Irish source. Do not enter a pmol/L result in this field.", demo_value: 25 },
+      ...[{id:"recent_steroid_use",label:"Current or recent steroid use",type:"select",options:[{value:"unknown",label:"Unknown / not recorded"},{value:"yes",label:"Yes"},{value:"no",label:"No"}]},
+      {id:"steroid_name",label:"Steroid name",type:"text"},{id:"steroid_dose",label:"Dose and frequency",type:"text"},{id:"steroid_route",label:"Route (including inhaled / injected / topical)",type:"text"},{id:"steroid_duration",label:"Duration of use",type:"text"},{id:"steroid_last_dose",label:"Last dose / recent taper",type:"text"}].map(d=>({...d,ui_section:"immunotherapy_bloods",always_show:true,required:false,input_role:"context",endocrine_context:true,demo_value:d.id==="recent_steroid_use"?"unknown":""})),
       { id: "glucose_mmol_l", label: "Glucose", type: "number", step: "0.1", min: 0, unit: "mmol/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional immune-mediated diabetes screening or symptom-triggered result.", demo_value: 5 },
       { id: "ketones_mmol_l", label: "Blood ketones", type: "number", step: "0.1", min: 0, unit: "mmol/L", ui_section: "immunotherapy_bloods", always_show: true, required: false, help: "Optional and symptom-triggered; assess urgently with hyperglycaemia or suspected ketoacidosis.", demo_value: 0.1 }
     ];
@@ -809,6 +811,7 @@
       return buildIncompleteResult(protocol, profile, context, inputs, definitions, validation, rawInputs || {});
     }
 
+    const endocrineContext = isImmunotherapyProtocol(protocol) && Endocrine ? Endocrine.assess(inputs, options.endocrineReferences) : {rows:[],reviewRequired:false};
     const evaluated = RuleEngine.evaluate(protocol, inputs, context);
     const findings = evaluated.findings.map(finding => ({
       ...finding,
@@ -864,6 +867,7 @@
       complete,
       coverageComplete: skippedFields.length === 0,
       partialAssessment: !complete,
+      endocrineContext,
       actionType,
       status: actionType === "incomplete" ? "No assessment value entered" : (ACTION_LABELS[actionType] || humanise(actionType)),
       statusClass: STATUS_CLASS[actionType] || "warn",
@@ -981,7 +985,7 @@
 
   function documentationSummary(result, assessmentId) {
     const lines = [
-      "SACTCheck JSON protocol assessment",
+      "SACTCheck treatment assessment engine",
       "",
       `Assessment ID: ${assessmentId || "Not entered"}`,
       `Protocol: ${result.protocol.title}`,
@@ -1021,6 +1025,7 @@
       result.errors.forEach(item => lines.push(`- Rule error ${item.ruleId}: ${item.message}`));
     }
 
+    if (result.endocrineContext?.rows?.length) lines.push("", Endocrine.toText(result.endocrineContext));
     lines.push(
       "",
       "Clinical decision support - not treatment clearance. SACTCheck applies encoded NCCP protocol criteria to clinician-entered information. This output does not constitute treatment clearance and does not replace complete clinical assessment, the current official NCCP protocol, prescribing information, local policy or professional judgement. The responsible oncology clinician retains responsibility for the final treatment decision."

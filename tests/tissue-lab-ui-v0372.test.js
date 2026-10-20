@@ -45,7 +45,8 @@ assert.strictEqual(Lab.calculate(combinedByLabel, { alt:34, ast:84 }).ratio, 2, 
 const partial = Lab.calculate('alt_ast_uln_multiple', { alt:68 });
 assert.deepStrictEqual(partial.missingAnalytes, ['ast']);
 assert.match(partial.display, /AST not entered \(not assumed normal\)/);
-assert.match(partial.display, /highest entered transaminase = 2 ×ULN/);
+assert.match(partial.display, /ALT 68 U\/L \(ULN 34; above limit, 2 ×ULN\)/);
+assert.doesNotMatch(partial.display, /÷| = /);
 
 // Invalid edited ULNs must not silently revert to another denominator.
 Lab.reset();

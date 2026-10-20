@@ -418,16 +418,16 @@
     card.dataset.cardLaunchEnabled = "true";
     card.tabIndex = 0;
     card.setAttribute("role", "group");
-    card.setAttribute("aria-label", `${card.querySelector("h2")?.textContent || "Regimen"}. Open protocol assessment.`);
+    card.setAttribute("aria-label", `${card.querySelector("h2")?.textContent || "Regimen"}. Open Clinic workflow.`);
     const activate = event => {
       if (event.target.closest("a, button, input, select, textarea, summary, details")) return;
-      launch.click();
+      (card.querySelector("[data-open-regimen-workflow]") || launch).click();
     };
     card.addEventListener("click", activate);
     card.addEventListener("keydown", event => {
       if ((event.key === "Enter" || event.key === " ") && !event.target.closest("a, button, input, select, textarea, summary")) {
         event.preventDefault();
-        launch.click();
+        (card.querySelector("[data-open-regimen-workflow]") || launch).click();
       }
     });
   }

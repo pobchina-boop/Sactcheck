@@ -183,7 +183,7 @@
     if (bilirubinAlias(id)) {
       return {
         target: id,
-        title: "Bilirubin result",
+        title: "Bilirubin",
         analytes: [{ id: "bilirubin", label: "Bilirubin", unit: "µmol/L", setting: "bilirubinUln" }],
         decisionUnit: "×ULN"
       };
@@ -192,7 +192,7 @@
     if (combinedTransaminaseAlias(id, label)) {
       return {
         target: id,
-        title: "ALT / AST results",
+        title: "AST/ALT",
         analytes: [
           { id: "alt", label: "ALT", unit: "U/L", setting: "altUln" },
           { id: "ast", label: "AST", unit: "U/L", setting: "astUln" }
@@ -205,7 +205,7 @@
     if (altAlias(id)) {
       return {
         target: id,
-        title: "ALT result",
+        title: "ALT",
         analytes: [{ id: "alt", label: "ALT", unit: "U/L", setting: "altUln" }],
         decisionUnit: "×ULN"
       };
@@ -214,7 +214,7 @@
     if (astAlias(id)) {
       return {
         target: id,
-        title: "AST result",
+        title: "AST",
         analytes: [{ id: "ast", label: "AST", unit: "U/L", setting: "astUln" }],
         decisionUnit: "×ULN"
       };
@@ -252,7 +252,7 @@
     const highestPart = parts.find(part => Math.abs(part.ratio - ratio) < 1e-12) || parts[0];
     const missingAnalytes = adapter.analytes.filter(analyte => !parts.some(part => part.id === analyte.id)).map(analyte => analyte.id);
     const calculationText = parts.map(part =>
-      `${part.label} ${format(part.actual)} ${part.unit} ÷ ULN ${format(part.upper)} ${part.unit} = ${format(part.ratio, 2)} ×ULN`
+      `${part.label} ${format(part.actual)} ${part.unit} (ULN ${format(part.upper)}; ${part.ratio > 1 ? "above" : "within"} limit${part.ratio > 1 ? `, ${format(part.ratio, 2)} ×ULN` : ""})`
     ).join(" · ");
     const missingText = adapter.highest && missingAnalytes.length
       ? ` · ${missingAnalytes.map(id => id.toUpperCase()).join(" / ")} not entered (not assumed normal)`
@@ -268,7 +268,7 @@
       parts,
       highestPart,
       missingAnalytes,
-      display: `${calculationText}${missingText}${decisionText}`,
+      display: `${calculationText}${missingText}`,
       decisionDisplay: adapter.highest
         ? `${format(ratio, 2)} ×ULN (highest entered transaminase)`
         : `${format(ratio, 2)} ×ULN`

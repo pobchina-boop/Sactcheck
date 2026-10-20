@@ -138,7 +138,7 @@
           rows.push({
             field: leaf.field,
             label: definition.label || humanise(leaf.field),
-            actual: lab ? `${lab.display} → ${lab.decisionDisplay}` : `${result?.displayInputs?.[leaf.field] ?? formatValue(result?.inputs?.[leaf.field])}${lab || definition.type === "select" ? "" : unit}`,
+            actual: lab ? `${lab.display}` : `${result?.displayInputs?.[leaf.field] ?? formatValue(result?.inputs?.[leaf.field])}${lab || definition.type === "select" ? "" : unit}`,
             criterion: `${operatorSymbol(leaf.operator)} ${formatCutoff(leaf.value, leaf.operator)}${unit}`,
             outcome: category.label,
             outcomeKey: category.key,
@@ -158,7 +158,7 @@
         rows.push({
           field,
           label: definition.label || humanise(field),
-          actual: lab ? `${lab.display} → ${lab.decisionDisplay}` : `${result?.displayInputs?.[field] ?? formatValue(result?.inputs?.[field])}${lab || definition.type === "select" ? "" : unit}`,
+          actual: lab ? `${lab.display}` : `${result?.displayInputs?.[field] ?? formatValue(result?.inputs?.[field])}${lab || definition.type === "select" ? "" : unit}`,
           criterion: finding.contextRequired ? "Linked context required" : "Encoded pathway reviewed",
           outcome: category.label,
           outcomeKey: category.key,
@@ -179,7 +179,7 @@
       rows.push({
         field: definition.id,
         label: definition.label || humanise(definition.id),
-        actual: lab ? `${lab.display} → ${lab.decisionDisplay}` : `${result?.displayInputs?.[definition.id] ?? formatValue(value)}${lab || definition.type === "select" ? "" : unit}`,
+        actual: lab ? `${lab.display}` : `${result?.displayInputs?.[definition.id] ?? formatValue(value)}${lab || definition.type === "select" ? "" : unit}`,
         criterion: "No standalone encoded criterion",
         outcome: "Recorded",
         outcomeKey: "recorded",
@@ -228,6 +228,8 @@
         detail: "Review the highlighted protocol criteria and the current NCCP source before the final treatment decision."
       };
     }
+
+    if(result?.endocrineContext?.reviewRequired)return {key:"review",title:"Hormone results require clinical interpretation",detail:"Review the reference comparisons, sampling time and steroid context alongside the encoded protocol findings. Unassessed domains remain unknown."};
 
     if (contextRequired.length) {
       return {
@@ -291,6 +293,16 @@
     const protocol = options.protocol || {};
     const metadata = protocol.metadata || {};
     const rowData = findingRows(result, options.labCalculations || {});
+    const hormoneRows=(result.endocrineContext?.rows||[]).map(r=>({...r,criterion:`${r.criterion}. ${r.interpretation} ${result.endocrineContext.referenceLabel}. ${r.sourceLabel||"Source"}: ${r.source}`}));
+    if(hormoneRows.length){
+      const ids=new Set(hormoneRows.map(r=>r.field));
+      if(ids.has("steroid_context")){
+        ["recent_steroid_use","steroid_name","steroid_dose","steroid_route","steroid_duration","steroid_last_dose"].forEach(id=>ids.add(id));
+        if(ids.has("cortisol_nmol_l"))ids.add("cortisol_sample_time");
+      }
+      rowData.rows=[...rowData.rows.filter(r=>!ids.has(r.field)),...hormoneRows];
+      rowData.allRows=[...rowData.allRows.filter(r=>!ids.has(r.field)),...hormoneRows];
+    }
     const course = courseTokens(protocol, result?.context?.indicationId);
     const outcome = outcomeFor(result);
     const doseApi = typeof globalThis !== "undefined" ? globalThis.SACTCheckProtocolDoseSchedule : null;

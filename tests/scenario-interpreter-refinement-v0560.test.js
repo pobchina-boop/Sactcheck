@@ -39,7 +39,7 @@ assert.ok(!parsed.extractions.some(item => /blood pressure|systolic|sbp/i.test(`
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const globalSource = fs.readFileSync(path.join(root, 'js', 'global-scenario-interpreter.js'), 'utf8');
 const inRegimenSource = fs.readFileSync(path.join(root, 'js', 'scenario-interpreter.js'), 'utf8');
-assert.ok(index.includes('Clinical scenario interpreter'));
+assert.ok(!index.includes('Clinical scenario interpreter'), 'Retired interpreter entry is removed');
 assert.ok(!index.includes('Clinical Scenario Interpreter'));
 assert.ok(index.includes('js/global-scenario-interpreter.js?v=0.56.0'));
 assert.ok(index.includes('js/scenario-interpreter.js?v=0.56.0'));

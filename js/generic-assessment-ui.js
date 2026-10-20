@@ -8,6 +8,7 @@
 
   const Engine = root.SACTCheckAssessmentEngine;
   const LocalLab = root.SACTCheckLocalLab;
+  const Endocrine = root.SACTCheckEndocrineContext;
   const AssessmentOutput = root.SACTCheckAssessmentOutput;
   const AssessmentPdf = root.SACTCheckAssessmentPdf;
   if (!Engine) throw new Error("SACTCheckAssessmentEngine must load before generic-assessment-ui.js.");
@@ -89,17 +90,17 @@
     screen.id = "jsonAssessmentScreen";
     screen.className = "screen";
     screen.innerHTML = `
+      <h1 class="assessment-heading">Treatment assessment engine</h1>
       <div class="toolbar spread">
         <div class="toolbar" style="margin:0">
           <a href="#libraryScreen" class="btn secondary" id="jsonBackLibrary" role="button">← Regimen library</a>
           <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" rel="external" referrerpolicy="no-referrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
           <button class="btn secondary hidden" type="button" id="jsonDoseScheduleButton"><span aria-hidden="true">📅</span> Dose &amp; Schedule</button>
           <button class="btn secondary hidden" type="button" id="jsonImmuneSafetyButton"><span aria-hidden="true">◉</span> Immune safety</button>
-          <button class="btn secondary hidden" type="button" id="jsonScenarioInterpreterButton"><span aria-hidden="true">✦</span> Clinical scenario interpreter</button>
           <button class="btn secondary hidden" type="button" id="jsonRegimenInfoButton"><span aria-hidden="true">◈</span> Regimen info</button>
           <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Supportive medicines</a>
         </div>
-        <span class="badge engine-json">JSON engine v${escapeHtml(Engine.version)}</span>
+        <span class="badge engine-json" hidden aria-hidden="true">Engine v${escapeHtml(Engine.version)}</span>
       </div>
 
       <details open>
@@ -157,12 +158,13 @@
           <div class="laboratory-domain immunotherapy-laboratory-domain hidden" id="jsonImmunotherapyBloodSection">
             <div class="laboratory-domain-heading"><div><h3>Immunotherapy endocrine bloods</h3><p class="subtle">Optional screening or symptom-triggered inputs only.</p></div><span id="jsonImmunotherapyBloodCount">—</span></div>
             <div id="jsonImmunotherapyBloodGrid" class="grid blood-input-grid"></div>
+            <details class="endocrine-reference-panel" id="jsonEndocrineReferences"><summary>Hormone reference ranges and sources</summary><div id="jsonEndocrineReferenceControls"></div></details>
           </div>
 
           </div>
 
           <details id="jsonLabProfilePanel" class="lab-profile-details hidden">
-            <summary>Local laboratory profile · automatic ×ULN calculation</summary>
+            <summary>Laboratory reference limits</summary>
             <div class="details-body">
               <p class="subtle">Enter the patient’s actual laboratory results. SACTCheck divides each result by the ULN shown below and passes the calculated ×ULN value into the unchanged protocol rule. For combined transaminase rules, ALT and AST are calculated separately and the higher entered multiple is used. An unentered analyte is not assumed normal. Displayed multiples are rounded; decisions use full precision. Reference limits vary: check the patient’s laboratory report and edit the ULNs where appropriate.</p>
               <label for="jsonLabLftProfile">LFT reference profile</label>
@@ -215,7 +217,7 @@
         </section>
 
         <div class="toolbar">
-          <button class="btn" type="submit">Run JSON protocol assessment</button>
+          <button class="btn" type="submit">Run assessment engine</button>
           <button class="btn secondary" type="button" id="jsonDemo">Load demonstration values</button>
           <button class="btn secondary" type="button" id="jsonReset">Reset</button>
         </div>
@@ -347,6 +349,7 @@
     document.getElementById("jsonLabLftProfile")?.addEventListener("change", event => {
       LocalLab?.selectProfile(event.target.value);
       populateLabProfileControls();
+      renderEndocrineReferenceControls();
       updateConditionalInputs();
       refreshCompactInputStates();
       hideResult();
@@ -354,6 +357,7 @@
     document.getElementById("jsonLabReset")?.addEventListener("click", () => {
       LocalLab?.reset();
       populateLabProfileControls();
+      renderEndocrineReferenceControls();
       updateConditionalInputs();
       refreshCompactInputStates();
       hideResult();
@@ -550,12 +554,14 @@
     const validation = LocalLab.validatePatch?.(patch);
     if (validation && !validation.valid) {
       populateLabProfileControls();
+    renderEndocrineReferenceControls();
       refreshLabPreviews();
       if (typeof root.showToast === "function") root.showToast("ULN values must be positive numbers. Previous laboratory limits were kept.");
       return;
     }
     LocalLab.write(patch);
     populateLabProfileControls();
+    renderEndocrineReferenceControls();
     updateConditionalInputs();
     refreshCompactInputStates();
     hideResult();
@@ -650,7 +656,9 @@
     if (!config) return;
     const [sectionId, gridId, countId] = config;
     const visible = definitions.filter(definition => definition.visible !== false);
-    document.getElementById(gridId).innerHTML = definitions.map(definition => renderInput(definition, { compact: false, blood: true, domain, domainLabel: LABORATORY_DOMAIN_LABELS[domain], immunotherapy: domain === "immunotherapy" })).join("");
+    const inputHtml = definition => renderInput(definition, { compact: false, blood: true, domain, domainLabel: LABORATORY_DOMAIN_LABELS[domain], immunotherapy: domain === "immunotherapy" });
+    const context = definitions.filter(d=>d.endocrine_context);
+    document.getElementById(gridId).innerHTML = definitions.filter(d=>!d.endocrine_context).map(inputHtml).join("") + (context.length ? `<details class="steroid-context"><summary>Recent steroids · cortisol / ACTH context</summary><div class="grid">${context.map(inputHtml).join("")}</div></details>` : "");
     document.getElementById(sectionId).classList.toggle("hidden", visible.length === 0);
     document.getElementById(countId).textContent = `${visible.length} field${visible.length === 1 ? "" : "s"}`;
   }
@@ -687,6 +695,7 @@
     document.getElementById("jsonTreatmentContextSection").classList.toggle("hidden", contextDefinitions.filter(definition => definition.visible !== false).length === 0);
     document.getElementById("jsonLabProfilePanel").classList.toggle("hidden", !definitions.some(definition => LocalLab?.adapterFor(definition)));
     populateLabProfileControls();
+    renderEndocrineReferenceControls();
     document.getElementById("jsonBloodInputCount").textContent = `${visibleLabs.length} relevant field${visibleLabs.length === 1 ? "" : "s"}`;
     document.getElementById("jsonToxicityCount").textContent = `${visibleToxicities.length} optional field${visibleToxicities.length === 1 ? "" : "s"}`;
     document.getElementById("jsonContextCount").textContent = `${contextDefinitions.filter(definition => definition.visible !== false).length} optional field${contextDefinitions.length === 1 ? "" : "s"}`;
@@ -796,15 +805,15 @@
     const wrapperClass = definition.visible === false ? "hidden" : "";
     const labAdapter = LocalLab?.adapterFor(definition);
     const control = buildControl(definition);
-    const displayLabel = labAdapter ? `${labAdapter.title} · automatic ×ULN` : definition.label;
+    const displayLabel = labAdapter ? labAdapter.title : definition.label;
     const unit = displayUnit(definition, displayLabel, labAdapter);
     const labelFor = labAdapter ? "" : ` for="jsonInput_${escapeHtml(definition.id)}"`;
     const hints = [];
     const roleLabels = { decision: "Decision input", monitoring: "Monitoring only", context: "Treatment context", documentation: "Documentation" };
     if (definition.input_role && roleLabels[definition.input_role]) hints.push(`<strong>${roleLabels[definition.input_role]}.</strong>`);
     if (definition.help && !options.blood) hints.push(escapeHtml(definition.help));
-    if (definition.id === "tsh_miu_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("tsh")));
-    if (definition.id === "free_t4_pmol_l" && LocalLab) hints.push(escapeHtml(LocalLab.referenceText("free_t4")));
+    if (Endocrine?.referenceHint(definition.id)) hints.push(escapeHtml(Endocrine.referenceHint(definition.id)));
+    if (definition.id === "acth_result") hints.push("Use pg/mL (or ng/L), not pmol/L.");
     if (isEcogDefinition(definition)) hints.push("Select the clinician-assessed ECOG functional status. This is not a CTCAE grade.");
     if (definition.assessment_guidance && !options.blood && !isEcogDefinition(definition) && !root.SACTCheckCTCAE?.guide(definition)) hints.push(escapeHtml(definition.assessment_guidance));
     if (!options.blood) hints.push("Blank fields remain unassessed.");
@@ -915,8 +924,8 @@
         const parts = [];
         const isLab = laboratoryDomain(definition) !== null;
         if (definition.help && !isLab) parts.push(definition.help);
-        if (definition.id === "tsh_miu_l" && LocalLab) parts.push(LocalLab.referenceText("tsh"));
-        if (definition.id === "free_t4_pmol_l" && LocalLab) parts.push(LocalLab.referenceText("free_t4"));
+        if (Endocrine?.referenceHint(definition.id)) parts.push(Endocrine.referenceHint(definition.id));
+        if (definition.id === "acth_result") parts.push("Use pg/mL (or ng/L), not pmol/L.");
         if (isEcogDefinition(definition)) parts.push("Select the clinician-assessed ECOG functional status. This is not a CTCAE grade.");
         if (definition.assessment_guidance && !isLab && !isEcogDefinition(definition) && !root.SACTCheckCTCAE?.guide(definition)) parts.push(definition.assessment_guidance);
         if (!isLab) parts.push("Blank fields remain unassessed.");
@@ -1074,6 +1083,25 @@
     });
   }
 
+  function renderEndocrineReferenceControls() {
+    const target=document.getElementById("jsonEndocrineReferenceControls");
+    if(!target||!Endocrine)return;
+    const settings=Endocrine.read();
+    target.innerHTML=`<p>Irish laboratories use different assays and intervals. These are St James’s Hospital reference examples, not national treatment thresholds. Check the reporting laboratory; use custom limits when different. This does not change NCCP dose rules.</p>
+      <label for="endocrineReferenceProfile">Reference profile</label><select id="endocrineReferenceProfile"><option value="sjh" ${settings.profile==='sjh'?'selected':''}>St James’s Hospital · published example</option><option value="custom" ${settings.profile==='custom'?'selected':''}>Custom reporting laboratory · same units</option></select>
+      <div class="reference-table-scroll"><table><thead><tr><th>Hormone / time</th><th>Lower</th><th>Upper</th><th>Units / source</th></tr></thead><tbody>${Endocrine.fields.map(f=>`<tr><th scope="row">${escapeHtml(f.label)}</th>${['Lower','Upper'].map(bound=>`<td><input type="number" min="0" step="any" data-endocrine-limit="${f.key+bound}" aria-label="${escapeHtml(f.label)} ${bound.toLowerCase()} reference limit" value="${escapeHtml(settings[f.key+bound]??'')}" ${settings.profile==='sjh'?'readonly':''}></td>`).join('')}<td>${escapeHtml(f.unit)} <a href="${escapeHtml(Endocrine.sources[f.source||f.key])}" target="_blank" rel="noopener noreferrer">Source</a></td></tr>`).join('')}</tbody></table></div><p class="hint">Source pages checked 20 October 2026. Reference comparisons are separate from diagnostic cutoffs. Cortisol requires the collection time; unknown steroid history remains unknown.</p>`;
+    target.querySelector('#endocrineReferenceProfile').addEventListener('change',event=>{Endocrine.selectProfile(event.target.value);renderEndocrineReferenceControls();updateConditionalInputs();hideResult();});
+    target.querySelectorAll('[data-endocrine-limit]').forEach(input=>input.addEventListener('change',()=>{Endocrine.write({profile:'custom',[input.dataset.endocrineLimit]:input.value});updateConditionalInputs();hideResult();}));
+  }
+
+  function renderEndocrineContext(result) {
+    let panel=document.getElementById('jsonEndocrineContextResult');
+    if(!panel){panel=document.createElement('section');panel.id='jsonEndocrineContextResult';panel.className='endocrine-context-summary';document.getElementById('jsonStatusBox').insertAdjacentElement('afterend',panel);}
+    const context=result.endocrineContext;
+    panel.hidden=!context?.rows?.length;
+    panel.innerHTML=context?.rows?.length?`<h3>Hormone results · contextual review</h3><p>${escapeHtml(context.referenceLabel)}</p>${context.rows.map(row=>`<p><strong>${escapeHtml(row.label)}:</strong> ${row.field==='steroid_context'?escapeHtml(row.actual):`<strong>${escapeHtml(row.actual)}</strong>`}<br>${escapeHtml(row.criterion)}. ${escapeHtml(row.interpretation)} <a href="${escapeHtml(row.source)}" target="_blank" rel="noopener noreferrer">${escapeHtml(row.sourceLabel||"Source")}</a></p>`).join('')}`:'';
+  }
+
   function resultPresentation(result) {
     const action = String(result?.actionType || "");
     if (result?.invalid?.length || result?.errors?.length || action === "incomplete") {
@@ -1085,6 +1113,7 @@
     if (["consultant_review", "partial_context_required"].includes(action)) {
       return { title: "Clinical review required", detail: result.recommendation };
     }
+    if (result.endocrineContext?.reviewRequired && ["proceed", "proceed_with_caution"].includes(action)) return {title:"Hormone results require clinical interpretation",detail:"Review the reference comparisons, sampling time and steroid context alongside the encoded protocol findings."};
     if (["proceed", "proceed_with_caution"].includes(action)) {
       return { title: action === "proceed" ? "Treatment criteria met" : "No treatment criteria breached", detail: action === "proceed" ? "No value entered falls outside the protocol treatment criteria." : "No value entered falls outside the protocol criteria. Unassessed fields remain unknown." };
     }
@@ -1140,12 +1169,14 @@
     const unassessedCount = result.unassessed?.length || 0;
     document.getElementById("jsonCoverageMetric").textContent = `${result.assessedRuleCount} of ${result.applicableRuleCount} encoded applicable rules assessed · ${unassessedCount} domain${unassessedCount === 1 ? "" : "s"} unassessed`;
 
+    renderEndocrineContext(result);
+    if(result.endocrineContext?.reviewRequired && ["proceed","proceed_with_caution"].includes(result.actionType)) statusBox.className="status warn";
     renderErrors(result);
     renderPriorityFindings(result);
     renderFindings(result);
     let summary = Engine.documentationSummary(result, latestAssessmentId);
-    const labLines = Object.values(latestLabCalculations).map(calculation => `- ${calculation.display} → decision value ${calculation.decisionDisplay}`);
-    if (labLines.length) summary += `\n\nAutomatic local-laboratory calculations (${LocalLab?.read().profileName || "local profile"}):\n${labLines.join("\n")}`;
+    const labLines = Object.values(latestLabCalculations).map(calculation => `- ${calculation.display}`);
+    if (labLines.length) summary += `\n\nLaboratory results (${LocalLab?.read().profileName || "local profile"}):\n${labLines.join("\n")}`;
     document.getElementById("jsonSummary").value = summary;
     renderOnePageSummary();
     container.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1295,7 +1326,7 @@
         const unit = definition.unit ? ` ${definition.unit}` : "";
         return {
           label: labCalculation ? `${definition.label || humanise(leaf.field)} · calculated` : (definition.label || humanise(leaf.field)),
-          actual: labCalculation ? `${labCalculation.display} → ${labCalculation.decisionDisplay}` : `${displayInputs[leaf.field] ?? formatComparisonValue(inputs[leaf.field])}${definition.type === "select" ? "" : unit}`,
+          actual: labCalculation ? `${labCalculation.display}` : `${displayInputs[leaf.field] ?? formatComparisonValue(inputs[leaf.field])}${definition.type === "select" ? "" : unit}`,
           symbol: operatorSymbol(leaf.operator),
           cutoff: `${formatCutoff(leaf.value, leaf.operator)}${unit}`
         };

@@ -43,7 +43,8 @@
         else root.showToast?.("Clinic workflow is still loading - try again in a moment.");
       }else{
         const api=root.SACTCheckPatientContent||root.SACTCheckRegimenConsentBuilder;
-        if(api?.open) api.open(protocol,{tab:"print",autoPdf:true});
+        if(root.SACTCheckPatientAssets?.hasDedicated?.(protocol)) root.SACTCheckPatientAssets.openPortal(protocol);
+        else if(api?.open) api.open(protocol,{tab:"overview"});
         else root.showToast?.("Patient support is still loading - try again in a moment.");
       }
     });
@@ -84,7 +85,7 @@
         button.dataset.openPatientSupport=id;
         button.className="btn secondary patient-support-card-button";
       }
-      button.innerHTML='<span aria-hidden="true">◎</span> Patient guide PDF';
+      button.innerHTML='<span aria-hidden="true">◎</span> Patient platform';
       replaceButtonWithOwned(button,"patient");
     }
   }
@@ -96,6 +97,9 @@
       actions.querySelectorAll("[data-consent-add-agent],.consent-add-agent-button,.add-regimen-button").forEach(x=>x.remove());
       ensureAction(actions,card,"workflow");
       ensureAction(actions,card,"patient");
+      actions.querySelectorAll('.json-assessment-launch,.regimen-launch').forEach(button=>{button.hidden=true;button.tabIndex=-1;});
+      const source=actions.querySelector('.official-pdf-link');
+      if(source && source.textContent!=="NCCP source") source.textContent="NCCP source";
       card.dataset.v0740Actions="ready";
     });
   }
@@ -146,7 +150,7 @@
     }
     const search=root.document.getElementById("regimenSearch");
     if(search) search.placeholder=mode==="patient"
-      ?"Find a regimen for patient guide PDF"
+      ?"Find a regimen for patient platform"
       :"Regimen, drug, trade name, NCCP number or indication";
   }
 
@@ -208,31 +212,7 @@
         if(p) if(p.textContent!=="Open the regimen-specific A4 / PDF treatment guide used to support the consent discussion.") p.textContent="Open the regimen-specific A4 / PDF treatment guide used to support the consent discussion.";
         if(button) if(button.textContent!=="Open patient guide PDF") button.textContent="Open patient guide PDF";
       }
-      if(module.classList.contains("patient")){
-        if(h3.textContent!=="Patient A4 treatment guide") h3.textContent="Patient A4 treatment guide";
-        const p=h3.parentElement?.querySelector("p");
-        if(p) if(p.textContent!=="Patient-agnostic, regimen-specific A4 / PDF guide with exact schedule, chemo-man visual language, toxicity categories, urgent warnings and QR access.") p.textContent="Patient-agnostic, regimen-specific A4 / PDF guide with exact schedule, chemo-man visual language, toxicity categories, urgent warnings and QR access.";
-        const status=module.querySelector(".workflow-status");
-        if(status){ status.className="workflow-status available"; if(status.textContent!=="Ready") status.textContent="Ready"; }
-        if(!module.querySelector("[data-workflow-print-passport]")){
-          const b=root.document.createElement("button");
-          b.type="button";
-          b.className="btn secondary workflow-module-action";
-          b.dataset.workflowPrintPassport="true";
-          if(b.textContent!=="Open patient guide") b.textContent="Open patient guide";
-          b.addEventListener("click",async()=>{
-            const panel=root.document.getElementById("regimenWorkflowOverlay");
-            panel && (panel.hidden=true);
-            const protocol=root.__v0740ActiveProtocol;
-            if(protocol){
-              const api=root.SACTCheckPatientContent;
-              const risk=await api?.preload?.().then(()=>null).catch(()=>null);
-              api?.open?.(protocol,{tab:"print",autoPdf:true});
-            }
-          });
-          module.appendChild(b);
-        }
-      }
+
     });
   }
 

@@ -8,7 +8,8 @@ const workflow=fs.readFileSync(path.join(__dirname,'../js/regimen-workflow-engin
 const bootstrap=fs.readFileSync(path.join(__dirname,'../js/study-release.js'),'utf8');
 assert.ok(ui.includes('One regimen. One connected information pathway.'));
 assert.ok(ui.includes('Regimen-specific oncology information pipeline'));
-assert.ok(ui.includes('Patient A4 treatment guide'));
+assert.ok(ui.includes('Patient platform'));
+assert.ok(!ui.includes('data-workflow-print-passport'), 'No duplicate patient action decorator');
 assert.ok(ui.includes('hero.querySelectorAll(".v0740-brand-lockup,.v0750-brand-lockup")'));
 assert.ok(!workflow.includes('brand.innerHTML='),'workflow engine must not inject a competing homepage logo');
 assert.ok(bootstrap.includes('patient-support-v0750.js'));

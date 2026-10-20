@@ -47,9 +47,9 @@ assert.ok(['0.55.0', '0.56.0'].includes(scenarioInterpreter.version));
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const globalSource = fs.readFileSync(path.join(root, 'js', 'global-scenario-interpreter.js'), 'utf8');
-assert.ok(html.includes('id="globalScenarioInterpreter"'));
-assert.ok(html.includes('Clinical scenario interpreter'));
-assert.ok(html.includes('Regimen agnostic entry point'));
+assert.ok(!html.includes('id="globalScenarioInterpreter"'));
+assert.ok(!html.includes('data-open-global-scenario'));
+assert.ok(!html.includes('Regimen agnostic entry point'));
 assert.ok(/js\/global-scenario-interpreter\.js\?v=0\.(?:55|56)\.0/.test(html));
 assert.ok(/css\/global-scenario-interpreter\.css\?v=0\.(?:55|56)\.0/.test(html));
 assert.ok(/js\/scenario-interpreter\.js\?v=0\.(?:55|56)\.0/.test(html));
