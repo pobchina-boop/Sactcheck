@@ -18,13 +18,13 @@ const libraryStart = html.indexOf('<div id="libraryScreen" class="screen active"
 const hero = html.indexOf('id="studyHero"', libraryStart);
 const portal = html.indexOf('id="portalSwitcher"', libraryStart);
 const catalogue = html.indexOf('id="libraryCatalogueSection"', libraryStart);
-const search = html.indexOf('id="regimenSearch"', catalogue);
+const search = html.indexOf('id="regimenSearch"', hero);
 const scenario = html.indexOf('id="clinicalScenarioLauncher"', catalogue);
 const cards = html.indexOf('id="regimenGrid"', catalogue);
 assert.ok(libraryStart >= 0 && hero > libraryStart, 'Library screen and hero must exist.');
-assert.ok(hero < portal, 'Persistent mission hero must be the first substantive library section.');
+assert.ok(hero < portal, 'Search hero must be the first substantive library section.');
 assert.ok(portal < catalogue, 'Library selector must remain before the engine catalogue.');
-assert.ok(catalogue < search && search < cards, 'Regimen search must remain before the cards.');
+assert.ok(hero < search && search < portal && search < catalogue && catalogue < cards, 'Search must be the first substantive library action, before selectors and cards.');
 assert.strictEqual(scenario,-1,'The retired scenario launcher must not appear in the library.');
 assert.ok(!layout.includes('insertBefore(catalogue,hero)'), 'Runtime must not move the catalogue ahead of the hero.');
 assert.ok(layout.includes('library.insertBefore(hero,library.firstElementChild)'), 'Runtime placement guard must keep hero first.');

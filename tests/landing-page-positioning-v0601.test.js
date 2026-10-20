@@ -13,9 +13,9 @@ assert.ok(pkg.version.localeCompare('0.60.1', undefined, { numeric: true }) >= 0
 assert.ok(read('CHANGELOG.MD').includes('v0.60.1 — Mission-Led Landing Page'), 'Historical release label should remain in the changelog trace.');
 assert.ok(/css\/landing-page-v0602\.css\?v=0\.(?:60\.[123]|61\.0)/.test(html));
 assert.ok(html.includes('Operationalising NCCP protocols at the point of care.'));
-assert.ok(html.includes('Our purpose:'));
-assert.ok(html.includes('Clinical assessment'));
-assert.ok(html.includes('Patient understanding'));
+assert.ok(html.includes('Find a treatment regimen'));
+assert.ok(read('about.html').includes('Treatment assessment engine'));
+assert.ok(read('about.html').includes('Patient platform'));
 assert.ok(html.includes('Operationalising NCCP protocols at the point of care.'));
 assert.ok(html.includes('class="study-modal landing-modal"'));
 assert.ok(html.includes('See the three-step quick start'));

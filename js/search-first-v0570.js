@@ -73,49 +73,21 @@
 
   function scrollToResults(){
     const catalogue=document.getElementById('libraryCatalogueSection');
-    catalogue?.scrollIntoView({behavior:'smooth',block:'start'});
+    catalogue?.scrollIntoView({behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
   }
 
   function focusSearch(){
     const search=document.getElementById('regimenSearch');
-    search?.scrollIntoView({behavior:'smooth',block:'center'});
+    search?.scrollIntoView({behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
     window.setTimeout(()=>search?.focus(),180);
   }
 
   function moveSearchIntoEngine(){
-    const heroCopy=document.querySelector('#studyHero .mission-hero-copy');
+    const entry=document.querySelector('#studyHero .engine-first-entry');
     const primary=document.querySelector('.library-search-primary');
-    if(!heroCopy || !primary) return;
+    if(!entry || !primary) return;
 
     ensureSearchPerformanceNote(primary);
-
-    let entry=document.querySelector('.engine-first-entry');
-    if(!entry){
-      entry=document.createElement('section');
-      entry.className='engine-first-entry';
-      entry.setAttribute('aria-labelledby','engineFirstTitle');
-      entry.innerHTML=`
-        <div class="engine-first-heading">
-          <div>
-            <span class="engine-first-eyebrow">Regimen information hub</span>
-            <h2 id="engineFirstTitle">Find a treatment regimen</h2>
-          </div>
-          <span class="engine-first-protocol-count">Source-linked regimen library</span>
-        </div>
-        <p class="engine-first-copy">Search the exact NCCP regimen, then open the clinical workflow, patient guide, source material or sustainability support you need.</p>
-        <div class="engine-first-search-host"></div>
-        <div class="engine-first-flow" aria-label="SACTCheck assessment workflow">
-          <span><strong>1</strong> Find</span>
-          <span><strong>2</strong> Assess</span>
-          <span><strong>3</strong> Explain</span>
-          <span><strong>4</strong> Verify</span>
-        </div>
-        <p class="engine-knowledge-hint" data-engine-knowledge-hint hidden></p>`;
-      const lead=heroCopy.querySelector('.mission-hero-lead');
-      if(lead) lead.insertAdjacentElement('afterend',entry);
-      else heroCopy.prepend(entry);
-    }
-
     const host=entry.querySelector('.engine-first-search-host');
     if(host && primary.parentElement!==host) host.appendChild(primary);
 
@@ -146,43 +118,6 @@
           scrollToResults();
         }
       });
-    }
-  }
-
-  function refineHero(){
-    const hero=document.getElementById('studyHero');
-    if(!hero) return;
-
-    setText('#studyHero .study-kicker','SACTCheck Engine · clinician-controlled NCCP decision support');
-    setText('#studyHero .mission-hero-copy h1','Operationalising NCCP protocols at the point of care.');
-    setText(
-      '#studyHero .mission-hero-lead',
-      'Regimen-specific assessment, supportive care, clinical evidence and patient information in one connected workflow.'
-    );
-
-    const purpose=hero.querySelector('.mission-hero-purpose');
-    if(purpose){
-      purpose.innerHTML='<strong>Our purpose:</strong> help clinicians apply national guidance and patients understand their treatment, with the source and reasoning always visible.';
-    }
-
-    const visualKicker=hero.querySelector('.mission-visual-brand span');
-    if(visualKicker) visualKicker.textContent='SACTCHECK ENGINE';
-
-    const actions=hero.querySelector('.mission-hero-actions');
-    if(actions){
-      const launch=actions.querySelector('.launch-engine-button');
-      if(launch){
-        launch.textContent='Browse all protocols ↓';
-        launch.classList.add('engine-browse-button');
-        launch.removeAttribute('data-focus-regimen-search');
-        launch.addEventListener('click',scrollToResults);
-      }
-
-      const why=actions.querySelector('[data-open-about]');
-      if(why) why.classList.add('engine-why-button');
-
-      actions.querySelectorAll('[data-open-global-scenario],[data-open-nccp-tracker],[data-open-clinical-validation],[data-open-sustainability-module]')
-        .forEach(button=>{ button.hidden=true; });
     }
   }
 
@@ -247,9 +182,7 @@
     badge.textContent='Source check pending';
     tracker.querySelector('.engine-support-text')?.appendChild(badge);
     tracker.addEventListener('click',()=>{
-      const source=document.getElementById('nccpUpdateCountBadge')?.closest('button') ||
-        document.querySelector('.nccp-tracker-header-button,[data-open-nccp-tracker]');
-      source?.click();
+      window.SACTCheckNccpChangeTracker?.open?.();
     });
 
     const validation=createSupportTool('✓','Clinical validation','Source-reconciliation workspace and validation status.');
@@ -294,12 +227,6 @@
     }
   }
 
-  function simplifyHeader(){
-    document.querySelectorAll('.header-study-meta [data-open-clinical-validation]').forEach(button=>{
-      button.classList.add('engine-header-secondary-hidden');
-    });
-  }
-
   function bindEngineFocus(){
     document.querySelectorAll('[data-focus-regimen-search]').forEach(button=>{
       if(button.dataset.engineFirstFocusBound) return;
@@ -319,11 +246,9 @@
     const library=document.getElementById('libraryScreen');
     if(library&&hero&&library.firstElementChild!==hero) library.insertBefore(hero,library.firstElementChild);
 
-    refineHero();
     moveSearchIntoEngine();
     hideScenarioFromMainstream();
     createSupportTools();
-    simplifyHeader();
     bindEngineFocus();
     applyReleaseLabel();
 
@@ -335,7 +260,6 @@
   function reassertAfterLibraryRefresh(){
     window.setTimeout(()=>{
       applyReleaseLabel();
-      simplifyHeader();
     },0);
   }
 

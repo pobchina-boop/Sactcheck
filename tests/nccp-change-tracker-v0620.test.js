@@ -29,7 +29,8 @@ assert.strictEqual(feed.features.length, 8, "tracker must explain eight core cap
 assert.ok(html.includes('id="nccpChangeTrackerScreen"'), "tracker screen must be present");
 assert.ok(html.includes("What the tracker does and why each feature matters"), "tracker function and value must be visible in the interface");
 assert.ok(html.includes("No detected change can modify a clinical rule automatically"), "interface must state the safety boundary");
-assert.ok(html.includes('data-open-nccp-tracker'), "tracker must be accessible from the application");
+const clinicWorkflow = fs.readFileSync(path.join(root, "js", "regimen-workflow-engine-v0750.js"), "utf8");
+assert.ok(clinicWorkflow.includes('data-workflow-nccp-tracker'), "tracker must be accessible from the clinic workflow");
 assert.ok(ui.includes("Previous source") && ui.includes("Current source"), "UI must support previous and current source comparison");
 assert.ok(workflow.includes("schedule:") && workflow.includes("workflow_dispatch:"), "tracker workflow must support scheduled and manual runs");
 assert.ok(workflow.includes("pull request") || workflow.includes("pull-request"), "generated source changes must enter a review workflow");

@@ -18,5 +18,12 @@ handlers.keydown[0]({key:'Escape',preventDefault(){}});assert.equal(box.hidden,t
 clicks.open();clicks.search();assert.equal(box.hidden,true);assert.equal(context.location.hash,'#libraryScreen');assert.equal(focused,'search');assert.equal(scrolled,'auto','Respect reduced motion');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert.equal((html.match(/id="regimenSearch"/g)||[]).length,1);
 const title='Operationalising NCCP protocols at the point of care.';
-for(const file of ['index.html','js/search-first-v0570.js','js/sactcheck-interface-v0750.js'])assert(fs.readFileSync(path.join(root,file),'utf8').includes(title),`${file}: competing headline`);
-console.log('Landing UI passed: direct entry, single search, About open/close, focus restoration/trap, Escape and reduced-motion search return.');
+for(const file of ['index.html','about.html'])assert(fs.readFileSync(path.join(root,file),'utf8').includes(title),`${file}: competing headline`);
+const header=html.match(/<header class="app-header">([\s\S]*?)<\/header>/)[1];
+assert.equal((header.match(/data-open-about/g)||[]).length,1,'Header has a single About us action');
+for(const token of ['data-open-nccp-tracker','data-open-clinical-validation','data-open-study-info','study-build-badge','header-version'])assert(!header.includes(token),`Secondary header item remains: ${token}`);
+assert(header.includes('>About us</a>'));
+const footer=html.match(/<footer class="study-footer">([\s\S]*?)<\/footer>/)[1];
+for(const token of ['data-open-clinical-validation','data-open-study-info','sactSustainabilityAnchor'])assert(footer.includes(token),`Supporting service missing from footer: ${token}`);
+assert(!footer.includes('data-open-nccp-tracker'),'NCCP tracker belongs in the clinic workflow');
+console.log('Landing UI passed: direct entry, single search, study-information open/close, focus restoration/trap, Escape and reduced-motion search return.');

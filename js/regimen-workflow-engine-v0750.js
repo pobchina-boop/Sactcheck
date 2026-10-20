@@ -666,7 +666,11 @@
           <div class="workflow-module-icon">↗</div>
           <div><span>Source</span><h3>NCCP source</h3><p>Keep the current national regimen source visible at the point of care.</p></div>
           ${moduleStatus(manifest.sourceUrl?"available":"review_required")}
+          <div class="workflow-source-actions">
           ${manifest.sourceUrl?`<a class="btn secondary workflow-module-action" href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">Official NCCP PDF</a>`:""}
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-nccp-tracker>Open NCCP tracker</button>
+          </div>
+          <small class="workflow-module-note">Review source updates and reconciliation status. The source register opens with this regimen selected.</small>
         </article>
       </div>
       ${renderInteractions(manifest)}
@@ -677,6 +681,16 @@
       const card=cardFor(activeProtocol);
       closePanel();
       card?.querySelector(".json-assessment-launch")?.click();
+    });
+    body.querySelector("[data-workflow-nccp-tracker]")?.addEventListener("click",()=>{
+      const tracker=root.SACTCheckNccpChangeTracker;
+      if(!tracker?.open){
+        root.alert?.("The NCCP tracker is still loading. Please try again in a moment.");
+        return;
+      }
+      const sourceQuery=manifest.nccpCode||"";
+      closePanel();
+      tracker.open({sourceQuery});
     });
     body.querySelector("[data-workflow-consent]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
