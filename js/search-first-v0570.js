@@ -178,7 +178,7 @@
         launch.addEventListener('click',scrollToResults);
       }
 
-      const why=actions.querySelector('[data-open-study-info]');
+      const why=actions.querySelector('[data-open-about]');
       if(why) why.classList.add('engine-why-button');
 
       actions.querySelectorAll('[data-open-global-scenario],[data-open-nccp-tracker],[data-open-clinical-validation],[data-open-sustainability-module]')

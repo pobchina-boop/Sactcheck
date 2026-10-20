@@ -9,6 +9,7 @@ const out = path.join(root, "_site");
 
 const topLevelFiles = [
   "index.html",
+  "about.html",
   "sustainability.html",
   "404.html",
   "manifest.webmanifest",

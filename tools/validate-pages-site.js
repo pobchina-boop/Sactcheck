@@ -8,7 +8,7 @@ const codes=registry.codes;
 const protectedManifest=JSON.parse(fs.readFileSync(path.join(root,"data","protected-patient-assets-v0810.json"),"utf8"));
 const forbiddenTopLevel=[".git",".github","tests","tools","node_modules","package.json","SECURITY.md"];
 const required=[
-  "index.html","sustainability.html","manifest.webmanifest","js","css","protocols/index.json","404.html",
+  "index.html","about.html","css/about-sactcheck.css","sustainability.html","manifest.webmanifest","js","css","protocols/index.json","404.html",
   "js/sactcheck-release.js","js/runtime-performance-v0810.js","js/patient-asset-registry-v0810.js",
   "js/patient-support-v0750.js","js/regimen-workflow-engine-v0750.js","js/ui-stability-v0810.js","js/antiemetic-print-v0810.js",
   "data/app-release.json","data/protected-patient-assets-v0810.json",
