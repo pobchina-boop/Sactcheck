@@ -75,11 +75,13 @@ Twelve protocols previously labelled only as `current` now carry the explicit ve
 | 00254 | 5 | — | 2030-12-19 |
 | 00262 | 8 | 2015-04-29 | 2021-05-12 |
 | 00263 | 7 | 2015-04-29 | 2021-05-12 |
+| 00322 | 4 | 2016-05-03 | 2030-06-13 |
 | 00361 | 4 | 2016-11-11 | 2031-01-20 |
 | 00371 | 4 | 2016-11-11 | 2031-02-23 |
 | 00376 | 4 | 2016-11-11 | 2031-01-20 |
 | 00423 | 5 | 2017-07-07 | 2021-06-23 |
 | 00619 | 4a | 2024-05-31 | 2030-08-11 |
+| 00794 | 3 | 2024-02-23 | 2030-03-04 |
 | 00936 | 1 | 2026-02-18 | 2027-02-18 |
 
 ## Partial-assessment standardisation
@@ -90,9 +92,9 @@ All 361 indexed solid tumour protocols now use the platform policy that every en
 
 These are not automated release failures, because older NCCP documents do not use a uniform publication/review header and many encodings pre-date the structured metadata model. They remain an explicit manual source-review queue.
 
-- Missing stored publication date: **254** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00322, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545 … plus 234 more)
-- Missing stored review or last-reviewed date: **252** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00322, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00526, 00545, 00659, 00720 … plus 232 more)
-- Source document not explicitly marked as manually checked: **181** (00348, 00350, 00734, 00775, 00789, 00790, 00858, 00860, 00861, 00212, 00205, 00256, 00831, 00897, 00926, 00215, 00104, 00282, 00326, 00333 … plus 161 more)
+- Missing stored publication date: **253** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545, 00659 … plus 233 more)
+- Missing stored review or last-reviewed date: **249** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00526, 00545, 00659, 00720, 00736, 00738 … plus 229 more)
+- Source document not explicitly marked as manually checked: **180** (00348, 00350, 00734, 00775, 00789, 00790, 00858, 00860, 00861, 00212, 00205, 00256, 00831, 00897, 00926, 00215, 00104, 00282, 00326, 00333 … plus 160 more)
 
 ## Clinical boundary
 

@@ -46,16 +46,17 @@
       "software_tests_completed": true,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_v0849_pending_independent_clinical_and_pharmacy_validation",
+      "source_document_checked": true
     },
-    "sactcheck_encoding_version": "0.45.1",
+    "sactcheck_encoding_version": "0.84.9",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "migration": {
       "mode": "live_json",
       "switch_to_generic_assessment": true
     },
-    "source_url": "https://healthservice.hse.ie/documents/6397/588_Olaparib_tablet_monotherapy_FZxXOtF.pdf",
+    "source_url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
     "catalogue_section": "targeted_her2_therapy",
     "catalogue_section_label": "Targeted & HER2 therapies",
     "treatment_class": [
@@ -75,7 +76,7 @@
     ],
     "tumour_group": "Gynaecology",
     "gynaecology_subgroup": "ovarian_parp",
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-10-20",
     "treatment_context": [
       "gynaecology",
       "ovarian_parp",
@@ -115,17 +116,24 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_clinical_validation",
+      "label": "Source reconciled · independent clinical/pharmacy validation pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.9",
+      "audit_date": "2026-10-20",
+      "scope_note": "NCCP v5b and EMA SmPC checked. Shared indications retained; new detailed eligibility rules are breast-specific. Source conflicts are explicit and do not generate automatic doses."
     },
-    "canonical_protocol_id": "nccp-00588-v5b"
+    "canonical_protocol_id": "nccp-00588-v5b",
+    "source_alternative_url": "https://assets.hse.ie/media/documents/olaparib_tablet_monotherapy_588.pdf",
+    "content_scope_v0849": {
+      "new_patient_suite_indication": "adjuvant_high_risk_early_breast",
+      "new_patient_suite_nccp_code": "00588h",
+      "other_indications_preserved": true,
+      "requires_indication_gated_patient_routing": true
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -263,7 +271,7 @@
     {
       "indication_id": "00588-gu",
       "code": "00588g",
-      "description": "HRR-mutated metastatic castration-resistant prostate cancer in an NCCP-listed olaparib indication.",
+      "description": "BRCA1/2-mutated metastatic castration-resistant prostate cancer after a new hormonal agent, under NCCP 00588g (not any HRR alteration).",
       "tumour_groups": [
         "Genitourinary"
       ]
@@ -480,11 +488,6 @@
           1,
           2
         ]
-      },
-      {
-        "field": "weeks_since_completion_of_last_local_or_systemic_treatment",
-        "operator": "<=",
-        "value": 12
       }
     ],
     "high_risk_breast_definitions": {
@@ -529,7 +532,8 @@
         "operator": "==",
         "value": false
       }
-    ]
+    ],
+    "breast_start_window_recommendation": "Ideally initiate within 12 weeks of last surgery, chemotherapy or radiation; later starts require specialist review, not an automatic contraindication."
   },
   "exclusions": [
     "Hypersensitivity to olaparib or excipients",
@@ -576,7 +580,20 @@
         "test": "Pregnancy test"
       }
     ],
-    "disease_monitoring": "According to treatment plan and supervising Consultant."
+    "disease_monitoring": "According to treatment plan and supervising Consultant.",
+    "source": {
+      "document": "NCCP 00588 v5b",
+      "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+      "page": 4,
+      "checked_date": "2026-10-20",
+      "section": "Tests"
+    },
+    "agent_specific_notes": [
+      "Monthly FBC for the first 12 months and periodically thereafter if treatment continues (EMA4.4). NCCP specifies FBC, renal and liver profile every 4 weeks for12 months, then as clinically indicated.",
+      "No routine olaparib-specific echo, ECG, DXA, tumour-marker or CT interval is mandated. Add tests for another treatment or clinical indication, without importing an ovarian trial scan schedule into adjuvant breast care.",
+      "Interrupt for severe blood toxicity; persistent abnormal counts after a four-week interruption require marrow/cytogenetic investigation.",
+      "Breast duration is up to 1 year. Ovarian/prostate/pancreatic duration remains indication-specific."
+    ]
   },
   "dose_levels": [
     {
@@ -596,326 +613,1563 @@
     }
   ],
   "rule_engine": {
-    "conflict_policy": "Return the most restrictive applicable action and display every triggered rule.",
-    "missing_data_policy": "Do not infer missing values; request the missing input or return consultant review required.",
-    "actions_ranked_most_to_least_restrictive": [
-      "cease",
-      "delay",
-      "dose_reduce_two_levels",
-      "dose_reduce_one_level",
-      "consultant_review",
-      "proceed"
-    ],
+    "evaluation_mode": "highest_priority_triggered",
+    "conflict_policy": "Display every source-linked finding; the most restrictive action governs. Source conflicts suppress automatic numeric doses.",
     "rules": [
       {
         "rule_id": "HAEM_COUNTS_PROCEED",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 100
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 100
+            }
+          ]
+        },
         "action": {
           "type": "proceed",
-          "dose_percent_of_previous": 100
+          "components": [
+            "olaparib"
+          ],
+          "message": "The entered ANC and platelet values meet NCCP on-treatment thresholds. Continue the previous prescribed dose only if other assessed domains permit; this does not reset an existing reduction."
         },
+        "explanation": "The entered ANC and platelet values meet NCCP on-treatment thresholds. Continue the previous prescribed dose only if other assessed domains permit; this does not reset an existing reduction.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+          "checked_date": "2026-10-20",
+          "section": "Table 2"
+        }
       },
       {
         "rule_id": "HAEM_COUNTS_DELAY_AND_REDUCE",
-        "any": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": "<",
-            "value": 1
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": "<",
-            "value": 100
-          }
-        ],
+        "when": {
+          "any": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 100
+            }
+          ]
+        },
         "action": {
           "type": "delay_then_dose_reduce",
-          "until": "haematological recovery",
-          "dose_level_change": -1
+          "components": [
+            "olaparib"
+          ],
+          "message": "Delay olaparib for ANC <1 or platelets <100 ×10⁹/L until recovery, then restart one level lower per NCCP Table 1. Check prior reductions and occurrence history; the fourth occurrence requires cessation.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "No dose now; after recovery, use the next lower verified dose level (300 → 250 → 200 mg twice daily). Confirm prior reductions and occurrence history with the Consultant."
         },
+        "explanation": "Delay olaparib for ANC <1 or platelets <100 ×10⁹/L until recovery, then restart one level lower per NCCP Table 1. Check prior reductions and occurrence history; the fourth occurrence requires cessation.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+          "checked_date": "2026-10-20",
+          "section": "Tables 1–2"
+        }
       },
       {
         "rule_id": "HAEM_TOXICITY_FOURTH_OCCURRENCE_CEASE",
-        "all": [
-          {
-            "field": "haematological_toxicity_occurrence_number",
-            "operator": ">=",
-            "value": 4
-          }
-        ],
+        "when": {
+          "field": "haematological_toxicity_occurrence_number",
+          "operator": ">=",
+          "value": 4
+        },
         "action": {
           "type": "cease",
           "components": [
             "olaparib"
-          ]
+          ],
+          "message": "At the fourth qualifying haematological toxicity or febrile-neutropenia occurrence, NCCP specifies cessation of olaparib."
         },
+        "explanation": "At the fourth qualifying haematological toxicity or febrile-neutropenia occurrence, NCCP specifies cessation of olaparib.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+          "checked_date": "2026-10-20",
+          "section": "Table 2"
+        }
       },
       {
         "rule_id": "FEBRILE_NEUTROPENIA_DELAY_REDUCE",
-        "all": [
-          {
-            "field": "febrile_neutropenia",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "delay_then_dose_reduce",
-          "until": "clinical and haematological recovery",
-          "dose_level_change": -1
+          "components": [
+            "olaparib"
+          ],
+          "message": "Febrile neutropenia requires urgent assessment and interruption until recovery. NCCP calls for a lower restart dose; grade 4 may require two levels and the fourth occurrence requires cessation. Confirm grade and previous dose before calculating any restart.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "No dose now; establish recovery, grade, previous dose and occurrence history before restart."
         },
+        "explanation": "Febrile neutropenia requires urgent assessment and interruption until recovery. NCCP calls for a lower restart dose; grade 4 may require two levels and the fourth occurrence requires cessation. Confirm grade and previous dose before calculating any restart.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 2,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "section": "Table 2"
+        }
+      },
+      {
+        "rule_id": "GRADE3_FEBRILE_NEUTROPENIA_REDUCTION",
+        "when": {
+          "field": "febrile_neutropenia_grade",
+          "operator": "==",
+          "value": 3
         },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Grade 3 febrile neutropenia: urgent treatment, delay until recovery, then restart one dose level lower. Check occurrence history; the fourth occurrence requires cessation.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "No dose now; after recovery, use the next lower verified dose level (300 → 250 → 200 mg twice daily). Confirm prior reductions and occurrence history with the Consultant."
+        },
+        "explanation": "Grade 3 febrile neutropenia: urgent treatment, delay until recovery, then restart one dose level lower. Check occurrence history; the fourth occurrence requires cessation.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 5,
+          "checked_date": "2026-10-20",
+          "section": "Table 2"
+        }
       },
       {
         "rule_id": "GRADE4_FEBRILE_NEUTROPENIA_TWO_LEVEL_REDUCTION",
-        "all": [
-          {
-            "field": "febrile_neutropenia",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "febrile_neutropenia_grade",
-            "operator": "==",
-            "value": 4
-          }
-        ],
+        "when": {
+          "field": "febrile_neutropenia_grade",
+          "operator": "==",
+          "value": 4
+        },
         "action": {
-          "type": "consultant_review",
-          "recommendation": "Consider restarting at a reduction of two dose levels."
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Grade 4 febrile neutropenia: urgent treatment and delay until recovery. NCCP says consider a two-level reduction on restart; this is a Consultant decision, not an automatic restart prescription.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "No dose now; consider two dose levels lower only after recovery and Consultant review."
         },
+        "explanation": "Grade 4 febrile neutropenia: urgent treatment and delay until recovery. NCCP says consider a two-level reduction on restart; this is a Consultant decision, not an automatic restart prescription.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Consider restarting at a reduction of two dose levels."
+          "checked_date": "2026-10-20",
+          "section": "Table 2"
+        }
       },
       {
         "rule_id": "RENAL_CRCL_GT50",
-        "all": [
-          {
-            "field": "crcl_ml_min",
-            "operator": ">",
-            "value": 50
-          }
-        ],
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": ">",
+          "value": 50
+        },
         "action": {
           "type": "proceed",
-          "dose_mg_twice_daily": 300
+          "components": [
+            "olaparib"
+          ],
+          "message": "CrCl >50 mL/min requires no renal dose reduction. Maintain any existing toxicity-related reduction; do not automatically increase to the original dose."
         },
+        "explanation": "CrCl >50 mL/min requires no renal dose reduction. Maintain any existing toxicity-related reduction; do not automatically increase to the original dose.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+          "checked_date": "2026-10-20",
+          "section": "Table 3"
+        }
       },
       {
         "rule_id": "RENAL_CRCL_30_TO_50",
-        "all": [
-          {
-            "field": "crcl_ml_min",
-            "operator": "between_inclusive",
-            "value": [
-              30,
-              50
-            ]
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">",
+              "value": 30
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 50
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP specifies 200 mg twice daily for CrCl 30–50 mL/min; the SmPC uses 31–50. This result is for values >30 to 50; exact 30 requires separate source-reconciliation review. Preserve a lower existing dose if another restriction applies.",
           "dose_mg_twice_daily": 200,
           "total_daily_dose_mg": 400
         },
+        "explanation": "NCCP specifies 200 mg twice daily for CrCl 30–50 mL/min; the SmPC uses 31–50. This result is for values >30 to 50; exact 30 requires separate source-reconciliation review. Preserve a lower existing dose if another restriction applies.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 3,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "section": "Table 3"
+        }
+      },
+      {
+        "rule_id": "RENAL_CRCL_EXACT30_SOURCE_CONFLICT",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": 30
         },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "At CrCl exactly 30 mL/min, NCCP Table 3 includes the patient in its 30–50 band (200 mg twice daily), but EMA classifies ≤30 as severe, with use only if benefit outweighs risk. Consultant/pharmacist reconciliation is required; no automatic numeric dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "At CrCl exactly 30 mL/min, NCCP Table 3 includes the patient in its 30–50 band (200 mg twice daily), but EMA classifies ≤30 as severe, with use only if benefit outweighs risk. Consultant/pharmacist reconciliation is required; no automatic numeric dose.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 5,
+          "checked_date": "2026-10-20",
+          "section": "Table 3; EMA SmPC 4.2"
+        }
       },
       {
         "rule_id": "RENAL_CRCL_LT30",
-        "all": [
-          {
-            "field": "crcl_ml_min",
-            "operator": "<",
-            "value": 30
-          }
-        ],
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 30
+        },
         "action": {
           "type": "consultant_review",
-          "recommendation": "Consider 50% of original dose."
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP says consider half the original dose at CrCl <30 mL/min. EMA does not routinely recommend use at ≤30, allowing it only when benefit outweighs risk with careful monitoring. Resolve the source difference with the Consultant and pharmacist; this is not an automatic 50% prescription.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
         },
+        "explanation": "NCCP says consider half the original dose at CrCl <30 mL/min. EMA does not routinely recommend use at ≤30, allowing it only when benefit outweighs risk with careful monitoring. Resolve the source difference with the Consultant and pharmacist; this is not an automatic 50% prescription.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Consider 50% of original dose."
+          "checked_date": "2026-10-20",
+          "section": "Table 3; EMA SmPC 4.2"
+        }
       },
       {
         "rule_id": "RENAL_HAEMODIALYSIS",
-        "all": [
-          {
-            "field": "crcl_ml_min",
-            "operator": "<",
-            "value": 30
-          },
-          {
-            "field": "haemodialysis",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "consultant_review",
-          "recommendation": "Consider 50% of original dose."
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP says consider half the original dose during haemodialysis. EMA lacks established end-stage renal dosing. Obtain Consultant and pharmacy review with monitoring; do not assume a numeric dose or dialysis timing.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
         },
+        "explanation": "NCCP says consider half the original dose during haemodialysis. EMA lacks established end-stage renal dosing. Obtain Consultant and pharmacy review with monitoring; do not assume a numeric dose or dialysis timing.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Consider 50% of original dose."
+          "checked_date": "2026-10-20",
+          "section": "Table 3; EMA SmPC 4.2"
+        }
       },
       {
         "rule_id": "HEPATIC_CHILD_PUGH_A",
-        "all": [
-          {
-            "field": "child_pugh_class",
-            "operator": "==",
-            "value": "A"
-          }
-        ],
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "A"
+        },
         "action": {
           "type": "proceed",
-          "dose_mg_twice_daily": 300
+          "components": [
+            "olaparib"
+          ],
+          "message": "Child-Pugh A requires no hepatic dose adjustment under NCCP and EMA. Maintain any existing dose reductions and assess new drug-induced liver injury separately."
         },
+        "explanation": "Child-Pugh A requires no hepatic dose adjustment under NCCP and EMA. Maintain any existing dose reductions and assess new drug-induced liver injury separately.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+          "checked_date": "2026-10-20",
+          "section": "Table 3"
+        }
       },
       {
         "rule_id": "HEPATIC_CHILD_PUGH_B",
-        "all": [
-          {
-            "field": "child_pugh_class",
-            "operator": "==",
-            "value": "B"
-          }
-        ],
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "B"
+        },
         "action": {
           "type": "proceed",
-          "dose_mg_twice_daily": 300
+          "components": [
+            "olaparib"
+          ],
+          "message": "Child-Pugh B requires no hepatic dose adjustment under NCCP and EMA. Maintain any existing dose reductions and assess new drug-induced liver injury separately."
         },
+        "explanation": "Child-Pugh B requires no hepatic dose adjustment under NCCP and EMA. Maintain any existing dose reductions and assess new drug-induced liver injury separately.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+          "checked_date": "2026-10-20",
+          "section": "Table 3"
+        }
       },
       {
         "rule_id": "HEPATIC_CHILD_PUGH_C",
-        "all": [
-          {
-            "field": "child_pugh_class",
-            "operator": "==",
-            "value": "C"
-          }
-        ],
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
         "action": {
           "type": "consultant_review",
-          "recommendation": "Consider 50% of original dose."
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP suggests considering half the original dose in Child-Pugh C; EMA does not recommend olaparib because safety and pharmacokinetics are unstudied. Resolve this difference with Consultant/pharmacy review rather than generating a numeric dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
         },
+        "explanation": "NCCP suggests considering half the original dose in Child-Pugh C; EMA does not recommend olaparib because safety and pharmacokinetics are unstudied. Resolve this difference with Consultant/pharmacy review rather than generating a numeric dose.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 5,
-          "table": 3,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "section": "Table 3; EMA SmPC 4.2"
+        }
+      },
+      {
+        "rule_id": "STRONG_CYP3A_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "cyp3a_inhibitor_class",
+              "operator": "==",
+              "value": "strong"
+            },
+            {
+              "any": [
+                {
+                  "field": "cyp3a_inhibitor_unavoidable",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cyp3a_inhibitor_unavoidable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
         },
-        "explanation": "Consider 50% of original dose."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Avoid strong CYP3A inhibitors and seek an alternative. Only if co-administration is unavoidable does NCCP specify a reduced olaparib dose. Confirm the interaction plan before issuing a dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "Avoid strong CYP3A inhibitors and seek an alternative. Only if co-administration is unavoidable does NCCP specify a reduced olaparib dose. Confirm the interaction plan before issuing a dose.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 6,
+          "checked_date": "2026-10-20",
+          "section": "Table 4"
+        }
       },
       {
         "rule_id": "STRONG_CYP3A_INHIBITOR",
-        "all": [
-          {
-            "field": "cyp3a_inhibitor_class",
-            "operator": "==",
-            "value": "strong"
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "cyp3a_inhibitor_class",
+              "operator": "==",
+              "value": "strong"
+            },
+            {
+              "field": "cyp3a_inhibitor_unavoidable",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
+          "components": [
+            "olaparib"
+          ],
+          "message": "If the strong CYP3A inhibitor is genuinely unavoidable, NCCP specifies olaparib 100 mg twice daily. Reconcile other dose restrictions with pharmacy; do not independently stack reductions.",
           "dose_mg_twice_daily": 100,
           "total_daily_dose_mg": 200
         },
+        "explanation": "If the strong CYP3A inhibitor is genuinely unavoidable, NCCP specifies olaparib 100 mg twice daily. Reconcile other dose restrictions with pharmacy; do not independently stack reductions.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 6,
-          "table": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "section": "Table 4"
+        }
+      },
+      {
+        "rule_id": "MODERATE_CYP3A_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "cyp3a_inhibitor_class",
+              "operator": "==",
+              "value": "moderate"
+            },
+            {
+              "any": [
+                {
+                  "field": "cyp3a_inhibitor_unavoidable",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cyp3a_inhibitor_unavoidable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
         },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Avoid moderate CYP3A inhibitors and seek an alternative. Only if co-administration is unavoidable does NCCP specify a reduced olaparib dose. Confirm the interaction plan before issuing a dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "Avoid moderate CYP3A inhibitors and seek an alternative. Only if co-administration is unavoidable does NCCP specify a reduced olaparib dose. Confirm the interaction plan before issuing a dose.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 6,
+          "checked_date": "2026-10-20",
+          "section": "Table 4"
+        }
       },
       {
         "rule_id": "MODERATE_CYP3A_INHIBITOR",
-        "all": [
-          {
-            "field": "cyp3a_inhibitor_class",
-            "operator": "==",
-            "value": "moderate"
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "cyp3a_inhibitor_class",
+              "operator": "==",
+              "value": "moderate"
+            },
+            {
+              "field": "cyp3a_inhibitor_unavoidable",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
+          "components": [
+            "olaparib"
+          ],
+          "message": "If the moderate CYP3A inhibitor is genuinely unavoidable, NCCP specifies olaparib 150 mg twice daily. Reconcile other dose restrictions with pharmacy; do not independently stack reductions.",
           "dose_mg_twice_daily": 150,
           "total_daily_dose_mg": 300
         },
+        "explanation": "If the moderate CYP3A inhibitor is genuinely unavoidable, NCCP specifies olaparib 150 mg twice daily. Reconcile other dose restrictions with pharmacy; do not independently stack reductions.",
         "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
           "page": 6,
-          "table": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "section": "Table 4"
+        }
+      },
+      {
+        "rule_id": "MULTIPLE_DOSE_RESTRICTIONS",
+        "when": {
+          "all": [
+            {
+              "field": "cyp3a_inhibitor_class",
+              "operator": "in",
+              "value": [
+                "strong",
+                "moderate"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 50
+                },
+                {
+                  "field": "child_pugh_class",
+                  "operator": "==",
+                  "value": "C"
+                },
+                {
+                  "field": "current_dose_level",
+                  "operator": "in",
+                  "value": [
+                    "-1",
+                    "-2"
+                  ]
+                }
+              ]
+            }
+          ]
         },
-        "explanation": "Encoded decision rule. Source specific explanation pending reconciliation."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Concurrent interaction and organ/toxicity dose restrictions need one reconciled prescription. Neither source supplies a validated combined reduction algorithm; do not add percentages or choose a dose automatically.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "Concurrent interaction and organ/toxicity dose restrictions need one reconciled prescription. Neither source supplies a validated combined reduction algorithm; do not add percentages or choose a dose automatically.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 6,
+          "checked_date": "2026-10-20",
+          "section": "Tables 1, 3–4"
+        }
+      },
+      {
+        "rule_id": "OLAPARIB_HYPERSENSITIVITY",
+        "when": {
+          "field": "olaparib_hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Hypersensitivity to olaparib/excipients is excluded."
+        },
+        "explanation": "Hypersensitivity to olaparib/excipients is excluded.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 4,
+          "checked_date": "2026-10-20",
+          "section": "Exclusions"
+        }
+      },
+      {
+        "rule_id": "PREVIOUS_PARP_INHIBITOR",
+        "when": {
+          "field": "previous_parp_inhibitor",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Previous PARP-inhibitor treatment is excluded by this NCCP regimen."
+        },
+        "explanation": "Previous PARP-inhibitor treatment is excluded by this NCCP regimen.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 4,
+          "checked_date": "2026-10-20",
+          "section": "Exclusions"
+        }
+      },
+      {
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Pregnancy is excluded; olaparib can harm the fetus."
+        },
+        "explanation": "Pregnancy is excluded; olaparib can harm the fetus.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 4,
+          "checked_date": "2026-10-20",
+          "section": "Exclusions"
+        }
+      },
+      {
+        "rule_id": "BREASTFEEDING",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Breastfeeding is excluded during treatment and for one month after the last dose."
+        },
+        "explanation": "Breastfeeding is excluded during treatment and for one month after the last dose.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 4,
+          "checked_date": "2026-10-20",
+          "section": "Exclusions"
+        }
+      },
+      {
+        "rule_id": "SEVERE_HAEMATOLOGICAL_TOXICITY",
+        "when": {
+          "field": "severe_haematological_toxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Interrupt olaparib for severe haematological toxicity and investigate."
+        },
+        "explanation": "Interrupt olaparib for severe haematological toxicity and investigate.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "BLOOD_TRANSFUSION_DEPENDENCE",
+        "when": {
+          "field": "blood_transfusion_dependence",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Interrupt olaparib and investigate new blood-transfusion dependence."
+        },
+        "explanation": "Interrupt olaparib and investigate new blood-transfusion dependence.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "PERSISTENT_CYTOPENIA_AFTER_4_WEEK_HOLD",
+        "when": {
+          "field": "persistent_cytopenia_after_4_week_hold",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Counts still clinically abnormal after a four-week interruption require bone-marrow analysis and/or cytogenetic investigation. Keep treatment interrupted pending specialist evaluation."
+        },
+        "explanation": "Counts still clinically abnormal after a four-week interruption require bone-marrow analysis and/or cytogenetic investigation. Keep treatment interrupted pending specialist evaluation.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "SUSPECTED_PNEUMONITIS",
+        "when": {
+          "field": "suspected_pneumonitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Interrupt olaparib and urgently investigate new/worsening breathlessness, cough, fever or unexplained chest imaging changes."
+        },
+        "explanation": "Interrupt olaparib and urgently investigate new/worsening breathlessness, cough, fever or unexplained chest imaging changes.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "SUSPECTED_DRUG_INDUCED_LIVER_INJURY",
+        "when": {
+          "field": "suspected_drug_induced_liver_injury",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Interrupt olaparib for suspected drug-induced liver injury; check liver tests and evaluate promptly. Severe DILI may require permanent discontinuation following clinical assessment."
+        },
+        "explanation": "Interrupt olaparib for suspected drug-induced liver injury; check liver tests and evaluate promptly. Severe DILI may require permanent discontinuation following clinical assessment.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 9,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "CONFIRMED_MDS_AML",
+        "when": {
+          "field": "confirmed_mds_aml",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Confirmed MDS/AML requires discontinuation of olaparib and appropriate haematology care."
+        },
+        "explanation": "Confirmed MDS/AML requires discontinuation of olaparib and appropriate haematology care.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "CONFIRMED_PNEUMONITIS",
+        "when": {
+          "field": "confirmed_pneumonitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Confirmed olaparib-associated pneumonitis requires discontinuation and treatment."
+        },
+        "explanation": "Confirmed olaparib-associated pneumonitis requires discontinuation and treatment.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "START_RECOVERY_NOT_MET",
+        "when": {
+          "field": "recovered_previous_haematological_toxicity",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Do not start olaparib until prior treatment-related anaemia, neutropenia and thrombocytopenia have recovered to CTCAE grade 1 or better. On-treatment NCCP thresholds must not be substituted for the initial recovery requirement."
+        },
+        "explanation": "Do not start olaparib until prior treatment-related anaemia, neutropenia and thrombocytopenia have recovered to CTCAE grade 1 or better. On-treatment NCCP thresholds must not be substituted for the initial recovery requirement.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "SUSPECTED_VTE",
+        "when": {
+          "field": "suspected_vte",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Urgently investigate possible venous thrombosis/pulmonary embolism and treat appropriately. The SmPC does not mandate permanent discontinuation for every thrombotic event.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "Urgently investigate possible venous thrombosis/pulmonary embolism and treat appropriately. The SmPC does not mandate permanent discontinuation for every thrombotic event.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "CYP3A_INDUCER",
+        "when": {
+          "field": "strong_or_moderate_cyp3a_inducer",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Strong/moderate CYP3A inducers can substantially reduce olaparib exposure and efficacy. Avoid co-administration and review alternatives; do not compensate with an unvalidated higher dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "Strong/moderate CYP3A inducers can substantially reduce olaparib exposure and efficacy. Avoid co-administration and review alternatives; do not compensate with an unvalidated higher dose.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 9,
+          "checked_date": "2026-10-20",
+          "section": "4.4–4.5"
+        }
+      },
+      {
+        "rule_id": "INTOLERABLE_NONHAEM_TOXICITY",
+        "when": {
+          "field": "intolerable_nonhaematological_toxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Clinically important nausea, vomiting, diarrhoea or other intolerable toxicity may require interruption and subsequent reduction. Assess hydration and oral intake, treat symptoms and agree the dose with the Consultant; NCCP gives no universal grade-based restart algorithm.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "Clinically important nausea, vomiting, diarrhoea or other intolerable toxicity may require interruption and subsequent reduction. Assess hydration and oral intake, treat symptoms and agree the dose with the Consultant; NCCP gives no universal grade-based restart algorithm.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 5,
+          "checked_date": "2026-10-20",
+          "section": "Dose modifications"
+        }
+      },
+      {
+        "rule_id": "SUSPECTED_MDS_AML",
+        "when": {
+          "field": "suspected_mds_aml",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Suspected MDS/AML requires haematology assessment including marrow/cytogenetic investigations. If severe or persistent cytopenia is present, also apply the interruption pathway; confirmed MDS/AML requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "Suspected MDS/AML requires haematology assessment including marrow/cytogenetic investigations. If severe or persistent cytopenia is present, also apply the interruption pathway; confirmed MDS/AML requires discontinuation.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4"
+        }
+      },
+      {
+        "rule_id": "BREAST_GERMLINE_BRCA",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "field": "germline_brca_status",
+              "operator": "in",
+              "value": [
+                "negative",
+                "unknown"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP 00588h requires a pathogenic germline BRCA1/2 mutation confirmed by a validated test; somatic-only or unknown status does not establish eligibility.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "NCCP 00588h requires a pathogenic germline BRCA1/2 mutation confirmed by a validated test; somatic-only or unknown status does not establish eligibility.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "BREAST_HER2",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "field": "her2_status",
+              "operator": "in",
+              "value": [
+                "positive",
+                "unknown"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP 00588h requires HER2-negative early breast cancer. Resolve receptor status before choosing this pathway.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "NCCP 00588h requires HER2-negative early breast cancer. Resolve receptor status before choosing this pathway.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "BREAST_ECOG",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "field": "ecog",
+              "operator": ">",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP 00588h lists ECOG0–2; higher performance-status scores require specialist treatment-suitability review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "NCCP 00588h lists ECOG0–2; higher performance-status scores require specialist treatment-suitability review.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "BREAST_PRIOR_CHEMO",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "field": "prior_neoadjuvant_or_adjuvant_chemotherapy",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP 00588h requires previous neoadjuvant or adjuvant chemotherapy. Olaparib is not a substitute for the indicated initial chemotherapy course.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "NCCP 00588h requires previous neoadjuvant or adjuvant chemotherapy. Olaparib is not a substitute for the indicated initial chemotherapy course.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "BREAST_START_WINDOW",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "field": "weeks_since_completion_of_last_local_or_systemic_treatment",
+              "operator": ">",
+              "value": 12
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP says ideally start within twelve weeks of the last surgery, chemotherapy or radiation. Beyond twelve weeks is a specialist timing decision, not an absolute contraindication.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "NCCP says ideally start within twelve weeks of the last surgery, chemotherapy or radiation. Beyond twelve weeks is a specialist timing decision, not an absolute contraindication.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "BREAST_NEO_PCR",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "all": [
+                {
+                  "field": "breast_chemotherapy_setting",
+                  "operator": "==",
+                  "value": "neoadjuvant"
+                },
+                {
+                  "field": "residual_invasive_disease",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "The NCCP high-risk neoadjuvant breast criteria require residual invasive disease; a pathological complete response does not meet this listed pathway.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "The NCCP high-risk neoadjuvant breast criteria require residual invasive disease; a pathological complete response does not meet this listed pathway.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "BREAST_HRPOS_NEO_CPS_EG",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "all": [
+                {
+                  "field": "breast_receptor_group",
+                  "operator": "==",
+                  "value": "hr_positive"
+                },
+                {
+                  "field": "breast_chemotherapy_setting",
+                  "operator": "==",
+                  "value": "neoadjuvant"
+                },
+                {
+                  "field": "cps_eg_score",
+                  "operator": "<",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "HR-positive/HER2-negative neoadjuvant eligibility requires residual invasive disease plus CPS+EG score at least 3. A score below3 does not meet the NCCP high-risk definition.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "HR-positive/HER2-negative neoadjuvant eligibility requires residual invasive disease plus CPS+EG score at least 3. A score below3 does not meet the NCCP high-risk definition.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "BREAST_HRPOS_ADJ_NODES",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "all": [
+                {
+                  "field": "breast_receptor_group",
+                  "operator": "==",
+                  "value": "hr_positive"
+                },
+                {
+                  "field": "breast_chemotherapy_setting",
+                  "operator": "==",
+                  "value": "adjuvant"
+                },
+                {
+                  "field": "positive_axillary_nodes",
+                  "operator": "<",
+                  "value": 4
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "For HR-positive/HER2-negative disease treated with adjuvant chemotherapy, NCCP requires at least four pathologically positive nodes.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "For HR-positive/HER2-negative disease treated with adjuvant chemotherapy, NCCP requires at least four pathologically positive nodes.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "BREAST_TNBC_ADJ_SIZE",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "all": [
+                {
+                  "field": "breast_receptor_group",
+                  "operator": "==",
+                  "value": "tnbc"
+                },
+                {
+                  "field": "breast_chemotherapy_setting",
+                  "operator": "==",
+                  "value": "adjuvant"
+                },
+                {
+                  "field": "positive_axillary_nodes",
+                  "operator": "==",
+                  "value": 0
+                },
+                {
+                  "field": "primary_tumour_cm",
+                  "operator": "<",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Node-negative TNBC after adjuvant chemotherapy requires pathological tumour size at least 2 cm. Smaller node-negative tumours do not meet this NCCP high-risk definition.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "Node-negative TNBC after adjuvant chemotherapy requires pathological tumour size at least 2 cm. Smaller node-negative tumours do not meet this NCCP high-risk definition.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "BREAST_DURATION",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "field": "months_on_olaparib",
+              "operator": ">=",
+              "value": 12
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "The adjuvant breast course is up to one year, or earlier recurrence/unacceptable toxicity. Review completion now; do not import an ovarian two-year maintenance duration.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "The adjuvant breast course is up to one year, or earlier recurrence/unacceptable toxicity. Review completion now; do not import an ovarian two-year maintenance duration.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "section": "Breast eligibility"
+        }
+      },
+      {
+        "rule_id": "SEVERE_ANAEMIA",
+        "when": {
+          "field": "hb_g_dl",
+          "operator": "<",
+          "value": 8
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Haemoglobin below 8 g/dL is CTCAE grade 3 anaemia: interrupt olaparib, assess symptoms and bleeding/other causes, and arrange appropriate haematological treatment. This does not prescribe a transfusion threshold or automatic restart dose."
+        },
+        "explanation": "Haemoglobin below 8 g/dL is CTCAE grade 3 anaemia: interrupt olaparib, assess symptoms and bleeding/other causes, and arrange appropriate haematological treatment. This does not prescribe a transfusion threshold or automatic restart dose.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4; CTCAE v5 anaemia grading",
+          "additional_source": {
+            "document": "NCI CTCAE v5",
+            "url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+            "section": "Blood and lymphatic system disorders / Anaemia"
+          }
+        }
+      },
+      {
+        "rule_id": "MODERATE_ANAEMIA",
+        "when": {
+          "all": [
+            {
+              "field": "hb_g_dl",
+              "operator": ">=",
+              "value": 8
+            },
+            {
+              "field": "hb_g_dl",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Haemoglobin 8 to below 10 g/dL is CTCAE grade 2 anaemia. Review symptoms, trend and management; before first treatment prior-treatment anaemia must recover to grade 1 or better. NCCP has no automatic fixed on-treatment Hb dose ladder.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "Haemoglobin 8 to below 10 g/dL is CTCAE grade 2 anaemia. Review symptoms, trend and management; before first treatment prior-treatment anaemia must recover to grade 1 or better. NCCP has no automatic fixed on-treatment Hb dose ladder.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4; CTCAE v5 anaemia grading",
+          "additional_source": {
+            "document": "NCI CTCAE v5",
+            "url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+            "section": "Blood and lymphatic system disorders / Anaemia"
+          }
+        }
+      },
+      {
+        "rule_id": "HB_DOMAIN_GRADE1_OR_BETTER",
+        "when": {
+          "field": "hb_g_dl",
+          "operator": ">=",
+          "value": 10
+        },
+        "action": {
+          "type": "proceed",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Haemoglobin at least 10 g/dL is no worse than CTCAE grade 1 by concentration alone. This does not exclude symptomatic anaemia or clear the other blood and safety domains."
+        },
+        "explanation": "Haemoglobin at least 10 g/dL is no worse than CTCAE grade 1 by concentration alone. This does not exclude symptomatic anaemia or clear the other blood and safety domains.",
+        "source": {
+          "document": "EMA Lynparza SmPC (retrieved 2026-10-20)",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+          "page": 8,
+          "checked_date": "2026-10-20",
+          "section": "4.4; CTCAE v5 anaemia grading",
+          "additional_source": {
+            "document": "NCI CTCAE v5",
+            "url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+            "section": "Blood and lymphatic system disorders / Anaemia"
+          }
+        }
+      },
+      {
+        "rule_id": "AGE_UNDER18",
+        "when": {
+          "field": "age_years",
+          "operator": "<",
+          "value": 18
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP 00588 indications are for adults. EMA has no established paediatric dose recommendation; seek specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "NCCP 00588 indications are for adults. EMA has no established paediatric dose recommendation; seek specialist review.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 1,
+          "checked_date": "2026-10-20",
+          "section": "Indications; EMA4.2"
+        }
+      },
+      {
+        "rule_id": "BREAST_RADIATION_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_high_risk_early_breast"
+            },
+            {
+              "field": "weeks_since_radiotherapy",
+              "operator": "<",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "OlympiA completed local therapy, including radiotherapy, at least two weeks before enrolment. Review a shorter interval with the oncology/radiation team; this is trial-based sequencing, not an NCCP numerical dose rule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specialist review; do not derive an automatic dose from this finding."
+        },
+        "explanation": "OlympiA completed local therapy, including radiotherapy, at least two weeks before enrolment. Review a shorter interval with the oncology/radiation team; this is trial-based sequencing, not an NCCP numerical dose rule.",
+        "source": {
+          "document": "OlympiA primary trial (Tutt et al.2021)",
+          "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa2105215",
+          "page": 2396,
+          "section": "Methods / Eligibility",
+          "checked_date": "2026-10-20"
+        }
       }
     ]
   },
@@ -960,11 +2214,13 @@
   },
   "required_inputs": [],
   "output_templates": {
-    "proceed": "Meets the encoded NCCP criteria for olaparib at the assessed dose.",
-    "delay_then_dose_reduce": "Delay olaparib until recovery, then restart at the encoded reduced dose level. Consultant review is required.",
-    "dose_reduce": "The encoded NCCP rule indicates a dose reduction. Consultant review is required.",
-    "cease": "The encoded NCCP rule indicates olaparib should be ceased.",
-    "consultant_review": "The NCCP source recommends individualised clinical judgement or consideration of a percentage dose; Consultant review is required."
+    "proceed": "Entered criteria meet the encoded domain thresholds; omitted information remains unassessed.",
+    "consultant_review": "Review the source-linked concern with the Consultant and oncology pharmacist.",
+    "delay_then_dose_reduce": "Interrupt olaparib now. Recovery, previous dose and occurrence history determine any subsequent restart.",
+    "contraindicated": "An NCCP exclusion or product contraindication was entered. Do not administer.",
+    "withhold": "Interrupt or do not start olaparib pending investigation of the entered concern.",
+    "cease": "NCCP specifies cessation in this circumstance.",
+    "permanently_discontinue": "The source specifies discontinuation; arrange appropriate specialist care."
   },
   "input_definitions": {
     "indication_id": {
@@ -1006,7 +2262,11 @@
       "demo_value": 2,
       "unit": "×10⁹/L",
       "always_show": true,
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00588 v5b — Table 2 action thresholds",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+      "source_grading_note": "NCCP Table 2, page 5, specifies numeric continuation and interruption thresholds without naming a CTCAE version. These are treatment-action thresholds, not CTCAE grades.",
+      "assessment_guidance": "On treatment: ANC at least 1 ×10⁹/L AND platelets at least 100 ×10⁹/L permits the previous dose in this domain. ANC below 1 OR platelets below 100 requires delay until recovery, then review the next reduced dose level; the fourth qualifying occurrence requires cessation. Initial treatment also requires recovery from previous blood toxicity. Other entered safety concerns still govern."
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
@@ -1017,7 +2277,11 @@
       "demo_value": 200,
       "unit": "×10⁹/L",
       "always_show": true,
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00588 v5b — Table 2 action thresholds",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+      "source_grading_note": "NCCP Table 2, page 5, specifies numeric continuation and interruption thresholds without naming a CTCAE version. These are treatment-action thresholds, not CTCAE grades.",
+      "assessment_guidance": "On treatment: ANC at least 1 ×10⁹/L AND platelets at least 100 ×10⁹/L permits the previous dose in this domain. ANC below 1 OR platelets below 100 requires delay until recovery, then review the next reduced dose level; the fourth qualifying occurrence requires cessation. Initial treatment also requires recovery from previous blood toxicity. Other entered safety concerns still govern."
     },
     "haematological_toxicity_occurrence_number": {
       "label": "Haematological toxicity occurrence number",
@@ -1065,7 +2329,7 @@
           }
         ]
       },
-      "help": "Enter the cumulative occurrence number only when a haematological toxicity pathway has been triggered.",
+      "help": "Cumulative qualifying count/FN occurrence; the fourth requires cessation. A missing number does not block an immediate count-based hold.",
       "input_role": "decision"
     },
     "febrile_neutropenia": {
@@ -1074,7 +2338,11 @@
       "required": false,
       "demo_value": false,
       "always_show": true,
-      "input_role": "decision"
+      "input_role": "decision",
+      "ctcae_version": "5.0",
+      "ctcae_category": "febrile_neutropenia",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Use the same CTCAE v5 reference as the linked grade selector: ANC below 1 ×10⁹/L with a single temperature above 38.3°C or at least 38°C sustained for more than one hour. Urgently assess suspected sepsis; NCCP requires interruption for febrile neutropenia regardless of whether the severity selector has been completed."
     },
     "febrile_neutropenia_grade": {
       "label": "Febrile neutropenia grade",
@@ -1105,18 +2373,6 @@
           "description": "No febrile neutropenia."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Grade 1 is not defined for febrile neutropenia."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Grade 2 is not defined for febrile neutropenia."
-        },
-        {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
@@ -1140,28 +2396,34 @@
       "options": [
         {
           "value": "renal_0_29",
-          "label": "<30 mL/min",
-          "decision_value": 14,
+          "label": "<30 mL/min — source reconciliation",
+          "decision_value": 20,
           "range_min_inclusive": 0,
-          "range_max_inclusive": 29
+          "range_max_exclusive": 30
+        },
+        {
+          "value": "renal_exact30",
+          "label": "Exactly 30 mL/min — NCCP/SmPC boundary differs",
+          "decision_value": 30,
+          "range_min_inclusive": 30,
+          "range_max_inclusive": 30
         },
         {
           "value": "renal_30_50",
-          "label": "30-50 mL/min",
+          "label": ">30–50 mL/min",
           "decision_value": 40,
-          "range_min_inclusive": 30,
+          "range_min_exclusive": 30,
           "range_max_inclusive": 50
         },
         {
           "value": "renal_51_plus",
-          "label": ">=51 mL/min",
-          "decision_value": 51,
-          "range_min_inclusive": 51,
-          "range_max_inclusive": null
+          "label": ">50 mL/min",
+          "decision_value": 70,
+          "range_min_exclusive": 50
         },
         {
           "value": "dialysis",
-          "label": "Dialysis - use the protocol-specific dialysis pathway / specialist review",
+          "label": "Haemodialysis — specialist reconciliation",
           "decision_value": 0,
           "sets_fields": {
             "haemodialysis": true
@@ -1174,7 +2436,8 @@
       },
       "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation.",
       "always_show": true,
-      "input_role": "decision"
+      "input_role": "decision",
+      "help": "Use verified creatinine clearance, not an interchangeable unadjusted eGFR. Exact30 is a source discrepancy. Numeric input remains supported."
     },
     "haemodialysis": {
       "label": "Patient receiving haemodialysis",
@@ -1261,6 +2524,382 @@
       "demo_value": "starting",
       "always_show": true,
       "input_role": "context"
+    },
+    "olaparib_hypersensitivity": {
+      "label": "Olaparib/excipient hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "previous_parp_inhibitor": {
+      "label": "Previous PARP-inhibitor treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnancy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_haematological_toxicity": {
+      "label": "Severe haematological toxicity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "blood_transfusion_dependence": {
+      "label": "New blood-transfusion dependence",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "persistent_cytopenia_after_4_week_hold": {
+      "label": "Counts remain abnormal after four weeks off olaparib",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_pneumonitis": {
+      "label": "New respiratory symptoms / suspected pneumonitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "confirmed_pneumonitis": {
+      "label": "Confirmed olaparib-associated pneumonitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_drug_induced_liver_injury": {
+      "label": "Suspected drug-induced liver injury",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "confirmed_mds_aml": {
+      "label": "Confirmed MDS/AML",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_mds_aml": {
+      "label": "Suspected MDS/AML",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_vte": {
+      "label": "Suspected venous thrombosis / pulmonary embolism",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "strong_or_moderate_cyp3a_inducer": {
+      "label": "Strong/moderate CYP3A inducer",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "intolerable_nonhaematological_toxicity": {
+      "label": "Intolerable nausea, vomiting, diarrhoea or other toxicity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recovered_previous_haematological_toxicity": {
+      "label": "Before initial treatment: previous blood toxicity recovered to grade 1 or better",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "help": "Initial-start requirement from EMA SmPC. Do not use the less restrictive on-treatment count threshold to infer recovery.",
+      "demo_value": true,
+      "grading_source_label": "EMA Lynparza SmPC — initial blood-toxicity recovery",
+      "grading_source_url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
+      "source_grading_note": "SmPC section 4.4 requires recovery to CTCAE grade 1 or better before initial treatment, but does not name a CTCAE version here. Confirm the named cytopenia and the source grading version; generic severity anchors cannot establish recovery.",
+      "assessment_guidance": "Before starting olaparib, confirm that haemoglobin, platelets and neutrophils have recovered from prior anticancer treatment to CTCAE grade 1 or better. A passing NCCP on-treatment ANC/platelet threshold does not establish this initial-start requirement."
+    },
+    "cyp3a_inhibitor_unavoidable": {
+      "label": "CYP3A inhibitor co-administration confirmed unavoidable",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "visible_when": {
+        "field": "cyp3a_inhibitor_class",
+        "operator": "in",
+        "value": [
+          "strong",
+          "moderate"
+        ]
+      },
+      "demo_value": false
+    },
+    "germline_brca_status": {
+      "label": "Germline BRCA1/2 status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "positive",
+          "label": "Pathogenic/likely pathogenic germline BRCA1/2"
+        },
+        {
+          "value": "negative",
+          "label": "Not confirmed / somatic-only"
+        },
+        {
+          "value": "unknown",
+          "label": "Unknown"
+        }
+      ],
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": "positive"
+    },
+    "her2_status": {
+      "label": "HER2 status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "negative",
+          "label": "HER2 negative"
+        },
+        {
+          "value": "positive",
+          "label": "HER2 positive"
+        },
+        {
+          "value": "unknown",
+          "label": "Unknown"
+        }
+      ],
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": "negative"
+    },
+    "breast_receptor_group": {
+      "label": "Breast receptor group",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "tnbc",
+          "label": "Triple negative"
+        },
+        {
+          "value": "hr_positive",
+          "label": "Hormone receptor positive / HER2 negative"
+        }
+      ],
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": "tnbc"
+    },
+    "breast_chemotherapy_setting": {
+      "label": "Previous chemotherapy setting",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "neoadjuvant",
+          "label": "Before surgery"
+        },
+        {
+          "value": "adjuvant",
+          "label": "After surgery"
+        }
+      ],
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": "neoadjuvant"
+    },
+    "prior_neoadjuvant_or_adjuvant_chemotherapy": {
+      "label": "Previous neoadjuvant/adjuvant chemotherapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": true
+    },
+    "residual_invasive_disease": {
+      "label": "Residual invasive disease after neoadjuvant chemotherapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": true
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "score",
+      "min": 0,
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "max": 4,
+      "demo_value": 0
+    },
+    "cps_eg_score": {
+      "label": "CPS+EG score",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "score",
+      "min": 0,
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "max": 6,
+      "demo_value": 3
+    },
+    "positive_axillary_nodes": {
+      "label": "Pathologically positive axillary nodes",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "nodes",
+      "min": 0,
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": 4
+    },
+    "primary_tumour_cm": {
+      "label": "Pathological primary tumour size",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "cm",
+      "min": 0,
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": 2
+    },
+    "weeks_since_completion_of_last_local_or_systemic_treatment": {
+      "label": "Time since last surgery, chemotherapy or radiation",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "weeks",
+      "min": 0,
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": 0
+    },
+    "months_on_olaparib": {
+      "label": "Time on adjuvant olaparib",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "months",
+      "min": 0,
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "demo_value": 0
+    },
+    "hb_g_dl": {
+      "label": "Haemoglobin",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "g/dL",
+      "min": 0,
+      "help": "Enter g/dL (divide g/L by 10). Severe or transfusion-dependent anaemia needs interruption and investigation; this is not a transfusion-prescribing calculator.",
+      "demo_value": 12,
+      "ctcae_version": "5.0",
+      "ctcae_category": "anemia",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Use CTCAE v5 anaemia grading, matching the encoded Hb rules: below 8 g/dL is grade 3, 8 to below 10 g/dL is grade 2, and grade 1 requires the local lower limit of normal. Transfusion indication or life-threatening consequences can assign a higher grade. This is not a transfusion-prescribing threshold or whole-patient clearance."
+    },
+    "age_years": {
+      "label": "Age",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "years",
+      "min": 0,
+      "demo_value": 55
+    },
+    "weeks_since_radiotherapy": {
+      "label": "Time since completion of radiotherapy",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "weeks",
+      "min": 0,
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "adjuvant_high_risk_early_breast"
+      },
+      "help": "Use only if radiotherapy was given. Trial sequencing used at least two weeks after local therapy; review the individual plan.",
+      "demo_value": 3
     }
   },
   "assessment_profiles": [
@@ -1269,6 +2908,53 @@
       "label": "Standard assessment",
       "required_inputs": [],
       "context": {}
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "continuous",
+      "name": "Continuous olaparib tablets",
+      "label": "Twice daily every day; duration depends on indication",
+      "administration": [
+        {
+          "drug": "olaparib",
+          "dose": {
+            "value": 300,
+            "unit": "mg twice daily"
+          },
+          "day": [
+            "Every day"
+          ],
+          "route": "PO",
+          "notes": "No planned rest week. Swallow whole; do not replace a missed dose. Breast adjuvant00588h: up to 1 year; other shared indications have different durations."
+        }
+      ]
+    }
+  ],
+  "source_conflicts_v0849": [
+    {
+      "topic": "CrCl exactly 30",
+      "nccp": "30–50:200mgBD",
+      "ema": "≤30 severe; benefit-risk exception only",
+      "resolution": "Consultant/pharmacist review; no automatic dose"
+    },
+    {
+      "topic": "Severe renal/dialysis",
+      "nccp": "Consider50% original",
+      "ema": "Not routinely recommended; limited evidence",
+      "resolution": "Review; no automatic dose"
+    },
+    {
+      "topic": "Child-PughC",
+      "nccp": "Consider50% original",
+      "ema": "Not recommended",
+      "resolution": "Review; no automatic dose"
+    },
+    {
+      "topic": "Initial blood recovery versus on-treatment counts",
+      "nccp": "ANC≥1 and platelets≥100 continuation threshold",
+      "ema": "Prior-treatment blood toxicity grade≤1 before initial start",
+      "resolution": "Separate initial-start recovery input; no inferred equivalence"
     }
   ]
 }

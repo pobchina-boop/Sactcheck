@@ -297,9 +297,10 @@ const regimens={
     "receptors": [
       "hrpos-her2neg"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6720/322_v4_Everolimus_and_Exemestane.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "NCCP 00322a: postmenopausal hormone receptor-positive, HER2-negative advanced breast cancer without symptomatic visceral disease after recurrence or progression following a non-steroidal aromatase inhibitor.",
+    "setting_qualifications": {}
   },
   "00348": {
     "code": "00348",
@@ -433,9 +434,10 @@ const regimens={
     "receptors": [
       "hrpos-her2neg"
     ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6457/414_v5_Palbociclib_o9nHDn7.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6457/414_Palbociclib.pdf",
+    "basis": "NCCP 00414 a: HR-positive, HER2-negative locally advanced/metastatic disease with an aromatase inhibitor. NCCP 00414 b: the same receptor/disease setting with fulvestrant in women who have received prior endocrine therapy. Pre/perimenopausal women also need an agreed ovarian-suppression plan.",
+    "setting_qualifications": {}
   },
   "00423": {
     "code": "00423",
@@ -776,11 +778,15 @@ const regimens={
     ],
     "receptors": [
       "her2pos",
-      "her2low"
+      "hrpos-her2neg",
+      "tnbc"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "NCCP00776a: unresectable/metastatic HER2-positive breast cancer after at least one anti-HER2 regimen. NCCP00776b: unresectable/metastatic HER2-low breast cancer after chemotherapy for metastatic disease, or recurrence during or within six months after adjuvant chemotherapy.",
+    "setting_qualifications": {
+      "advanced": "HER2-positive or HER2-low with exact NCCP prior-treatment criteria; HER2-negative without HER2-low expression is not sufficient."
+    }
   },
   "00785": {
     "code": "00785",
@@ -831,9 +837,10 @@ const regimens={
     "receptors": [
       "tnbc"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6417/794_v3_Sacituzumab_Govitecan_Therapy.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "NCCP00794a covers adults with unresectable or metastatic triple-negative breast cancer after at least two prior systemic therapies, including at least one for advanced disease. The NCCP entry specifies ECOG 0–1. Broader European licensed indications must be checked separately against the applicable Irish regimen and reimbursement pathway.",
+    "setting_qualifications": {}
   },
   "00796": {
     "code": "00796",
@@ -1120,11 +1127,15 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "her2neg"
+      "hrpos-her2neg",
+      "tnbc"
     ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6397/588_Olaparib_tablet_monotherapy_FZxXOtF.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+    "basis": "Adults with a confirmed pathogenic germline BRCA1/2 mutation, HER2-negative high-risk early breast cancer and previous neoadjuvant or adjuvant chemotherapy. The high-risk definition depends on hormone receptors, prior chemotherapy setting, surgical pathology and, for one pathway, CPS+EG score.",
+    "setting_qualifications": {
+      "adjuvant": "NCCP 00588h only; germline BRCA1/2, HER2-negative high-risk early breast criteria apply."
+    }
   }
 };
 const ids=['breastSetting','breastReceptor','breastSuite'];

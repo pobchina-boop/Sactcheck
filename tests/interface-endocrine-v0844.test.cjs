@@ -37,5 +37,13 @@ check(()=>{const ui=read('js/generic-assessment-ui.js');assert.match(ui,/Run ass
 check(()=>assert.doesNotMatch(read('index.html'),/data-open-global-scenario|id="clinicalScenarioLauncher"|id="globalScenarioInterpreter"/));
 check(()=>assert.doesNotMatch(read('css/regimen-workflow-v0720.css'),/content:"Pre-treatment assessment engine"|content:"Patient portal"/));
 const edits=['contact-text-changes.json','contact-pdf-changes.json'].flatMap(n=>JSON.parse(read('validation/interface-v0844/'+n)));
-for(const edit of edits)check(()=>assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,edit.path))).digest('hex'),edit.after,edit.path));
+for(const edit of edits)check(()=>{
+ let content=fs.readFileSync(path.join(root,edit.path));
+ // v0.84.9 only adds a dedicated dispatch and five codes to this builder.
+ // Strip those exact additions to keep the original contact migration byte-protected.
+ if(edit.path==='tools/build-complete-pathways.cjs')content=Buffer.from(content.toString()
+  .replace("codes=['00588','00794','00776','00322','00414',", "codes=[")
+  .replace(" if(d.service_kind==='targeted'){require('./targeted-patient-suite-v0849.cjs').buildSuite(d,{anatomy,write});continue;}\n",''));
+ assert.equal(crypto.createHash('sha256').update(content).digest('hex'),edit.after,edit.path);
+});
 console.log(`${checks} interface, source-range boundary, partial-input, steroid context, export and contact-migration checks passed.`);

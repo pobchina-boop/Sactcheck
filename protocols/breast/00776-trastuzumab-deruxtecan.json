@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 6,
     "source_url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.84.9",
     "treatment_setting": [
       "metastatic"
     ],
@@ -30,7 +30,8 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_validation",
+      "software_validation_record": "validation/targeted-breast-v0849/enhertu-source-cases-results.json"
     },
     "emetogenic_risk": "high",
     "antiemetic_proforma_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
@@ -56,19 +57,23 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
+      "reconciled_release": "0.84.9",
+      "reconciled_date": "2026-10-20",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "clinical_use_authorised": false
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00776-v3b"
+    "canonical_protocol_id": "nccp-00776-v3b",
+    "source_checked_date": "2026-10-20",
+    "drugs": [
+      "trastuzumab deruxtecan"
+    ],
+    "review_date": "2030-02-12"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -91,7 +96,7 @@
       "input_role": "decision"
     },
     "history_ild_pneumonitis": {
-      "label": "History of ILD or pneumonitis",
+      "label": "History of ILD or pneumonitis before starting this regimen",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -120,7 +125,12 @@
       "step": 0.01,
       "unit": "×10⁹/L",
       "demo_value": 2,
-      "input_role": "decision"
+      "input_role": "decision",
+      "always_show": true,
+      "ctcae_version": "5.0",
+      "ctcae_category": "neutrophil_count_decreased",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "NCCP00776 Table3 uses CTCAE v5.0: ANC0.5–<1.0 is Grade3; ANC<0.5 is Grade4. Use these dose-table bands, not the different CTCAE v6.0 educational thresholds. Fever/infection needs separate urgent assessment."
     },
     "temperature_c": {
       "label": "Current temperature (°C)",
@@ -131,7 +141,10 @@
       "step": 0.1,
       "unit": "°C",
       "demo_value": 36.8,
-      "input_role": "decision"
+      "input_role": "decision",
+      "ctcae_version": "5.0",
+      "ctcae_category": "fever",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
     },
     "temperature_38_duration_hours": {
       "label": "Duration temperature ≥38°C (hours)",
@@ -142,7 +155,11 @@
       "step": 0.5,
       "unit": "hours",
       "demo_value": 0,
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00776 timing criterion · not a toxicity grade",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+      "source_grading_note": "This is elapsed time at temperature≥38°C, not a temperature measurement or CTCAE grade. The NCCP febrile-neutropenia condition uses ANC<1.0 and temperature>38.3°C, or temperature≥38°C sustained for more than1hour.",
+      "assessment_guidance": "This is elapsed time at temperature≥38°C, not a temperature measurement or CTCAE grade. The NCCP febrile-neutropenia condition uses ANC<1.0 and temperature>38.3°C, or temperature≥38°C sustained for more than1hour."
     },
     "ild_pneumonitis_grade": {
       "label": "Current ILD/pneumonitis grade",
@@ -151,27 +168,27 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
+          "label": "Grade 0 · no current ILD",
           "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1",
+          "label": "Grade 1 · imaging changes, no symptoms",
           "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2",
+          "label": "Grade 2 · symptomatic; medical treatment indicated",
           "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3",
+          "label": "Grade 3 · severe symptoms; oxygen indicated",
           "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4",
+          "label": "Grade 4 · life-threatening respiratory compromise",
           "ctcae_grade": 4
         }
       ],
@@ -179,19 +196,23 @@
       "ctcae_version": "5.0",
       "ctcae_category": "pneumonitis",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess new cough, dyspnoea, oxygen requirement, imaging findings, infection and alternative causes. Immune-related or drug-related pneumonitis requires urgent senior review when symptomatic.",
+      "assessment_guidance": "Assess new cough, breathlessness, oxygen requirement and imaging, while considering infection and other causes. Trastuzumab-deruxtecan-related ILD requires prompt evaluation; symptomatic disease permanently stops treatment under NCCP.",
       "input_role": "decision"
     },
     "ild_grade1_resolution_days": {
-      "label": "Days from Grade 1 ILD onset to resolution",
+      "label": "Days from previous Grade 1 ILD onset to complete resolution",
       "type": "number",
       "required": false,
-      "min": 0,
+      "min": 1,
       "max": 365,
       "step": 1,
       "unit": "days",
-      "demo_value": 0,
-      "input_role": "decision"
+      "demo_value": 28,
+      "input_role": "decision",
+      "assessment_guidance": "This is a count of days from a previous Grade1 ILD episode to complete resolution, not a toxicity grade. Grade0 recovery is required before resumption; ≤28days permits the same dose and >28days a one-level reduction.",
+      "grading_source_label": "NCCP 00776 timing criterion · not a toxicity grade",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+      "source_grading_note": "This is a count of days from a previous Grade1 ILD episode to complete resolution, not a toxicity grade. Grade0 recovery is required before resumption; ≤28days permits the same dose and >28days a one-level reduction."
     },
     "lvef_percent": {
       "label": "Current LVEF (%)",
@@ -270,6 +291,269 @@
       ],
       "demo_value": 0,
       "input_role": "decision"
+    },
+    "platelets": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "unit": "×10⁹/L",
+      "input_role": "context",
+      "assessment_guidance": "NCCP and current EMA sources require FBC review but do not give a platelet-specific dose ladder for this drug. Platelet results require clinical assessment; do not infer a US-label dose algorithm or regard an entered value as clearance.",
+      "always_show": true,
+      "demo_value": 180,
+      "ctcae_version": "5.0",
+      "ctcae_category": "thrombocytopenia",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "hb_g_dl": {
+      "label": "Haemoglobin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 25,
+      "step": 0.1,
+      "unit": "g/dL",
+      "input_role": "context",
+      "assessment_guidance": "Review anaemia and symptoms clinically; no Hb-specific dose algorithm is supplied by NCCP00776.",
+      "always_show": true,
+      "demo_value": 12,
+      "ctcae_version": "5.0",
+      "ctcae_category": "anemia",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance category",
+      "type": "select",
+      "required": false,
+      "demo_value": "renal_ge60",
+      "unit": "mL/min",
+      "options": [
+        {
+          "value": "renal_lt30",
+          "label": "<30 mL/min — source reconciliation",
+          "decision_value": 20,
+          "range_min_inclusive": 0,
+          "range_max_exclusive": 30
+        },
+        {
+          "value": "renal_30_lt60",
+          "label": "30–<60 mL/min — no reduction; closer ILD monitoring",
+          "decision_value": 45,
+          "range_min_inclusive": 30,
+          "range_max_exclusive": 60
+        },
+        {
+          "value": "renal_ge60",
+          "label": "≥60 mL/min — no renal dose adjustment",
+          "decision_value": 80,
+          "range_min_inclusive": 60
+        },
+        {
+          "value": "dialysis",
+          "label": "Haemodialysis — specialist reconciliation",
+          "decision_value": 0,
+          "sets_fields": {
+            "haemodialysis": true
+          }
+        }
+      ],
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      },
+      "assessment_guidance": "Use verified creatinine clearance. NCCP separates ≥30 from <30mL/min and dialysis; EMA adds enhanced toxicity/ILD monitoring for moderate impairment (30–<60mL/min). Do not infer a band without a verified renal calculation.",
+      "help": "The selector preserves these source-specific thresholds. Numeric input remains supported; renal results alone do not clear other assessment domains.",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": false,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first dose"
+        },
+        {
+          "value": "ongoing",
+          "label": "During treatment"
+        }
+      ],
+      "demo_value": "ongoing"
+    },
+    "baseline_lvef_percent": {
+      "label": "Baseline LVEF",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "input_role": "decision",
+      "demo_value": 60
+    },
+    "her2_status": {
+      "label": "Validated HER2 category",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "positive",
+          "label": "HER2-positive: IHC3+ or amplified"
+        },
+        {
+          "value": "low",
+          "label": "HER2-low: IHC1+ or IHC2+/ISH-negative"
+        },
+        {
+          "value": "ultralow",
+          "label": "HER2-ultralow / IHC0 with membrane staining"
+        },
+        {
+          "value": "zero",
+          "label": "HER2 IHC0 without membrane staining"
+        },
+        {
+          "value": "unknown",
+          "label": "Not established"
+        }
+      ],
+      "demo_value": "positive"
+    },
+    "prior_anti_her2_regimen": {
+      "label": "HER2-positive pathway: at least one prior anti-HER2 regimen",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_metastatic_chemotherapy": {
+      "label": "HER2-low pathway: previous chemotherapy for metastatic disease",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recurrence_within6mo_adjuvant_chemo": {
+      "label": "HER2-low pathway: recurrence during or within 6 months of adjuvant chemotherapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "unresectable_or_metastatic": {
+      "label": "Unresectable or metastatic breast cancer",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "age_years": {
+      "label": "Age",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 120,
+      "step": 1,
+      "unit": "years",
+      "input_role": "decision",
+      "demo_value": 55
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "cord_compression_or_active_cns": {
+      "label": "Spinal cord compression or untreated/symptomatic CNS metastases",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_ild_pneumonitis": {
+      "label": "New pulmonary symptoms or imaging suggesting ILD / pneumonitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "previous_symptomatic_ild": {
+      "label": "Previous treatment-related symptomatic ILD, even if now resolved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false,
+      "assessment_guidance": "Historical symptomatic ILD means Grade2 or greater under NCCP/EMA and permanently excludes rechallenge. This yes/no history input is not the current toxicity grade."
+    },
+    "confirmed_severe_lvef_recheck": {
+      "label": "Repeat assessment confirms LVEF <40% or >20-point decline",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "lvef_40_45_recheck": {
+      "label": "Repeat after initial LVEF 40–45% with 10–20-point decline",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "recovered",
+          "label": "Recovered to within 10 points of baseline"
+        },
+        {
+          "value": "not_recovered",
+          "label": "Not recovered to within 10 points of baseline"
+        }
+      ],
+      "demo_value": "recovered"
+    },
+    "further_dose_reduction_required": {
+      "label": "A further dose reduction is clinically required",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "mild_moderate_infusion_reaction": {
+      "label": "Mild/moderate infusion-related reaction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "unit": "×ULN",
+      "input_role": "decision",
+      "demo_value": 0.8,
+      "assessment_guidance": "Use the measured bilirubin and laboratory ULN; the interface calculates the multiple. EMA has limited data above1.5×ULN, irrespective of AST."
     }
   },
   "required_inputs": [],
@@ -307,8 +591,11 @@
           "recommendation": "Do not administer trastuzumab deruxtecan."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "Do not administer trastuzumab deruxtecan.",
         "field": "hypersensitivity",
@@ -325,8 +612,11 @@
           "recommendation": "Clinically significant cardiac disease is an NCCP exclusion."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "Clinically significant cardiac disease is an NCCP exclusion.",
         "field": "clinically_significant_cardiac_disease",
@@ -343,8 +633,11 @@
           "recommendation": "A history of ILD or pneumonitis is an NCCP exclusion."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "A history of ILD or pneumonitis is an NCCP exclusion.",
         "field": "history_ild_pneumonitis",
@@ -361,8 +654,11 @@
           "recommendation": "Do not administer during pregnancy."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "Do not administer during pregnancy.",
         "field": "pregnancy",
@@ -379,8 +675,11 @@
           "recommendation": "Do not administer while breastfeeding."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "Do not administer while breastfeeding.",
         "field": "breastfeeding",
@@ -397,8 +696,11 @@
           "recommendation": "Permanently discontinue for a severe infusion-related reaction."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 1,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "Permanently discontinue for a severe infusion-related reaction.",
         "field": "severe_infusion_reaction",
@@ -412,13 +714,26 @@
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "Permanently discontinue for symptomatic Grade 2 or greater ILD/pneumonitis and promptly initiate corticosteroid treatment."
+          "recommendation": "Permanently discontinue for symptomatic Grade ≥2 ILD/pneumonitis. Promptly initiate corticosteroids under specialist care (EMA example: prednisolone ≥1 mg/kg/day or equivalent for at least 14 days, then taper for at least 4 weeks). Do not rechallenge after symptomatic ILD."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776",
+          "supplemental_sources": [
+            {
+              "document": "EMA Enhertu product information",
+              "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+              "page": 7,
+              "checked_date": "2026-10-20",
+              "source_id": "ema-enhertu",
+              "section": "4.4"
+            }
+          ]
         },
-        "explanation": "Permanently discontinue for symptomatic Grade 2 or greater ILD/pneumonitis and promptly initiate corticosteroid treatment.",
+        "explanation": "Permanently discontinue for symptomatic Grade ≥2 ILD/pneumonitis. Promptly initiate corticosteroids under specialist care (EMA example: prednisolone ≥1 mg/kg/day or equivalent for at least 14 days, then taper for at least 4 weeks). Do not rechallenge after symptomatic ILD.",
         "field": "ild_pneumonitis_grade",
         "operator": ">=",
         "value": 2
@@ -426,29 +741,37 @@
       {
         "rule_id": "ILD_G1_LONG",
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "dose_reduce_one_level",
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "Interrupt until Grade 0; because resolution took >28 days, reduce one dose level."
+          "recommendation": "Previous Grade 1 ILD took >28 days to resolve: after confirmation of Grade 0, reduce one dose level. No re-escalation; if already at 3.2 mg/kg, discontinue.",
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "dose_reduction_level"
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
-        "explanation": "Interrupt until Grade 0; because resolution took >28 days, reduce one dose level.",
-        "all": [
-          {
-            "field": "ild_pneumonitis_grade",
-            "operator": "==",
-            "value": 1
-          },
-          {
-            "field": "ild_grade1_resolution_days",
-            "operator": ">",
-            "value": 28
-          }
-        ]
+        "explanation": "Previous Grade 1 ILD took >28 days to resolve: after confirmation of Grade 0, reduce one dose level. No re-escalation; if already at 3.2 mg/kg, discontinue.",
+        "when": {
+          "all": [
+            {
+              "field": "ild_pneumonitis_grade",
+              "operator": "==",
+              "value": 0
+            },
+            {
+              "field": "ild_grade1_resolution_days",
+              "operator": ">",
+              "value": 28
+            }
+          ]
+        }
       },
       {
         "rule_id": "ILD_G1",
@@ -457,13 +780,26 @@
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "Interrupt for Grade 1 ILD/pneumonitis until resolved to Grade 0; consider corticosteroids as soon as suspected."
+          "recommendation": "Withhold for asymptomatic Grade 1 ILD until Grade 0. Consider corticosteroids promptly (EMA example: prednisolone ≥0.5 mg/kg/day or equivalent); investigate with CT and respiratory input. If resolved within 28 days resume same dose; if >28 days reduce one level. These are clinician instructions, not a patient self-treatment plan."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776",
+          "supplemental_sources": [
+            {
+              "document": "EMA Enhertu product information",
+              "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+              "page": 7,
+              "checked_date": "2026-10-20",
+              "source_id": "ema-enhertu",
+              "section": "4.4"
+            }
+          ]
         },
-        "explanation": "Interrupt for Grade 1 ILD/pneumonitis until resolved to Grade 0; consider corticosteroids as soon as suspected.",
+        "explanation": "Withhold for asymptomatic Grade 1 ILD until Grade 0. Consider corticosteroids promptly (EMA example: prednisolone ≥0.5 mg/kg/day or equivalent); investigate with CT and respiratory input. If resolved within 28 days resume same dose; if >28 days reduce one level. These are clinician instructions, not a patient self-treatment plan.",
         "field": "ild_pneumonitis_grade",
         "operator": "==",
         "value": 1
@@ -475,13 +811,19 @@
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "Interrupt for ANC <0.5 ×10⁹/L until recovered to Grade ≤2, then reduce one dose level."
+          "recommendation": "Withhold for ANC<0.5 ×10⁹/L until ANC≥1.0 (Grade ≤2), then reduce one dose level. If already at 3.2 mg/kg and further reduction is required, discontinue.",
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "dose_reduction_level"
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
-        "explanation": "Interrupt for ANC <0.5 ×10⁹/L until recovered to Grade ≤2, then reduce one dose level.",
+        "explanation": "Withhold for ANC<0.5 ×10⁹/L until ANC≥1.0 (Grade ≤2), then reduce one dose level. If already at 3.2 mg/kg and further reduction is required, discontinue.",
         "field": "anc",
         "operator": "<",
         "value": 0.5
@@ -493,13 +835,16 @@
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "Interrupt for ANC 0.5 to <1.0 ×10⁹/L until recovered to Grade ≤2, then maintain dose."
+          "recommendation": "Withhold for ANC 0.5 to <1.0 ×10⁹/L until ANC≥1.0 (Grade ≤2), then maintain the current dose. Assess fever/infection separately."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
-        "explanation": "Interrupt for ANC 0.5 to <1.0 ×10⁹/L until recovered to Grade ≤2, then maintain dose.",
+        "explanation": "Withhold for ANC 0.5 to <1.0 ×10⁹/L until ANC≥1.0 (Grade ≤2), then maintain the current dose. Assess fever/infection separately.",
         "all": [
           {
             "field": "anc",
@@ -520,13 +865,19 @@
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "Febrile neutropenia criterion met: interrupt until resolved, then reduce one dose level."
+          "recommendation": "Febrile neutropenia criterion met: interrupt until resolved, then reduce one dose level. Arrange urgent clinical assessment and manage suspected neutropenic sepsis under local policy; do not wait for a threshold-duration test to seek help.",
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "dose_reduction_level"
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
-        "explanation": "Febrile neutropenia criterion met: interrupt until resolved, then reduce one dose level.",
+        "explanation": "Febrile neutropenia criterion met: interrupt until resolved, then reduce one dose level. Arrange urgent clinical assessment and manage suspected neutropenic sepsis under local policy; do not wait for a threshold-duration test to seek help.",
         "all": [
           {
             "field": "anc",
@@ -547,13 +898,19 @@
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "Febrile neutropenia criterion met: ANC <1.0 with temperature ≥38°C sustained >1 hour; interrupt until resolved, then reduce one dose level."
+          "recommendation": "Febrile neutropenia criterion met: ANC <1.0 with temperature ≥38°C sustained >1 hour; interrupt until resolved, then reduce one dose level. Arrange urgent clinical assessment and manage suspected neutropenic sepsis under local policy; do not wait for a threshold-duration test to seek help.",
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "dose_reduction_level"
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
-        "explanation": "Febrile neutropenia criterion met: ANC <1.0 with temperature ≥38°C sustained >1 hour; interrupt until resolved, then reduce one dose level.",
+        "explanation": "Febrile neutropenia criterion met: ANC <1.0 with temperature ≥38°C sustained >1 hour; interrupt until resolved, then reduce one dose level. Arrange urgent clinical assessment and manage suspected neutropenic sepsis under local policy; do not wait for a threshold-duration test to seek help.",
         "all": [
           {
             "field": "anc",
@@ -582,8 +939,11 @@
           "recommendation": "Permanently discontinue for symptomatic congestive heart failure."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "Permanently discontinue for symptomatic congestive heart failure.",
         "field": "symptomatic_chf",
@@ -600,8 +960,11 @@
           "recommendation": "Interrupt for LVEF <40%; repeat within 3 weeks. If confirmed, permanently discontinue."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "Interrupt for LVEF <40%; repeat within 3 weeks. If confirmed, permanently discontinue.",
         "field": "lvef_percent",
@@ -618,8 +981,11 @@
           "recommendation": "Interrupt for an absolute LVEF decrease >20 percentage points; repeat within 3 weeks and permanently discontinue if confirmed."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "Interrupt for an absolute LVEF decrease >20 percentage points; repeat within 3 weeks and permanently discontinue if confirmed.",
         "field": "lvef_drop_points",
@@ -636,27 +1002,37 @@
           "recommendation": "LVEF 40-45% with a 10-20 point fall: interrupt and repeat within 3 weeks; discontinue if not recovered to within 10 points of baseline."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "LVEF 40-45% with a 10-20 point fall: interrupt and repeat within 3 weeks; discontinue if not recovered to within 10 points of baseline.",
-        "all": [
-          {
-            "field": "lvef_percent",
-            "operator": ">=",
-            "value": 40
-          },
-          {
-            "field": "lvef_percent",
-            "operator": "<=",
-            "value": 45
-          },
-          {
-            "field": "lvef_drop_points",
-            "operator": ">=",
-            "value": 10
-          }
-        ]
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": ">=",
+              "value": 40
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<=",
+              "value": 45
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": ">=",
+              "value": 10
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        }
       },
       {
         "rule_id": "LVEF_40_45_SMALLDROP",
@@ -668,27 +1044,37 @@
           "recommendation": "LVEF 40-45% with <10 point fall: treatment may continue; repeat LVEF within 3 weeks."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "LVEF 40-45% with <10 point fall: treatment may continue; repeat LVEF within 3 weeks.",
-        "all": [
-          {
-            "field": "lvef_percent",
-            "operator": ">=",
-            "value": 40
-          },
-          {
-            "field": "lvef_percent",
-            "operator": "<=",
-            "value": 45
-          },
-          {
-            "field": "lvef_drop_points",
-            "operator": "<",
-            "value": 10
-          }
-        ]
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "ongoing"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": ">=",
+              "value": 40
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<=",
+              "value": 45
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        }
       },
       {
         "rule_id": "LVEF_GT45_DROP10",
@@ -700,27 +1086,37 @@
           "recommendation": "LVEF >45% with a 10-20 point fall: continue treatment with cardiac surveillance."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "LVEF >45% with a 10-20 point fall: continue treatment with cardiac surveillance.",
-        "all": [
-          {
-            "field": "lvef_percent",
-            "operator": ">",
-            "value": 45
-          },
-          {
-            "field": "lvef_drop_points",
-            "operator": ">=",
-            "value": 10
-          },
-          {
-            "field": "lvef_drop_points",
-            "operator": "<=",
-            "value": 20
-          }
-        ]
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "ongoing"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": ">",
+              "value": 45
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": ">=",
+              "value": 10
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        }
       },
       {
         "rule_id": "SEVERE_HEPATIC",
@@ -732,8 +1128,11 @@
           "recommendation": "Severe hepatic impairment: trastuzumab deruxtecan is not recommended."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
         "explanation": "Severe hepatic impairment: trastuzumab deruxtecan is not recommended.",
         "field": "hepatic_impairment",
@@ -743,17 +1142,31 @@
       {
         "rule_id": "MOD_HEPATIC",
         "action": {
-          "type": "proceed_with_caution",
+          "type": "consultant_review",
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "Moderate hepatic impairment: no adjustment expected, but close toxicity monitoring is recommended."
+          "recommendation": "NCCP expects no adjustment for moderate hepatic impairment with close toxicity monitoring. EMA states that dose requirements with bilirubin>1.5×ULN cannot be determined due to limited data. Reconcile the category and source difference with oncology/pharmacy; do not calculate a dose automatically.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776",
+          "supplemental_sources": [
+            {
+              "document": "EMA Enhertu product information",
+              "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+              "page": 6,
+              "checked_date": "2026-10-20",
+              "source_id": "ema-enhertu",
+              "section": "4.2"
+            }
+          ]
         },
-        "explanation": "Moderate hepatic impairment: no adjustment expected, but close toxicity monitoring is recommended.",
+        "explanation": "NCCP expects no adjustment for moderate hepatic impairment with close toxicity monitoring. EMA states that dose requirements with bilirubin>1.5×ULN cannot be determined due to limited data. Reconcile the category and source difference with oncology/pharmacy; do not calculate a dose automatically.",
         "field": "hepatic_impairment",
         "operator": "==",
         "value": "moderate"
@@ -765,16 +1178,640 @@
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "A further dose reduction below 3.2 mg/kg is required: discontinue treatment."
+          "recommendation": "A further reduction below 3.2 mg/kg is required: permanently discontinue. Do not re-escalate following a reduction."
         },
         "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
         },
-        "explanation": "A further dose reduction below 3.2 mg/kg is required: discontinue treatment.",
-        "field": "dose_reduction_level",
+        "explanation": "A further reduction below 3.2 mg/kg is required: permanently discontinue. Do not re-escalate following a reduction.",
+        "when": {
+          "all": [
+            {
+              "field": "dose_reduction_level",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "further_dose_reduction_required",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": "<",
+                      "value": 1
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "temperature_c",
+                          "operator": ">",
+                          "value": 38.3
+                        },
+                        {
+                          "all": [
+                            {
+                              "field": "temperature_c",
+                              "operator": ">=",
+                              "value": 38
+                            },
+                            {
+                              "field": "temperature_38_duration_hours",
+                              "operator": ">",
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "ild_pneumonitis_grade",
+                      "operator": "==",
+                      "value": 0
+                    },
+                    {
+                      "field": "ild_grade1_resolution_days",
+                      "operator": ">",
+                      "value": 28
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "rule_id": "ILD_G1_RESOLVED_28",
+        "when": {
+          "all": [
+            {
+              "field": "ild_pneumonitis_grade",
+              "operator": "==",
+              "value": 0
+            },
+            {
+              "field": "ild_grade1_resolution_days",
+              "operator": "<=",
+              "value": 28
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Previous Grade 1 ILD resolved within 28 days: after confirming complete Grade 0 recovery and no prior symptomatic ILD, the same dose may resume. Continue pulmonary surveillance; all other domains remain to be assessed."
+        },
+        "explanation": "Previous Grade 1 ILD resolved within 28 days: after confirming complete Grade 0 recovery and no prior symptomatic ILD, the same dose may resume. Continue pulmonary surveillance; all other domains remain to be assessed.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 4,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "ILD_SUSPECTED",
+        "when": {
+          "field": "suspected_ild_pneumonitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Withhold while suspected ILD/pneumonitis is urgently evaluated. Arrange radiographic investigation, preferably CT, consider respiratory consultation and corticosteroids according to grade. Do not wait for the next routine scan."
+        },
+        "explanation": "Withhold while suspected ILD/pneumonitis is urgently evaluated. Arrange radiographic investigation, preferably CT, consider respiratory consultation and corticosteroids according to grade. Do not wait for the next routine scan.",
+        "source": {
+          "document": "EMA Enhertu product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+          "page": 7,
+          "checked_date": "2026-10-20",
+          "source_id": "ema-enhertu"
+        }
+      },
+      {
+        "rule_id": "ILD_PREVIOUS_SYMPTOMATIC",
+        "when": {
+          "field": "previous_symptomatic_ild",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Prior symptomatic Grade ≥2 treatment-related ILD prohibits rechallenge even if symptoms/imaging have subsequently resolved."
+        },
+        "explanation": "Prior symptomatic Grade ≥2 treatment-related ILD prohibits rechallenge even if symptoms/imaging have subsequently resolved.",
+        "source": {
+          "document": "EMA Enhertu product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+          "page": 7,
+          "checked_date": "2026-10-20",
+          "source_id": "ema-enhertu"
+        }
+      },
+      {
+        "rule_id": "BASELINE_LVEF_LT50",
+        "when": {
+          "any": [
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "all": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "lvef_percent",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Do not initiate automatically: baseline LVEF<50% does not meet NCCP eligibility. Obtain oncology/cardiology review; ongoing-treatment continuation rules must not be applied to first-dose eligibility."
+        },
+        "explanation": "Do not initiate automatically: baseline LVEF<50% does not meet NCCP eligibility. Obtain oncology/cardiology review; ongoing-treatment continuation rules must not be applied to first-dose eligibility.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 2,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "LVEF_CONFIRMED_SEVERE",
+        "when": {
+          "field": "confirmed_severe_lvef_recheck",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Repeat LVEF confirms <40% or an absolute fall >20 percentage points: permanently discontinue."
+        },
+        "explanation": "Repeat LVEF confirms <40% or an absolute fall >20 percentage points: permanently discontinue.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 4,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "LVEF_RECHECK_NOT_RECOVERED",
+        "when": {
+          "field": "lvef_40_45_recheck",
+          "operator": "==",
+          "value": "not_recovered"
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "After initial LVEF 40–45% with10–20-point fall, repeat within 3 weeks has not recovered to within 10 points of baseline: permanently discontinue."
+        },
+        "explanation": "After initial LVEF 40–45% with10–20-point fall, repeat within 3 weeks has not recovered to within 10 points of baseline: permanently discontinue.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 4,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "LVEF_RECHECK_RECOVERED",
+        "when": {
+          "field": "lvef_40_45_recheck",
+          "operator": "==",
+          "value": "recovered"
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "After the specified initial LVEF 40–45%/10–20-point decline and treatment interruption, recovery to within 10 points permits same-dose resumption following clinical review. This pathway does not override confirmed severe dysfunction or symptomatic CHF."
+        },
+        "explanation": "After the specified initial LVEF 40–45%/10–20-point decline and treatment interruption, recovery to within 10 points permits same-dose resumption following clinical review. This pathway does not override confirmed severe dysfunction or symptomatic CHF.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 4,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "RENAL_GE60",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": ">=",
+          "value": 60
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "CrCl≥60 mL/min: no renal dose adjustment is required under NCCP. This assesses the renal domain only."
+        },
+        "explanation": "CrCl≥60 mL/min: no renal dose adjustment is required under NCCP. This assesses the renal domain only.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "RENAL_MODERATE",
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 30
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "CrCl 30–<60 mL/min: no renal dose adjustment is required. EMA reports higher Grade 1–2 ILD incidence with moderate impairment; monitor carefully for respiratory symptoms and other toxicity."
+        },
+        "explanation": "CrCl 30–<60 mL/min: no renal dose adjustment is required. EMA reports higher Grade 1–2 ILD incidence with moderate impairment; monitor carefully for respiratory symptoms and other toxicity.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776",
+          "supplemental_sources": [
+            {
+              "document": "EMA Enhertu product information",
+              "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+              "page": 6,
+              "checked_date": "2026-10-20",
+              "source_id": "ema-enhertu",
+              "section": "4.2"
+            }
+          ]
+        }
+      },
+      {
+        "rule_id": "RENAL_SEVERE",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 30
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "NCCP expects no renal adjustment at CrCl<30 mL/min, but EMA says dose requirements cannot be determined because data are lacking. Reconcile with oncology/pharmacy; no automatic dose recommendation. Monitor carefully, especially for ILD.",
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP expects no renal adjustment at CrCl<30 mL/min, but EMA says dose requirements cannot be determined because data are lacking. Reconcile with oncology/pharmacy; no automatic dose recommendation. Monitor carefully, especially for ILD.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776",
+          "supplemental_sources": [
+            {
+              "document": "EMA Enhertu product information",
+              "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+              "page": 6,
+              "checked_date": "2026-10-20",
+              "source_id": "ema-enhertu",
+              "section": "4.2"
+            }
+          ]
+        }
+      },
+      {
+        "rule_id": "RENAL_DIALYSIS",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "NCCP expects no dialysis adjustment; EMA cannot determine dosing in end-stage renal disease. Obtain specialist/pharmacy review and close toxicity/ILD monitoring; no numeric recommendation is inferred.",
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP expects no dialysis adjustment; EMA cannot determine dosing in end-stage renal disease. Obtain specialist/pharmacy review and close toxicity/ILD monitoring; no numeric recommendation is inferred.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 3,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776",
+          "supplemental_sources": [
+            {
+              "document": "EMA Enhertu product information",
+              "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+              "page": 6,
+              "checked_date": "2026-10-20",
+              "source_id": "ema-enhertu",
+              "section": "4.2"
+            }
+          ]
+        }
+      },
+      {
+        "rule_id": "AGE_SOURCE_BOUNDARY",
+        "when": {
+          "field": "age_years",
+          "operator": "<=",
+          "value": 18
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "NCCP eligibility literally specifies age>18years while the indication/EMA says adults. Patients aged18 need source-boundary reconciliation; younger patients are outside this adult regimen."
+        },
+        "explanation": "NCCP eligibility literally specifies age>18years while the indication/EMA says adults. Patients aged18 need source-boundary reconciliation; younger patients are outside this adult regimen.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 1,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "ECOG_OUTSIDE",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "ECOG>2 is outside NCCP eligibility; consultant review is required."
+        },
+        "explanation": "ECOG>2 is outside NCCP eligibility; consultant review is required.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 1,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "HER2_OUTSIDE",
+        "when": {
+          "field": "her2_status",
+          "operator": "in",
+          "value": [
+            "ultralow",
+            "zero",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "This NCCP00776v3b card covers HER2-positive or HER2-low disease. HER2-ultralow, IHC0 or unknown status is not automatically eligible. Broader EMA indications do not establish NCCP eligibility or Irish reimbursement."
+        },
+        "explanation": "This NCCP00776v3b card covers HER2-positive or HER2-low disease. HER2-ultralow, IHC0 or unknown status is not automatically eligible. Broader EMA indications do not establish NCCP eligibility or Irish reimbursement.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 1,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "HER2_POS_PRIOR",
+        "when": {
+          "all": [
+            {
+              "field": "her2_status",
+              "operator": "==",
+              "value": "positive"
+            },
+            {
+              "field": "prior_anti_her2_regimen",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "NCCP00776a requires at least one previous anti-HER2 regimen. This monotherapy card is not a first-line trastuzumab-deruxtecan/pertuzumab regimen."
+        },
+        "explanation": "NCCP00776a requires at least one previous anti-HER2 regimen. This monotherapy card is not a first-line trastuzumab-deruxtecan/pertuzumab regimen.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 1,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "HER2_LOW_PRIOR",
+        "when": {
+          "all": [
+            {
+              "field": "her2_status",
+              "operator": "==",
+              "value": "low"
+            },
+            {
+              "field": "prior_metastatic_chemotherapy",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "recurrence_within6mo_adjuvant_chemo",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "NCCP00776b requires previous metastatic chemotherapy OR recurrence during/within 6 months after adjuvant chemotherapy. Neither criterion was met. The newer EMA post-endocrine/ultralow indication is not silently imported."
+        },
+        "explanation": "NCCP00776b requires previous metastatic chemotherapy OR recurrence during/within 6 months after adjuvant chemotherapy. Neither criterion was met. The newer EMA post-endocrine/ultralow indication is not silently imported.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 1,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "SETTING_OUTSIDE",
+        "when": {
+          "field": "unresectable_or_metastatic",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "This NCCP regimen is for unresectable or metastatic disease, not routine neoadjuvant/adjuvant treatment."
+        },
+        "explanation": "This NCCP regimen is for unresectable or metastatic disease, not routine neoadjuvant/adjuvant treatment.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 1,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "CNS_CAUTION",
+        "when": {
+          "field": "cord_compression_or_active_cns",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Spinal cord compression or untreated/symptomatic CNS metastases require urgent clinical assessment and an agreed treatment plan; NCCP lists these as cautions."
+        },
+        "explanation": "Spinal cord compression or untreated/symptomatic CNS metastases require urgent clinical assessment and an agreed treatment plan; NCCP lists these as cautions.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 2,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "INFUSION_MILD_MOD",
+        "when": {
+          "field": "mild_moderate_infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Slow or interrupt the infusion for infusion-related symptoms and assess promptly. A severe infusion reaction requires permanent discontinuation; restart/rate decisions require clinical supervision."
+        },
+        "explanation": "Slow or interrupt the infusion for infusion-related symptoms and assess promptly. A severe infusion reaction requires permanent discontinuation; restart/rate decisions require clinical supervision.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 1,
+          "checked_date": "2026-10-20",
+          "source_id": "nccp-00776"
+        }
+      },
+      {
+        "rule_id": "BILIRUBIN_GT1_5",
+        "field": "bilirubin_ratio_uln",
         "operator": ">",
-        "value": 2
+        "value": 1.5,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "dose_calculation": "specialist_review",
+          "recommendation": "Bilirubin >1.5×ULN: EMA cannot determine dose requirements due to limited data. Reconcile with NCCP hepatic categories and oncology/pharmacy; severe hepatic impairment is not recommended by NCCP. No automatic numeric dose is inferred."
+        },
+        "explanation": "Bilirubin >1.5×ULN: EMA cannot determine dose requirements due to limited data. Reconcile with NCCP hepatic categories and oncology/pharmacy; severe hepatic impairment is not recommended by NCCP. No automatic numeric dose is inferred.",
+        "source": {
+          "document": "EMA Enhertu product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.2",
+          "source_id": "ema-enhertu",
+          "checked_date": "2026-10-20"
+        }
       }
     ]
   },
@@ -783,10 +1820,10 @@
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk",
     "summary": [
-      "Aprepitant 125 mg PO Day 1, then 80 mg PO Days 2-3",
-      "Dexamethasone 8 mg PO Days 2-4",
-      "Omeprazole 20 mg PO Days 1-4",
-      "PRN cyclizine or metoclopramide; loperamide guidance included"
+      "High emetic risk: prescribe prophylaxis before each infusion and a delayed/breakthrough nausea plan using the linked NCCP high-risk pathway and local pharmacy policy.",
+      "EMA specifically recommends combined antiemetics before every dose; the earlier abbreviated medication list was not a complete prescription.",
+      "Pulmonary symptom education and Enhertu patient alert card; baseline/12 weekly cardiac surveillance.",
+      "No generic G-CSF requirement inferred; consider individual risk and previous neutropenia under local policy."
     ],
     "provenance": "National NCCP antiemetic guidance is linked for antiemetic support. Confirm regimen specific supportive care against the current NCCP protocol and applicable local policy.",
     "script_id": "nccp-parenteral-high",
@@ -796,5 +1833,106 @@
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general"
-  }
+  },
+  "indications": [
+    {
+      "code": "00776a",
+      "description": "Unresectable/metastatic HER2-positive breast cancer after one or more anti-HER2 regimens."
+    },
+    {
+      "code": "00776b",
+      "description": "Unresectable/metastatic HER2-low breast cancer after metastatic chemotherapy, or recurrence during/within 6 months of adjuvant chemotherapy."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "enhertu",
+      "name": "Trastuzumab deruxtecan",
+      "label": "Day 1 every 21 days",
+      "cycle_length_days": 21,
+      "duration": "Until disease progression or unacceptable toxicity",
+      "administration": [
+        {
+          "drug": "trastuzumab deruxtecan",
+          "dose": {
+            "value": 5.4,
+            "unit": "mg/kg"
+          },
+          "day": 1,
+          "route": "IV",
+          "infusion_minutes": 90,
+          "diluent": "100 mL glucose5%",
+          "notes": "First infusion90 minutes; subsequent infusions30 minutes if tolerated. Use0.20/0.22micron PES/PS filter. Not interchangeable with trastuzumab or T-DM1. No home pump."
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "trastuzumab deruxtecan": {
+      "0": "5.4 mg/kg",
+      "-1": "4.4 mg/kg",
+      "-2": "3.2 mg/kg"
+    }
+  },
+  "monitoring": {
+    "baseline": [
+      "FBC, renal/liver profile before treatment.",
+      "ECHO/MUGA LVEF before first dose; NCCP eligibility≥50%.",
+      "Pregnancy test where applicable; establish HER2 result, previous therapy, pulmonary history and baseline respiratory symptoms."
+    ],
+    "regular": [
+      "FBC, renal/liver profile before every 21-day cycle.",
+      "ECHO/MUGA every 12 weeks; 4–8 weekly if signs of cardiac impairment. At an uninterrupted21-day schedule,12 weeks is approximately before cycle 5,24 weeks before cycle 9; delays do not reset the elapsed-time cardiac clock.",
+      "Ask about new cough, breathlessness, fever or worsening breathing at every contact. Suspected ILD needs prompt CT/assessment, not the next scheduled scan.",
+      "Pregnancy test when clinically indicated."
+    ],
+    "disease": "Disease imaging follows the documented consultant treatment plan; NCCP does not mandate a universal CT or PET interval or routine tumour-marker schedule. Record baseline disease assessment and next response review separately from toxicity-triggered CT.",
+    "bone": "No routine Enhertu-specific DXA schedule. Use bone-density assessment if another treatment or personal fracture risk requires it.",
+    "heart": "Baseline and every 12 weeks echo/MUGA. For a new LVEF decline meeting a dose-modification threshold, repeat within 3 weeks; symptomatic CHF requires permanent discontinuation.",
+    "sources": [
+      {
+        "document": "NCCP00776 v3b (21 May 2026)",
+        "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+        "page": 2,
+        "checked_date": "2026-10-20",
+        "source_id": "nccp-00776"
+      },
+      {
+        "document": "NCCP00776 v3b (21 May 2026)",
+        "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+        "page": 3,
+        "checked_date": "2026-10-20",
+        "source_id": "nccp-00776"
+      },
+      {
+        "document": "EMA Enhertu product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/enhertu-epar-product-information_en.pdf",
+        "page": 7,
+        "checked_date": "2026-10-20",
+        "source_id": "ema-enhertu"
+      }
+    ]
+  },
+  "source_discrepancies": [
+    {
+      "topic": "Indications",
+      "detail": "EMA label is broader than NCCP00776v3b. Do not import first-line pertuzumab combination, HER2-ultralow/post-endocrine, lung, gastric or tumour-agnostic indications into this card."
+    },
+    {
+      "topic": "Severe renal impairment/dialysis",
+      "detail": "NCCP Giraud-based recommendation expects no adjustment; EMA says dosing cannot be determined due to absent data. Review rather than automatic dose clearance."
+    },
+    {
+      "topic": "Moderate hepatic impairment",
+      "detail": "NCCP expects no reduction with close monitoring; EMA cannot determine dose requirements at bilirubin>1.5ULN. Specialist reconciliation required."
+    },
+    {
+      "topic": "Age18",
+      "detail": "NCCP says adult in indication but >18 in eligibility; source discrepancy retained for review."
+    },
+    {
+      "topic": "Platelets",
+      "detail": "Neither the mapped NCCP document nor retrieved EMA SmPC provides a numerical thrombocytopenia dose ladder. Platelets are recorded for clinical review; no US-label thresholds have been imported."
+    }
+  ]
 }

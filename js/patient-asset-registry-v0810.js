@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.8';
-  const CONTENT_RELEASE='0.84.2';
+  const RELEASE='0.84.9';
+  const CONTENT_RELEASE='0.84.9';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00588':{"title": "Olaparib · adjuvant breast treatment", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Breast adjuvant 00588h only"},
+    '00794':{"title": "Sacituzumab govitecan (Trodelvy)", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00776':{"title": "Trastuzumab deruxtecan (Enhertu) · every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00322':{"title": "Everolimus + exemestane", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00414':{"title": "Palbociclib with endocrine therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00361':{"title": "Fulvestrant · injections every 4 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00376':{"title": "Exemestane · daily hormone therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00371':{"title": "Letrozole · daily hormone therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -109,6 +114,7 @@
   function hasDedicated(value){return Boolean(definitionFor(value));}
   function relativePath(value,asset='portal'){
     const def=definitionFor(value); if(!def) return null;
+    if(def.scopeGuard) return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
     if(asset==='supportive-care-selector') return def.phaseSupport?`patient/${def.code}/supportive-care.html`:null;
     if(asset==='longitudinal') return def.longitudinal?`patient/${def.code}/treatment-journey.html`:null;
     if(asset==='supportive-care') return def.supportiveCare?`patient/${def.code}/supportive-care.pdf`:null;
@@ -132,6 +138,7 @@
   }
   function compatibilityUrl(value,asset='portal'){
     const def=definitionFor(value); if(!def) return null;
+    if(def.scopeGuard) return publicUrl(value,asset);
     const suffix=asset==='guide'?'guide.pdf':asset==='passport'?'passport.pdf':asset==='contact-card'&&def.contactCard?'contact-card.pdf':asset==='sact-card'&&def.sactCard?'sactcard.pdf':'';
     return new URL(`docs/patient/${def.code}/${suffix}`,PUBLIC_ORIGIN).href;
   }

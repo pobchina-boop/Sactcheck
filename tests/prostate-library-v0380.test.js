@@ -84,12 +84,20 @@ for (const { file, data } of prostate) {
   assert(!Array.isArray(data.required_inputs) || data.required_inputs.length === 0, `${code} still has blocking mandatory inputs.`);
   for (const [field, definition] of definitionEntries(data)) {
     assert.notStrictEqual(definition.required, true, `${code}/${field} is still marked as a blocking required input.`);
-    if (definition.ctcae_version || /(?:^|_)grade(?:$|_)/i.test(field)) {
+    const olaparibReference = code === '00588' && ['hb_g_dl','febrile_neutropenia'].includes(field);
+    if (olaparibReference) {
+      assert.strictEqual(definition.type, field === 'hb_g_dl' ? 'number' : 'boolean');
+      assert.strictEqual(definition.ctcae_version, '5.0');
+      assert.match(definition.ctcae_source_url, /cancer.gov.*ctcae-v5/);
+      assert(definition.assessment_guidance);
+    }
+    if (!olaparibReference && (definition.ctcae_version || /(?:^|_)grade(?:$|_)/i.test(field))) {
       assert.strictEqual(definition.type, 'select', `${code}/${field} CTCAE input must be a selector.`);
       assert.strictEqual(definition.ctcae_version, '5.0', `${code}/${field} lacks CTCAE v5.0 metadata.`);
       assert(definition.assessment_guidance, `${code}/${field} lacks practical grading guidance.`);
       const options = definition.options || [];
-      assert(options.length >= 5, `${code}/${field} does not display Grade 0–4 choices.`);
+      if(code==='00588'&&field==='febrile_neutropenia_grade')assert.deepStrictEqual(options.map(x=>Number(x.value)),[0,3,4], 'CTCAE v5 febrile neutropenia has no grades 1 or 2');
+      else assert(options.length >= 5, `${code}/${field} does not display Grade 0–4 choices.`);
       options.forEach(option => assert(option.description, `${code}/${field}/${option.value} lacks a grade explanation.`));
     }
     if (field === 'renal_band') {

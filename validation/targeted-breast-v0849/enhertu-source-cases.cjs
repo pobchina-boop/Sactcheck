@@ -1,0 +1,65 @@
+'use strict';
+// Source-first clinical boundary matrix. NCCP00776v3b pp1–5 and EMA Enhertu §§4.2–4.4.
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const repo=process.env.SACT_REPO||path.resolve(__dirname,'../..'),E=require(path.join(repo,'js/assessment-engine')),D=require(path.join(repo,'js/protocol-dose-schedule')),V=require(path.join(repo,'js/protocol-validator'));
+const p=JSON.parse(fs.readFileSync(path.join(repo,'protocols/breast/00776-trastuzumab-deruxtecan.json'),'utf8'));
+const cases=[];let failed=0;const clinical=r=>r.findings.filter(f=>!f.domainAssessment&&!/^PARTIAL_/.test(f.ruleId||''));
+function run(name,input,expect,source,extra){const c={name,input,source};try{const r=E.assess(p,input),m=D.buildModificationModel(p,r);assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);if(expect)assert.equal(r.actionType,expect);if(extra)extra(r,m);c.actual=r.actionType;c.findings=clinical(r).map(f=>({id:f.ruleId,action:f.actionType,text:f.explanation}));c.visibleDose=m.rows.map(x=>({dose:x.protocolDose,action:x.actionType}));c.pass=true;}catch(e){c.pass=false;c.error=e.message;failed++;}cases.push(c);}
+function structure(name,fn){try{fn();cases.push({name,pass:true});}catch(e){failed++;cases.push({name,pass:false,error:e.message});}}
+const has=(r,id)=>clinical(r).some(f=>f.ruleId===id),txt=r=>clinical(r).map(f=>f.explanation).join(' '),noDose=m=>assert(!m.rows.some(x=>/^\s*\d/.test(String(x.protocolDose))));
+run('Blank never clears treatment',{},'incomplete','Partial-assessment policy',(_,m)=>noDose(m));
+for(const x of [0,0.49,0.5,0.99,1,1.01,1.49,1.5,2])run('Isolated ANC '+x,{anc:x},x<0.5?'withhold_then_reduce':x<1?'withhold':null,'NCCPp4 neutropenia',r=>{assert.equal(has(r,'ANC_G4'),x<0.5);assert.equal(has(r,'ANC_G3'),x>=0.5&&x<1)});
+for(const [t,h,yes]of [[38,1,false],[38,1.01,true],[38.3,0,false],[38.31,0,true],[37.9,2,false]])for(const a of [0.99,1])run(`Febrile ANC${a} temp${t} duration${h}`,{anc:a,temperature_c:t,temperature_38_duration_hours:h},yes&&a<1?'withhold_then_reduce':null,'NCCPp4 FN: strict >38.3 or ≥38 sustained>1h',r=>assert.equal(has(r,'FEBRILE_NEUTROPENIA_383')||has(r,'FEBRILE_NEUTROPENIA_38'),yes&&a<1));
+for(const grade of [0,1,2,3,4])run('ILD grade '+grade,{ild_pneumonitis_grade:grade},grade>=2?'permanently_discontinue':grade===1?'withhold':null,'NCCPp4/EMA4.4',r=>{if(grade===1)assert(/0\.5/.test(txt(r)));if(grade>=2)assert(/corticosteroid|prednisolone/.test(txt(r)));});
+run('Suspected ILD independently withholds',{suspected_ild_pneumonitis:true},'withhold','EMA4.4',r=>assert(/CT/.test(txt(r))));
+run('Past symptomatic ILD cannot restart despite currentGrade0',{previous_symptomatic_ild:true,ild_pneumonitis_grade:0,ild_grade1_resolution_days:7},'permanently_discontinue','EMA4.4 no rechallenge');
+for(const days of [1,28,29,45])run('ResolvedGrade1 ILD '+days+'days',{ild_pneumonitis_grade:0,ild_grade1_resolution_days:days},days<=28?'proceed_with_caution':'dose_reduce_one_level','NCCPp4 28day boundary',(_,m)=>{if(days>28)noDose(m)});
+run('ActiveGrade1 is not restart despite resolution field',{ild_pneumonitis_grade:1,ild_grade1_resolution_days:29},'withhold','Must reachGrade0 before dose selection',r=>assert(!has(r,'ILD_G1_LONG')));
+run('Resolution days alone require currentgrade context',{ild_grade1_resolution_days:29},'partial_context_required','No assumed resolution',(_,m)=>noDose(m));
+for(const f of ['hypersensitivity','clinically_significant_cardiac_disease','history_ild_pneumonitis','pregnancy','breastfeeding'])run('Exclusion '+f,{[f]:true},'contraindicated','NCCPp2 exclusions');
+run('Severe infusion reaction',{severe_infusion_reaction:true},'permanently_discontinue','NCCPp1');
+run('Other infusion reaction',{mild_moderate_infusion_reaction:true},'withhold','NCCPp1 slow/interrupt');
+run('Symptomatic CHF',{symptomatic_chf:true},'permanently_discontinue','NCCPp4');
+for(const val of [39.9,40,45,45.1,49.9,50,55])run('BaselineLVEF '+val,{assessment_stage:'baseline',lvef_percent:val},val<50?'withhold':null,'NCCPp2 firstdose≥50',r=>assert.equal(has(r,'BASELINE_LVEF_LT50'),val<50));
+for(const val of [49.9,50])run('IsolatedbaselineLVEF '+val,{baseline_lvef_percent:val},val<50?'withhold':null,'NCCPp2 baselineeligibility',r=>assert.equal(has(r,'BASELINE_LVEF_LT50'),val<50));
+for(const val of [39.9,40,45,45.1])for(const drop of [9.9,10,20,20.1])run(`OngoingLVEF${val} drop${drop}`,{assessment_stage:'ongoing',lvef_percent:val,lvef_drop_points:drop},val<40||drop>20||(val<=45&&drop>=10)?'withhold':'proceed_with_caution','NCCPp4 LVEF branches',r=>{assert.equal(has(r,'LVEF_40_45_DROP10'),val>=40&&val<=45&&drop>=10&&drop<=20);assert.equal(has(r,'LVEF_DROP_GT20'),drop>20);});
+run('LVEF44 without fall retains unresolvedcontext',{lvef_percent:44},'partial_context_required','NCCPp4 LVEFandabsolutechange',(_,m)=>noDose(m));
+run('Independent fall>20 withholds withoutabsolute',{lvef_drop_points:20.1},'withhold','NCCPp4 OR');
+run('Confirmed severe recheck stops',{confirmed_severe_lvef_recheck:true},'permanently_discontinue','NCCPp4 repeatwithin3weeks');
+run('Recheck40–45 not recovered stops',{lvef_40_45_recheck:'not_recovered'},'permanently_discontinue','NCCPp4');
+run('Recheck40–45 recovered allows same-dose review',{lvef_40_45_recheck:'recovered'},'proceed_with_caution','NCCPp4');
+run('Recoveredrecheck cannot overrideCHF',{lvef_40_45_recheck:'recovered',symptomatic_chf:true},'permanently_discontinue','NCCPp4 conflicts');
+for(const renal of [0,29.9,30,59.9,60,90])run('CrCl '+renal,{crcl_ml_min:renal},renal<30?'consultant_review':'proceed_with_caution','NCCPp3 + EMA4.2 discrepancy',r=>{if(renal<30)assert(/cannot be determined/.test(txt(r)));if(renal>=30&&renal<60)assert(/ILD/.test(txt(r)));});
+run('Dialysis requires source reconciliation',{haemodialysis:true},'consultant_review','NCCPp3 versusEMA4.2',(_,m)=>noDose(m));
+for(const liver of ['none_mild','moderate','severe'])run('Hepatic '+liver,{hepatic_impairment:liver},liver==='moderate'?'consultant_review':liver==='severe'?'contraindicated':null,'NCCPp3/EMA4.2',(_,m)=>{if(liver==='moderate')noDose(m)});
+for(const level of [0,1,2]){
+ run('Grade4ANC currentlevel'+level,{anc:0.4,dose_reduction_level:level},level===2?'permanently_discontinue':'withhold_then_reduce','NCCPp3–4 reductionladder',(r,m)=>{if(level<2)assert(m.rows.some(x=>x.protocolDose===(level===0?'4.4 mg/kg':'3.2 mg/kg')));else noDose(m)});
+ run('ResolvedlateILD currentlevel'+level,{ild_pneumonitis_grade:0,ild_grade1_resolution_days:29,dose_reduction_level:level},level===2?'permanently_discontinue':'dose_reduce_one_level','NCCPp3–4 reductionladder');
+}
+run('Atminimumdose alone doesnotstop',{dose_reduction_level:2},null,'Onlyfurtherreductionrequirementstops',r=>assert(!has(r,'FURTHER_REDUCTION')));
+run('Explicit further reduction atminimum stops',{dose_reduction_level:2,further_dose_reduction_required:true},'permanently_discontinue','NCCPp3');
+run('Unknown currentdose neverinventsfuture numericdose',{anc:0.4},'withhold_then_reduce','Currentdosecontextrequired',(_,m)=>noDose(m));
+run('G2ILD overridesdose reduction',{ild_pneumonitis_grade:2,anc:0.4,dose_reduction_level:0},'permanently_discontinue','Stopoverridesreduction',(_,m)=>noDose(m));
+for(const value of ['ultralow','zero','unknown'])run('HER2 '+value,{her2_status:value},'consultant_review','NCCP00776a/b donotbroadenfromEMA');
+run('HER2positive withoutpriorantiHER2',{her2_status:'positive',prior_anti_her2_regimen:false},'consultant_review','NCCP00776a');
+run('HER2positive priorantiHER2',{her2_status:'positive',prior_anti_her2_regimen:true},null,'NCCP00776a',r=>assert(!has(r,'HER2_POS_PRIOR')));
+for(const [prior,early]of [[false,false],[false,true],[true,false],[true,true]])run(`HER2lowprior${prior}early${early}`,{her2_status:'low',prior_metastatic_chemotherapy:prior,recurrence_within6mo_adjuvant_chemo:early},!prior&&!early?'consultant_review':null,'NCCP00776b ORcriteria',r=>assert.equal(has(r,'HER2_LOW_PRIOR'),!prior&&!early));
+run('HER2low singlecriterionmissing notassumedfalse',{her2_status:'low',prior_metastatic_chemotherapy:false},null,'Partialeligibilityonly',r=>assert(!has(r,'HER2_LOW_PRIOR')));
+for(const a of [17,18,19])run('Age '+a,{age_years:a},a<=18?'consultant_review':null,'NCCPp1 wording>18versusEMAadults');
+for(const e of [0,2,3,4])run('ECOG '+e,{ecog:e},e>2?'consultant_review':null,'NCCPp1 ECOG0–2');
+run('Nonadvanced setting notmapped',{unresectable_or_metastatic:false},'consultant_review','NCCPp1');
+run('ActiveCNS/cord caution',{cord_compression_or_active_cns:true},'consultant_review','NCCPp2');
+for(const v of [10,24.9,25,49.9,50,75,100])run('Platelets noforeigndosealgorithm '+v,{platelets:v},null,'NCCP+EMA no plateletdose ladder',(_,m)=>noDose(m));
+structure('Strictschema andsource links',()=>{assert(V.validate(p,{strict:true}).valid);assert.deepEqual(p.required_inputs,[]);for(const d of Object.values(p.input_definitions))assert.equal(d.required,false);for(const r of p.rule_engine.rules){assert(r.source.url);assert(r.source.page);assert.equal(r.source.checked_date,'2026-10-20');}for(const k of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[k],false);});
+structure('Twentyonedays and doses',()=>{const m=D.buildModel(p);assert.equal(m.phases[0].cycleLength,21);assert.equal(m.phases[0].components[0].dose,'5.4 mg/kg');assert.deepEqual(m.phases[0].components[0].days,['1']);});
+structure('Explicit12weekechos andno inventedgenericCTinterval',()=>{assert(/12 weeks/.test(JSON.stringify(p.monitoring)));assert(/cycle 5/.test(JSON.stringify(p.monitoring)));assert(/does not mandate a universal CT/.test(p.monitoring.disease));});
+for(const v of [1.49,1.5,1.51,3,4])run('Bilirubin EMA boundary '+v,{bilirubin_ratio_uln:v},v>1.5?'consultant_review':null,'EMA4.2 bilirubin>1.5ULN',(_,m)=>noDose(m));
+for(const [band,action,renal,dialysis] of [['renal_lt30','consultant_review',20,false],['renal_30_lt60','proceed_with_caution',45,false],['renal_ge60','proceed_with_caution',80,false],['dialysis','consultant_review',0,true]])run('Renal selector '+band,{crcl_ml_min:band},action,'NCCPp3 and EMA4.2 bands',r=>{assert.equal(r.inputs.crcl_ml_min,renal);if(dialysis)assert.equal(r.inputs.haemodialysis,true);});
+structure('Renal input declares source-specific bands',()=>{const d=p.input_definitions.crcl_ml_min;assert.equal(d.type,'select');assert.equal(d.renal_input.mode,'protocol_specific_band');assert.equal(d.renal_input.exact_value_required,false);for(const o of d.options)assert(Object.hasOwn(o,'decision_value'));});
+require(path.join(repo,'js/ctcae-descriptors'));const CT=globalThis.SACTCheckCTCAE;
+structure('Actual ANC guide and calculator match NCCP v5 thresholds',()=>{const d={id:'anc',...p.input_definitions.anc},g=CT.guide(d);assert.equal(g.version,'CTCAE v5.0');assert.match(g.grades.find(x=>x.grade===4).description,/<0.5/);assert.equal(CT.gradeForValue(d,0.49).grade,4);assert.equal(CT.gradeForValue(d,0.5).grade,3);assert.equal(CT.gradeForValue(d,0.99).grade,3);assert.equal(CT.gradeForValue(d,1).grade,2);});
+structure('Actual monitoring-only blood guides retain source v5 without dose ladder',()=>{for(const id of ['platelets','hb_g_dl'])assert.equal(CT.guide({id,...p.input_definitions[id]}).version,'CTCAE v5.0');assert.equal(CT.gradeForValue({id:'platelets',...p.input_definitions.platelets},24).grade,4);});
+structure('Timing values cannot be calculated as fever or ILD grades',()=>{for(const id of ['temperature_38_duration_hours','ild_grade1_resolution_days']){const d={id,...p.input_definitions[id]},g=CT.guide(d);assert.equal(g.sourceSpecific,true);assert.equal(g.calculable,false);assert.deepEqual(g.grades,[]);assert.equal(CT.gradeForValue(d,40),null);}});
+structure('Historical ILD boolean has no current-grade dropdown guide',()=>assert.equal(CT.guide({id:'previous_symptomatic_ild',...p.input_definitions.previous_symptomatic_ild}),null));
+structure('Actual ILD select remains v5 and symptomatic grade2',()=>{const g=CT.guide({id:'ild_pneumonitis_grade',...p.input_definitions.ild_pneumonitis_grade});assert.equal(g.version,'CTCAE v5.0');assert.match(g.grades.find(x=>x.grade===2).description,/Symptomatic/);});
+const out={checked_at:new Date().toISOString(),code:'00776',source:p.metadata.source_url,total:cases.length,passed:cases.length-failed,failed,cases};fs.writeFileSync(path.join(__dirname,'enhertu-source-cases-results.json'),JSON.stringify(out,null,2)+'\n');console.log(`Enhertu source-derived scenarios: ${out.passed}/${out.total} passed`);for(const c of cases.filter(x=>!x.pass))console.error(c.name,c.error);process.exitCode=failed?1:0;

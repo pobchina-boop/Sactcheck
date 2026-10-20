@@ -1,0 +1,53 @@
+'use strict';
+// Source-derived boundary cases; not independent clinical/pharmacy validation.
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const root=process.env.SACT_REPO||path.resolve(__dirname,'../..'),P=JSON.parse(fs.readFileSync(path.join(root,'protocols/breast/00794-sacituzumab-govitecan.json')));
+const E=require(path.join(root,'js/assessment-engine')),D=require(path.join(root,'js/protocol-dose-schedule')),V=require(path.join(root,'js/protocol-validator'));
+const cases=[];let failed=0;
+const clinical=r=>r.findings.filter(f=>!f.domainAssessment&&!/^PARTIAL_/.test(f.ruleId||''));
+const holds=new Set(['withhold','withhold_then_reduce','contraindicated','discontinue','permanently_discontinue']);
+function run(name,input,expect,source,extra){let c={name,input,source};try{const r=E.assess(P,input),m=D.buildModificationModel(P,r);assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);if(expect)assert.equal(r.actionType,expect);if(extra)extra(r,m);if(['withhold','contraindicated','discontinue','permanently_discontinue','consultant_review','incomplete'].includes(expect))assert(!m.rows.some(x=>x.quantified&&/^\d/.test(x.protocolDose)),'Unsafe/unresolved state displays numeric dose');c.actual=r.actionType;c.findings=clinical(r).map(x=>({id:x.ruleId,action:x.actionType,explanation:x.explanation}));c.visibleDose=m.rows.map(x=>({dose:x.protocolDose,quantified:x.quantified,action:x.actionType}));c.pass=true;}catch(e){c.pass=false;c.error=e.message;failed++;}cases.push(c);}
+function noHold(r){assert(!clinical(r).some(f=>holds.has(f.actionType)));}
+function structural(name,fn){try{fn();cases.push({name,pass:true});}catch(e){failed++;cases.push({name,pass:false,error:e.message});}}
+run('Blank cannot clear treatment',{},'incomplete','Partial-assessment policy');
+for(const day of [1,8])for(const anc of [0,.49,.5,.99,1,1.49,1.5,1.51,2])run(`Day${day} ANC${anc}`,{cycle_day:day,anc},anc<(day===1?1.5:1)?'withhold':null,'NCCP p2 separate Day1/Day8 thresholds',anc>=(day===1?1.5:1)?noHold:null);
+for(const anc of [0,.99,1,1.49,1.5,2])run('Isolated ANC '+anc,{anc},anc<1?'withhold':anc<1.5?'consultant_review':null,'NCCP p2; missing day does not block low-ANC assessment',anc>=1.5?noHold:null);
+for(const field of ['hypersensitivity','pregnancy','breastfeeding'])run(field,{[field]:true},'contraindicated','NCCP p2');
+for(const field of ['active_uncontrolled_infection','ugt1a1_28_homozygous','gilbert_syndrome','ugt1a1_interacting_medicine','increased_febrile_neutropenia_risk'])run(field,{[field]:true},'consultant_review','NCCP p2 / SmPC4.4–4.5');
+for(const field of ['febrile_neutropenia_grade34','uncontrolled_nvd','other_grade34_persisting_despite_optimal_management'])run(field,{[field]:true},'withhold','NCCP pp3,5 / SmPC4.2,4.4');
+run('Shorter grade4 neutropenia is not automatically duration-qualified',{grade4_neutropenia_days:6},null,'NCCP p3 ≥7d or less if clinically indicated',noHold);
+run('Grade4 neutropenia duration7',{grade4_neutropenia_days:7},'withhold','NCCP p3');
+for(const n of [0,1,2,2.5,3,3.5,4])run('Neutropenia recovery delay '+n,{neutropenia_delay_weeks:n},n>3?'discontinue':n>=2?'consultant_review':null,'NCCP p3Table1');
+for(const n of [0,1,2,3,4])run('Severe neutropenia occurrence '+n,{severe_neutropenia_occurrence:n},n>=4?'discontinue':n===1?'consultant_review':n>=2?'dose_reduce':null,'NCCP p3Table1',n===2||n===3?(r,m)=>assert(m.rows.some(x=>x.quantified&&x.protocolDose===`${n===2?7.5:5} mg/kg`)):null);
+for(const n of [0,1,2,3])run('Severe nonneutropenic occurrence '+n,{non_neutropenic_severe_occurrence:n},n>=3?'discontinue':n===2?'consultant_review':n===1?'dose_reduce':null,'NCCP p3Table1; EU SmPC4.2 source difference at second occurrence');
+run('No recovery nonneutropenic',{not_recovered_within_3_weeks:true},'discontinue','NCCP p3Table1');
+for(const n of [1,2,3,3.5])run('Other toxicity recovery delay '+n,{severe_non_neutropenic_delay_weeks:n},n>3?'discontinue':n>=2?'consultant_review':null,'NCCP p3Table1');
+for(const field of ['diarrhoea_grade','vomiting_grade'])for(const n of [0,1,2,3,4])run(field+' '+n,{[field]:n},n>=3?'withhold':null,'NCCP p5 / EU SmPC4.4',n<3?noHold:null);
+for(const n of [0,1,2,3])run('Nausea '+n,{nausea_grade:n},n>=3?'withhold':null,'EU SmPC4.4',n<3?noHold:null);
+for(const n of [0,1,2,3,4])run('Generic nonhaem '+n,{nonhaem_grade:n},n===4?'withhold':n===3?'consultant_review':null,'NCCP p3Table1 / EU SmPC4.2',n<3?noHold:null);
+for(const n of [0,1,2,3,4])run('Infusion reaction '+n,{infusion_reaction_grade:n},n===4?'permanently_discontinue':n>=1?'withhold':null,'NCCP pp1–2 / EU SmPC4.2');
+run('Life-threatening infusion reaction standalone',{life_threatening_infusion_reaction:true},'permanently_discontinue','NCCP p2');
+for(const v of [1,1.5,1.51,2])run('Bilirubin '+v,{bilirubin_ratio_uln:v},v>1.5?'withhold':null,'EU SmPC4.2',v<=1.5?noHold:null);
+for(const mets of [true,false])for(const v of [2.99,3,3.01,5,5.01])run(`AST/ALT${v} liverMets${mets}`,{alt_ratio_uln:v,liver_metastases:mets},v>(mets?5:3)?'withhold':null,'EU SmPC4.2',v<=(mets?5:3)?noHold:null);
+for(const v of [3,3.01,5,5.01])run('AST/ALT unknown metastasis '+v,{alt_ratio_uln:v},v>5?'withhold':v>3?'consultant_review':null,'EU SmPC4.2; unknown context not normal');
+for(const v of [0,14.99,15,29.9,30,59.99,60,90])run('CrCl '+v,{crcl_ml_min:v},v<15?'consultant_review':v<60?'proceed_with_caution':null,'NCCP p4 / EU SmPC4.2');
+for(const [band,expected] of [['renal_lt15','consultant_review'],['renal_15_lt60','proceed_with_caution'],['renal_ge60',null],['dialysis','consultant_review']])run('Renal selector '+band,{crcl_ml_min:band},expected,'NCCP p4 / EU SmPC4.2 protocol-specific bands');
+run('Dialysis source conflict',{haemodialysis:true},'consultant_review','NCCP p4 / EU SmPC4.2');
+for(const v of ['none','mild','moderate','severe'])run('Hepatic category '+v,{hepatic_impairment:v},['moderate','severe'].includes(v)?'consultant_review':null,'NCCP p4 / EU SmPC4.2');
+for(const [field,fail,pass]of [['age_years',17,18],['ecog',2,1],['triple_negative_confirmed',false,true],['unresectable_or_metastatic',false,true],['prior_systemic_therapies',1,2],['prior_advanced_therapy',false,true]]){run(field+' outside NCCP',{[field]:fail},'consultant_review','NCCP p1 eligibility');run(field+' criterion met alone',{[field]:pass},null,'NCCP p1 eligibility; partial assessment',noHold);}
+run('Cholinergic symptoms with glaucoma',{cholinergic_symptoms:true,glaucoma:true},'consultant_review','NCCP pp4–5',(r)=>assert(clinical(r).some(x=>/should not be used/.test(x.explanation))));
+run('Current severe diarrhoea overrides historical reduction',{non_neutropenic_severe_occurrence:1,diarrhoea_grade:3},'withhold','NCCP pp3,5');
+run('Current ANC hold overrides historical dose reduction',{severe_neutropenia_occurrence:2,anc:.2},'withhold','NCCP pp2–3');
+run('Pregnancy overrides reduction',{severe_neutropenia_occurrence:3,pregnancy:true},'contraindicated','NCCP p2');
+run('Bilirubin avoidance overrides renal no-adjustment',{bilirubin_ratio_uln:2,crcl_ml_min:55},'withhold','EU SmPC4.2 and NCCP p4');
+structural('All inputs optional and protocol strictly valid',()=>{assert.deepEqual(P.required_inputs,[]);for(const x of Object.values(P.input_definitions))assert.equal(x.required,false);assert(V.validate(P,{strict:true}).valid);});
+structural('Every rule has exact source metadata',()=>{assert.equal(P.rule_engine.rules.length,51);for(const r of P.rule_engine.rules){assert(r.source.url);assert(r.source.page);assert.equal(r.source.checked_date,'2026-10-20');}for(const k of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(P.metadata.validation[k],false);});
+structural('Correct D1/D8 q21 schedule and observation',()=>{const m=D.buildModel(P);assert.equal(m.phases.length,1);assert.equal(m.phases[0].cycleLength,21);assert.deepEqual(m.phases[0].components[0].days,['1','8']);assert.equal(m.phases[0].components[0].dose,'10 mg/kg');assert(/30 minutes/.test(m.phases[0].components[0].note));});
+structural('High risk includes both administration days and no steroid duplication',()=>{assert.equal(P.supportive_care.emetogenic_risk,'high');assert(/BOTH Day 1 and Day 8/.test(P.supportive_care.premedication_summary.join(' ')));assert(/duplication/.test(P.supportive_care.premedication_summary.join(' ')));});
+structural('Monitoring schedule specific; no invented echo/CT interval',()=>{const s=JSON.stringify(P.monitoring);assert(/every second cycle/.test(s));assert(/Day 8/.test(s));assert(/ECG only if clinically indicated/.test(s));assert(/does not specify a universal CT/.test(s));});
+
+require(path.join(root,'js/ctcae-descriptors'));const G=global.SACTCheckCTCAE;
+structural('Rendered source fields never silently inherit v6 grades or grade durations',()=>{for(const id of ['anc','platelets_x10e9_l','hb_g_dl','neutropenia_delay_weeks','grade4_neutropenia_days','febrile_neutropenia_grade34','not_recovered_within_3_weeks','other_grade34_persisting_despite_optimal_management']){const d={...P.input_definitions[id],id},g=G.guide(d);assert(g.sourceSpecific);assert(!g.calculable);assert.equal(g.grades.length,0);assert.equal(g.comparison,null);assert.equal(G.gradeForValue(d,.2),null);assert(/NCCP 00794/.test(g.sourceLabel));}});
+structural('Named nausea/vomiting descriptors replace generic severity anchors',()=>{for(const id of ['nausea_grade','vomiting_grade']){const d=P.input_definitions[id],g=G.guide({...d,id});assert(d.ctcae_category);assert(d.assessment_guidance);assert(g.sourceSpecific);assert(/5.0/.test(g.sourceLabel));assert(/tube feeding|TPN|admission/.test(g.grades.find(x=>x.grade===3).description));}assert.deepEqual(P.input_definitions.nausea_grade.options.map(o=>o.value),[0,1,2,3]);for(const [id,category] of [['diarrhoea_grade','diarrhoea'],['infusion_reaction_grade','infusion']]){const d=P.input_definitions[id],g=G.guide({...d,id});assert.equal(g.version,'CTCAE v5.0');assert.equal(d.ctcae_category,category);assert(d.assessment_guidance);assert(d.options.every(o=>o.description));assert.equal(g.grades.find(x=>x.grade===3).description,d.options.find(o=>o.value===3).description);}});
+
+const out={release:'0.84.9',regimen:'00794',checked_at:new Date().toISOString(),total:cases.length,passed:cases.length-failed,failed,clinical_validation:'pending independent Consultant/oncology pharmacy review',cases};fs.writeFileSync(path.join(__dirname,'sacituzumab-source-cases-results.json'),JSON.stringify(out,null,2)+'\n');console.log(`Sacituzumab: ${out.passed}/${out.total} passed`);for(const c of cases.filter(x=>!x.pass))console.error(c.name,c.error);process.exitCode=failed?1:0;

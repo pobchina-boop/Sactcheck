@@ -86,7 +86,7 @@ function assessAc(overrides = {}) {
 }
 
 const cases = [
-  ['olaparib normal proceeds', assessOlaparib(), 'proceed'],
+  ['olaparib legacy fields remain a partial assessment', assessOlaparib(), 'proceed_with_caution'],
   ['olaparib renal dose reduction', assessOlaparib({ crcl_ml_min: 40 }), 'dose_reduce'],
   ['olaparib low counts delays/reduces', assessOlaparib({ anc_x10e9_l: 0.7 }), 'delay_then_dose_reduce'],
   ['olaparib fourth occurrence ceases', assessOlaparib({ haematological_toxicity_occurrence_number: 4 }), 'cease'],
@@ -102,8 +102,8 @@ const cases = [
 
 for (const [name, result, expected] of cases) {
   assert.equal(result.actionType, expected, `${name}: expected ${expected}, got ${result.actionType}\n${JSON.stringify(result.findings, null, 2)}`);
-  // v0.83.7 adds source eligibility/immune domains. These older fixtures do not assess them.
-  assert.equal(result.complete, name.startsWith('olaparib'), `${name}: expected explicit partial coverage for the breast fixtures`);
+  // v0.83.7 / v0.84.9 add source-specific safety and eligibility domains. These older fixtures intentionally leave them unassessed.
+  assert.equal(result.complete, false, `${name}: legacy fixtures must retain explicit partial coverage`);
   console.log(`✓ ${name}`);
 }
 

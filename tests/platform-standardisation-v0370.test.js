@@ -152,16 +152,27 @@ for (const { file, data } of protocols) {
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
       const folfoxSourceDiarrhoea = (['00447','00733'].includes(code)) && ['diarrhoea_current_grade','diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
+      const everolimusSource = code === '00322';
+      const palbociclibSource = code === '00414' && field === 'nonhaem_toxicity_grade';
       const pldSource = code === '00205' && ['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field);
-      if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
+      if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, everolimusSource ? '3.0' : palbociclibSource ? '4.0' : folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
+      if(palbociclibSource){assert.equal(def.grading_source_label,'NCCP 00414 / CTCAE v4.0');assert.match(def.grading_source_url,/cancer.gov.*ctcae-v403/);assert(def.options.every(x=>x.description));}
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
       if(!pldSource) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
       const sourceHfs = ['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field);
-      const expectedGrades = sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
+      const sourceNausea = code === '00794' && field === 'nausea_grade';
+      const expectedGrades = sourceNausea ? [0,1,2,3] : ['00322','00588'].includes(code) && field === 'febrile_neutropenia_grade' ? [0,3,4] : sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
+      if (everolimusSource) {
+        assert.equal(def.grading_source_label, 'NCCP 00322 / NCI CTCAE v3.0');
+        assert.match(def.grading_source_url, /cancer.gov.*ctcae-v3/);
+        assert.deepEqual((def.options || []).map(x => Number(x.value)), expectedGrades);
+        assert((def.options || []).every(x => x.description), 'Everolimus source descriptions must override shared defaults');
+      }
       expectedGrades.forEach(grade => assert(grades.has(grade), `${code}/${field} lacks Grade ${grade}`));
+      if(sourceNausea) {assert(!grades.has(4), 'CTCAE v5 nausea has no grade 4');assert.match(def.grading_source_label,/v5.0.*nausea/);assert.match(def.grading_source_url,/cancer.gov.*ctcae-v5/);assert(def.options.every(x=>x.description));}
       if(sourceHfs) assert(!grades.has(4), 'HFS has no grade 4 in the source table');
       const guide = ctcae.guide({ ...def, id: field });
       assert(guide && guide.grades.length >= expectedGrades.length, `${code}/${field} has no rendered CTCAE grade guide`);
