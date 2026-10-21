@@ -1,0 +1,1436 @@
+{
+  "audit_date": "2026-10-21",
+  "baseline_commit": "b96d39271fa8d179554f69fa29b85092849d7762",
+  "scope": [
+    "00200",
+    "00201",
+    "00726"
+  ],
+  "clinical_use_authorised": false,
+  "source_method": "Official NCCP web PDF text extraction; no original binary checksum or visual table inspection. Supplemental Roche SmPC from manufacturer publication on emc; EMA direct PDF fetch returned HTTP 429.",
+  "sources": {
+    "00200": {
+      "url": "https://healthservice.hse.ie/documents/6330/200_Trastuzumab_21days_Ubeecpc.pdf",
+      "version": "8",
+      "pages": 6
+    },
+    "00201": {
+      "url": "https://healthservice.hse.ie/documents/6540/201_v6_Trastuzumab_IV_7_days.pdf",
+      "version": "6",
+      "pages": 5
+    },
+    "00726": {
+      "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+      "version": "3a",
+      "pages": 7
+    }
+  },
+  "supplemental_sources": [
+    {
+      "id": "roche-herceptin",
+      "url": "https://www.medicines.org.uk/emc/product/3856/smpc",
+      "section": "4.4",
+      "checked": "2026-10-21",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "esc2022",
+      "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995",
+      "section": "Figure 11",
+      "verified_by": "Indexed primary full-text excerpt; full publisher page failed to open.",
+      "summary": "Six-monthly TTE after the first year only for asymptomatic low/moderate-risk metastatic HER2 disease with normal TTE; do not silently override the NCCP 12-week default."
+    }
+  ],
+  "proposed_changes": {
+    "00200": {
+      "new_rules": [
+        {
+          "rule_id": "INFUSION_REACTION_G1_G2",
+          "when": {
+            "all": [
+              {
+                "field": "hypersensitivity_grade",
+                "operator": ">=",
+                "value": 1
+              },
+              {
+                "field": "hypersensitivity_grade",
+                "operator": "<=",
+                "value": 2
+              }
+            ]
+          },
+          "action": {
+            "type": "withhold",
+            "components": [
+              "trastuzumab"
+            ],
+            "recommendation": "Pause or slow the infusion and assess the reaction. Provide appropriate treatment and observe until symptoms resolve; restart requires the treating team’s decision."
+          },
+          "explanation": "Pause or slow the infusion and assess the reaction. Provide appropriate treatment and observe until symptoms resolve; restart requires the treating team’s decision.",
+          "source": {
+            "document": "NCCP 00200 v8",
+            "url": "https://healthservice.hse.ie/documents/6330/200_Trastuzumab_21days_Ubeecpc.pdf",
+            "page": 5
+          }
+        },
+        {
+          "rule_id": "SEVERE_REACTION_G3",
+          "when": {
+            "field": "hypersensitivity_grade",
+            "operator": "==",
+            "value": 3
+          },
+          "action": {
+            "type": "withhold",
+            "components": [
+              "trastuzumab"
+            ],
+            "recommendation": "Stop the infusion and urgently treat the serious reaction. Re-exposure requires specialist review; grade 3 alone is not a rule for permanent cessation."
+          },
+          "explanation": "Stop the infusion and urgently treat the serious reaction. Re-exposure requires specialist review; grade 3 alone is not a rule for permanent cessation.",
+          "source": {
+            "document": "NCCP 00200 v8",
+            "url": "https://healthservice.hse.ie/documents/6330/200_Trastuzumab_21days_Ubeecpc.pdf",
+            "page": 5
+          }
+        }
+      ],
+      "metadata_patch": {},
+      "indications": [
+        {
+          "code": "00200a",
+          "description": "HER2-positive metastatic breast cancer; intravenous trastuzumab every 21 days."
+        },
+        {
+          "code": "00200b",
+          "description": "HER2-positive early breast cancer; intravenous trastuzumab every 21 days."
+        }
+      ],
+      "existing_rule_condition_wrappers": {
+        "EBC_BASELINE_LOW": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            },
+            "EXISTING_WHEN"
+          ]
+        },
+        "EBC_BASELINE_BORDERLINE": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            },
+            "EXISTING_WHEN"
+          ]
+        },
+        "BASELINE_SETTING_MISSING": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            },
+            "EXISTING_WHEN"
+          ]
+        },
+        "MBC_BASELINE_CARDIAC_REVIEW": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            },
+            "EXISTING_WHEN"
+          ]
+        }
+      },
+      "stage_note": "Literal EXISTING_WHEN marks where the current condition object is retained. This proposal preserves stand-alone baseline inputs when the stage is omitted, while suppressing initiation-only rules for explicitly ongoing treatment."
+    },
+    "00201": {
+      "new_rules": [
+        {
+          "rule_id": "INFUSION_REACTION_G1_G2",
+          "when": {
+            "all": [
+              {
+                "field": "hypersensitivity_grade",
+                "operator": ">=",
+                "value": 1
+              },
+              {
+                "field": "hypersensitivity_grade",
+                "operator": "<=",
+                "value": 2
+              }
+            ]
+          },
+          "action": {
+            "type": "withhold",
+            "components": [
+              "trastuzumab"
+            ],
+            "recommendation": "Pause or slow the infusion and assess the reaction. Provide appropriate treatment and observe until symptoms resolve; restart requires the treating team’s decision."
+          },
+          "explanation": "Pause or slow the infusion and assess the reaction. Provide appropriate treatment and observe until symptoms resolve; restart requires the treating team’s decision.",
+          "source": {
+            "document": "Roche Herceptin IV SmPC",
+            "url": "https://www.medicines.org.uk/emc/product/3856/smpc",
+            "section": "4.4",
+            "note": "HTML SmPC section 4.4; no physical page reference. NCCP 00201 v6 page 4 directs the reader to the relevant SmPC."
+          }
+        },
+        {
+          "rule_id": "SEVERE_REACTION_G3",
+          "when": {
+            "field": "hypersensitivity_grade",
+            "operator": "==",
+            "value": 3
+          },
+          "action": {
+            "type": "withhold",
+            "components": [
+              "trastuzumab"
+            ],
+            "recommendation": "Stop the infusion and urgently treat the serious reaction. Re-exposure requires specialist review; grade 3 alone is not a rule for permanent cessation."
+          },
+          "explanation": "Stop the infusion and urgently treat the serious reaction. Re-exposure requires specialist review; grade 3 alone is not a rule for permanent cessation.",
+          "source": {
+            "document": "Roche Herceptin IV SmPC",
+            "url": "https://www.medicines.org.uk/emc/product/3856/smpc",
+            "section": "4.4",
+            "note": "HTML SmPC section 4.4; no physical page reference. NCCP 00201 v6 page 4 directs the reader to the relevant SmPC."
+          }
+        }
+      ],
+      "metadata_patch": {
+        "regimen_reimbursement_code": "00201a",
+        "published_date": "2014-02-10",
+        "review_date": "2030-04-10",
+        "last_reviewed_date": "2025-04-10",
+        "review_date_basis": "next_scheduled_review",
+        "nccp_version": "6"
+      },
+      "indications": [
+        {
+          "code": "00201a",
+          "description": "HER2-positive metastatic breast cancer; intravenous trastuzumab every 7 days."
+        }
+      ]
+    },
+    "00726": {
+      "new_input_definitions": {
+        "treatment_setting": {
+          "label": "Treatment setting",
+          "type": "select",
+          "required": false,
+          "input_role": "context",
+          "options": [
+            {
+              "value": "metastatic",
+              "label": "Metastatic / locally recurrent unresectable"
+            },
+            {
+              "value": "early",
+              "label": "Early breast cancer"
+            }
+          ],
+          "demo_value": "metastatic"
+        },
+        "indication_eligible": {
+          "label": "Full NCCP maintenance indication confirmed",
+          "type": "boolean",
+          "required": false,
+          "input_role": "decision",
+          "demo_value": false
+        },
+        "chemotherapy_component_completed": {
+          "label": "Preceding chemotherapy with pertuzumab/trastuzumab completed",
+          "type": "boolean",
+          "required": false,
+          "input_role": "decision",
+          "demo_value": false
+        },
+        "disease_progression": {
+          "label": "Disease progression on current treatment",
+          "type": "boolean",
+          "required": false,
+          "input_role": "decision",
+          "demo_value": false
+        },
+        "cardiac_monitoring_overdue": {
+          "label": "Required echo / MUGA result overdue or unavailable",
+          "type": "boolean",
+          "required": false,
+          "input_role": "decision",
+          "demo_value": false
+        },
+        "prolonged_diarrhoea": {
+          "label": "Prolonged diarrhoea despite supportive treatment",
+          "type": "boolean",
+          "required": false,
+          "input_role": "decision",
+          "demo_value": false
+        },
+        "concurrent_anthracycline": {
+          "label": "Concurrent anthracycline planned",
+          "type": "boolean",
+          "required": false,
+          "input_role": "decision",
+          "demo_value": false
+        }
+      },
+      "new_rules": [
+        {
+          "rule_id": "MAINTENANCE_SETTING_REVIEW",
+          "when": {
+            "field": "treatment_setting",
+            "operator": "==",
+            "value": "early"
+          },
+          "action": {
+            "type": "consultant_review",
+            "components": [
+              "pertuzumab",
+              "trastuzumab"
+            ],
+            "recommendation": "This NCCP maintenance card is for metastatic or locally recurrent unresectable disease; use the relevant early-breast pathway."
+          },
+          "explanation": "This NCCP maintenance card is for metastatic or locally recurrent unresectable disease; use the relevant early-breast pathway.",
+          "source": {
+            "document": "NCCP 00726 v3a",
+            "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+            "page": 1
+          }
+        },
+        {
+          "rule_id": "MAINTENANCE_INDICATION_REVIEW",
+          "when": {
+            "field": "indication_eligible",
+            "operator": "==",
+            "value": false
+          },
+          "action": {
+            "type": "consultant_review",
+            "components": [
+              "pertuzumab",
+              "trastuzumab"
+            ],
+            "recommendation": "Confirm the complete maintenance indication and preceding pertuzumab/trastuzumab chemotherapy strategy before selecting this card."
+          },
+          "explanation": "Confirm the complete maintenance indication and preceding pertuzumab/trastuzumab chemotherapy strategy before selecting this card.",
+          "source": {
+            "document": "NCCP 00726 v3a",
+            "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+            "page": 1
+          }
+        },
+        {
+          "rule_id": "CHEMOTHERAPY_COMPLETION_REVIEW",
+          "when": {
+            "field": "chemotherapy_component_completed",
+            "operator": "==",
+            "value": false
+          },
+          "action": {
+            "type": "consultant_review",
+            "components": [
+              "pertuzumab",
+              "trastuzumab"
+            ],
+            "recommendation": "The chemotherapy component has not been completed. Review the active combination protocol; this card describes antibody-only continuation."
+          },
+          "explanation": "The chemotherapy component has not been completed. Review the active combination protocol; this card describes antibody-only continuation.",
+          "source": {
+            "document": "NCCP 00726 v3a",
+            "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+            "page": 1
+          }
+        },
+        {
+          "rule_id": "PROGRESSION_REVIEW",
+          "when": {
+            "field": "disease_progression",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "consultant_review",
+            "components": [
+              "pertuzumab",
+              "trastuzumab"
+            ],
+            "recommendation": "Progression requires reassessment of the treatment strategy; do not automatically continue this maintenance plan."
+          },
+          "explanation": "Progression requires reassessment of the treatment strategy; do not automatically continue this maintenance plan.",
+          "source": {
+            "document": "NCCP 00726 v3a",
+            "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+            "page": 1
+          }
+        },
+        {
+          "rule_id": "ECHO_UNAVAILABLE",
+          "when": {
+            "field": "cardiac_monitoring_overdue",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "consultant_review",
+            "components": [
+              "pertuzumab",
+              "trastuzumab"
+            ],
+            "recommendation": "Obtain the required cardiac result and a documented specialist decision before the next administration; do not assume normal function."
+          },
+          "explanation": "Obtain the required cardiac result and a documented specialist decision before the next administration; do not assume normal function.",
+          "source": {
+            "document": "NCCP 00726 v3a",
+            "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+            "page": 2
+          }
+        },
+        {
+          "rule_id": "UNCONTROLLED_HYPERTENSION_REVIEW",
+          "when": {
+            "field": "uncontrolled_hypertension",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "consultant_review",
+            "components": [
+              "pertuzumab",
+              "trastuzumab"
+            ],
+            "recommendation": "Uncontrolled hypertension is a cardiac-risk context not studied in the pertuzumab population described by NCCP. Assess and optimise cardiovascular status before deciding to continue."
+          },
+          "explanation": "Uncontrolled hypertension is a cardiac-risk context not studied in the pertuzumab population described by NCCP. Assess and optimise cardiovascular status before deciding to continue.",
+          "source": {
+            "document": "NCCP 00726 v3a",
+            "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+            "page": 5
+          }
+        },
+        {
+          "rule_id": "PROLONGED_DIARRHOEA_NOT_IMPROVING",
+          "when": {
+            "all": [
+              {
+                "field": "prolonged_diarrhoea",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "field": "diarrhoea_not_improving",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          "action": {
+            "type": "withhold",
+            "components": [
+              "pertuzumab"
+            ],
+            "recommendation": "Consider interrupting pertuzumab for prolonged diarrhoea that has not improved with supportive treatment. Review hydration and electrolytes; resume only after symptoms are controlled."
+          },
+          "explanation": "Consider interrupting pertuzumab for prolonged diarrhoea that has not improved with supportive treatment. Review hydration and electrolytes; resume only after symptoms are controlled.",
+          "source": {
+            "document": "NCCP 00726 v3a",
+            "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+            "page": 5
+          }
+        },
+        {
+          "rule_id": "ANTHRACYCLINE_OVERLAP",
+          "when": {
+            "field": "concurrent_anthracycline",
+            "operator": "==",
+            "value": true
+          },
+          "action": {
+            "type": "withhold",
+            "components": [
+              "pertuzumab",
+              "trastuzumab"
+            ],
+            "recommendation": "Do not administer concurrent anthracycline with this HER2-antibody maintenance card; review the complete regimen and cardiac risk."
+          },
+          "explanation": "Do not administer concurrent anthracycline with this HER2-antibody maintenance card; review the complete regimen and cardiac risk.",
+          "source": {
+            "document": "NCCP 00726 v3a",
+            "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+            "page": 5
+          }
+        }
+      ],
+      "do_not_make_required": [
+        "treatment_setting",
+        "indication_eligible",
+        "chemotherapy_component_completed",
+        "disease_progression",
+        "cardiac_monitoring_overdue",
+        "prolonged_diarrhoea",
+        "concurrent_anthracycline"
+      ],
+      "preserve_existing_cardiac_and_reload_rules": true
+    }
+  },
+  "acceptance_cases": [
+    {
+      "id": "00200-empty",
+      "code": "00200",
+      "inputs": {},
+      "expect": {
+        "actions": [
+          "incomplete"
+        ]
+      }
+    },
+    {
+      "id": "00200-lvef49drop10",
+      "code": "00200",
+      "inputs": {
+        "lvef_percent": 49,
+        "lvef_drop_points": 10
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00200-lvef50drop10",
+      "code": "00200",
+      "inputs": {
+        "lvef_percent": 50,
+        "lvef_drop_points": 10
+      },
+      "expect": {
+        "forbid_rules": [
+          "LVEF_HOLD"
+        ]
+      }
+    },
+    {
+      "id": "00200-lvef49drop9_99",
+      "code": "00200",
+      "inputs": {
+        "lvef_percent": 49,
+        "lvef_drop_points": 9.99
+      },
+      "expect": {
+        "forbid_rules": [
+          "LVEF_HOLD"
+        ]
+      }
+    },
+    {
+      "id": "00200-lvef49unknownchange",
+      "code": "00200",
+      "inputs": {
+        "lvef_percent": 49
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00200-hf",
+      "code": "00200",
+      "inputs": {
+        "symptomatic_heart_failure": true
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00200-reaction1",
+      "code": "00200",
+      "inputs": {
+        "hypersensitivity_grade": 1
+      },
+      "expect": {
+        "actions": [
+          "withhold",
+          "proceed_with_caution",
+          "consultant_review"
+        ],
+        "text": "infusion",
+        "text2": "interrupt|slow|pause"
+      }
+    },
+    {
+      "id": "00200-reaction2",
+      "code": "00200",
+      "inputs": {
+        "hypersensitivity_grade": 2
+      },
+      "expect": {
+        "actions": [
+          "withhold",
+          "proceed_with_caution",
+          "consultant_review"
+        ],
+        "text": "infusion",
+        "text2": "interrupt|slow|pause"
+      }
+    },
+    {
+      "id": "00200-reaction3",
+      "code": "00200",
+      "inputs": {
+        "hypersensitivity_grade": 3
+      },
+      "expect": {
+        "actions": [
+          "withhold",
+          "consultant_review"
+        ],
+        "text": "reaction|infusion"
+      }
+    },
+    {
+      "id": "00200-reaction4",
+      "code": "00200",
+      "inputs": {
+        "hypersensitivity_grade": 4
+      },
+      "expect": {
+        "actions": [
+          "discontinue",
+          "permanently_discontinue"
+        ]
+      }
+    },
+    {
+      "id": "00200-late1",
+      "code": "00200",
+      "inputs": {
+        "days_overdue": 1
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "6 mg/kg"
+      }
+    },
+    {
+      "id": "00200-late7",
+      "code": "00200",
+      "inputs": {
+        "days_overdue": 7
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "6 mg/kg"
+      }
+    },
+    {
+      "id": "00200-late7.01",
+      "code": "00200",
+      "inputs": {
+        "days_overdue": 7.01
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "8 mg/kg"
+      }
+    },
+    {
+      "id": "00200-late8",
+      "code": "00200",
+      "inputs": {
+        "days_overdue": 8
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "8 mg/kg"
+      }
+    },
+    {
+      "id": "00200-echooverdue",
+      "code": "00200",
+      "inputs": {
+        "cardiac_monitoring_overdue": true
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00200-fbcabnormal",
+      "code": "00200",
+      "inputs": {
+        "fbc_clinical_concern": true
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00200-anthracycline",
+      "code": "00200",
+      "inputs": {
+        "concurrent_anthracycline": true
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00200-ecog3",
+      "code": "00200",
+      "inputs": {
+        "ecog": 3
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00201-empty",
+      "code": "00201",
+      "inputs": {},
+      "expect": {
+        "actions": [
+          "incomplete"
+        ]
+      }
+    },
+    {
+      "id": "00201-lvef49drop10",
+      "code": "00201",
+      "inputs": {
+        "lvef_percent": 49,
+        "lvef_drop_points": 10
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00201-lvef50drop10",
+      "code": "00201",
+      "inputs": {
+        "lvef_percent": 50,
+        "lvef_drop_points": 10
+      },
+      "expect": {
+        "forbid_rules": [
+          "LVEF_HOLD"
+        ]
+      }
+    },
+    {
+      "id": "00201-lvef49drop9_99",
+      "code": "00201",
+      "inputs": {
+        "lvef_percent": 49,
+        "lvef_drop_points": 9.99
+      },
+      "expect": {
+        "forbid_rules": [
+          "LVEF_HOLD"
+        ]
+      }
+    },
+    {
+      "id": "00201-lvef49unknownchange",
+      "code": "00201",
+      "inputs": {
+        "lvef_percent": 49
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00201-hf",
+      "code": "00201",
+      "inputs": {
+        "symptomatic_heart_failure": true
+      },
+      "expect": {
+        "actions": [
+          "discontinue"
+        ]
+      }
+    },
+    {
+      "id": "00201-reaction1",
+      "code": "00201",
+      "inputs": {
+        "hypersensitivity_grade": 1
+      },
+      "expect": {
+        "actions": [
+          "withhold",
+          "proceed_with_caution",
+          "consultant_review"
+        ],
+        "text": "infusion",
+        "text2": "interrupt|slow|pause"
+      }
+    },
+    {
+      "id": "00201-reaction2",
+      "code": "00201",
+      "inputs": {
+        "hypersensitivity_grade": 2
+      },
+      "expect": {
+        "actions": [
+          "withhold",
+          "proceed_with_caution",
+          "consultant_review"
+        ],
+        "text": "infusion",
+        "text2": "interrupt|slow|pause"
+      }
+    },
+    {
+      "id": "00201-reaction3",
+      "code": "00201",
+      "inputs": {
+        "hypersensitivity_grade": 3
+      },
+      "expect": {
+        "actions": [
+          "withhold",
+          "consultant_review"
+        ],
+        "text": "reaction|infusion"
+      }
+    },
+    {
+      "id": "00201-reaction4",
+      "code": "00201",
+      "inputs": {
+        "hypersensitivity_grade": 4
+      },
+      "expect": {
+        "actions": [
+          "discontinue",
+          "permanently_discontinue"
+        ]
+      }
+    },
+    {
+      "id": "00201-late1",
+      "code": "00201",
+      "inputs": {
+        "days_overdue": 1
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "2 mg/kg"
+      }
+    },
+    {
+      "id": "00201-late7",
+      "code": "00201",
+      "inputs": {
+        "days_overdue": 7
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "2 mg/kg"
+      }
+    },
+    {
+      "id": "00201-late7.01",
+      "code": "00201",
+      "inputs": {
+        "days_overdue": 7.01
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "4 mg/kg"
+      }
+    },
+    {
+      "id": "00201-late8",
+      "code": "00201",
+      "inputs": {
+        "days_overdue": 8
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "4 mg/kg"
+      }
+    },
+    {
+      "id": "00201-echooverdue",
+      "code": "00201",
+      "inputs": {
+        "cardiac_monitoring_overdue": true
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00201-fbcabnormal",
+      "code": "00201",
+      "inputs": {
+        "fbc_clinical_concern": true
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00201-anthracycline",
+      "code": "00201",
+      "inputs": {
+        "concurrent_anthracycline": true
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00201-ecog3",
+      "code": "00201",
+      "inputs": {
+        "ecog": 3
+      },
+      "expect": {
+        "actions": [
+          "proceed_with_caution",
+          "incomplete"
+        ]
+      }
+    },
+    {
+      "id": "00200-earlybaseline49",
+      "code": "00200",
+      "inputs": {
+        "treatment_setting": "early",
+        "assessment_stage": "baseline",
+        "baseline_lvef_percent": 49
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00200-earlybaseline50",
+      "code": "00200",
+      "inputs": {
+        "treatment_setting": "early",
+        "baseline_lvef_percent": 50
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00200-earlybaseline55",
+      "code": "00200",
+      "inputs": {
+        "treatment_setting": "early",
+        "baseline_lvef_percent": 55
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00200-historicalbaseline49ongoingrecovered",
+      "code": "00200",
+      "inputs": {
+        "treatment_setting": "early",
+        "assessment_stage": "ongoing",
+        "baseline_lvef_percent": 49,
+        "lvef_percent": 60,
+        "lvef_drop_points": 0
+      },
+      "expect": {
+        "forbid_rules": [
+          "EBC_BASELINE_LOW",
+          "EBC_BASELINE_BORDERLINE"
+        ],
+        "forbid_actions": [
+          "withhold",
+          "contraindicated",
+          "discontinue"
+        ]
+      }
+    },
+    {
+      "id": "00201-wrongsetting",
+      "code": "00201",
+      "inputs": {
+        "treatment_setting": "early"
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00726-lvef39.99drop0",
+      "code": "00726",
+      "inputs": {
+        "lvef_percent": 39.99,
+        "lvef_drop_points": 0
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-lvef40drop10",
+      "code": "00726",
+      "inputs": {
+        "lvef_percent": 40,
+        "lvef_drop_points": 10
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-lvef45drop10",
+      "code": "00726",
+      "inputs": {
+        "lvef_percent": 45,
+        "lvef_drop_points": 10
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-lvef40drop9.99",
+      "code": "00726",
+      "inputs": {
+        "lvef_percent": 40,
+        "lvef_drop_points": 9.99
+      },
+      "expect": {
+        "forbid_rules": [
+          "LVEF_WITHHOLD_LOW",
+          "LVEF_WITHHOLD_40_45"
+        ]
+      }
+    },
+    {
+      "id": "00726-lvef45drop9.99",
+      "code": "00726",
+      "inputs": {
+        "lvef_percent": 45,
+        "lvef_drop_points": 9.99
+      },
+      "expect": {
+        "forbid_rules": [
+          "LVEF_WITHHOLD_LOW",
+          "LVEF_WITHHOLD_40_45"
+        ]
+      }
+    },
+    {
+      "id": "00726-lvef45.01drop10",
+      "code": "00726",
+      "inputs": {
+        "lvef_percent": 45.01,
+        "lvef_drop_points": 10
+      },
+      "expect": {
+        "forbid_rules": [
+          "LVEF_WITHHOLD_LOW",
+          "LVEF_WITHHOLD_40_45"
+        ]
+      }
+    },
+    {
+      "id": "00726-lvef45unknownchange",
+      "code": "00726",
+      "inputs": {
+        "lvef_percent": 45
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00726-start49",
+      "code": "00726",
+      "inputs": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 49
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00726-ongoing49",
+      "code": "00726",
+      "inputs": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49
+      },
+      "expect": {
+        "forbid_rules": [
+          "BASELINE_LVEF"
+        ]
+      }
+    },
+    {
+      "id": "00726-gap5.99",
+      "code": "00726",
+      "inputs": {
+        "weeks_since_last_dose": 5.99
+      },
+      "expect": {
+        "forbid_rules": [
+          "MISSED_DOSE_RELOAD"
+        ]
+      }
+    },
+    {
+      "id": "00726-gap6",
+      "code": "00726",
+      "inputs": {
+        "weeks_since_last_dose": 6
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "840",
+        "text2": "8 mg/kg"
+      }
+    },
+    {
+      "id": "00726-gap6.01",
+      "code": "00726",
+      "inputs": {
+        "weeks_since_last_dose": 6.01
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ],
+        "text": "840",
+        "text2": "8 mg/kg"
+      }
+    },
+    {
+      "id": "00726-setting",
+      "code": "00726",
+      "inputs": {
+        "treatment_setting": "early"
+      },
+      "expect": {
+        "actions": [
+          "consultant_review",
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-indication",
+      "code": "00726",
+      "inputs": {
+        "indication_eligible": false
+      },
+      "expect": {
+        "actions": [
+          "consultant_review",
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-notcompleted",
+      "code": "00726",
+      "inputs": {
+        "chemotherapy_component_completed": false
+      },
+      "expect": {
+        "actions": [
+          "consultant_review",
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-progression",
+      "code": "00726",
+      "inputs": {
+        "disease_progression": true
+      },
+      "expect": {
+        "actions": [
+          "consultant_review",
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-echooverdue",
+      "code": "00726",
+      "inputs": {
+        "cardiac_monitoring_overdue": true
+      },
+      "expect": {
+        "actions": [
+          "consultant_review",
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-hypertension",
+      "code": "00726",
+      "inputs": {
+        "uncontrolled_hypertension": true
+      },
+      "expect": {
+        "actions": [
+          "consultant_review",
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-prolongedG2",
+      "code": "00726",
+      "inputs": {
+        "diarrhoea_grade": 2,
+        "prolonged_diarrhoea": true,
+        "diarrhoea_not_improving": true
+      },
+      "expect": {
+        "actions": [
+          "withhold",
+          "consultant_review"
+        ],
+        "text": "diarrhoea"
+      }
+    },
+    {
+      "id": "00726-notprolongedG2",
+      "code": "00726",
+      "inputs": {
+        "diarrhoea_grade": 2,
+        "prolonged_diarrhoea": false,
+        "diarrhoea_not_improving": false
+      },
+      "expect": {
+        "forbid_rules": [
+          "PROLONGED_DIARRHOEA_NOT_IMPROVING"
+        ]
+      }
+    },
+    {
+      "id": "00726-diarrhoea3resistant",
+      "code": "00726",
+      "inputs": {
+        "diarrhoea_grade": 3,
+        "diarrhoea_not_improving": true
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-diarrhoea3",
+      "code": "00726",
+      "inputs": {
+        "diarrhoea_grade": 3
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00726-stoptrastuzumab",
+      "code": "00726",
+      "inputs": {
+        "trastuzumab_discontinued": true
+      },
+      "expect": {
+        "actions": [
+          "discontinue"
+        ],
+        "text": "pertuzumab"
+      }
+    },
+    {
+      "id": "00726-bronchospasm",
+      "code": "00726",
+      "inputs": {
+        "bronchospasm_or_ards": true
+      },
+      "expect": {
+        "actions": [
+          "permanently_discontinue"
+        ],
+        "text": "pertuzumab"
+      }
+    },
+    {
+      "id": "00726-anthracycline",
+      "code": "00726",
+      "inputs": {
+        "concurrent_anthracycline": true
+      },
+      "expect": {
+        "actions": [
+          "withhold"
+        ]
+      }
+    },
+    {
+      "id": "00726-hf",
+      "code": "00726",
+      "inputs": {
+        "symptomatic_heart_failure": true
+      },
+      "expect": {
+        "actions": [
+          "discontinue"
+        ]
+      }
+    },
+    {
+      "id": "00726-grade4",
+      "code": "00726",
+      "inputs": {
+        "hypersensitivity_grade": 4
+      },
+      "expect": {
+        "actions": [
+          "discontinue",
+          "permanently_discontinue"
+        ]
+      }
+    },
+    {
+      "id": "00726-fbc",
+      "code": "00726",
+      "inputs": {
+        "fbc_clinical_concern": true
+      },
+      "expect": {
+        "actions": [
+          "consultant_review"
+        ]
+      }
+    },
+    {
+      "id": "00726-empty",
+      "code": "00726",
+      "inputs": {},
+      "expect": {
+        "actions": [
+          "incomplete"
+        ]
+      }
+    }
+  ],
+  "coverage_note": "Bounded core source/metadata/reaction/maintenance audit. Not exhaustive independent clinical validation or a complete interaction screen."
+}

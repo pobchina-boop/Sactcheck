@@ -1,0 +1,822 @@
+{
+  "00206": {
+    "input_definitions": {
+      "severe_infusion_reaction": {
+        "label": "Current severe infusion reaction, not yet resolved",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "life_threatening_infusion_reaction": {
+        "label": "Life-threatening infusion reaction",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "confirmed_true_hypersensitivity": {
+        "label": "Confirmed true hypersensitivity reaction during treatment",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "prior_permanent_trastuzumab_discontinuation_for_reaction": {
+        "label": "Prior permanent trastuzumab discontinuation for an infusion or hypersensitivity reaction",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      }
+    },
+    "replace_rules": [
+      {
+        "rule_id": "BASELINE_LVEF",
+        "when": {
+          "all": [
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Baseline LVEF must be \u226550% in the NCCP inclusion criteria. Obtain specialist review before initiation."
+        },
+        "explanation": "Baseline LVEF must be \u226550% in the NCCP inclusion criteria. Obtain specialist review before initiation.",
+        "source": {
+          "document": "NCCP 00206 v5",
+          "url": "https://healthservice.hse.ie/documents/6547/206_Trastuzumab_Emtansine_21days.pdf",
+          "page": 2
+        }
+      }
+    ],
+    "add_rules": [
+      {
+        "rule_id": "IRR_SEVERE",
+        "when": {
+          "field": "severe_infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Interrupt treatment for an unresolved severe infusion reaction and manage urgently. Retreatment needs consultant assessment after symptoms resolve."
+        },
+        "explanation": "Interrupt treatment for an unresolved severe infusion reaction and manage urgently. Retreatment needs consultant assessment after symptoms resolve.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "IRR_LIFE_THREATENING",
+        "when": {
+          "field": "life_threatening_infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Life-threatening infusion reaction: permanently discontinue T-DM1 and manage as an emergency."
+        },
+        "explanation": "Life-threatening infusion reaction: permanently discontinue T-DM1 and manage as an emergency.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "TRUE_HYPERSENSITIVITY",
+        "when": {
+          "field": "confirmed_true_hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Confirmed true hypersensitivity during treatment: permanently discontinue T-DM1."
+        },
+        "explanation": "Confirmed true hypersensitivity during treatment: permanently discontinue T-DM1.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 10
+        }
+      },
+      {
+        "rule_id": "PRIOR_REACTION_STOP",
+        "when": {
+          "field": "prior_permanent_trastuzumab_discontinuation_for_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "T-DM1 is not recommended after trastuzumab was permanently stopped for an infusion or hypersensitivity reaction. Reconcile the prior reaction and treatment plan with oncology/pharmacy."
+        },
+        "explanation": "T-DM1 is not recommended after trastuzumab was permanently stopped for an infusion or hypersensitivity reaction. Reconcile the prior reaction and treatment plan with oncology/pharmacy.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "STAGE_CONTEXT_LVEF",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Confirm whether this is a starting or ongoing-treatment result. The starting LVEF requirement and on-treatment cardiac bands differ; missing stage cannot establish eligibility."
+        },
+        "explanation": "Confirm whether this is a starting or ongoing-treatment result. The starting LVEF requirement and on-treatment cardiac bands differ; missing stage cannot establish eligibility.",
+        "source": {
+          "document": "NCCP 00206 v5",
+          "url": "https://healthservice.hse.ie/documents/6547/206_Trastuzumab_Emtansine_21days.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "BASELINE_ORGAN_EVIDENCE",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "platelets",
+                  "operator": "<=",
+                  "value": 100
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">",
+                  "value": 2.5
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 2.5
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "These starting laboratory values lie outside populations studied in the product information. Review suitability and monitoring before initiation; this is an evidence limitation, not an invented absolute NCCP cutoff."
+        },
+        "explanation": "These starting laboratory values lie outside populations studied in the product information. Review suitability and monitoring before initiation; this is an evidence limitation, not an invented absolute NCCP cutoff.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CURRENT_BASELINE_LVEF",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Starting LVEF is below the NCCP minimum of 50%. Hold initiation for specialist review; the metastatic on-treatment bands do not establish baseline eligibility."
+        },
+        "explanation": "Starting LVEF is below the NCCP minimum of 50%. Hold initiation for specialist review; the metastatic on-treatment bands do not establish baseline eligibility.",
+        "source": {
+          "document": "NCCP 00206 v5",
+          "url": "https://healthservice.hse.ie/documents/6547/206_Trastuzumab_Emtansine_21days.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "REACTION_G1_3_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "hypersensitivity_grade",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "hypersensitivity_grade",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Review the reaction mechanism and severity before further treatment. Severe infusion reactions require interruption; true hypersensitivity requires permanent cessation."
+        },
+        "explanation": "Review the reaction mechanism and severity before further treatment. Severe infusion reactions require interruption; true hypersensitivity requires permanent cessation.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "PLT_PRIOR_HOLD_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "platelets",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 75
+            },
+            {
+              "field": "prior_platelet_hold",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "A platelet count of 50\u201374 requires the prior-hold history. A previous count-related hold must recover to at least 75; do not assume there was no prior hold."
+        },
+        "explanation": "A platelet count of 50\u201374 requires the prior-hold history. A previous count-related hold must recover to at least 75; do not assume there was no prior hold.",
+        "source": {
+          "document": "NCCP 00206 v5",
+          "url": "https://healthservice.hse.ie/documents/6547/206_Trastuzumab_Emtansine_21days.pdf",
+          "page": 3
+        }
+      }
+    ],
+    "text_replacements": [
+      {
+        "from": "Relevant drug / excipient allergy: do not administer. SC trastuzumab also contains hyaluronidase.",
+        "to": "Relevant T-DM1 or excipient allergy: do not administer."
+      }
+    ]
+  },
+  "00659": {
+    "input_definitions": {
+      "severe_infusion_reaction": {
+        "label": "Current severe infusion reaction, not yet resolved",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "life_threatening_infusion_reaction": {
+        "label": "Life-threatening infusion reaction",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "confirmed_true_hypersensitivity": {
+        "label": "Confirmed true hypersensitivity reaction during treatment",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "prior_permanent_trastuzumab_discontinuation_for_reaction": {
+        "label": "Prior permanent trastuzumab discontinuation for an infusion or hypersensitivity reaction",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "significant_cardiac_disease": {
+        "label": "Clinically significant cardiac disease",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "gross_residual_or_recurrent_disease": {
+        "label": "Clinically evident gross residual or recurrent disease after surgery",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "indication_eligible": {
+        "label": "Full NCCP postoperative indication and prior-treatment eligibility confirmed",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false,
+        "assessment_guidance": "Confirm T1\u20134/N0\u20133/M0 disease, residual invasive HER2-positive disease, surgery/start interval, completion and duration of neoadjuvant chemotherapy and HER2-directed treatment. NCCP specifies initiation within 12 weeks of surgery; review its full eligibility section."
+      },
+      "cardiac_monitoring_overdue": {
+        "label": "Required echo / MUGA result overdue or unavailable",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      },
+      "dili_no_alternative_cause": {
+        "label": "No other likely cause for combined transaminase / bilirubin elevation",
+        "type": "boolean",
+        "required": false,
+        "always_show": true,
+        "input_role": "decision",
+        "demo_value": false
+      }
+    },
+    "replace_rules": [],
+    "add_rules": [
+      {
+        "rule_id": "IRR_SEVERE",
+        "when": {
+          "field": "severe_infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Interrupt treatment for an unresolved severe infusion reaction and manage urgently. Retreatment needs consultant assessment after symptoms resolve."
+        },
+        "explanation": "Interrupt treatment for an unresolved severe infusion reaction and manage urgently. Retreatment needs consultant assessment after symptoms resolve.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "IRR_LIFE_THREATENING",
+        "when": {
+          "field": "life_threatening_infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Life-threatening infusion reaction: permanently discontinue T-DM1 and manage as an emergency."
+        },
+        "explanation": "Life-threatening infusion reaction: permanently discontinue T-DM1 and manage as an emergency.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "TRUE_HYPERSENSITIVITY",
+        "when": {
+          "field": "confirmed_true_hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Confirmed true hypersensitivity during treatment: permanently discontinue T-DM1."
+        },
+        "explanation": "Confirmed true hypersensitivity during treatment: permanently discontinue T-DM1.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 10
+        }
+      },
+      {
+        "rule_id": "PRIOR_REACTION_STOP",
+        "when": {
+          "field": "prior_permanent_trastuzumab_discontinuation_for_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "T-DM1 is not recommended after trastuzumab was permanently stopped for an infusion or hypersensitivity reaction. Reconcile the prior reaction and treatment plan with oncology/pharmacy."
+        },
+        "explanation": "T-DM1 is not recommended after trastuzumab was permanently stopped for an infusion or hypersensitivity reaction. Reconcile the prior reaction and treatment plan with oncology/pharmacy.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 9
+        }
+      },
+      {
+        "rule_id": "STAGE_CONTEXT_LVEF",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Confirm whether this is a starting or ongoing-treatment result. The starting LVEF requirement and on-treatment cardiac bands differ; missing stage cannot establish eligibility."
+        },
+        "explanation": "Confirm whether this is a starting or ongoing-treatment result. The starting LVEF requirement and on-treatment cardiac bands differ; missing stage cannot establish eligibility.",
+        "source": {
+          "document": "NCCP 00659 v2",
+          "url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "BASELINE_ORGAN_EVIDENCE",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "platelets",
+                  "operator": "<=",
+                  "value": 100
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">",
+                  "value": 2.5
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 2.5
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "These starting laboratory values lie outside populations studied in the product information. Review suitability and monitoring before initiation; this is an evidence limitation, not an invented absolute NCCP cutoff."
+        },
+        "explanation": "These starting laboratory values lie outside populations studied in the product information. Review suitability and monitoring before initiation; this is an evidence limitation, not an invented absolute NCCP cutoff.",
+        "source": {
+          "document": "EMA Kadcyla SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/kadcyla-epar-product-information_en.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "CARDIAC_DISEASE",
+        "when": {
+          "field": "significant_cardiac_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Clinically significant cardiac disease is an NCCP exclusion. Obtain specialist reassessment before treatment."
+        },
+        "explanation": "Clinically significant cardiac disease is an NCCP exclusion. Obtain specialist reassessment before treatment.",
+        "source": {
+          "document": "NCCP 00659 v2",
+          "url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "GROSS_RESIDUAL_RECURRENCE",
+        "when": {
+          "field": "gross_residual_or_recurrent_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Gross residual or recurrent disease following preoperative therapy and surgery is excluded from this postoperative pathway; reassess the treatment plan."
+        },
+        "explanation": "Gross residual or recurrent disease following preoperative therapy and surgery is excluded from this postoperative pathway; reassess the treatment plan.",
+        "source": {
+          "document": "NCCP 00659 v2",
+          "url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "INDICATION_REVIEW",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "The complete postoperative NCCP indication or preoperative duration/timing criteria are not confirmed. Reconcile eligibility before treatment selection."
+        },
+        "explanation": "The complete postoperative NCCP indication or preoperative duration/timing criteria are not confirmed. Reconcile eligibility before treatment selection.",
+        "source": {
+          "document": "NCCP 00659 v2",
+          "url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "ECHO_UNAVAILABLE",
+        "when": {
+          "field": "cardiac_monitoring_overdue",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Required heart-function monitoring is unavailable. Arrange the result and documented consultant decision before another administration; never assume normal function."
+        },
+        "explanation": "Required heart-function monitoring is unavailable. Arrange the result and documented consultant decision before another administration; never assume normal function.",
+        "source": {
+          "document": "NCCP 00659 v2",
+          "url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "STAGE_CONTEXT_NEURO",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "peripheral_neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Grade 2 neuropathy excludes starting this early-breast regimen but has a different on-treatment action. Confirm assessment stage."
+        },
+        "explanation": "Grade 2 neuropathy excludes starting this early-breast regimen but has a different on-treatment action. Confirm assessment stage.",
+        "source": {
+          "document": "NCCP 00659 v2",
+          "url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "HF_G2_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "heart_failure_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Grade 2 heart failure needs the current LVEF to apply the source stopping rule. Obtain cardiac assessment; do not assume LVEF is at least 45%."
+        },
+        "explanation": "Grade 2 heart failure needs the current LVEF to apply the source stopping rule. Obtain cardiac assessment; do not assume LVEF is at least 45%.",
+        "source": {
+          "document": "NCCP 00659 v2",
+          "url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "DILI_CONFIRMED",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "field": "ast_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    },
+                    {
+                      "field": "alt_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "dili_no_alternative_cause",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Combined hepatic values and no other likely cause meet the source DILI criterion: permanently discontinue T-DM1."
+        },
+        "explanation": "Combined hepatic values and no other likely cause meet the source DILI criterion: permanently discontinue T-DM1.",
+        "source": {
+          "document": "NCCP 00659 v2",
+          "url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "DILI_CAUSE_UNRESOLVED",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "field": "ast_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    },
+                    {
+                      "field": "alt_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "dili_no_alternative_cause",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab emtansine"
+          ],
+          "recommendation": "Investigate the cause of the combined hepatic abnormalities. The bilirubin stopping rule still applies; confirmed drug-induced injury requires permanent cessation."
+        },
+        "explanation": "Investigate the cause of the combined hepatic abnormalities. The bilirubin stopping rule still applies; confirmed drug-induced injury requires permanent cessation.",
+        "source": {
+          "document": "NCCP 00659 v2",
+          "url": "https://healthservice.hse.ie/documents/6680/659_v2_Trastuzumab_Emtansine_EBC_21days.pdf",
+          "page": 5
+        }
+      }
+    ],
+    "text_replacements": []
+  }
+}
