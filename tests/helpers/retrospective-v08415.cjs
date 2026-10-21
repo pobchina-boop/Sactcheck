@@ -1,0 +1,2 @@
+const fs=require('fs'),path=require('path');
+exports.expectedHash=(file,original)=>{const m=JSON.parse(fs.readFileSync(path.join(__dirname,'../../validation/phesgo-retro-v08415/retrospective-hashes.json'),'utf8'));const change=m.files[file];if(!change)return original;if(!/^(patient|docs\/patient)\/(00785|00796|00797|00789|00790)\//.test(file)&&!/^data\/patient-knowledge\/(00785|00796|00797|00789|00790)\.json$/.test(file))throw Error('Unapproved migration '+file);if(change.before!==original)throw Error('Unexpected original hash '+file);return change.after;};

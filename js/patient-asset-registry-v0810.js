@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.14';
-  const CONTENT_RELEASE='0.84.14';
+  const RELEASE='0.84.15';
+  const CONTENT_RELEASE='0.84.15';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00734':{"title": "weekly carboplatin AUC 2 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},

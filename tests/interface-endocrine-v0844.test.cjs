@@ -45,7 +45,9 @@ for(const edit of edits)check(()=>{
   assert.equal(revision.original_contact_migration_hash,edit.after);
   const current=JSON.parse(read('validation/her2-retro-v08414/builder-revision.json'));
   assert.equal(current.before,revision.after);
-  assert.equal(crypto.createHash('sha256').update(content).digest('hex'),current.after);
+  const phesgo=JSON.parse(read('validation/phesgo-retro-v08415/builder-revision.json'));
+  assert.equal(phesgo.before,current.after);
+  assert.equal(crypto.createHash('sha256').update(content).digest('hex'),phesgo.after);
   assert(content.toString().includes('Insert numbers here'));
  }else assert.equal(crypto.createHash('sha256').update(content).digest('hex'),require('./helpers/retrospective-v08413.cjs').expectedHash(edit.path,edit.after),edit.path);
 

@@ -10731,8 +10731,8 @@ const definitions={
   },
   "00785": {
     "code": "00785",
-    "release": "0.84.12",
-    "checked": "2026-10-20",
+    "release": "0.84.15",
+    "checked": "2026-10-21",
     "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
@@ -10964,23 +10964,13 @@ const definitions={
         "id": "smpc",
         "title": "EMA Phesgo product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf"
-      },
-      {
-        "id": "federica",
-        "title": "FeDeriCa · combined SC formulation",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/33357420/"
-      },
-      {
-        "id": "trial",
-        "title": "CLEOPATRA · metastatic dual HER2 strategy",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/22149875/"
       }
     ]
   },
   "00796": {
     "code": "00796",
-    "release": "0.84.12",
-    "checked": "2026-10-20",
+    "release": "0.84.15",
+    "checked": "2026-10-21",
     "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
@@ -11212,23 +11202,13 @@ const definitions={
         "id": "smpc",
         "title": "EMA Phesgo product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf"
-      },
-      {
-        "id": "federica",
-        "title": "FeDeriCa · combined SC formulation",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/33357420/"
-      },
-      {
-        "id": "trial",
-        "title": "CLEOPATRA · metastatic docetaxel / dual HER2 strategy",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/22149875/"
       }
     ]
   },
   "00797": {
     "code": "00797",
-    "release": "0.84.12",
-    "checked": "2026-10-20",
+    "release": "0.84.15",
+    "checked": "2026-10-21",
     "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
@@ -11294,7 +11274,7 @@ const definitions={
           "Baseline FBC, renal / liver",
           "FBC, renal and liver profile before every cycle. Review required counts before Day 8 and Day 15 dosing under the local pre-dose pathway.",
           "Check before changing phase",
-          "FBC, renal and liver profile before every cycle. Review required counts before Day 8 and Day 15 dosing under the local pre-dose pathway.",
+          "Phesgo-only maintenance: FBC, renal and liver profile before each 21-day cycle",
           "Active medicines / abnormal results determine follow-up"
         ],
         "source_ids": [
@@ -11460,23 +11440,13 @@ const definitions={
         "id": "smpc",
         "title": "EMA Phesgo product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf"
-      },
-      {
-        "id": "federica",
-        "title": "FeDeriCa · combined SC formulation",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/33357420/"
-      },
-      {
-        "id": "trial",
-        "title": "Weekly paclitaxel / dual HER2 phase II follow-up",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/30602614/"
       }
     ]
   },
   "00789": {
     "code": "00789",
-    "release": "0.84.12",
-    "checked": "2026-10-20",
+    "release": "0.84.15",
+    "checked": "2026-10-21",
     "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
@@ -11542,7 +11512,7 @@ const definitions={
           "Baseline FBC, renal / liver",
           "FBC, renal and liver profile before every cycle.",
           "Check before changing phase",
-          "FBC, renal and liver profile before every cycle.",
+          "Use the blood-test schedule for the separately selected postoperative medicine",
           "Active medicines / abnormal results determine follow-up"
         ],
         "source_ids": [
@@ -11554,11 +11524,11 @@ const definitions={
       {
         "label": "Echo / heart tests",
         "cells": [
-          "Baseline echo / MUGA; ECG risk review",
-          "Symptoms can prompt earlier assessment",
-          "12 weeks from first HER2 dose; around cycle 5",
-          "Continue every 12 weeks including maintenance",
-          "Agree follow-up when treatment ends"
+          "Baseline echo / MUGA; ECG and cardiovascular risk review",
+          "Echo every 12 weeks: first around cycle 5; earlier for symptoms",
+          "Review any due cardiac test; surgery does not restart the clock",
+          "Continue cardiac checks for the selected HER2 medicine",
+          "Agree cardiac follow-up when treatment ends"
         ],
         "source_ids": [
           "00789",
@@ -11571,11 +11541,11 @@ const definitions={
       {
         "label": "Imaging / markers",
         "cells": [
-          "Baseline disease assessment",
-          "Review clinical response",
-          "Before surgery",
-          "Surveillance plan after local treatment",
-          "Discuss results and next steps"
+          "Baseline breast / nodal assessment; staging as indicated",
+          "Clinical response and MDT-selected imaging during treatment",
+          "Reassess before surgery; pathology informs the next plan",
+          "Mammography of remaining breast tissue under the surveillance plan",
+          "Other imaging for symptoms / clinical concern; no routine tumour-marker screening"
         ],
         "source_ids": [
           "early",
@@ -11645,7 +11615,7 @@ const definitions={
     ],
     "clinical_notes": [
       "Columns show sequence, not equal lengths. No personal dates are required.",
-      "NCCP 00789 describes postoperative trastuzumab for a further 12 cycles to complete about one year from the first dose. Pathology, including residual invasive disease, can change the adjuvant medicine; confirm a separate approved regimen. Do not route early-breast patients automatically to metastatic Phesgo maintenance 00785.",
+      "After surgery, your team reviews the pathology and chooses the next HER2 medicine. The usual plan aims to complete about one year of HER2 treatment from the first dose. Remaining invasive cancer can change the medicine offered. The selected treatment has its own blood tests and supportive medicines.",
       "A test is complete only when booked, performed and reviewed; this content does not send reminders."
     ],
     "sources": [
@@ -11708,23 +11678,13 @@ const definitions={
         "id": "smpc",
         "title": "EMA Phesgo product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf"
-      },
-      {
-        "id": "federica",
-        "title": "FeDeriCa · combined SC formulation",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/33357420/"
-      },
-      {
-        "id": "trial",
-        "title": "TRYPHAENA · neoadjuvant dual HER2 blockade",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/23704196/"
       }
     ]
   },
   "00790": {
     "code": "00790",
-    "release": "0.84.12",
-    "checked": "2026-10-20",
+    "release": "0.84.15",
+    "checked": "2026-10-21",
     "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
@@ -11790,7 +11750,7 @@ const definitions={
           "Baseline FBC, renal / liver",
           "FBC, renal and liver profile before every cycle. Review required counts before Day 8 dosing under the local pre-dose pathway.",
           "Check before changing phase",
-          "FBC, renal and liver profile before every cycle. Review required counts before Day 8 dosing under the local pre-dose pathway.",
+          "Use the blood-test schedule for the separately selected postoperative medicine",
           "Active medicines / abnormal results determine follow-up"
         ],
         "source_ids": [
@@ -11802,11 +11762,11 @@ const definitions={
       {
         "label": "Echo / heart tests",
         "cells": [
-          "Baseline echo / MUGA; ECG risk review",
-          "Symptoms can prompt earlier assessment",
-          "12 weeks from first HER2 dose; around cycle 5",
-          "Continue every 12 weeks including maintenance",
-          "Agree follow-up when treatment ends"
+          "Baseline echo / MUGA; ECG and cardiovascular risk review",
+          "Echo every 12 weeks: first around cycle 5; earlier for symptoms",
+          "Review any due cardiac test; surgery does not restart the clock",
+          "Continue cardiac checks for the selected HER2 medicine",
+          "Agree cardiac follow-up when treatment ends"
         ],
         "source_ids": [
           "00790",
@@ -11819,11 +11779,11 @@ const definitions={
       {
         "label": "Imaging / markers",
         "cells": [
-          "Baseline disease assessment",
-          "Review clinical response",
-          "Before surgery",
-          "Surveillance plan after local treatment",
-          "Discuss results and next steps"
+          "Baseline breast / nodal assessment; staging as indicated",
+          "Clinical response and MDT-selected imaging during treatment",
+          "Reassess before surgery; pathology informs the next plan",
+          "Mammography of remaining breast tissue under the surveillance plan",
+          "Other imaging for symptoms / clinical concern; no routine tumour-marker screening"
         ],
         "source_ids": [
           "early",
@@ -11893,7 +11853,7 @@ const definitions={
     ],
     "clinical_notes": [
       "Columns show sequence, not equal lengths. No personal dates are required.",
-      "NCCP 00790 directs postoperative adjuvant therapy, such as trastuzumab or trastuzumab emtansine as appropriate, to complete one year. Pathology and the MDT select the actual medicine; do not assume Phesgo continuation or the metastatic 00785 code.",
+      "After surgery, your team reviews the pathology and chooses the next HER2 medicine. The usual plan aims to complete about one year of HER2 treatment from the first dose. Remaining invasive cancer can change the medicine offered. The selected treatment has its own blood tests and supportive medicines.",
       "A test is complete only when booked, performed and reviewed; this content does not send reminders."
     ],
     "sources": [
@@ -11956,16 +11916,6 @@ const definitions={
         "id": "smpc",
         "title": "EMA Phesgo product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf"
-      },
-      {
-        "id": "federica",
-        "title": "FeDeriCa · combined SC formulation",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/33357420/"
-      },
-      {
-        "id": "trial",
-        "title": "TRAIN-2 · three-year follow-up",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/34014249/"
       }
     ]
   },

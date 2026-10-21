@@ -27,7 +27,7 @@
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
     },
-    "sactcheck_encoding_version": "0.84.12",
+    "sactcheck_encoding_version": "0.84.15",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Independent weekly paclitaxel rules may be assessed from a single supplied value; dose and duration inputs refine but do not suppress immediate hold findings.",
     "source_document_pages": 7,
@@ -69,14 +69,21 @@
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00797-v4",
-    "source_checked_date": "2026-10-20",
+    "source_checked_date": "2026-10-21",
     "source_sha256": "d1e21ec651159c58d4e2817b5c7d5005ce89f85833ce1f067db1484c4bfea1ca",
     "audit_limitations": [
       "Independent oncology and pharmacy validation pending.",
       "Printed hepatic/count gaps or overlapping toxicity rows are explicitly referred for review; no invented numeric restart dose.",
       "Postoperative or HER2-only continuation must use the chosen indication-specific regimen; early-breast cards do not silently select Phesgo maintenance 00785."
     ],
-    "regimen_reimbursement_code": "00797a"
+    "regimen_reimbursement_code": "00797a",
+    "source_version_verified_date": "2026-10-21",
+    "retrospective_review_v08415": {
+      "checked": "2026-10-21",
+      "clinical_use_authorised": false,
+      "status": "Source reconciliation; independent oncology/pharmacy approval pending",
+      "audit_folder": "validation/phesgo-retro-v08415/advanced"
+    }
   },
   "clinical_governance": {
     "disclaimer": "Decision-support encoding of the current NCCP source. It does not replace the NCCP regimen, clinical judgement, local policy, prescribing review or pharmacy verification."
@@ -310,7 +317,7 @@
       "input_role": "decision"
     },
     "phesgo_hypersensitivity_grade": {
-      "label": "Phesgo hypersensitivity reaction",
+      "label": "Current Phesgo hypersensitivity reaction",
       "type": "select",
       "demo_value": 0,
       "required": false,
@@ -544,6 +551,22 @@
       "required": false,
       "always_show": true,
       "input_role": "decision"
+    },
+    "significant_injection_reaction": {
+      "label": "Current significant Phesgo injection-related reaction",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "disease_progression": {
+      "label": "Disease progression on the current treatment",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -586,9 +609,9 @@
             "trastuzumab",
             "paclitaxel"
           ],
-          "recommendation": "Relevant drug/excipient allergy is an NCCP exclusion. Identify the responsible agent; any carboplatin desensitisation requires specialist advice and a controlled protocol."
+          "recommendation": "Relevant drug/excipient allergy is an NCCP exclusion. Identify the responsible agent and obtain specialist advice before any re-exposure."
         },
-        "explanation": "Relevant drug/excipient allergy is an NCCP exclusion. Identify the responsible agent; any carboplatin desensitisation requires specialist advice and a controlled protocol.",
+        "explanation": "Relevant drug/excipient allergy is an NCCP exclusion. Identify the responsible agent and obtain specialist advice before any re-exposure.",
         "source": {
           "document": "NCCP 00797 v4",
           "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
@@ -910,23 +933,40 @@
             "pertuzumab",
             "trastuzumab"
           ],
-          "recommendation": "Assess dehydration, infection and severity promptly; review interruption and supportive treatment before the next dose. No automatic percentage reduction of Phesgo.",
+          "recommendation": "Assess dehydration, infection and severity promptly; consider fluids/electrolytes and early antidiarrhoeal treatment. Consider interrupting Phesgo if severe or prolonged diarrhoea does not improve; restart only when controlled after clinical review. Do not reduce the fixed Phesgo dose by a percentage.",
           "dose_calculation": "specialist_review",
           "show_in_dose_actions": true
         },
-        "explanation": "Assess dehydration, infection and severity promptly; review interruption and supportive treatment before the next dose. No automatic percentage reduction of Phesgo.",
+        "explanation": "Assess dehydration, infection and severity promptly; consider fluids/electrolytes and early antidiarrhoeal treatment. Consider interrupting Phesgo if severe or prolonged diarrhoea does not improve; restart only when controlled after clinical review. Do not reduce the fixed Phesgo dose by a percentage.",
         "source": {
-          "document": "NCCP 00797 v4",
-          "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
-          "page": 4
+          "document": "Phesgo SmPC section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf",
+          "page": 8
         }
       },
       {
         "rule_id": "BASELINE_LVEF_LOW",
         "when": {
-          "field": "baseline_lvef_percent",
-          "operator": "<",
-          "value": 50
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
         },
         "action": {
           "type": "withhold",
@@ -934,9 +974,9 @@
             "pertuzumab",
             "trastuzumab"
           ],
-          "recommendation": "Metastatic baseline LVEF must be ≥50%; obtain specialist review."
+          "recommendation": "Before initiation, metastatic LVEF must be at least 50%; obtain specialist review if lower. A historical baseline value alone is not an on-treatment withholding criterion."
         },
-        "explanation": "Metastatic baseline LVEF must be ≥50%; obtain specialist review.",
+        "explanation": "Before initiation, metastatic LVEF must be at least 50%; obtain specialist review if lower. A historical baseline value alone is not an on-treatment withholding criterion.",
         "source": {
           "document": "NCCP 00797 v4",
           "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
@@ -1252,9 +1292,9 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Treat febrile neutropenia urgently and withhold chemotherapy pending recovery and review. Phesgo may sometimes continue during reversible myelosuppression with careful monitoring; assess complications."
+          "recommendation": "Treat febrile neutropenia urgently and withhold chemotherapy pending recovery and review. Phesgo may sometimes continue during reversible myelosuppression with careful monitoring; assess complications. NCCP also advises considering addition of G-CSF after febrile neutropenia."
         },
-        "explanation": "Treat febrile neutropenia urgently and withhold chemotherapy pending recovery and review. Phesgo may sometimes continue during reversible myelosuppression with careful monitoring; assess complications.",
+        "explanation": "Treat febrile neutropenia urgently and withhold chemotherapy pending recovery and review. Phesgo may sometimes continue during reversible myelosuppression with careful monitoring; assess complications. NCCP also advises considering addition of G-CSF after febrile neutropenia.",
         "source": {
           "document": "NCCP 00797 v4",
           "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
@@ -1603,11 +1643,11 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Grade 2 neuropathy: decrease 10 mg/m² from actual current dose. Persistent/second occurrence in TRAIN-2 requires a further 10 mg/m² decrease. Verify prior reductions; this is separate from the haematological ladder.",
+          "recommendation": "Grade 2 peripheral neuropathy: decrease paclitaxel by 10 mg/m² from the actual current dose after review. Verify previous reductions; this differs from the haematological 80→65→50 mg/m² ladder.",
           "dose_calculation": "specialist_review",
           "show_in_dose_actions": true
         },
-        "explanation": "Grade 2 neuropathy: decrease 10 mg/m² from actual current dose. Persistent/second occurrence in TRAIN-2 requires a further 10 mg/m² decrease. Verify prior reductions; this is separate from the haematological ladder.",
+        "explanation": "Grade 2 peripheral neuropathy: decrease paclitaxel by 10 mg/m² from the actual current dose after review. Verify previous reductions; this differs from the haematological 80→65→50 mg/m² ladder.",
         "source": {
           "document": "NCCP 00797 v4",
           "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
@@ -1806,9 +1846,9 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Delay for low ANC; establish duration/recovery. Prolonged ANC <0.5 for ≥7 days requires one-level reduction after recovery."
+          "recommendation": "Delay paclitaxel for low ANC; establish duration and recovery. ANC 0.5–0.99: consider reduction at a subsequent cycle; ANC <0.5 for at least 7 days requires a one-level reduction after recovery. Without duration, do not invent a restart dose."
         },
-        "explanation": "Delay for low ANC; establish duration/recovery. Prolonged ANC <0.5 for ≥7 days requires one-level reduction after recovery.",
+        "explanation": "Delay paclitaxel for low ANC; establish duration and recovery. ANC 0.5–0.99: consider reduction at a subsequent cycle; ANC <0.5 for at least 7 days requires a one-level reduction after recovery. Without duration, do not invent a restart dose.",
         "source": {
           "document": "NCCP 00797 v4",
           "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
@@ -1844,9 +1884,9 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Delay paclitaxel for platelets below 90; below 70 requires one-level reduction after recovery."
+          "recommendation": "Delay paclitaxel for platelets below 90. For 70–90, consider reduction at a subsequent cycle; below 70 requires a one-level reduction after recovery. Exactly 90 overlaps printed source bands and requires review."
         },
-        "explanation": "Delay paclitaxel for platelets below 90; below 70 requires one-level reduction after recovery.",
+        "explanation": "Delay paclitaxel for platelets below 90. For 70–90, consider reduction at a subsequent cycle; below 70 requires a one-level reduction after recovery. Exactly 90 overlaps printed source bands and requires review.",
         "source": {
           "document": "NCCP 00797 v4",
           "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
@@ -1948,6 +1988,195 @@
           "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
           "page": 4
         }
+      },
+      {
+        "rule_id": "ASSESSMENT_STAGE_INVALID",
+        "when": {
+          "field": "assessment_stage",
+          "operator": "not_in",
+          "value": [
+            "baseline",
+            "ongoing"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Select a valid assessment stage: before starting or during treatment. An unrecognised value cannot select pretreatment versus ongoing criteria; independent safety findings still apply.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Select a valid assessment stage: before starting or during treatment. An unrecognised value cannot select pretreatment versus ongoing criteria; independent safety findings still apply.",
+        "source": {
+          "document": "NCCP 00797 v4",
+          "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BASELINE_CURRENT_LVEF_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "The entered current LVEF is below the 50% pretreatment requirement. Obtain oncology/cardiology review before starting; on-treatment thresholds differ."
+        },
+        "explanation": "The entered current LVEF is below the 50% pretreatment requirement. Obtain oncology/cardiology review before starting; on-treatment thresholds differ.",
+        "source": {
+          "document": "NCCP 00797 v4",
+          "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "LVEF_STAGE_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Clarify whether this is the pretreatment result or an on-treatment measurement: initiation requires LVEF at least 50%; the ongoing hold threshold also uses the change from pretreatment. Independent urgent cardiac findings still apply.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Clarify whether this is the pretreatment result or an on-treatment measurement: initiation requires LVEF at least 50%; the ongoing hold threshold also uses the change from pretreatment. Independent urgent cardiac findings still apply.",
+        "source": {
+          "document": "NCCP 00797 v4",
+          "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "PHESGO_REACTION_G1_G2",
+        "when": {
+          "all": [
+            {
+              "field": "phesgo_hypersensitivity_grade",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "phesgo_hypersensitivity_grade",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Pause or slow the Phesgo injection, assess and treat the reaction, and observe until signs and symptoms resolve. Resumption requires the treating team's decision; this is not an automatic permanent stop."
+        },
+        "explanation": "Pause or slow the Phesgo injection, assess and treat the reaction, and observe until signs and symptoms resolve. Resumption requires the treating team's decision; this is not an automatic permanent stop.",
+        "source": {
+          "document": "Phesgo SmPC sections 4.2 and 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "PHESGO_REACTION_G3",
+        "when": {
+          "field": "phesgo_hypersensitivity_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Stop the injection and urgently manage the serious reaction. Specialist review is required before any re-exposure; consider permanent discontinuation according to severity and response. Grade 4, bronchospasm or ARDS require permanent discontinuation."
+        },
+        "explanation": "Stop the injection and urgently manage the serious reaction. Specialist review is required before any re-exposure; consider permanent discontinuation according to severity and response. Grade 4, bronchospasm or ARDS require permanent discontinuation.",
+        "source": {
+          "document": "Phesgo SmPC sections 4.2 and 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "PHESGO_INJECTION_REACTION",
+        "when": {
+          "field": "significant_injection_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Pause or slow the Phesgo injection and provide appropriate treatment. Monitor to complete resolution; severe injection reactions require specialist review and consideration of permanent discontinuation."
+        },
+        "explanation": "Pause or slow the Phesgo injection and provide appropriate treatment. Monitor to complete resolution; severe injection reactions require specialist review and consideration of permanent discontinuation.",
+        "source": {
+          "document": "Phesgo SmPC sections 4.2 and 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf",
+          "page": 7
+        }
+      },
+      {
+        "rule_id": "PROGRESSION_REVIEW",
+        "when": {
+          "field": "disease_progression",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Progression requires reassessment of the treatment strategy. Do not automatically continue this Phesgo plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Progression requires reassessment of the treatment strategy. Do not automatically continue this Phesgo plan.",
+        "source": {
+          "document": "NCCP 00797 v4",
+          "url": "https://healthservice.hse.ie/documents/6420/797_v4_PertuzumabTrasPhesgo_PACLitaxel.pdf",
+          "page": 1
+        }
       }
     ]
   },
@@ -2014,7 +2243,7 @@
           },
           "day": 1,
           "route": "SC injection",
-          "notes": "One combined thigh injection; initial/reloading 1200/600 mg if indicated by actual history. Loading 8 min +30 min observation; maintenance 5 min +15 min observation. Complete observation before chemotherapy."
+          "notes": "One combined thigh injection; initial/reloading 1200/600 mg if indicated by actual history. Loading 8 min +30 min observation; maintenance 5 min +15 min observation."
         }
       ]
     }

@@ -1,0 +1,213 @@
+{
+  "audit": "NCCP early-breast Phesgo retrospective source and software audit",
+  "checked": "2026-10-21",
+  "codes": [
+    "00789",
+    "00790"
+  ],
+  "status": "Research and proposed corrections only; parent performs integration. Independent clinical and oncology-pharmacy sign-off remains pending.",
+  "scope": [
+    "Live official NCCP 00789 v3 and 00790 v3 PDFs",
+    "EMA Phesgo SmPC sections 4.2 and 4.4",
+    "NCCP NCIS antiemetics v8 2025 Table 1",
+    "Actual protocol JSON assessed using js/assessment-engine.js",
+    "Patient knowledge JSON, longitudinal journeys, phase-support JSON, generated HTML guide/knowledge/consent/passport/support surfaces"
+  ],
+  "baseline": {
+    "cases": 141,
+    "passed": 93,
+    "failed": 48,
+    "note": "Several cases exercise the same context defect across both cards, and some require explicit clarification rather than correcting a numeric dose. This is not 48 separate clinical dosing errors."
+  },
+  "in_memory_proposal": {
+    "cases": 141,
+    "passed": 141,
+    "failed": 0,
+    "app_files_changed_by_auditor": false
+  },
+  "findings": [
+    {
+      "id": "EARLY-CARDIAC-CONTEXT",
+      "priority": "high",
+      "codes": [
+        "00789",
+        "00790"
+      ],
+      "finding": "A historical baseline LVEF below initiation criteria creates a new hold during an ongoing assessment even with a normal current result. Conversely, selecting before-starting and entering only current LVEF misses the initiation threshold. A decline without current LVEF lacks an explicit clarification.",
+      "proposed_rule_ids": [
+        "BASELINE_LVEF_LOW",
+        "BASELINE_LVEF_50_55",
+        "BASELINE_HISTORY_MISSING",
+        "BASELINE_CURRENT_LVEF_LOW",
+        "BASELINE_CURRENT_LVEF_50_55",
+        "BASELINE_CURRENT_HISTORY_MISSING",
+        "ONGOING_BASELINE_HISTORY_REVIEW",
+        "LVEF_STAGE_MISSING",
+        "LVEF_CURRENT_MISSING"
+      ],
+      "source": {
+        "00789": "pp3,7",
+        "00790": "pp5,10"
+      }
+    },
+    {
+      "id": "CONTEXT-ENUMS",
+      "priority": "high",
+      "codes": [
+        "00789",
+        "00790"
+      ],
+      "finding": "Unknown assessment-stage and phase values are accepted by the shared engine. Scoped protocol guards now require correction; invalid TRAIN-2 Day15 is also guarded. Independent severe cardiac and reaction actions remain dominant.",
+      "proposed_rule_ids": [
+        "INVALID_ASSESSMENT_STAGE",
+        "INVALID_TREATMENT_PHASE",
+        "INVALID_CYCLE_DAY"
+      ],
+      "note": "These are software guardrails inferred from the source distinctions, not direct NCCP rule wording. No shared engine changes proposed."
+    },
+    {
+      "id": "PHESGO-REACTIONS",
+      "priority": "high",
+      "codes": [
+        "00789",
+        "00790"
+      ],
+      "finding": "The existing selector only acted on grade4. Current grades1\u20133 and significant injection reactions now pause/stop and prompt assessment, without incorrectly making every reaction a permanent stop. Existing grade4/bronchospasm/ARDS permanent-stop rules remain dominant.",
+      "proposed_rule_ids": [
+        "PHESGO_REACTION_G1_G2",
+        "PHESGO_REACTION_G3",
+        "PHESGO_INJECTION_REACTION"
+      ],
+      "source": "EMA Phesgo SmPC pp6\u20137, sections4.2/4.4",
+      "note": "Shared proposals harmonised with advanced Phesgo audit; current-reaction input label prevents confusion with resolved history."
+    },
+    {
+      "id": "CARBO-RENAL-CONTEXT",
+      "priority": "medium",
+      "codes": [
+        "00789",
+        "00790"
+      ],
+      "finding": "Estimated GFR60 without a creatinine timestamp returns proceed_with_caution. Entering stale creatinine or a reference rise without method lacks a specific clarification. Proposed context rules do not invent doses.",
+      "proposed_rule_ids": [
+        "CARBO_CREATININE_AGE_MISSING",
+        "CARBO_METHOD_MISSING"
+      ],
+      "source": {
+        "00789": "p6",
+        "00790": "pp9\u201310"
+      }
+    },
+    {
+      "id": "POSTOPERATIVE-ROUTING",
+      "priority": "high",
+      "codes": [
+        "00789",
+        "00790"
+      ],
+      "finding": "Selecting continuation alone returns proceed_with_caution despite no defined postoperative administration. Require the separately selected source regimen; no automatic metastatic00785 routing.",
+      "proposed_rule_ids": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "source": "Both NCCP protocols p1"
+    },
+    {
+      "id": "TCHP-NEURO-CONTEXT",
+      "priority": "medium",
+      "codes": [
+        "00789"
+      ],
+      "finding": "Grade2 neuropathy with no stage fails to explain the starting-treatment exclusion versus different ongoing modification threshold.",
+      "proposed_rule_ids": [
+        "BASELINE_NEURO_CONTEXT"
+      ],
+      "source": "NCCP00789 pp4,7"
+    },
+    {
+      "id": "TCHP-HEPATIC-COMPANIONS",
+      "priority": "high",
+      "codes": [
+        "00789"
+      ],
+      "finding": "The bilirubin-delay rule affects chemotherapy components only although the source coordinates companion drugs while docetaxel is delayed. Proposed action includes the companion antibodies. After chemotherapy is stopped for non-recovery, HER2 continuation remains an individual review.",
+      "proposed_rule_ids": [
+        "DOC_BILIRUBIN_DELAY"
+      ],
+      "source": "NCCP00789 p6"
+    },
+    {
+      "id": "TRAIN2-ADULT",
+      "priority": "medium",
+      "codes": [
+        "00790"
+      ],
+      "finding": "Explicit age\u226518 eligibility was represented only by the aggregate indication flag. Optional age input and under18 specialist-review branch allow direct assessment.",
+      "proposed_rule_ids": [
+        "ADULT_ELIGIBILITY"
+      ],
+      "source": "NCCP00790 p5"
+    },
+    {
+      "id": "TIMELINE-ECHO-PHASE",
+      "priority": "high",
+      "codes": [
+        "00789",
+        "00790"
+      ],
+      "finding": "Week12/cycle5 first echo was rendered in the surgery/pathology column rather than during six neoadjuvant cycles. Move this cell; keep elapsed-time scheduling through phase/route changes.",
+      "content_proposals": "content-proposals.json",
+      "source": {
+        "00789": "p4",
+        "00790": "p6"
+      }
+    },
+    {
+      "id": "POSTOPERATIVE-TESTS-SUPPORT",
+      "priority": "medium",
+      "codes": [
+        "00789",
+        "00790"
+      ],
+      "finding": "Postoperative blood cells repeat the neoadjuvant schedule, including TRAIN-2 Day8. Follow the chosen postoperative medicine instead. Minimal-risk antibody support must not imply that an unknown HER2-directed ADC has the same supportive needs. Correct the TRAIN-2 continuation citation currently pointing to its count table.",
+      "content_proposals": "content-proposals.json",
+      "source": "Both sources p1; regimen-specific testing/support sections and NCIS antiemetic Table1"
+    },
+    {
+      "id": "PATIENT-COPY",
+      "priority": "low",
+      "codes": [
+        "00789",
+        "00790"
+      ],
+      "finding": "Patient-facing chapters contain internal routing language about metastatic regimen00785. Replace with plain language about pathology selecting the next medicine. Week12 imaging column should not imply a universal scheduled response scan because NCCP leaves disease monitoring to the consultant plan.",
+      "content_proposals": "content-proposals.json"
+    }
+  ],
+  "confirmed_without_threshold_change": [
+    "Six21-day neoadjuvant cycles; TRAIN-2 paclitaxel Days1/8 and no planned Day15.",
+    "SC combined product, loading/reloading1200/600mg8minutes with30minutes observation, maintenance600/600mg5minutes with15minutes observation; finish observation before chemotherapy.",
+    "Six-week missed-dose/switch boundary; no percentage reduction of Phesgo.",
+    "Baseline cardiac assessment,12-week surveillance and earlier4\u20138-week checks when impaired; ongoing early-breast cardiac criterion requires both LVEF<50 and decline\u226510points.",
+    "Existing TCHP printed haematology boundary gaps, hepatic AND/OR ambiguities and TRAIN-2 toxicity overlaps are explicitly referred for review rather than silently rounded or assigned unsupported numeric doses.",
+    "Carboplatin GFR\u226420 exclusion,20\u201330caution,<60myelosuppression risk,125cap;48-hour estimated-creatinine rule and110%isotope-reference boundary.",
+    "Day1 carboplatin support uses the NCIS high-risk carboplatin row; TRAIN-2 Day8 uses low-risk support. Steroid-reconciliation text is present. Docetaxel and paclitaxel premedication schedules match source-specific sections.",
+    "Patient chronology does not require calendar dates; formulation evidence is distinguished from regimen efficacy; no numeric survival metrics are present in patient evidence fields."
+  ],
+  "limitations": [
+    "Live official PDFs were browsed; direct binary download returned403, so old source hashes are recorded only as prior-audit provenance and are not freshly verified.",
+    "This bounded audit did not separately re-reconcile the entire current NCCP website catalogue.",
+    "This is not an exhaustive clinical audit of all possible multi-variable combinations, a prescription, or independent human clinical/pharmacy sign-off.",
+    "Parent is responsible for integrating proposals, regenerating outputs, and testing final rendered assets."
+  ],
+  "run": {
+    "actual_final_protocols": "node validation/phesgo-retro-v08415/early/source-cases.cjs",
+    "proposal_in_memory": "node validation/phesgo-retro-v08415/early/source-cases.cjs --proposed",
+    "baseline_captured": "baseline-results.json"
+  },
+  "integrated_protocol_tests": {
+    "count": 141,
+    "passed": 141,
+    "failed": 0,
+    "note": "Parent integrated proposals and ran default cases against actual app protocols; final-results.json checked by auditor."
+  }
+}
