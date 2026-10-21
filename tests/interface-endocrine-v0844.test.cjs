@@ -43,7 +43,9 @@ for(const edit of edits)check(()=>{
  if(edit.path==='tools/build-complete-pathways.cjs'){
   const revision=JSON.parse(read('validation/tnbc-v08413/builder-revision.json'));
   assert.equal(revision.original_contact_migration_hash,edit.after);
-  assert.equal(crypto.createHash('sha256').update(content).digest('hex'),revision.after);
+  const current=JSON.parse(read('validation/her2-retro-v08414/builder-revision.json'));
+  assert.equal(current.before,revision.after);
+  assert.equal(crypto.createHash('sha256').update(content).digest('hex'),current.after);
   assert(content.toString().includes('Insert numbers here'));
  }else assert.equal(crypto.createHash('sha256').update(content).digest('hex'),require('./helpers/retrospective-v08413.cjs').expectedHash(edit.path,edit.after),edit.path);
 

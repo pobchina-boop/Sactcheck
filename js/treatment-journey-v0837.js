@@ -833,9 +833,9 @@ const definitions={
       "A DEXA scan is considered for endocrine/menopause/fracture indications, not automatically because HER2 antibodies continue."
     ],
     "code": "00726",
-    "release": "0.83.7",
-    "checked": "2026-10-17",
-    "status": "Draft — independent clinical, pharmacy and patient/PPI review pending",
+    "release": "0.84.14",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
     "sources": [
@@ -1546,9 +1546,9 @@ const definitions={
   },
   "00659": {
     "code": "00659",
-    "release": "0.83.8",
-    "checked": "2026-10-17",
-    "status": "Draft — independent clinical, pharmacy and patient/PPI review pending",
+    "release": "0.84.14",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
     "title": "Adjuvant trastuzumab emtansine (T-DM1): the whole pathway",
@@ -1613,7 +1613,7 @@ const definitions={
         "cells": [
           "Prior-treatment checks",
           "Baseline FBC, liver and renal tests",
-          "Before every cycle: platelets, liver and renal tests",
+          "FBC including platelets, renal and liver tests before every cycle",
           "Review abnormal results",
           "As required by continuing care"
         ],
@@ -1628,7 +1628,7 @@ const definitions={
         "cells": [
           "Baseline / earlier HER2 monitoring",
           "Review LVEF before switching",
-          "Every 12 weeks; sooner if abnormal / symptoms",
+          "Every 12 weeks: around cycles 5, 9 and 13 if uninterrupted; earlier if needed",
           "Completion assessment",
           "Risk-based surveillance"
         ],
@@ -2245,9 +2245,9 @@ const definitions={
   },
   "00200": {
     "code": "00200",
-    "release": "0.83.9",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.14",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
     "title": "Trastuzumab IV · every 3 weeks: the whole pathway",
@@ -2492,9 +2492,9 @@ const definitions={
   },
   "00201": {
     "code": "00201",
-    "release": "0.83.9",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.14",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
     "title": "Trastuzumab IV · weekly · metastatic: the whole pathway",
@@ -2516,7 +2516,7 @@ const definitions={
           "Weekly IV trastuzumab",
           "Review benefit, symptoms and heart function",
           "Continue while beneficial and tolerated",
-          "Early: completed year if applicable. Metastatic: review whether to continue or change."
+          "Review cancer control and tolerance; agree continuation or a change."
         ],
         "source_ids": [
           "00201"
@@ -2591,8 +2591,8 @@ const definitions={
         "cells": [
           "Define baseline sites and scan purpose",
           "Review symptoms at each visit",
-          "Metastatic response imaging if due; not an automatic early-breast CT",
-          "Individualised response or breast surveillance plan",
+          "Response imaging when due; exact timing agreed for the known disease sites.",
+          "Continue the individual metastatic response-assessment plan.",
           "Response scans commonly every 2–4 months; individualise. Markers supplement clinical review and imaging."
         ],
         "source_ids": [
@@ -2606,11 +2606,11 @@ const definitions={
         "label": "Endocrine / bone health",
         "kind": "local",
         "cells": [
-          "Check hormone receptor status and endocrine indication",
-          "Endocrine timing coordinated with the wider plan",
-          "DEXA if indicated by endocrine / fracture risk",
-          "May overlap trastuzumab when clinically appropriate",
-          "Longer endocrine and bone follow-up can outlast HER2 treatment"
+          "Check hormone receptors, previous treatments and bone-health needs",
+          "Any endocrine treatment requires a separate oncology plan",
+          "DEXA only if indicated by endocrine treatment or fracture risk",
+          "Do not add another anticancer medicine from this component card",
+          "Continue the individual bone and supportive-care plan"
         ],
         "source_ids": [
           "early",
@@ -3233,9 +3233,9 @@ const definitions={
   },
   "00206": {
     "code": "00206",
-    "release": "0.83.9",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.14",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
     "title": "Trastuzumab emtansine (T-DM1) · metastatic: the whole pathway",
@@ -3257,7 +3257,7 @@ const definitions={
           "T-DM1 IV every 3 weeks",
           "Review benefit, symptoms and heart function",
           "Continue while beneficial and tolerated",
-          "Early: completed year if applicable. Metastatic: review whether to continue or change."
+          "Review cancer control and tolerance; agree continuation or a change."
         ],
         "source_ids": [
           "00206"
@@ -3299,11 +3299,11 @@ const definitions={
         "label": "Blood tests",
         "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
+          "Baseline FBC, renal and liver tests",
           "Before every cycle",
-          "SC: week 12 is another six-week blood point; T-DM1: every cycle",
+          "Before every cycle, including around C5",
           "Before every cycle",
-          "Follow abnormalities and the next treatment plan"
+          "Review abnormalities and the next treatment plan"
         ],
         "source_ids": [
           "00206"
@@ -3332,8 +3332,8 @@ const definitions={
         "cells": [
           "Define baseline sites and scan purpose",
           "Review symptoms at each visit",
-          "Metastatic response imaging if due; not an automatic early-breast CT",
-          "Individualised response or breast surveillance plan",
+          "Response imaging when due; exact timing agreed for the known disease sites.",
+          "Continue the individual metastatic response-assessment plan.",
           "Response scans commonly every 2–4 months; individualise. Markers supplement clinical review and imaging."
         ],
         "source_ids": [
@@ -3347,11 +3347,11 @@ const definitions={
         "label": "Endocrine / bone health",
         "kind": "local",
         "cells": [
-          "Check hormone receptor status and endocrine indication",
-          "Endocrine timing coordinated with the wider plan",
-          "DEXA if indicated by endocrine / fracture risk",
-          "May overlap trastuzumab when clinically appropriate",
-          "Longer endocrine and bone follow-up can outlast HER2 treatment"
+          "Check hormone receptors, previous treatments and bone-health needs",
+          "Any endocrine treatment requires a separate oncology plan",
+          "DEXA only if indicated by endocrine treatment or fracture risk",
+          "Do not add another anticancer medicine from this component card",
+          "Continue the individual bone and supportive-care plan"
         ],
         "source_ids": [
           "early",

@@ -651,8 +651,8 @@
 
         <article class="workflow-module patient">
           <div class="workflow-module-icon">QR</div>
-          <div><span>Patient</span><h3>Patient platform</h3><p>${dedicatedPatientPipeline(activeProtocol)?"Open the dedicated regimen-specific patient pipeline, visual guide and schedule-aware support.":"Open the regimen guide or print the generic wallet-sized card."} Patient details remain patient-agnostic in SACTCheck.</p></div>
-          ${moduleStatus("available")}
+          <details class="workflow-patient-disclosure">
+          <summary><span>Patient platform</span><span class="workflow-disclosure-chevron" aria-hidden="true">⌄</span></summary>
           <div class="workflow-patient-actions">
           <button class="btn secondary workflow-module-action" type="button" data-workflow-patient-guide>Open patient platform</button>
           <button class="btn secondary workflow-module-action" type="button" data-workflow-passport-card>Open Treatment Passport</button>
@@ -660,6 +660,7 @@
           ${patientAssets()?.relativePath?.(activeProtocol,'longitudinal')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'longitudinal'))}" target="_blank" rel="noopener noreferrer">Whole treatment journey · scans and monitoring</a>`:''}
           ${patientAssets()?.definitionFor?.(activeProtocol)?.sactCard?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'sact-card'))}" target="_blank" rel="noopener noreferrer">Treatment / contact card</a>`:''}
           </div>
+          </details>
         </article>
 
         <article class="workflow-module source">

@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.13';
-  const CONTENT_RELEASE='0.84.13';
+  const RELEASE='0.84.14';
+  const CONTENT_RELEASE='0.84.14';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00734':{"title": "weekly carboplatin AUC 2 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -69,7 +69,7 @@
     '00892':{title:"Adjuvant ribociclib + endocrine therapy",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
     '00936':{title:"Tucatinib + capecitabine + trastuzumab",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
     '00525':{title:"Ribociclib + endocrine therapy \u00b7 metastatic",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true},
-    '00726':{title:"Pertuzumab + trastuzumab maintenance",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,longitudinal:true},
+    '00726':{title:"Pertuzumab + trastuzumab maintenance",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
     '00207':{title:"Cetuximab \u00b7 weekly",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00732':{title:"Cetuximab \u00b7 every two weeks",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},
     '00328':{title:"Weekly cetuximab + FOLFIRI",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true},

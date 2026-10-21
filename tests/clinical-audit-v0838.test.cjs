@@ -29,7 +29,7 @@ for(const f of ['alt_uln_multiple','ast_uln_multiple'])for(const [v,e] of [[3.01
 const alt=t('00659','ALT G2 lower restart level',{alt_uln_multiple:4},'withhold');assert(alt.findings.some(x=>/reduce one level/.test(x.explanation)));
 const ast=t('00659','AST G2 same restart level',{ast_uln_multiple:4},'withhold');assert(ast.findings.some(x=>/same dose/.test(x.explanation)));
 for(const [v,e] of [[1.01,'withhold'],[2,'withhold'],[2.01,'discontinue']])t('00659','T-DM1 bilirubin '+v,{bilirubin_uln_multiple:v},e);
-for(const [v,drop,e] of [[44.99,0,'withhold'],[45,10,'withhold'],[49.99,10,'withhold'],[45,9.99,'proceed_with_caution']])t('00659','Early cardiac branch '+v+'/'+drop,{lvef_percent:v,lvef_drop_points:drop},e);
+for(const [v,drop,e] of [[44.99,0,'withhold'],[45,10,'withhold'],[49.99,10,'withhold'],[45,9.99,'proceed_with_caution']])t('00659','Early cardiac branch '+v+'/'+drop,{assessment_stage:'ongoing',lvef_percent:v,lvef_drop_points:drop},e);
 t('00659','Missing cardiac change',{lvef_percent:46},'consultant_review');t('00659','Persistent cardiac stop',{lvef_repeat_confirms:true},'discontinue');
 t('00659','Drug ILD',{pulmonary_toxicity:true},'permanently_discontinue');t('00659','RT G2 unresolved',{rt_pneumonitis_grade:2,rt_pneumonitis_not_resolving:true},'discontinue');t('00659','Below lowest dose',{dose_reduction_level:2,further_reduction_required:true},'discontinue');
 for(const v of [.49,.5,.99])t('00892','Ribociclib ANC '+v,{anc:v},'withhold',noRestart);

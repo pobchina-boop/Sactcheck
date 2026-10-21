@@ -5,14 +5,14 @@
   "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00201",
-    "nccp_version": 6,
+    "nccp_version": "6",
     "tumour_group": "Breast",
     "title": "Trastuzumab Intravenous Monotherapy – 7 days",
     "short_title": "Trastuzumab IV weekly",
     "indication": "HER2-positive metastatic breast cancer",
-    "regimen_reimbursement_code": "00785a",
-    "published_date": "2022-12-20",
-    "review_date": "2029-04-12",
+    "regimen_reimbursement_code": "00201a",
+    "published_date": "2014-02-10",
+    "review_date": "2030-04-10",
     "source_url": "https://healthservice.hse.ie/documents/6540/201_v6_Trastuzumab_IV_7_days.pdf",
     "source_document_pages": 5,
     "catalog": {
@@ -21,7 +21,7 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.83.9",
+    "sactcheck_encoding_version": "0.84.14",
     "validation": {
       "source_document_checked": true,
       "software_tests_completed": true,
@@ -70,13 +70,21 @@
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00201-v6",
-    "source_checked_date": "2026-10-17",
+    "source_checked_date": "2026-10-21",
     "schedule_summary": "Initial loading 4 mg/kg; omit loading when continuing from a trastuzumab-containing regimen. Review missed-dose history separately.",
     "audit_limitations": [
       "Other cancer medicines in combination indications require the complete combination protocol; this card encodes trastuzumab only.",
       "Independent clinical and pharmacy validation pending."
     ],
-    "source_version_verified_date": "2026-10-17"
+    "source_version_verified_date": "2026-10-21",
+    "last_reviewed_date": "2025-04-10",
+    "review_date_basis": "next_scheduled_review",
+    "retrospective_review_v08414": {
+      "checked": "2026-10-21",
+      "clinical_use_authorised": false,
+      "status": "Source reconciliation; independent oncology/pharmacy approval pending",
+      "audit_folder": "validation/her2-retro-v08414/antibody"
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -86,8 +94,8 @@
   },
   "indications": [
     {
-      "code": "00200a",
-      "description": "HER2-positive breast cancer treated with intravenous trastuzumab every 21 days."
+      "code": "00201a",
+      "description": "HER2-positive metastatic breast cancer; intravenous trastuzumab every 7 days."
     }
   ],
   "treatment_phases": [
@@ -805,6 +813,59 @@
           "document": "NCCP 00201 v6",
           "url": "https://healthservice.hse.ie/documents/6540/201_v6_Trastuzumab_IV_7_days.pdf",
           "page": 2
+        }
+      },
+      {
+        "rule_id": "INFUSION_REACTION_G1_G2",
+        "when": {
+          "all": [
+            {
+              "field": "hypersensitivity_grade",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "hypersensitivity_grade",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Pause or slow the infusion and assess the reaction. Provide appropriate treatment and observe until symptoms resolve; restart requires the treating team’s decision."
+        },
+        "explanation": "Pause or slow the infusion and assess the reaction. Provide appropriate treatment and observe until symptoms resolve; restart requires the treating team’s decision.",
+        "source": {
+          "document": "Roche Herceptin IV SmPC",
+          "url": "https://www.medicines.org.uk/emc/product/3856/smpc",
+          "section": "4.4",
+          "note": "HTML SmPC section 4.4; no physical page reference. NCCP 00201 v6 page 4 directs the reader to the relevant SmPC."
+        }
+      },
+      {
+        "rule_id": "SEVERE_REACTION_G3",
+        "when": {
+          "field": "hypersensitivity_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Stop the infusion and urgently treat the serious reaction. Re-exposure requires specialist review; grade 3 alone is not a rule for permanent cessation."
+        },
+        "explanation": "Stop the infusion and urgently treat the serious reaction. Re-exposure requires specialist review; grade 3 alone is not a rule for permanent cessation.",
+        "source": {
+          "document": "Roche Herceptin IV SmPC",
+          "url": "https://www.medicines.org.uk/emc/product/3856/smpc",
+          "section": "4.4",
+          "note": "HTML SmPC section 4.4; no physical page reference. NCCP 00201 v6 page 4 directs the reader to the relevant SmPC."
         }
       }
     ]

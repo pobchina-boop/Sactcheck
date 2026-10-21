@@ -21,7 +21,7 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.83.7",
+    "sactcheck_encoding_version": "0.84.14",
     "catalogue_section": "targeted_her2_therapy",
     "catalogue_section_label": "Targeted & HER2 therapies",
     "treatment_class": [
@@ -57,7 +57,7 @@
     },
     "encoding_maturity": {
       "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Source-mapped rules \u00b7 independent clinical/pharmacy review pending",
+      "label": "Source-mapped rules · independent clinical/pharmacy review pending",
       "source_reconciled": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -69,7 +69,14 @@
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00726-v3a",
-    "source_checked_date": "2026-10-17"
+    "source_checked_date": "2026-10-21",
+    "source_version_verified_date": "2026-10-21",
+    "retrospective_review_v08414": {
+      "checked": "2026-10-21",
+      "clinical_use_authorised": false,
+      "status": "Source reconciliation; independent oncology/pharmacy approval pending",
+      "audit_folder": "validation/her2-retro-v08414/antibody"
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -268,7 +275,7 @@
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Increase of 4\u20136 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
         },
         {
           "value": 3,
@@ -458,6 +465,65 @@
       "required": false,
       "input_role": "decision",
       "demo_value": false
+    },
+    "treatment_setting": {
+      "label": "Treatment setting",
+      "type": "select",
+      "required": false,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "metastatic",
+          "label": "Metastatic / locally recurrent unresectable"
+        },
+        {
+          "value": "early",
+          "label": "Early breast cancer"
+        }
+      ],
+      "demo_value": "metastatic"
+    },
+    "indication_eligible": {
+      "label": "Full NCCP maintenance indication confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "chemotherapy_component_completed": {
+      "label": "Preceding chemotherapy with pertuzumab/trastuzumab completed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "disease_progression": {
+      "label": "Disease progression on current treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cardiac_monitoring_overdue": {
+      "label": "Required echo / MUGA result overdue or unavailable",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prolonged_diarrhoea": {
+      "label": "Prolonged diarrhoea despite supportive treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "concurrent_anthracycline": {
+      "label": "Concurrent anthracycline planned",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -625,7 +691,7 @@
           "document": "NCCP 00726 v3a",
           "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf"
         },
-        "explanation": "LVEF 40\u201345% with a fall of at least 10 points requires withholding."
+        "explanation": "LVEF 40–45% with a fall of at least 10 points requires withholding."
       },
       {
         "rule_id": "SYMPTOMATIC_HEART_FAILURE",
@@ -919,11 +985,11 @@
             "pertuzumab",
             "trastuzumab"
           ],
-          "recommendation": "Starting eligibility requires LVEF \u226550%; this differs from the on-treatment withholding criteria.",
+          "recommendation": "Starting eligibility requires LVEF ≥50%; this differs from the on-treatment withholding criteria.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Starting eligibility requires LVEF \u226550%; this differs from the on-treatment withholding criteria.",
+        "explanation": "Starting eligibility requires LVEF ≥50%; this differs from the on-treatment withholding criteria.",
         "source": {
           "document": "NCCP 00726 v3a",
           "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
@@ -956,11 +1022,11 @@
             "pertuzumab",
             "trastuzumab"
           ],
-          "recommendation": "Current LVEF is in the 40\u201345% band. The absolute fall from pretreatment is needed to apply the withholding criterion.",
+          "recommendation": "Current LVEF is in the 40–45% band. The absolute fall from pretreatment is needed to apply the withholding criterion.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Current LVEF is in the 40\u201345% band. The absolute fall from pretreatment is needed to apply the withholding criterion.",
+        "explanation": "Current LVEF is in the 40–45% band. The absolute fall from pretreatment is needed to apply the withholding criterion.",
         "source": {
           "document": "NCCP 00726 v3a",
           "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
@@ -985,6 +1051,190 @@
           "dose_calculation": "specialist_review"
         },
         "explanation": "Urgently assess severe diarrhoea and provide supportive treatment; consider interrupting pertuzumab if there is no improvement.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "MAINTENANCE_SETTING_REVIEW",
+        "when": {
+          "field": "treatment_setting",
+          "operator": "==",
+          "value": "early"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "This NCCP maintenance card is for metastatic or locally recurrent unresectable disease; use the relevant early-breast pathway."
+        },
+        "explanation": "This NCCP maintenance card is for metastatic or locally recurrent unresectable disease; use the relevant early-breast pathway.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "MAINTENANCE_INDICATION_REVIEW",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Confirm the complete maintenance indication and preceding pertuzumab/trastuzumab chemotherapy strategy before selecting this card."
+        },
+        "explanation": "Confirm the complete maintenance indication and preceding pertuzumab/trastuzumab chemotherapy strategy before selecting this card.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "CHEMOTHERAPY_COMPLETION_REVIEW",
+        "when": {
+          "field": "chemotherapy_component_completed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "The chemotherapy component has not been completed. Review the active combination protocol; this card describes antibody-only continuation."
+        },
+        "explanation": "The chemotherapy component has not been completed. Review the active combination protocol; this card describes antibody-only continuation.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "PROGRESSION_REVIEW",
+        "when": {
+          "field": "disease_progression",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Progression requires reassessment of the treatment strategy; do not automatically continue this maintenance plan."
+        },
+        "explanation": "Progression requires reassessment of the treatment strategy; do not automatically continue this maintenance plan.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "ECHO_UNAVAILABLE",
+        "when": {
+          "field": "cardiac_monitoring_overdue",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Obtain the required cardiac result and a documented specialist decision before the next administration; do not assume normal function."
+        },
+        "explanation": "Obtain the required cardiac result and a documented specialist decision before the next administration; do not assume normal function.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "UNCONTROLLED_HYPERTENSION_REVIEW",
+        "when": {
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Uncontrolled hypertension is a cardiac-risk context not studied in the pertuzumab population described by NCCP. Assess and optimise cardiovascular status before deciding to continue."
+        },
+        "explanation": "Uncontrolled hypertension is a cardiac-risk context not studied in the pertuzumab population described by NCCP. Assess and optimise cardiovascular status before deciding to continue.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PROLONGED_DIARRHOEA_NOT_IMPROVING",
+        "when": {
+          "all": [
+            {
+              "field": "prolonged_diarrhoea",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "diarrhoea_not_improving",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "Consider interrupting pertuzumab for prolonged diarrhoea that has not improved with supportive treatment. Review hydration and electrolytes; resume only after symptoms are controlled."
+        },
+        "explanation": "Consider interrupting pertuzumab for prolonged diarrhoea that has not improved with supportive treatment. Review hydration and electrolytes; resume only after symptoms are controlled.",
+        "source": {
+          "document": "NCCP 00726 v3a",
+          "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "ANTHRACYCLINE_OVERLAP",
+        "when": {
+          "field": "concurrent_anthracycline",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Do not administer concurrent anthracycline with this HER2-antibody maintenance card; review the complete regimen and cardiac risk."
+        },
+        "explanation": "Do not administer concurrent anthracycline with this HER2-antibody maintenance card; review the complete regimen and cardiac risk.",
         "source": {
           "document": "NCCP 00726 v3a",
           "url": "https://healthservice.hse.ie/documents/6599/726_v3a_Pertuzumab_trastuzumab.pdf",
