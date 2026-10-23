@@ -52,7 +52,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6545/204_v11_PertuzumabTrasDoc.pdf",
-    "basis": "HER2-positive metastatic or unresectable locally recurrent breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "HER2-positive metastatic or unresectable locally recurrent breast cancer"
   },
   "00206": {
     "code": "00206",
@@ -76,9 +76,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6559/217_Lapatinib_and_Capecitabine_therapy.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "HER2-positive advanced or metastatic breast cancer after prior anthracycline, taxane and trastuzumab therapy, in accordance with the NCCP indication."
   },
   "00230": {
     "code": "00230",
@@ -162,7 +162,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6362/258_v9_TCH.pdf",
-    "basis": "HER2-positive adjuvant breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "HER2-positive adjuvant breast cancer"
   },
   "00260": {
     "code": "00260",
@@ -325,9 +325,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "NCCP00350a: adult high-risk HER2-positive neoadjuvant treatment with separately selected chemotherapy. NCCP00350b: adjuvant high-risk HER2-positive treatment; source records pertuzumab reimbursement not approved. Verify access separately."
   },
   "00361": {
     "code": "00361",
@@ -518,7 +518,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf",
-    "basis": "HER2-positive metastatic or unresectable locally recurrent breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "HER2-positive metastatic or unresectable locally recurrent breast cancer"
   },
   "00512": {
     "code": "00512",
@@ -555,9 +555,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6630/526_v5_Pertuzumab_Vinorelbine_trastuzumab_zOGbzKp.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Treatment of adults with HER2-positive metastatic or locally recurrent unresectable breast cancer without previous anti-HER2 therapy or chemotherapy for metastatic disease, when taxane therapy is clinically unsuitable."
   },
   "00545": {
     "code": "00545",
@@ -649,7 +649,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6598/722_v2_TCHP.pdf",
-    "basis": "NCCP source audit 2026-10-17"
+    "basis": "Neoadjuvant treatment of adult patients with HER2-positive locally advanced, inflammatory or early breast cancer at high risk of recurrence."
   },
   "00726": {
     "code": "00726",
@@ -676,7 +676,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf",
-    "basis": "HER2-positive neoadjuvant breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "HER2-positive neoadjuvant breast cancer"
   },
   "00734": {
     "code": "00734",
@@ -766,9 +766,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6662/775_v3_Pertuzumab_trastuzumab_PACLitaxel_CARBOplatin.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Neoadjuvant treatment of HER2-positive locally advanced, inflammatory or high-risk early breast cancer."
   },
   "00776": {
     "code": "00776",
@@ -877,9 +877,9 @@ const regimens={
     "receptors": [
       "her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6421/798_v3_Pertuzumab_trastuzumab_Phesgo_vinorelbine.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Treatment of adults with HER2-positive metastatic or locally recurrent unresectable breast cancer without previous anti-HER2 therapy or chemotherapy for metastatic disease, when taxane therapy is clinically unsuitable."
   },
   "00815": {
     "code": "00815",

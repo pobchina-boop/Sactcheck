@@ -4,6 +4,7 @@
   const endpoints={
     OS:{name:'Overall survival',family:'survival',icon:'◷',definition:'Time to death from any cause, from the study-defined starting point.'},
     PFS:{name:'Progression-free survival',family:'progression',icon:'◫',definition:'Time to progression or death; preserve the study assessment criteria.'},
+    TTP:{name:'Time to progression',family:'progression',icon:'◫',definition:'Time to the trial-defined progression event. Death handling varies by trial; TTP is not interchangeable with PFS.'},
     EFS:{name:'Event-free survival',family:'events',icon:'◇',definition:'Time to a study-defined event. Check the exact events included; this is not interchangeable with DFS.'},
     DFS:{name:'Disease-free survival',family:'events',icon:'◇',definition:'Time to disease recurrence or other events specified by the study, including death where defined.'},
     iDFS:{name:'Invasive disease-free survival',family:'events',icon:'◇',definition:'Time to the invasive-disease events and deaths defined by the study; review the full composite definition.'},

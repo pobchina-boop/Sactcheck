@@ -607,8 +607,11 @@
   }
 
   function descriptor(definition, option) {
-    if (isEcogDefinition(definition)) return "";
+    const eventCount = !/grade|ctcae/.test(definition?.id || "") && /occurrence|episodes?|event[_ ]?number|reduction[_ ]?count|number of reductions/.test(normalise(definition));
+    if (isEcogDefinition(definition) || eventCount) return "";
     if (option?.description) return String(option.description);
+    // A numeric schedule day or event count is not a toxicity severity grade.
+    if (!/grade|ctcae/.test(normalise(definition)) && !definition?.ctcae_category && !sourceSpecific(definition) && option?.ctcae_grade == null && !/grade/i.test(option?.label || "")) return "";
     if (sourceSpecific(definition)) return "Refer to the grading criteria in the named regimen/product source.";
     const grade = numericGrade(option?.ctcae_grade ?? option?.value, option?.label);
     if (grade === null) return "";

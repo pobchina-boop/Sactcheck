@@ -1,0 +1,3102 @@
+{
+  "mode": "candidates",
+  "checked": "2026-10-21",
+  "scope": "Independent source expectations; software tests do not constitute clinical authorisation.",
+  "count": 168,
+  "passed": 168,
+  "failed": 0,
+  "cases": [
+    {
+      "code": "00350",
+      "name": "Empty assessment never clears",
+      "input": {},
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Invalid stage produces clarification",
+      "input": {
+        "assessment_stage": "nonsense"
+      },
+      "expectedRules": [
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_ASSESSMENT_STAGE",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Heart failure remains independently actionable",
+      "input": {
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "HEART_FAILURE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "HEART_FAILURE",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Invalid stage does not mask symptomatic heart failure",
+      "input": {
+        "assessment_stage": "nonsense",
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "HEART_FAILURE",
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "HEART_FAILURE",
+        "INVALID_ASSESSMENT_STAGE",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Cardiac hold boundary 49.99/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49.99,
+        "lvef_drop_points": 10
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "LVEF_HOLD"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "withhold",
+      "actualRules": [
+        "LVEF_HOLD",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Cardiac hold boundary 50/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 50,
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "LVEF_HOLD"
+      ],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Cardiac hold boundary 49/9.99",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49,
+        "lvef_drop_points": 9.99
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "LVEF_HOLD"
+      ],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Drop alone does not stand in for current LVEF",
+      "input": {
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [
+        "LVEF_CURRENT_MISSING"
+      ],
+      "excludedRules": [
+        "LVEF_HOLD"
+      ],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "LVEF_CURRENT_MISSING",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Current LVEF alone needs stage",
+      "input": {
+        "lvef_percent": 54
+      },
+      "expectedRules": [
+        "LVEF_STAGE_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 2,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "LVEF_STAGE_MISSING",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Pregnancy independently excluded",
+      "input": {
+        "pregnancy": true
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "PREGNANCY"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "PREGNANCY",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Empty assessment never clears",
+      "input": {},
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "incomplete",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Invalid stage produces clarification",
+      "input": {
+        "assessment_stage": "nonsense"
+      },
+      "expectedRules": [
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Invalid phase produces clarification",
+      "input": {
+        "treatment_phase": "nonsense"
+      },
+      "expectedRules": [
+        "INVALID_TREATMENT_PHASE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_TREATMENT_PHASE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Postoperative phase requires selected regimen",
+      "input": {
+        "treatment_phase": "continuation"
+      },
+      "expectedRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Heart failure remains independently actionable",
+      "input": {
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "HEART_FAILURE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "HEART_FAILURE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Invalid stage does not mask symptomatic heart failure",
+      "input": {
+        "assessment_stage": "nonsense",
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "HEART_FAILURE",
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "HEART_FAILURE",
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Cardiac hold boundary 49.99/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49.99,
+        "lvef_drop_points": 10
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "LVEF_HOLD"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "withhold",
+      "actualRules": [
+        "LVEF_HOLD"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Cardiac hold boundary 50/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 50,
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "LVEF_HOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Cardiac hold boundary 49/9.99",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49,
+        "lvef_drop_points": 9.99
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "LVEF_HOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Drop alone does not stand in for current LVEF",
+      "input": {
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [
+        "LVEF_CURRENT_MISSING"
+      ],
+      "excludedRules": [
+        "LVEF_HOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "LVEF_CURRENT_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Current LVEF alone needs stage",
+      "input": {
+        "lvef_percent": 54
+      },
+      "expectedRules": [
+        "LVEF_STAGE_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "LVEF_STAGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Pregnancy independently excluded",
+      "input": {
+        "pregnancy": true
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "PREGNANCY"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "PREGNANCY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Empty assessment never clears",
+      "input": {},
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "incomplete",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Invalid stage produces clarification",
+      "input": {
+        "assessment_stage": "nonsense"
+      },
+      "expectedRules": [
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Invalid phase produces clarification",
+      "input": {
+        "treatment_phase": "nonsense"
+      },
+      "expectedRules": [
+        "INVALID_TREATMENT_PHASE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_TREATMENT_PHASE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Postoperative phase requires selected regimen",
+      "input": {
+        "treatment_phase": "continuation"
+      },
+      "expectedRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Heart failure remains independently actionable",
+      "input": {
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "HER2_HF"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "withhold",
+      "actualRules": [
+        "HER2_HF"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Invalid stage does not mask symptomatic heart failure",
+      "input": {
+        "assessment_stage": "nonsense",
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "HER2_HF",
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "withhold",
+      "actualRules": [
+        "HER2_HF",
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Cardiac hold boundary 49.99/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49.99,
+        "lvef_drop_points": 10
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "HER2_LVEF_HOLD"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "withhold",
+      "actualRules": [
+        "HER2_LVEF_HOLD",
+        "HER2_LVEF_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Cardiac hold boundary 50/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 50,
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "HER2_LVEF_HOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_LVEF_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Cardiac hold boundary 49/9.99",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49,
+        "lvef_drop_points": 9.99
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "HER2_LVEF_HOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_LVEF_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Drop alone does not stand in for current LVEF",
+      "input": {
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [
+        "LVEF_CURRENT_MISSING"
+      ],
+      "excludedRules": [
+        "HER2_LVEF_HOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_LVEF_REVIEW",
+        "LVEF_CURRENT_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Current LVEF alone needs stage",
+      "input": {
+        "lvef_percent": 54
+      },
+      "expectedRules": [
+        "LVEF_STAGE_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "LVEF_STAGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Pregnancy independently excluded",
+      "input": {
+        "pregnancy": true
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "PREGNANCY_REVIEW"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "PREGNANCY_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Empty assessment never clears",
+      "input": {},
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "incomplete",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Invalid stage produces clarification",
+      "input": {
+        "assessment_stage": "nonsense"
+      },
+      "expectedRules": [
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Invalid phase produces clarification",
+      "input": {
+        "treatment_phase": "nonsense"
+      },
+      "expectedRules": [
+        "INVALID_TREATMENT_PHASE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_TREATMENT_PHASE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Postoperative phase requires selected regimen",
+      "input": {
+        "treatment_phase": "continuation"
+      },
+      "expectedRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Heart failure remains independently actionable",
+      "input": {
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "SYMPTOMATIC_HEART_FAILURE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "SYMPTOMATIC_HEART_FAILURE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Invalid stage does not mask symptomatic heart failure",
+      "input": {
+        "assessment_stage": "nonsense",
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "SYMPTOMATIC_HEART_FAILURE",
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "SYMPTOMATIC_HEART_FAILURE",
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Cardiac hold boundary 49.99/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49.99,
+        "lvef_drop_points": 10
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "LVEF_WITHHOLD"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "withhold",
+      "actualRules": [
+        "LVEF_WITHHOLD"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Cardiac hold boundary 50/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 50,
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "LVEF_WITHHOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Cardiac hold boundary 49/9.99",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49,
+        "lvef_drop_points": 9.99
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "LVEF_WITHHOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Drop alone does not stand in for current LVEF",
+      "input": {
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [
+        "LVEF_CURRENT_MISSING"
+      ],
+      "excludedRules": [
+        "LVEF_WITHHOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "LVEF_CURRENT_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Current LVEF alone needs stage",
+      "input": {
+        "lvef_percent": 54
+      },
+      "expectedRules": [
+        "LVEF_STAGE_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "LVEF_STAGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Pregnancy independently excluded",
+      "input": {
+        "pregnancy": true
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "EXCLUSION_PREGNANCY_BREASTFEEDING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "EXCLUSION_PREGNANCY_BREASTFEEDING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Empty assessment never clears",
+      "input": {},
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "incomplete",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Invalid stage produces clarification",
+      "input": {
+        "assessment_stage": "nonsense"
+      },
+      "expectedRules": [
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Invalid phase produces clarification",
+      "input": {
+        "treatment_phase": "nonsense"
+      },
+      "expectedRules": [
+        "INVALID_TREATMENT_PHASE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_TREATMENT_PHASE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Postoperative phase requires selected regimen",
+      "input": {
+        "treatment_phase": "continuation"
+      },
+      "expectedRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Heart failure remains independently actionable",
+      "input": {
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "HER2_HF"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "HER2_HF"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Invalid stage does not mask symptomatic heart failure",
+      "input": {
+        "assessment_stage": "nonsense",
+        "symptomatic_heart_failure": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "HER2_HF",
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "HER2_HF",
+        "INVALID_ASSESSMENT_STAGE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Cardiac hold boundary 49.99/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49.99,
+        "lvef_drop_points": 10
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "HER2_LVEF_HOLD"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "withhold",
+      "actualRules": [
+        "HER2_LVEF_HOLD",
+        "HER2_LVEF_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Cardiac hold boundary 50/10",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 50,
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "HER2_LVEF_HOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_LVEF_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Cardiac hold boundary 49/9.99",
+      "input": {
+        "assessment_stage": "ongoing",
+        "lvef_percent": 49,
+        "lvef_drop_points": 9.99
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "HER2_LVEF_HOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_LVEF_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Drop alone does not stand in for current LVEF",
+      "input": {
+        "lvef_drop_points": 10
+      },
+      "expectedRules": [
+        "LVEF_CURRENT_MISSING"
+      ],
+      "excludedRules": [
+        "HER2_LVEF_HOLD"
+      ],
+      "sourcePage": 7,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_LVEF_REVIEW",
+        "LVEF_CURRENT_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Current LVEF alone needs stage",
+      "input": {
+        "lvef_percent": 54
+      },
+      "expectedRules": [
+        "LVEF_STAGE_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "LVEF_STAGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Pregnancy independently excluded",
+      "input": {
+        "pregnancy": true
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "PREGNANCY_REVIEW"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "PREGNANCY_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Pretreatment LVEF49 current value",
+      "input": {
+        "treatment_setting": "neoadjuvant",
+        "companion_regimen_confirmed": true,
+        "assessment_stage": "baseline",
+        "lvef_percent": 49
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "BASELINE_CURRENT_LVEF_LOW"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "withhold",
+      "actualRules": [
+        "BASELINE_CURRENT_LVEF_LOW",
+        "LVEF_CHANGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Pretreatment LVEF54 no anthracycline",
+      "input": {
+        "treatment_setting": "neoadjuvant",
+        "companion_regimen_confirmed": true,
+        "assessment_stage": "baseline",
+        "lvef_percent": 54,
+        "anthracycline_completed": false
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "BASELINE_CURRENT_LVEF_50_55"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "withhold",
+      "actualRules": [
+        "BASELINE_CURRENT_LVEF_50_55"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Pretreatment LVEF50 after anthracycline",
+      "input": {
+        "treatment_setting": "neoadjuvant",
+        "companion_regimen_confirmed": true,
+        "assessment_stage": "baseline",
+        "lvef_percent": 50,
+        "anthracycline_completed": true
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "BASELINE_CURRENT_LVEF_50_55",
+        "BASELINE_CURRENT_LVEF_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Pretreatment LVEF54 unknown anthracycline",
+      "input": {
+        "treatment_setting": "neoadjuvant",
+        "companion_regimen_confirmed": true,
+        "assessment_stage": "baseline",
+        "lvef_percent": 54
+      },
+      "expectedRules": [
+        "BASELINE_CURRENT_HISTORY_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "BASELINE_CURRENT_HISTORY_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Ongoing historical low baseline is not current hold",
+      "input": {
+        "treatment_setting": "neoadjuvant",
+        "companion_regimen_confirmed": true,
+        "assessment_stage": "ongoing",
+        "baseline_lvef_percent": 49,
+        "lvef_percent": 60,
+        "lvef_drop_points": 0
+      },
+      "expectedRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "excludedRules": [
+        "BASELINE_LVEF_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Six-week IV gap 41.99",
+      "input": {
+        "treatment_setting": "neoadjuvant",
+        "companion_regimen_confirmed": true,
+        "days_since_last_antibody": 41.99
+      },
+      "expectedRules": [
+        "HER2_MAINTENANCE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_MAINTENANCE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Six-week IV gap 42",
+      "input": {
+        "treatment_setting": "neoadjuvant",
+        "companion_regimen_confirmed": true,
+        "days_since_last_antibody": 42
+      },
+      "expectedRules": [
+        "HER2_RELOAD"
+      ],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_RELOAD"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Trastuzumab permanent stop requires pertuzumab stop",
+      "input": {
+        "treatment_setting": "neoadjuvant",
+        "companion_regimen_confirmed": true,
+        "trastuzumab_discontinued": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "STOP_PERTUZUMAB_WITH_H"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "STOP_PERTUZUMAB_WITH_H"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Pretreatment LVEF49 current value",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 49
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "BASELINE_CURRENT_LVEF_LOW"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "withhold",
+      "actualRules": [
+        "BASELINE_CURRENT_LVEF_LOW",
+        "LVEF_CHANGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Pretreatment LVEF54 no anthracycline",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 54,
+        "anthracycline_completed": false
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "BASELINE_CURRENT_LVEF_50_55"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "withhold",
+      "actualRules": [
+        "BASELINE_CURRENT_LVEF_50_55"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Pretreatment LVEF50 after anthracycline",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 50,
+        "anthracycline_completed": true
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "BASELINE_CURRENT_LVEF_50_55",
+        "BASELINE_CURRENT_LVEF_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Pretreatment LVEF54 unknown anthracycline",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 54
+      },
+      "expectedRules": [
+        "BASELINE_CURRENT_HISTORY_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "BASELINE_CURRENT_HISTORY_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Ongoing historical low baseline is not current hold",
+      "input": {
+        "assessment_stage": "ongoing",
+        "baseline_lvef_percent": 49,
+        "lvef_percent": 60,
+        "lvef_drop_points": 0
+      },
+      "expectedRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "excludedRules": [
+        "BASELINE_LVEF_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Six-week IV gap 41.99",
+      "input": {
+        "days_since_last_antibody": 41.99
+      },
+      "expectedRules": [
+        "HER2_MAINTENANCE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_MAINTENANCE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Six-week IV gap 42",
+      "input": {
+        "days_since_last_antibody": 42
+      },
+      "expectedRules": [
+        "HER2_RELOAD"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "HER2_RELOAD"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Trastuzumab permanent stop requires pertuzumab stop",
+      "input": {
+        "trastuzumab_discontinued": true
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "STOP_PERTUZUMAB_WITH_H"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "STOP_PERTUZUMAB_WITH_H"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "No companion regimen not assumed TCHP",
+      "input": {
+        "lvef_percent": 60
+      },
+      "expectedRules": [
+        "COMPANION_REGIMEN_REQUIRED"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Adjuvant Irish access distinguished",
+      "input": {
+        "treatment_setting": "adjuvant",
+        "companion_regimen_confirmed": true
+      },
+      "expectedRules": [
+        "ADJUVANT_ACCESS"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "ADJUVANT_ACCESS"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Concurrent anthracycline is held",
+      "input": {
+        "concurrent_anthracycline": true
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "ANTHRACYCLINE_CONCURRENT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "withhold",
+      "actualRules": [
+        "ANTHRACYCLINE_CONCURRENT",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Not a metastatic regimen",
+      "input": {
+        "treatment_setting": "metastatic"
+      },
+      "expectedRules": [
+        "SETTING_INVALID"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_INVALID"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "No invented chemotherapy rule in framework",
+      "input": {},
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "No chemotherapy fields in framework",
+      "input": {},
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Grade4 antibody reaction",
+      "input": {
+        "her2_hypersensitivity_grade": 4
+      },
+      "expectedAction": "discontinue",
+      "expectedRules": [
+        "HER2_REACTION_G4"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "discontinue",
+      "actualRules": [
+        "HER2_REACTION_G4",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Current reaction requires intervention",
+      "input": {
+        "her2_hypersensitivity_grade": 2
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "INFUSION_REACTION"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "withhold",
+      "actualRules": [
+        "INFUSION_REACTION",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Bronchospasm permanent pertuzumab stop",
+      "input": {
+        "bronchospasm_or_ards": true
+      },
+      "expectedAction": "permanently_discontinue",
+      "expectedRules": [
+        "PERTUZUMAB_SEVERE_REACTION"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "permanently_discontinue",
+      "actualRules": [
+        "PERTUZUMAB_SEVERE_REACTION",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Persistent severe diarrhoea",
+      "input": {
+        "severe_persistent_diarrhoea": true
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "DIARRHOEA"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "withhold",
+      "actualRules": [
+        "DIARRHOEA",
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00350",
+      "name": "Severe renal data limitation no carboplatin cutoff",
+      "input": {
+        "severe_renal_impairment": true
+      },
+      "expectedRules": [
+        "RENAL_SEVERE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COMPANION_REGIMEN_REQUIRED",
+        "SETTING_REQUIRED",
+        "RENAL_SEVERE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "TRAIN2 D1 0.99/150",
+      "input": {
+        "assessment_stage": "ongoing",
+        "cycle_day": 1,
+        "anc_x10e9_l": 0.99,
+        "platelets_x10e9_l": 150
+      },
+      "expectedAction": "delay",
+      "expectedRules": [
+        "TRAIN_D1_anc_x10e9_l"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "delay",
+      "actualRules": [
+        "TRAIN_D1_anc_x10e9_l"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "TRAIN2 D1 2/74.99",
+      "input": {
+        "assessment_stage": "ongoing",
+        "cycle_day": 1,
+        "anc_x10e9_l": 2,
+        "platelets_x10e9_l": 74.99
+      },
+      "expectedAction": "delay",
+      "expectedRules": [
+        "TRAIN_D1_platelets_x10e9_l"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "delay",
+      "actualRules": [
+        "TRAIN_D1_platelets_x10e9_l"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "TRAIN2 D8 0.49/150",
+      "input": {
+        "assessment_stage": "ongoing",
+        "cycle_day": 8,
+        "anc_x10e9_l": 0.49,
+        "platelets_x10e9_l": 150
+      },
+      "expectedAction": "omit",
+      "expectedRules": [
+        "TRAIN_D8_OMIT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "omit",
+      "actualRules": [
+        "TRAIN_D8_OMIT"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "TRAIN2 D8 2/49.99",
+      "input": {
+        "assessment_stage": "ongoing",
+        "cycle_day": 8,
+        "anc_x10e9_l": 2,
+        "platelets_x10e9_l": 49.99
+      },
+      "expectedAction": "omit",
+      "expectedRules": [
+        "TRAIN_D8_OMIT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "omit",
+      "actualRules": [
+        "TRAIN_D8_OMIT"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "TRAIN2 equality D1",
+      "input": {
+        "assessment_stage": "ongoing",
+        "cycle_day": 1,
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 75
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "TRAIN_D1_anc_x10e9_l",
+        "TRAIN_D1_platelets_x10e9_l",
+        "TRAIN_D8_OMIT"
+      ],
+      "sourcePage": 5,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "TRAIN2 equality D8",
+      "input": {
+        "assessment_stage": "ongoing",
+        "cycle_day": 8,
+        "anc_x10e9_l": 0.5,
+        "platelets_x10e9_l": 50
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "TRAIN_D1_anc_x10e9_l",
+        "TRAIN_D1_platelets_x10e9_l",
+        "TRAIN_D8_OMIT"
+      ],
+      "sourcePage": 5,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Day15 is not scheduled",
+      "input": {
+        "cycle_day": 15
+      },
+      "expectedRules": [
+        "INVALID_CYCLE_DAY"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "INVALID_CYCLE_DAY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Missing day needs correct threshold",
+      "input": {
+        "anc_x10e9_l": 0.8
+      },
+      "expectedRules": [
+        "TRAIN_DAY_MISSING_anc_x10e9_l"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "TRAIN_DAY_MISSING_anc_x10e9_l"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Baseline ANC exclusion differs from later Day1",
+      "input": {
+        "assessment_stage": "baseline",
+        "anc_x10e9_l": 1.49
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "BASELINE_ANC"
+      ],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "BASELINE_ANC"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Paclitaxel bilirubin 1.26",
+      "input": {
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 2,
+        "bilirubin_uln_multiple": 1.26
+      },
+      "expectedRules": [
+        "PAC_HEP_75"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "PAC_HEP_75"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Paclitaxel bilirubin 2",
+      "input": {
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 2,
+        "bilirubin_uln_multiple": 2
+      },
+      "expectedRules": [
+        "PAC_HEP_75"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "PAC_HEP_75"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Paclitaxel bilirubin 2.01",
+      "input": {
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 2,
+        "bilirubin_uln_multiple": 2.01
+      },
+      "expectedRules": [
+        "PAC_HEP_50"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "PAC_HEP_50"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Paclitaxel bilirubin 5",
+      "input": {
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 2,
+        "bilirubin_uln_multiple": 5
+      },
+      "expectedRules": [
+        "PAC_HEP_50"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "PAC_HEP_50"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Printed bilirubin gap 1.255",
+      "input": {
+        "bilirubin_uln_multiple": 1.255
+      },
+      "expectedAction": "consultant_review",
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "PAC_HEP_GAP_1.25",
+        "PAC_HEP_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Printed bilirubin gap 2.005",
+      "input": {
+        "bilirubin_uln_multiple": 2.005
+      },
+      "expectedAction": "consultant_review",
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "PAC_HEP_GAP_2",
+        "PAC_HEP_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Independent hepatic contraindication {\"ast_uln_multiple\":10}",
+      "input": {
+        "ast_uln_multiple": 10
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "PAC_HEP_STOP"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "PAC_HEP_STOP"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Independent hepatic contraindication {\"bilirubin_uln_multiple\":5.01}",
+      "input": {
+        "bilirubin_uln_multiple": 5.01
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "PAC_HEP_STOP"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "PAC_HEP_STOP",
+        "PAC_HEP_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Neuropathy grade2 is paclitaxel decrement",
+      "input": {
+        "neuropathy_grade": 2
+      },
+      "expectedRules": [
+        "PAC_NEURO_G2"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "PAC_NEURO_G2"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Grade3 neuropathy source overlap requires hold",
+      "input": {
+        "neuropathy_grade": 3
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "PAC_NEURO_CONFLICT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 7,
+      "actualAction": "withhold",
+      "actualRules": [
+        "PAC_NEURO_CONFLICT"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "No docetaxel residue",
+      "input": {},
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "incomplete",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Exact ANC1.5 source boundary",
+      "input": {
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 1.5,
+        "platelets_x10e9_l": 150
+      },
+      "expectedRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Exact platelet100 source boundary",
+      "input": {
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 2,
+        "platelets_x10e9_l": 100
+      },
+      "expectedRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Intermediate ANC plus platelet100 not numeric dose",
+      "input": {
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 1.2,
+        "platelets_x10e9_l": 100,
+        "count_strategy": "dose_reduction"
+      },
+      "expectedRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "excludedRules": [
+        "TCH_INTERMEDIATE_75"
+      ],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "TCH_INTERMEDIATE_CONTEXT",
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "ANC1.2 without stage needs clarification",
+      "input": {
+        "anc_x10e9_l": 1.2
+      },
+      "expectedRules": [
+        "BASELINE_COUNT_CONTEXT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "TCH_INTERMEDIATE_CONTEXT",
+        "BASELINE_COUNT_CONTEXT"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Neuropathy grade2 without stage needs clarification",
+      "input": {
+        "neuropathy_grade": 2
+      },
+      "expectedRules": [
+        "BASELINE_NEURO_CONTEXT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "BASELINE_NEURO_CONTEXT"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Postchemotherapy low counts not TCHP delay",
+      "input": {
+        "treatment_phase": "continuation",
+        "anc_x10e9_l": 0.2
+      },
+      "expectedRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "excludedRules": [
+        "COUNTS_LOW_IMMEDIATE_DELAY",
+        "TCH_COUNTS_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Current baseline LVEF49",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 49
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "CURRENT_BASELINE_LVEF_LOW"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "withhold",
+      "actualRules": [
+        "CURRENT_BASELINE_LVEF_LOW",
+        "HER2_LVEF_REVIEW",
+        "LVEF_CHANGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Historic low LVEF during ongoing not new hold",
+      "input": {
+        "assessment_stage": "ongoing",
+        "baseline_lvef_percent": 49,
+        "lvef_percent": 60,
+        "lvef_drop_points": 0
+      },
+      "expectedRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "excludedRules": [
+        "HER2_BASELINE_LOW",
+        "HISTORIC_BASELINE_LVEF_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "55 exact remains clinical judgement",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 55
+      },
+      "expectedRules": [
+        "CURRENT_BASELINE_LVEF_BORDERLINE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CURRENT_BASELINE_LVEF_BORDERLINE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Exact ANC1.5 source boundary",
+      "input": {
+        "assessment_stage": "ongoing",
+        "anc": 1.5,
+        "platelets": 150
+      },
+      "expectedRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COUNT_SOURCE_EQUALITY",
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Exact platelet100 source boundary",
+      "input": {
+        "assessment_stage": "ongoing",
+        "anc": 2,
+        "platelets": 100
+      },
+      "expectedRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COUNT_SOURCE_EQUALITY",
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Intermediate ANC plus platelet100 not numeric dose",
+      "input": {
+        "assessment_stage": "ongoing",
+        "anc": 1.2,
+        "platelets": 100,
+        "gcsf_strategy": "dose_reduction"
+      },
+      "expectedRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "excludedRules": [
+        "COUNTS_INTERMEDIATE_REDUCE"
+      ],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COUNT_SOURCE_EQUALITY",
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "ANC1.2 without stage needs clarification",
+      "input": {
+        "anc": 1.2
+      },
+      "expectedRules": [
+        "BASELINE_COUNT_CONTEXT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COUNTS_INTERMEDIATE_CONTEXT",
+        "BASELINE_COUNT_CONTEXT"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Neuropathy grade2 without stage needs clarification",
+      "input": {
+        "neuropathy_grade": 2
+      },
+      "expectedRules": [
+        "BASELINE_NEURO_CONTEXT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "BASELINE_NEURO_CONTEXT"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Postchemotherapy low counts not TCHP delay",
+      "input": {
+        "treatment_phase": "continuation",
+        "anc": 0.2
+      },
+      "expectedRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "excludedRules": [
+        "COUNTS_LOW_IMMEDIATE_DELAY",
+        "TCH_COUNTS_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Current baseline LVEF49",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 49
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "BASELINE_LVEF_BELOW55"
+      ],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "BASELINE_LVEF_BELOW55",
+        "LOW_LVEF_CONTEXT",
+        "LVEF_CHANGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Historic low LVEF during ongoing not new hold",
+      "input": {
+        "assessment_stage": "ongoing",
+        "baseline_lvef_percent": 49,
+        "lvef_percent": 60,
+        "lvef_drop_points": 0
+      },
+      "expectedRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "excludedRules": [
+        "HER2_BASELINE_LOW",
+        "HISTORIC_BASELINE_LVEF_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "No invented postanthracycline50 exception",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 54,
+        "anthracycline_completed": true
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "BASELINE_LVEF_BELOW55"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Exact ANC1.5 source boundary",
+      "input": {
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 1.5,
+        "platelets_x10e9_l": 150
+      },
+      "expectedRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Exact platelet100 source boundary",
+      "input": {
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 2,
+        "platelets_x10e9_l": 100
+      },
+      "expectedRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Intermediate ANC plus platelet100 not numeric dose",
+      "input": {
+        "assessment_stage": "ongoing",
+        "anc_x10e9_l": 1.2,
+        "platelets_x10e9_l": 100,
+        "count_strategy": "dose_reduction"
+      },
+      "expectedRules": [
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "excludedRules": [
+        "TCH_INTERMEDIATE_75"
+      ],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "TCH_INTERMEDIATE_CONTEXT",
+        "COUNT_EXACT_BOUNDARY"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "ANC1.2 without stage needs clarification",
+      "input": {
+        "anc_x10e9_l": 1.2
+      },
+      "expectedRules": [
+        "BASELINE_COUNT_CONTEXT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "TCH_INTERMEDIATE_CONTEXT",
+        "BASELINE_COUNT_CONTEXT"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Neuropathy grade2 without stage needs clarification",
+      "input": {
+        "neuropathy_grade": 2
+      },
+      "expectedRules": [
+        "BASELINE_NEURO_CONTEXT"
+      ],
+      "excludedRules": [],
+      "sourcePage": 4,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "BASELINE_NEURO_CONTEXT"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Postchemotherapy low counts not TCHP delay",
+      "input": {
+        "treatment_phase": "continuation",
+        "anc_x10e9_l": 0.2
+      },
+      "expectedRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "excludedRules": [
+        "COUNTS_LOW_IMMEDIATE_DELAY",
+        "TCH_COUNTS_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CONTINUATION_REGIMEN_REQUIRED"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Current baseline LVEF49",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 49
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [
+        "CURRENT_BASELINE_LVEF_LOW"
+      ],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "withhold",
+      "actualRules": [
+        "CURRENT_BASELINE_LVEF_LOW",
+        "HER2_LVEF_REVIEW",
+        "LVEF_CHANGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Historic low LVEF during ongoing not new hold",
+      "input": {
+        "assessment_stage": "ongoing",
+        "baseline_lvef_percent": 49,
+        "lvef_percent": 60,
+        "lvef_drop_points": 0
+      },
+      "expectedRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "excludedRules": [
+        "HER2_BASELINE_LOW",
+        "HISTORIC_BASELINE_LVEF_LOW"
+      ],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "ONGOING_BASELINE_HISTORY_REVIEW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "No invented postanthracycline50 exception",
+      "input": {
+        "assessment_stage": "baseline",
+        "lvef_percent": 54,
+        "anthracycline_completed": true
+      },
+      "expectedAction": "withhold",
+      "expectedRules": [],
+      "excludedRules": [],
+      "sourcePage": 3,
+      "actualAction": "withhold",
+      "actualRules": [
+        "CURRENT_BASELINE_LVEF_LOW"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "GFR boundary 20",
+      "input": {
+        "gfr_ml_min": 20
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "CARBO_GFR_STOP"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "CARBO_GFR_STOP"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "GFR boundary 20.01",
+      "input": {
+        "gfr_ml_min": 20.01
+      },
+      "expectedRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "GFR boundary 30",
+      "input": {
+        "gfr_ml_min": 30
+      },
+      "expectedRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Estimated creatinine older48h",
+      "input": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48.01
+      },
+      "expectedRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Estimated GFR missing creatinine age",
+      "input": {
+        "gfr_method": "estimated",
+        "gfr_ml_min": 70
+      },
+      "expectedRules": [
+        "CARBO_CREATININE_AGE_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_CREATININE_AGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Creatinine48h boundary accepted",
+      "input": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Isotope reference110 accepted",
+      "input": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Isotope reference110.01 reviewed",
+      "input": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110.01
+      },
+      "expectedRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00775",
+      "name": "Renal method missing not inferred",
+      "input": {
+        "creatinine_result_age_hours": 72
+      },
+      "expectedRules": [
+        "CARBO_METHOD_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_METHOD_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "GFR boundary 20",
+      "input": {
+        "gfr_ml_min": 20
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "CARBO_GFR_STOP"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "CARBO_GFR_STOP"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "GFR boundary 20.01",
+      "input": {
+        "gfr_ml_min": 20.01
+      },
+      "expectedRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "GFR boundary 30",
+      "input": {
+        "gfr_ml_min": 30
+      },
+      "expectedRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "excludedRules": [],
+      "sourcePage": 5,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Estimated creatinine older48h",
+      "input": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48.01
+      },
+      "expectedRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Estimated GFR missing creatinine age",
+      "input": {
+        "gfr_method": "estimated",
+        "gfr_ml_min": 70
+      },
+      "expectedRules": [
+        "CARBO_CREATININE_AGE_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_CREATININE_AGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Creatinine48h boundary accepted",
+      "input": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Isotope reference110 accepted",
+      "input": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Isotope reference110.01 reviewed",
+      "input": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110.01
+      },
+      "expectedRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00258",
+      "name": "Renal method missing not inferred",
+      "input": {
+        "creatinine_result_age_hours": 72
+      },
+      "expectedRules": [
+        "CARBO_METHOD_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_METHOD_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "GFR boundary 20",
+      "input": {
+        "gfr_ml_min": 20
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "GFR_20_OR_LESS"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "GFR_20_OR_LESS"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "GFR boundary 20.01",
+      "input": {
+        "gfr_ml_min": 20.01
+      },
+      "expectedRules": [
+        "GFR_20_TO30"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [
+        "GFR_20_TO30"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "GFR boundary 30",
+      "input": {
+        "gfr_ml_min": 30
+      },
+      "expectedRules": [
+        "GFR_20_TO30"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [
+        "GFR_20_TO30"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Estimated creatinine older48h",
+      "input": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48.01
+      },
+      "expectedRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Estimated GFR missing creatinine age",
+      "input": {
+        "gfr_method": "estimated",
+        "gfr_ml_min": 70
+      },
+      "expectedRules": [
+        "CARBO_CREATININE_AGE_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_CREATININE_AGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Creatinine48h boundary accepted",
+      "input": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Isotope reference110 accepted",
+      "input": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Isotope reference110.01 reviewed",
+      "input": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110.01
+      },
+      "expectedRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00722",
+      "name": "Renal method missing not inferred",
+      "input": {
+        "creatinine_result_age_hours": 72
+      },
+      "expectedRules": [
+        "CARBO_METHOD_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_METHOD_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "GFR boundary 20",
+      "input": {
+        "gfr_ml_min": 20
+      },
+      "expectedAction": "contraindicated",
+      "expectedRules": [
+        "CARBO_GFR_STOP"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "contraindicated",
+      "actualRules": [
+        "CARBO_GFR_STOP"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "GFR boundary 20.01",
+      "input": {
+        "gfr_ml_min": 20.01
+      },
+      "expectedRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "GFR boundary 30",
+      "input": {
+        "gfr_ml_min": 30
+      },
+      "expectedRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "excludedRules": [],
+      "sourcePage": 6,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_GFR_CAUTION"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Estimated creatinine older48h",
+      "input": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48.01
+      },
+      "expectedRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Estimated GFR missing creatinine age",
+      "input": {
+        "gfr_method": "estimated",
+        "gfr_ml_min": 70
+      },
+      "expectedRules": [
+        "CARBO_CREATININE_AGE_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_CREATININE_AGE_MISSING"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Creatinine48h boundary accepted",
+      "input": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "CARBO_OLD_CREATININE"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Isotope reference110 accepted",
+      "input": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110
+      },
+      "expectedRules": [],
+      "excludedRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "sourcePage": 1,
+      "actualAction": "proceed_with_caution",
+      "actualRules": [],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Isotope reference110.01 reviewed",
+      "input": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110.01
+      },
+      "expectedRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_CREATININE_RISE"
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Renal method missing not inferred",
+      "input": {
+        "creatinine_result_age_hours": 72
+      },
+      "expectedRules": [
+        "CARBO_METHOD_MISSING"
+      ],
+      "excludedRules": [],
+      "sourcePage": 1,
+      "actualAction": "consultant_review",
+      "actualRules": [
+        "CARBO_METHOD_MISSING"
+      ],
+      "pass": true
+    }
+  ]
+}

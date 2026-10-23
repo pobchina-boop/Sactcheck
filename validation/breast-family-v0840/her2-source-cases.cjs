@@ -57,12 +57,13 @@ for (const code of codes) {
 
 for (const code of ['00258','00731']) {
   const ongoing={assessment_stage:'ongoing',treatment_phase:'combination'};
-  test(code,'Counts exact1.5/100 do not trigger a low-count hold',{...ongoing,anc_x10e9_l:1.5,platelets_x10e9_l:100},null,(r,m)=>{noRule(r,/TCH_COUNTS_LOW|TCH_INTERMEDIATE|TCH_ANC_GAP/);assert(!['delay','withhold','contraindicated'].includes(r.actionType));});
+  // v0.84.16: exact source boundaries require review; recovery examples use strictly greater counts.
+  test(code,'Counts exact1.5/100 remain source-boundary review, not a low-count hold',{...ongoing,anc_x10e9_l:1.5,platelets_x10e9_l:100},null,(r,m)=>{hasRule(r,/COUNT_EXACT_BOUNDARY/);noRule(r,/TCH_COUNTS_LOW|TCH_INTERMEDIATE|TCH_ANC_GAP/);assert(!['delay','withhold','contraindicated'].includes(r.actionType));});
   test(code,'Single ANC0.99 delays chemotherapy',{anc_x10e9_l:0.99},'delay',(r,m)=>{hasRule(r,/TCH_COUNTS_LOW/);noNumeric(m);assert(m.rows.every(x=>['docetaxel','carboplatin'].includes(x.componentId)));});
   test(code,'Single platelets99 delays chemotherapy',{platelets_x10e9_l:99},'delay',(r,m)=>noNumeric(m));
   test(code,'ANC1.2 with missing strategy remains partial/review',{anc_x10e9_l:1.2},null,requiresReview);
-  test(code,'Intermediate ANC selected dose-reduction strategy',{...ongoing,anc_x10e9_l:1.2,platelets_x10e9_l:100,count_strategy:'dose_reduction'},null,(r,m)=>{hasRule(r,/TCH_INTERMEDIATE_75/);assert(/75%/.test(words(r)));});
-  test(code,'Intermediate ANC selected G-CSF strategy',{...ongoing,anc_x10e9_l:1.2,platelets_x10e9_l:100,count_strategy:'gcsf'},null,(r,m)=>{hasRule(r,/TCH_INTERMEDIATE_GCSF/);assert(/100%/.test(words(r)));});
+  test(code,'Intermediate ANC selected dose-reduction strategy',{...ongoing,anc_x10e9_l:1.2,platelets_x10e9_l:101,count_strategy:'dose_reduction'},null,(r,m)=>{hasRule(r,/TCH_INTERMEDIATE_75/);assert(/75%/.test(words(r)));});
+  test(code,'Intermediate ANC selected G-CSF strategy',{...ongoing,anc_x10e9_l:1.2,platelets_x10e9_l:101,count_strategy:'gcsf'},null,(r,m)=>{hasRule(r,/TCH_INTERMEDIATE_GCSF/);assert(/100%/.test(words(r)));});
   test(code,'Printed ANC decimal gap1.495',{...ongoing,anc_x10e9_l:1.495,platelets_x10e9_l:100},'consultant_review',(r,m)=>{hasRule(r,/TCH_ANC_GAP/);noNumeric(m);});
   test(code,'Baseline ANC1.2 is an initiation exclusion',{assessment_stage:'baseline',treatment_phase:'combination',anc_x10e9_l:1.2},'contraindicated',(r,m)=>noNumeric(m));
   for(const [value,action] of [[20,'contraindicated'],[20.01,'consultant_review'],[30,'consultant_review']])test(code,'Carboplatin GFR boundary '+value,{gfr_ml_min:value},action,(r,m)=>noNumeric(m));
@@ -84,7 +85,7 @@ for (const code of ['00258','00731']) {
   test(code,'Stomatitis at60 maps to50',{stomatitis_grade:3,current_docetaxel_mg_m2:60},null,(r,m)=>{hasRule(r,/DOC_MOUTH_60/);assert(m.rows.some(x=>x.componentId==='docetaxel'&&/50\s*mg/.test(x.protocolDose)),'Expected50mg/m² source option visible');});
   test(code,'Acute FN interrupts chemotherapy',{febrile_neutropenia:true},'withhold',(r,m)=>noNumeric(m));
   for(const [episode,strategy,percent,basis] of [[1,'dose_reduction',75,/previous/i],[2,'dose_reduction',50,/original/i],[1,'gcsf',100,/G.CSF/i],[2,'gcsf',75,/G.CSF/i],[3,'gcsf',50,/G.CSF/i]]) {
-    test(code,`Recovered FN${episode} strategy${strategy}`,{...ongoing,fn_episode_count:episode,anc_x10e9_l:1.5,platelets_x10e9_l:100,count_strategy:strategy,febrile_neutropenia:false},null,(r,m)=>{
+    test(code,`Recovered FN${episode} strategy${strategy}`,{...ongoing,fn_episode_count:episode,anc_x10e9_l:1.51,platelets_x10e9_l:101,count_strategy:strategy,febrile_neutropenia:false},null,(r,m)=>{
       const detail=words(r);assert(new RegExp(percent+'\\s*%').test(detail),'Applicable source percentage must be visible: '+percent+'%');assert(basis.test(detail),'Correct original/previous/G-CSF basis must be visible');
       assert(!['withhold','delay'].includes(r.actionType),'Recovered historical episode should not itself become acute FN hold');
     });

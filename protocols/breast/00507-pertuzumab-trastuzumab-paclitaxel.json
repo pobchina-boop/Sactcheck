@@ -31,7 +31,7 @@
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
     },
-    "sactcheck_encoding_version": "0.84.0",
+    "sactcheck_encoding_version": "0.84.16",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Independent weekly paclitaxel rules may be assessed from a single supplied value; dose and duration inputs refine but do not suppress immediate hold findings.",
     "source_document_pages": 7,
@@ -61,20 +61,23 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "source_reconciled_rule_encoding",
-      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled; independent clinical/pharmacy review pending",
       "source_reconciled": true,
       "reconciled_release": "0.84.0",
       "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.16",
+      "audit_date": "2026-10-21",
+      "scope_note": "Source audit and scenario cases in validation/breast-expansion-v08416/advanced. Not clinical approval."
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00507-v6",
-    "source_checked_date": "2026-10-17",
-    "source_version_verified_date": "2026-10-17",
+    "source_checked_date": "2026-10-21",
+    "source_version_verified_date": "2026-10-21",
     "audit_limitations": [
       "Source hepatic / boundary ambiguities are explicit review actions.",
       "Independent clinical and pharmacy validation pending.",
@@ -510,7 +513,7 @@
     "baseline_lvef_percent": {
       "label": "Baseline LVEF",
       "type": "number",
-      "demo_value": 2,
+      "demo_value": 60,
       "required": false,
       "min": 0,
       "step": 0.01,
@@ -698,6 +701,13 @@
       "required": false,
       "always_show": true,
       "input_role": "decision"
+    },
+    "current_infusion_reaction": {
+      "label": "Current infusion reaction requiring assessment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -933,9 +943,9 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Hold low-ANC paclitaxel now; establish duration and recovery before deciding reduction."
+          "recommendation": "Delay paclitaxel for ANC<1.0. For 0.5–0.99 consider dose reduction at a subsequent cycle. ANC<0.5 requires duration: if≥7 days, reduce one source level after recovery. Review current dose and recovery before restarting."
         },
-        "explanation": "Hold low-ANC paclitaxel now; establish duration and recovery before deciding reduction.",
+        "explanation": "Delay paclitaxel for ANC<1.0. For 0.5–0.99 consider dose reduction at a subsequent cycle. ANC<0.5 requires duration: if≥7 days, reduce one source level after recovery. Review current dose and recovery before restarting.",
         "source": {
           "document": "NCCP 00507 v6",
           "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf",
@@ -971,9 +981,9 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Delay paclitaxel for platelets below 90; below 70 requires reduction after recovery."
+          "recommendation": "Delay paclitaxel for platelets<90. In 70–90 range consider reduction at a subsequent cycle; <70 requires one-level reduction after recovery. Exactly 90 overlaps printed rows and requires clarification."
         },
-        "explanation": "Delay paclitaxel for platelets below 90; below 70 requires reduction after recovery.",
+        "explanation": "Delay paclitaxel for platelets<90. In 70–90 range consider reduction at a subsequent cycle; <70 requires one-level reduction after recovery. Exactly 90 overlaps printed rows and requires clarification.",
         "source": {
           "document": "NCCP 00507 v6",
           "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf",
@@ -1847,9 +1857,18 @@
       {
         "rule_id": "HER2_BASELINE_LOW",
         "when": {
-          "field": "baseline_lvef_percent",
-          "operator": "<",
-          "value": 50
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
         },
         "action": {
           "type": "withhold",
@@ -1857,9 +1876,9 @@
             "trastuzumab",
             "pertuzumab"
           ],
-          "recommendation": "Below the source baseline LVEF eligibility; specialist cardiac assessment before starting."
+          "recommendation": "At treatment initiation, baseline LVEF below 50% does not meet eligibility; withhold pending cardiac/specialist review. Historical baseline must not be substituted for the ongoing current measurement."
         },
-        "explanation": "Below the source baseline LVEF eligibility; specialist cardiac assessment before starting.",
+        "explanation": "At treatment initiation, baseline LVEF below 50% does not meet eligibility; withhold pending cardiac/specialist review. Historical baseline must not be substituted for the ongoing current measurement.",
         "source": {
           "document": "NCCP 00507 v6",
           "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf",
@@ -2160,6 +2179,179 @@
           "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf",
           "page": 4
         }
+      },
+      {
+        "rule_id": "HER2_BASELINE_CURRENT_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "At treatment initiation current LVEF below 50% does not meet eligibility. Withhold antibodies and obtain cardiac/specialist review before starting.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "At treatment initiation current LVEF below 50% does not meet eligibility. Withhold antibodies and obtain cardiac/specialist review before starting.",
+        "source": {
+          "document": "NCCP 00507 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf"
+        }
+      },
+      {
+        "rule_id": "STAGE_INVALID",
+        "when": {
+          "field": "assessment_stage",
+          "operator": "not_in",
+          "value": [
+            "baseline",
+            "ongoing"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab",
+            "pertuzumab",
+            "paclitaxel"
+          ],
+          "recommendation": "Unrecognised assessment stage: select baseline or ongoing. Independent safety findings still apply; do not infer a valid stage.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised assessment stage: select baseline or ongoing. Independent safety findings still apply; do not infer a valid stage.",
+        "source": {
+          "document": "NCCP 00507 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf"
+        }
+      },
+      {
+        "rule_id": "PHASE_INVALID",
+        "when": {
+          "field": "treatment_phase",
+          "operator": "not_in",
+          "value": [
+            "combination",
+            "continuation"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab",
+            "pertuzumab",
+            "paclitaxel"
+          ],
+          "recommendation": "Unrecognised treatment phase: confirm combination treatment or antibody-only continuation. Do not select a chemotherapy dose from an invalid phase.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised treatment phase: confirm combination treatment or antibody-only continuation. Do not select a chemotherapy dose from an invalid phase.",
+        "source": {
+          "document": "NCCP 00507 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf"
+        }
+      },
+      {
+        "rule_id": "HISTORICAL_BASELINE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Establish whether this low baseline value is an initiation result or historical. Obtain the current LVEF and treatment stage; no automatic ongoing hold can be based on an old result alone.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Establish whether this low baseline value is an initiation result or historical. Obtain the current LVEF and treatment stage; no automatic ongoing hold can be based on an old result alone.",
+        "source": {
+          "document": "NCCP 00507 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf"
+        }
+      },
+      {
+        "rule_id": "CURRENT_INFUSION_REACTION",
+        "when": {
+          "field": "current_infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab",
+            "pertuzumab",
+            "paclitaxel"
+          ],
+          "recommendation": "Interrupt the implicated infusion and assess/manage the reaction under the local emergency policy. Confirm culprit medicine and severity before any restart; a prior resolved reaction is not the same as a current reaction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Interrupt the implicated infusion and assess/manage the reaction under the local emergency policy. Confirm culprit medicine and severity before any restart; a prior resolved reaction is not the same as a current reaction.",
+        "source": {
+          "document": "NCCP 00507 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf"
+        }
+      },
+      {
+        "rule_id": "HER2_REACTION_G1_2",
+        "when": {
+          "field": "trastuzumab_hypersensitivity_grade",
+          "operator": "in",
+          "value": [
+            1,
+            2
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab",
+            "pertuzumab"
+          ],
+          "recommendation": "Current antibody infusion reaction: interrupt or slow and assess according to severity/local policy; treat symptoms and monitor. Consultant decides whether and how to restart after recovery.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Current antibody infusion reaction: interrupt or slow and assess according to severity/local policy; treat symptoms and monitor. Consultant decides whether and how to restart after recovery.",
+        "source": {
+          "document": "NCCP 00507 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf"
+        }
       }
     ]
   },
@@ -2167,12 +2359,12 @@
     "emetogenic_risk": "phase_dependent",
     "mapping_source": "NCCP regimen and antiemetic classification; phase-specific source review v0.84.0",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "AC: high; taxane: low; TC: moderate; carboplatin AUC 6 combination: high; HER2-only continuation: minimal. Use only the active phase.",
-    "mapping_confidence": "high",
+    "mapping_basis": "Taxane combination low risk; antibody-only continuation minimal. Taxane premedication and supportive drugs do not carry forward automatically.",
+    "mapping_confidence": "source_reconciled_pending_pharmacy_review",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "summary": "See the phase-specific drafts in patient/00507/supportive-care.html",
-    "source_url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf",
+    "source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "script_id": null,
     "phase_profiles": {
       "combination": {
@@ -2181,9 +2373,10 @@
       },
       "continuation": {
         "level": "minimal",
-        "script_id": "nccp-parenteral-minimal"
+        "script_id": "nccp-minimal-no-routine-prophylaxis"
       }
-    }
+    },
+    "phase_specific_plan": "patient/00507/supportive-care.html"
   },
   "treatment_phases": [
     {

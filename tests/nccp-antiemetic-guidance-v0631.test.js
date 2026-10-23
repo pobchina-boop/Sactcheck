@@ -25,7 +25,12 @@ const familyPhases = {
   '00258':{combination:'high',continuation:'minimal'},
   '00204':{combination:'low',continuation:'minimal'},
   '00507':{combination:'low',continuation:'minimal'},
-  '00512':{combination:'low',continuation:'minimal'}
+  '00512':{combination:'low',continuation:'minimal'},
+  '00526':{iv:'minimal',oral:'oral_moderate_high',continuation:'minimal'},
+  '00798':{iv:'minimal',oral:'oral_moderate_high',continuation:'minimal'},
+  '00775':{day1:'high',day8:'low',continuation:'variable'},
+  '00722':{combination:'high',continuation:'variable'},
+  '00731':{combination:'high',continuation:'variable'}
 };
 const resolver = fs.readFileSync(path.join(root, "js", "emetogenic-risk.js"), "utf8");
 const ui = fs.readFileSync(path.join(root, "js", "generic-assessment-ui.js"), "utf8");
@@ -66,7 +71,9 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
     "00431": "low"
   };
   for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
-    const expected = allowedCorrections[code] || baseline.level;
+    const migratedMap = ['00204','00507','00258','00526','00798','00775','00722','00731'].includes(code);
+    const expected = migratedMap ? 'phase_dependent' : allowedCorrections[code] || baseline.level;
+    if(migratedMap) assert.deepStrictEqual(currentMapLevels[code].phase_levels,familyPhases[code],code+' source-reconciled phase risks');
     assert.strictEqual(currentMapLevels[code]?.level, expected, `${code} emetogenic classification differs from the retained baseline or approved v0.64.0 correction`);
   }
 }
@@ -163,7 +170,9 @@ if (fs.existsSync(localDir)) {
     for (const [phase, level] of Object.entries(phases)) {
       const selected=risk.get(protocol,{treatmentPhase:phase});
       assert.strictEqual(selected.level,level,code+'/'+phase);
-      assert.strictEqual(selected.scriptId,['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level);
+      const migrated=['00204','00507','00258','00526','00798','00775','00722','00731'].includes(code);
+      const expectedScript=migrated ? (['high','variable'].includes(level)?null:level==='minimal'?'nccp-minimal-no-routine-prophylaxis':level==='oral_moderate_high'?'nccp-oral-moderate-high':'nccp-parenteral-'+level) : ['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level;
+      assert.strictEqual(selected.scriptId,expectedScript,code+'/'+phase+' must use the source-specific support pathway');
     }
     for (const [alias,phase] of Object.entries(protocol.supportive_care.phase_aliases || {})) assert.strictEqual(risk.get(protocol,{treatmentPhase:alias}).level,phases[phase]);
     assert.strictEqual(risk.get(protocol,{treatmentPhase:'unknown'}).scriptId,null);

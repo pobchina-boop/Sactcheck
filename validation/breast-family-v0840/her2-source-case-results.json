@@ -1,6 +1,6 @@
 {
-  "created_at": "2026-10-20T20:20:00.137Z",
-  "root": "/workspace/scratch/aa44ad62d693/sactcheck-v08413",
+  "created_at": "2026-10-21T08:46:40.238Z",
+  "root": "/workspace/scratch/aa44ad62d693/sactcheck-v08416",
   "source_audit": "her2-audit.json",
   "case_count": 211,
   "passed": 211,
@@ -1178,7 +1178,7 @@
     },
     {
       "code": "00258",
-      "name": "Counts exact1.5/100 do not trigger a low-count hold",
+      "name": "Counts exact1.5/100 remain source-boundary review, not a low-count hold",
       "inputs": {
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
@@ -1186,9 +1186,28 @@
         "platelets_x10e9_l": 100
       },
       "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "COUNT_EXACT_BOUNDARY",
+          "action": "consultant_review",
+          "explanation": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "carboplatin",
+          "action": "consultant_review",
+          "dose": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance.",
+          "rule": "COUNT_EXACT_BOUNDARY"
+        },
+        {
+          "component": "docetaxel",
+          "action": "consultant_review",
+          "dose": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance.",
+          "rule": "COUNT_EXACT_BOUNDARY"
+        }
+      ],
       "pass": true
     },
     {
@@ -1203,7 +1222,7 @@
         {
           "id": "TCH_COUNTS_LOW",
           "action": "delay",
-          "explanation": "Delay chemotherapy until ANC ≥1.5 and platelets ≥100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab."
+          "explanation": "Delay chemotherapy until ANC >1.5 and platelets >100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab."
         }
       ],
       "doseRows": [
@@ -1234,7 +1253,7 @@
         {
           "id": "TCH_COUNTS_LOW",
           "action": "delay",
-          "explanation": "Delay chemotherapy until ANC ≥1.5 and platelets ≥100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab."
+          "explanation": "Delay chemotherapy until ANC >1.5 and platelets >100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab."
         }
       ],
       "doseRows": [
@@ -1265,20 +1284,25 @@
         {
           "id": "TCH_INTERMEDIATE_CONTEXT",
           "action": "consultant_review",
-          "explanation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+          "explanation": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+        },
+        {
+          "id": "BASELINE_COUNT_CONTEXT",
+          "action": "consultant_review",
+          "explanation": "Clarify baseline versus ongoing: initiation excludes ANC<1.5, while later treatment has a source-specific strategy."
         }
       ],
       "doseRows": [
         {
           "component": "carboplatin",
           "action": "consultant_review",
-          "dose": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+          "dose": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
           "rule": "TCH_INTERMEDIATE_CONTEXT"
         },
         {
           "component": "docetaxel",
           "action": "consultant_review",
-          "dose": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+          "dose": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
           "rule": "TCH_INTERMEDIATE_CONTEXT"
         }
       ],
@@ -1291,7 +1315,7 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "anc_x10e9_l": 1.2,
-        "platelets_x10e9_l": 100,
+        "platelets_x10e9_l": 101,
         "count_strategy": "dose_reduction"
       },
       "expectedAction": "finding/dose assertions",
@@ -1305,7 +1329,7 @@
         {
           "id": "TCH_INTERMEDIATE_CONTEXT",
           "action": "consultant_review",
-          "explanation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+          "explanation": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
         }
       ],
       "doseRows": [
@@ -1331,7 +1355,7 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "anc_x10e9_l": 1.2,
-        "platelets_x10e9_l": 100,
+        "platelets_x10e9_l": 101,
         "count_strategy": "gcsf"
       },
       "expectedAction": "finding/dose assertions",
@@ -1340,7 +1364,7 @@
         {
           "id": "TCH_INTERMEDIATE_CONTEXT",
           "action": "consultant_review",
-          "explanation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+          "explanation": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
         },
         {
           "id": "TCH_INTERMEDIATE_GCSF",
@@ -1352,13 +1376,13 @@
         {
           "component": "carboplatin",
           "action": "consultant_review",
-          "dose": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+          "dose": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
           "rule": "TCH_INTERMEDIATE_CONTEXT"
         },
         {
           "component": "docetaxel",
           "action": "consultant_review",
-          "dose": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+          "dose": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
           "rule": "TCH_INTERMEDIATE_CONTEXT"
         }
       ],
@@ -1380,6 +1404,11 @@
           "id": "TCH_ANC_GAP",
           "action": "consultant_review",
           "explanation": "ANC lies between the printed decimal bands; confirm interpretation."
+        },
+        {
+          "id": "COUNT_EXACT_BOUNDARY",
+          "action": "consultant_review",
+          "explanation": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance."
         }
       ],
       "doseRows": [
@@ -1417,7 +1446,7 @@
         {
           "id": "TCH_INTERMEDIATE_CONTEXT",
           "action": "consultant_review",
-          "explanation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+          "explanation": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
         }
       ],
       "doseRows": [
@@ -1429,12 +1458,6 @@
         },
         {
           "component": "docetaxel",
-          "action": "contraindicated",
-          "dose": "Not to be administered",
-          "rule": "BASELINE_ANC"
-        },
-        {
-          "component": "trastuzumab",
           "action": "contraindicated",
           "dose": "Not to be administered",
           "rule": "BASELINE_ANC"
@@ -1685,6 +1708,11 @@
           "id": "TCH_LIVER_UNMAPPED",
           "action": "consultant_review",
           "explanation": "High single liver axis may be unassigned by this matrix. Resolve with the full table; do not infer normal dosing."
+        },
+        {
+          "id": "DOC_HEP_COMPANION_REVIEW",
+          "action": "consultant_review",
+          "explanation": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly."
         }
       ],
       "doseRows": [
@@ -1699,6 +1727,12 @@
           "action": "delay",
           "dose": "No dose now",
           "rule": "TCH_LIVER_DELAY"
+        },
+        {
+          "component": "trastuzumab",
+          "action": "consultant_review",
+          "dose": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly.",
+          "rule": "DOC_HEP_COMPANION_REVIEW"
         }
       ],
       "pass": true
@@ -1761,6 +1795,11 @@
           "id": "TCH_BILIRUBIN",
           "action": "delay",
           "explanation": "Abnormal bilirubin: delay chemotherapy up to two weeks; if no recovery, stop chemotherapy. Trastuzumab continuation needs a separate clinical decision."
+        },
+        {
+          "id": "DOC_HEP_COMPANION_REVIEW",
+          "action": "consultant_review",
+          "explanation": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly."
         }
       ],
       "doseRows": [
@@ -1775,6 +1814,12 @@
           "action": "delay",
           "dose": "No dose now",
           "rule": "TCH_BILIRUBIN"
+        },
+        {
+          "component": "trastuzumab",
+          "action": "consultant_review",
+          "dose": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly.",
+          "rule": "DOC_HEP_COMPANION_REVIEW"
         }
       ],
       "pass": true
@@ -1937,8 +1982,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 1,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "dose_reduction",
         "febrile_neutropenia": false
       },
@@ -1948,7 +1993,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_dose_reduction_1",
@@ -1979,8 +2024,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 2,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "dose_reduction",
         "febrile_neutropenia": false
       },
@@ -1990,7 +2035,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_dose_reduction_2",
@@ -2021,8 +2066,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 1,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "gcsf",
         "febrile_neutropenia": false
       },
@@ -2032,7 +2077,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_gcsf_1",
@@ -2063,8 +2108,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 2,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "gcsf",
         "febrile_neutropenia": false
       },
@@ -2074,7 +2119,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_gcsf_2",
@@ -2105,8 +2150,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 3,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "gcsf",
         "febrile_neutropenia": false
       },
@@ -2116,7 +2161,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_gcsf_3",
@@ -2154,20 +2199,25 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
+        },
+        {
+          "id": "COUNT_EXACT_BOUNDARY",
+          "action": "consultant_review",
+          "explanation": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance."
         }
       ],
       "doseRows": [
         {
           "component": "carboplatin",
           "action": "consultant_review",
-          "dose": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart.",
+          "dose": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart.",
           "rule": "TCH_FN_CONTEXT"
         },
         {
           "component": "docetaxel",
           "action": "consultant_review",
-          "dose": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart.",
+          "dose": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart.",
           "rule": "TCH_FN_CONTEXT"
         }
       ],
@@ -2175,7 +2225,7 @@
     },
     {
       "code": "00731",
-      "name": "Counts exact1.5/100 do not trigger a low-count hold",
+      "name": "Counts exact1.5/100 remain source-boundary review, not a low-count hold",
       "inputs": {
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
@@ -2183,9 +2233,28 @@
         "platelets_x10e9_l": 100
       },
       "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "COUNT_EXACT_BOUNDARY",
+          "action": "consultant_review",
+          "explanation": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "carboplatin",
+          "action": "consultant_review",
+          "dose": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance.",
+          "rule": "COUNT_EXACT_BOUNDARY"
+        },
+        {
+          "component": "docetaxel",
+          "action": "consultant_review",
+          "dose": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance.",
+          "rule": "COUNT_EXACT_BOUNDARY"
+        }
+      ],
       "pass": true
     },
     {
@@ -2200,7 +2269,7 @@
         {
           "id": "TCH_COUNTS_LOW",
           "action": "delay",
-          "explanation": "Delay chemotherapy until ANC ≥1.5 and platelets ≥100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab."
+          "explanation": "Delay chemotherapy until ANC >1.5 and platelets >100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab."
         }
       ],
       "doseRows": [
@@ -2231,7 +2300,7 @@
         {
           "id": "TCH_COUNTS_LOW",
           "action": "delay",
-          "explanation": "Delay chemotherapy until ANC ≥1.5 and platelets ≥100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab."
+          "explanation": "Delay chemotherapy until ANC >1.5 and platelets >100. Then source strategy determines 75% dosing versus 100% with G-CSF. This does not automatically reduce trastuzumab."
         }
       ],
       "doseRows": [
@@ -2262,20 +2331,25 @@
         {
           "id": "TCH_INTERMEDIATE_CONTEXT",
           "action": "consultant_review",
-          "explanation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+          "explanation": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+        },
+        {
+          "id": "BASELINE_COUNT_CONTEXT",
+          "action": "consultant_review",
+          "explanation": "Clarify baseline versus ongoing: initiation excludes ANC<1.5, while later treatment has a source-specific strategy."
         }
       ],
       "doseRows": [
         {
           "component": "carboplatin",
           "action": "consultant_review",
-          "dose": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+          "dose": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
           "rule": "TCH_INTERMEDIATE_CONTEXT"
         },
         {
           "component": "docetaxel",
           "action": "consultant_review",
-          "dose": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+          "dose": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
           "rule": "TCH_INTERMEDIATE_CONTEXT"
         }
       ],
@@ -2288,7 +2362,7 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "anc_x10e9_l": 1.2,
-        "platelets_x10e9_l": 100,
+        "platelets_x10e9_l": 101,
         "count_strategy": "dose_reduction"
       },
       "expectedAction": "finding/dose assertions",
@@ -2302,7 +2376,7 @@
         {
           "id": "TCH_INTERMEDIATE_CONTEXT",
           "action": "consultant_review",
-          "explanation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+          "explanation": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
         }
       ],
       "doseRows": [
@@ -2328,7 +2402,7 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "anc_x10e9_l": 1.2,
-        "platelets_x10e9_l": 100,
+        "platelets_x10e9_l": 101,
         "count_strategy": "gcsf"
       },
       "expectedAction": "finding/dose assertions",
@@ -2337,7 +2411,7 @@
         {
           "id": "TCH_INTERMEDIATE_CONTEXT",
           "action": "consultant_review",
-          "explanation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+          "explanation": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
         },
         {
           "id": "TCH_INTERMEDIATE_GCSF",
@@ -2349,13 +2423,13 @@
         {
           "component": "carboplatin",
           "action": "consultant_review",
-          "dose": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+          "dose": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
           "rule": "TCH_INTERMEDIATE_CONTEXT"
         },
         {
           "component": "docetaxel",
           "action": "consultant_review",
-          "dose": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
+          "dose": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy.",
           "rule": "TCH_INTERMEDIATE_CONTEXT"
         }
       ],
@@ -2377,6 +2451,11 @@
           "id": "TCH_ANC_GAP",
           "action": "consultant_review",
           "explanation": "ANC lies between the printed decimal bands; confirm interpretation."
+        },
+        {
+          "id": "COUNT_EXACT_BOUNDARY",
+          "action": "consultant_review",
+          "explanation": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance."
         }
       ],
       "doseRows": [
@@ -2414,7 +2493,7 @@
         {
           "id": "TCH_INTERMEDIATE_CONTEXT",
           "action": "consultant_review",
-          "explanation": "ANC 1–1.49 requires platelets ≥100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
+          "explanation": "ANC 1–1.49 requires platelets >100 and an explicitly selected dose-reduction versus G-CSF strategy; do not assume the missing strategy."
         }
       ],
       "doseRows": [
@@ -2429,279 +2508,284 @@
           "action": "contraindicated",
           "dose": "Not to be administered",
           "rule": "BASELINE_ANC"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Carboplatin GFR boundary 20",
+      "inputs": {
+        "gfr_ml_min": 20
+      },
+      "expectedAction": "contraindicated",
+      "actualAction": "contraindicated",
+      "findings": [
+        {
+          "id": "CARBO_GFR_STOP",
+          "action": "contraindicated",
+          "explanation": "Do not administer carboplatin at GFR ≤20 mL/min."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "carboplatin",
+          "action": "contraindicated",
+          "dose": "Not to be administered",
+          "rule": "CARBO_GFR_STOP"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Carboplatin GFR boundary 20.01",
+      "inputs": {
+        "gfr_ml_min": 20.01
+      },
+      "expectedAction": "consultant_review",
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "CARBO_GFR_CAUTION",
+          "action": "consultant_review",
+          "explanation": "GFR >20–30: extreme caution and oncology / pharmacy review."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "carboplatin",
+          "action": "consultant_review",
+          "dose": "GFR >20–30: extreme caution and oncology / pharmacy review.",
+          "rule": "CARBO_GFR_CAUTION"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Carboplatin GFR boundary 30",
+      "inputs": {
+        "gfr_ml_min": 30
+      },
+      "expectedAction": "consultant_review",
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "CARBO_GFR_CAUTION",
+          "action": "consultant_review",
+          "explanation": "GFR >20–30: extreme caution and oncology / pharmacy review."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "carboplatin",
+          "action": "consultant_review",
+          "dose": "GFR >20–30: extreme caution and oncology / pharmacy review.",
+          "rule": "CARBO_GFR_CAUTION"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Carboplatin GFR30.01 outside extreme-caution band",
+      "inputs": {
+        "gfr_ml_min": 30.01
+      },
+      "expectedAction": "finding/dose assertions",
+      "actualAction": "proceed_with_caution",
+      "findings": [],
+      "doseRows": [],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Creatinine exactly48h accepted by recency rule",
+      "inputs": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48
+      },
+      "expectedAction": "finding/dose assertions",
+      "actualAction": "proceed_with_caution",
+      "findings": [],
+      "doseRows": [],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Creatinine older than48h reviewed",
+      "inputs": {
+        "gfr_method": "estimated",
+        "creatinine_result_age_hours": 48.01
+      },
+      "expectedAction": "consultant_review",
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "CARBO_OLD_CREATININE",
+          "action": "consultant_review",
+          "explanation": "Estimated-GFR dosing requires a creatinine result within 48 hours; obtain current renal assessment."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "carboplatin",
+          "action": "consultant_review",
+          "dose": "Estimated-GFR dosing requires a creatinine result within 48 hours; obtain current renal assessment.",
+          "rule": "CARBO_OLD_CREATININE"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Isotope reference rise exactly110%",
+      "inputs": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110
+      },
+      "expectedAction": "finding/dose assertions",
+      "actualAction": "proceed_with_caution",
+      "findings": [],
+      "doseRows": [],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Isotope reference rise above110%",
+      "inputs": {
+        "gfr_method": "isotope",
+        "creatinine_percent_reference": 110.01
+      },
+      "expectedAction": "consultant_review",
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "CARBO_CREATININE_RISE",
+          "action": "consultant_review",
+          "explanation": "Creatinine >110% of isotope-GFR reference: reassess renal dose calculation."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "carboplatin",
+          "action": "consultant_review",
+          "dose": "Creatinine >110% of isotope-GFR reference: reassess renal dose calculation.",
+          "rule": "CARBO_CREATININE_RISE"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Normal bilirubin and AST/ALT2.5 ALP2.5 no reduction",
+      "inputs": {
+        "alt_uln_multiple": 2.5,
+        "ast_uln_multiple": 2.5,
+        "alp_uln_multiple": 2.5,
+        "bilirubin_uln_multiple": 1
+      },
+      "expectedAction": "finding/dose assertions",
+      "actualAction": "proceed_with_caution",
+      "findings": [],
+      "doseRows": [],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "AST2.51 ALP2.5 identifies75-to60 pathway",
+      "inputs": {
+        "alt_uln_multiple": 2,
+        "ast_uln_multiple": 2.51,
+        "alp_uln_multiple": 2.5,
+        "bilirubin_uln_multiple": 1
+      },
+      "expectedAction": "finding/dose assertions",
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "TCH_DOC_LIVER_60",
+          "action": "consultant_review",
+          "explanation": "Source liver matrix: 75 →60 mg/m². Confirm current dose, both transaminases and accompanying-drug delay instructions. Stable abnormalities do not trigger repeated reductions; recovery may permit source-directed re-escalation."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "docetaxel",
+          "action": "consultant_review",
+          "dose": "Source liver matrix: 75 →60 mg/m². Confirm current dose, both transaminases and accompanying-drug delay instructions. Stable abnormalities do not trigger repeated reductions; recovery may permit source-directed re-escalation.",
+          "rule": "TCH_DOC_LIVER_60"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "AST/ALT1.5 ALP5 no liver reduction",
+      "inputs": {
+        "alt_uln_multiple": 1.5,
+        "ast_uln_multiple": 1.5,
+        "alp_uln_multiple": 5,
+        "bilirubin_uln_multiple": 1
+      },
+      "expectedAction": "finding/dose assertions",
+      "actualAction": "proceed_with_caution",
+      "findings": [],
+      "doseRows": [],
+      "pass": true
+    },
+    {
+      "code": "00731",
+      "name": "Raised transaminase and ALP both>5 delay",
+      "inputs": {
+        "alt_uln_multiple": 5.1,
+        "ast_uln_multiple": 1,
+        "alp_uln_multiple": 5.1
+      },
+      "expectedAction": "delay",
+      "actualAction": "delay",
+      "findings": [
+        {
+          "id": "TCH_LIVER_DELAY",
+          "action": "delay",
+          "explanation": "Both transaminases and ALP above 5: delay up to two weeks, stop chemotherapy if not recovered. Coordinate accompanying drugs; do not automatically clear antibodies."
+        },
+        {
+          "id": "TCH_LIVER_UNMAPPED",
+          "action": "consultant_review",
+          "explanation": "High single liver axis may be unassigned by this matrix. Resolve with the full table; do not infer normal dosing."
+        },
+        {
+          "id": "DOC_HEP_COMPANION_REVIEW",
+          "action": "consultant_review",
+          "explanation": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "carboplatin",
+          "action": "delay",
+          "dose": "No dose now",
+          "rule": "TCH_LIVER_DELAY"
+        },
+        {
+          "component": "docetaxel",
+          "action": "delay",
+          "dose": "No dose now",
+          "rule": "TCH_LIVER_DELAY"
         },
         {
           "component": "pertuzumab",
-          "action": "contraindicated",
-          "dose": "Not to be administered",
-          "rule": "BASELINE_ANC"
+          "action": "consultant_review",
+          "dose": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly.",
+          "rule": "DOC_HEP_COMPANION_REVIEW"
         },
         {
           "component": "trastuzumab",
-          "action": "contraindicated",
-          "dose": "Not to be administered",
-          "rule": "BASELINE_ANC"
-        }
-      ],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Carboplatin GFR boundary 20",
-      "inputs": {
-        "gfr_ml_min": 20
-      },
-      "expectedAction": "contraindicated",
-      "actualAction": "contraindicated",
-      "findings": [
-        {
-          "id": "CARBO_GFR_STOP",
-          "action": "contraindicated",
-          "explanation": "Do not administer carboplatin at GFR ≤20 mL/min."
-        }
-      ],
-      "doseRows": [
-        {
-          "component": "carboplatin",
-          "action": "contraindicated",
-          "dose": "Not to be administered",
-          "rule": "CARBO_GFR_STOP"
-        }
-      ],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Carboplatin GFR boundary 20.01",
-      "inputs": {
-        "gfr_ml_min": 20.01
-      },
-      "expectedAction": "consultant_review",
-      "actualAction": "consultant_review",
-      "findings": [
-        {
-          "id": "CARBO_GFR_CAUTION",
           "action": "consultant_review",
-          "explanation": "GFR >20–30: extreme caution and oncology / pharmacy review."
-        }
-      ],
-      "doseRows": [
-        {
-          "component": "carboplatin",
-          "action": "consultant_review",
-          "dose": "GFR >20–30: extreme caution and oncology / pharmacy review.",
-          "rule": "CARBO_GFR_CAUTION"
-        }
-      ],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Carboplatin GFR boundary 30",
-      "inputs": {
-        "gfr_ml_min": 30
-      },
-      "expectedAction": "consultant_review",
-      "actualAction": "consultant_review",
-      "findings": [
-        {
-          "id": "CARBO_GFR_CAUTION",
-          "action": "consultant_review",
-          "explanation": "GFR >20–30: extreme caution and oncology / pharmacy review."
-        }
-      ],
-      "doseRows": [
-        {
-          "component": "carboplatin",
-          "action": "consultant_review",
-          "dose": "GFR >20–30: extreme caution and oncology / pharmacy review.",
-          "rule": "CARBO_GFR_CAUTION"
-        }
-      ],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Carboplatin GFR30.01 outside extreme-caution band",
-      "inputs": {
-        "gfr_ml_min": 30.01
-      },
-      "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Creatinine exactly48h accepted by recency rule",
-      "inputs": {
-        "gfr_method": "estimated",
-        "creatinine_result_age_hours": 48
-      },
-      "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Creatinine older than48h reviewed",
-      "inputs": {
-        "gfr_method": "estimated",
-        "creatinine_result_age_hours": 48.01
-      },
-      "expectedAction": "consultant_review",
-      "actualAction": "consultant_review",
-      "findings": [
-        {
-          "id": "CARBO_OLD_CREATININE",
-          "action": "consultant_review",
-          "explanation": "Estimated-GFR dosing requires a creatinine result within 48 hours; obtain current renal assessment."
-        }
-      ],
-      "doseRows": [
-        {
-          "component": "carboplatin",
-          "action": "consultant_review",
-          "dose": "Estimated-GFR dosing requires a creatinine result within 48 hours; obtain current renal assessment.",
-          "rule": "CARBO_OLD_CREATININE"
-        }
-      ],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Isotope reference rise exactly110%",
-      "inputs": {
-        "gfr_method": "isotope",
-        "creatinine_percent_reference": 110
-      },
-      "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Isotope reference rise above110%",
-      "inputs": {
-        "gfr_method": "isotope",
-        "creatinine_percent_reference": 110.01
-      },
-      "expectedAction": "consultant_review",
-      "actualAction": "consultant_review",
-      "findings": [
-        {
-          "id": "CARBO_CREATININE_RISE",
-          "action": "consultant_review",
-          "explanation": "Creatinine >110% of isotope-GFR reference: reassess renal dose calculation."
-        }
-      ],
-      "doseRows": [
-        {
-          "component": "carboplatin",
-          "action": "consultant_review",
-          "dose": "Creatinine >110% of isotope-GFR reference: reassess renal dose calculation.",
-          "rule": "CARBO_CREATININE_RISE"
-        }
-      ],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Normal bilirubin and AST/ALT2.5 ALP2.5 no reduction",
-      "inputs": {
-        "alt_uln_multiple": 2.5,
-        "ast_uln_multiple": 2.5,
-        "alp_uln_multiple": 2.5,
-        "bilirubin_uln_multiple": 1
-      },
-      "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "AST2.51 ALP2.5 identifies75-to60 pathway",
-      "inputs": {
-        "alt_uln_multiple": 2,
-        "ast_uln_multiple": 2.51,
-        "alp_uln_multiple": 2.5,
-        "bilirubin_uln_multiple": 1
-      },
-      "expectedAction": "finding/dose assertions",
-      "actualAction": "consultant_review",
-      "findings": [
-        {
-          "id": "TCH_DOC_LIVER_60",
-          "action": "consultant_review",
-          "explanation": "Source liver matrix: 75 →60 mg/m². Confirm current dose, both transaminases and accompanying-drug delay instructions. Stable abnormalities do not trigger repeated reductions; recovery may permit source-directed re-escalation."
-        }
-      ],
-      "doseRows": [
-        {
-          "component": "docetaxel",
-          "action": "consultant_review",
-          "dose": "Source liver matrix: 75 →60 mg/m². Confirm current dose, both transaminases and accompanying-drug delay instructions. Stable abnormalities do not trigger repeated reductions; recovery may permit source-directed re-escalation.",
-          "rule": "TCH_DOC_LIVER_60"
-        }
-      ],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "AST/ALT1.5 ALP5 no liver reduction",
-      "inputs": {
-        "alt_uln_multiple": 1.5,
-        "ast_uln_multiple": 1.5,
-        "alp_uln_multiple": 5,
-        "bilirubin_uln_multiple": 1
-      },
-      "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
-      "pass": true
-    },
-    {
-      "code": "00731",
-      "name": "Raised transaminase and ALP both>5 delay",
-      "inputs": {
-        "alt_uln_multiple": 5.1,
-        "ast_uln_multiple": 1,
-        "alp_uln_multiple": 5.1
-      },
-      "expectedAction": "delay",
-      "actualAction": "delay",
-      "findings": [
-        {
-          "id": "TCH_LIVER_DELAY",
-          "action": "delay",
-          "explanation": "Both transaminases and ALP above 5: delay up to two weeks, stop chemotherapy if not recovered. Coordinate accompanying drugs; do not automatically clear antibodies."
-        },
-        {
-          "id": "TCH_LIVER_UNMAPPED",
-          "action": "consultant_review",
-          "explanation": "High single liver axis may be unassigned by this matrix. Resolve with the full table; do not infer normal dosing."
-        }
-      ],
-      "doseRows": [
-        {
-          "component": "carboplatin",
-          "action": "delay",
-          "dose": "No dose now",
-          "rule": "TCH_LIVER_DELAY"
-        },
-        {
-          "component": "docetaxel",
-          "action": "delay",
-          "dose": "No dose now",
-          "rule": "TCH_LIVER_DELAY"
+          "dose": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly.",
+          "rule": "DOC_HEP_COMPANION_REVIEW"
         }
       ],
       "pass": true
@@ -2764,6 +2848,11 @@
           "id": "TCH_BILIRUBIN",
           "action": "delay",
           "explanation": "Abnormal bilirubin: delay chemotherapy up to two weeks; if no recovery, stop chemotherapy. Trastuzumab continuation needs a separate clinical decision."
+        },
+        {
+          "id": "DOC_HEP_COMPANION_REVIEW",
+          "action": "consultant_review",
+          "explanation": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly."
         }
       ],
       "doseRows": [
@@ -2778,6 +2867,18 @@
           "action": "delay",
           "dose": "No dose now",
           "rule": "TCH_BILIRUBIN"
+        },
+        {
+          "component": "pertuzumab",
+          "action": "consultant_review",
+          "dose": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly.",
+          "rule": "DOC_HEP_COMPANION_REVIEW"
+        },
+        {
+          "component": "trastuzumab",
+          "action": "consultant_review",
+          "dose": "When docetaxel is delayed for hepatic toxicity, source generally delays companion drugs too. Its bilirubin paragraph permits trastuzumab continuation after review; document each antibody decision explicitly.",
+          "rule": "DOC_HEP_COMPANION_REVIEW"
         }
       ],
       "pass": true
@@ -2940,8 +3041,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 1,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "dose_reduction",
         "febrile_neutropenia": false
       },
@@ -2951,7 +3052,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_dose_reduction_1",
@@ -2982,8 +3083,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 2,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "dose_reduction",
         "febrile_neutropenia": false
       },
@@ -2993,7 +3094,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_dose_reduction_2",
@@ -3024,8 +3125,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 1,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "gcsf",
         "febrile_neutropenia": false
       },
@@ -3035,7 +3136,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_gcsf_1",
@@ -3066,8 +3167,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 2,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "gcsf",
         "febrile_neutropenia": false
       },
@@ -3077,7 +3178,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_gcsf_2",
@@ -3108,8 +3209,8 @@
         "assessment_stage": "ongoing",
         "treatment_phase": "combination",
         "fn_episode_count": 3,
-        "anc_x10e9_l": 1.5,
-        "platelets_x10e9_l": 100,
+        "anc_x10e9_l": 1.51,
+        "platelets_x10e9_l": 101,
         "count_strategy": "gcsf",
         "febrile_neutropenia": false
       },
@@ -3119,7 +3220,7 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
         },
         {
           "id": "TCH_FN_gcsf_3",
@@ -3157,20 +3258,25 @@
         {
           "id": "TCH_FN_CONTEXT",
           "action": "consultant_review",
-          "explanation": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart."
+          "explanation": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart."
+        },
+        {
+          "id": "COUNT_EXACT_BOUNDARY",
+          "action": "consultant_review",
+          "explanation": "Printed count table uses strict >1.5 and >100. Exact boundary requires source/consultant clarification rather than automatic full-dose clearance."
         }
       ],
       "doseRows": [
         {
           "component": "carboplatin",
           "action": "consultant_review",
-          "dose": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart.",
+          "dose": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart.",
           "rule": "TCH_FN_CONTEXT"
         },
         {
           "component": "docetaxel",
           "action": "consultant_review",
-          "dose": "Review source FN episode table, chosen strategy and recovery ANC ≥1.5 / platelets ≥100. A historic episode number alone never authorises restart.",
+          "dose": "Review source FN episode table, chosen strategy and recovery ANC >1.5 / platelets >100. A historic episode number alone never authorises restart.",
           "rule": "TCH_FN_CONTEXT"
         }
       ],
@@ -3400,6 +3506,11 @@
           "id": "HER2_LVEF_REVIEW",
           "action": "consultant_review",
           "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        },
+        {
+          "id": "LVEF_STAGE_MISSING",
+          "action": "consultant_review",
+          "explanation": "Confirm whether this is baseline or ongoing LVEF: the initiation threshold differs from on-treatment hold criteria. Missing context is not clearance."
         }
       ],
       "doseRows": [
@@ -3426,6 +3537,11 @@
           "id": "HER2_LVEF_REVIEW",
           "action": "consultant_review",
           "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        },
+        {
+          "id": "LVEF_STAGE_MISSING",
+          "action": "consultant_review",
+          "explanation": "Confirm whether this is baseline or ongoing LVEF: the initiation threshold differs from on-treatment hold criteria. Missing context is not clearance."
         }
       ],
       "doseRows": [
@@ -3452,6 +3568,11 @@
           "id": "HER2_LVEF_REVIEW",
           "action": "consultant_review",
           "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        },
+        {
+          "id": "LVEF_STAGE_MISSING",
+          "action": "consultant_review",
+          "explanation": "Confirm whether this is baseline or ongoing LVEF: the initiation threshold differs from on-treatment hold criteria. Missing context is not clearance."
         }
       ],
       "doseRows": [
@@ -3483,6 +3604,11 @@
           "id": "HER2_LVEF_REVIEW",
           "action": "consultant_review",
           "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        },
+        {
+          "id": "LVEF_STAGE_MISSING",
+          "action": "consultant_review",
+          "explanation": "Confirm whether this is baseline or ongoing LVEF: the initiation threshold differs from on-treatment hold criteria. Missing context is not clearance."
         }
       ],
       "doseRows": [
@@ -3515,6 +3641,11 @@
           "id": "HER2_LVEF_REVIEW",
           "action": "consultant_review",
           "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        },
+        {
+          "id": "LVEF_STAGE_MISSING",
+          "action": "consultant_review",
+          "explanation": "Confirm whether this is baseline or ongoing LVEF: the initiation threshold differs from on-treatment hold criteria. Missing context is not clearance."
         }
       ],
       "doseRows": [
@@ -3547,6 +3678,11 @@
           "id": "HER2_LVEF_REVIEW",
           "action": "consultant_review",
           "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        },
+        {
+          "id": "LVEF_STAGE_MISSING",
+          "action": "consultant_review",
+          "explanation": "Confirm whether this is baseline or ongoing LVEF: the initiation threshold differs from on-treatment hold criteria. Missing context is not clearance."
         }
       ],
       "doseRows": [
@@ -3578,7 +3714,7 @@
         {
           "id": "HER2_LVEF_HOLD",
           "action": "withhold",
-          "explanation": "Hold for LVEF <50% AND a fall ≥10 percentage points. Repeat within about 3 weeks; no improvement / further decline requires consultant and cardiology review."
+          "explanation": "Hold pertuzumab and trastuzumab for current LVEF<50% AND fall≥10 percentage points from baseline. Repeat LVEF within 3 weeks; no improvement or further decline requires consultant/cardiology review and consideration of discontinuation. This NCCP00204 criterion differs from 00507; do not substitute another regimen threshold."
         },
         {
           "id": "HER2_LVEF_REVIEW",
@@ -4190,6 +4326,11 @@
           "id": "HER2_HF",
           "action": "withhold",
           "explanation": "Symptomatic heart failure: hold and obtain urgent cardiology / oncology review; source says consider discontinuation, not an automatic permanent-stop rule."
+        },
+        {
+          "id": "CONTINUATION_REGIMEN_REQUIRED",
+          "action": "consultant_review",
+          "explanation": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward."
         }
       ],
       "doseRows": [
@@ -4670,7 +4811,7 @@
         {
           "id": "PAC_PLT_LOW",
           "action": "delay",
-          "explanation": "Delay paclitaxel for platelets below 90; below 70 requires reduction after recovery."
+          "explanation": "Delay paclitaxel for platelets<90. In 70–90 range consider reduction at a subsequent cycle; <70 requires one-level reduction after recovery. Exactly 90 overlaps printed rows and requires clarification."
         }
       ],
       "doseRows": [
@@ -4701,7 +4842,7 @@
         {
           "id": "PAC_PLT_LOW",
           "action": "delay",
-          "explanation": "Delay paclitaxel for platelets below 90; below 70 requires reduction after recovery."
+          "explanation": "Delay paclitaxel for platelets<90. In 70–90 range consider reduction at a subsequent cycle; <70 requires one-level reduction after recovery. Exactly 90 overlaps printed rows and requires clarification."
         }
       ],
       "doseRows": [
@@ -4726,7 +4867,7 @@
         {
           "id": "PAC_ANC_LOW",
           "action": "delay",
-          "explanation": "Hold low-ANC paclitaxel now; establish duration and recovery before deciding reduction."
+          "explanation": "Delay paclitaxel for ANC<1.0. For 0.5–0.99 consider dose reduction at a subsequent cycle. ANC<0.5 requires duration: if≥7 days, reduce one source level after recovery. Review current dose and recovery before restarting."
         }
       ],
       "doseRows": [
@@ -4758,7 +4899,7 @@
         {
           "id": "PAC_ANC_LOW",
           "action": "delay",
-          "explanation": "Hold low-ANC paclitaxel now; establish duration and recovery before deciding reduction."
+          "explanation": "Delay paclitaxel for ANC<1.0. For 0.5–0.99 consider dose reduction at a subsequent cycle. ANC<0.5 requires duration: if≥7 days, reduce one source level after recovery. Review current dose and recovery before restarting."
         },
         {
           "id": "PAC_PROLONGED_HISTORY",
@@ -5228,9 +5369,22 @@
         "anc_x10e9_l": 0.8
       },
       "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "CONTINUATION_REGIMEN_REQUIRED",
+          "action": "consultant_review",
+          "explanation": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "trastuzumab",
+          "action": "consultant_review",
+          "dose": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward.",
+          "rule": "CONTINUATION_REGIMEN_REQUIRED"
+        }
+      ],
       "pass": true
     },
     {
@@ -5241,9 +5395,22 @@
         "platelets_x10e9_l": 60
       },
       "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "CONTINUATION_REGIMEN_REQUIRED",
+          "action": "consultant_review",
+          "explanation": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "trastuzumab",
+          "action": "consultant_review",
+          "dose": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward.",
+          "rule": "CONTINUATION_REGIMEN_REQUIRED"
+        }
+      ],
       "pass": true
     },
     {
@@ -5255,9 +5422,22 @@
         "bilirubin_uln_multiple": 6
       },
       "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "CONTINUATION_REGIMEN_REQUIRED",
+          "action": "consultant_review",
+          "explanation": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "trastuzumab",
+          "action": "consultant_review",
+          "dose": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward.",
+          "rule": "CONTINUATION_REGIMEN_REQUIRED"
+        }
+      ],
       "pass": true
     },
     {
@@ -5268,9 +5448,22 @@
         "severe_hepatic_impairment": true
       },
       "expectedAction": "finding/dose assertions",
-      "actualAction": "proceed_with_caution",
-      "findings": [],
-      "doseRows": [],
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "CONTINUATION_REGIMEN_REQUIRED",
+          "action": "consultant_review",
+          "explanation": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "trastuzumab",
+          "action": "consultant_review",
+          "dose": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward.",
+          "rule": "CONTINUATION_REGIMEN_REQUIRED"
+        }
+      ],
       "pass": true
     },
     {
@@ -5281,9 +5474,22 @@
         "neuropathy_grade": 3
       },
       "expectedAction": "finding/dose assertions",
-      "actualAction": "partial_context_required",
-      "findings": [],
-      "doseRows": [],
+      "actualAction": "consultant_review",
+      "findings": [
+        {
+          "id": "CONTINUATION_REGIMEN_REQUIRED",
+          "action": "consultant_review",
+          "explanation": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward."
+        }
+      ],
+      "doseRows": [
+        {
+          "component": "trastuzumab",
+          "action": "consultant_review",
+          "dose": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward.",
+          "rule": "CONTINUATION_REGIMEN_REQUIRED"
+        }
+      ],
       "pass": true
     },
     {
@@ -5306,6 +5512,16 @@
           "id": "HER2_LVEF_REVIEW",
           "action": "consultant_review",
           "explanation": "Review the measured LVEF and baseline change using this regimen’s exact hold criterion. Missing context is unassessed; an isolated concerning result is not clearance."
+        },
+        {
+          "id": "CONTINUATION_REGIMEN_REQUIRED",
+          "action": "consultant_review",
+          "explanation": "Chemotherapy is complete or a postoperative phase is proposed. Confirm the separately selected HER2 regimen for its own assessment, monitoring and support; do not carry chemotherapy dose actions forward."
+        },
+        {
+          "id": "LVEF_STAGE_MISSING",
+          "action": "consultant_review",
+          "explanation": "Confirm whether this is baseline or ongoing LVEF: the initiation threshold differs from on-treatment hold criteria. Missing context is not clearance."
         }
       ],
       "doseRows": [
@@ -5399,7 +5615,7 @@
         {
           "id": "HER2_LVEF_HOLD",
           "action": "withhold",
-          "explanation": "Hold for LVEF <50% AND a fall ≥10 percentage points. Repeat within about 3 weeks; no improvement / further decline requires consultant and cardiology review."
+          "explanation": "Hold pertuzumab and trastuzumab for current LVEF<50% AND fall≥10 percentage points from baseline. Repeat LVEF within 3 weeks; no improvement or further decline requires consultant/cardiology review and consideration of discontinuation. This NCCP00204 criterion differs from 00507; do not substitute another regimen threshold."
         },
         {
           "id": "HER2_LVEF_REVIEW",

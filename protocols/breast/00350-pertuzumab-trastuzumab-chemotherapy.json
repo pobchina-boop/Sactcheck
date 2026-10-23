@@ -9,7 +9,7 @@
     "tumour_group": "Breast",
     "title": "Pertuzumab and Trastuzumab with Chemotherapy",
     "short_title": "Pertuzumab + Trastuzumab + Chemotherapy",
-    "indication": "Neoadjuvant or adjuvant HER2-directed treatment with an appropriate chemotherapy backbone.",
+    "indication": "NCCP00350a: adult high-risk HER2-positive neoadjuvant treatment with separately selected chemotherapy. NCCP00350b: adjuvant high-risk HER2-positive treatment; source records pertuzumab reimbursement not approved. Verify access separately.",
     "regimen_reimbursement_code": "00350a",
     "published_date": "2019-07-24",
     "review_date": "2026-07-21",
@@ -21,7 +21,7 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.84.16",
     "icd10": "C50",
     "treatment_setting": [
       "neoadjuvant",
@@ -32,7 +32,8 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08416_independent_clinical_and_pharmacy_review_pending",
+      "source_document_checked": true
     },
     "catalogue_section": "targeted_her2_therapy",
     "catalogue_section_label": "Targeted & HER2 therapies",
@@ -55,19 +56,24 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.16",
+      "audit_date": "2026-10-21",
+      "scope_note": "Source/software review does not establish clinical authorisation."
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00350-v3"
+    "canonical_protocol_id": "nccp-00350-v3",
+    "regimen_reimbursement_codes": [
+      "00350a",
+      "00350b"
+    ],
+    "source_version_verified_date": "2026-10-21"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -120,422 +126,284 @@
     }
   ],
   "input_definitions": {
-    "indication_id": {
-      "label": "Indication",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "00722a",
-          "label": "Neoadjuvant treatment of adult patients with HER2-positive locally advanced, inflammatory or early breast cancer at high risk of recurrence."
-        }
-      ],
-      "demo_value": "00722a",
-      "ui_section": "treatment_context",
-      "always_show": true,
-      "input_role": "context"
-    },
-    "assessment_type": {
+    "assessment_stage": {
       "label": "Assessment stage",
       "type": "select",
+      "demo_value": "baseline",
       "required": false,
-      "options": [
-        {
-          "value": "pre_treatment",
-          "label": "Pre-treatment assessment"
-        }
-      ],
-      "demo_value": "pre_treatment",
-      "ui_section": "treatment_context",
       "always_show": true,
-      "input_role": "context"
-    },
-    "cycle_number": {
-      "label": "Cycle number",
-      "type": "number",
-      "required": false,
-      "min": 1,
-      "max": 200,
-      "step": 1,
-      "demo_value": 1,
-      "ui_section": "treatment_context",
-      "always_show": true,
-      "input_role": "context"
-    },
-    "assessment_stage": {
-      "label": "Treatment assessment context",
-      "type": "select",
-      "required": false,
+      "input_role": "context",
       "options": [
         {
           "value": "baseline",
-          "label": "Baseline eligibility"
+          "label": "Before starting"
         },
         {
           "value": "ongoing",
-          "label": "Ongoing cycle assessment"
+          "label": "During treatment"
         }
-      ],
-      "demo_value": "ongoing",
-      "ui_section": "treatment_context",
+      ]
+    },
+    "baseline_lvef_percent": {
+      "label": "Baseline LVEF",
+      "type": "number",
+      "demo_value": 60,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 100
+    },
+    "lvef_percent": {
+      "label": "Current LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 100
+    },
+    "lvef_drop_points": {
+      "label": "Fall from baseline LVEF",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "percentage points",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 100
+    },
+    "anthracycline_completed": {
+      "label": "Anthracycline component completed before starting HER2 therapy",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
       "always_show": true,
       "input_role": "decision"
     },
-    "gcsf_strategy": {
-      "label": "Haematological management strategy",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "dose_reduction",
-          "label": "Dose-reduction pathway"
-        },
-        {
-          "value": "gcsf",
-          "label": "Maintain regimen with G-CSF pathway"
-        }
-      ],
-      "demo_value": "gcsf",
-      "ui_section": "treatment_context",
-      "help": "The source provides alternative dose-reduction and G-CSF strategies.",
-      "input_role": "decision"
-    },
-    "anc": {
-      "label": "ANC (×10⁹/L)",
+    "ecog": {
+      "label": "ECOG performance status",
       "type": "number",
+      "demo_value": 2,
       "required": false,
       "min": 0,
-      "max": 50,
       "step": 0.01,
-      "demo_value": 2.0,
-      "ui_section": "labs",
-      "unit": "×10⁹/L",
-      "input_role": "decision"
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 4
     },
-    "platelets": {
-      "label": "Platelets (×10⁹/L)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 2000,
-      "step": 1,
-      "demo_value": 200,
-      "ui_section": "labs",
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "febrile_neutropenia_event_number": {
-      "label": "Febrile neutropenia event number",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "No previous event"
-        },
-        {
-          "value": 1,
-          "label": "First event"
-        },
-        {
-          "value": 2,
-          "label": "Second event"
-        },
-        {
-          "value": 3,
-          "label": "Third or later event"
-        }
-      ],
-      "demo_value": 0,
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "gfr_ml_min": {
-      "label": "GFR category",
-      "type": "select",
-      "required": false,
-      "demo_value": "renal_31_plus",
-      "ui_section": "labs",
-      "unit": "mL/min",
-      "options": [
-        {
-          "value": "renal_0_20",
-          "label": "<21 mL/min",
-          "decision_value": 10,
-          "range_min_inclusive": 0,
-          "range_max_inclusive": 20
-        },
-        {
-          "value": "renal_21_30",
-          "label": "21-30 mL/min",
-          "decision_value": 25,
-          "range_min_inclusive": 21,
-          "range_max_inclusive": 30
-        },
-        {
-          "value": "renal_31_plus",
-          "label": ">=31 mL/min",
-          "decision_value": 31,
-          "range_min_inclusive": 31,
-          "range_max_inclusive": null
-        }
-      ],
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "source": "Encoded rule thresholds",
-        "exact_value_required": false
-      },
-      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation.",
-      "input_role": "decision"
-    },
-    "bilirubin_abnormal": {
-      "label": "Bilirubin above the laboratory normal range",
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "AST or ALT (× ULN)",
-      "type": "number",
       "required": false,
-      "min": 0,
-      "max": 50,
-      "step": 0.01,
-      "demo_value": 1,
-      "ui_section": "labs",
-      "unit": "× ULN",
-      "input_role": "decision"
-    },
-    "alk_phos_uln_multiple": {
-      "label": "Alkaline phosphatase (× ULN)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 50,
-      "step": 0.01,
-      "demo_value": 1,
-      "ui_section": "labs",
-      "unit": "× ULN",
-      "input_role": "decision"
-    },
-    "lvef_percent": {
-      "label": "Current LVEF (%)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "demo_value": 60,
-      "ui_section": "labs",
-      "unit": "%",
-      "input_role": "decision"
-    },
-    "lvef_drop_points": {
-      "label": "Absolute LVEF fall from pretreatment value (percentage points)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "demo_value": 0,
-      "ui_section": "labs",
-      "unit": "percentage points",
-      "input_role": "decision"
-    },
-    "symptomatic_heart_failure": {
-      "label": "Symptomatic heart failure",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "neuropathy_grade": {
-      "label": "Peripheral neuropathy grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ui_section": "clinical",
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
-      "input_role": "decision"
-    },
-    "stomatitis_grade": {
-      "label": "Stomatitis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ui_section": "clinical",
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
-      "input_role": "decision"
-    },
-    "current_docetaxel_dose": {
-      "label": "Current docetaxel dose level",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "75",
-          "label": "75 mg/m²"
-        },
-        {
-          "value": "60",
-          "label": "60 mg/m²"
-        },
-        {
-          "value": "50",
-          "label": "50 mg/m²"
-        }
-      ],
-      "demo_value": "75",
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "hypersensitivity_grade": {
-      "label": "Hypersensitivity / anaphylaxis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ui_section": "clinical",
-      "ctcae_version": "5.0",
-      "ctcae_category": "hypersensitivity_anaphylaxis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess bronchospasm, urticaria, angioedema, hypotension, airway compromise, treatment route and hospitalisation. Anaphylaxis or life-threatening hypersensitivity requires immediate emergency treatment.",
-      "input_role": "decision"
-    },
-    "relevant_drug_hypersensitivity": {
-      "label": "Relevant drug hypersensitivity before treatment",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
+      "always_show": true,
       "input_role": "decision"
     },
     "pregnancy": {
       "label": "Pregnant",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
-    "clinically_significant_cardiac_disease": {
+    "her2_positive": {
+      "label": "HER2-positive tumour confirmed",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "indication_eligible": {
+      "label": "Full NCCP indication and prior-treatment criteria met",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "symptomatic_heart_failure": {
+      "label": "Confirmed symptomatic heart failure",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "significant_cardiac_disease": {
       "label": "Clinically significant cardiac disease",
       "type": "boolean",
-      "required": false,
       "demo_value": false,
-      "ui_section": "clinical",
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
-    "active_infection": {
-      "label": "Active clinically significant infection",
+    "severe_dyspnoea_at_rest": {
+      "label": "Dyspnoea at rest due to malignancy / comorbidity",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "cardiac_monitoring_overdue": {
+      "label": "Required echo / MUGA result overdue or unavailable",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "days_since_last_antibody": {
+      "label": "Days since last IV dual-HER2 infusion",
+      "type": "number",
+      "demo_value": 2,
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "treatment_setting": {
+      "label": "Treatment setting",
+      "type": "select",
+      "required": false,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "neoadjuvant",
+          "label": "Before surgery"
+        },
+        {
+          "value": "adjuvant",
+          "label": "After surgery"
+        }
+      ],
+      "demo_value": "neoadjuvant"
+    },
+    "companion_regimen_confirmed": {
+      "label": "Companion chemotherapy NCCP regimen selected and separately assessed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "concurrent_anthracycline": {
+      "label": "Anthracycline is being given concurrently",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "trastuzumab_discontinued": {
+      "label": "Trastuzumab permanently discontinued",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "her2_hypersensitivity_grade": {
+      "label": "Current HER2-antibody reaction grade",
+      "type": "select",
+      "required": false,
+      "input_role": "context",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "grading_source_label": "NCCP 00350 / named adverse-event assessment",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+      "source_grading_note": "The regimen gives treatment-action thresholds, not a complete grading table. Confirm the exact adverse event and its clinician-assessed grade; do not infer severity from a single symptom or LVEF value.",
+      "assessment_guidance": "Confirm the named adverse event and grading criteria with the treating team before applying the source treatment-action threshold."
+    },
+    "significant_infusion_reaction": {
+      "label": "Significant current infusion reaction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bronchospasm_or_ards": {
+      "label": "Reaction-associated bronchospasm or ARDS",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_persistent_diarrhoea": {
+      "label": "Severe or prolonged diarrhoea not improving",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_renal_impairment": {
+      "label": "Severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment": {
+      "label": "Hepatic impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "age_years": {
+      "label": "Age",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "years",
+      "input_role": "decision",
+      "demo_value": 55
     }
   },
   "required_inputs": [],
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "Evaluate only supplied values; do not infer missing values. Context and eligibility fields remain optional during partial assessment unless a specific decision rule requires them.",
+    "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -555,977 +423,1093 @@
     ],
     "rules": [
       {
-        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "relevant_drug_hypersensitivity",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "docetaxel",
-            "carboplatin",
-            "trastuzumab",
-            "pertuzumab"
-          ],
-          "recommendation": "Do not administer TCHP; obtain consultant review."
+        "rule_id": "ECHO_MISSING",
+        "when": {
+          "field": "cardiac_monitoring_overdue",
+          "operator": "==",
+          "value": true
         },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Relevant hypersensitivity is an exclusion."
-      },
-      {
-        "rule_id": "EXCLUSION_PREGNANCY_BREASTFEEDING",
-        "any": [
-          {
-            "field": "pregnancy",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "breastfeeding",
-            "operator": "==",
-            "value": true
-          }
-        ],
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "docetaxel",
-            "carboplatin",
-            "trastuzumab",
-            "pertuzumab"
-          ],
-          "recommendation": "Do not administer TCHP during pregnancy or breastfeeding; urgent consultant review required."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Pregnancy and breastfeeding are exclusions."
-      },
-      {
-        "rule_id": "CARDIAC_DISEASE_EXCLUSION",
-        "field": "clinically_significant_cardiac_disease",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "trastuzumab",
-            "pertuzumab"
-          ],
-          "recommendation": "Do not proceed with HER2-directed treatment without consultant/cardiology review."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Clinically significant cardiac disease is an exclusion."
-      },
-      {
-        "rule_id": "ACTIVE_INFECTION_REVIEW",
-        "field": "active_infection",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "docetaxel",
-            "carboplatin",
-            "trastuzumab",
-            "pertuzumab"
-          ],
-          "recommendation": "Withhold treatment and assess/treat the infection before proceeding."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Clinically significant infection requires review before systemic treatment."
-      },
-      {
-        "rule_id": "BASELINE_LVEF_BELOW55",
-        "all": [
-          {
-            "field": "assessment_stage",
-            "operator": "==",
-            "value": "baseline"
-          },
-          {
-            "field": "lvef_percent",
-            "operator": "<",
-            "value": 55
-          }
-        ],
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "trastuzumab",
-            "pertuzumab"
-          ],
-          "recommendation": "Pretreatment LVEF is below the encoded eligibility value of 55%; obtain consultant/cardiology review."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Pretreatment LVEF should be at least 55%."
-      },
-      {
-        "rule_id": "BASELINE_NEUROPATHY_G2_PLUS",
-        "all": [
-          {
-            "field": "assessment_stage",
-            "operator": "==",
-            "value": "baseline"
-          },
-          {
-            "field": "neuropathy_grade",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "docetaxel"
-          ],
-          "recommendation": "Baseline grade 2 or greater sensory/motor neuropathy is an exclusion for this regimen."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Baseline grade 2 or greater neuropathy is excluded."
-      },
-      {
-        "rule_id": "COUNTS_LOW_IMMEDIATE_DELAY",
-        "any": [
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1.0
-          },
-          {
-            "field": "platelets",
-            "operator": "<=",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "delay",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay docetaxel and carboplatin for low counts. Enter the selected haematological management strategy to refine the post-recovery dose plan."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ANC below 1.0 or platelets 100 or below requires an immediate treatment delay; the selected G-CSF or dose-reduction pathway refines subsequent dosing."
-      },
-      {
-        "rule_id": "COUNTS_INTERMEDIATE_REDUCE",
-        "all": [
-          {
-            "field": "anc",
-            "operator": ">=",
-            "value": 1.0
-          },
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Give 75% docetaxel and carboplatin according to the dose-reduction pathway."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ANC 1.0–1.49 with platelets >100 uses 75% doses in the dose-reduction pathway."
-      },
-      {
-        "rule_id": "COUNTS_INTERMEDIATE_GCSF",
-        "all": [
-          {
-            "field": "anc",
-            "operator": ">=",
-            "value": 1.0
-          },
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          }
-        ],
-        "action": {
-          "type": "proceed_with_caution",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "The encoded G-CSF option permits 100% regimen with G-CSF support; confirm the selected strategy with the consultant."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "The source includes a 100% regimen plus G-CSF option."
-      },
-      {
-        "rule_id": "COUNTS_LOW_REDUCE",
-        "all": [
-          {
-            "any": [
-              {
-                "field": "anc",
-                "operator": "<",
-                "value": 1.0
-              },
-              {
-                "field": "platelets",
-                "operator": "<=",
-                "value": 100
-              }
-            ]
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          }
-        ],
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay until ANC >1.5 and platelets >100, then give 75% docetaxel and carboplatin."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Low Day 1 counts require delay and 75% dosing in the dose-reduction pathway."
-      },
-      {
-        "rule_id": "COUNTS_LOW_GCSF",
-        "all": [
-          {
-            "any": [
-              {
-                "field": "anc",
-                "operator": "<",
-                "value": 1.0
-              },
-              {
-                "field": "platelets",
-                "operator": "<=",
-                "value": 100
-              }
-            ]
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          }
-        ],
-        "action": {
-          "type": "delay",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay until ANC >1.5 and platelets >100, then resume 100% regimen with the selected G-CSF strategy."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Low Day 1 counts require delay before the 100% plus G-CSF option."
-      },
-      {
-        "rule_id": "FN_FIRST_REDUCE",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": "==",
-            "value": 1
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "For a first febrile-neutropenia event, give 75% of the previous cycle dose when counts have recovered."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "First febrile-neutropenia event: 75% dose-reduction option."
-      },
-      {
-        "rule_id": "FN_SECOND_REDUCE",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": "==",
-            "value": 2
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "dose_reduce_two_levels",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "For a second febrile-neutropenia event, give 50% of the original cycle dose when counts have recovered."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Second febrile-neutropenia event: 50% of original dose."
-      },
-      {
-        "rule_id": "FN_THIRD_REDUCE",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "dose_reduction"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Discontinue the regimen or switch to the G-CSF pathway after a third febrile-neutropenia event."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Third event: discontinue or switch strategy."
-      },
-      {
-        "rule_id": "FN_FIRST_GCSF",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": "==",
-            "value": 1
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "proceed_with_caution",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "After a first febrile-neutropenia event and count recovery, give 100% of the regimen using the G-CSF pathway."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "First event in the G-CSF option retains 100% regimen dosing."
-      },
-      {
-        "rule_id": "FN_SECOND_GCSF",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": "==",
-            "value": 2
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "After a second febrile-neutropenia event and count recovery, give 75% of the regimen using the G-CSF pathway."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Second event in the G-CSF option uses 75% regimen dosing."
-      },
-      {
-        "rule_id": "FN_THIRD_GCSF",
-        "all": [
-          {
-            "field": "febrile_neutropenia_event_number",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "gcsf_strategy",
-            "operator": "==",
-            "value": "gcsf"
-          },
-          {
-            "field": "anc",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "platelets",
-            "operator": ">",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "dose_reduce_two_levels",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "After a third febrile-neutropenia event and count recovery, give 50% of the regimen using the G-CSF pathway."
-        },
-        "source": {
-          "page": 5,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Third event in the G-CSF option uses 50% regimen dosing."
-      },
-      {
-        "rule_id": "GFR_20_OR_LESS",
-        "field": "gfr_ml_min",
-        "operator": "<=",
-        "value": 20,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "carboplatin"
-          ],
-          "recommendation": "Do not administer carboplatin when GFR is 20 mL/min or less."
-        },
-        "source": {
-          "page": 6,
-          "table": "Table 4",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Carboplatin should not be administered at GFR ≤20 mL/min."
-      },
-      {
-        "rule_id": "GFR_20_TO30",
-        "all": [
-          {
-            "field": "gfr_ml_min",
-            "operator": ">",
-            "value": 20
-          },
-          {
-            "field": "gfr_ml_min",
-            "operator": "<=",
-            "value": 30
-          }
-        ],
-        "action": {
-          "type": "proceed_with_caution",
-          "components": [
-            "carboplatin"
-          ],
-          "recommendation": "Carboplatin requires extreme caution at GFR >20 to 30 mL/min; obtain consultant/pharmacy review."
-        },
-        "source": {
-          "page": 6,
-          "table": "Table 4",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "The source advises extreme caution at GFR 20–30 mL/min."
-      },
-      {
-        "rule_id": "BILIRUBIN_ABNORMAL",
-        "field": "bilirubin_abnormal",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "delay",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay chemotherapy for up to 2 weeks for abnormal bilirubin; if no recovery, stop chemotherapy. Trastuzumab may continue after consultant review."
-        },
-        "source": {
-          "page": 6,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Abnormal bilirubin requires chemotherapy delay and reassessment."
-      },
-      {
-        "rule_id": "DOCETAXEL_HEPATIC_REDUCE_A",
-        "all": [
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": ">",
-            "value": 2.5
-          },
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": "<=",
-            "value": 2.5
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel"
-          ],
-          "recommendation": "Reduce docetaxel from 75 to 60 mg/m²."
-        },
-        "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "AST/ALT >2.5–5×ULN with alkaline phosphatase ≤2.5×ULN requires docetaxel 60 mg/m²."
-      },
-      {
-        "rule_id": "DOCETAXEL_HEPATIC_REDUCE_B",
-        "all": [
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": ">",
-            "value": 2.5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "docetaxel"
-          ],
-          "recommendation": "Reduce docetaxel from 75 to 60 mg/m²."
-        },
-        "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Combined transaminase and alkaline-phosphatase elevation requires docetaxel 60 mg/m²."
-      },
-      {
-        "rule_id": "DOCETAXEL_HEPATIC_DELAY",
-        "all": [
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": ">",
-            "value": 5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": ">",
-            "value": 5
-          }
-        ],
-        "action": {
-          "type": "delay",
-          "components": [
-            "docetaxel",
-            "carboplatin"
-          ],
-          "recommendation": "Delay chemotherapy for a maximum of 2 weeks; discontinue chemotherapy if values do not recover."
-        },
-        "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "The explicit Table 5 combination of AST/ALT >5×ULN and alkaline phosphatase >5×ULN requires delay."
-      },
-      {
-        "rule_id": "DOCETAXEL_HEPATIC_UNLISTED_HIGH_TRANSAMINASES",
-        "all": [
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": ">",
-            "value": 5
-          },
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          }
-        ],
         "action": {
           "type": "consultant_review",
           "components": [
-            "docetaxel",
-            "carboplatin"
+            "pertuzumab",
+            "trastuzumab"
           ],
-          "recommendation": "This liver-test combination is not explicitly tabulated in Table 5; obtain consultant/pharmacy review before chemotherapy."
+          "recommendation": "Obtain and review the required cardiac result before administration; do not infer a normal result.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Obtain and review the required cardiac result before administration; do not infer a normal result.",
         "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Avoid extrapolating an unlisted hepatic combination."
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 3
+        }
       },
       {
-        "rule_id": "DOCETAXEL_HEPATIC_UNLISTED_HIGH_ALP",
-        "all": [
-          {
-            "field": "alk_phos_uln_multiple",
-            "operator": ">",
-            "value": 5
-          },
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": "<=",
-            "value": 5
-          }
-        ],
+        "rule_id": "HER2_REQUIRED",
+        "when": {
+          "field": "her2_positive",
+          "operator": "==",
+          "value": false
+        },
         "action": {
           "type": "consultant_review",
           "components": [
-            "docetaxel",
-            "carboplatin"
+            "pertuzumab",
+            "trastuzumab"
           ],
-          "recommendation": "This liver-test combination is not explicitly tabulated in Table 5; obtain consultant/pharmacy review before chemotherapy."
+          "recommendation": "Validated HER2-positive disease is required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Validated HER2-positive disease is required.",
         "source": {
-          "page": 7,
-          "table": "Table 5",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Avoid extrapolating an unlisted hepatic combination."
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
       },
       {
-        "rule_id": "LVEF_WITHHOLD",
-        "all": [
-          {
-            "field": "lvef_percent",
-            "operator": "<",
-            "value": 50
-          },
-          {
-            "field": "lvef_drop_points",
-            "operator": ">=",
-            "value": 10
-          }
-        ],
+        "rule_id": "INDICATION",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab",
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Check the complete indication, setting and prior-treatment restriction in NCCP before selecting this regimen.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Check the complete indication, setting and prior-treatment restriction in NCCP before selecting this regimen.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab",
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Outside NCCP ECOG 0–1 eligibility; consultant review.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside NCCP ECOG 0–1 eligibility; consultant review.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BASELINE_LVEF_LOW",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                }
+              ]
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
         "action": {
           "type": "withhold",
           "components": [
-            "trastuzumab",
-            "pertuzumab"
+            "pertuzumab",
+            "trastuzumab"
           ],
-          "recommendation": "Withhold trastuzumab and pertuzumab for at least 3 weeks and repeat LVEF assessment."
+          "recommendation": "Baseline LVEF below 50% is outside both early-breast initiation thresholds."
         },
+        "explanation": "Baseline LVEF below 50% is outside both early-breast initiation thresholds.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "LVEF <50% with a fall of at least 10 points requires withholding."
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
       },
       {
-        "rule_id": "SYMPTOMATIC_HEART_FAILURE",
-        "field": "symptomatic_heart_failure",
-        "operator": "==",
-        "value": true,
+        "rule_id": "BASELINE_LVEF_50_55",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": "<",
+                  "value": 55
+                },
+                {
+                  "field": "anthracycline_completed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Early-breast baseline requires LVEF ≥55%, or ≥50% after completed anthracycline chemotherapy. Confirm treatment history."
+        },
+        "explanation": "Early-breast baseline requires LVEF ≥55%, or ≥50% after completed anthracycline chemotherapy. Confirm treatment history.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BASELINE_HISTORY_MISSING",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": "<",
+                  "value": 55
+                },
+                {
+                  "field": "anthracycline_completed",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "LVEF 50–<55% requires confirmation of completed anthracycline treatment; do not assume that exception applies.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "LVEF 50–<55% requires confirmation of completed anthracycline treatment; do not assume that exception applies.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "LVEF_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": ">=",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Hold pertuzumab and trastuzumab at least 3 weeks for LVEF <50% AND decline ≥10 percentage points. Source restart criteria: LVEF ≥50% OR decline <10 points, after repeat assessment and consultant review. No improvement/further decline: consider discontinuation and cardiology."
+        },
+        "explanation": "Hold pertuzumab and trastuzumab at least 3 weeks for LVEF <50% AND decline ≥10 percentage points. Source restart criteria: LVEF ≥50% OR decline <10 points, after repeat assessment and consultant review. No improvement/further decline: consider discontinuation and cardiology.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "LVEF_CHANGE_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Obtain the baseline change to interpret this cardiac band; missing change is not a normal result.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Obtain the baseline change to interpret this cardiac band; missing change is not a normal result.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "INVALID_ASSESSMENT_STAGE",
+        "when": {
+          "field": "assessment_stage",
+          "operator": "not_in",
+          "value": [
+            "baseline",
+            "ongoing"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Choose Before starting or During treatment. The entered assessment stage is unrecognised; it must not bypass initiation eligibility or be treated as a completed assessment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Choose Before starting or During treatment. The entered assessment stage is unrecognised; it must not bypass initiation eligibility or be treated as a completed assessment.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        },
+        "encoding_note": "Context clarification; no invented numeric restart dose."
+      },
+      {
+        "rule_id": "ONGOING_BASELINE_HISTORY_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "ongoing"
+            },
+            {
+              "any": [
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "all": [
+                    {
+                      "field": "baseline_lvef_percent",
+                      "operator": "<",
+                      "value": 55
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "anthracycline_completed",
+                          "operator": "==",
+                          "value": false
+                        },
+                        {
+                          "field": "anthracycline_completed",
+                          "operator": "missing"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "The recorded baseline LVEF needs review against initiation eligibility. During treatment, use the current LVEF, change from baseline, symptoms and cardiac plan; the historic baseline alone must not create a new automatic hold.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The recorded baseline LVEF needs review against initiation eligibility. During treatment, use the current LVEF, change from baseline, symptoms and cardiac plan; the historic baseline alone must not create a new automatic hold.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        },
+        "encoding_note": "Context clarification; no invented numeric restart dose."
+      },
+      {
+        "rule_id": "LVEF_CURRENT_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_drop_points",
+              "operator": ">=",
+              "value": 10
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Obtain the current LVEF before applying the early-breast cardiac hold criteria; a fall alone does not establish both required values. Assess cardiac symptoms urgently.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Obtain the current LVEF before applying the early-breast cardiac hold criteria; a fall alone does not establish both required values. Assess cardiac symptoms urgently.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 4
+        },
+        "encoding_note": "Context clarification; no invented numeric restart dose."
+      },
+      {
+        "rule_id": "BASELINE_CURRENT_LVEF_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Baseline LVEF below 50% is outside both early-breast initiation thresholds."
+        },
+        "explanation": "Baseline LVEF below 50% is outside both early-breast initiation thresholds.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BASELINE_CURRENT_LVEF_50_55",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "all": [
+                {
+                  "field": "lvef_percent",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "lvef_percent",
+                  "operator": "<",
+                  "value": 55
+                },
+                {
+                  "field": "anthracycline_completed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Early-breast baseline requires LVEF ≥55%, or ≥50% after completed anthracycline chemotherapy. Confirm treatment history."
+        },
+        "explanation": "Early-breast baseline requires LVEF ≥55%, or ≥50% after completed anthracycline chemotherapy. Confirm treatment history.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BASELINE_CURRENT_HISTORY_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "all": [
+                {
+                  "field": "lvef_percent",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "lvef_percent",
+                  "operator": "<",
+                  "value": 55
+                },
+                {
+                  "field": "anthracycline_completed",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "LVEF 50–<55% requires confirmation of completed anthracycline treatment; do not assume that exception applies.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "LVEF 50–<55% requires confirmation of completed anthracycline treatment; do not assume that exception applies.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "LVEF_STAGE_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 55
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Clarify whether this current LVEF is a pretreatment or on-treatment measurement. Early-breast initiation requires at least 55%, or at least 50% after completed anthracyclines. On-treatment criteria differ; independent cardiac holds still apply.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Clarify whether this current LVEF is a pretreatment or on-treatment measurement. Early-breast initiation requires at least 55%, or at least 50% after completed anthracyclines. On-treatment criteria differ; independent cardiac holds still apply.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        },
+        "encoding_note": "Context clarification; no invented numeric restart dose."
+      },
+      {
+        "rule_id": "ALLERGY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Relevant antibody/excipient hypersensitivity excludes treatment."
+        },
+        "explanation": "Relevant antibody/excipient hypersensitivity excludes treatment.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Pregnancy is an NCCP exclusion; urgent specialist treatment review."
+        },
+        "explanation": "Pregnancy is an NCCP exclusion; urgent specialist treatment review.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BREASTFEEDING",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Breastfeeding is an NCCP exclusion; specialist advice required."
+        },
+        "explanation": "Breastfeeding is an NCCP exclusion; specialist advice required.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "CARDIAC_DISEASE",
+        "when": {
+          "field": "significant_cardiac_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Clinically significant cardiac disease requires specialist review before HER2 therapy."
+        },
+        "explanation": "Clinically significant cardiac disease requires specialist review before HER2 therapy.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DYSPNOEA_REST",
+        "when": {
+          "field": "severe_dyspnoea_at_rest",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Rest dyspnoea requires urgent assessment before treatment; NCCP flags elevated fatal infusion-reaction risk."
+        },
+        "explanation": "Rest dyspnoea requires urgent assessment before treatment; NCCP flags elevated fatal infusion-reaction risk.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "HEART_FAILURE",
+        "when": {
+          "field": "symptomatic_heart_failure",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "discontinue",
           "components": [
-            "trastuzumab",
-            "pertuzumab"
+            "pertuzumab",
+            "trastuzumab"
           ],
-          "recommendation": "Discontinue trastuzumab and pertuzumab for symptomatic heart failure and obtain urgent cardiology review."
+          "recommendation": "Symptomatic heart failure: discontinue HER2 antibodies and refer urgently."
         },
+        "explanation": "Symptomatic heart failure: discontinue HER2 antibodies and refer urgently.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Symptomatic heart failure requires discontinuation."
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 4
+        }
       },
       {
-        "rule_id": "HYPERSENSITIVITY_G4",
-        "field": "hypersensitivity_grade",
-        "operator": ">=",
-        "value": 4,
+        "rule_id": "HER2_REACTION_G4",
+        "when": {
+          "field": "her2_hypersensitivity_grade",
+          "operator": "==",
+          "value": 4
+        },
         "action": {
           "type": "discontinue",
           "components": [
-            "trastuzumab",
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Grade4 hypersensitivity: discontinue implicated antibody and manage urgently."
+        },
+        "explanation": "Grade4 hypersensitivity: discontinue implicated antibody and manage urgently.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "INFUSION_REACTION",
+        "when": {
+          "any": [
+            {
+              "field": "her2_hypersensitivity_grade",
+              "operator": "in",
+              "value": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "field": "significant_infusion_reaction",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Interrupt or slow the infusion, assess and treat the reaction and observe to resolution. Serious reactions require urgent supportive treatment. Re-exposure is a treating-team decision."
+        },
+        "explanation": "Interrupt or slow the infusion, assess and treat the reaction and observe to resolution. Serious reactions require urgent supportive treatment. Re-exposure is a treating-team decision.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "PERTUZUMAB_SEVERE_REACTION",
+        "when": {
+          "field": "bronchospasm_or_ards",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
             "pertuzumab"
           ],
-          "recommendation": "Discontinue HER2-directed treatment for grade 4 hypersensitivity/anaphylaxis."
+          "recommendation": "Reaction-associated bronchospasm or ARDS: permanently discontinue pertuzumab and manage urgently."
         },
+        "explanation": "Reaction-associated bronchospasm or ARDS: permanently discontinue pertuzumab and manage urgently.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade 4 hypersensitivity requires discontinuation."
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 5
+        }
       },
       {
-        "rule_id": "NEUROPATHY_GT2_AT75",
-        "all": [
-          {
-            "field": "neuropathy_grade",
-            "operator": ">",
-            "value": 2
-          },
-          {
-            "field": "current_docetaxel_dose",
-            "operator": "==",
-            "value": "75"
-          }
-        ],
+        "rule_id": "DIARRHOEA",
+        "when": {
+          "field": "severe_persistent_diarrhoea",
+          "operator": "==",
+          "value": true
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
-            "docetaxel"
+            "pertuzumab"
           ],
-          "recommendation": "Reduce docetaxel to 60 mg/m² for grade >2 peripheral neuropathy."
+          "recommendation": "Severe/prolonged diarrhoea without improvement: consider interruption until controlled; assess hydration/electrolytes and infection urgently."
         },
+        "explanation": "Severe/prolonged diarrhoea without improvement: consider interruption until controlled; assess hydration/electrolytes and infection urgently.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade >2 neuropathy requires docetaxel reduction to 60 mg/m²."
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 5
+        }
       },
       {
-        "rule_id": "NEUROPATHY_GT2_AT60",
-        "all": [
-          {
-            "field": "neuropathy_grade",
-            "operator": ">",
-            "value": 2
-          },
-          {
-            "field": "current_docetaxel_dose",
-            "operator": "==",
-            "value": "60"
-          }
-        ],
+        "rule_id": "STOP_PERTUZUMAB_WITH_H",
+        "when": {
+          "field": "trastuzumab_discontinued",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "discontinue",
           "components": [
-            "docetaxel"
+            "pertuzumab"
           ],
-          "recommendation": "Discontinue docetaxel if grade >2 neuropathy continues at 60 mg/m²."
+          "recommendation": "Discontinue pertuzumab if trastuzumab is discontinued."
         },
+        "explanation": "Discontinue pertuzumab if trastuzumab is discontinued.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Persistent grade >2 neuropathy at 60 mg/m² requires docetaxel discontinuation."
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 3
+        }
       },
       {
-        "rule_id": "STOMATITIS_G3_AT75",
-        "all": [
-          {
-            "field": "stomatitis_grade",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "current_docetaxel_dose",
-            "operator": "==",
-            "value": "75"
-          }
-        ],
+        "rule_id": "ANTHRACYCLINE_CONCURRENT",
+        "when": {
+          "field": "concurrent_anthracycline",
+          "operator": "==",
+          "value": true
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
-            "docetaxel"
+            "pertuzumab",
+            "trastuzumab"
           ],
-          "recommendation": "Reduce docetaxel to 60 mg/m² for grade 3 or greater stomatitis."
+          "recommendation": "Complete the entire anthracycline component before starting these antibodies. Do not administer concurrent anthracycline/HER2 therapy under this source."
         },
+        "explanation": "Complete the entire anthracycline component before starting these antibodies. Do not administer concurrent anthracycline/HER2 therapy under this source.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade ≥3 stomatitis requires docetaxel reduction."
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 1
+        }
       },
       {
-        "rule_id": "STOMATITIS_G3_AT60",
-        "all": [
-          {
-            "field": "stomatitis_grade",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "current_docetaxel_dose",
-            "operator": "==",
-            "value": "60"
-          }
-        ],
+        "rule_id": "COMPANION_REGIMEN_REQUIRED",
+        "when": {
+          "any": [
+            {
+              "field": "companion_regimen_confirmed",
+              "operator": "missing"
+            },
+            {
+              "field": "companion_regimen_confirmed",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
-            "docetaxel"
+            "pertuzumab",
+            "trastuzumab"
           ],
-          "recommendation": "Reduce docetaxel from 60 to 50 mg/m²; no further reduction is planned."
+          "recommendation": "This antibody framework requires a separately selected chemotherapy regimen. Its count, renal/hepatic, dose and supportive-care rules must be assessed there; no docetaxel or carboplatin dose is inferred here.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "This antibody framework requires a separately selected chemotherapy regimen. Its count, renal/hepatic, dose and supportive-care rules must be assessed there; no docetaxel or carboplatin dose is inferred here.",
         "source": {
-          "page": 7,
-          "table": "Table 6",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "SETTING_REQUIRED",
+        "when": {
+          "field": "treatment_setting",
+          "operator": "missing"
         },
-        "explanation": "Recurrent grade ≥3 stomatitis at 60 mg/m² requires reduction to 50 mg/m²."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Confirm neoadjuvant versus adjuvant setting; treatment duration, surgery sequence and Irish access differ.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm neoadjuvant versus adjuvant setting; treatment duration, surgery sequence and Irish access differ.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "SETTING_INVALID",
+        "when": {
+          "field": "treatment_setting",
+          "operator": "not_in",
+          "value": [
+            "neoadjuvant",
+            "adjuvant"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Select one of the two source settings. This is not a metastatic maintenance protocol.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Select one of the two source settings. This is not a metastatic maintenance protocol.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "ADJUVANT_ACCESS",
+        "when": {
+          "field": "treatment_setting",
+          "operator": "==",
+          "value": "adjuvant"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "NCCP00350b records pertuzumab reimbursement not approved. Verify current Irish access separately and document the selected pathway; clinical evidence is not funding authorisation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "NCCP00350b records pertuzumab reimbursement not approved. Verify current Irish access separately and document the selected pathway; clinical evidence is not funding authorisation.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "ADULT_ELIGIBILITY",
+        "when": {
+          "field": "age_years",
+          "operator": "<",
+          "value": 18
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "The source indication is for adults; a paediatric plan is not established by this card.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The source indication is for adults; a paediatric plan is not established by this card.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "RENAL_SEVERE",
+        "when": {
+          "field": "severe_renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab"
+          ],
+          "recommendation": "No source dose recommendation for severe renal impairment because data are limited. Specialist review; no invented percentage reduction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "No source dose recommendation for severe renal impairment because data are limited. Specialist review; no invented percentage reduction.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HEPATIC_CONTEXT",
+        "when": {
+          "field": "hepatic_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Limited dedicated hepatic data for the antibodies; no specific pertuzumab dose recommendation. Assess the chosen chemotherapy separately.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Limited dedicated hepatic data for the antibodies; no specific pertuzumab dose recommendation. Assess the chosen chemotherapy separately.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HER2_RELOAD",
+        "when": {
+          "field": "days_since_last_antibody",
+          "operator": ">=",
+          "value": 42
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Gap≥6weeks: pertuzumab840mg IV over60min and trastuzumab8mg/kg IV over90min, then420mg and6mg/kg q21days; verify history and safety.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Gap≥6weeks: pertuzumab840mg IV over60min and trastuzumab8mg/kg IV over90min, then420mg and6mg/kg q21days; verify history and safety.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "HER2_MAINTENANCE",
+        "when": {
+          "field": "days_since_last_antibody",
+          "operator": "<",
+          "value": 42
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pertuzumab",
+            "trastuzumab"
+          ],
+          "recommendation": "Gap<6weeks: usual pertuzumab420mg and trastuzumab6mg/kg IV as soon as appropriate; revert to planned schedule. This does not authorise early dosing.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Gap<6weeks: usual pertuzumab420mg and trastuzumab6mg/kg IV as soon as appropriate; revert to planned schedule. This does not authorise early dosing.",
+        "source": {
+          "document": "NCCP 00350 v3",
+          "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf",
+          "page": 3
+        }
       }
     ]
   },
   "output_templates": {
-    "proceed": "No encoded contraindication, hold, dose-modification or treatment-context criterion was triggered. Complete normal prescribing, clinical and pharmacy checks.",
+    "proceed": "Antibody safety domains only. The companion chemotherapy requires its own NCCP assessment; this result is not whole-regimen clearance.",
     "coverage_gap": "One or more potentially relevant protocol domains were not assessed."
   },
   "supportive_care": {

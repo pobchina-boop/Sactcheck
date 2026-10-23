@@ -3,205 +3,168 @@
 'use strict';
 const definitions={
   "00722": {
-    "title": "TCHP: before surgery and beyond",
-    "setting": "Neoadjuvant · HER2-positive early breast cancer",
-    "summary": "Six cycles before surgery are one part of the pathway. Surgery findings determine the treatment afterwards; hormone treatment is added only if the cancer is also hormone-receptor positive.",
+    "code": "00722",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "TCHP: docetaxel, carboplatin, trastuzumab and pertuzumab: the whole pathway",
+    "setting": "HER2-positive early breast cancer · before surgery",
+    "summary": "All four medicines are given by infusion on Day 1 of a 21-day cycle, for six cycles before surgery. Surgery findings guide the postoperative treatment. There is no routine take-home chemotherapy pump.",
     "stages": [
-      "Before treatment",
-      "TCHP · about 18 weeks",
-      "Surgery and pathology",
-      "After surgery",
-      "Longer-term follow-up"
+      "Before starting",
+      "Cycles 1–4",
+      "Around cycle 5 / week 12",
+      "Surgery / next phase",
+      "Ongoing / follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: use the current regimen and active phase",
+          "Echo due; treatment review",
+          "Surgery/pathology select postoperative medicine",
+          "Review benefit / tolerance and next plan"
+        ],
         "kind": "treatment",
-        "cells": [
-          "Checks and access plan",
-          "TCHP every 3 weeks ×6",
-          "Pause for surgery; review response",
-          "HER2 treatment chosen from pathology; commonly to complete a year overall",
-          "Review after the planned course"
-        ],
         "source_ids": [
-          "00722",
-          "early"
+          "nccp"
         ],
         "note": ""
       },
       {
-        "label": "Surgery",
-        "kind": "local",
+        "label": "Surgery / radiotherapy",
         "cells": [
-          "Discuss breast and lymph-node surgery",
-          "Review response and plan the operation",
-          "Lumpectomy OR mastectomy; lymph-node surgery as indicated",
-          "Recovery, wound and shoulder/arm review",
-          "Report new breast, arm or scar concerns"
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
         ],
-        "source_ids": [
-          "early",
-          "neo"
-        ],
-        "note": ""
-      },
-      {
-        "label": "Radiotherapy",
         "kind": "local",
-        "cells": [
-          "Discuss whether likely to be needed",
-          "Usually planned after chemotherapy and surgery",
-          "Decision uses operation and pathology",
-          "If indicated: may overlap HER2 treatment; team agrees timing",
-          "Review skin, fatigue and late effects"
-        ],
         "source_ids": [
           "early"
         ],
-        "note": ""
-      },
-      {
-        "label": "Endocrine / bone care",
-        "kind": "bone",
-        "cells": [
-          "Check ER/PR status",
-          "Not a substitute for TCHP",
-          "Plan if HR-positive",
-          "Endocrine treatment if indicated; assess bone protection",
-          "Endocrine treatment can continue for years; DEXA by risk"
-        ],
-        "source_ids": [
-          "early",
-          "bone",
-          "nogg"
-        ],
-        "note": ""
+        "note": "Timing depends on indication and recovery."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Blood count, kidney and liver tests; GFR",
-          "Before every cycle",
-          "Preoperative checks arranged by surgical team",
-          "According to the new regimen",
-          "Only as clinically indicated"
+          "Baseline FBC, renal and liver profile",
+          "Before each cycle; additional dose checks as prescribed",
+          "Continue the required pre-dose checks",
+          "Use the selected active regimen’s blood-test schedule",
+          "Investigate symptoms / persistent abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
-          "00722"
+          "nccp"
         ],
-        "note": ""
+        "note": "Use the active regimen and dose-day checks."
       },
       {
-        "label": "Heart checks",
-        "kind": "heart",
+        "label": "Echo / cardiac checks",
         "cells": [
-          "Baseline echo / LVEF",
-          "Echo about every 12 weeks",
-          "Carry the cardiac monitoring plan forward",
-          "Continue HER2 surveillance; assessment at completion",
-          "Risk-based follow-up; assess symptoms promptly"
+          "Baseline cardiac assessment",
+          "Earlier for symptoms / concern",
+          "Echo during neoadjuvant treatment, around cycle 5",
+          "Surgery does not restart the echo clock",
+          "Agree follow-up for the active medicine and cardiac risk"
         ],
+        "kind": "heart",
         "source_ids": [
-          "00722",
+          "nccp",
           "esc"
         ],
-        "note": ""
+        "note": "Keep the clock from the first HER2 dose."
       },
       {
-        "label": "Cancer imaging",
-        "kind": "imaging",
+        "label": "Scans / tumour markers",
         "cells": [
-          "Breast imaging; staging if indicated",
-          "Clinical response review; imaging for concern or surgical planning",
-          "Pathology shows response",
-          "Plan surveillance of remaining breast",
-          "Annual mammography; no routine CT/markers if well"
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Before surgery / pathology",
+          "Breast surveillance after early treatment"
         ],
+        "kind": "imaging",
         "source_ids": [
-          "neo",
           "early"
         ],
-        "note": ""
+        "note": "Imaging follows the disease setting and clinical need."
+      },
+      {
+        "label": "Endocrine / DEXA",
+        "cells": [
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "bone"
+        ],
+        "note": "DEXA follows endocrine treatment and fracture risk."
       }
     ],
     "milestones": [
       {
-        "title": "Heart ultrasound (echo)",
-        "when": "Before HER2 therapy; every 12 weeks during it; at completion",
-        "why": "Checks heart pumping function, even without symptoms.",
-        "action": "Ask when the next echo is due and who arranges it. Report new breathlessness, swelling or palpitations.",
+        "title": "Blood tests",
+        "when": "FBC, kidney and liver profile at baseline and before every 21-day cycle. The team reviews the necessary results before a planned dose.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00722",
+          "nccp"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Heart tests",
+        "when": "Check heart pumping function before starting HER2 treatment. Repeat echo or MUGA every 12 weeks: around cycle 5, then cycle 9 if 21-day cycles stay on time. Earlier checks are needed for symptoms or abnormal findings. Count elapsed time from the first HER2 dose; changing phase or route does not restart the clock.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp",
+          "herceptin",
           "esc"
         ],
-        "clinical": "NCCP baseline LVEF ≥55%; impaired function may need 4–8-week reassessment. After completion, ESC surveillance is risk-based; do not end cardiac follow-up merely because chemotherapy stops."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Response and operation planning",
-        "when": "During neoadjuvant treatment and before surgery",
-        "why": "Checks the local response and helps plan surgery.",
-        "action": "Ask which breast imaging is planned and whether the result changes the operation.",
+        "title": "Cancer imaging",
+        "when": "Baseline breast and nodal imaging, with staging tests appropriate to the diagnosis. Review response during preoperative treatment and before surgery. After local treatment, arrange breast surveillance; routine CT, PET or tumour-marker testing is not the usual screening plan for someone without symptoms.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "neo"
-        ],
-        "clinical": "Regular clinical examination. Use the most informative baseline modality for imaging follow-up; no universal CT at each cycle."
-      },
-      {
-        "title": "After surgery: choose the next pathway",
-        "when": "When pathology is available",
-        "why": "Residual cancer and receptor status can change the postoperative medicines.",
-        "action": "Ask for the name, purpose and planned duration of the next treatment.",
-        "source_ids": [
-          "00722",
           "early"
         ],
-        "clinical": "NCCP 00722 describes further trastuzumab to complete one year. Contemporary postoperative HER2 selection requires MDT review, including a separate residual-disease pathway. NCCP 00726 is metastatic maintenance and must not be used as an automatic adjuvant continuation."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Bone health, if endocrine therapy is prescribed",
-        "when": "At the endocrine-treatment decision; then by risk",
-        "why": "Assess fracture risk and whether a baseline DEXA bone-density scan is needed when starting an aromatase inhibitor or ovarian suppression/treatment-induced menopause. It may already have been done before this regimen.",
-        "action": "Ask whether a DEXA result is already available and whether bone protection is recommended.",
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "bone",
-          "nogg"
-        ],
-        "clinical": "Repeat DEXA is based on baseline bone density, fracture risk and bone treatment. A 12–24-month reassessment can be appropriate near a treatment threshold or when risk changes; it is not an automatic annual scan for everyone. NICE baseline DEXA criteria include the exception for patients already receiving adjuvant bisphosphonates."
-      },
-      {
-        "title": "Surveillance after early breast treatment",
-        "when": "After completion of local treatment",
-        "why": "Annual mammography of remaining breast tissue after treatment; the team sets the first date. The mastectomy side is not routinely mammographed. New symptoms need assessment between visits.",
-        "action": "Report new symptoms without waiting for the next mammogram.",
-        "source_ids": [
-          "early",
           "bone"
         ],
-        "clinical": "Routine CT, PET or tumour-marker blood tests are not recommended simply to look for recurrence after early breast treatment in someone without symptoms. Imaging is arranged for a clinical reason."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       }
     ],
     "clinical_notes": [
-      "Radiotherapy, endocrine therapy and HER2 continuation can overlap when the MDT considers this appropriate. The map does not prescribe exact postoperative start dates.",
-      "The echo interval runs from the HER2 treatment course; changing phase does not reset monitoring."
+      "After surgery, the pathology helps select the next HER2 medicine. The plan usually aims to complete about one year of HER2 treatment from the first dose. Residual invasive disease may change the treatment. Blood tests and supportive medicines must follow the selected postoperative regimen.",
+      "No automatic booking, reminders or completion tracking are enabled."
     ],
-    "code": "00722",
-    "release": "0.83.7",
-    "checked": "2026-10-17",
-    "status": "Draft — independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
     "sources": [
       {
-        "id": "00722",
+        "id": "nccp",
         "title": "NCCP 00722 v2 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6598/722_v2_TCHP.pdf"
-      },
-      {
-        "id": "bone",
-        "title": "NICE NG101 · bone health and follow-up",
-        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
       },
       {
         "id": "early",
@@ -214,14 +177,54 @@ const definitions={
         "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
       },
       {
-        "id": "neo",
-        "title": "ASCO · neoadjuvant breast therapy and response assessment",
-        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8274745/"
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
       },
       {
         "id": "nogg",
         "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
         "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "herceptin",
+        "title": "EMA Herceptin product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
       }
     ]
   },
@@ -6420,185 +6423,166 @@ const definitions={
   },
   "00258": {
     "code": "00258",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
     "title": "TCH → trastuzumab continuation: the whole pathway",
     "setting": "HER2-positive adjuvant breast cancer",
     "summary": "Default: six 21-day TCH cycles with IV trastuzumab, then trastuzumab alone to complete one year total. The source also permits weekly IV or fixed-dose SC trastuzumab alternatives; the team confirms the formulation and visit schedule.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Surgery / baseline",
+      "TCH cycles 1–4",
+      "Around cycle 5 / week 12",
+      "Finish chemo → trastuzumab",
+      "Complete / follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: use the current regimen and active phase",
+          "Echo due; treatment review",
+          "Finish chemotherapy; trastuzumab continues",
+          "Review benefit / tolerance and next plan"
+        ],
         "kind": "treatment",
-        "cells": [
-          "Confirm indication, organ function and access",
-          "Taxane ± HER2 treatment",
-          "Review tolerance and response",
-          "HER2 continuation under the agreed plan",
-          "Review outcome and next treatment"
-        ],
         "source_ids": [
-          "00258"
+          "nccp"
         ],
-        "note": "Default: six 21-day TCH cycles with IV trastuzumab, then trastuzumab alone to complete one year total. The source also permits weekly IV or fixed-dose SC trastuzumab alternatives; the team confirms the formulation and visit schedule."
+        "note": ""
       },
       {
-        "label": "Surgery",
-        "kind": "local",
+        "label": "Surgery / radiotherapy",
         "cells": [
-          "Early adjuvant: surgery usually already completed",
-          "No automatic surgery during these cycles",
-          "Reassess local-treatment needs",
-          "Pathology / recovery guide next steps",
-          "Local follow-up"
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Lumpectomy versus mastectomy is an individual surgical decision; this map does not choose it."
-      },
-      {
-        "label": "Radiotherapy",
-        "kind": "local",
-        "cells": [
-          "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "May overlap HER2-only treatment when agreed",
-          "Assess late effects / local follow-up"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "In adjuvant care, radiotherapy usually follows chemotherapy when indicated; endocrine therapy follows its own receptor-specific plan. Radiotherapy and endocrine therapy may overlap HER2-only continuation when the MDT agrees; assess cardiac / lung exposure."
+        "note": "Timing depends on indication and recovery."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
+          "Baseline FBC, renal and liver profile",
+          "Before each cycle; additional dose checks as prescribed",
+          "Continue the required pre-dose checks",
+          "Use the selected active regimen’s blood-test schedule",
+          "Investigate symptoms / persistent abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
-          "00258"
+          "nccp"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": "Use the active regimen and dose-day checks."
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Echo / cardiac checks",
         "cells": [
-          "Baseline echo / MUGA",
-          "Symptoms can prompt earlier tests",
-          "At 12 weeks from HER2 start",
-          "Every 12 weeks / 3 months during HER2",
-          "Agree post-treatment cardiac plan"
+          "Baseline cardiac assessment",
+          "Earlier for symptoms / concern",
+          "Echo / MUGA due around 12 weeks",
+          "Continue every 12 weeks; keep the original clock",
+          "Agree follow-up for the active medicine and cardiac risk"
         ],
+        "kind": "heart",
         "source_ids": [
-          "00258",
-          "smpc",
+          "nccp",
           "esc"
         ],
-        "note": "Baseline before HER2 treatment; repeat every 12 weeks during treatment. Repeat at completion; 4–8-week checks may be needed with impairment. Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "note": "Keep the clock from the first HER2 dose."
       },
       {
-        "label": "Scans / markers",
+        "label": "Scans / tumour markers",
+        "cells": [
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Reassess disease and treatment plan",
+          "Breast surveillance after early treatment"
+        ],
         "kind": "imaging",
-        "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
-        ],
         "source_ids": [
-          "early",
-          "metastatic"
+          "early"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": "Imaging follows the disease setting and clinical need."
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Endocrine / DEXA",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
         ],
+        "kind": "local",
         "source_ids": [
-          "early",
           "bone"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": "DEXA follows endocrine treatment and fracture risk."
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
+        "title": "Blood tests",
+        "when": "NCCP specifies baseline and regular FBC, liver and renal profiles; the team confirms the pre-dose checks for the active chemotherapy or trastuzumab-only phase. Verify kidney function for carboplatin dosing.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00258"
+          "nccp"
         ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Heart assessment",
-        "when": "Baseline before HER2 treatment; repeat every 12 weeks during treatment. Repeat at completion; 4–8-week checks may be needed with impairment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Heart tests",
+        "when": "NCCP lists baseline echo/MUGA if clinically indicated, but requires cardiac eligibility assessment; the trastuzumab product information calls for baseline cardiac assessment. Repeat every 12 weeks during trastuzumab and at completion. Earlier checks follow symptoms or cardiac concern. Around cycle 5 is the first 12-week check if treatment stays on time.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00258",
-          "smpc",
+          "nccp",
+          "herceptin",
           "esc"
         ],
-        "clinical": "Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
+        "title": "Cancer imaging",
+        "when": "Baseline breast and nodal imaging, with staging tests appropriate to the diagnosis. Review response during preoperative treatment and before surgery. After local treatment, arrange breast surveillance; routine CT, PET or tumour-marker testing is not the usual screening plan for someone without symptoms.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "early",
-          "metastatic"
+          "early"
         ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00258"
+          "bone"
         ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "The whole pathway is individualised by the MDT."
+      "Complete the selected chemotherapy and continue trastuzumab to the agreed total course, usually one year from the first dose; this is not an additional year after chemotherapy.",
+      "No automatic booking, reminders or completion tracking are enabled."
     ],
     "sources": [
       {
-        "id": "00258",
-        "title": "NCCP 00258 v9 · official source",
+        "id": "nccp",
+        "title": "NCCP 00258 v9 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6362/258_v9_TCH.pdf"
       },
       {
@@ -6652,198 +6636,179 @@ const definitions={
         "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       },
       {
-        "id": "smpc",
+        "id": "herceptin",
         "title": "EMA Herceptin product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
       },
       {
-        "id": "trial",
-        "title": "BCIRG 006 · adjuvant HER2 therapy",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/21991949/"
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
       }
     ]
   },
   "00731": {
     "code": "00731",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
     "title": "TCHP · subcutaneous trastuzumab: the whole pathway",
     "setting": "HER2-positive neoadjuvant breast cancer",
     "summary": "Six 21-day cycles before surgery: IV pertuzumab, fixed-dose trastuzumab under the skin, IV docetaxel and IV carboplatin. Surgery and pathology guide the postoperative HER2 plan. This is not the combined Phesgo injection.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "Cycles 1–4",
+      "Around cycle 5 / week 12",
+      "Surgery / next phase",
+      "Ongoing / follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: use the current regimen and active phase",
+          "Echo due; treatment review",
+          "Surgery/pathology select postoperative medicine",
+          "Review benefit / tolerance and next plan"
+        ],
         "kind": "treatment",
-        "cells": [
-          "Confirm indication, organ function and access",
-          "Taxane ± HER2 treatment",
-          "Surgery / pathology review",
-          "HER2 continuation under the agreed plan",
-          "Review outcome and next treatment"
-        ],
         "source_ids": [
-          "00731"
+          "nccp"
         ],
-        "note": "Six 21-day cycles before surgery: IV pertuzumab, fixed-dose trastuzumab under the skin, IV docetaxel and IV carboplatin. Surgery and pathology guide the postoperative HER2 plan. This is not the combined Phesgo injection."
+        "note": ""
       },
       {
-        "label": "Surgery",
-        "kind": "local",
+        "label": "Surgery / radiotherapy",
         "cells": [
-          "Plan surgery after neoadjuvant response",
-          "Neoadjuvant systemic treatment first",
-          "Neoadjuvant: surgery after recovery",
-          "Pathology / recovery guide next steps",
-          "Local follow-up"
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Lumpectomy versus mastectomy is an individual surgical decision; this map does not choose it."
-      },
-      {
-        "label": "Radiotherapy",
-        "kind": "local",
-        "cells": [
-          "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "May overlap HER2-only treatment when agreed",
-          "Assess late effects / local follow-up"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "Neoadjuvant chemotherapy precedes surgery. Pathology determines postoperative systemic therapy; radiotherapy follows the surgical / systemic plan and can overlap HER2 treatment when agreed."
+        "note": "Timing depends on indication and recovery."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
+          "Baseline FBC, renal and liver profile",
+          "Before each cycle; additional dose checks as prescribed",
+          "Continue the required pre-dose checks",
+          "Use the selected active regimen’s blood-test schedule",
+          "Investigate symptoms / persistent abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
-          "00731"
+          "nccp"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": "Use the active regimen and dose-day checks."
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Echo / cardiac checks",
         "cells": [
-          "Baseline echo / MUGA",
-          "Symptoms can prompt earlier tests",
-          "At 12 weeks from HER2 start",
-          "Every 12 weeks / 3 months during HER2",
-          "Agree post-treatment cardiac plan"
+          "Baseline cardiac assessment",
+          "Earlier for symptoms / concern",
+          "Echo during neoadjuvant treatment, around cycle 5",
+          "Surgery does not restart the echo clock",
+          "Agree follow-up for the active medicine and cardiac risk"
         ],
+        "kind": "heart",
         "source_ids": [
-          "00731",
-          "smpc",
+          "nccp",
           "esc"
         ],
-        "note": "Baseline before HER2 treatment; repeat every 12 weeks during treatment. Repeat at completion; 4–8-week checks may be needed with impairment. Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "note": "Keep the clock from the first HER2 dose."
       },
       {
-        "label": "Scans / markers",
+        "label": "Scans / tumour markers",
+        "cells": [
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Before surgery / pathology",
+          "Breast surveillance after early treatment"
+        ],
         "kind": "imaging",
-        "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Reassess before surgery",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
-        ],
         "source_ids": [
-          "early",
-          "metastatic"
+          "early"
         ],
-        "note": "Assess the breast / nodes before treatment and response during the neoadjuvant course to guide surgery; modality and interval follow the MDT plan. New symptoms can require earlier assessment. Later asymptomatic early-breast surveillance is different from metastatic CT monitoring. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": "Imaging follows the disease setting and clinical need."
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Endocrine / DEXA",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
         ],
+        "kind": "local",
         "source_ids": [
-          "early",
           "bone"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": "DEXA follows endocrine treatment and fracture risk."
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
+        "title": "Blood tests",
+        "when": "FBC, kidney and liver profile at baseline and before every 21-day cycle. The team reviews the necessary results before a planned dose.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00731"
+          "nccp"
         ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Heart assessment",
-        "when": "Baseline before HER2 treatment; repeat every 12 weeks during treatment. Repeat at completion; 4–8-week checks may be needed with impairment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Heart tests",
+        "when": "Check heart pumping function before starting HER2 treatment. Repeat echo or MUGA every 12 weeks: around cycle 5, then cycle 9 if 21-day cycles stay on time. Earlier checks are needed for symptoms or abnormal findings. Count elapsed time from the first HER2 dose; changing phase or route does not restart the clock.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00731",
-          "smpc",
+          "nccp",
+          "herceptin",
           "esc"
         ],
-        "clinical": "Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Imaging and markers",
-        "when": "Assess the breast / nodes before treatment and response during the neoadjuvant course to guide surgery; modality and interval follow the MDT plan. New symptoms can require earlier assessment. Later asymptomatic early-breast surveillance is different from metastatic CT monitoring. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
+        "title": "Cancer imaging",
+        "when": "Baseline breast and nodal imaging, with staging tests appropriate to the diagnosis. Review response during preoperative treatment and before surgery. After local treatment, arrange breast surveillance; routine CT, PET or tumour-marker testing is not the usual screening plan for someone without symptoms.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "early",
-          "metastatic"
+          "early"
         ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00731"
+          "bone"
         ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "The whole pathway is individualised by the MDT."
+      "After surgery, the pathology helps select the next HER2 medicine. The plan usually aims to complete about one year of HER2 treatment from the first dose. Residual invasive disease may change the treatment. Blood tests and supportive medicines must follow the selected postoperative regimen.",
+      "No automatic booking, reminders or completion tracking are enabled."
     ],
     "sources": [
       {
-        "id": "00731",
-        "title": "NCCP 00731 v2 · official source",
+        "id": "nccp",
+        "title": "NCCP 00731 v2 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6601/731_v2_TCHSCP.pdf"
       },
       {
@@ -6897,198 +6862,180 @@ const definitions={
         "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       },
       {
-        "id": "smpc",
+        "id": "herceptin",
         "title": "EMA Herceptin product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
       },
       {
-        "id": "trial",
-        "title": "TRYPHAENA · neoadjuvant dual HER2 blockade",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/23704196/"
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
       }
     ]
   },
   "00204": {
     "code": "00204",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
     "title": "Docetaxel + pertuzumab + trastuzumab: the whole pathway",
     "setting": "HER2-positive metastatic or unresectable locally recurrent breast cancer",
     "summary": "IV pertuzumab, IV trastuzumab and docetaxel every 21 days. Docetaxel duration is reviewed separately; the two HER2 antibodies may continue after chemotherapy stops while beneficial and tolerated.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "First cycles",
+      "Around week 12",
+      "Continuing / next phase",
+      "Longer-term plan"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: use the current regimen and active phase",
+          "Echo due; treatment review",
+          "Review active medicines and benefit / tolerance",
+          "Review benefit / tolerance and next plan"
+        ],
         "kind": "treatment",
-        "cells": [
-          "Confirm indication, organ function and access",
-          "Taxane ± HER2 treatment",
-          "Review tolerance and response",
-          "HER2 continuation under the agreed plan",
-          "Review outcome and next treatment"
-        ],
         "source_ids": [
-          "00204"
+          "nccp"
         ],
-        "note": "IV pertuzumab, IV trastuzumab and docetaxel every 21 days. Docetaxel duration is reviewed separately; the two HER2 antibodies may continue after chemotherapy stops while beneficial and tolerated."
+        "note": ""
       },
       {
-        "label": "Surgery",
-        "kind": "local",
+        "label": "Surgery / radiotherapy",
         "cells": [
-          "Site-specific procedures if indicated",
-          "No automatic surgery during these cycles",
-          "Reassess local-treatment needs",
-          "Individual multidisciplinary plan",
-          "Local follow-up"
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
         ],
+        "kind": "local",
         "source_ids": [
           "metastatic"
         ],
-        "note": "Lumpectomy versus mastectomy is an individual surgical decision; this map does not choose it."
-      },
-      {
-        "label": "Radiotherapy",
-        "kind": "local",
-        "cells": [
-          "Assess indication",
-          "Only when clinically indicated",
-          "Coordinate surgery and recovery",
-          "Radiation team agrees timing",
-          "Assess late effects / local follow-up"
-        ],
-        "source_ids": [
-          "metastatic"
-        ],
-        "note": "Radiotherapy is site / symptom directed. Both teams agree whether systemic treatment continues or pauses; no concurrent schedule is assumed."
+        "note": "Timing depends on indication and recovery."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
+          "Baseline FBC, renal and liver profile",
+          "Before each cycle; additional dose checks as prescribed",
+          "Continue the required pre-dose checks",
+          "Use the selected active regimen’s blood-test schedule",
+          "Investigate symptoms / persistent abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
-          "00204"
+          "nccp"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": "Use the active regimen and dose-day checks."
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Echo / cardiac checks",
         "cells": [
-          "Baseline echo / MUGA",
-          "Symptoms can prompt earlier tests",
-          "At 12 weeks from HER2 start",
-          "Every 12 weeks / 3 months during HER2",
-          "Agree post-treatment cardiac plan"
+          "Baseline cardiac assessment",
+          "Earlier for symptoms / concern",
+          "Echo / MUGA due around 12 weeks",
+          "Continue every 12 weeks; keep the original clock",
+          "Agree follow-up for the active medicine and cardiac risk"
         ],
+        "kind": "heart",
         "source_ids": [
-          "00204",
-          "smpc",
+          "nccp",
           "esc"
         ],
-        "note": "Baseline before HER2 treatment; repeat every 12 weeks during treatment. Repeat at completion; 4–8-week checks may be needed with impairment. Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. At a change or completion, agree cardiac follow-up from treatment exposure, symptoms and results. ESC permits six-monthly echo only in selected asymptomatic low/moderate-risk patients with normal assessments after the first metastatic year. This does not automatically replace NCCP 12-week checks or begin when chemotherapy stops."
+        "note": "Keep the clock from the first HER2 dose."
       },
       {
-        "label": "Scans / markers",
+        "label": "Scans / tumour markers",
+        "cells": [
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Reassess disease and treatment plan",
+          "Imaging generally every 2–4 months; individual plan"
+        ],
         "kind": "imaging",
-        "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Response scan if due",
-          "Response imaging if metastatic",
-          "Symptoms can trigger earlier tests"
-        ],
         "source_ids": [
-          "early",
-          "metastatic"
+          "metastatic",
+          "markers"
         ],
-        "note": "For metastatic breast disease, response assessment commonly every 2–4 months, adapted to sites, symptoms and treatment. Markers can supplement assessment; they do not replace imaging or alone determine a treatment change."
+        "note": "Imaging follows the disease setting and clinical need."
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Endocrine / DEXA",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
         ],
+        "kind": "local",
         "source_ids": [
-          "early",
           "bone"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": "DEXA follows endocrine treatment and fracture risk."
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
+        "title": "Blood tests",
+        "when": "FBC, kidney and liver profile at baseline and before every 21-day cycle. The team reviews the necessary results before a planned dose.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00204"
+          "nccp"
         ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Heart assessment",
-        "when": "Baseline before HER2 treatment; repeat every 12 weeks during treatment. Repeat at completion; 4–8-week checks may be needed with impairment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Heart tests",
+        "when": "Check heart pumping function before starting HER2 treatment. Repeat echo or MUGA every 12 weeks: around cycle 5, then cycle 9 if 21-day cycles stay on time. Earlier checks are needed for symptoms or abnormal findings. Count elapsed time from the first HER2 dose; changing phase or route does not restart the clock. After the first year, ESC guidance allows six-monthly echo in selected asymptomatic low- or moderate-risk metastatic patients with normal assessments, only under an agreed team plan. Entering maintenance alone does not justify reducing checks.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00204",
-          "smpc",
+          "nccp",
+          "herceptin",
           "esc"
         ],
-        "clinical": "Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. At a change or completion, agree cardiac follow-up from treatment exposure, symptoms and results. ESC permits six-monthly echo only in selected asymptomatic low/moderate-risk patients with normal assessments after the first metastatic year. This does not automatically replace NCCP 12-week checks or begin when chemotherapy stops."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Imaging and markers",
-        "when": "For metastatic breast disease, response assessment commonly every 2–4 months, adapted to sites, symptoms and treatment. Markers can supplement assessment; they do not replace imaging or alone determine a treatment change.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
+        "title": "Cancer imaging",
+        "when": "Record baseline disease sites. Response imaging is generally reviewed every 2–4 months under international guidance, adapted to symptoms, disease pace and treatment. The team selects the scan; this is not an automatic CT chest/abdomen/pelvis order for every patient. Tumour markers may support assessment in selected cases, but do not alone decide progression or a treatment change.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "early",
           "metastatic"
         ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00204"
+          "bone"
         ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "The whole pathway is individualised by the MDT."
+      "Continue while treatment is helping and tolerated. If a component stops, confirm the exact medicines, tests and supportive prescription for the new phase. Maintenance remains active treatment.",
+      "No automatic booking, reminders or completion tracking are enabled."
     ],
     "sources": [
       {
-        "id": "00204",
-        "title": "NCCP 00204 v11 · official source",
+        "id": "nccp",
+        "title": "NCCP 00204 v11 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6545/204_v11_PertuzumabTrasDoc.pdf"
       },
       {
@@ -7142,198 +7089,180 @@ const definitions={
         "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       },
       {
-        "id": "smpc",
+        "id": "herceptin",
         "title": "EMA Herceptin product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
       },
       {
-        "id": "trial",
-        "title": "CLEOPATRA · docetaxel with dual HER2 blockade",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/22149875/"
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
       }
     ]
   },
   "00507": {
     "code": "00507",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
     "title": "Weekly paclitaxel + pertuzumab + trastuzumab: the whole pathway",
     "setting": "HER2-positive metastatic or unresectable locally recurrent breast cancer",
     "summary": "Paclitaxel on Days 1, 8 and 15 of each 21-day block, for up to eight cycles; IV pertuzumab and trastuzumab on Day 1. This NCCP alternative applies when docetaxel is unsuitable, not tolerated or caused significant toxicity. Antibodies may continue after the taxane stops while beneficial and tolerated.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "First cycles",
+      "Around week 12",
+      "Continuing / next phase",
+      "Longer-term plan"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: use the current regimen and active phase",
+          "Echo due; treatment review",
+          "Review active medicines and benefit / tolerance",
+          "Review benefit / tolerance and next plan"
+        ],
         "kind": "treatment",
-        "cells": [
-          "Confirm indication, organ function and access",
-          "Taxane ± HER2 treatment",
-          "Review tolerance and response",
-          "HER2 continuation under the agreed plan",
-          "Review outcome and next treatment"
-        ],
         "source_ids": [
-          "00507"
+          "nccp"
         ],
-        "note": "Paclitaxel on Days 1, 8 and 15 of each 21-day block, for up to eight cycles; IV pertuzumab and trastuzumab on Day 1. This NCCP alternative applies when docetaxel is unsuitable, not tolerated or caused significant toxicity. Antibodies may continue after the taxane stops while beneficial and tolerated."
+        "note": ""
       },
       {
-        "label": "Surgery",
-        "kind": "local",
+        "label": "Surgery / radiotherapy",
         "cells": [
-          "Site-specific procedures if indicated",
-          "No automatic surgery during these cycles",
-          "Reassess local-treatment needs",
-          "Individual multidisciplinary plan",
-          "Local follow-up"
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
         ],
+        "kind": "local",
         "source_ids": [
           "metastatic"
         ],
-        "note": "Lumpectomy versus mastectomy is an individual surgical decision; this map does not choose it."
-      },
-      {
-        "label": "Radiotherapy",
-        "kind": "local",
-        "cells": [
-          "Assess indication",
-          "Only when clinically indicated",
-          "Coordinate surgery and recovery",
-          "Radiation team agrees timing",
-          "Assess late effects / local follow-up"
-        ],
-        "source_ids": [
-          "metastatic"
-        ],
-        "note": "Radiotherapy is site / symptom directed. Both teams agree whether systemic treatment continues or pauses; no concurrent schedule is assumed."
+        "note": "Timing depends on indication and recovery."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
+          "Baseline FBC, renal and liver profile",
+          "Before each cycle; additional dose checks as prescribed",
+          "Continue the required pre-dose checks",
+          "Use the selected active regimen’s blood-test schedule",
+          "Investigate symptoms / persistent abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
-          "00507"
+          "nccp"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": "Use the active regimen and dose-day checks."
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Echo / cardiac checks",
         "cells": [
-          "Baseline echo / MUGA",
-          "Symptoms can prompt earlier tests",
-          "At 12 weeks from HER2 start",
-          "Every 12 weeks / 3 months during HER2",
-          "Agree post-treatment cardiac plan"
+          "Baseline cardiac assessment",
+          "Earlier for symptoms / concern",
+          "Echo / MUGA due around 12 weeks",
+          "Continue every 12 weeks; keep the original clock",
+          "Agree follow-up for the active medicine and cardiac risk"
         ],
+        "kind": "heart",
         "source_ids": [
-          "00507",
-          "smpc",
+          "nccp",
           "esc"
         ],
-        "note": "Baseline before HER2 treatment; repeat every 12 weeks during treatment. Repeat at completion; 4–8-week checks may be needed with impairment. Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. At a change or completion, agree cardiac follow-up from treatment exposure, symptoms and results. ESC permits six-monthly echo only in selected asymptomatic low/moderate-risk patients with normal assessments after the first metastatic year. This does not automatically replace NCCP 12-week checks or begin when chemotherapy stops."
+        "note": "Keep the clock from the first HER2 dose."
       },
       {
-        "label": "Scans / markers",
+        "label": "Scans / tumour markers",
+        "cells": [
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Reassess disease and treatment plan",
+          "Imaging generally every 2–4 months; individual plan"
+        ],
         "kind": "imaging",
-        "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Response scan if due",
-          "Response imaging if metastatic",
-          "Symptoms can trigger earlier tests"
-        ],
         "source_ids": [
-          "early",
-          "metastatic"
+          "metastatic",
+          "markers"
         ],
-        "note": "For metastatic breast disease, response assessment commonly every 2–4 months, adapted to sites, symptoms and treatment. Markers can supplement assessment; they do not replace imaging or alone determine a treatment change."
+        "note": "Imaging follows the disease setting and clinical need."
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Endocrine / DEXA",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
         ],
+        "kind": "local",
         "source_ids": [
-          "early",
           "bone"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": "DEXA follows endocrine treatment and fracture risk."
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
+        "title": "Blood tests",
+        "when": "FBC, kidney and liver profile at baseline and before every 21-day cycle. The team reviews the necessary results before a planned dose. Confirm the blood-count check needed before each additional vinorelbine or paclitaxel dose; a Day 1 result does not automatically authorise a later dose.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00507"
+          "nccp"
         ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Heart assessment",
-        "when": "Baseline before HER2 treatment; repeat every 12 weeks during treatment. Repeat at completion; 4–8-week checks may be needed with impairment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Heart tests",
+        "when": "Check heart pumping function before starting HER2 treatment. Repeat echo or MUGA every 12 weeks: around cycle 5, then cycle 9 if 21-day cycles stay on time. Earlier checks are needed for symptoms or abnormal findings. Count elapsed time from the first HER2 dose; changing phase or route does not restart the clock. After the first year, ESC guidance allows six-monthly echo in selected asymptomatic low- or moderate-risk metastatic patients with normal assessments, only under an agreed team plan. Entering maintenance alone does not justify reducing checks.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00507",
-          "smpc",
+          "nccp",
+          "herceptin",
           "esc"
         ],
-        "clinical": "Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. At a change or completion, agree cardiac follow-up from treatment exposure, symptoms and results. ESC permits six-monthly echo only in selected asymptomatic low/moderate-risk patients with normal assessments after the first metastatic year. This does not automatically replace NCCP 12-week checks or begin when chemotherapy stops."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Imaging and markers",
-        "when": "For metastatic breast disease, response assessment commonly every 2–4 months, adapted to sites, symptoms and treatment. Markers can supplement assessment; they do not replace imaging or alone determine a treatment change.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
+        "title": "Cancer imaging",
+        "when": "Record baseline disease sites. Response imaging is generally reviewed every 2–4 months under international guidance, adapted to symptoms, disease pace and treatment. The team selects the scan; this is not an automatic CT chest/abdomen/pelvis order for every patient. Tumour markers may support assessment in selected cases, but do not alone decide progression or a treatment change.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "early",
           "metastatic"
         ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       },
       {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
         "source_ids": [
-          "00507"
+          "bone"
         ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        "clinical": "Educational timing; the treating team confirms the individual plan."
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "The whole pathway is individualised by the MDT."
+      "Continue while treatment is helping and tolerated. If a component stops, confirm the exact medicines, tests and supportive prescription for the new phase. Maintenance remains active treatment.",
+      "No automatic booking, reminders or completion tracking are enabled."
     ],
     "sources": [
       {
-        "id": "00507",
-        "title": "NCCP 00507 v6 · official source",
+        "id": "nccp",
+        "title": "NCCP 00507 v6 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6611/507_v6_Pertuzumab_Tras_PACLitaxel_2jBzcSC.pdf"
       },
       {
@@ -7387,14 +7316,14 @@ const definitions={
         "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       },
       {
-        "id": "smpc",
+        "id": "herceptin",
         "title": "EMA Herceptin product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
       },
       {
-        "id": "trial",
-        "title": "Weekly paclitaxel with pertuzumab / trastuzumab",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/30602614/"
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
       }
     ]
   },
@@ -12906,6 +12835,1185 @@ const definitions={
         "id": "port",
         "title": "eviQ · implanted port patient information",
         "url": "https://www.eviq.org.au/p/507"
+      }
+    ]
+  },
+  "00217": {
+    "code": "00217",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Lapatinib + capecitabine: the whole pathway",
+    "setting": "HER2-positive advanced breast cancer · previously treated",
+    "summary": "Lapatinib once daily on Days 1–21, continuously. Capecitabine twice daily on Days 1–14, then no capecitabine on Days 15–21. Repeat every 21 days while beneficial and tolerated. The capecitabine rest week is not a lapatinib rest week.",
+    "stages": [
+      "Before starting",
+      "First cycles",
+      "Around week 12",
+      "Continuing / next phase",
+      "Longer-term plan"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: lapatinib daily; capecitabine Days 1–14",
+          "Echo due; treatment review",
+          "Review active medicines and benefit / tolerance",
+          "Review benefit / tolerance and next plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "metastatic"
+        ],
+        "note": "Timing depends on indication and recovery."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "Baseline FBC, renal and liver profile; DPD result; potassium / magnesium",
+          "Before each 21-day cycle; assess symptoms and oral dosing",
+          "Continue the required pre-dose checks",
+          "Use the selected active regimen’s blood-test schedule",
+          "Investigate symptoms / persistent abnormalities"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the active regimen and dose-day checks."
+      },
+      {
+        "label": "ECG / QT",
+        "cells": [
+          "Baseline ECG; correct K / Mg",
+          "Repeat 1–2 weeks after starting (cycle 1 Days 8–15)",
+          "Additional ECG if risk, interacting drugs or symptoms",
+          "Review QT-risk medicines and electrolytes",
+          "Individual ECG plan; early ECG is not an echo"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "smpc"
+        ],
+        "note": "EMA Tyverb: ECG before and 1–2 weeks after starting lapatinib, then as risk or symptoms require."
+      },
+      {
+        "label": "Echo / cardiac checks",
+        "cells": [
+          "Baseline cardiac assessment",
+          "Earlier for symptoms / concern",
+          "Echo / MUGA due around 12 weeks",
+          "Continue every 12 weeks; keep the original clock",
+          "Agree follow-up for the active medicine and cardiac risk"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "nccp",
+          "esc"
+        ],
+        "note": "Keep the clock from the first HER2 dose."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "cells": [
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Reassess disease and treatment plan",
+          "Imaging generally every 2–4 months; individual plan"
+        ],
+        "kind": "imaging",
+        "source_ids": [
+          "metastatic",
+          "markers"
+        ],
+        "note": "Imaging follows the disease setting and clinical need."
+      },
+      {
+        "label": "Endocrine / DEXA",
+        "cells": [
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "bone"
+        ],
+        "note": "DEXA follows endocrine treatment and fracture risk."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, kidney and liver profile at baseline and before every 21-day cycle. The team reviews the necessary results before a planned dose.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Heart tests",
+        "when": "NCCP requires baseline LVEF assessment in its cardiac precautions and echo/MUGA every 12 weeks (around cycle 5 if on time), or earlier for concern. EMA Tyverb specifies an ECG with QT before starting and again 1–2 weeks after starting, around Days 8–15 of cycle 1. Correct low potassium or magnesium before treatment and arrange extra ECG checks for interacting medicines, symptoms or QT risk. This early ECG is separate from the 12-week echo.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Record baseline disease sites. Response imaging is generally reviewed every 2–4 months under international guidance, adapted to symptoms, disease pace and treatment. The team selects the scan; this is not an automatic CT chest/abdomen/pelvis order for every patient. Tumour markers may support assessment in selected cases, but do not alone decide progression or a treatment change.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "metastatic"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "bone"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "Continue while treatment is helping and tolerated. If a component stops, confirm the exact medicines, tests and supportive prescription for the new phase. Maintenance remains active treatment.",
+      "No automatic booking, reminders or completion tracking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00217 v7 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6559/217_Lapatinib_and_Capecitabine_therapy.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "herceptin",
+        "title": "EMA Herceptin product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Tyverb product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/tyverb-epar-product-information_en.pdf"
+      }
+    ]
+  },
+  "00350": {
+    "code": "00350",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pertuzumab + trastuzumab · with selected chemotherapy: the whole pathway",
+    "setting": "HER2-positive early breast cancer · neoadjuvant or adjuvant framework",
+    "summary": "IV pertuzumab and IV trastuzumab every 21 days. Before surgery: 3–6 cycles alongside the selected chemotherapy. After surgery: up to 18 cycles overall under the agreed adjuvant plan. If an anthracycline is used first, finish it before starting these antibodies with the taxane phase. Confirm the exact companion regimen and local access.",
+    "stages": [
+      "Select indication / chemotherapy",
+      "Anthracycline first, if used",
+      "Antibodies with taxane",
+      "Surgery / adjuvant continuation",
+      "Completion / follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: antibodies with selected chemotherapy",
+          "Start antibodies with the taxane",
+          "Confirm indication, companion and continuation",
+          "Review benefit / tolerance and next plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "early"
+        ],
+        "note": "Timing depends on indication and recovery."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "Baseline antibody and companion-regimen checks",
+          "Follow the chosen anthracycline source",
+          "Before each cycle plus companion-regimen checks",
+          "Follow the current medicines",
+          "Follow abnormal results / next plan"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the active regimen and dose-day checks."
+      },
+      {
+        "label": "Echo / cardiac checks",
+        "cells": [
+          "Cardiac risk and baseline review",
+          "Reassess after anthracycline, before first HER2 dose",
+          "First echo 12 weeks after HER2 begins",
+          "Every 12 weeks during HER2; at completion",
+          "Follow-up for risk / chosen medicine"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "nccp",
+          "esc"
+        ],
+        "note": "Keep the clock from the first HER2 dose."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "cells": [
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Reassess disease and treatment plan",
+          "Breast surveillance after early treatment"
+        ],
+        "kind": "imaging",
+        "source_ids": [
+          "early"
+        ],
+        "note": "Imaging follows the disease setting and clinical need."
+      },
+      {
+        "label": "Endocrine / DEXA",
+        "cells": [
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "bone"
+        ],
+        "note": "DEXA follows endocrine treatment and fracture risk."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, kidney and liver profile at baseline and before every 21-day cycle. The team reviews the necessary results before a planned dose. The selected chemotherapy can require extra or more frequent checks.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Heart tests",
+        "when": "Check heart pumping function before starting HER2 treatment. Repeat echo or MUGA every 12 weeks: around cycle 5, then cycle 9 if 21-day cycles stay on time. Earlier checks are needed for symptoms or abnormal findings. Count elapsed time from the first HER2 dose; changing phase or route does not restart the clock.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp",
+          "herceptin",
+          "esc"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Baseline breast and nodal imaging, with staging tests appropriate to the diagnosis. Review response during preoperative treatment and before surgery. After local treatment, arrange breast surveillance; routine CT, PET or tumour-marker testing is not the usual screening plan for someone without symptoms.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "early"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "bone"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "The chosen chemotherapy, indication, response, tolerance and local access determine the next step. Do not treat this antibody framework as a complete chemotherapy protocol.",
+      "No automatic booking, reminders or completion tracking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00350 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6813/350_v3_Pertuzumab_Trastuz_Chemo.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "herceptin",
+        "title": "EMA Herceptin product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
+      }
+    ]
+  },
+  "00526": {
+    "code": "00526",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pertuzumab + trastuzumab + vinorelbine: the whole pathway",
+    "setting": "HER2-positive advanced breast cancer · taxanes unsuitable",
+    "summary": "IV pertuzumab and IV trastuzumab on Day 1; vinorelbine on Days 1 and 8 of each 21-day cycle. Vinorelbine is prescribed by IV OR by mouth, not both. There is no planned Day 15 vinorelbine. Continue while beneficial and tolerated; treatment may change if one component causes toxicity.",
+    "stages": [
+      "Before starting",
+      "First cycles",
+      "Around week 12",
+      "Continuing / next phase",
+      "Longer-term plan"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: HER2 Day 1; vinorelbine Days 1 and 8",
+          "Echo due; treatment review",
+          "Review active medicines and benefit / tolerance",
+          "Review benefit / tolerance and next plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "metastatic"
+        ],
+        "note": "Timing depends on indication and recovery."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "Baseline FBC, renal and liver profile",
+          "Before each cycle; additional dose checks as prescribed",
+          "Continue the required pre-dose checks",
+          "Use the selected active regimen’s blood-test schedule",
+          "Investigate symptoms / persistent abnormalities"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the active regimen and dose-day checks."
+      },
+      {
+        "label": "Echo / cardiac checks",
+        "cells": [
+          "Baseline cardiac assessment",
+          "Earlier for symptoms / concern",
+          "Echo / MUGA due around 12 weeks",
+          "Continue every 12 weeks; keep the original clock",
+          "Agree follow-up for the active medicine and cardiac risk"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "nccp",
+          "esc"
+        ],
+        "note": "Keep the clock from the first HER2 dose."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "cells": [
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Reassess disease and treatment plan",
+          "Imaging generally every 2–4 months; individual plan"
+        ],
+        "kind": "imaging",
+        "source_ids": [
+          "metastatic",
+          "markers"
+        ],
+        "note": "Imaging follows the disease setting and clinical need."
+      },
+      {
+        "label": "Endocrine / DEXA",
+        "cells": [
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "bone"
+        ],
+        "note": "DEXA follows endocrine treatment and fracture risk."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, kidney and liver profile at baseline and before every 21-day cycle. The team reviews the necessary results before a planned dose. Confirm the blood-count check needed before each additional vinorelbine or paclitaxel dose; a Day 1 result does not automatically authorise a later dose. For oral vinorelbine, the product information requires blood counts on the day of each administration, including Day 8; the regimen source lists full blood/renal/liver checks before each cycle.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp",
+          "vinorelbine-oral"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Heart tests",
+        "when": "Check heart pumping function before starting HER2 treatment. Repeat echo or MUGA every 12 weeks: around cycle 5, then cycle 9 if 21-day cycles stay on time. Earlier checks are needed for symptoms or abnormal findings. Count elapsed time from the first HER2 dose; changing phase or route does not restart the clock. After the first year, ESC guidance allows six-monthly echo in selected asymptomatic low- or moderate-risk metastatic patients with normal assessments, only under an agreed team plan. Entering maintenance alone does not justify reducing checks.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp",
+          "herceptin",
+          "esc"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Record baseline disease sites. Response imaging is generally reviewed every 2–4 months under international guidance, adapted to symptoms, disease pace and treatment. The team selects the scan; this is not an automatic CT chest/abdomen/pelvis order for every patient. Tumour markers may support assessment in selected cases, but do not alone decide progression or a treatment change.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "metastatic"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "bone"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "Continue while treatment is helping and tolerated. If a component stops, confirm the exact medicines, tests and supportive prescription for the new phase. Maintenance remains active treatment.",
+      "No automatic booking, reminders or completion tracking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00526 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6630/526_v5_Pertuzumab_Vinorelbine_trastuzumab_zOGbzKp.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "herceptin",
+        "title": "EMA Herceptin product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
+      },
+      {
+        "id": "oral-support",
+        "title": "NCCP SACT nausea / vomiting guidance v6 (2025) · oral treatment",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "vinorelbine-oral",
+        "title": "Irish Navelbine oral product information",
+        "url": "https://medicines.ie/medicines/navelbine-r-20-mg-soft-capsule~A0000682/spc"
+      }
+    ]
+  },
+  "00775": {
+    "code": "00775",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "TRAIN-2 · IV pertuzumab / trastuzumab: the whole pathway",
+    "setting": "HER2-positive early breast cancer · neoadjuvant",
+    "summary": "Six 21-day cycles before surgery: IV pertuzumab, trastuzumab, carboplatin and paclitaxel on Day 1; paclitaxel alone on Day 8. There is no planned Day 15 paclitaxel. Surgery and pathology guide the postoperative HER2 medicine.",
+    "stages": [
+      "Before starting",
+      "Cycles 1–4",
+      "Around cycle 5 / week 12",
+      "Surgery / next phase",
+      "Ongoing / follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: all medicines Day 1; paclitaxel Day 8",
+          "Echo due; treatment review",
+          "Surgery/pathology select postoperative medicine",
+          "Review benefit / tolerance and next plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "early"
+        ],
+        "note": "Timing depends on indication and recovery."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "Baseline FBC, renal and liver profile",
+          "Before each cycle; additional dose checks as prescribed",
+          "Continue the required pre-dose checks",
+          "Use the selected active regimen’s blood-test schedule",
+          "Investigate symptoms / persistent abnormalities"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the active regimen and dose-day checks."
+      },
+      {
+        "label": "Echo / cardiac checks",
+        "cells": [
+          "Baseline cardiac assessment",
+          "Earlier for symptoms / concern",
+          "Echo during neoadjuvant treatment, around cycle 5",
+          "Surgery does not restart the echo clock",
+          "Agree follow-up for the active medicine and cardiac risk"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "nccp",
+          "esc"
+        ],
+        "note": "Keep the clock from the first HER2 dose."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "cells": [
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Before surgery / pathology",
+          "Breast surveillance after early treatment"
+        ],
+        "kind": "imaging",
+        "source_ids": [
+          "early"
+        ],
+        "note": "Imaging follows the disease setting and clinical need."
+      },
+      {
+        "label": "Endocrine / DEXA",
+        "cells": [
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "bone"
+        ],
+        "note": "DEXA follows endocrine treatment and fracture risk."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, kidney and liver profile at baseline and before every 21-day cycle. The team reviews the necessary results before a planned dose. Confirm the blood-count check needed before each additional vinorelbine or paclitaxel dose; a Day 1 result does not automatically authorise a later dose.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Heart tests",
+        "when": "Check heart pumping function before starting HER2 treatment. Repeat echo or MUGA every 12 weeks: around cycle 5, then cycle 9 if 21-day cycles stay on time. Earlier checks are needed for symptoms or abnormal findings. Count elapsed time from the first HER2 dose; changing phase or route does not restart the clock.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp",
+          "herceptin",
+          "esc"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Baseline breast and nodal imaging, with staging tests appropriate to the diagnosis. Review response during preoperative treatment and before surgery. After local treatment, arrange breast surveillance; routine CT, PET or tumour-marker testing is not the usual screening plan for someone without symptoms.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "early"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "bone"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "After surgery, the pathology helps select the next HER2 medicine. The plan usually aims to complete about one year of HER2 treatment from the first dose. Residual invasive disease may change the treatment. Blood tests and supportive medicines must follow the selected postoperative regimen.",
+      "No automatic booking, reminders or completion tracking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00775 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6662/775_v3_Pertuzumab_trastuzumab_PACLitaxel_CARBOplatin.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "herceptin",
+        "title": "EMA Herceptin product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
+      }
+    ]
+  },
+  "00798": {
+    "code": "00798",
+    "release": "0.84.16",
+    "checked": "2026-10-21",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Phesgo + vinorelbine: the whole pathway",
+    "setting": "HER2-positive advanced breast cancer · taxanes unsuitable",
+    "summary": "Phesgo on Day 1; vinorelbine on Days 1 and 8 of each 21-day cycle. Vinorelbine is prescribed by IV OR by mouth, not both. There is no planned Day 15 vinorelbine. Continue while beneficial and tolerated; any antibody-only phase is separately prescribed.",
+    "stages": [
+      "Before starting",
+      "First cycles",
+      "Around week 12",
+      "Continuing / next phase",
+      "Longer-term plan"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm diagnosis and exact regimen",
+          "See the dose-day map: HER2 Day 1; vinorelbine Days 1 and 8",
+          "Echo due; treatment review",
+          "Review active medicines and benefit / tolerance",
+          "Review benefit / tolerance and next plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Agree indication and sequence",
+          "No automatic concurrent radiation",
+          "Coordinate with both teams",
+          "Local treatment as indicated",
+          "Review recovery and late effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "metastatic"
+        ],
+        "note": "Timing depends on indication and recovery."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "Baseline FBC, renal and liver profile",
+          "Before each cycle; additional dose checks as prescribed",
+          "Continue the required pre-dose checks",
+          "Use the selected active regimen’s blood-test schedule",
+          "Investigate symptoms / persistent abnormalities"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the active regimen and dose-day checks."
+      },
+      {
+        "label": "Echo / cardiac checks",
+        "cells": [
+          "Baseline cardiac assessment",
+          "Earlier for symptoms / concern",
+          "Echo / MUGA due around 12 weeks",
+          "Continue every 12 weeks; keep the original clock",
+          "Agree follow-up for the active medicine and cardiac risk"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "nccp",
+          "esc"
+        ],
+        "note": "Keep the clock from the first HER2 dose."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "cells": [
+          "Baseline disease assessment",
+          "Clinical response; imaging if concern",
+          "Response review as planned; not tied to echo",
+          "Reassess disease and treatment plan",
+          "Imaging generally every 2–4 months; individual plan"
+        ],
+        "kind": "imaging",
+        "source_ids": [
+          "metastatic",
+          "markers"
+        ],
+        "note": "Imaging follows the disease setting and clinical need."
+      },
+      {
+        "label": "Endocrine / DEXA",
+        "cells": [
+          "Check hormone receptors / fracture risk",
+          "Plan endocrine therapy if indicated",
+          "DEXA when relevant to bone-risk plan",
+          "Endocrine timing by the treating team",
+          "Individual DEXA / bone follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "bone"
+        ],
+        "note": "DEXA follows endocrine treatment and fracture risk."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood tests",
+        "when": "FBC, kidney and liver profile at baseline and before every 21-day cycle. The team reviews the necessary results before a planned dose. Confirm the blood-count check needed before each additional vinorelbine or paclitaxel dose; a Day 1 result does not automatically authorise a later dose. For oral vinorelbine, the product information requires blood counts on the day of each administration, including Day 8; the regimen source lists full blood/renal/liver checks before each cycle.",
+        "why": "Check safety before the next dose.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp",
+          "vinorelbine-oral"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Heart tests",
+        "when": "Check heart pumping function before starting HER2 treatment. Repeat echo or MUGA every 12 weeks: around cycle 5, then cycle 9 if 21-day cycles stay on time. Earlier checks are needed for symptoms or abnormal findings. Count elapsed time from the first HER2 dose; changing phase or route does not restart the clock. After the first year, ESC guidance allows six-monthly echo in selected asymptomatic low- or moderate-risk metastatic patients with normal assessments, only under an agreed team plan. Entering maintenance alone does not justify reducing checks.",
+        "why": "Monitor pumping function and relevant rhythm risk.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "nccp",
+          "herceptin",
+          "esc"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Cancer imaging",
+        "when": "Record baseline disease sites. Response imaging is generally reviewed every 2–4 months under international guidance, adapted to symptoms, disease pace and treatment. The team selects the scan; this is not an automatic CT chest/abdomen/pelvis order for every patient. Tumour markers may support assessment in selected cases, but do not alone decide progression or a treatment change.",
+        "why": "Assess response or follow-up needs.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "metastatic"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      },
+      {
+        "title": "Bone health",
+        "when": "If the cancer is also hormone-receptor positive, endocrine treatment may form part of the wider plan. Bone-density testing is linked to aromatase inhibitors, ovarian suppression and fracture risk; it is not automatically required because a HER2 medicine is prescribed. Agree baseline DEXA where indicated and individual follow-up.",
+        "why": "Assess fracture risk where relevant.",
+        "action": "Agree the booking owner, result reviewer and action if overdue.",
+        "source_ids": [
+          "bone"
+        ],
+        "clinical": "Educational timing; the treating team confirms the individual plan."
+      }
+    ],
+    "clinical_notes": [
+      "Continue while treatment is helping and tolerated. If a component stops, confirm the exact medicines, tests and supportive prescription for the new phase. Maintenance remains active treatment.",
+      "No automatic booking, reminders or completion tracking are enabled."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00798 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6421/798_v3_Pertuzumab_trastuzumab_Phesgo_vinorelbine.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "herceptin",
+        "title": "EMA Herceptin product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "perjeta",
+        "title": "EMA Perjeta product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/perjeta-epar-product-information_en.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Phesgo product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/phesgo-epar-product-information_en.pdf"
+      },
+      {
+        "id": "oral-support",
+        "title": "NCCP SACT nausea / vomiting guidance v6 (2025) · oral treatment",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "vinorelbine-oral",
+        "title": "Irish Navelbine oral product information",
+        "url": "https://medicines.ie/medicines/navelbine-r-20-mg-soft-capsule~A0000682/spc"
       }
     ]
   }

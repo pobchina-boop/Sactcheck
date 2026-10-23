@@ -165,14 +165,15 @@ for (const { file, data } of protocols) {
       const everolimusSource = code === '00322';
       const palbociclibSource = code === '00414' && field === 'nonhaem_toxicity_grade';
       const pldSource = code === '00205' && ['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field);
-      if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, everolimusSource ? '3.0' : palbociclibSource ? '4.0' : folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea || ['00858','00860','00861','00348','00734'].includes(code) ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
+      const newSourceGrade = (code === '00217' && ['cardiac_toxicity_grade','pulmonary_toxicity_grade'].includes(field)) || (code === '00350' && field === 'her2_hypersensitivity_grade');
+      if(newSourceGrade){assert.equal(def.grading_source_url,metadata.source_url);assert.match(def.source_grading_note,/not a complete grading table/);assert(!def.ctcae_version);}else if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, everolimusSource ? '3.0' : palbociclibSource ? '4.0' : folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea || ['00858','00860','00861','00348','00734'].includes(code) ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
       if(palbociclibSource){assert.equal(def.grading_source_label,'NCCP 00414 / CTCAE v4.0');assert.match(def.grading_source_url,/cancer.gov.*ctcae-v403/);assert(def.options.every(x=>x.description));}
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
-      if(!pldSource) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
+      if(!pldSource && !newSourceGrade) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
-      const sourceHfs = ['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field);
+      const sourceHfs = (['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field)) || (code === '00217' && field === 'hand_foot_grade');
       const sourceNausea = code === '00794' && field === 'nausea_grade';
       const expectedGrades = sourceNausea ? [0,1,2,3] : ['00322','00588'].includes(code) && field === 'febrile_neutropenia_grade' ? [0,3,4] : sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
       if (everolimusSource) {
@@ -217,7 +218,7 @@ for (const { file, data } of protocols) {
       assert.equal(def.renal_input?.exact_value_required, true, `${code}/${field} exact renal field must declare why a continuous value is required`);
       assert(String(def.renal_input?.reason || '').length >= 20, `${code}/${field} exact renal field lacks a source-specific rationale`);
     } else if (mode === 'source_threshold_numeric') {
-      assert(['00205','00228','00230','00736','00743','00254','00371'].includes(code),`${code}: numeric threshold entry requires an audited source`);
+      assert(['00205','00217','00228','00230','00736','00743','00254','00371'].includes(code),`${code}: numeric threshold entry requires an audited source`);
       assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);
       const auditedSources=[metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)];
       assert(auditedSources.includes(def.renal_input.source_url),`${code}/${field}: numeric renal source must be NCCP or an explicitly audited supplement`);assert(def.renal_input.reason.length>=20);

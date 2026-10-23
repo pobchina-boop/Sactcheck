@@ -2,12 +2,13 @@
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),cp=require('child_process');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
 const index=json('data/breast-family-v0840-source-index.json'),codes=index.codes,R=require('../js/patient-asset-registry-v0810'),J=require('../js/treatment-journey-v0837'),B=require('../js/breast-library-v0837'),D=require('../js/protocol-dose-schedule');
+const migrated=new Set(['00204','00507','00258','00731']);
 const kb=json('data/regimen-knowledge-base-v0840-addendum.json'),support=json('data/phase-support-v0838.json').regimens;
 assert.equal(codes.length,16);assert.equal(kb.regimen_profiles.length,16);assert.equal(kb.evidence_records.length,16);
 for(const code of codes){
  const d=json(`data/patient-knowledge/${code}.json`),p=json('protocols/breast/'+fs.readdirSync(path.join(root,'protocols/breast')).find(n=>n.startsWith(code)));
- assert.equal(d.suite_release,'0.84.0');assert.equal(d.cycle_display,'reference-chronology');assert.equal(p.metadata.sactcheck_encoding_version,'0.84.0');assert.equal(d.protocol_version,String(p.metadata.nccp_version));
- assert.equal(index.regimens[code].rule_count,p.rule_engine.rules.length);assert.match(index.regimens[code].source_sha256,/^[a-f0-9]{64}$/);assert.equal(p.metadata.validation.clinical_use_authorised,false);
+ assert.equal(d.suite_release,migrated.has(code)?'0.84.16':'0.84.0');assert.equal(d.cycle_display,'reference-chronology');assert.equal(p.metadata.sactcheck_encoding_version,migrated.has(code)?'0.84.16':'0.84.0');assert.equal(d.protocol_version,String(p.metadata.nccp_version));
+ if(!migrated.has(code))assert.equal(index.regimens[code].rule_count,p.rule_engine.rules.length);else assert(p.rule_engine.rules.length>=index.regimens[code].rule_count,'Retrospective rules retain coverage; source cases test changed semantics');assert.match(index.regimens[code].source_sha256,/^[a-f0-9]{64}$/);assert.equal(p.metadata.validation.clinical_use_authorised,false);
  assert(p.rule_engine.rules.every(r=>r.source?.url&&r.source.page));assert.equal(new Set(p.rule_engine.rules.map(r=>r.rule_id)).size,p.rule_engine.rules.length);
  assert(d.anatomy.length>=3&&d.anatomy.length<=8);assert.equal(J.definitions[code].has_patient_dates,false);assert.equal(J.definitions[code].schedule_type,'relative-educational');
  for(const lane of J.definitions[code].lanes){assert.equal(lane.cells.length,J.definitions[code].stages.length);for(const id of lane.source_ids)assert(J.definitions[code].sources.some(s=>s.id===id));}
@@ -22,7 +23,7 @@ for(const code of codes){
  assert.equal(R.relativePath(code,'supportive-care-selector'),`patient/${code}/supportive-care.html`);assert.equal(R.relativePath(code,'longitudinal'),`patient/${code}/treatment-journey.html`);assert(read('404.html').includes(code));
  assert(kb.regimen_profiles.some(k=>k.protocol_id===d.protocol_id));assert(kb.evidence_records.some(k=>k.protocol_id===d.protocol_id));assert(D.buildModel(p).phases.length>=1);
  const sm=json('data/sustainability-regimen-metadata-v0691.json').profiles[p.protocol_id];assert.equal(sm.administration_frequency.value,d.schedule_summary);assert.equal(sm.ambulatory_pump.value,false);
- for(const phase of support[code])if(phase.id==='continuation'){assert.equal(phase.medicines.length,0);assert.equal(phase.emetogenic_risk,'Minimal');}
+ for(const phase of support[code])if(phase.id==='continuation'){assert.equal(phase.medicines.length,0);if(code==='00731')assert.match(phase.emetogenic_risk,/Confirm.*postoperative/);else assert.equal(phase.emetogenic_risk,'Minimal');}
 }
 const contexts=json('data/breast-library-contexts-v0837.json').regimens;
 for(const c of ['00260','00278','00316','00432','00433','00745']){assert(contexts[c].settings.includes('neoadjuvant'));assert(contexts[c].settings.includes('adjuvant'));}

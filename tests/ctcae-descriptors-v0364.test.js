@@ -23,6 +23,11 @@ for (const file of walk(path.join(root, 'protocols')).filter(f => f.endsWith('.j
   try { protocol = JSON.parse(fs.readFileSync(file, 'utf8')); } catch { continue; }
   for (const [id, def] of Object.entries(protocol.input_definitions || {})) {
     if (def?.type !== 'select' || !/grade/i.test(`${id} ${def.label || ''}`)) continue;
+    // Event counts may mention the grade of the event; their options still count occurrences.
+    if (!/grade|ctcae/i.test(id) && /occurrence|episodes?|event[_ ]?number|reduction[_ ]?count|number of reductions/i.test(`${id} ${def.label || ''}`)) {
+      for (const option of def.options || []) if (lib.descriptor({...def,id},option)) throw new Error(`Event count mislabelled as grade: ${id}`);
+      continue;
+    }
     gradeFields += 1;
     const definition = { ...def, id };
     for (const option of def.options || []) {

@@ -7,7 +7,7 @@ const noDose=(_r,d)=>assert(!d.rows.some(x=>/^\d+[.,]?\d*\s*mg/.test(x.protocolD
 for(const c of codes){t(c,'Blank remains unassessed',{},'incomplete');t(c,'Outside performance status',{ecog:4},'consultant_review');assert.equal(ps[c].metadata.validation.clinical_use_authorised,false);assert(ps[c].rule_engine.rules.every(r=>r.source?.url&&r.source?.page));assert.equal(ps[c].required_inputs.length,0);}
 for(const n of [.49,.5,.99])t('00722','Low ANC independently actionable '+n,{anc:n},'delay');
 for(const n of [49.99,99.99])t('00722','Low platelets independently actionable '+n,{platelets:n},'delay');
-for(const v of [1,1.49])t('00722','Intermediate ANC selected reduction '+v,{anc:v,platelets:101,gcsf_strategy:'dose_reduction'},'dose_reduce');
+for(const v of [1,1.49])t('00722','Intermediate ANC selected reduction '+v,{assessment_stage:'ongoing',anc:v,platelets:101,gcsf_strategy:'dose_reduction'},'dose_reduce');
 for(const v of [1.495,1.5])t('00722','Count table decimal/equality gap '+v,{anc:v,platelets:101,gcsf_strategy:'dose_reduction'},'consultant_review');
 t('00722','Exact platelet gap',{platelets:100},'consultant_review');t('00722','Missing count strategy',{anc:1.2},'consultant_review');t('00722','Baseline ANC threshold',{assessment_stage:'baseline',anc:1.49},'contraindicated');
 for(const v of [0,20])t('00722','Carboplatin GFR contraindication '+v,{gfr_ml_min:v},'contraindicated');
