@@ -2,6 +2,8 @@
 
 Five new breast full-service suites and five retrospective upgrades, prepared over verified v0.84.15 (Git commit b619d7f). This package is for review and installation; it has not been committed, pushed or deployed by this development session.
 
+Updated 23 October 2026 (UI revision 5): restore the prominent, persistent feasibility notice above the homepage and assessment screens. The visible status says “Feasibility evaluation build — not for routine clinical use”; its expandable explanation and the About page describe pending independent validation, draft-document limits, privacy and project independence. Search remains directly accessible. This revised ZIP replaces the earlier v0.84.16 download; install this one package over v0.84.15.
+
 ## Regimens
 
 | NCCP | Treatment | Work |
@@ -62,5 +64,7 @@ Add full-service suites for NCCP 00217, 00350, 00526, 00775 and 00798, and retro
 Reconcile assessment rules with the NCCP sources, including TRAIN-2 timing, the separate chemotherapy requirement for 00350, lapatinib/capecitabine toxicity and renal context, IV/oral vinorelbine differences, Phesgo reloads and phase-specific cardiac checks.
 
 Connect clinician rationale and evidence, patient timelines and monitoring maps, consent, guides, passports, logistics and route/day/phase-specific supportive care. Keep numerical efficacy evidence in the clinician knowledge base. Fix severity descriptions appearing on occurrence counts and treatment days.
+
+Restore a persistent feasibility-build notice and expandable disclaimer on the homepage and assessment screens, with matching clinical-boundary wording on the About page. State that independent clinical and oncology-pharmacy validation is pending and that the platform is not for routine clinical use.
 
 Verify 449 new source-derived scenarios, 10 evidence profiles, 94 PDFs and 40 QR destinations, with scoped preservation of existing patient assets. Independent clinical/pharmacy and patient/PPI review remains pending.
