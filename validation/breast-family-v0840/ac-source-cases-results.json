@@ -1,16 +1,16 @@
 {
-  "checkedAt": "2026-10-20T20:19:59.265Z",
-  "repository": "/workspace/scratch/aa44ad62d693/sactcheck-v08413",
+  "checkedAt": "2026-10-25T09:00:06.241Z",
+  "repository": "/workspace/scratch/bca730129437/sactcheck",
   "snapshotSha256": {
     "js/assessment-engine.js": "cbe0ecfc7edc6132e62689c2c58bb8d2682e1644ef5b67347ada94884dd437a1",
-    "js/protocol-dose-schedule.js": "7bbe7d31fd970f5356c2d2a92ce1b6e266d473a8556d720f75d84c83c1bd0090",
-    "protocols/breast/00252-ac-doxorubicin-cyclophosphamide.json": "e1c64e8f5908052a93102471d3496f0715c80fb90b6d41a7e7791f9d72bcf669",
-    "protocols/breast/00260-ac-followed-by-weekly-paclitaxel.json": "cb6f7af43d35c91cc420b7da95c9d76c1fa167b343e3cbde0d2e15f97356267e",
-    "protocols/breast/00278-dose-dense-ac-paclitaxel-14-day.json": "b706d9988fdb7e8760fae7945be3f29d0f49b0117e642954f4e201a58480a72a",
-    "protocols/breast/00316-ddac-paclitaxel-14-day-trastuzumab.json": "45e08bf79ff117ccae5b122df901e1cda5a0a2ab43aea729c220c878c086ec2b",
-    "protocols/breast/00432-ac-weekly-paclitaxel-trastuzumab.json": "a40ce359b219a6631ca998422935cc72c6bcfb231578577f240f07e4393a992e",
-    "protocols/breast/00433-ddac-weekly-paclitaxel-trastuzumab.json": "b8ed59ac79b00d23ba201e9060247c2d7f1e6682be18eba489a58e4141b1af83",
-    "protocols/breast/00745-ddac-weekly-paclitaxel-trastuzumab-q21d.json": "bdcd676522821d20ca80754db7af24f8814bfecefb2fbf93710c7fbdbf2e598a"
+    "js/protocol-dose-schedule.js": "185ded7ac071f1c9c6107db980e48ab1ab2ab25a750df1e8a2f13aa8a46152b2",
+    "protocols/breast/00252-ac-doxorubicin-cyclophosphamide.json": "78fee985580c9c26433e995794eba6b67dd761239b43d2378cb4722430e0750d",
+    "protocols/breast/00260-ac-followed-by-weekly-paclitaxel.json": "66c7e322de41c1cb2097efb876e2fb8282c4bacbf0155174636a080bedd15ba2",
+    "protocols/breast/00278-dose-dense-ac-paclitaxel-14-day.json": "5c801b3bb801259a03404f22c582d502113012893f313f5cc1591730cbfa7375",
+    "protocols/breast/00316-ddac-paclitaxel-14-day-trastuzumab.json": "a459d87eb45f1207f4f452e6e082740f9613ddc7be9ec5f34d3387b42c21adc7",
+    "protocols/breast/00432-ac-weekly-paclitaxel-trastuzumab.json": "6f40ca468e361c3faa957c9907b1f7ed985d6a950fd1579a229c8e54c9c9a980",
+    "protocols/breast/00433-ddac-weekly-paclitaxel-trastuzumab.json": "f6465edaa4f5d6e9a5596c7a8607ed72437e0452f630f8722bfdc02d83d45ba0",
+    "protocols/breast/00745-ddac-weekly-paclitaxel-trastuzumab-q21d.json": "5f60506f2135fa85aabba92a04061703c50561875927d65b86235d5821c1e43b"
   },
   "limitations": "Source-derived software checks; not human clinical validation, treatment authorisation, or exhaustive cross-product testing.",
   "sourceAuditSha256": "bff153693fd3aa22f385ea6f6a93f56854d4da88618cbfd6a2a174d0906a0fd9",
@@ -3720,20 +3720,37 @@
       },
       "kind": "original-source-audit",
       "pass": true,
-      "actual": "proceed_with_caution",
+      "actual": "consultant_review",
       "findings": [
         {
-          "rule": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
-          "action": "partial_context_required",
-          "text": "Current phase AC chemotherapy reaches an encoded threshold, but the final action also depends on Assessment stage, Restart after a count-related delay, Previous thrombocytopenia-related delays, Febrile neutropenia, Current LVEF, Clinically significant heart disease, Prior cumulative doxorubicin exposure, Proposed dose would exceed lifetime anthracycline limit, Bilirubin (absolute), Child-Pugh C, Haemodialysis, Creatinine clearance (not indexed eGFR), Severe hepatic impairment, Fall from baseline LVEF, Previous FN episode; acute illness resolved. Do not treat this as clearance."
-        },
-        {
-          "rule": "PARTIAL_ANC_X10E9_L_CONTEXT_REQUIRED",
-          "action": "partial_context_required",
-          "text": "ANC 1 reaches an encoded threshold, but the final action also depends on Assessment stage, Restart after a count-related delay. Do not treat this as clearance."
+          "rule": "BASELINE_STAGE_CONTEXT",
+          "action": "consultant_review",
+          "text": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage."
         }
       ],
-      "doseActions": []
+      "doseActions": [
+        {
+          "component": "cyclophosphamide",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "600 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "doxorubicin",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "60 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "paclitaxel",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "175 mg/m²",
+          "quantified": false
+        }
+      ]
     },
     {
       "code": "00316",
@@ -6748,20 +6765,37 @@
       },
       "kind": "original-source-audit",
       "pass": true,
-      "actual": "proceed_with_caution",
+      "actual": "consultant_review",
       "findings": [
         {
-          "rule": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
-          "action": "partial_context_required",
-          "text": "Current phase AC chemotherapy reaches an encoded threshold, but the final action also depends on Assessment stage, Restart after a count-related delay, Previous thrombocytopenia-related delays, Febrile neutropenia, Current LVEF, Clinically significant heart disease, Prior cumulative doxorubicin exposure, Proposed dose would exceed lifetime anthracycline limit, Bilirubin (absolute), Child-Pugh C, Haemodialysis, Creatinine clearance (not indexed eGFR), Severe hepatic impairment, Fall from baseline LVEF, Previous FN episode; acute illness resolved. Do not treat this as clearance."
-        },
-        {
-          "rule": "PARTIAL_ANC_X10E9_L_CONTEXT_REQUIRED",
-          "action": "partial_context_required",
-          "text": "ANC 1 reaches an encoded threshold, but the final action also depends on Assessment stage, Restart after a count-related delay. Do not treat this as clearance."
+          "rule": "BASELINE_STAGE_CONTEXT",
+          "action": "consultant_review",
+          "text": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage."
         }
       ],
-      "doseActions": []
+      "doseActions": [
+        {
+          "component": "cyclophosphamide",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "600 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "doxorubicin",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "60 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "paclitaxel",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "80 mg/m²",
+          "quantified": false
+        }
+      ]
     },
     {
       "code": "00433",
@@ -6869,29 +6903,22 @@
         {
           "rule": "PREVIOUS_FN",
           "action": "consultant_review",
-          "text": "Source cytotoxic table describes 75% dosing after FN once recovered. Verify current phase, original / current dose and recovery; antibody dosing is not automatically reduced."
+          "text": "The AC table describes 75% dosing after prior febrile neutropenia once recovered. Confirm original/current doses and recovery; this AC instruction does not assign a paclitaxel or trastuzumab reduction."
         }
       ],
       "doseActions": [
         {
           "component": "cyclophosphamide",
           "action": "consultant_review",
-          "dose": "Source cytotoxic table describes 75% dosing after FN once recovered. Verify current phase, original / current dose and recovery; antibody dosing is not automatically reduced.",
+          "dose": "The AC table describes 75% dosing after prior febrile neutropenia once recovered. Confirm original/current doses and recovery; this AC instruction does not assign a paclitaxel or trastuzumab reduction.",
           "reference": "600 mg/m²",
           "quantified": false
         },
         {
           "component": "doxorubicin",
           "action": "consultant_review",
-          "dose": "Source cytotoxic table describes 75% dosing after FN once recovered. Verify current phase, original / current dose and recovery; antibody dosing is not automatically reduced.",
+          "dose": "The AC table describes 75% dosing after prior febrile neutropenia once recovered. Confirm original/current doses and recovery; this AC instruction does not assign a paclitaxel or trastuzumab reduction.",
           "reference": "60 mg/m²",
-          "quantified": false
-        },
-        {
-          "component": "paclitaxel",
-          "action": "consultant_review",
-          "dose": "Source cytotoxic table describes 75% dosing after FN once recovered. Verify current phase, original / current dose and recovery; antibody dosing is not automatically reduced.",
-          "reference": "80 mg/m²",
           "quantified": false
         }
       ]
@@ -7572,20 +7599,37 @@
       },
       "kind": "original-source-audit",
       "pass": true,
-      "actual": "proceed_with_caution",
+      "actual": "consultant_review",
       "findings": [
         {
-          "rule": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
-          "action": "partial_context_required",
-          "text": "Current phase Taxane phase reaches an encoded threshold, but the final action also depends on Assessment stage, Febrile neutropenia, ALT / ULN, Bilirubin / ULN, Peripheral neuropathy grade, Other non-haematological toxicity, Previous paclitaxel dose reductions, Still intolerant after previous dose reductions, Paclitaxel toxicity delay, Current LVEF, Fall from baseline LVEF, Symptomatic heart failure, HER2-treatment hypersensitivity, Required cardiac assessment unavailable / overdue, Clinically significant cardiac disease, Severe dyspnoea at rest / requiring oxygen, Actual trastuzumab schedule, Days late after the planned trastuzumab dose, Stomatitis, Skin toxicity, Severe hepatic impairment, Previous FN episode; acute illness resolved, Duration of ANC below 0.5. Do not treat this as clearance."
-        },
-        {
-          "rule": "PARTIAL_ANC_X10E9_L_CONTEXT_REQUIRED",
-          "action": "partial_context_required",
-          "text": "ANC 1 reaches an encoded threshold, but the final action also depends on Assessment stage. Do not treat this as clearance."
+          "rule": "BASELINE_STAGE_CONTEXT",
+          "action": "consultant_review",
+          "text": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage."
         }
       ],
-      "doseActions": []
+      "doseActions": [
+        {
+          "component": "cyclophosphamide",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "600 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "doxorubicin",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "60 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "paclitaxel",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "80 mg/m²",
+          "quantified": false
+        }
+      ]
     },
     {
       "code": "00433",
@@ -8348,20 +8392,37 @@
       },
       "kind": "original-source-audit",
       "pass": true,
-      "actual": "proceed_with_caution",
+      "actual": "consultant_review",
       "findings": [
         {
-          "rule": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
-          "action": "partial_context_required",
-          "text": "Current phase AC chemotherapy reaches an encoded threshold, but the final action also depends on Assessment stage, Restart after a count-related delay, Previous thrombocytopenia-related delays, Febrile neutropenia, Current LVEF, Clinically significant heart disease, Prior cumulative doxorubicin exposure, Proposed dose would exceed lifetime anthracycline limit, Bilirubin (absolute), Child-Pugh C, Haemodialysis, Creatinine clearance (not indexed eGFR), Severe hepatic impairment, Fall from baseline LVEF, Previous FN episode; acute illness resolved. Do not treat this as clearance."
-        },
-        {
-          "rule": "PARTIAL_ANC_X10E9_L_CONTEXT_REQUIRED",
-          "action": "partial_context_required",
-          "text": "ANC 1 reaches an encoded threshold, but the final action also depends on Assessment stage, Restart after a count-related delay. Do not treat this as clearance."
+          "rule": "BASELINE_STAGE_CONTEXT",
+          "action": "consultant_review",
+          "text": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage."
         }
       ],
-      "doseActions": []
+      "doseActions": [
+        {
+          "component": "cyclophosphamide",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "600 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "doxorubicin",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "60 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "paclitaxel",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "80 mg/m²",
+          "quantified": false
+        }
+      ]
     },
     {
       "code": "00745",
@@ -11097,9 +11158,28 @@
           "rule": "TAX_RESTART_BOUNDARY",
           "action": "consultant_review",
           "text": "After a count delay, recovery ANC must be >1; platelet recovery wording is source-specific. Routine-dose thresholds do not automatically authorise restart at the boundary."
+        },
+        {
+          "rule": "BASELINE_STAGE_CONTEXT",
+          "action": "consultant_review",
+          "text": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage."
         }
       ],
       "doseActions": [
+        {
+          "component": "cyclophosphamide",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "600 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "doxorubicin",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "60 mg/m²",
+          "quantified": false
+        },
         {
           "component": "paclitaxel",
           "action": "consultant_review",
@@ -11948,7 +12028,7 @@
         {
           "rule": "PARTIAL_ASSESSMENT_STAGE_CONTEXT_REQUIRED",
           "action": "partial_context_required",
-          "text": "Assessment stage Before starting reaches an encoded threshold, but the final action also depends on ANC. Do not treat this as clearance."
+          "text": "Assessment stage Before starting reaches an encoded threshold, but the final action also depends on ANC, Baseline LVEF, Current LVEF. Do not treat this as clearance."
         }
       ],
       "doseActions": [
@@ -12400,9 +12480,28 @@
           "rule": "TAX_RESTART_BOUNDARY",
           "action": "consultant_review",
           "text": "After a count delay, recovery ANC must be >1; platelet recovery wording is source-specific. Routine-dose thresholds do not automatically authorise restart at the boundary."
+        },
+        {
+          "rule": "BASELINE_STAGE_CONTEXT",
+          "action": "consultant_review",
+          "text": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage."
         }
       ],
       "doseActions": [
+        {
+          "component": "cyclophosphamide",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "600 mg/m²",
+          "quantified": false
+        },
+        {
+          "component": "doxorubicin",
+          "action": "consultant_review",
+          "dose": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "reference": "60 mg/m²",
+          "quantified": false
+        },
         {
           "component": "paclitaxel",
           "action": "consultant_review",
@@ -12432,7 +12531,7 @@
         {
           "rule": "PARTIAL_ASSESSMENT_STAGE_CONTEXT_REQUIRED",
           "action": "partial_context_required",
-          "text": "Assessment stage Before starting reaches an encoded threshold, but the final action also depends on ANC. Do not treat this as clearance."
+          "text": "Assessment stage Before starting reaches an encoded threshold, but the final action also depends on ANC, Baseline LVEF, Current LVEF. Do not treat this as clearance."
         }
       ],
       "doseActions": [
@@ -14110,6 +14209,11 @@
           "rule": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
           "action": "partial_context_required",
           "text": "Current phase Taxane phase reaches an encoded threshold, but the final action also depends on Assessment stage, ANC, Platelets, Duration of ANC below 0.5, Febrile neutropenia, ALT / ULN, Bilirubin / ULN, Peripheral neuropathy grade, Other non-haematological toxicity, Previous paclitaxel dose reductions, Still intolerant after previous dose reductions, Paclitaxel toxicity delay, Symptomatic heart failure, HER2-treatment hypersensitivity, Required cardiac assessment unavailable / overdue, Clinically significant cardiac disease, Severe dyspnoea at rest / requiring oxygen, Actual trastuzumab schedule, Days late after the planned trastuzumab dose, Stomatitis, Skin toxicity, Severe hepatic impairment, Previous FN episode; acute illness resolved. Do not treat this as clearance."
+        },
+        {
+          "rule": "PARTIAL_LVEF_PERCENT_CONTEXT_REQUIRED",
+          "action": "partial_context_required",
+          "text": "Current LVEF 50 reaches an encoded threshold, but the final action also depends on Assessment stage. Do not treat this as clearance."
         }
       ],
       "doseActions": []
@@ -14186,6 +14290,11 @@
           "rule": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
           "action": "partial_context_required",
           "text": "Current phase Taxane phase reaches an encoded threshold, but the final action also depends on Assessment stage, ANC, Platelets, Duration of ANC below 0.5, Febrile neutropenia, ALT / ULN, Bilirubin / ULN, Peripheral neuropathy grade, Other non-haematological toxicity, Previous paclitaxel dose reductions, Still intolerant after previous dose reductions, Paclitaxel toxicity delay, Symptomatic heart failure, HER2-treatment hypersensitivity, Required cardiac assessment unavailable / overdue, Clinically significant cardiac disease, Severe dyspnoea at rest / requiring oxygen, Actual trastuzumab schedule, Days late after the planned trastuzumab dose, Stomatitis, Skin toxicity, Severe hepatic impairment, Previous FN episode; acute illness resolved. Do not treat this as clearance."
+        },
+        {
+          "rule": "PARTIAL_LVEF_PERCENT_CONTEXT_REQUIRED",
+          "action": "partial_context_required",
+          "text": "Current LVEF 50.01 reaches an encoded threshold, but the final action also depends on Assessment stage. Do not treat this as clearance."
         }
       ],
       "doseActions": []
@@ -14250,6 +14359,7 @@
       "code": "00433",
       "name": "Baseline LVEF eligibility boundary49.99",
       "inputs": {
+        "assessment_stage": "baseline",
         "baseline_lvef_percent": 49.99
       },
       "kind": "additional",
@@ -14276,6 +14386,7 @@
       "code": "00433",
       "name": "Baseline LVEF eligibility boundary50",
       "inputs": {
+        "assessment_stage": "baseline",
         "baseline_lvef_percent": 50
       },
       "kind": "additional",
@@ -14302,6 +14413,7 @@
       "code": "00433",
       "name": "Baseline LVEF eligibility boundary55",
       "inputs": {
+        "assessment_stage": "baseline",
         "baseline_lvef_percent": 55
       },
       "kind": "additional",
@@ -14328,12 +14440,19 @@
       "code": "00433",
       "name": "Baseline LVEF eligibility boundary55.01",
       "inputs": {
+        "assessment_stage": "baseline",
         "baseline_lvef_percent": 55.01
       },
       "kind": "additional",
       "pass": true,
       "actual": "proceed_with_caution",
-      "findings": [],
+      "findings": [
+        {
+          "rule": "PARTIAL_ASSESSMENT_STAGE_CONTEXT_REQUIRED",
+          "action": "partial_context_required",
+          "text": "Assessment stage Before starting reaches an encoded threshold, but the final action also depends on ANC. Do not treat this as clearance."
+        }
+      ],
       "doseActions": []
     },
     {
@@ -14829,6 +14948,11 @@
           "rule": "PARTIAL_TREATMENT_PHASE_CONTEXT_REQUIRED",
           "action": "partial_context_required",
           "text": "Current phase Taxane phase reaches an encoded threshold, but the final action also depends on Assessment stage, ANC, Platelets, Febrile neutropenia, ALT / ULN, Bilirubin / ULN, Peripheral neuropathy grade, Previous paclitaxel dose reductions, Still intolerant after previous dose reductions, Symptomatic heart failure, HER2-treatment hypersensitivity, Required cardiac assessment unavailable / overdue, Clinically significant cardiac disease, Severe dyspnoea at rest / requiring oxygen, Previous thrombocytopenia-related delays, Other non-haematological toxicity, Stomatitis, Skin toxicity, Severe hepatic impairment, Previous FN episode; acute illness resolved, Restart after a count-related delay. Do not treat this as clearance."
+        },
+        {
+          "rule": "PARTIAL_LVEF_PERCENT_CONTEXT_REQUIRED",
+          "action": "partial_context_required",
+          "text": "Current LVEF 50 reaches an encoded threshold, but the final action also depends on Assessment stage. Do not treat this as clearance."
         }
       ],
       "doseActions": []

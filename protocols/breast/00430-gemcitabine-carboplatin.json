@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00430-v6",
   "file_name": "00430-gemcitabine-carboplatin.json",
-  "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
+  "status": "source_reconciled_rule_encoding_pending_independent_validation",
   "metadata": {
     "nccp_regimen_code": "00430",
     "nccp_version": 6,
@@ -10,8 +10,8 @@
     "title": "Gemcitabine and Carboplatin AUC2 - 21 day",
     "short_title": "Gemcitabine + carboplatin AUC2",
     "indication": "Locally recurrent or metastatic triple-negative breast cancer.",
-    "published_date": "2016-04-08",
-    "review_date": "2021-03-23",
+    "published_date": "2017-07-07",
+    "review_date": "2031-04-01",
     "source_url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf",
     "source_document_pages": 8,
     "catalog": {
@@ -20,12 +20,12 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.84.18",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-07-19",
+    "source_checked_date": "2026-10-25",
     "validation": {
       "source_document_checked": true,
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
@@ -56,17 +56,21 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled encoding · independent clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "reconciled_release": "0.84.18",
+      "reconciled_date": "2026-10-25",
+      "scope_note": "Current NCCP source, treatment-day context and boundary review; not independent clinical validation."
     },
-    "canonical_protocol_id": "nccp-00430-v6"
+    "canonical_protocol_id": "nccp-00430-v6",
+    "source_version_verified_date": "2026-10-25",
+    "source_version_verified": true,
+    "full_suite_release": "0.84.18",
+    "schedule_summary": "Carboplatin AUC2 is given first, followed by gemcitabine 1,000 mg/m², on BOTH Days 1 and 8 of each 21-day cycle. Treatment continues until progression or unacceptable toxicity."
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -76,19 +80,9 @@
   },
   "indications": [
     {
-      "indication_id": "relapsed_ovarian",
-      "code": "00306a",
-      "description": "Relapsed epithelial ovarian carcinoma after a recurrence-free interval of at least 6 months following first-line platinum therapy."
-    },
-    {
-      "indication_id": "relapsed_fallopian_tube",
-      "code": "00306b",
-      "description": "Relapsed fallopian tube cancer after a recurrence-free interval of at least 6 months following first-line platinum therapy."
-    },
-    {
-      "indication_id": "relapsed_primary_peritoneal",
-      "code": "00306c",
-      "description": "Relapsed primary peritoneal cancer after a recurrence-free interval of at least 6 months following first-line platinum therapy."
+      "indication_id": "metastatic_tnbc",
+      "code": "00430a",
+      "description": "Locally recurrent metastatic triple-negative breast cancer."
     }
   ],
   "treatment_phases": [
@@ -96,280 +90,397 @@
       "phase_id": "21_day_cycle",
       "cycle_length_days": 21,
       "cycles": [],
+      "duration": "Until disease progression or unacceptable toxicity",
       "administration": [
         {
           "day": 1,
           "order": 1,
-          "drug": "gemcitabine",
+          "drug": "carboplatin",
           "dose": {
-            "value": 1000,
-            "unit": "mg/m²"
+            "value": 2,
+            "unit": "AUC"
           },
-          "route": "IV infusion"
+          "route": "IV infusion",
+          "diluent": "250 mL glucose 5%",
+          "infusion_minutes": 30
         },
         {
           "day": 1,
           "order": 2,
-          "drug": "carboplatin",
-          "dose": {
-            "value": 4,
-            "unit": "AUC"
-          },
-          "route": "IV infusion"
-        },
-        {
-          "day": 8,
-          "order": 1,
           "drug": "gemcitabine",
           "dose": {
             "value": 1000,
             "unit": "mg/m²"
           },
-          "route": "IV infusion"
+          "route": "IV infusion",
+          "diluent": "250 mL NaCl 0.9%",
+          "infusion_minutes": 30
+        },
+        {
+          "day": 8,
+          "order": 1,
+          "drug": "carboplatin",
+          "dose": {
+            "value": 2,
+            "unit": "AUC"
+          },
+          "route": "IV infusion",
+          "diluent": "250 mL glucose 5%",
+          "infusion_minutes": 30
+        },
+        {
+          "day": 8,
+          "order": 2,
+          "drug": "gemcitabine",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "diluent": "250 mL NaCl 0.9%",
+          "infusion_minutes": 30
         }
       ]
     }
   ],
   "input_definitions": {
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "indication_eligible": {
+      "label": "Exact NCCP indication confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "hypersensitivity": {
+      "label": "Relevant medicine or excipient hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy_or_breastfeeding": {
+      "label": "Pregnant or breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "active_infection": {
+      "label": "Clinically significant active infection",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pretreatment_tests_unresolved": {
+      "label": "Required tests or results unresolved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_label": "NCCP named toxicity assessment",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf",
+      "assessment_guidance": "Confirm the clinician-assessed grade using the approved grading reference; NCCP provides treatment actions, not a complete grading manual.",
+      "unit": "Clinician-assessed grade",
+      "source_grading_note": "The NCCP regimen specifies action thresholds, not a complete grading table. Confirm the named adverse event and grade using the approved clinical grading reference before applying the source action.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "Clinician-assessed grade 0. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-assessed grade 1. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-assessed grade 2. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-assessed grade 3. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-assessed grade 4. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
+        }
+      ],
+      "ctcae_category": "other_nonhaematological"
+    },
+    "toxicity_excludes_nausea_vomiting": {
+      "label": "This graded non-haematological event is NOT nausea or vomiting",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "renal_measure_type": {
+      "label": "Renal measurement type",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "measured",
+          "label": "Measured GFR"
+        },
+        {
+          "value": "cg",
+          "label": "Cockcroft–Gault creatinine clearance"
+        },
+        {
+          "value": "wright",
+          "label": "Wright estimate"
+        },
+        {
+          "value": "indexed_egfr",
+          "label": "Indexed laboratory eGFR"
+        },
+        {
+          "value": "unknown",
+          "label": "Method unconfirmed"
+        }
+      ],
+      "demo_value": "measured"
+    },
     "indication_id": {
       "label": "Indication",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": "relapsed_ovarian",
-          "label": "00306a — Relapsed epithelial ovarian carcinoma after a recurrence-free interval of at least 6 months following first-line platinum therapy."
-        },
-        {
-          "value": "relapsed_fallopian_tube",
-          "label": "00306b — Relapsed fallopian tube cancer after a recurrence-free interval of at least 6 months following first-line platinum therapy."
-        },
-        {
-          "value": "relapsed_primary_peritoneal",
-          "label": "00306c — Relapsed primary peritoneal cancer after a recurrence-free interval of at least 6 months following first-line platinum therapy."
+          "value": "metastatic_tnbc",
+          "label": "00430a — Locally recurrent/metastatic triple-negative breast cancer"
         }
       ],
-      "ui_section": "treatment_context",
-      "demo_value": "relapsed_ovarian",
-      "always_show": true,
-      "input_role": "context"
-    },
-    "assessment_type": {
-      "label": "Assessment type",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "pre_treatment",
-          "label": "Pre-treatment assessment"
-        }
-      ],
-      "ui_section": "treatment_context",
-      "demo_value": "pre_treatment",
-      "always_show": true,
-      "input_role": "context"
+      "demo_value": "metastatic_tnbc"
     },
     "treatment_day": {
       "label": "Treatment day",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": "day1",
-          "label": "Day 1 — gemcitabine + carboplatin"
+          "label": "Day 1 — carboplatin AND gemcitabine"
         },
         {
           "value": "day8",
-          "label": "Day 8 — gemcitabine only"
+          "label": "Day 8 — carboplatin AND gemcitabine"
         }
       ],
-      "ui_section": "treatment_context",
-      "demo_value": "day1",
-      "always_show": true,
-      "input_role": "decision"
-    },
-    "cycle_number": {
-      "label": "Cycle number",
-      "type": "number",
-      "required": false,
-      "min": 1,
-      "max": 100,
-      "step": 1,
-      "demo_value": 1,
-      "ui_section": "treatment_context",
-      "always_show": true,
-      "input_role": "context"
+      "demo_value": "day1"
     },
     "anc": {
       "label": "ANC",
       "type": "number",
-      "required": false,
       "min": 0,
-      "max": 50,
+      "max": 100,
       "step": 0.01,
-      "demo_value": 2.0,
-      "ui_section": "labs",
+      "required": false,
+      "input_role": "decision",
       "unit": "×10⁹/L",
-      "input_role": "decision"
+      "demo_value": 3
     },
     "platelets": {
       "label": "Platelets",
       "type": "number",
-      "required": false,
       "min": 0,
       "max": 2000,
       "step": 1,
-      "demo_value": 200,
-      "ui_section": "labs",
+      "required": false,
+      "input_role": "decision",
       "unit": "×10⁹/L",
-      "input_role": "decision"
+      "demo_value": 200
     },
     "gfr_ml_min": {
-      "label": "GFR / CrCl",
+      "label": "Verified GFR / CrCl",
       "type": "number",
-      "required": false,
       "min": 0,
-      "max": 250,
-      "step": 1,
-      "demo_value": 90,
-      "ui_section": "labs",
+      "max": 300,
+      "step": 0.1,
+      "required": false,
+      "input_role": "decision",
       "unit": "mL/min",
       "renal_input": {
         "mode": "exact_continuous",
         "exact_value_required": true,
-        "reason": "Required for carboplatin Calvert dosing and renal safety assessment."
+        "reason": "Calvert carboplatin AUC2 and renal restrictions require a verified continuous unindexed GFR/CrCl."
       },
-      "assessment_guidance": "Enter the verified continuous GFR/CrCl used for carboplatin dosing. The app will apply encoded renal thresholds; confirm the Calvert calculation and local dosing policy independently.",
-      "input_role": "decision"
+      "demo_value": 80
     },
     "bilirubin_micromol_l": {
-      "label": "Bilirubin",
+      "label": "Total bilirubin",
       "type": "number",
-      "required": false,
       "min": 0,
       "max": 1000,
       "step": 1,
-      "demo_value": 15,
-      "ui_section": "labs",
+      "required": false,
+      "input_role": "decision",
       "unit": "µmol/L",
-      "input_role": "decision"
+      "demo_value": 10
+    },
+    "current_febrile_neutropenia": {
+      "label": "Current suspected febrile neutropenia",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     },
     "haematologic_event": {
-      "label": "Previous-cycle haematologic event",
+      "label": "Previous qualifying haematological event",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": "none",
           "label": "None"
         },
         {
-          "value": "anc_lt_0_5_gt5d",
-          "label": "ANC <0.5 for >5 days"
-        },
-        {
-          "value": "anc_lt_0_1_gt3d",
-          "label": "ANC <0.1 for >3 days"
+          "value": "day1_delay",
+          "label": "Day 1 delayed for ANC <1 or platelets <100"
         },
         {
           "value": "febrile_neutropenia",
-          "label": "Febrile neutropenia"
+          "label": "Previous febrile neutropenia"
         },
         {
           "value": "platelets_lt25",
-          "label": "Platelets <25 ×10⁹/L"
+          "label": "Platelet nadir <25"
         },
         {
-          "value": "cycle_delay_gt1week",
-          "label": "Cycle delay >1 week due to toxicity"
+          "value": "bleeding_thrombocytopenia",
+          "label": "Bleeding associated with thrombocytopenia"
         }
       ],
-      "ui_section": "clinical",
-      "demo_value": "none",
-      "input_role": "decision"
+      "demo_value": "none"
     },
-    "nonhaem_toxicity_grade": {
-      "label": "Other non-haematologic toxicity grade",
+    "prior_haematologic_episode": {
+      "label": "Previous qualifying haematological episode",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "label": "First episode"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "label": "Second episode"
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "value": "3plus",
+          "label": "Third or later episode"
         }
       ],
-      "ui_section": "clinical",
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Name the exact non-haematological adverse event first and apply that event's own CTCAE v5.0 criterion. The general Grade 1-4 severity anchors are a screening aid only and are not a substitute for the named term.",
-      "input_role": "decision"
+      "demo_value": 1
+    },
+    "nonhaem_episode": {
+      "label": "Qualifying non-haematological episode",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "First episode"
+        },
+        {
+          "value": 2,
+          "label": "Second episode"
+        },
+        {
+          "value": "3plus",
+          "label": "Third or later episode"
+        }
+      ],
+      "demo_value": 1
     },
     "pneumonitis_grade": {
       "label": "Pneumonitis grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_label": "NCCP named toxicity assessment",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf",
+      "assessment_guidance": "Confirm the clinician-assessed grade using the approved grading reference; NCCP provides treatment actions, not a complete grading manual.",
+      "unit": "Clinician-assessed grade",
+      "source_grading_note": "The NCCP regimen specifies action thresholds, not a complete grading table. Confirm the named adverse event and grade using the approved clinical grading reference before applying the source action.",
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "description": "Clinician-assessed grade 0. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "description": "Clinician-assessed grade 1. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "description": "Clinician-assessed grade 2. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "description": "Clinician-assessed grade 3. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "description": "Clinician-assessed grade 4. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         }
       ],
-      "ui_section": "clinical",
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "pneumonitis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess new cough, dyspnoea, oxygen requirement, imaging findings, infection and alternative causes. Immune-related or drug-related pneumonitis requires urgent senior review when symptomatic.",
-      "input_role": "decision"
+      "ctcae_category": "pneumonitis"
+    },
+    "suspected_drug_induced_pneumonitis": {
+      "label": "Suspected gemcitabine-induced pneumonitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     },
     "scar_status": {
-      "label": "Severe cutaneous adverse reaction",
+      "label": "Severe cutaneous reaction",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": "none",
@@ -384,46 +495,36 @@
           "label": "Confirmed SCAR"
         }
       ],
-      "ui_section": "clinical",
-      "demo_value": "none",
-      "input_role": "decision"
+      "demo_value": "none"
     },
-    "haemodialysis": {
-      "label": "Receiving haemodialysis",
+    "creatinine_sample_age_hours": {
+      "label": "Age of creatinine sample used for estimated GFR",
+      "type": "number",
+      "min": 0,
+      "max": 10000,
+      "step": 1,
+      "required": false,
+      "input_role": "decision",
+      "unit": "hours",
+      "demo_value": 24
+    },
+    "creatinine_percent_of_isotope_baseline": {
+      "label": "Current creatinine as percentage of isotope-GFR baseline",
+      "type": "number",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "required": false,
+      "input_role": "decision",
+      "unit": "%",
+      "demo_value": 100
+    },
+    "renal_estimate_unreliable": {
+      "label": "Obesity, low creatinine or muscle loss makes renal estimate unreliable",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "ui_section": "labs",
-      "visible_when": {
-        "field": "gfr_ml_min",
-        "operator": "<",
-        "value": 30
-      },
-      "input_role": "decision"
-    },
-    "hypersensitivity": {
-      "label": "Relevant gemcitabine or carboplatin hypersensitivity",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "pregnancy_or_breastfeeding": {
-      "label": "Pregnant or breastfeeding",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
-      "input_role": "decision"
-    },
-    "active_infection": {
-      "label": "Active clinically significant infection",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -449,367 +550,1548 @@
     ],
     "rules": [
       {
-        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "rule_id": "INDICATION",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "gemcitabine",
             "carboplatin"
           ],
-          "recommendation": "Do not administer this regimen; obtain consultant review."
+          "recommendation": "Confirm the exact NCCP indication, prior treatment and patient selection before prescribing.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Confirm the exact NCCP indication, prior treatment and patient selection before prescribing.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Relevant hypersensitivity is an exclusion."
+          "document": "NCCP 00430 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "PREGNANCY_LACTATION",
-        "field": "pregnancy_or_breastfeeding",
-        "operator": "==",
-        "value": true,
+        "rule_id": "ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "ECOG is outside the source eligibility range (0–1).",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ECOG is outside the source eligibility range (0–1).",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "ALLERGY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "gemcitabine",
             "carboplatin"
           ],
-          "recommendation": "Do not administer without urgent consultant review."
+          "recommendation": "Relevant drug/excipient hypersensitivity is a source exclusion; do not administer. For a previous mild carboplatin reaction, exceptional rechallenge requires immunology advice and a controlled desensitisation protocol; this assessment does not authorise rechallenge.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Relevant drug/excipient hypersensitivity is a source exclusion; do not administer. For a previous mild carboplatin reaction, exceptional rechallenge requires immunology advice and a controlled desensitisation protocol; this assessment does not authorise rechallenge.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy_or_breastfeeding",
+          "operator": "==",
+          "value": true
         },
-        "explanation": "Pregnancy/breastfeeding requires urgent specialist review."
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Pregnancy or breastfeeding is a source exclusion; specialist management is required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Pregnancy or breastfeeding is a source exclusion; specialist management is required.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
         "rule_id": "ACTIVE_INFECTION",
-        "field": "active_infection",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "field": "active_infection",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "withhold",
           "components": [
             "gemcitabine",
             "carboplatin"
           ],
-          "recommendation": "Withhold treatment and assess/treat the infection."
+          "recommendation": "Withhold and urgently assess clinically significant infection; treatment cannot be cleared by an isolated normal count.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Withhold and urgently assess clinically significant infection; treatment cannot be cleared by an isolated normal count.",
         "source": {
+          "document": "NCCP 00430 v6",
           "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Clinically significant infection requires review."
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "DAY1_COUNTS_LOW",
-        "all": [
-          {
-            "field": "treatment_day",
-            "operator": "==",
-            "value": "day1"
-          },
-          {
-            "any": [
-              {
-                "field": "anc",
-                "operator": "<",
-                "value": 1
-              },
-              {
-                "field": "platelets",
-                "operator": "<",
-                "value": 100
-              }
-            ]
-          }
-        ],
+        "rule_id": "TESTS",
+        "when": {
+          "field": "pretreatment_tests_unresolved",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Obtain and review required blood and organ-function tests before prescribing. Omitted results remain unassessed.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Obtain and review required blood and organ-function tests before prescribing. Omitted results remain unassessed.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "NONHAEM_EXCLUSION_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "nonhaem_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "toxicity_excludes_nausea_vomiting",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_excludes_nausea_vomiting",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Identify the exact adverse event and urgently review severe symptoms. The printed non-haematological dose table excludes nausea/vomiting; do not apply its dose percentage without confirming the toxicity category.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Identify the exact adverse event and urgently review severe symptoms. The printed non-haematological dose table excludes nausea/vomiting; do not apply its dose percentage without confirming the toxicity category.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "RENAL_METHOD",
+        "when": {
+          "field": "renal_measure_type",
+          "operator": "in",
+          "value": [
+            "indexed_egfr",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Verify renal function in mL/min. Indexed eGFR is not directly interchangeable with the source renal measurement or Calvert calculation; do not use an unconfirmed value.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Verify renal function in mL/min. Indexed eGFR is not directly interchangeable with the source renal measurement or Calvert calculation; do not use an unconfirmed value.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_INDICATION",
+        "when": {
+          "field": "indication_id",
+          "operator": "not_in",
+          "value": [
+            "metastatic_tnbc"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "This regimen is NCCP 00430a for locally recurrent/metastatic triple-negative breast cancer. An ovarian/fallopian/peritoneal regimen selection is not applicable.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "This regimen is NCCP 00430a for locally recurrent/metastatic triple-negative breast cancer. An ovarian/fallopian/peritoneal regimen selection is not applicable.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "ACUTE_FN",
+        "when": {
+          "field": "current_febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Current suspected febrile neutropenia: withhold treatment and arrange urgent assessment. The previous-event restart table is not a current-infection treatment plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Current suspected febrile neutropenia: withhold treatment and arrange urgent assessment. The previous-event restart table is not a current-infection treatment plan.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "DAY_REQUIRED",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "exists"
+                },
+                {
+                  "field": "platelets",
+                  "operator": "exists"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Choose Day 1 or Day 8 before interpreting counts: Day 1 delay/restart and Day 8 omission/reduction rules differ. No treatment day is inferred.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Choose Day 1 or Day 8 before interpreting counts: Day 1 delay/restart and Day 8 omission/reduction rules differ. No treatment day is inferred.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "D1_DELAY",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "delay",
           "components": [
             "gemcitabine",
             "carboplatin"
           ],
-          "recommendation": "Delay Day 1 until ANC ≥1.0 and platelets ≥100 ×10⁹/L. After the first such episode or febrile neutropenia, resume both drugs at 80%; after a second episode, resume at 60%."
+          "recommendation": "Delay Day 1 until ANC ≥1 and platelets ≥100 ×10⁹/L. Establish qualifying episode number and clinical recovery before using the subsequent-dose table.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Delay Day 1 until ANC ≥1 and platelets ≥100 ×10⁹/L. Establish qualifying episode number and clinical recovery before using the subsequent-dose table.",
         "source": {
+          "document": "NCCP 00430 v6",
           "page": 3,
-          "table": "Table 1",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Day 1 proceeds only at ANC ≥1.0 and platelets ≥100."
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "DAY8_OMIT",
-        "all": [
-          {
-            "field": "treatment_day",
-            "operator": "==",
-            "value": "day8"
-          },
-          {
-            "any": [
-              {
-                "field": "anc",
-                "operator": "<",
-                "value": 0.75
-              },
-              {
-                "field": "platelets",
-                "operator": "<",
-                "value": 75
-              }
-            ]
-          }
-        ],
+        "rule_id": "D8_OMIT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day8"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 0.75
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "omit",
           "components": [
             "gemcitabine",
             "carboplatin"
           ],
-          "recommendation": "Omit both Day-8 gemcitabine and carboplatin for ANC <0.75 or platelets <75 ×10⁹/L."
+          "recommendation": "Omit BOTH Day 8 drugs. The omitted treatment is not reinstated within this cycle.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Omit BOTH Day 8 drugs. The omitted treatment is not reinstated within this cycle.",
         "source": {
+          "document": "NCCP 00430 v6",
           "page": 4,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Day-8 severe cytopenia requires omission."
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "DAY8_75_PERCENT",
-        "all": [
-          {
-            "field": "treatment_day",
-            "operator": "==",
-            "value": "day8"
-          },
-          {
-            "any": [
-              {
-                "all": [
-                  {
-                    "field": "anc",
-                    "operator": ">=",
-                    "value": 0.75
-                  },
-                  {
-                    "field": "anc",
-                    "operator": "<",
-                    "value": 1.0
-                  }
-                ]
-              },
-              {
-                "all": [
-                  {
-                    "field": "platelets",
-                    "operator": ">=",
-                    "value": 75
-                  },
-                  {
-                    "field": "platelets",
-                    "operator": "<",
-                    "value": 100
-                  }
-                ]
-              }
-            ]
-          }
-        ],
+        "rule_id": "D8_REDUCE",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day8"
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">=",
+                      "value": 0.75
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 0.99
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">=",
+                      "value": 75
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 99
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "gemcitabine",
             "carboplatin"
           ],
-          "recommendation": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L."
+          "recommendation": "For Day 8 intermediate counts, the source specifies BOTH drugs at 80% of the actual Day 1 dose, not 75% and not 80% of the original starting dose. Confirm both counts and that the omission criterion is absent.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "For Day 8 intermediate counts, the source specifies BOTH drugs at 80% of the actual Day 1 dose, not 75% and not 80% of the original starting dose. Confirm both counts and that the omission criterion is absent.",
         "source": {
+          "document": "NCCP 00430 v6",
           "page": 4,
-          "table": "Table 2",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Day-8 intermediate cytopenia requires 75% dosing."
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "PRIOR_HAEM_EVENT_REDUCE",
-        "field": "haematologic_event",
-        "operator": "!=",
-        "value": "none",
+        "rule_id": "D8_UNASSIGNED_BOUNDARY",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day8"
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc",
+                      "operator": ">",
+                      "value": 0.99
+                    },
+                    {
+                      "field": "anc",
+                      "operator": "<",
+                      "value": 1
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets",
+                      "operator": ">",
+                      "value": 99
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<",
+                      "value": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "gemcitabine",
             "carboplatin"
           ],
-          "recommendation": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%."
+          "recommendation": "The printed Day 8 rows leave ANC between 0.99 and 1.00 or platelets between 99 and 100 unassigned. Do not round or infer a dose; obtain source/consultant clarification.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "The printed Day 8 rows leave ANC between 0.99 and 1.00 or platelets between 99 and 100 unassigned. Do not round or infer a dose; obtain source/consultant clarification.",
         "source": {
+          "document": "NCCP 00430 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "HISTORICAL_HAEM",
+        "when": {
+          "field": "haematologic_event",
+          "operator": "in",
+          "value": [
+            "day1_delay",
+            "febrile_neutropenia",
+            "platelets_lt25",
+            "bleeding_thrombocytopenia"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Previous qualifying haematological toxicity: confirm episode number, current clinical recovery, ANC ≥1 and platelets ≥100. Day 1 restart uses the ORIGINAL starting dose; Day 8 adjustments use that cycle’s Day 1 dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Previous qualifying haematological toxicity: confirm episode number, current clinical recovery, ANC ≥1 and platelets ≥100. Day 1 restart uses the ORIGINAL starting dose; Day 8 adjustments use that cycle’s Day 1 dose.",
+        "source": {
+          "document": "NCCP 00430 v6",
           "page": 3,
-          "table": "Table 1",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction."
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "CARBOPLATIN_GFR_20_OR_LESS",
-        "field": "gfr_ml_min",
-        "operator": "<=",
-        "value": 20,
+        "rule_id": "D1_HISTORICAL_1",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "field": "haematologic_event",
+              "operator": "in",
+              "value": [
+                "day1_delay",
+                "febrile_neutropenia",
+                "platelets_lt25",
+                "bleeding_thrombocytopenia"
+              ]
+            },
+            {
+              "field": "prior_haematologic_episode",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "all": [
+                {
+                  "field": "anc",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "platelets",
+                  "operator": ">=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "After episode 1, both drugs may resume at 80% of the ORIGINAL starting dose only after count and clinical recovery. Do not apply sequential percentage multiplication or automatically re-escalate.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After episode 1, both drugs may resume at 80% of the ORIGINAL starting dose only after count and clinical recovery. Do not apply sequential percentage multiplication or automatically re-escalate.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "D1_HISTORICAL_2",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "field": "haematologic_event",
+              "operator": "in",
+              "value": [
+                "day1_delay",
+                "febrile_neutropenia",
+                "platelets_lt25",
+                "bleeding_thrombocytopenia"
+              ]
+            },
+            {
+              "field": "prior_haematologic_episode",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "all": [
+                {
+                  "field": "anc",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "platelets",
+                  "operator": ">=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "After episode 2, both drugs may resume at 60% of the ORIGINAL starting dose only after count and clinical recovery. Do not apply sequential percentage multiplication or automatically re-escalate.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After episode 2, both drugs may resume at 60% of the ORIGINAL starting dose only after count and clinical recovery. Do not apply sequential percentage multiplication or automatically re-escalate.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "HISTORICAL_LATER",
+        "when": {
+          "all": [
+            {
+              "field": "haematologic_event",
+              "operator": "in",
+              "value": [
+                "day1_delay",
+                "febrile_neutropenia",
+                "platelets_lt25",
+                "bleeding_thrombocytopenia"
+              ]
+            },
+            {
+              "field": "prior_haematologic_episode",
+              "operator": "==",
+              "value": "3plus"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "The printed Day 1 table specifies first and second qualifying episodes only. A third/later event needs an individual consultant decision; no extrapolated dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The printed Day 1 table specifies first and second qualifying episodes only. A third/later event needs an individual consultant decision; no extrapolated dose.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "CARBO_LE20",
+        "when": {
+          "field": "gfr_ml_min",
+          "operator": "<=",
+          "value": 20
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "carboplatin"
           ],
-          "recommendation": "Do not administer carboplatin at GFR ≤20 mL/min."
+          "recommendation": "GFR ≤20 mL/min: do not administer carboplatin. This explicit restriction takes precedence over the overlapping 20–30 caution wording.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "GFR ≤20 mL/min: do not administer carboplatin. This explicit restriction takes precedence over the overlapping 20–30 caution wording.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Carboplatin should not be administered at GFR ≤20."
+          "document": "NCCP 00430 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "CARBOPLATIN_GFR_20_TO_30",
-        "all": [
-          {
-            "field": "gfr_ml_min",
-            "operator": ">",
-            "value": 20
-          },
-          {
-            "field": "gfr_ml_min",
-            "operator": "<=",
-            "value": 30
-          }
-        ],
+        "rule_id": "CARBO_20_30",
+        "when": {
+          "all": [
+            {
+              "field": "gfr_ml_min",
+              "operator": ">",
+              "value": 20
+            },
+            {
+              "field": "gfr_ml_min",
+              "operator": "<=",
+              "value": 30
+            }
+          ]
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "carboplatin"
           ],
-          "recommendation": "Use carboplatin with extreme caution at GFR 20–30 mL/min; consultant and pharmacy review required."
+          "recommendation": "Carboplatin at GFR >20 to ≤30 mL/min requires extreme caution and consultant/pharmacy review.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Carboplatin at GFR >20 to ≤30 mL/min requires extreme caution and consultant/pharmacy review.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe renal impairment requires extreme caution."
+          "document": "NCCP 00430 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "GEMCITABINE_BILIRUBIN_27_PLUS",
-        "field": "bilirubin_micromol_l",
-        "operator": ">=",
-        "value": 27,
+        "rule_id": "CARBO_LT60",
+        "when": {
+          "all": [
+            {
+              "field": "gfr_ml_min",
+              "operator": ">",
+              "value": 30
+            },
+            {
+              "field": "gfr_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "CrCl <60 mL/min increases carboplatin myelosuppression risk; review monitoring, dose method and marrow reserve. No fixed percentage reduction is specified.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "CrCl <60 mL/min increases carboplatin myelosuppression risk; review monitoring, dose method and marrow reserve. No fixed percentage reduction is specified.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "CALVERT_CAP",
+        "when": {
+          "field": "gfr_ml_min",
+          "operator": ">",
+          "value": 125
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "The GFR used in the Calvert calculation must not exceed 125 mL/min. Confirm method and apply target AUC 2 × (GFR +25) for each Day 1 and Day 8 carboplatin administration.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The GFR used in the Calvert calculation must not exceed 125 mL/min. Confirm method and apply target AUC 2 × (GFR +25) for each Day 1 and Day 8 carboplatin administration.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "RENAL_METHOD_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "gfr_ml_min",
+              "operator": "exists"
+            },
+            {
+              "field": "renal_measure_type",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Confirm whether this is measured GFR or an appropriate Cockcroft–Gault/Wright estimate in mL/min before Calvert dosing. The number alone does not verify the renal method.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm whether this is measured GFR or an appropriate Cockcroft–Gault/Wright estimate in mL/min before Calvert dosing. The number alone does not verify the renal method.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "CREATININE_STALE",
+        "when": {
+          "all": [
+            {
+              "field": "renal_measure_type",
+              "operator": "in",
+              "value": [
+                "cg",
+                "wright"
+              ]
+            },
+            {
+              "field": "creatinine_sample_age_hours",
+              "operator": ">",
+              "value": 48
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Estimated-GFR carboplatin dosing requires serum creatinine obtained within 48 hours of administration. Obtain a current result and recalculate as required; do not reuse a stale estimate.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Estimated-GFR carboplatin dosing requires serum creatinine obtained within 48 hours of administration. Obtain a current result and recalculate as required; do not reuse a stale estimate.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "ISOTOPE_BASELINE_CHANGE",
+        "when": {
+          "all": [
+            {
+              "field": "renal_measure_type",
+              "operator": "==",
+              "value": "measured"
+            },
+            {
+              "field": "creatinine_percent_of_isotope_baseline",
+              "operator": ">",
+              "value": 110
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Current creatinine exceeds 110% of the isotope-GFR baseline. Consider repeat measured GFR or a suitable current estimate before reusing the previous carboplatin dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Current creatinine exceeds 110% of the isotope-GFR baseline. Consider repeat measured GFR or a suitable current estimate before reusing the previous carboplatin dose.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "RENAL_ESTIMATE_UNRELIABLE",
+        "when": {
+          "field": "renal_estimate_unreliable",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Measured GFR is recommended where obesity, low creatinine or reduced muscle mass makes formula estimates unreliable. Weight or creatinine substitutions require explicit prescriber selection, not automatic correction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Measured GFR is recommended where obesity, low creatinine or reduced muscle mass makes formula estimates unreliable. Weight or creatinine substitutions require explicit prescriber selection, not automatic correction.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "GEM_RENAL_LT30",
+        "when": {
+          "field": "gfr_ml_min",
+          "operator": "<",
+          "value": 30
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "gemcitabine"
           ],
-          "recommendation": "For bilirubin ≥27 µmol/L, consider starting gemcitabine at 80% with potential escalation, or full dose with active monitoring, after consultant review."
+          "recommendation": "For gemcitabine alone, the source expects no renal dose adjustment below 30 mL/min. This does NOT override the separate carboplatin restriction; review clinical risk and component-specific dosing.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "For gemcitabine alone, the source expects no renal dose adjustment below 30 mL/min. This does NOT override the separate carboplatin restriction; review clinical risk and component-specific dosing.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Hepatic impairment requires an individualised NCCP option."
+          "document": "NCCP 00430 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "NONHAEM_G3PLUS",
-        "field": "nonhaem_toxicity_grade",
-        "operator": ">=",
-        "value": 3,
+        "rule_id": "GEM_BILI",
+        "when": {
+          "field": "bilirubin_micromol_l",
+          "operator": ">=",
+          "value": 27
+        },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Bilirubin ≥27 µmol/L: gemcitabine may start at 80% of original dose with escalation if tolerated OR full dose with active monitoring. Select an individual pathway; do not apply an automatic reduction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Bilirubin ≥27 µmol/L: gemcitabine may start at 80% of original dose with escalation if tolerated OR full dose with active monitoring. Select an individual pathway; do not apply an automatic reduction.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "NONHAEM_HOLD",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "toxicity_excludes_nausea_vomiting",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "nonhaem_episode",
+                  "operator": "missing"
+                },
+                {
+                  "field": "nonhaem_episode",
+                  "operator": "in",
+                  "value": [
+                    1,
+                    2
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
           "components": [
             "gemcitabine",
             "carboplatin"
           ],
-          "recommendation": "Withhold until toxicity recovers to grade 1 or less, then consider a dose reduction."
+          "recommendation": "Withhold gemcitabine and carboplatin until the qualifying non-haematological toxicity recovers to grade ≤1. Confirm episode number and which drug is responsible before selecting a restart dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Withhold gemcitabine and carboplatin until the qualifying non-haematological toxicity recovers to grade ≤1. Confirm episode number and which drug is responsible before selecting a restart dose.",
         "source": {
-          "page": 6,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade 3 or greater non-haematologic toxicity requires withholding and review."
+          "document": "NCCP 00430 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "PNEUMONITIS_G2PLUS",
-        "field": "pneumonitis_grade",
-        "operator": ">=",
-        "value": 2,
+        "rule_id": "NONHAEM_FIRST",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "toxicity_excludes_nausea_vomiting",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "field": "nonhaem_episode",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "First qualifying grade ≥3 non-haematological event: after recovery to grade ≤1, a 20% reduction from the initial dose of gemcitabine OR carboplatin may be selected by the consultant. Do not automatically reduce both.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "First qualifying grade ≥3 non-haematological event: after recovery to grade ≤1, a 20% reduction from the initial dose of gemcitabine OR carboplatin may be selected by the consultant. Do not automatically reduce both.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "NONHAEM_SECOND",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "toxicity_excludes_nausea_vomiting",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "field": "nonhaem_episode",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Second qualifying event: a second 20% reduction in either gemcitabine or carboplatin is permitted after recovery. The printed wording does not resolve sequential versus original-dose arithmetic; confirm the intended dose with the consultant.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Second qualifying event: a second 20% reduction in either gemcitabine or carboplatin is permitted after recovery. The printed wording does not resolve sequential versus original-dose arithmetic; confirm the intended dose with the consultant.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "NONHAEM_THIRD",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "toxicity_excludes_nausea_vomiting",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "field": "nonhaem_episode",
+              "operator": "==",
+              "value": "3plus"
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Third qualifying grade ≥3 non-haematological toxicity episode: discontinue treatment under the source table; specialist review required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Third qualifying grade ≥3 non-haematological toxicity episode: discontinue treatment under the source table; specialist review required.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "PNEUMONITIS",
+        "when": {
+          "field": "pneumonitis_grade",
+          "operator": ">=",
+          "value": 2
+        },
         "action": {
           "type": "discontinue",
           "components": [
             "gemcitabine"
           ],
-          "recommendation": "Discontinue gemcitabine for grade 2 or greater pneumonitis and assess urgently."
+          "recommendation": "Grade ≥2 pneumonitis: discontinue gemcitabine and arrange urgent assessment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Grade ≥2 pneumonitis: discontinue gemcitabine and arrange urgent assessment.",
         "source": {
-          "page": 7,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00430 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "SUSPECTED_PNEUMONITIS",
+        "when": {
+          "field": "suspected_drug_induced_pneumonitis",
+          "operator": "==",
+          "value": true
         },
-        "explanation": "Clinically significant pneumonitis requires gemcitabine discontinuation."
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Suspected drug-induced pneumonitis: discontinue gemcitabine and investigate urgently; do not wait for a formal toxicity grade.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Suspected drug-induced pneumonitis: discontinue gemcitabine and investigate urgently; do not wait for a formal toxicity grade.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
         "rule_id": "SCAR_CONFIRMED",
-        "field": "scar_status",
-        "operator": "==",
-        "value": "confirmed",
+        "when": {
+          "field": "scar_status",
+          "operator": "==",
+          "value": "confirmed"
+        },
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "gemcitabine"
           ],
-          "recommendation": "Permanently discontinue gemcitabine for confirmed SCAR."
+          "recommendation": "Severe cutaneous adverse reaction: discontinue gemcitabine.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Severe cutaneous adverse reaction: discontinue gemcitabine.",
         "source": {
-          "page": 7,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Confirmed SCAR requires permanent discontinuation."
+          "document": "NCCP 00430 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
         "rule_id": "SCAR_SUSPECTED",
-        "field": "scar_status",
-        "operator": "==",
-        "value": "suspected",
+        "when": {
+          "field": "scar_status",
+          "operator": "==",
+          "value": "suspected"
+        },
         "action": {
           "type": "withhold",
           "components": [
             "gemcitabine"
           ],
-          "recommendation": "Withhold gemcitabine while suspected SCAR is urgently evaluated."
+          "recommendation": "Withhold gemcitabine and urgently investigate suspected severe cutaneous adverse reaction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Withhold gemcitabine and urgently investigate suspected severe cutaneous adverse reaction.",
         "source": {
-          "page": 7,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Suspected SCAR requires immediate withholding and assessment."
+          "document": "NCCP 00430 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       },
       {
-        "rule_id": "HAEMODIALYSIS_TIMING",
-        "field": "haemodialysis",
-        "operator": "==",
-        "value": true,
+        "rule_id": "HD",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "gemcitabine"
           ],
-          "recommendation": "Confirm gemcitabine and dialysis timing with oncology pharmacy; NCCP notes dialysis 6–12 hours after gemcitabine."
+          "recommendation": "Gemcitabine: no dose adjustment is expected with haemodialysis started 6–12 hours after administration. Confirm timing with renal/oncology pharmacy. This does not authorise carboplatin in dialysis; assess its separate restriction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Gemcitabine: no dose adjustment is expected with haemodialysis started 6–12 hours after administration. Confirm timing with renal/oncology pharmacy. This does not authorise carboplatin in dialysis; assess its separate restriction.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00430 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": "not_in",
+          "value": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
         },
-        "explanation": "Haemodialysis timing requires pharmacy confirmation."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Select a recognised integer ecog.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Select a recognised integer ecog.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_NONHAEM_TOXICITY_GRADE",
+        "when": {
+          "field": "nonhaem_toxicity_grade",
+          "operator": "not_in",
+          "value": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Select a recognised integer nonhaem toxicity grade.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Select a recognised integer nonhaem toxicity grade.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_RENAL_MEASURE_TYPE",
+        "when": {
+          "field": "renal_measure_type",
+          "operator": "not_in",
+          "value": [
+            "measured",
+            "cg",
+            "wright",
+            "indexed_egfr",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Unrecognised renal measure type: resolve context before applying source rules.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised renal measure type: resolve context before applying source rules.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_INDICATION_ID",
+        "when": {
+          "field": "indication_id",
+          "operator": "not_in",
+          "value": [
+            "metastatic_tnbc"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Unrecognised indication id: resolve context before applying source rules.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised indication id: resolve context before applying source rules.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_TREATMENT_DAY",
+        "when": {
+          "field": "treatment_day",
+          "operator": "not_in",
+          "value": [
+            "day1",
+            "day8"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Unrecognised treatment day: resolve context before applying source rules.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised treatment day: resolve context before applying source rules.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_HAEMATOLOGIC_EVENT",
+        "when": {
+          "field": "haematologic_event",
+          "operator": "not_in",
+          "value": [
+            "none",
+            "day1_delay",
+            "febrile_neutropenia",
+            "platelets_lt25",
+            "bleeding_thrombocytopenia"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Unrecognised haematologic event: resolve context before applying source rules.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised haematologic event: resolve context before applying source rules.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_PRIOR_HAEMATOLOGIC_EPISODE",
+        "when": {
+          "field": "prior_haematologic_episode",
+          "operator": "not_in",
+          "value": [
+            1,
+            2,
+            "3plus"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Unrecognised prior haematologic episode: resolve context before applying source rules.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised prior haematologic episode: resolve context before applying source rules.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_NONHAEM_EPISODE",
+        "when": {
+          "field": "nonhaem_episode",
+          "operator": "not_in",
+          "value": [
+            1,
+            2,
+            "3plus"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Unrecognised nonhaem episode: resolve context before applying source rules.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised nonhaem episode: resolve context before applying source rules.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_PNEUMONITIS_GRADE",
+        "when": {
+          "field": "pneumonitis_grade",
+          "operator": "not_in",
+          "value": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Select a recognised integer pneumonitis grade.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Select a recognised integer pneumonitis grade.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_SCAR_STATUS",
+        "when": {
+          "field": "scar_status",
+          "operator": "not_in",
+          "value": [
+            "none",
+            "suspected",
+            "confirmed"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "recommendation": "Unrecognised scar status: resolve context before applying source rules.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised scar status: resolve context before applying source rules.",
+        "source": {
+          "document": "NCCP 00430 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+        }
       }
     ]
   },
@@ -819,14 +2101,30 @@
   },
   "supportive_care": {
     "emetogenic_risk": "moderate",
-    "script_id": "nccp-parenteral-moderate",
+    "script_id": "nccp-v8-moderate-v08418",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Carboplatin AUC 2; NCCP V6 classifies AUC >=4 as high and AUC <4 as moderate.",
+    "mapping_basis": "Carboplatin is AUC2 on Days 1 and 8; moderate risk on each administered treatment day.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
+    "phase_specific_plan": "patient/00430/supportive-care.html",
+    "phase_profiles": {
+      "combination": {
+        "level": "moderate",
+        "script_id": "nccp-v8-moderate-v08418"
+      }
+    },
+    "source_url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+  },
+  "assessment_profiles": [
+    {
+      "id": "default",
+      "label": "Rapid partial assessment",
+      "required_inputs": [],
+      "context": {}
+    }
+  ]
 }

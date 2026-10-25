@@ -29,7 +29,7 @@
       "her2_targeted_therapy"
     ],
     "cytotoxic": true,
-    "sactcheck_encoding_version": "0.84.0",
+    "sactcheck_encoding_version": "0.84.18",
     "source_title_exact": "PACLitaxel 80 mg/m² and Trastuzumab Therapy – 7 day (12 weeks)",
     "display_title_normalised": true,
     "display_title_normalisation_version": "0.41.1",
@@ -60,7 +60,7 @@
       "level": "source_reconciled_rule_encoding",
       "label": "Source reconciled · independent clinical/pharmacy review pending",
       "source_reconciled": true,
-      "reconciled_release": "0.84.0",
+      "reconciled_release": "0.84.18",
       "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -69,7 +69,7 @@
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00512-v5",
-    "source_checked_date": "2026-10-17",
+    "source_checked_date": "2026-10-25",
     "source_version_verified_date": "2026-10-17",
     "audit_limitations": [
       "Source hepatic / boundary ambiguities are explicit review actions.",
@@ -107,7 +107,8 @@
         "q21": "continuation"
       }
     },
-    "dose_level_context": "Paclitaxel source reduction ladder 80 / 65 / 50 mg/m². The toxicity-specific action determines whether it applies; neuropathy and hepatic instructions differ."
+    "dose_level_context": "Paclitaxel source reduction ladder 80 / 65 / 50 mg/m². The toxicity-specific action determines whether it applies; neuropathy and hepatic instructions differ.",
+    "full_suite_release": "0.84.18"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -1151,14 +1152,14 @@
           ]
         },
         "action": {
-          "type": "delay_then_dose_reduce",
+          "type": "withhold",
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Delay and treat febrile neutropenia urgently; reduce one level after recovery and consider G-CSF.",
+          "recommendation": "Withhold paclitaxel and assess febrile neutropenia urgently. Consider G-CSF after recovery. FN alone does not assign an automatic one-level reduction in this source; apply any separate count/duration criteria and review the actual dose.",
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Delay and treat febrile neutropenia urgently; reduce one level after recovery and consider G-CSF.",
+        "explanation": "Withhold paclitaxel and assess febrile neutropenia urgently. Consider G-CSF after recovery. FN alone does not assign an automatic one-level reduction in this source; apply any separate count/duration criteria and review the actual dose.",
         "source": {
           "document": "NCCP 00512 v5",
           "url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf",
@@ -1866,9 +1867,18 @@
       {
         "rule_id": "HER2_BASELINE_LOW",
         "when": {
-          "field": "baseline_lvef_percent",
-          "operator": "<",
-          "value": 50
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
         },
         "action": {
           "type": "withhold",
@@ -1889,14 +1899,23 @@
         "when": {
           "all": [
             {
-              "field": "baseline_lvef_percent",
-              "operator": ">=",
-              "value": 50
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
             },
             {
-              "field": "baseline_lvef_percent",
-              "operator": "<=",
-              "value": 55
+              "all": [
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": "<=",
+                  "value": 55
+                }
+              ]
             }
           ]
         },
@@ -2036,21 +2055,38 @@
         "when": {
           "all": [
             {
-              "field": "trastuzumab_schedule",
-              "operator": "==",
-              "value": "q21"
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "continuation"
+                }
+              ]
             },
             {
               "all": [
                 {
-                  "field": "days_overdue_trastuzumab",
-                  "operator": ">",
-                  "value": 0
+                  "field": "trastuzumab_schedule",
+                  "operator": "==",
+                  "value": "q21"
                 },
                 {
-                  "field": "days_overdue_trastuzumab",
-                  "operator": "<=",
-                  "value": 7
+                  "all": [
+                    {
+                      "field": "days_overdue_trastuzumab",
+                      "operator": ">",
+                      "value": 0
+                    },
+                    {
+                      "field": "days_overdue_trastuzumab",
+                      "operator": "<=",
+                      "value": 7
+                    }
+                  ]
                 }
               ]
             }
@@ -2077,14 +2113,31 @@
         "when": {
           "all": [
             {
-              "field": "trastuzumab_schedule",
-              "operator": "==",
-              "value": "q21"
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "continuation"
+                }
+              ]
             },
             {
-              "field": "days_overdue_trastuzumab",
-              "operator": ">",
-              "value": 7
+              "all": [
+                {
+                  "field": "trastuzumab_schedule",
+                  "operator": "==",
+                  "value": "q21"
+                },
+                {
+                  "field": "days_overdue_trastuzumab",
+                  "operator": ">",
+                  "value": 7
+                }
+              ]
             }
           ]
         },
@@ -2307,6 +2360,234 @@
           "url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf",
           "page": 3
         }
+      },
+      {
+        "rule_id": "BASELINE_STAGE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "continuation"
+                }
+              ]
+            },
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+        "source": {
+          "document": "NCCP 00512 v5",
+          "url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "HER2_SCHEDULE_MISMATCH",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "trastuzumab_schedule",
+              "operator": "==",
+              "value": "q21"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "NCCP 00512 uses weekly trastuzumab during the 12-week paclitaxel combination. A 21-day antibody schedule is permitted for continuation; confirm the actual phase or select regimen 00815 for the 21-day combination.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "NCCP 00512 uses weekly trastuzumab during the 12-week paclitaxel combination. A 21-day antibody schedule is permitted for continuation; confirm the actual phase or select regimen 00815 for the 21-day combination.",
+        "source": {
+          "document": "NCCP 00512 v5",
+          "url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "BASELINE_LVEF_STAGE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<=",
+              "value": 55
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Confirm whether the recorded LVEF is a current pre-treatment result or historical baseline. Apply initiation eligibility only at baseline; ongoing cardiac decisions need the current LVEF, change from baseline and symptoms.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm whether the recorded LVEF is a current pre-treatment result or historical baseline. Apply initiation eligibility only at baseline; ongoing cardiac decisions need the current LVEF, change from baseline and symptoms.",
+        "source": {
+          "document": "NCCP 00512 v5",
+          "url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "HISTORICAL_LVEF_CURRENT_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "ongoing"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<=",
+              "value": 55
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "A previously low or borderline baseline LVEF does not establish current cardiac function. Obtain the current result and review symptoms and change from baseline before the next trastuzumab decision; no automatic current contraindication is inferred from history alone.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "A previously low or borderline baseline LVEF does not establish current cardiac function. Obtain the current result and review symptoms and change from baseline before the next trastuzumab decision; no automatic current contraindication is inferred from history alone.",
+        "source": {
+          "document": "NCCP 00512 v5",
+          "url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BASELINE_CURRENT_LVEF_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "missing"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Current LVEF below 50% at initiation is outside the source eligibility. Withhold planned trastuzumab and obtain specialist cardiac assessment; do not require a historical LVEF fall to identify low starting function."
+        },
+        "explanation": "Current LVEF below 50% at initiation is outside the source eligibility. Withhold planned trastuzumab and obtain specialist cardiac assessment; do not require a historical LVEF fall to identify low starting function.",
+        "source": {
+          "document": "NCCP 00512 v5",
+          "url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BASELINE_CURRENT_LVEF_BORDERLINE",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "missing"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<=",
+              "value": 55
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "The current pre-treatment LVEF lies in the source range requiring clinical judgement. Confirm cardiology/oncology advice before starting; this initiation threshold is separate from the ongoing fall-plus-current-LVEF rule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "The current pre-treatment LVEF lies in the source range requiring clinical judgement. Confirm cardiology/oncology advice before starting; this initiation threshold is separate from the ongoing fall-plus-current-LVEF rule.",
+        "source": {
+          "document": "NCCP 00512 v5",
+          "url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf",
+          "page": 2
+        }
       }
     ]
   },
@@ -2334,13 +2615,14 @@
     "phase_profiles": {
       "combination": {
         "level": "low",
-        "script_id": "nccp-parenteral-low"
+        "script_id": "nccp-v8-paclitaxel-v08417"
       },
       "continuation": {
         "level": "minimal",
-        "script_id": "nccp-parenteral-minimal"
+        "script_id": "nccp-v8-trastuzumab-v08417"
       }
-    }
+    },
+    "phase_specific_plan": "patient/00512/supportive-care.html"
   },
   "dose_levels": {
     "paclitaxel": {

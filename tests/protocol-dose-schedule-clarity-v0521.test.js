@@ -47,8 +47,10 @@ assert.strictEqual(catalogue.protocols.length, 376);
 // PLD reductions depend on the toxicity/history pathway, so no generic ladder is inferred.
 // v0.84.16 adds the structured lapatinib/capecitabine schedule.
 // v0.84.17 adds EC90, EC75, FEC100, FEC50 and AT schedules.
-assert.strictEqual(usefulCoverage, 134);
-assert.strictEqual(scheduleCoverage, 132);
+// v0.84.18 adds oral CMF, IV CMF q28/q21 and gemcitabine 800 schedules;
+// gemcitabine/carboplatin already had a schedule and is corrected in place.
+assert.strictEqual(usefulCoverage, 138);
+assert.strictEqual(scheduleCoverage, 136);
 assert.strictEqual(doseLevelCoverage, 45);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));

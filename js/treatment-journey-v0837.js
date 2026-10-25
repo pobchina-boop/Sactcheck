@@ -1325,110 +1325,111 @@ const definitions={
   },
   "00815": {
     "code": "00815",
-    "release": "0.83.8",
-    "checked": "2026-10-17",
-    "status": "Draft — independent clinical, pharmacy and patient/PPI review pending",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "Weekly paclitaxel + trastuzumab → trastuzumab continuation: the whole pathway",
-    "setting": "Adjuvant · HER2-positive early breast cancer",
-    "summary": "Paclitaxel weekly for 12 doses with trastuzumab every 3 weeks; continue trastuzumab to complete one year of HER2 treatment when appropriate.",
+    "title": "Weekly paclitaxel + trastuzumab → trastuzumab continuation: treatment and checks",
+    "setting": "Adjuvant HER2-positive, node-negative breast cancer; tumour ≤3 cm",
+    "summary": "Paclitaxel weekly for 12 doses with trastuzumab every 3 weeks; continue trastuzumab to complete one year of HER2 treatment when appropriate. The team selects IV trastuzumab or locally approved subcutaneous trastuzumab; these are alternative formulations, not additional medicines.",
     "stages": [
-      "After surgery",
-      "Combination · 12 weeks",
-      "Trastuzumab continuation",
-      "Completion",
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
       "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
+        "cells": [
+          "Confirm exact regimen",
+          "Weekly paclitaxel + trastuzumab → trastuzumab continuation",
+          "Paclitaxel weekly for 12 doses with trastuzumab every 3 weeks; continue trastuzumab to complete one year of HER2 treatment when appropriate. The team selects IV trastuzumab or locally approved subcutaneous trastuzumab; these are alternative formulations, not additional medicines.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
+        ],
         "kind": "treatment",
-        "cells": [
-          "Confirm HER2 and indication",
-          "Paclitaxel weekly + trastuzumab every 3 weeks",
-          "Trastuzumab every 3 weeks",
-          "Complete one year total if appropriate",
-          "Endocrine treatment if HR-positive"
-        ],
         "source_ids": [
           "00815"
         ],
-        "note": ""
+        "note": "Paclitaxel weekly for 12 doses with trastuzumab every 3 weeks; continue trastuzumab to complete one year of HER2 treatment when appropriate. The team selects IV trastuzumab or locally approved subcutaneous trastuzumab; these are alternative formulations, not additional medicines."
       },
       {
-        "label": "Surgery",
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Adjuvant HER2-positive, node-negative breast cancer; tumour ≤3 cm",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
         "kind": "local",
-        "cells": [
-          "Surgery usually already completed",
-          "Wound / arm recovery",
-          "No routine further operation from this regimen",
-          "MDT review if needed",
-          "Report breast / chest-wall changes"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": ""
-      },
-      {
-        "label": "Radiotherapy",
-        "kind": "local",
-        "cells": [
-          "Agree indication and fields",
-          "Usually after paclitaxel",
-          "Can overlap trastuzumab if agreed",
-          "Review skin, fatigue and breathing",
-          "Late effects assessed if symptoms"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": ""
-      },
-      {
-        "label": "Blood tests",
-        "kind": "blood",
-        "cells": [
-          "FBC, kidney/liver tests",
-          "Before each weekly chemotherapy dose",
-          "According to clinical status / ongoing treatment",
-          "Review unresolved toxicity",
-          "Only as clinically indicated"
-        ],
         "source_ids": [
           "00815"
         ],
-        "note": ""
+        "note": "Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors."
       },
       {
-        "label": "Heart checks",
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "FBC, renal and liver profile",
+          "Confirm treatment-day results",
+          "Repeat on the source/local schedule",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00815"
+        ],
+        "note": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Baseline cardiac assessment",
+          "Start 12-week monitoring clock",
+          "Echo/MUGA every 12 weeks",
+          "Keep clock through phase change",
+          "Product-information / risk-based plan"
+        ],
         "kind": "heart",
-        "cells": [
-          "Baseline echo / LVEF",
-          "Every 12 weeks during HER2 treatment",
-          "Continue the same surveillance clock",
-          "Completion assessment / risk review",
-          "Follow-up by cardiac risk"
-        ],
         "source_ids": [
           "00815",
-          "esc"
+          "smpc"
+        ],
+        "note": "Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan."
+      },
+      {
+        "label": "Cancer review",
+        "cells": [
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Breast follow-up"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00815",
+          "early"
         ],
         "note": ""
       },
       {
-        "label": "Cancer imaging",
-        "kind": "imaging",
+        "label": "Other checks",
         "cells": [
-          "Review operative pathology",
-          "No routine CT series if well",
-          "Routine surveillance plan",
-          "Confirm first mammogram timing",
-          "Annual mammography; symptoms prompt assessment"
+          "Confirm HER2 and baseline eligibility",
+          "Review support medicines",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
+          "00815",
           "bone"
         ],
         "note": ""
@@ -1436,63 +1437,54 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Blood tests and treatment review",
-        "when": "FBC, kidney/liver tests → Before each weekly chemotherapy dose → According to clinical status / ongoing treatment → Review unresolved toxicity → Only as clinically indicated",
-        "why": "Results may change whether a dose is given or held.",
-        "action": "Confirm the booking and who reviews the result before treatment.",
-        "source_ids": [
-          "00815"
-        ],
-        "clinical": ""
-      },
-      {
-        "title": "Heart tests",
-        "when": "Baseline echo / LVEF → Every 12 weeks during HER2 treatment → Continue the same surveillance clock → Completion assessment / risk review → Follow-up by cardiac risk",
-        "why": "ECG measures rhythm; echo measures pumping function. They are different checks.",
-        "action": "Keep the planned appointments and report symptoms between them.",
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "Adjuvant HER2-positive, node-negative breast cancer; tumour ≤3 cm. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "clinical": "Adjuvant HER2-positive, node-negative breast cancer; tumour ≤3 cm. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "action": "Confirm source eligibility and results.",
         "source_ids": [
           "00815",
-          "esc"
-        ],
-        "clinical": ""
+          "smpc"
+        ]
       },
       {
-        "title": "Imaging and markers",
-        "when": "Review operative pathology → No routine CT series if well → Routine surveillance plan → Confirm first mammogram timing → Annual mammography; symptoms prompt assessment",
-        "why": "The purpose and frequency depend on early versus advanced disease.",
-        "action": "Ask which test is next and what decision its result will inform.",
-        "source_ids": [
-          "early",
-          "bone"
-        ],
-        "clinical": ""
-      },
-      {
-        "title": "Bone health with endocrine treatment",
-        "when": "At endocrine / ovarian-suppression planning; repeat by risk",
-        "why": "Low oestrogen can affect bone strength.",
-        "action": "Ask whether DEXA, fracture-risk assessment or bone protection is appropriate.",
-        "source_ids": [
-          "bone",
-          "nogg"
-        ],
-        "clinical": "NICE baseline DEXA criteria exclude those already receiving adjuvant bisphosphonates. Repeat intervals are individualised; reassessment in 12–24 months may be appropriate near a treatment threshold."
-      },
-      {
-        "title": "Who arranges and reviews each check?",
-        "when": "At initiation and every handover",
-        "why": "A recommended test can be missed if responsibility is unclear.",
-        "action": "Ask the team to document the booking owner, result reviewer, due window and escalation route.",
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "clinical": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "action": "Confirm active medicines and whether a dose is held.",
         "source_ids": [
           "00815"
-        ],
-        "clinical": "Local workflow design, not an additional NCCP laboratory requirement. A result is not treated as complete or normal because its due window has passed."
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "Paclitaxel weekly for 12 doses with trastuzumab every 3 weeks; continue trastuzumab to complete one year of HER2 treatment when appropriate. The team selects IV trastuzumab or locally approved subcutaneous trastuzumab; these are alternative formulations, not additional medicines.",
+        "clinical": "Paclitaxel weekly for 12 doses with trastuzumab every 3 weeks; continue trastuzumab to complete one year of HER2 treatment when appropriate. The team selects IV trastuzumab or locally approved subcutaneous trastuzumab; these are alternative formulations, not additional medicines.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00815"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "clinical": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00815",
+          "early"
+        ]
       }
     ],
     "clinical_notes": [
-      "IV and SC trastuzumab are alternative formulations: IV weight-based loading / maintenance or fixed-dose SC. Do not add both.",
-      "The source delayed-IV-dose paragraph says weekly maintenance after reload despite its q3-week schedule. Treat that wording as a source discrepancy; verify the formulation-specific prescription.",
-      "Columns show sequence, not equal durations. Appointments and completed results are not tracked by this educational map."
+      "Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors.",
+      "Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+      "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+      "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
     ],
     "sources": [
       {
@@ -1541,9 +1533,9 @@ const definitions={
         "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
       },
       {
-        "id": "trial",
-        "title": "APT · 10-year analysis (2023)",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/36858723/"
+        "id": "smpc",
+        "title": "EMA Herceptin product information · formulation and cardiac surveillance",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
       }
     ]
   },
@@ -4290,185 +4282,171 @@ const definitions={
   },
   "00316": {
     "code": "00316",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "Dose-dense AC → fortnightly paclitaxel + weekly trastuzumab: the whole pathway",
+    "title": "Dose-dense AC → fortnightly paclitaxel + weekly trastuzumab: treatment and checks",
     "setting": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer",
     "summary": "Four AC cycles every 14 days, then four fortnightly paclitaxel treatments with trastuzumab weekly on Days 1 and 8 of each 14-day block (eight weekly antibody doses). Trastuzumab then continues every 21 days to complete one year total; it is not given with AC.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
+      "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Confirm indication, organ function and access",
-          "AC ×4",
-          "Taxane with trastuzumab",
-          "HER2 continuation under the agreed plan",
-          "Review outcome and next treatment"
+          "Confirm exact regimen",
+          "Dose-dense AC → fortnightly paclitaxel + weekly trastuzumab",
+          "Four AC cycles every 14 days, then four fortnightly paclitaxel treatments with trastuzumab weekly on Days 1 and 8 of each 14-day block (eight weekly antibody doses). Trastuzumab then continues every 21 days to complete one year total; it is not given with AC.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
         ],
+        "kind": "treatment",
         "source_ids": [
           "00316"
         ],
         "note": "Four AC cycles every 14 days, then four fortnightly paclitaxel treatments with trastuzumab weekly on Days 1 and 8 of each 14-day block (eight weekly antibody doses). Trastuzumab then continues every 21 days to complete one year total; it is not given with AC."
       },
       {
-        "label": "Surgery",
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "HER2-positive neoadjuvant or adjuvant high-risk breast cancer",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
         "kind": "local",
-        "cells": [
-          "Choose preoperative or postoperative pathway",
-          "Neoadjuvant: systemic treatment before surgery",
-          "Neoadjuvant: surgery / pathology after recovery",
-          "Adjuvant: surgery already completed before systemic treatment",
-          "Follow the selected local-care pathway"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
-      },
-      {
-        "label": "Radiotherapy",
-        "kind": "local",
-        "cells": [
-          "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "May overlap HER2-only treatment when agreed",
-          "Assess late effects / local follow-up"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
-      },
-      {
-        "label": "Blood tests",
-        "kind": "blood",
-        "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
-        ],
         "source_ids": [
           "00316"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": "For neoadjuvant treatment, agree response review and surgery planning; for adjuvant treatment, surgery has usually happened. Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors. Do not give trastuzumab concurrently with the AC phase."
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Blood / kidney / liver",
         "cells": [
-          "Baseline echo / MUGA",
-          "Before HER2 starts after AC",
-          "At 12 weeks from HER2 start",
-          "Every 12 weeks / 3 months during HER2",
-          "Agree post-treatment cardiac plan"
+          "FBC, renal and liver profile",
+          "Confirm treatment-day results",
+          "Repeat on the source/local schedule",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
         ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00316"
+        ],
+        "note": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Baseline cardiac assessment",
+          "Reassess before trastuzumab",
+          "Echo/MUGA every 12 weeks",
+          "Keep clock through phase change",
+          "Product-information / risk-based plan"
+        ],
+        "kind": "heart",
         "source_ids": [
           "00316",
-          "smpc",
-          "esc"
+          "smpc"
         ],
-        "note": "Baseline before AC; reassess before starting trastuzumab. Then every 12 weeks during HER2 treatment. Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "note": "Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan."
       },
       {
-        "label": "Scans / markers",
-        "kind": "imaging",
+        "label": "Cancer review",
         "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Breast follow-up"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "metastatic"
+          "00316",
+          "early"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": ""
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Other checks",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Confirm HER2 and baseline eligibility",
+          "Review support medicines",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
+          "00316",
           "bone"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": ""
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
-        "source_ids": [
-          "00316"
-        ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
-      },
-      {
-        "title": "Heart assessment",
-        "when": "Baseline before AC; reassess before starting trastuzumab. Then every 12 weeks during HER2 treatment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer. Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "clinical": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer. Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "action": "Confirm source eligibility and results.",
         "source_ids": [
           "00316",
-          "smpc",
-          "esc"
-        ],
-        "clinical": "Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+          "smpc"
+        ]
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
-        "source_ids": [
-          "early",
-          "metastatic"
-        ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
-      },
-      {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "clinical": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "action": "Confirm active medicines and whether a dose is held.",
         "source_ids": [
           "00316"
-        ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "Four AC cycles every 14 days, then four fortnightly paclitaxel treatments with trastuzumab weekly on Days 1 and 8 of each 14-day block (eight weekly antibody doses). Trastuzumab then continues every 21 days to complete one year total; it is not given with AC.",
+        "clinical": "Four AC cycles every 14 days, then four fortnightly paclitaxel treatments with trastuzumab weekly on Days 1 and 8 of each 14-day block (eight weekly antibody doses). Trastuzumab then continues every 21 days to complete one year total; it is not given with AC.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00316"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "clinical": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00316",
+          "early"
+        ]
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "HER2 treatment does not overlap AC in these sequential regimens."
+      "For neoadjuvant treatment, agree response review and surgery planning; for adjuvant treatment, surgery has usually happened. Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors. Do not give trastuzumab concurrently with the AC phase.",
+      "Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+      "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+      "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
     ],
     "sources": [
       {
         "id": "00316",
-        "title": "NCCP 00316 v6 · official source",
+        "title": "NCCP 00316 v6 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6717/316_v6_Dose_Dense_AC-TH.pdf"
       },
       {
@@ -4525,11 +4503,6 @@ const definitions={
         "id": "smpc",
         "title": "EMA Herceptin product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
-      },
-      {
-        "id": "trial",
-        "title": "NSABP B-31 / NCCTG N9831 · AC-taxane-trastuzumab",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/16236738/"
       }
     ]
   },
@@ -4809,185 +4782,171 @@ const definitions={
   },
   "00433": {
     "code": "00433",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "Dose-dense AC → weekly paclitaxel + weekly trastuzumab: the whole pathway",
+    "title": "Dose-dense AC → weekly paclitaxel + weekly trastuzumab: treatment and checks",
     "setting": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer",
     "summary": "Four AC cycles 14 days apart with growth-factor support, then 12 weekly paclitaxel doses with weekly trastuzumab. Continue trastuzumab to complete one year total; no concurrent AC / trastuzumab.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
+      "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Confirm indication, organ function and access",
-          "AC ×4",
-          "Taxane with trastuzumab",
-          "HER2 continuation under the agreed plan",
-          "Review outcome and next treatment"
+          "Confirm exact regimen",
+          "Dose-dense AC → weekly paclitaxel + weekly trastuzumab",
+          "Four AC cycles 14 days apart with growth-factor support, then 12 weekly paclitaxel doses with weekly trastuzumab. Continue trastuzumab to complete one year total; no concurrent AC / trastuzumab.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
         ],
+        "kind": "treatment",
         "source_ids": [
           "00433"
         ],
         "note": "Four AC cycles 14 days apart with growth-factor support, then 12 weekly paclitaxel doses with weekly trastuzumab. Continue trastuzumab to complete one year total; no concurrent AC / trastuzumab."
       },
       {
-        "label": "Surgery",
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "HER2-positive neoadjuvant or adjuvant high-risk breast cancer",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
         "kind": "local",
-        "cells": [
-          "Choose preoperative or postoperative pathway",
-          "Neoadjuvant: systemic treatment before surgery",
-          "Neoadjuvant: surgery / pathology after recovery",
-          "Adjuvant: surgery already completed before systemic treatment",
-          "Follow the selected local-care pathway"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
-      },
-      {
-        "label": "Radiotherapy",
-        "kind": "local",
-        "cells": [
-          "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "May overlap HER2-only treatment when agreed",
-          "Assess late effects / local follow-up"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
-      },
-      {
-        "label": "Blood tests",
-        "kind": "blood",
-        "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
-        ],
         "source_ids": [
           "00433"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": "For neoadjuvant treatment, agree response review and surgery planning; for adjuvant treatment, surgery has usually happened. Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors. Do not give trastuzumab concurrently with the AC phase."
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Blood / kidney / liver",
         "cells": [
-          "Baseline echo / MUGA",
-          "Before HER2 starts after AC",
-          "At 12 weeks from HER2 start",
-          "Every 12 weeks / 3 months during HER2",
-          "Agree post-treatment cardiac plan"
+          "FBC, renal and liver profile",
+          "Confirm treatment-day results",
+          "Repeat on the source/local schedule",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
         ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00433"
+        ],
+        "note": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Baseline cardiac assessment",
+          "Reassess before trastuzumab",
+          "EMA: cardiac assessment every 3 months",
+          "Keep clock through phase change",
+          "Product-information / risk-based plan"
+        ],
+        "kind": "heart",
         "source_ids": [
           "00433",
-          "smpc",
-          "esc"
+          "smpc"
         ],
-        "note": "Baseline before AC and review before trastuzumab. NCCP does not state a fixed ongoing echo interval here; EMA trastuzumab information supplements this with cardiac assessment every 3 months during treatment. Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "note": "Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. NCCP specifies cardiac tests as clinically indicated; EMA trastuzumab information specifies baseline and three-monthly cardiac assessment during treatment. Keep the monitoring clock through the change to trastuzumab alone; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan."
       },
       {
-        "label": "Scans / markers",
-        "kind": "imaging",
+        "label": "Cancer review",
         "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Breast follow-up"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "metastatic"
+          "00433",
+          "early"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": ""
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Other checks",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Confirm HER2 and baseline eligibility",
+          "Review support medicines",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
+          "00433",
           "bone"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": ""
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
-        "source_ids": [
-          "00433"
-        ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
-      },
-      {
-        "title": "Heart assessment",
-        "when": "Baseline before AC and review before trastuzumab. NCCP does not state a fixed ongoing echo interval here; EMA trastuzumab information supplements this with cardiac assessment every 3 months during treatment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer. Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. NCCP specifies cardiac tests as clinically indicated; EMA trastuzumab information specifies baseline and three-monthly cardiac assessment during treatment. Keep the monitoring clock through the change to trastuzumab alone; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "clinical": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer. Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. NCCP specifies cardiac tests as clinically indicated; EMA trastuzumab information specifies baseline and three-monthly cardiac assessment during treatment. Keep the monitoring clock through the change to trastuzumab alone; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "action": "Confirm source eligibility and results.",
         "source_ids": [
           "00433",
-          "smpc",
-          "esc"
-        ],
-        "clinical": "Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+          "smpc"
+        ]
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
-        "source_ids": [
-          "early",
-          "metastatic"
-        ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
-      },
-      {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "clinical": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "action": "Confirm active medicines and whether a dose is held.",
         "source_ids": [
           "00433"
-        ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "Four AC cycles 14 days apart with growth-factor support, then 12 weekly paclitaxel doses with weekly trastuzumab. Continue trastuzumab to complete one year total; no concurrent AC / trastuzumab.",
+        "clinical": "Four AC cycles 14 days apart with growth-factor support, then 12 weekly paclitaxel doses with weekly trastuzumab. Continue trastuzumab to complete one year total; no concurrent AC / trastuzumab.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00433"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "clinical": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00433",
+          "early"
+        ]
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "HER2 treatment does not overlap AC in these sequential regimens."
+      "For neoadjuvant treatment, agree response review and surgery planning; for adjuvant treatment, surgery has usually happened. Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors. Do not give trastuzumab concurrently with the AC phase.",
+      "Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. NCCP specifies cardiac tests as clinically indicated; EMA trastuzumab information specifies baseline and three-monthly cardiac assessment during treatment. Keep the monitoring clock through the change to trastuzumab alone; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+      "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+      "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
     ],
     "sources": [
       {
         "id": "00433",
-        "title": "NCCP 00433 v6 · official source",
+        "title": "NCCP 00433 v6 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6471/433_v6_Dose_Dense_AC-TH_Weekly.pdf"
       },
       {
@@ -5044,195 +5003,176 @@ const definitions={
         "id": "smpc",
         "title": "EMA Herceptin product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
-      },
-      {
-        "id": "trial",
-        "title": "NSABP B-31 / NCCTG N9831 · AC-taxane-trastuzumab",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/16236738/"
       }
     ]
   },
   "00745": {
     "code": "00745",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "Dose-dense AC → weekly paclitaxel + 3-weekly trastuzumab: the whole pathway",
+    "title": "Dose-dense AC → weekly paclitaxel + 3-weekly trastuzumab: treatment and checks",
     "setting": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer",
     "summary": "Four AC cycles 14 days apart, followed by paclitaxel weekly for 12 doses and IV trastuzumab every 21 days. Trastuzumab then continues to complete one year total.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
+      "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Confirm indication, organ function and access",
-          "AC ×4",
-          "Taxane with trastuzumab",
-          "HER2 continuation under the agreed plan",
-          "Review outcome and next treatment"
+          "Confirm exact regimen",
+          "Dose-dense AC → weekly paclitaxel + 3-weekly trastuzumab",
+          "Four AC cycles 14 days apart, followed by paclitaxel weekly for 12 doses and IV trastuzumab every 21 days. Trastuzumab then continues to complete one year total.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
         ],
+        "kind": "treatment",
         "source_ids": [
           "00745"
         ],
         "note": "Four AC cycles 14 days apart, followed by paclitaxel weekly for 12 doses and IV trastuzumab every 21 days. Trastuzumab then continues to complete one year total."
       },
       {
-        "label": "Surgery",
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "HER2-positive neoadjuvant or adjuvant high-risk breast cancer",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
         "kind": "local",
-        "cells": [
-          "Choose preoperative or postoperative pathway",
-          "Neoadjuvant: systemic treatment before surgery",
-          "Neoadjuvant: surgery / pathology after recovery",
-          "Adjuvant: surgery already completed before systemic treatment",
-          "Follow the selected local-care pathway"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
-      },
-      {
-        "label": "Radiotherapy",
-        "kind": "local",
-        "cells": [
-          "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "May overlap HER2-only treatment when agreed",
-          "Assess late effects / local follow-up"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
-      },
-      {
-        "label": "Blood tests",
-        "kind": "blood",
-        "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
-        ],
         "source_ids": [
           "00745"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": "For neoadjuvant treatment, agree response review and surgery planning; for adjuvant treatment, surgery has usually happened. Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors. Do not give trastuzumab concurrently with the AC phase."
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Blood / kidney / liver",
         "cells": [
-          "Baseline echo / MUGA",
-          "Before HER2 starts after AC",
-          "At 12 weeks from HER2 start",
-          "Every 12 weeks / 3 months during HER2",
-          "Agree post-treatment cardiac plan"
+          "FBC, renal and liver profile",
+          "Confirm treatment-day results",
+          "Repeat on the source/local schedule",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
         ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00745"
+        ],
+        "note": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Baseline cardiac assessment",
+          "Reassess before trastuzumab",
+          "Echo/MUGA every 12 weeks",
+          "Keep clock through phase change",
+          "Product-information / risk-based plan"
+        ],
+        "kind": "heart",
         "source_ids": [
           "00745",
-          "smpc",
-          "esc"
+          "smpc"
         ],
-        "note": "Baseline before AC; reassess before starting trastuzumab. Then every 12 weeks during HER2 treatment. Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "note": "Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan."
       },
       {
-        "label": "Scans / markers",
-        "kind": "imaging",
+        "label": "Cancer review",
         "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Breast follow-up"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "metastatic"
+          "00745",
+          "early"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": ""
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Other checks",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Confirm HER2 and baseline eligibility",
+          "Review support medicines",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
+          "00745",
           "bone"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": ""
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
-        "source_ids": [
-          "00745"
-        ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
-      },
-      {
-        "title": "Heart assessment",
-        "when": "Baseline before AC; reassess before starting trastuzumab. Then every 12 weeks during HER2 treatment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer. Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "clinical": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer. Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "action": "Confirm source eligibility and results.",
         "source_ids": [
           "00745",
-          "smpc",
-          "esc"
-        ],
-        "clinical": "Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+          "smpc"
+        ]
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
-        "source_ids": [
-          "early",
-          "metastatic"
-        ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
-      },
-      {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "clinical": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "action": "Confirm active medicines and whether a dose is held.",
         "source_ids": [
           "00745"
-        ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "Four AC cycles 14 days apart, followed by paclitaxel weekly for 12 doses and IV trastuzumab every 21 days. Trastuzumab then continues to complete one year total.",
+        "clinical": "Four AC cycles 14 days apart, followed by paclitaxel weekly for 12 doses and IV trastuzumab every 21 days. Trastuzumab then continues to complete one year total.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00745"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "clinical": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00745",
+          "early"
+        ]
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "HER2 treatment does not overlap AC in these sequential regimens."
+      "For neoadjuvant treatment, agree response review and surgery planning; for adjuvant treatment, surgery has usually happened. Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors. Do not give trastuzumab concurrently with the AC phase.",
+      "Review lifetime anthracycline exposure and baseline cardiac risk before AC; reassess before starting trastuzumab. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+      "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+      "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
     ],
     "sources": [
       {
         "id": "00745",
-        "title": "NCCP 00745 v2a · official source",
+        "title": "NCCP 00745 v2a · official regimen",
         "url": "https://healthservice.hse.ie/documents/6624/745_v2a_DDAC_TH_21_day.pdf"
       },
       {
@@ -5289,11 +5229,6 @@ const definitions={
         "id": "smpc",
         "title": "EMA Herceptin product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
-      },
-      {
-        "id": "trial",
-        "title": "NSABP B-31 / NCCTG N9831 · AC-taxane-trastuzumab",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/16236738/"
       }
     ]
   },
@@ -6058,185 +5993,171 @@ const definitions={
   },
   "00512": {
     "code": "00512",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "Weekly paclitaxel + weekly trastuzumab → trastuzumab: the whole pathway",
-    "setting": "Adjuvant HER2-positive, node-negative breast cancer with tumour ≤3 cm",
+    "title": "Weekly paclitaxel + weekly trastuzumab → trastuzumab: treatment and checks",
+    "setting": "Adjuvant HER2-positive, node-negative breast cancer; tumour ≤3 cm",
     "summary": "Paclitaxel and IV trastuzumab weekly for 12 weeks, then trastuzumab alone to complete one year total. Continuation can be weekly or every 3 weeks under the source-specific plan; the treatment aim remains adjuvant.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
+      "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Confirm indication, organ function and access",
-          "Taxane ± HER2 treatment",
-          "Review tolerance and response",
-          "HER2 continuation under the agreed plan",
-          "Review outcome and next treatment"
+          "Confirm exact regimen",
+          "Weekly paclitaxel + weekly trastuzumab → trastuzumab",
+          "Paclitaxel and IV trastuzumab weekly for 12 weeks, then trastuzumab alone to complete one year total. Continuation can be weekly or every 3 weeks under the source-specific plan; the treatment aim remains adjuvant.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
         ],
+        "kind": "treatment",
         "source_ids": [
           "00512"
         ],
         "note": "Paclitaxel and IV trastuzumab weekly for 12 weeks, then trastuzumab alone to complete one year total. Continuation can be weekly or every 3 weeks under the source-specific plan; the treatment aim remains adjuvant."
       },
       {
-        "label": "Surgery",
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Adjuvant HER2-positive, node-negative breast cancer; tumour ≤3 cm",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
         "kind": "local",
-        "cells": [
-          "Early adjuvant: surgery usually already completed",
-          "No automatic surgery during these cycles",
-          "Reassess local-treatment needs",
-          "Pathology / recovery guide next steps",
-          "Local follow-up"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "Lumpectomy versus mastectomy is an individual surgical decision; this map does not choose it."
-      },
-      {
-        "label": "Radiotherapy",
-        "kind": "local",
-        "cells": [
-          "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "May overlap HER2-only treatment when agreed",
-          "Assess late effects / local follow-up"
-        ],
-        "source_ids": [
-          "early"
-        ],
-        "note": "In adjuvant care, radiotherapy usually follows chemotherapy when indicated; endocrine therapy follows its own receptor-specific plan. Radiotherapy and endocrine therapy may overlap HER2-only continuation when the MDT agrees; assess cardiac / lung exposure."
-      },
-      {
-        "label": "Blood tests",
-        "kind": "blood",
-        "cells": [
-          "Baseline FBC, renal, liver",
-          "Regular FBC, renal and liver checks during weekly chemotherapy under the local pre-dose plan, plus the explicit NCCP 12-week cardiac / LFT / creatinine review.",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
-        ],
         "source_ids": [
           "00512"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": "Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors."
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Blood / kidney / liver",
         "cells": [
-          "Baseline echo / MUGA",
-          "Symptoms can prompt earlier tests",
-          "At 12 weeks from HER2 start",
-          "Every 12 weeks / 3 months during HER2",
-          "Agree post-treatment cardiac plan"
+          "FBC, renal and liver profile",
+          "Confirm treatment-day results",
+          "Repeat on the source/local schedule",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
         ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00512"
+        ],
+        "note": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Baseline cardiac assessment",
+          "Start 12-week monitoring clock",
+          "Echo/MUGA every 12 weeks",
+          "Keep clock through phase change",
+          "Product-information / risk-based plan"
+        ],
+        "kind": "heart",
         "source_ids": [
           "00512",
-          "smpc",
-          "esc"
+          "smpc"
         ],
-        "note": "Baseline before HER2 treatment; repeat every 12 weeks during treatment. The 12-week heart / LFT / creatinine review falls around the end of 12 weekly taxane doses, before continuation week 13. Then maintain the elapsed-time cardiac schedule. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "note": "Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan."
       },
       {
-        "label": "Scans / markers",
-        "kind": "imaging",
+        "label": "Cancer review",
         "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Breast follow-up"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "metastatic"
+          "00512",
+          "early"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": ""
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Other checks",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Confirm HER2 and baseline eligibility",
+          "Review support medicines",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
+          "00512",
           "bone"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": ""
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "Regular FBC, renal and liver checks during weekly chemotherapy under the local pre-dose plan, plus the explicit NCCP 12-week cardiac / LFT / creatinine review.",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
-        "source_ids": [
-          "00512"
-        ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
-      },
-      {
-        "title": "Heart assessment",
-        "when": "Baseline before HER2 treatment; repeat every 12 weeks during treatment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "Adjuvant HER2-positive, node-negative breast cancer; tumour ≤3 cm. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "clinical": "Adjuvant HER2-positive, node-negative breast cancer; tumour ≤3 cm. Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+        "action": "Confirm source eligibility and results.",
         "source_ids": [
           "00512",
-          "smpc",
-          "esc"
-        ],
-        "clinical": "The 12-week heart / LFT / creatinine review falls around the end of 12 weekly taxane doses, before continuation week 13. Then maintain the elapsed-time cardiac schedule. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+          "smpc"
+        ]
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
-        "source_ids": [
-          "early",
-          "metastatic"
-        ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
-      },
-      {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "clinical": "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+        "action": "Confirm active medicines and whether a dose is held.",
         "source_ids": [
           "00512"
-        ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "Paclitaxel and IV trastuzumab weekly for 12 weeks, then trastuzumab alone to complete one year total. Continuation can be weekly or every 3 weeks under the source-specific plan; the treatment aim remains adjuvant.",
+        "clinical": "Paclitaxel and IV trastuzumab weekly for 12 weeks, then trastuzumab alone to complete one year total. Continuation can be weekly or every 3 weeks under the source-specific plan; the treatment aim remains adjuvant.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00512"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "clinical": "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00512",
+          "early"
+        ]
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "The whole pathway is individualised by the MDT."
+      "Follow the agreed early-breast pathway. Trastuzumab may continue after chemotherapy and can overlap radiotherapy when approved by the treating team. Endocrine therapy depends on hormone receptors.",
+      "Assess cardiac function before trastuzumab and every 12 weeks during treatment. Keep the same monitoring clock when paclitaxel ends or trastuzumab changes schedule; arrange earlier review for symptoms or falling function. EMA product information recommends cardiac checks every 6 months after treatment until 24 months; following anthracyclines in early disease, yearly up to 5 years from the last trastuzumab dose or longer if function falls. Your team individualises this plan.",
+      "Baseline blood tests and review before each chemotherapy administration according to the source and local plan. Once chemotherapy ends, testing follows trastuzumab and individual clinical needs.",
+      "After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
     ],
     "sources": [
       {
         "id": "00512",
-        "title": "NCCP 00512 v5 · official source",
+        "title": "NCCP 00512 v5 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6515/512_v5_PACLitaxel_Trastuzumab_Weekly.pdf"
       },
       {
@@ -6293,11 +6214,6 @@ const definitions={
         "id": "smpc",
         "title": "EMA Herceptin product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
-      },
-      {
-        "id": "trial",
-        "title": "APT · paclitaxel and trastuzumab",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/36858723/"
       }
     ]
   },
@@ -15484,6 +15400,1122 @@ const definitions={
         "id": "trial",
         "title": "Regimen selection and source references",
         "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+      }
+    ]
+  },
+  "00377": {
+    "code": "00377",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "CMF · oral cyclophosphamide: treatment and checks",
+    "setting": "Adjuvant when anthracyclines are unsuitable, or metastatic breast cancer",
+    "summary": "Cyclophosphamide tablets on Days 1–14, with IV methotrexate and fluorouracil on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated.",
+    "stages": [
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm exact regimen",
+          "CMF · oral cyclophosphamide",
+          "Cyclophosphamide tablets on Days 1–14, with IV methotrexate and fluorouracil on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00377"
+        ],
+        "note": "Cyclophosphamide tablets on Days 1–14, with IV methotrexate and fluorouracil on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated."
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Confirm adjuvant or metastatic setting",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "00377"
+        ],
+        "note": "For adjuvant CMF, surgery has usually already happened; agree any later radiotherapy and endocrine treatment separately. In metastatic disease, surgery or radiotherapy is considered for selected clinical needs, not automatically after a fixed number of cycles."
+      },
+      {
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "FBC, renal and liver profile",
+          "Confirm treatment-day results",
+          "FBC, renal and liver tests before each cycle; confirm Day 8 review",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00377"
+        ],
+        "note": "NCCP specifies FBC, kidney and liver tests before each cycle. The unit must also confirm the Day 8 assessment and oral-dose instructions."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Review symptoms and prior treatment",
+          "Investigate clinical concerns",
+          "No routine HER2-style echo schedule",
+          "Review new chest/breathing symptoms",
+          "Clinical indication"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00377"
+        ],
+        "note": "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment."
+      },
+      {
+        "label": "Cancer review",
+        "cells": [
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Setting-specific review"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00377",
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Other checks",
+        "cells": [
+          "DPD before 5-FU",
+          "Review oral-dose instructions",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00377",
+          "bone"
+        ],
+        "note": ""
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "Adjuvant when anthracyclines are unsuitable, or metastatic breast cancer. Confirm DPD testing before the first fluorouracil dose. Kidney impairment can affect interpretation of uracil-based testing; ask the oncology team to review the result and testing method.",
+        "clinical": "Adjuvant when anthracyclines are unsuitable, or metastatic breast cancer. Confirm DPD testing before the first fluorouracil dose. Kidney impairment can affect interpretation of uracil-based testing; ask the oncology team to review the result and testing method.",
+        "action": "Confirm source eligibility and results.",
+        "source_ids": [
+          "00377"
+        ]
+      },
+      {
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "NCCP specifies FBC, kidney and liver tests before each cycle. The unit must also confirm the Day 8 assessment and oral-dose instructions.",
+        "clinical": "NCCP specifies FBC, kidney and liver tests before each cycle. The unit must also confirm the Day 8 assessment and oral-dose instructions.",
+        "action": "Confirm active medicines and whether a dose is held.",
+        "source_ids": [
+          "00377"
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "Cyclophosphamide tablets on Days 1–14, with IV methotrexate and fluorouracil on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated.",
+        "clinical": "Cyclophosphamide tablets on Days 1–14, with IV methotrexate and fluorouracil on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00377"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "The treatment setting changes the scan plan. After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns. For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "clinical": "The treatment setting changes the scan plan. After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns. For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00377",
+          "early",
+          "metastatic",
+          "markers"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "For adjuvant CMF, surgery has usually already happened; agree any later radiotherapy and endocrine treatment separately. In metastatic disease, surgery or radiotherapy is considered for selected clinical needs, not automatically after a fixed number of cycles.",
+      "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment.",
+      "NCCP specifies FBC, kidney and liver tests before each cycle. The unit must also confirm the Day 8 assessment and oral-dose instructions.",
+      "The treatment setting changes the scan plan. After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns. For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
+    ],
+    "sources": [
+      {
+        "id": "00377",
+        "title": "NCCP 00377 v6 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6337/377_v6_CMF_oral.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "oral-antiemetic",
+        "title": "NCCP antiemetic classification v6 · oral therapy Table 5, p8",
+        "url": "https://assets.hse.ie/media/documents/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ]
+  },
+  "00378": {
+    "code": "00378",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "CMF · IV · 28-day schedule: treatment and checks",
+    "setting": "Adjuvant when anthracyclines are unsuitable, or metastatic breast cancer",
+    "summary": "All three medicines are given intravenously on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated.",
+    "stages": [
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm exact regimen",
+          "CMF · IV · 28-day schedule",
+          "All three medicines are given intravenously on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00378"
+        ],
+        "note": "All three medicines are given intravenously on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated."
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Confirm adjuvant or metastatic setting",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "00378"
+        ],
+        "note": "For adjuvant CMF, surgery has usually already happened; agree any later radiotherapy and endocrine treatment separately. In metastatic disease, surgery or radiotherapy is considered for selected clinical needs, not automatically after a fixed number of cycles."
+      },
+      {
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "FBC, renal and liver profile",
+          "Confirm treatment-day results",
+          "FBC, renal and liver tests before each cycle; confirm Day 8 review",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00378"
+        ],
+        "note": "NCCP specifies FBC, kidney and liver tests before each cycle. The unit must also confirm the Day 8 assessment and oral-dose instructions."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Review symptoms and prior treatment",
+          "Investigate clinical concerns",
+          "No routine HER2-style echo schedule",
+          "Review new chest/breathing symptoms",
+          "Clinical indication"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00378"
+        ],
+        "note": "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment."
+      },
+      {
+        "label": "Cancer review",
+        "cells": [
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Setting-specific review"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00378",
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Other checks",
+        "cells": [
+          "DPD before 5-FU",
+          "Review support medicines",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00378",
+          "bone"
+        ],
+        "note": ""
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "Adjuvant when anthracyclines are unsuitable, or metastatic breast cancer. Confirm DPD testing before the first fluorouracil dose. Kidney impairment can affect interpretation of uracil-based testing; ask the oncology team to review the result and testing method.",
+        "clinical": "Adjuvant when anthracyclines are unsuitable, or metastatic breast cancer. Confirm DPD testing before the first fluorouracil dose. Kidney impairment can affect interpretation of uracil-based testing; ask the oncology team to review the result and testing method.",
+        "action": "Confirm source eligibility and results.",
+        "source_ids": [
+          "00378"
+        ]
+      },
+      {
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "NCCP specifies FBC, kidney and liver tests before each cycle. The unit must also confirm the Day 8 assessment and oral-dose instructions.",
+        "clinical": "NCCP specifies FBC, kidney and liver tests before each cycle. The unit must also confirm the Day 8 assessment and oral-dose instructions.",
+        "action": "Confirm active medicines and whether a dose is held.",
+        "source_ids": [
+          "00378"
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "All three medicines are given intravenously on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated.",
+        "clinical": "All three medicines are given intravenously on Days 1 and 8 of each 28-day cycle. Six cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00378"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "The treatment setting changes the scan plan. After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns. For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "clinical": "The treatment setting changes the scan plan. After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns. For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00378",
+          "early",
+          "metastatic",
+          "markers"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "For adjuvant CMF, surgery has usually already happened; agree any later radiotherapy and endocrine treatment separately. In metastatic disease, surgery or radiotherapy is considered for selected clinical needs, not automatically after a fixed number of cycles.",
+      "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment.",
+      "NCCP specifies FBC, kidney and liver tests before each cycle. The unit must also confirm the Day 8 assessment and oral-dose instructions.",
+      "The treatment setting changes the scan plan. After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns. For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
+    ],
+    "sources": [
+      {
+        "id": "00378",
+        "title": "NCCP 00378 v6 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6344/378_v6_cycloPHOSphamideIV_Methotrexate_5-FU_CMF.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      }
+    ]
+  },
+  "00381": {
+    "code": "00381",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "CMF · IV · 21-day schedule: treatment and checks",
+    "setting": "Adjuvant when anthracyclines are unsuitable, or metastatic breast cancer",
+    "summary": "All three medicines are given intravenously on Day 1 of each 21-day cycle. Eight cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated. There is no scheduled Day 8 chemotherapy dose.",
+    "stages": [
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm exact regimen",
+          "CMF · IV · 21-day schedule",
+          "All three medicines are given intravenously on Day 1 of each 21-day cycle. Eight cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated. There is no scheduled Day 8 chemotherapy dose.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00381"
+        ],
+        "note": "All three medicines are given intravenously on Day 1 of each 21-day cycle. Eight cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated. There is no scheduled Day 8 chemotherapy dose."
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Confirm adjuvant or metastatic setting",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "00381"
+        ],
+        "note": "For adjuvant CMF, surgery has usually already happened; agree any later radiotherapy and endocrine treatment separately. In metastatic disease, surgery or radiotherapy is considered for selected clinical needs, not automatically after a fixed number of cycles."
+      },
+      {
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "FBC, renal and liver profile",
+          "Confirm treatment-day results",
+          "FBC, renal and liver tests before each cycle",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00381"
+        ],
+        "note": "NCCP specifies FBC, kidney and liver tests before each cycle."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Review symptoms and prior treatment",
+          "Investigate clinical concerns",
+          "No routine HER2-style echo schedule",
+          "Review new chest/breathing symptoms",
+          "Clinical indication"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00381"
+        ],
+        "note": "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment."
+      },
+      {
+        "label": "Cancer review",
+        "cells": [
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Setting-specific review"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00381",
+          "early",
+          "metastatic",
+          "markers"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Other checks",
+        "cells": [
+          "DPD before 5-FU",
+          "Review support medicines",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00381",
+          "bone"
+        ],
+        "note": ""
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "Adjuvant when anthracyclines are unsuitable, or metastatic breast cancer. Confirm DPD testing before the first fluorouracil dose. Kidney impairment can affect interpretation of uracil-based testing; ask the oncology team to review the result and testing method.",
+        "clinical": "Adjuvant when anthracyclines are unsuitable, or metastatic breast cancer. Confirm DPD testing before the first fluorouracil dose. Kidney impairment can affect interpretation of uracil-based testing; ask the oncology team to review the result and testing method.",
+        "action": "Confirm source eligibility and results.",
+        "source_ids": [
+          "00381"
+        ]
+      },
+      {
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "NCCP specifies FBC, kidney and liver tests before each cycle.",
+        "clinical": "NCCP specifies FBC, kidney and liver tests before each cycle.",
+        "action": "Confirm active medicines and whether a dose is held.",
+        "source_ids": [
+          "00381"
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "All three medicines are given intravenously on Day 1 of each 21-day cycle. Eight cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated. There is no scheduled Day 8 chemotherapy dose.",
+        "clinical": "All three medicines are given intravenously on Day 1 of each 21-day cycle. Eight cycles for adjuvant treatment; metastatic treatment continues while beneficial and tolerated. There is no scheduled Day 8 chemotherapy dose.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00381"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "The treatment setting changes the scan plan. After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns. For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "clinical": "The treatment setting changes the scan plan. After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns. For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00381",
+          "early",
+          "metastatic",
+          "markers"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "For adjuvant CMF, surgery has usually already happened; agree any later radiotherapy and endocrine treatment separately. In metastatic disease, surgery or radiotherapy is considered for selected clinical needs, not automatically after a fixed number of cycles.",
+      "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment.",
+      "NCCP specifies FBC, kidney and liver tests before each cycle.",
+      "The treatment setting changes the scan plan. After early-breast treatment, breast imaging and clinical review follow the agreed plan. Routine CT/PET scans or blood tumour markers are not used to look for distant recurrence in a person without symptoms or clinical concerns. For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
+    ],
+    "sources": [
+      {
+        "id": "00381",
+        "title": "NCCP 00381 v6 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6346/381_v6_CMF_IV_21_Day.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      }
+    ]
+  },
+  "00430": {
+    "code": "00430",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Gemcitabine + carboplatin AUC2: treatment and checks",
+    "setting": "Locally recurrent or metastatic triple-negative breast cancer",
+    "summary": "Carboplatin AUC2 is given first, followed by gemcitabine 1,000 mg/m², on BOTH Days 1 and 8 of each 21-day cycle. Treatment continues until progression or unacceptable toxicity.",
+    "stages": [
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm exact regimen",
+          "Gemcitabine + carboplatin AUC2",
+          "Carboplatin AUC2 is given first, followed by gemcitabine 1,000 mg/m², on BOTH Days 1 and 8 of each 21-day cycle. Treatment continues until progression or unacceptable toxicity.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00430"
+        ],
+        "note": "Carboplatin AUC2 is given first, followed by gemcitabine 1,000 mg/m², on BOTH Days 1 and 8 of each 21-day cycle. Treatment continues until progression or unacceptable toxicity."
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Locally recurrent or metastatic triple-negative breast cancer",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "00430"
+        ],
+        "note": "For advanced cancer, review response and toxicity to decide whether to continue, change or stop. Supportive and palliative care can accompany anticancer treatment."
+      },
+      {
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "FBC, renal and liver profile",
+          "Day 1: FBC, renal and liver tests",
+          "Day 8: FBC; review both doses",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00430"
+        ],
+        "note": "Baseline and Day 1: full blood count, kidney and liver tests. Day 8: full blood count. Review kidney-function dosing and whether either medicine is held before each administration."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Review symptoms and prior treatment",
+          "Investigate clinical concerns",
+          "No routine HER2-style echo schedule",
+          "Review new chest/breathing symptoms",
+          "Clinical indication"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00430"
+        ],
+        "note": "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment."
+      },
+      {
+        "label": "Cancer review",
+        "cells": [
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Setting-specific review"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00430",
+          "metastatic",
+          "markers"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Other checks",
+        "cells": [
+          "Review previous treatment",
+          "Review support medicines",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00430",
+          "bone"
+        ],
+        "note": ""
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "Locally recurrent or metastatic triple-negative breast cancer. There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment.",
+        "clinical": "Locally recurrent or metastatic triple-negative breast cancer. There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment.",
+        "action": "Confirm source eligibility and results.",
+        "source_ids": [
+          "00430"
+        ]
+      },
+      {
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "Baseline and Day 1: full blood count, kidney and liver tests. Day 8: full blood count. Review kidney-function dosing and whether either medicine is held before each administration.",
+        "clinical": "Baseline and Day 1: full blood count, kidney and liver tests. Day 8: full blood count. Review kidney-function dosing and whether either medicine is held before each administration.",
+        "action": "Confirm active medicines and whether a dose is held.",
+        "source_ids": [
+          "00430"
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "Carboplatin AUC2 is given first, followed by gemcitabine 1,000 mg/m², on BOTH Days 1 and 8 of each 21-day cycle. Treatment continues until progression or unacceptable toxicity.",
+        "clinical": "Carboplatin AUC2 is given first, followed by gemcitabine 1,000 mg/m², on BOTH Days 1 and 8 of each 21-day cycle. Treatment continues until progression or unacceptable toxicity.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00430"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "clinical": "For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00430",
+          "metastatic",
+          "markers"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "For advanced cancer, review response and toxicity to decide whether to continue, change or stop. Supportive and palliative care can accompany anticancer treatment.",
+      "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment.",
+      "Baseline and Day 1: full blood count, kidney and liver tests. Day 8: full blood count. Review kidney-function dosing and whether either medicine is held before each administration.",
+      "For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
+    ],
+    "sources": [
+      {
+        "id": "00430",
+        "title": "NCCP 00430 v6 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6832/430_GemcarboAUC2.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      }
+    ]
+  },
+  "00749": {
+    "code": "00749",
+    "release": "0.84.18",
+    "checked": "2026-10-25",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Gemcitabine 800 mg/m² · 28-day schedule: treatment and checks",
+    "setting": "Advanced breast cancer after two or more treatment lines",
+    "summary": "Gemcitabine 800 mg/m² is given on Days 1, 8 and 15 of each 28-day cycle, for six to eight cycles unless progression or unacceptable toxicity changes the plan.",
+    "stages": [
+      "Before starting",
+      "First treatment block",
+      "During treatment",
+      "Change / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Confirm exact regimen",
+          "Gemcitabine 800 mg/m² · 28-day schedule",
+          "Gemcitabine 800 mg/m² is given on Days 1, 8 and 15 of each 28-day cycle, for six to eight cycles unless progression or unacceptable toxicity changes the plan.",
+          "Review active medicines and purpose",
+          "Next treatment / follow-up plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00749"
+        ],
+        "note": "Gemcitabine 800 mg/m² is given on Days 1, 8 and 15 of each 28-day cycle, for six to eight cycles unless progression or unacceptable toxicity changes the plan."
+      },
+      {
+        "label": "Surgery / radiotherapy",
+        "cells": [
+          "Advanced breast cancer after two or more treatment lines",
+          "Follow the MDT sequence",
+          "Radiotherapy timing needs agreement",
+          "Selected local treatment as indicated",
+          "Review recovery and ongoing effects"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "00749"
+        ],
+        "note": "For advanced cancer, review response and toxicity to decide whether to continue, change or stop. Supportive and palliative care can accompany anticancer treatment."
+      },
+      {
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "FBC, renal and liver profile",
+          "FBC before Days 1, 8 and 15",
+          "Renal and liver tests before each cycle",
+          "Review unresolved abnormalities",
+          "Individual clinical plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00749"
+        ],
+        "note": "Full blood count before every planned treatment on Days 1, 8 and 15; kidney and liver tests before each cycle. Initial eligibility, new-cycle and later-day thresholds are different."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Review symptoms and prior treatment",
+          "Investigate clinical concerns",
+          "No routine HER2-style echo schedule",
+          "Review new chest/breathing symptoms",
+          "Clinical indication"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00749"
+        ],
+        "note": "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment."
+      },
+      {
+        "label": "Cancer review",
+        "cells": [
+          "Confirm stage and setting",
+          "Agree review checkpoints",
+          "Review symptoms and response",
+          "Discuss continuation / next treatment",
+          "Setting-specific review"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00749",
+          "metastatic",
+          "markers"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Other checks",
+        "cells": [
+          "Review previous treatment",
+          "Review support medicines",
+          "Review toxicity before each dose",
+          "Endocrine / bone plan where relevant",
+          "Follow unresolved symptoms"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00749",
+          "bone"
+        ],
+        "note": ""
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Baseline review",
+        "when": "Before treatment",
+        "why": "Advanced breast cancer after two or more treatment lines. There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment.",
+        "clinical": "Advanced breast cancer after two or more treatment lines. There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment.",
+        "action": "Confirm source eligibility and results.",
+        "source_ids": [
+          "00749"
+        ]
+      },
+      {
+        "title": "Treatment-day check",
+        "when": "Before each planned dose",
+        "why": "Full blood count before every planned treatment on Days 1, 8 and 15; kidney and liver tests before each cycle. Initial eligibility, new-cycle and later-day thresholds are different.",
+        "clinical": "Full blood count before every planned treatment on Days 1, 8 and 15; kidney and liver tests before each cycle. Initial eligibility, new-cycle and later-day thresholds are different.",
+        "action": "Confirm active medicines and whether a dose is held.",
+        "source_ids": [
+          "00749"
+        ]
+      },
+      {
+        "title": "Support plan",
+        "when": "At every phase or day change",
+        "why": "Gemcitabine 800 mg/m² is given on Days 1, 8 and 15 of each 28-day cycle, for six to eight cycles unless progression or unacceptable toxicity changes the plan.",
+        "clinical": "Gemcitabine 800 mg/m² is given on Days 1, 8 and 15 of each 28-day cycle, for six to eight cycles unless progression or unacceptable toxicity changes the plan.",
+        "action": "Choose the matching support script; do not merge phases.",
+        "source_ids": [
+          "00749"
+        ]
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Agreed review points",
+        "why": "For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "clinical": "For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+        "action": "Review symptoms, results and patient priorities together.",
+        "source_ids": [
+          "00749",
+          "metastatic",
+          "markers"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "For advanced cancer, review response and toxicity to decide whether to continue, change or stop. Supportive and palliative care can accompany anticancer treatment.",
+      "There is no routine three-month echo schedule for CMF or gemcitabine alone. Review prior treatment and cardiac risk; new chest pain or breathing symptoms need urgent assessment.",
+      "Full blood count before every planned treatment on Days 1, 8 and 15; kidney and liver tests before each cycle. Initial eligibility, new-cycle and later-day thresholds are different.",
+      "For metastatic disease, record the disease sites and agree the scan type and review interval before treatment. Review response, symptoms and toxicity together; worsening symptoms may need earlier assessment.",
+      "Bone-density testing follows endocrine treatment, ovarian suppression, menopause and other bone-risk factors. DEXA is not automatically required before every chemotherapy course."
+    ],
+    "sources": [
+      {
+        "id": "00749",
+        "title": "NCCP 00749 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6672/749_v3_Gemcitabine_800_Monotherapy.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       }
     ]
   }

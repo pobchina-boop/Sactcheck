@@ -11,9 +11,9 @@
     "short_title": "Weekly paclitaxel + q3w trastuzumab",
     "indication": "Adjuvant treatment of HER2-positive node-negative breast cancer ≤3 cm.",
     "icd10": "C50",
-    "source_document_pages": 7,
+    "source_document_pages": 8,
     "source_url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
-    "sactcheck_encoding_version": "0.83.8",
+    "sactcheck_encoding_version": "0.84.18",
     "treatment_setting": [
       "adjuvant"
     ],
@@ -25,7 +25,7 @@
     },
     "validation": {
       "source_document_checked": true,
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
@@ -58,18 +58,31 @@
       "clinical_use_authorised": false,
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
-    "source_checked_date": "2026-10-17",
+    "source_checked_date": "2026-10-25",
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
       "label": "Source reconciled · independent clinical/pharmacy review pending",
       "source_reconciled": true,
-      "reconciled_release": "0.83.8",
+      "reconciled_release": "0.84.18",
       "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
-    "canonical_protocol_id": "nccp-00815-v3"
+    "canonical_protocol_id": "nccp-00815-v3",
+    "dose_schedule_variant_input": "trastuzumab_route",
+    "dose_schedule_variants": {
+      "combination": {
+        "iv": "combination",
+        "sc": "combination_sc"
+      },
+      "trastuzumab_maintenance": {
+        "iv": "trastuzumab_maintenance",
+        "sc": "trastuzumab_maintenance_sc"
+      }
+    },
+    "schedule_summary": "Paclitaxel weekly for 12 doses with trastuzumab every 3 weeks; continue trastuzumab to complete one year of HER2 treatment when appropriate. The team selects IV trastuzumab or locally approved subcutaneous trastuzumab; these are alternative formulations, not additional medicines.",
+    "full_suite_release": "0.84.18"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -401,7 +414,7 @@
       "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
     },
     "trastuzumab_route": {
-      "label": "Trastuzumab formulation",
+      "label": "Trastuzumab formulation (select to interpret dose and late-dose advice)",
       "type": "select",
       "demo_value": "iv",
       "required": false,
@@ -417,6 +430,73 @@
           "label": "Subcutaneous"
         }
       ]
+    },
+    "her2_positive": {
+      "label": "Validated HER2-positive cancer",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "indication_eligible": {
+      "label": "Adjuvant, node-negative breast cancer with tumour size at most 3 cm",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "significant_cardiac_disease": {
+      "label": "Clinically significant cardiac disease",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cardiac_monitoring_overdue": {
+      "label": "Required cardiac assessment unavailable or overdue",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_infusion_reaction": {
+      "label": "Current suspected infusion or administration reaction",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "sc_trastuzumab_locally_approved": {
+      "label": "SC trastuzumab substitution approved locally",
+      "type": "boolean",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "days_since_last_sc_trastuzumab": {
+      "label": "Days since last SC trastuzumab dose",
+      "type": "number",
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "demo_value": 21
     }
   },
   "required_inputs": [],
@@ -487,7 +567,7 @@
         "when": {
           "field": "ecog",
           "operator": ">",
-          "value": 1
+          "value": 2
         },
         "action": {
           "type": "consultant_review",
@@ -495,11 +575,11 @@
             "paclitaxel",
             "trastuzumab"
           ],
-          "recommendation": "Outside the published performance-status population; consultant assessment required.",
+          "recommendation": "ECOG above 2 is outside NCCP 00815 eligibility; consultant review of fitness and regimen choice is required.",
           "dose_calculation": "specialist_review",
           "show_in_dose_actions": true
         },
-        "explanation": "Outside the published performance-status population; consultant assessment required.",
+        "explanation": "ECOG above 2 is outside NCCP 00815 eligibility; consultant review of fitness and regimen choice is required.",
         "source": {
           "document": "NCCP 00815 v3",
           "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
@@ -845,17 +925,16 @@
           ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Source hepatic band corresponds to 60 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
-          "dose": {
-            "value": 60,
-            "unit": "mg/m2"
-          }
+          "recommendation": "This hepatic band specifies 75% of the ORIGINAL prescribed paclitaxel dose (60 mg/m² only for an 80 mg/m² starting dose). Review the documented original/current doses and prior reductions; do not automatically re-escalate.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
-        "explanation": "Source hepatic band corresponds to 60 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+        "explanation": "This hepatic band specifies 75% of the ORIGINAL prescribed paclitaxel dose (60 mg/m² only for an 80 mg/m² starting dose). Review the documented original/current doses and prior reductions; do not automatically re-escalate.",
         "source": {
           "document": "NCCP 00815 v3",
           "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
@@ -897,17 +976,16 @@
           ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Source hepatic band corresponds to 40 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
-          "dose": {
-            "value": 40,
-            "unit": "mg/m2"
-          }
+          "recommendation": "This hepatic band specifies 50% of the ORIGINAL prescribed paclitaxel dose (40 mg/m² only for an 80 mg/m² starting dose). Review the documented original/current doses and prior reductions; do not automatically re-escalate.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
-        "explanation": "Source hepatic band corresponds to 40 mg/m² paclitaxel (from an 80 mg/m² original dose). Reconcile prior reductions.",
+        "explanation": "This hepatic band specifies 50% of the ORIGINAL prescribed paclitaxel dose (40 mg/m² only for an 80 mg/m² starting dose). Review the documented original/current doses and prior reductions; do not automatically re-escalate.",
         "source": {
           "document": "NCCP 00815 v3",
           "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
@@ -1061,6 +1139,26 @@
                 {
                   "field": "alt_uln_multiple",
                   "operator": "exists"
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "exists"
+                },
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": "exists"
+                },
+                {
+                  "field": "severe_hepatic_impairment",
+                  "operator": "exists"
+                },
+                {
+                  "field": "anc_below_0_5_ge7_days",
+                  "operator": "exists"
+                },
+                {
+                  "field": "febrile_neutropenia",
+                  "operator": "exists"
                 }
               ]
             }
@@ -1123,9 +1221,18 @@
       {
         "rule_id": "BASELINE_LVEF_LT50",
         "when": {
-          "field": "baseline_lvef_percent",
-          "operator": "<",
-          "value": 50
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
         },
         "action": {
           "type": "contraindicated",
@@ -1146,14 +1253,23 @@
         "when": {
           "all": [
             {
-              "field": "baseline_lvef_percent",
-              "operator": ">=",
-              "value": 50
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
             },
             {
-              "field": "baseline_lvef_percent",
-              "operator": "<",
-              "value": 55
+              "all": [
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": "<",
+                  "value": 55
+                }
+              ]
             }
           ]
         },
@@ -1279,42 +1395,804 @@
         }
       },
       {
-        "rule_id": "MISSED_TRASTUZUMAB",
+        "rule_id": "BASELINE_STAGE_CONTEXT",
         "when": {
-          "field": "days_overdue_trastuzumab",
-          "operator": ">",
-          "value": 0
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "trastuzumab_maintenance"
+                }
+              ]
+            },
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm whether this is baseline initiation or an ongoing dose. ANC below 1.5 excludes starting this source regimen; ongoing count tables are different. Do not infer the assessment stage.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "BASELINE_ANC",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "trastuzumab_maintenance"
+                }
+              ]
+            },
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Baseline ANC below 1.5 is an exclusion in NCCP 00815. Do not start paclitaxel; this is separate from ongoing treatment count thresholds."
+        },
+        "explanation": "Baseline ANC below 1.5 is an exclusion in NCCP 00815. Do not start paclitaxel; this is separate from ongoing treatment count thresholds.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "HER2_STATUS",
+        "when": {
+          "field": "her2_positive",
+          "operator": "==",
+          "value": false
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "trastuzumab"
           ],
-          "recommendation": "Verify IV versus SC formulation and time overdue. IV >7 days overdue may need reloading; the source mistakenly says weekly after reloading despite its 21-day regimen. Reconcile with current SmPC. SC doses must remain at least 3 weeks apart.",
+          "recommendation": "Validated HER2 overexpression or amplification is required. Reconcile the pathology and regimen selection before treatment.",
           "dose_calculation": "specialist_review",
-          "show_in_dose_actions": true
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
-        "explanation": "Verify IV versus SC formulation and time overdue. IV >7 days overdue may need reloading; the source mistakenly says weekly after reloading despite its 21-day regimen. Reconcile with current SmPC. SC doses must remain at least 3 weeks apart.",
+        "explanation": "Validated HER2 overexpression or amplification is required. Reconcile the pathology and regimen selection before treatment.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "INDICATION_REVIEW",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "trastuzumab"
+          ],
+          "recommendation": "This source is for adjuvant, HER2-positive, node-negative breast cancer with tumour size at most 3 cm. Confirm indication or choose the appropriate regimen.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "This source is for adjuvant, HER2-positive, node-negative breast cancer with tumour size at most 3 cm. Confirm indication or choose the appropriate regimen.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "SEVERE_HEPATIC_EXCLUSION",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "trastuzumab_maintenance"
+                }
+              ]
+            },
+            {
+              "field": "severe_hepatic_impairment",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Severe hepatic impairment is a source chemotherapy exclusion. Do not administer paclitaxel; consider trastuzumab-only treatment separately with the specialist."
+        },
+        "explanation": "Severe hepatic impairment is a source chemotherapy exclusion. Do not administer paclitaxel; consider trastuzumab-only treatment separately with the specialist.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "CARDIAC_EXCLUSION",
+        "when": {
+          "field": "significant_cardiac_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Clinically significant cardiac disease is a source exclusion. Withhold planned trastuzumab pending consultant/cardiology assessment; normal isolated bloods do not remove this exclusion."
+        },
+        "explanation": "Clinically significant cardiac disease is a source exclusion. Withhold planned trastuzumab pending consultant/cardiology assessment; normal isolated bloods do not remove this exclusion.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "CARDIAC_MONITORING_REQUIRED",
+        "when": {
+          "field": "cardiac_monitoring_overdue",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Obtain and review the required baseline or follow-up cardiac assessment before the next trastuzumab decision. NCCP requests cardiac function every 12 weeks, sooner if impairment is suspected.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Obtain and review the required baseline or follow-up cardiac assessment before the next trastuzumab decision. NCCP requests cardiac function every 12 weeks, sooner if impairment is suspected.",
         "source": {
           "document": "NCCP 00815 v3",
           "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
           "page": 4
+        }
+      },
+      {
+        "rule_id": "CURRENT_REACTION",
+        "when": {
+          "field": "current_infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel",
+            "trastuzumab"
+          ],
+          "recommendation": "Stop the current administration and assess a suspected infusion or administration reaction immediately under local emergency policy; identify the responsible medicine before any restart."
+        },
+        "explanation": "Stop the current administration and assess a suspected infusion or administration reaction immediately under local emergency policy; identify the responsible medicine before any restart.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "CURRENT_FN",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "!=",
+                  "value": "trastuzumab_maintenance"
+                }
+              ]
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Withhold paclitaxel and assess suspected febrile neutropenia urgently. Consider G-CSF after recovery. FN alone does not assign an automatic one-level reduction; use the source count/duration criteria and consultant plan."
+        },
+        "explanation": "Withhold paclitaxel and assess suspected febrile neutropenia urgently. Consider G-CSF after recovery. FN alone does not assign an automatic one-level reduction; use the source count/duration criteria and consultant plan.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "FN_CONTINUATION",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "trastuzumab_maintenance"
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Suspected febrile neutropenia requires urgent assessment even after paclitaxel stops. Review the acute illness before planned treatment; no paclitaxel dose or automatic antibody reduction is generated during continuation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Suspected febrile neutropenia requires urgent assessment even after paclitaxel stops. Review the acute illness before planned treatment; no paclitaxel dose or automatic antibody reduction is generated during continuation.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "SEVERE_HEPATIC_PHASE_UNKNOWN",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "This value crosses the paclitaxel hepatic contraindication threshold if chemotherapy is still prescribed. Establish the active phase; do not assume trastuzumab-only continuation."
+        },
+        "explanation": "This value crosses the paclitaxel hepatic contraindication threshold if chemotherapy is still prescribed. Establish the active phase; do not assume trastuzumab-only continuation.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "LVEF_CHANGE_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_drop_points_from_baseline",
+              "operator": ">=",
+              "value": 10
+            },
+            {
+              "field": "current_lvef_percent",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Obtain current LVEF to apply the source combined criterion: a fall of at least 10 percentage points AND LVEF below 50%. A missing current result is not normal.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Obtain current LVEF to apply the source combined criterion: a fall of at least 10 percentage points AND LVEF below 50%. A missing current result is not normal.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "LVEF_LOW_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "current_lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "lvef_drop_points_from_baseline",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Current LVEF below 50% warrants consultant/cardiology review even though the supplied fall is less than 10 points. This does not meet the complete printed automatic hold criterion and is not treatment clearance.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Current LVEF below 50% warrants consultant/cardiology review even though the supplied fall is less than 10 points. This does not meet the complete printed automatic hold criterion and is not treatment clearance.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "MISSED_TRASTUZUMAB",
+        "when": {
+          "all": [
+            {
+              "field": "days_overdue_trastuzumab",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "trastuzumab_route",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Select IV versus SC formulation and verify time overdue before using late-dose advice. IV loading and SC 600 mg scheduling are different.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Select IV versus SC formulation and verify time overdue before using late-dose advice. IV loading and SC 600 mg scheduling are different.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "H_LATE_IV_SHORT",
+        "when": {
+          "all": [
+            {
+              "field": "trastuzumab_route",
+              "operator": "==",
+              "value": "iv"
+            },
+            {
+              "field": "days_overdue_trastuzumab",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "days_overdue_trastuzumab",
+              "operator": "<=",
+              "value": 7
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "IV dose up to one week overdue: usual maintenance dose of 6 mg/kg as soon as possible after review; next maintenance dose 21 days later per EMA. Confirm actual history and cardiac assessment; not an automatic restart order.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "IV dose up to one week overdue: usual maintenance dose of 6 mg/kg as soon as possible after review; next maintenance dose 21 days later per EMA. Confirm actual history and cardiac assessment; not an automatic restart order.",
+        "source": {
+          "document": "EMA Herceptin SmPC section 4.2; resolves NCCP 00815 page 4 schedule discrepancy",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "H_LATE_IV_RELOAD",
+        "when": {
+          "all": [
+            {
+              "field": "trastuzumab_route",
+              "operator": "==",
+              "value": "iv"
+            },
+            {
+              "field": "days_overdue_trastuzumab",
+              "operator": ">",
+              "value": 7
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "IV dose more than one week overdue: clinician-directed reload of 8 mg/kg over about 90 minutes, then 6 mg/kg 21 days later per EMA. NCCP 00815 page 4 contains conflicting weekly wording; reconcile with oncology/pharmacy and do not administer 6 mg/kg weekly.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "IV dose more than one week overdue: clinician-directed reload of 8 mg/kg over about 90 minutes, then 6 mg/kg 21 days later per EMA. NCCP 00815 page 4 contains conflicting weekly wording; reconcile with oncology/pharmacy and do not administer 6 mg/kg weekly.",
+        "source": {
+          "document": "EMA Herceptin SmPC section 4.2; resolves NCCP 00815 page 4 schedule discrepancy",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "H_LATE_SC",
+        "when": {
+          "all": [
+            {
+              "field": "trastuzumab_route",
+              "operator": "==",
+              "value": "sc"
+            },
+            {
+              "field": "days_overdue_trastuzumab",
+              "operator": ">",
+              "value": 0
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "SC dose missed: review giving the next 600 mg dose as soon as possible. Keep at least 21 days between SC administrations. No IV weight-based loading dose applies to SC treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "SC dose missed: review giving the next 600 mg dose as soon as possible. Keep at least 21 days between SC administrations. No IV weight-based loading dose applies to SC treatment.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "SC_INTERVAL_SHORT",
+        "when": {
+          "all": [
+            {
+              "field": "trastuzumab_route",
+              "operator": "==",
+              "value": "sc"
+            },
+            {
+              "field": "days_since_last_sc_trastuzumab",
+              "operator": "<",
+              "value": 21
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Do not administer the next SC trastuzumab dose at an interval shorter than 21 days. Verify the actual administration history and reschedule under the prescribing team."
+        },
+        "explanation": "Do not administer the next SC trastuzumab dose at an interval shorter than 21 days. Verify the actual administration history and reschedule under the prescribing team.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "SC_LOCAL_APPROVAL",
+        "when": {
+          "all": [
+            {
+              "field": "trastuzumab_route",
+              "operator": "==",
+              "value": "sc"
+            },
+            {
+              "any": [
+                {
+                  "field": "sc_trastuzumab_locally_approved",
+                  "operator": "missing"
+                },
+                {
+                  "field": "sc_trastuzumab_locally_approved",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "SC substitution is permitted in NCCP 00815 only where approved locally. Confirm that approval and the prescribed formulation before selecting the 600 mg schedule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "SC substitution is permitted in NCCP 00815 only where approved locally. Confirm that approval and the prescribed formulation before selecting the 600 mg schedule.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "BASELINE_LVEF_STAGE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "missing"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 55
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Confirm whether the recorded LVEF is a current pre-treatment result or historical baseline. Apply initiation eligibility only at baseline; ongoing cardiac decisions need the current LVEF, change from baseline and symptoms.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm whether the recorded LVEF is a current pre-treatment result or historical baseline. Apply initiation eligibility only at baseline; ongoing cardiac decisions need the current LVEF, change from baseline and symptoms.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "HISTORICAL_LVEF_CURRENT_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "ongoing"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 55
+            },
+            {
+              "field": "current_lvef_percent",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "A previously low or borderline baseline LVEF does not establish current cardiac function. Obtain the current result and review symptoms and change from baseline before the next trastuzumab decision; no automatic current contraindication is inferred from history alone.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "A previously low or borderline baseline LVEF does not establish current cardiac function. Obtain the current result and review symptoms and change from baseline before the next trastuzumab decision; no automatic current contraindication is inferred from history alone.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "BASELINE_CURRENT_LVEF_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "missing"
+            },
+            {
+              "field": "current_lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Current LVEF below 50% at initiation is outside the source eligibility. Withhold planned trastuzumab and obtain specialist cardiac assessment; do not require a historical LVEF fall to identify low starting function."
+        },
+        "explanation": "Current LVEF below 50% at initiation is outside the source eligibility. Withhold planned trastuzumab and obtain specialist cardiac assessment; do not require a historical LVEF fall to identify low starting function.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "BASELINE_CURRENT_LVEF_BORDERLINE",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "missing"
+            },
+            {
+              "field": "current_lvef_percent",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "current_lvef_percent",
+              "operator": "<",
+              "value": 55
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "The current pre-treatment LVEF lies in the source range requiring clinical judgement. Confirm cardiology/oncology advice before starting; this initiation threshold is separate from the ongoing fall-plus-current-LVEF rule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "The current pre-treatment LVEF lies in the source range requiring clinical judgement. Confirm cardiology/oncology advice before starting; this initiation threshold is separate from the ongoing fall-plus-current-LVEF rule.",
+        "source": {
+          "document": "NCCP 00815 v3",
+          "url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf",
+          "page": 3
         }
       }
     ],
     "missing_data_policy": "Evaluate supplied values independently. Missing values remain unassessed; never infer normality or phase."
   },
   "supportive_care": {
-    "emetogenic_risk": "low",
+    "emetogenic_risk": "phase_dependent",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
-    "script_id": "nccp-parenteral-low",
+    "script_id": null,
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "mapping_basis": "Highest active parenteral component is low emetogenic risk in NCCP V6 Table 7.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
-    "breakthrough_profile_id": "nccp-breakthrough-general"
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "phase_specific_plan": "patient/00815/supportive-care.html",
+    "phase_profiles": {
+      "combination": {
+        "level": "low",
+        "script_id": "nccp-v8-paclitaxel-v08417"
+      },
+      "trastuzumab_maintenance": {
+        "level": "minimal",
+        "script_id": "nccp-v8-trastuzumab-v08417"
+      }
+    },
+    "source_url": "https://healthservice.hse.ie/documents/6427/815_v3_Paclitaxel_weekly_Trastuzumab_3weekly.pdf"
   },
   "treatment_phases": [
     {
@@ -1345,6 +2223,12 @@
           "route": "IV infusion",
           "notes": "IV 8 mg/kg loading dose first; SC 600 mg is a formulation alternative, not an additional dose."
         }
+      ],
+      "cycles": [
+        1,
+        2,
+        3,
+        4
       ]
     },
     {
@@ -1363,6 +2247,61 @@
           "notes": "Complete the prescribed one-year HER2 course; verify route and loading requirements."
         }
       ]
+    },
+    {
+      "phase_id": "combination_sc",
+      "name": "Paclitaxel plus trastuzumab (SC trastuzumab alternative)",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "paclitaxel",
+          "dose": {
+            "value": 80,
+            "unit": "mg/m2"
+          },
+          "day": [
+            1,
+            8,
+            15
+          ],
+          "route": "IV infusion"
+        },
+        {
+          "drug": "trastuzumab",
+          "dose": {
+            "value": 600,
+            "unit": "mg"
+          },
+          "day": 1,
+          "route": "SC injection",
+          "notes": "Locally approved alternative to IV, not additional treatment. No loading dose; every 21 days. Observe for 30 minutes after the first injection and 15 minutes after subsequent injections unless local policy differs."
+        }
+      ],
+      "cycles": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "label": "Paclitaxel plus trastuzumab (SC trastuzumab alternative)"
+    },
+    {
+      "phase_id": "trastuzumab_maintenance_sc",
+      "name": "Trastuzumab continuation (SC trastuzumab alternative)",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "trastuzumab",
+          "dose": {
+            "value": 600,
+            "unit": "mg"
+          },
+          "day": 1,
+          "route": "SC injection",
+          "notes": "Locally approved alternative to IV, not additional treatment. No loading dose; every 21 days. Observe for 30 minutes after the first injection and 15 minutes after subsequent injections unless local policy differs."
+        }
+      ],
+      "label": "Trastuzumab continuation (SC trastuzumab alternative)"
     }
   ]
 }

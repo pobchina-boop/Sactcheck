@@ -13,15 +13,15 @@ for(const [f,v,e] of [['bilirubin_umol_l',20,'dose_reduce'],['bilirubin_umol_l',
 for(const c of ['00485','00815']){const phase=c==='00485'?'paclitaxel':'combination';
  t(c,'Paclitaxel platelet 90 source overlap',{treatment_phase:phase,platelets_x10e9_l:90},'consultant_review');
  t(c,'Paclitaxel platelet <70',{treatment_phase:phase,platelets_x10e9_l:69.99},'delay_then_dose_reduce',noRestart);
- for(const [v,e] of [[1.255,'consultant_review'],[1.26,'dose_reduce'],[2,'dose_reduce'],[2.005,'consultant_review'],[2.01,'dose_reduce'],[5.01,'contraindicated']])t(c,'Paclitaxel hepatic boundary '+v,{treatment_phase:phase,alt_uln_multiple:2,bilirubin_uln_multiple:v},e);
+ for(const [v,e] of [[1.255,'consultant_review'],[1.26,'dose_reduce'],[2,'dose_reduce'],[2.005,'consultant_review'],[2.01,'dose_reduce'],[5.01,'contraindicated']])t(c,'Paclitaxel hepatic boundary '+v,{treatment_phase:phase,alt_uln_multiple:2,bilirubin_uln_multiple:v},c==='00815'&&e==='dose_reduce'?'consultant_review':e);
  t(c,'Paclitaxel G2 neuropathy',{treatment_phase:phase,neuropathy_grade:2},'dose_reduce');
  t(c,'Paclitaxel G3 neuropathy',{treatment_phase:phase,neuropathy_grade:3},'discontinue');
 }
 t('00815','Continuation excludes old paclitaxel toxicities',{treatment_phase:'trastuzumab_maintenance',anc_x10e9_l:.8,neuropathy_grade:3,alt_uln_multiple:12},null,r=>assert(!r.findings.some(x=>x.ruleId?.startsWith('PAC_'))));
 t('00815','Trastuzumab current LVEF 49 with drop10',{current_lvef_percent:49,lvef_drop_points_from_baseline:10},'withhold',noRestart);
 t('00815','Trastuzumab missing baseline change',{current_lvef_percent:49},'consultant_review');
-t('00815','Baseline LVEF 49',{baseline_lvef_percent:49},'contraindicated');
-t('00815','Baseline LVEF 50',{baseline_lvef_percent:50},'consultant_review');
+t('00815','Baseline LVEF 49',{assessment_stage:'baseline',baseline_lvef_percent:49},'contraindicated');
+t('00815','Baseline LVEF 50',{assessment_stage:'baseline',baseline_lvef_percent:50},'consultant_review');
 t('00815','Delayed dose / formulation review',{days_overdue_trastuzumab:8},'consultant_review');
 for(const v of [24.99,25,49.99,50,74.99])t('00659','Early T-DM1 platelet hold '+v,{platelets:v},'withhold',noRestart);
 t('00659','Platelets 75 is outside hold bands',{platelets:75},null,r=>assert(!r.findings.some(x=>x.ruleId?.startsWith('PLT_'))));

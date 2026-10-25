@@ -16,6 +16,7 @@ const classificationBaseline = readJson("V0630_EMETOGENIC_CLASSIFICATION_SNAPSHO
 const clinicalCoreBaseline = readJson("V0630_CLINICAL_CORE_HASHES.json");
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
 const familyPhases = {
+  '00815':{combination:'low',trastuzumab_maintenance:'minimal'},
   '00858':{taxane_platinum:'moderate',ac:'high',adjuvant:'minimal'},'00860':{taxane_platinum:'high',ac:'high',paclitaxel_only:'low',adjuvant:'minimal'},'00861':{taxane_platinum:'moderate',ac:'high',adjuvant:'minimal'},'00348':{taxane_platinum:'high',ac:'high',paclitaxel_only:'low'},'00734':{taxane_platinum:'moderate',ac:'high'},
   '00260':{ac:'high',paclitaxel:'low'}, '00278':{ac:'high',paclitaxel:'low'},
   '00316':{ac:'high',paclitaxel:'low',continuation:'minimal'},
@@ -61,6 +62,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00377": "oral_moderate_high", // v0.84.18 oral cyclophosphamide Days 1–14, NCCP Table 5
+
     "00225": "low", // v0.83.5: NCCP V6 table 7 and 00225 v6
     "00586": "oral_minimal_low", // v0.83.4 NCCP capecitabine oral risk
     "00623": "oral_minimal_low",
@@ -71,7 +74,7 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
     "00431": "low"
   };
   for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
-    const migratedMap = ['00204','00507','00258','00526','00798','00775','00722','00731'].includes(code);
+    const migratedMap = ['00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
     const expected = migratedMap ? 'phase_dependent' : allowedCorrections[code] || baseline.level;
     if(migratedMap) assert.deepStrictEqual(currentMapLevels[code].phase_levels,familyPhases[code],code+' source-reconciled phase risks');
     assert.strictEqual(currentMapLevels[code]?.level, expected, `${code} emetogenic classification differs from the retained baseline or approved v0.64.0 correction`);
@@ -93,6 +96,7 @@ for (const record of index.protocols || []) {
   if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
   else if (baseline) {
     const correctionByPath = {
+      "breast/00377-cmf-oral.json": "oral_moderate_high",
       "gastrointestinal/00225-panitumumab-6-mg-kg-therapy.json": "low",
       "gastrointestinal/00586-capecitabine-825-mg-m2-and-radiotherapy-7-day.json": "oral_minimal_low",
       "gastrointestinal/00623-bevacizumab-7-5-mg-kg-and-capecitabine-1250-mg-m2-therapy.json": "oral_minimal_low",
@@ -108,7 +112,7 @@ for (const record of index.protocols || []) {
     const auditedPhases = familyPhases[md.nccp_regimen_code];
     assert.strictEqual(sc.emetogenic_risk ?? null, auditedPhases ? 'phase_dependent' : expectedRisk, `${relative} emetogenic risk changed outside approved source reconciliation`);
     const phaseLevels = Object.fromEntries(Object.entries(sc.phase_profiles || {}).map(([k, v]) => [k, v?.emetogenic_risk ?? v?.level]));
-    assert.deepStrictEqual(phaseLevels, auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);
+    assert.deepStrictEqual(phaseLevels, ['00377','00378','00381','00430','00749'].includes(md.nccp_regimen_code)?{combination:md.nccp_regimen_code==='00377'?'oral_moderate_high':md.nccp_regimen_code==='00749'?'low':'moderate'}:auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);
   }
   for (const [label, url] of [["supportive", sc.supportive_medications_pdf_url], ["metadata", md.antiemetic_proforma_url]]) {
     if (!url) continue;
@@ -170,9 +174,9 @@ if (fs.existsSync(localDir)) {
     for (const [phase, level] of Object.entries(phases)) {
       const selected=risk.get(protocol,{treatmentPhase:phase});
       assert.strictEqual(selected.level,level,code+'/'+phase);
-      const migrated=['00204','00507','00258','00526','00798','00775','00722','00731'].includes(code);
+      const migrated=['00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
       const v17Scripts={high:'nccp-v8-ac-v08417',low:'nccp-v8-paclitaxel-v08417',minimal:'nccp-v8-trastuzumab-v08417'};
-      const expectedScript=['00260','00278','00432'].includes(code) ? v17Scripts[level] : migrated ? (['high','variable'].includes(level)?null:level==='minimal'?'nccp-minimal-no-routine-prophylaxis':level==='oral_moderate_high'?'nccp-oral-moderate-high':'nccp-parenteral-'+level) : ['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level;
+      const expectedScript=['00260','00278','00432','00316','00433','00745','00512','00815'].includes(code) ? v17Scripts[level] : migrated ? (['high','variable'].includes(level)?null:level==='minimal'?'nccp-minimal-no-routine-prophylaxis':level==='oral_moderate_high'?'nccp-oral-moderate-high':'nccp-parenteral-'+level) : ['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level;
       assert.strictEqual(selected.scriptId,expectedScript,code+'/'+phase+' must use the source-specific support pathway');
     }
     for (const [alias,phase] of Object.entries(protocol.supportive_care.phase_aliases || {})) assert.strictEqual(risk.get(protocol,{treatmentPhase:alias}).level,phases[phase]);

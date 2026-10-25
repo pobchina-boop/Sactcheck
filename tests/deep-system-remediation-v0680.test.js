@@ -81,7 +81,7 @@ const sourceReconciled = ["00202","00815","00423","00377","00378","00381","00262
 for (const code of sourceReconciled) {
   const p = protocol(code);
   assert.strictEqual(p.metadata.encoding_maturity.source_reconciled, true, `${code} source reconciliation flag`);
-  assert.strictEqual(p.metadata.encoding_maturity.reconciled_release, ["00423","00262","00263","00269"].includes(code)?"0.84.17":code==="00743"?"0.84.1":code==="00202"?"0.84.0":code==="00815"?"0.83.8":"0.68.0", `${code} reconciliation release`);
+  assert.strictEqual(p.metadata.encoding_maturity.reconciled_release, ["00377","00378","00381","00749","00815"].includes(code)?"0.84.18":["00423","00262","00263","00269"].includes(code)?"0.84.17":code==="00743"?"0.84.1":code==="00202"?"0.84.0":code==="00815"?"0.83.8":"0.68.0", `${code} reconciliation release`);
 }
 
 // Source fidelity sentinels from the v0.68.0 audit remediation.
@@ -135,7 +135,8 @@ assert.strictEqual(result.actionType, "dose_reduce");
 assert(result.findings.some(f => f.ruleId === "ERI00743_RECURRENCE_0_97"));
 
 result = assess("00749", { assessment_phase: "cycle_day_8_15", anc_x10e9_l: 0.8 });
-assert.strictEqual(result.actionType, "dose_reduce");
+assert.strictEqual(result.actionType, "consultant_review");
+assert(result.findings.some(f => f.ruleId === "D8_15_REDUCE" && /75%/.test(f.explanation)), "Source reduction retained pending current-dose and restart review");
 result = assess("00749", { assessment_phase: "cycle_day_8_15", platelets_x10e9_l: 40 });
 assert.strictEqual(result.actionType, "omit");
 result = assess("00749", { bilirubin_umol_l: 30 });

@@ -707,7 +707,7 @@
     // Explicit treatment-phase IDs select the correct reference dose when a
     // medicine changes frequency between combination and continuation.
     const phaseId = result.inputs?.treatment_phase;
-    const variant = protocol.metadata?.dose_schedule_variants?.[phaseId]?.[result.inputs?.trastuzumab_schedule];
+    const variant = protocol.metadata?.dose_schedule_variants?.[phaseId]?.[result.inputs?.[protocol.metadata?.dose_schedule_variant_input || 'trastuzumab_schedule']];
     const currentPhase = model.allPhases.find(p => p.id === (variant || phaseId));
     if (currentPhase) model = {...model, allPhases:[currentPhase,...model.allPhases.filter(p=>p!==currentPhase)]};
     const actions = [];

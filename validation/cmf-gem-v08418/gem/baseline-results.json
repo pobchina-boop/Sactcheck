@@ -1,0 +1,3260 @@
+{
+  "mode": "baseline",
+  "total": 125,
+  "passed": 61,
+  "failed": 64,
+  "results": [
+    {
+      "code": "00430",
+      "name": "Blank form never clears treatment",
+      "input": {},
+      "expected": "incomplete",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Pregnancy exclusion",
+      "input": {
+        "pregnancy_or_breastfeeding": true
+      },
+      "expected": "contraindicated",
+      "pattern": "pregnancy|breastfeeding",
+      "actual": {
+        "action": "contraindicated",
+        "findings": [
+          {
+            "id": "PREGNANCY_LACTATION",
+            "type": "contraindicated",
+            "text": "Do not administer without urgent consultant review. Pregnancy/breastfeeding requires urgent specialist review.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Drug hypersensitivity exclusion",
+      "input": {
+        "hypersensitivity": true
+      },
+      "expected": "contraindicated",
+      "pattern": "hypersensitivity",
+      "actual": {
+        "action": "contraindicated",
+        "findings": [
+          {
+            "id": "EXCLUSION_HYPERSENSITIVITY",
+            "type": "contraindicated",
+            "text": "Do not administer this regimen; obtain consultant review. Relevant hypersensitivity is an exclusion.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Indication is not applicable",
+      "input": {
+        "indication_eligible": false
+      },
+      "expected": "consultant_review",
+      "pattern": "indication",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /indication/i"
+    },
+    {
+      "code": "00430",
+      "name": "ECOG outside source",
+      "input": {
+        "ecog": 2
+      },
+      "expected": "consultant_review",
+      "pattern": "ECOG",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /ECOG/i"
+    },
+    {
+      "code": "00430",
+      "name": "Unresolved required tests",
+      "input": {
+        "pretreatment_tests_unresolved": true
+      },
+      "expected": "consultant_review",
+      "pattern": "test|result",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /test|result/i"
+    },
+    {
+      "code": "00430",
+      "name": "Indexed eGFR not interchangeable",
+      "input": {
+        "renal_measure_type": "indexed_egfr"
+      },
+      "expected": "consultant_review",
+      "pattern": "indexed",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /indexed/i"
+    },
+    {
+      "code": "00430",
+      "name": "Dialysis timing",
+      "input": {
+        "haemodialysis": true
+      },
+      "expected": "consultant_review",
+      "pattern": "6.*12.*hours",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "HAEMODIALYSIS_TIMING",
+            "type": "consultant_review",
+            "text": "Confirm gemcitabine and dialysis timing with oncology pharmacy; NCCP notes dialysis 6–12 hours after gemcitabine. Haemodialysis timing requires pharmacy confirmation.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Nausea excluded from fixed nonhaem reductions",
+      "input": {
+        "nonhaem_toxicity_grade": 4,
+        "toxicity_excludes_nausea_vomiting": false
+      },
+      "expected": "consultant_review",
+      "pattern": "excludes nausea|excludes.*vomiting",
+      "actual": {
+        "action": "withhold_then_reduce",
+        "findings": [
+          {
+            "id": "NONHAEM_G3PLUS",
+            "type": "withhold_then_reduce",
+            "text": "Withhold until toxicity recovers to grade 1 or less, then consider a dose reduction. Grade 3 or greater non-haematologic toxicity requires withholding and review.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /excludes nausea|excludes.*vomiting/i"
+    },
+    {
+      "code": "00430",
+      "name": "Nonhaem category missing",
+      "input": {
+        "nonhaem_toxicity_grade": 4
+      },
+      "expected": "consultant_review",
+      "pattern": "exact adverse|category",
+      "actual": {
+        "action": "withhold_then_reduce",
+        "findings": [
+          {
+            "id": "NONHAEM_G3PLUS",
+            "type": "withhold_then_reduce",
+            "text": "Withhold until toxicity recovers to grade 1 or less, then consider a dose reduction. Grade 3 or greater non-haematologic toxicity requires withholding and review.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /exact adverse|category/i"
+    },
+    {
+      "code": "00430",
+      "name": "Unknown renal method",
+      "input": {
+        "renal_measure_type": "nonsense"
+      },
+      "expected": "consultant_review",
+      "pattern": "unrecognised",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /unrecognised/i"
+    },
+    {
+      "code": "00749",
+      "name": "Blank form never clears treatment",
+      "input": {},
+      "expected": "incomplete",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Pregnancy exclusion",
+      "input": {
+        "pregnancy_or_breastfeeding": true
+      },
+      "expected": "contraindicated",
+      "pattern": "pregnancy|breastfeeding",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing contraindicated /pregnancy|breastfeeding/i"
+    },
+    {
+      "code": "00749",
+      "name": "Drug hypersensitivity exclusion",
+      "input": {
+        "hypersensitivity": true
+      },
+      "expected": "contraindicated",
+      "pattern": "hypersensitivity",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing contraindicated /hypersensitivity/i"
+    },
+    {
+      "code": "00749",
+      "name": "Indication is not applicable",
+      "input": {
+        "indication_eligible": false
+      },
+      "expected": "consultant_review",
+      "pattern": "indication",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /indication/i"
+    },
+    {
+      "code": "00749",
+      "name": "ECOG outside source",
+      "input": {
+        "ecog": 3
+      },
+      "expected": "consultant_review",
+      "pattern": "ECOG",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /ECOG/i"
+    },
+    {
+      "code": "00749",
+      "name": "Unresolved required tests",
+      "input": {
+        "pretreatment_tests_unresolved": true
+      },
+      "expected": "consultant_review",
+      "pattern": "test|result",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /test|result/i"
+    },
+    {
+      "code": "00749",
+      "name": "Indexed eGFR not interchangeable",
+      "input": {
+        "renal_measure_type": "indexed_egfr"
+      },
+      "expected": "consultant_review",
+      "pattern": "indexed",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /indexed/i"
+    },
+    {
+      "code": "00749",
+      "name": "Dialysis timing",
+      "input": {
+        "haemodialysis": true
+      },
+      "expected": "consultant_review",
+      "pattern": "6.*12.*hours",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "GEM749_HD",
+            "type": "consultant_review",
+            "text": "Haemodialysis: no dose adjustment is expected, with dialysis started 6 to 12 hours after gemcitabine. Confirm timing with oncology pharmacy. Haemodialysis: no dose adjustment is expected, with dialysis started 6 to 12 hours after gemcitabine. Confirm timing with oncology pharmacy.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Nausea excluded from fixed nonhaem reductions",
+      "input": {
+        "nonhaem_toxicity_grade": 4,
+        "toxicity_excludes_nausea_vomiting": false
+      },
+      "expected": "consultant_review",
+      "pattern": "excludes nausea|excludes.*vomiting",
+      "actual": {
+        "action": "withhold_then_reduce",
+        "findings": [
+          {
+            "id": "GEM749_NONHAEM_G4",
+            "type": "withhold_then_reduce",
+            "text": "Grade 4 non haematological toxicity, excluding nausea or vomiting: withhold until recovery to grade 1 or lower; the NCCP table permits resumption at 50% or discontinuation at Consultant discretion. Grade 4 non haematological toxicity, excluding nausea or vomiting: withhold until recovery to grade 1 or lower; the NCCP table permits resumption at 50% or discontinuation at Consultant discretion.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /excludes nausea|excludes.*vomiting/i"
+    },
+    {
+      "code": "00749",
+      "name": "Nonhaem category missing",
+      "input": {
+        "nonhaem_toxicity_grade": 4
+      },
+      "expected": "consultant_review",
+      "pattern": "exact adverse|category",
+      "actual": {
+        "action": "withhold_then_reduce",
+        "findings": [
+          {
+            "id": "GEM749_NONHAEM_G4",
+            "type": "withhold_then_reduce",
+            "text": "Grade 4 non haematological toxicity, excluding nausea or vomiting: withhold until recovery to grade 1 or lower; the NCCP table permits resumption at 50% or discontinuation at Consultant discretion. Grade 4 non haematological toxicity, excluding nausea or vomiting: withhold until recovery to grade 1 or lower; the NCCP table permits resumption at 50% or discontinuation at Consultant discretion.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /exact adverse|category/i"
+    },
+    {
+      "code": "00749",
+      "name": "Unknown renal method",
+      "input": {
+        "renal_measure_type": "nonsense"
+      },
+      "expected": "consultant_review",
+      "pattern": "unrecognised",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /unrecognised/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day1 low ANC 0",
+      "input": {
+        "treatment_day": "day1",
+        "anc": 0
+      },
+      "expected": "delay",
+      "pattern": "ANC.*≥1|Day 1",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "DAY1_COUNTS_LOW",
+            "type": "delay",
+            "text": "Delay Day 1 until ANC ≥1.0 and platelets ≥100 ×10⁹/L. After the first such episode or febrile neutropenia, resume both drugs at 80%; after a second episode, resume at 60%. Day 1 proceeds only at ANC ≥1.0 and platelets ≥100.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day1 low ANC 0.5",
+      "input": {
+        "treatment_day": "day1",
+        "anc": 0.5
+      },
+      "expected": "delay",
+      "pattern": "ANC.*≥1|Day 1",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "DAY1_COUNTS_LOW",
+            "type": "delay",
+            "text": "Delay Day 1 until ANC ≥1.0 and platelets ≥100 ×10⁹/L. After the first such episode or febrile neutropenia, resume both drugs at 80%; after a second episode, resume at 60%. Day 1 proceeds only at ANC ≥1.0 and platelets ≥100.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day1 low ANC 0.99",
+      "input": {
+        "treatment_day": "day1",
+        "anc": 0.99
+      },
+      "expected": "delay",
+      "pattern": "ANC.*≥1|Day 1",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "DAY1_COUNTS_LOW",
+            "type": "delay",
+            "text": "Delay Day 1 until ANC ≥1.0 and platelets ≥100 ×10⁹/L. After the first such episode or febrile neutropenia, resume both drugs at 80%; after a second episode, resume at 60%. Day 1 proceeds only at ANC ≥1.0 and platelets ≥100.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day1 low platelets 0",
+      "input": {
+        "treatment_day": "day1",
+        "platelets": 0
+      },
+      "expected": "delay",
+      "pattern": "platelets.*≥100|Day 1",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "DAY1_COUNTS_LOW",
+            "type": "delay",
+            "text": "Delay Day 1 until ANC ≥1.0 and platelets ≥100 ×10⁹/L. After the first such episode or febrile neutropenia, resume both drugs at 80%; after a second episode, resume at 60%. Day 1 proceeds only at ANC ≥1.0 and platelets ≥100.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day1 low platelets 75",
+      "input": {
+        "treatment_day": "day1",
+        "platelets": 75
+      },
+      "expected": "delay",
+      "pattern": "platelets.*≥100|Day 1",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "DAY1_COUNTS_LOW",
+            "type": "delay",
+            "text": "Delay Day 1 until ANC ≥1.0 and platelets ≥100 ×10⁹/L. After the first such episode or febrile neutropenia, resume both drugs at 80%; after a second episode, resume at 60%. Day 1 proceeds only at ANC ≥1.0 and platelets ≥100.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day1 low platelets 99",
+      "input": {
+        "treatment_day": "day1",
+        "platelets": 99
+      },
+      "expected": "delay",
+      "pattern": "platelets.*≥100|Day 1",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "DAY1_COUNTS_LOW",
+            "type": "delay",
+            "text": "Delay Day 1 until ANC ≥1.0 and platelets ≥100 ×10⁹/L. After the first such episode or febrile neutropenia, resume both drugs at 80%; after a second episode, resume at 60%. Day 1 proceeds only at ANC ≥1.0 and platelets ≥100.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day1 inclusive exact boundaries",
+      "input": {
+        "treatment_day": "day1",
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "absent",
+      "pattern": "delay Day 1",
+      "actual": {
+        "action": "proceed_with_caution",
+        "findings": [
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 1 — gemcitabine + carboplatin meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Counts without treatment day",
+      "input": {
+        "anc": 0.8
+      },
+      "expected": "consultant_review",
+      "pattern": "choose Day 1 or Day 8",
+      "actual": {
+        "action": "partial_context_required",
+        "findings": [
+          {
+            "id": "PARTIAL_ANC_CONTEXT_REQUIRED",
+            "type": "partial_context_required",
+            "text": "ANC 0.8 reaches an encoded threshold, but the final action also depends on Treatment day, Platelets. Do not treat this as clearance."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /choose Day 1 or Day 8/i"
+    },
+    {
+      "code": "00430",
+      "name": "Invalid treatment day",
+      "input": {
+        "treatment_day": "day15"
+      },
+      "expected": "consultant_review",
+      "pattern": "unrecognised",
+      "actual": {
+        "action": "proceed_with_caution",
+        "findings": [
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day day15 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /unrecognised/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day8 omit ANC 0",
+      "input": {
+        "treatment_day": "day8",
+        "anc": 0
+      },
+      "expected": "omit",
+      "pattern": "both.*Day.?8|both.*drugs",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "DAY8_OMIT",
+            "type": "omit",
+            "text": "Omit both Day-8 gemcitabine and carboplatin for ANC <0.75 or platelets <75 ×10⁹/L. Day-8 severe cytopenia requires omission.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day8 omit ANC 0.5",
+      "input": {
+        "treatment_day": "day8",
+        "anc": 0.5
+      },
+      "expected": "omit",
+      "pattern": "both.*Day.?8|both.*drugs",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "DAY8_OMIT",
+            "type": "omit",
+            "text": "Omit both Day-8 gemcitabine and carboplatin for ANC <0.75 or platelets <75 ×10⁹/L. Day-8 severe cytopenia requires omission.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day8 omit ANC 0.749",
+      "input": {
+        "treatment_day": "day8",
+        "anc": 0.749
+      },
+      "expected": "omit",
+      "pattern": "both.*Day.?8|both.*drugs",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "DAY8_OMIT",
+            "type": "omit",
+            "text": "Omit both Day-8 gemcitabine and carboplatin for ANC <0.75 or platelets <75 ×10⁹/L. Day-8 severe cytopenia requires omission.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day8 omit platelets 0",
+      "input": {
+        "treatment_day": "day8",
+        "platelets": 0
+      },
+      "expected": "omit",
+      "pattern": "both.*Day.?8|both.*drugs",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "DAY8_OMIT",
+            "type": "omit",
+            "text": "Omit both Day-8 gemcitabine and carboplatin for ANC <0.75 or platelets <75 ×10⁹/L. Day-8 severe cytopenia requires omission.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day8 omit platelets 50",
+      "input": {
+        "treatment_day": "day8",
+        "platelets": 50
+      },
+      "expected": "omit",
+      "pattern": "both.*Day.?8|both.*drugs",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "DAY8_OMIT",
+            "type": "omit",
+            "text": "Omit both Day-8 gemcitabine and carboplatin for ANC <0.75 or platelets <75 ×10⁹/L. Day-8 severe cytopenia requires omission.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day8 omit platelets 74",
+      "input": {
+        "treatment_day": "day8",
+        "platelets": 74
+      },
+      "expected": "omit",
+      "pattern": "both.*Day.?8|both.*drugs",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "DAY8_OMIT",
+            "type": "omit",
+            "text": "Omit both Day-8 gemcitabine and carboplatin for ANC <0.75 or platelets <75 ×10⁹/L. Day-8 severe cytopenia requires omission.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Day8 80% ANC 0.75",
+      "input": {
+        "treatment_day": "day8",
+        "anc": 0.75
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*Day 1",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "DAY8_75_PERCENT",
+            "type": "dose_reduce",
+            "text": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L. Day-8 intermediate cytopenia requires 75% dosing.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*Day 1/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day8 80% ANC 0.8",
+      "input": {
+        "treatment_day": "day8",
+        "anc": 0.8
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*Day 1",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "DAY8_75_PERCENT",
+            "type": "dose_reduce",
+            "text": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L. Day-8 intermediate cytopenia requires 75% dosing.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*Day 1/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day8 80% ANC 0.99",
+      "input": {
+        "treatment_day": "day8",
+        "anc": 0.99
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*Day 1",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "DAY8_75_PERCENT",
+            "type": "dose_reduce",
+            "text": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L. Day-8 intermediate cytopenia requires 75% dosing.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*Day 1/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day8 80% platelets 75",
+      "input": {
+        "treatment_day": "day8",
+        "platelets": 75
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*Day 1",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "DAY8_75_PERCENT",
+            "type": "dose_reduce",
+            "text": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L. Day-8 intermediate cytopenia requires 75% dosing.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*Day 1/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day8 80% platelets 80",
+      "input": {
+        "treatment_day": "day8",
+        "platelets": 80
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*Day 1",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "DAY8_75_PERCENT",
+            "type": "dose_reduce",
+            "text": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L. Day-8 intermediate cytopenia requires 75% dosing.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*Day 1/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day8 80% platelets 99",
+      "input": {
+        "treatment_day": "day8",
+        "platelets": 99
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*Day 1",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "DAY8_75_PERCENT",
+            "type": "dose_reduce",
+            "text": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L. Day-8 intermediate cytopenia requires 75% dosing.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*Day 1/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day8 rounded ANC gap",
+      "input": {
+        "treatment_day": "day8",
+        "anc": 0.995
+      },
+      "expected": "consultant_review",
+      "pattern": "unassigned|round",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "DAY8_75_PERCENT",
+            "type": "dose_reduce",
+            "text": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L. Day-8 intermediate cytopenia requires 75% dosing.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /unassigned|round/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day8 rounded platelet gap",
+      "input": {
+        "treatment_day": "day8",
+        "platelets": 99.5
+      },
+      "expected": "consultant_review",
+      "pattern": "unassigned|round",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "DAY8_75_PERCENT",
+            "type": "dose_reduce",
+            "text": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L. Day-8 intermediate cytopenia requires 75% dosing.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /unassigned|round/i"
+    },
+    {
+      "code": "00430",
+      "name": "Day8 exact normal boundaries",
+      "input": {
+        "treatment_day": "day8",
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "absent",
+      "pattern": "omit BOTH|source specifies BOTH",
+      "actual": {
+        "action": "proceed_with_caution",
+        "findings": [
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 8 — gemcitabine only meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Severe competing platelet count wins",
+      "input": {
+        "treatment_day": "day8",
+        "anc": 0.8,
+        "platelets": 20
+      },
+      "expected": "omit",
+      "pattern": "not reinstated",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "DAY8_OMIT",
+            "type": "omit",
+            "text": "Omit both Day-8 gemcitabine and carboplatin for ANC <0.75 or platelets <75 ×10⁹/L. Day-8 severe cytopenia requires omission.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "DAY8_75_PERCENT",
+            "type": "dose_reduce",
+            "text": "Administer both Day-8 drugs at 80% of the Day-1 dose for ANC 0.75–0.99 or platelets 75–99 ×10⁹/L. Day-8 intermediate cytopenia requires 75% dosing.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing omit /not reinstated/i"
+    },
+    {
+      "code": "00430",
+      "name": "Current FN urgent not restart percentage",
+      "input": {
+        "current_febrile_neutropenia": true
+      },
+      "expected": "withhold",
+      "pattern": "urgent",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing withhold /urgent/i"
+    },
+    {
+      "code": "00430",
+      "name": "Previous event needs episode/recovery day1_delay",
+      "input": {
+        "haematologic_event": "day1_delay"
+      },
+      "expected": "consultant_review",
+      "pattern": "episode number|recovery",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /episode number|recovery/i"
+    },
+    {
+      "code": "00430",
+      "name": "First recovered previous event day1_delay",
+      "input": {
+        "treatment_day": "day1",
+        "haematologic_event": "day1_delay",
+        "prior_haematologic_episode": 1,
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 1 — gemcitabine + carboplatin meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*ORIGINAL/i"
+    },
+    {
+      "code": "00430",
+      "name": "Second recovered previous event day1_delay",
+      "input": {
+        "treatment_day": "day1",
+        "haematologic_event": "day1_delay",
+        "prior_haematologic_episode": 2,
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "consultant_review",
+      "pattern": "60%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 1 — gemcitabine + carboplatin meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /60%.*ORIGINAL/i"
+    },
+    {
+      "code": "00430",
+      "name": "Previous event needs episode/recovery febrile_neutropenia",
+      "input": {
+        "haematologic_event": "febrile_neutropenia"
+      },
+      "expected": "consultant_review",
+      "pattern": "episode number|recovery",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /episode number|recovery/i"
+    },
+    {
+      "code": "00430",
+      "name": "First recovered previous event febrile_neutropenia",
+      "input": {
+        "treatment_day": "day1",
+        "haematologic_event": "febrile_neutropenia",
+        "prior_haematologic_episode": 1,
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 1 — gemcitabine + carboplatin meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*ORIGINAL/i"
+    },
+    {
+      "code": "00430",
+      "name": "Second recovered previous event febrile_neutropenia",
+      "input": {
+        "treatment_day": "day1",
+        "haematologic_event": "febrile_neutropenia",
+        "prior_haematologic_episode": 2,
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "consultant_review",
+      "pattern": "60%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 1 — gemcitabine + carboplatin meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /60%.*ORIGINAL/i"
+    },
+    {
+      "code": "00430",
+      "name": "Previous event needs episode/recovery platelets_lt25",
+      "input": {
+        "haematologic_event": "platelets_lt25"
+      },
+      "expected": "consultant_review",
+      "pattern": "episode number|recovery",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /episode number|recovery/i"
+    },
+    {
+      "code": "00430",
+      "name": "First recovered previous event platelets_lt25",
+      "input": {
+        "treatment_day": "day1",
+        "haematologic_event": "platelets_lt25",
+        "prior_haematologic_episode": 1,
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 1 — gemcitabine + carboplatin meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*ORIGINAL/i"
+    },
+    {
+      "code": "00430",
+      "name": "Second recovered previous event platelets_lt25",
+      "input": {
+        "treatment_day": "day1",
+        "haematologic_event": "platelets_lt25",
+        "prior_haematologic_episode": 2,
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "consultant_review",
+      "pattern": "60%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 1 — gemcitabine + carboplatin meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /60%.*ORIGINAL/i"
+    },
+    {
+      "code": "00430",
+      "name": "Previous event needs episode/recovery bleeding_thrombocytopenia",
+      "input": {
+        "haematologic_event": "bleeding_thrombocytopenia"
+      },
+      "expected": "consultant_review",
+      "pattern": "episode number|recovery",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /episode number|recovery/i"
+    },
+    {
+      "code": "00430",
+      "name": "First recovered previous event bleeding_thrombocytopenia",
+      "input": {
+        "treatment_day": "day1",
+        "haematologic_event": "bleeding_thrombocytopenia",
+        "prior_haematologic_episode": 1,
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 1 — gemcitabine + carboplatin meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /80%.*ORIGINAL/i"
+    },
+    {
+      "code": "00430",
+      "name": "Second recovered previous event bleeding_thrombocytopenia",
+      "input": {
+        "treatment_day": "day1",
+        "haematologic_event": "bleeding_thrombocytopenia",
+        "prior_haematologic_episode": 2,
+        "anc": 1,
+        "platelets": 100
+      },
+      "expected": "consultant_review",
+      "pattern": "60%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "PARTIAL_TREATMENT_DAY_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Treatment day Day 1 — gemcitabine + carboplatin meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_ANC_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "ANC 1 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          },
+          {
+            "id": "PARTIAL_PLATELETS_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Platelets 100 meets the encoded criterion or does not trigger the restrictive threshold in 3 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /60%.*ORIGINAL/i"
+    },
+    {
+      "code": "00430",
+      "name": "Unrecovered restart still delayed",
+      "input": {
+        "treatment_day": "day1",
+        "haematologic_event": "febrile_neutropenia",
+        "prior_haematologic_episode": 1,
+        "anc": 0.9,
+        "platelets": 100
+      },
+      "expected": "delay",
+      "pattern": "delay",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "DAY1_COUNTS_LOW",
+            "type": "delay",
+            "text": "Delay Day 1 until ANC ≥1.0 and platelets ≥100 ×10⁹/L. After the first such episode or febrile neutropenia, resume both drugs at 80%; after a second episode, resume at 60%. Day 1 proceeds only at ANC ≥1.0 and platelets ≥100.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          },
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Third haem event not extrapolated",
+      "input": {
+        "haematologic_event": "day1_delay",
+        "prior_haematologic_episode": "3plus"
+      },
+      "expected": "consultant_review",
+      "pattern": "no extrapolated|third",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "PRIOR_HAEM_EVENT_REDUCE",
+            "type": "dose_reduce",
+            "text": "After first Day-1 cytopenic delay, febrile neutropenia, platelets <25, or bleeding with thrombocytopenia: resume both drugs at 80% once ANC ≥1.0 and platelets ≥100. After a second episode: resume at 60%. Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /no extrapolated|third/i"
+    },
+    {
+      "code": "00430",
+      "name": "Carboplatin prohibited GFR 0",
+      "input": {
+        "gfr_ml_min": 0,
+        "renal_measure_type": "measured"
+      },
+      "expected": "contraindicated",
+      "pattern": "do not administer carboplatin",
+      "component": "carboplatin",
+      "actual": {
+        "action": "contraindicated",
+        "findings": [
+          {
+            "id": "CARBOPLATIN_GFR_20_OR_LESS",
+            "type": "contraindicated",
+            "text": "Do not administer carboplatin at GFR ≤20 mL/min. Carboplatin should not be administered at GFR ≤20.",
+            "components": [
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Carboplatin prohibited GFR 19.9",
+      "input": {
+        "gfr_ml_min": 19.9,
+        "renal_measure_type": "measured"
+      },
+      "expected": "contraindicated",
+      "pattern": "do not administer carboplatin",
+      "component": "carboplatin",
+      "actual": {
+        "action": "contraindicated",
+        "findings": [
+          {
+            "id": "CARBOPLATIN_GFR_20_OR_LESS",
+            "type": "contraindicated",
+            "text": "Do not administer carboplatin at GFR ≤20 mL/min. Carboplatin should not be administered at GFR ≤20.",
+            "components": [
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Carboplatin prohibited GFR 20",
+      "input": {
+        "gfr_ml_min": 20,
+        "renal_measure_type": "measured"
+      },
+      "expected": "contraindicated",
+      "pattern": "do not administer carboplatin",
+      "component": "carboplatin",
+      "actual": {
+        "action": "contraindicated",
+        "findings": [
+          {
+            "id": "CARBOPLATIN_GFR_20_OR_LESS",
+            "type": "contraindicated",
+            "text": "Do not administer carboplatin at GFR ≤20 mL/min. Carboplatin should not be administered at GFR ≤20.",
+            "components": [
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Carboplatin caution GFR 20.01",
+      "input": {
+        "gfr_ml_min": 20.01,
+        "renal_measure_type": "measured"
+      },
+      "expected": "consultant_review",
+      "pattern": "extreme caution",
+      "component": "carboplatin",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "CARBOPLATIN_GFR_20_TO_30",
+            "type": "consultant_review",
+            "text": "Use carboplatin with extreme caution at GFR 20–30 mL/min; consultant and pharmacy review required. Severe renal impairment requires extreme caution.",
+            "components": [
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Carboplatin caution GFR 25",
+      "input": {
+        "gfr_ml_min": 25,
+        "renal_measure_type": "measured"
+      },
+      "expected": "consultant_review",
+      "pattern": "extreme caution",
+      "component": "carboplatin",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "CARBOPLATIN_GFR_20_TO_30",
+            "type": "consultant_review",
+            "text": "Use carboplatin with extreme caution at GFR 20–30 mL/min; consultant and pharmacy review required. Severe renal impairment requires extreme caution.",
+            "components": [
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Carboplatin caution GFR 30",
+      "input": {
+        "gfr_ml_min": 30,
+        "renal_measure_type": "measured"
+      },
+      "expected": "consultant_review",
+      "pattern": "extreme caution",
+      "component": "carboplatin",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "CARBOPLATIN_GFR_20_TO_30",
+            "type": "consultant_review",
+            "text": "Use carboplatin with extreme caution at GFR 20–30 mL/min; consultant and pharmacy review required. Severe renal impairment requires extreme caution.",
+            "components": [
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Myelosuppression risk below60",
+      "input": {
+        "gfr_ml_min": 59.9,
+        "renal_measure_type": "measured"
+      },
+      "expected": "consultant_review",
+      "pattern": "myelosuppression",
+      "component": "carboplatin",
+      "actual": {
+        "action": "proceed_with_caution",
+        "findings": [
+          {
+            "id": "PARTIAL_GFR_ML_MIN_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "GFR / CrCl 59.9 meets the encoded criterion or does not trigger the restrictive threshold in 2 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /myelosuppression/i"
+    },
+    {
+      "code": "00430",
+      "name": "Calvert upper cap",
+      "input": {
+        "gfr_ml_min": 126,
+        "renal_measure_type": "measured"
+      },
+      "expected": "consultant_review",
+      "pattern": "125.*AUC 2",
+      "component": "carboplatin",
+      "actual": {
+        "action": "proceed_with_caution",
+        "findings": [
+          {
+            "id": "PARTIAL_GFR_ML_MIN_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "GFR / CrCl 126 meets the encoded criterion or does not trigger the restrictive threshold in 2 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /125.*AUC 2/i"
+    },
+    {
+      "code": "00430",
+      "name": "CrCl source method missing",
+      "input": {
+        "gfr_ml_min": 90
+      },
+      "expected": "consultant_review",
+      "pattern": "confirm whether|method",
+      "component": "carboplatin",
+      "actual": {
+        "action": "proceed_with_caution",
+        "findings": [
+          {
+            "id": "PARTIAL_GFR_ML_MIN_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "GFR / CrCl 90 meets the encoded criterion or does not trigger the restrictive threshold in 2 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /confirm whether|method/i"
+    },
+    {
+      "code": "00430",
+      "name": "Estimated GFR stale creatinine",
+      "input": {
+        "renal_measure_type": "cg",
+        "creatinine_sample_age_hours": 49
+      },
+      "expected": "consultant_review",
+      "pattern": "48 hours",
+      "component": "carboplatin",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /48 hours/i"
+    },
+    {
+      "code": "00430",
+      "name": "Measured GFR creatinine rise",
+      "input": {
+        "renal_measure_type": "measured",
+        "creatinine_percent_of_isotope_baseline": 110.1
+      },
+      "expected": "consultant_review",
+      "pattern": "110%",
+      "component": "carboplatin",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /110%/i"
+    },
+    {
+      "code": "00430",
+      "name": "Unreliable estimate",
+      "input": {
+        "renal_estimate_unreliable": true
+      },
+      "expected": "consultant_review",
+      "pattern": "measured GFR",
+      "component": "carboplatin",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /measured GFR/i"
+    },
+    {
+      "code": "00430",
+      "name": "Hepatic alternative 27",
+      "input": {
+        "bilirubin_micromol_l": 27
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*OR full dose",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "GEMCITABINE_BILIRUBIN_27_PLUS",
+            "type": "consultant_review",
+            "text": "For bilirubin ≥27 µmol/L, consider starting gemcitabine at 80% with potential escalation, or full dose with active monitoring, after consultant review. Hepatic impairment requires an individualised NCCP option.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Hepatic alternative 50",
+      "input": {
+        "bilirubin_micromol_l": 50
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*OR full dose",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "GEMCITABINE_BILIRUBIN_27_PLUS",
+            "type": "consultant_review",
+            "text": "For bilirubin ≥27 µmol/L, consider starting gemcitabine at 80% with potential escalation, or full dose with active monitoring, after consultant review. Hepatic impairment requires an individualised NCCP option.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Nonhaem episode 1",
+      "input": {
+        "nonhaem_toxicity_grade": 3,
+        "toxicity_excludes_nausea_vomiting": true,
+        "nonhaem_episode": 1
+      },
+      "expected": "withhold",
+      "pattern": "grade ≤1",
+      "actual": {
+        "action": "withhold_then_reduce",
+        "findings": [
+          {
+            "id": "NONHAEM_G3PLUS",
+            "type": "withhold_then_reduce",
+            "text": "Withhold until toxicity recovers to grade 1 or less, then consider a dose reduction. Grade 3 or greater non-haematologic toxicity requires withholding and review.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing withhold /grade ≤1/i"
+    },
+    {
+      "code": "00430",
+      "name": "Nonhaem episode 2",
+      "input": {
+        "nonhaem_toxicity_grade": 3,
+        "toxicity_excludes_nausea_vomiting": true,
+        "nonhaem_episode": 2
+      },
+      "expected": "withhold",
+      "pattern": "grade ≤1",
+      "actual": {
+        "action": "withhold_then_reduce",
+        "findings": [
+          {
+            "id": "NONHAEM_G3PLUS",
+            "type": "withhold_then_reduce",
+            "text": "Withhold until toxicity recovers to grade 1 or less, then consider a dose reduction. Grade 3 or greater non-haematologic toxicity requires withholding and review.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing withhold /grade ≤1/i"
+    },
+    {
+      "code": "00430",
+      "name": "Nonhaem third discontinues",
+      "input": {
+        "nonhaem_toxicity_grade": 3,
+        "toxicity_excludes_nausea_vomiting": true,
+        "nonhaem_episode": "3plus"
+      },
+      "expected": "discontinue",
+      "pattern": "third|discontinue",
+      "actual": {
+        "action": "withhold_then_reduce",
+        "findings": [
+          {
+            "id": "NONHAEM_G3PLUS",
+            "type": "withhold_then_reduce",
+            "text": "Withhold until toxicity recovers to grade 1 or less, then consider a dose reduction. Grade 3 or greater non-haematologic toxicity requires withholding and review.",
+            "components": [
+              "gemcitabine",
+              "carboplatin"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing discontinue /third|discontinue/i"
+    },
+    {
+      "code": "00430",
+      "name": "Pneumonitis grade 2",
+      "input": {
+        "pneumonitis_grade": 2
+      },
+      "expected": "discontinue",
+      "pattern": "pneumonitis",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "discontinue",
+        "findings": [
+          {
+            "id": "PNEUMONITIS_G2PLUS",
+            "type": "discontinue",
+            "text": "Discontinue gemcitabine for grade 2 or greater pneumonitis and assess urgently. Clinically significant pneumonitis requires gemcitabine discontinuation.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Pneumonitis grade 3",
+      "input": {
+        "pneumonitis_grade": 3
+      },
+      "expected": "discontinue",
+      "pattern": "pneumonitis",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "discontinue",
+        "findings": [
+          {
+            "id": "PNEUMONITIS_G2PLUS",
+            "type": "discontinue",
+            "text": "Discontinue gemcitabine for grade 2 or greater pneumonitis and assess urgently. Clinically significant pneumonitis requires gemcitabine discontinuation.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Pneumonitis grade 4",
+      "input": {
+        "pneumonitis_grade": 4
+      },
+      "expected": "discontinue",
+      "pattern": "pneumonitis",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "discontinue",
+        "findings": [
+          {
+            "id": "PNEUMONITIS_G2PLUS",
+            "type": "discontinue",
+            "text": "Discontinue gemcitabine for grade 2 or greater pneumonitis and assess urgently. Clinically significant pneumonitis requires gemcitabine discontinuation.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00430",
+      "name": "Suspected drug pneumonitis",
+      "input": {
+        "suspected_drug_induced_pneumonitis": true
+      },
+      "expected": "discontinue",
+      "pattern": "suspected.*pneumonitis",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing discontinue /suspected.*pneumonitis/i"
+    },
+    {
+      "code": "00430",
+      "name": "Confirmed SCAR",
+      "input": {
+        "scar_status": "confirmed"
+      },
+      "expected": "permanently_discontinue",
+      "pattern": "cutaneous",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "permanently_discontinue",
+        "findings": [
+          {
+            "id": "SCAR_CONFIRMED",
+            "type": "permanently_discontinue",
+            "text": "Permanently discontinue gemcitabine for confirmed SCAR. Confirmed SCAR requires permanent discontinuation.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing permanently_discontinue /cutaneous/i"
+    },
+    {
+      "code": "00430",
+      "name": "Suspected SCAR",
+      "input": {
+        "scar_status": "suspected"
+      },
+      "expected": "withhold",
+      "pattern": "suspected",
+      "component": "gemcitabine",
+      "actual": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "SCAR_SUSPECTED",
+            "type": "withhold",
+            "text": "Withhold gemcitabine while suspected SCAR is urgently evaluated. Suspected SCAR requires immediate withholding and assessment.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Initial ANC strict 1",
+      "input": {
+        "assessment_phase": "initial_eligibility",
+        "anc_x10e9_l": 1
+      },
+      "expected": "withhold",
+      "pattern": ">1.5|above 1.5",
+      "actual": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "GEM749_INITIAL_ANC_LE1_5",
+            "type": "withhold",
+            "text": "Initial eligibility requires ANC above 1.5 ×10⁹/L. Initial eligibility requires ANC above 1.5 ×10⁹/L.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Initial ANC strict 1.5",
+      "input": {
+        "assessment_phase": "initial_eligibility",
+        "anc_x10e9_l": 1.5
+      },
+      "expected": "withhold",
+      "pattern": ">1.5|above 1.5",
+      "actual": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "GEM749_INITIAL_ANC_LE1_5",
+            "type": "withhold",
+            "text": "Initial eligibility requires ANC above 1.5 ×10⁹/L. Initial eligibility requires ANC above 1.5 ×10⁹/L.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Initial platelets strict100",
+      "input": {
+        "assessment_phase": "initial_eligibility",
+        "platelets_x10e9_l": 100
+      },
+      "expected": "withhold",
+      "pattern": ">100|above 100",
+      "actual": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "GEM749_INITIAL_PLT_LE100",
+            "type": "withhold",
+            "text": "Initial eligibility requires platelets above 100 ×10⁹/L. Initial eligibility requires platelets above 100 ×10⁹/L.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Initial creatinine criterion",
+      "input": {
+        "assessment_phase": "initial_eligibility",
+        "creatinine_uln_multiple": 1.51
+      },
+      "expected": "consultant_review",
+      "pattern": "1.5.*ULN",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "GEM749_INITIAL_CREAT_GT1_5ULN",
+            "type": "consultant_review",
+            "text": "Initial eligibility describes adequate renal function as creatinine at or below 1.5 × ULN. Review if above this level. Initial eligibility describes adequate renal function as creatinine at or below 1.5 × ULN. Review if above this level.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Initial transaminase criterion",
+      "input": {
+        "assessment_phase": "initial_eligibility",
+        "transaminase_uln_multiple": 3.01
+      },
+      "expected": "consultant_review",
+      "pattern": "3.*ULN",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "GEM749_INITIAL_TRANSAM_GT3ULN",
+            "type": "consultant_review",
+            "text": "Initial eligibility describes adequate liver function as transaminases at or below 3 × ULN. Review if above this level. Initial eligibility describes adequate liver function as transaminases at or below 3 × ULN. Review if above this level.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Phase missing for ANC",
+      "input": {
+        "anc_x10e9_l": 1
+      },
+      "expected": "consultant_review",
+      "pattern": "choose initial|no phase",
+      "actual": {
+        "action": "partial_context_required",
+        "findings": [
+          {
+            "id": "PARTIAL_ANC_X10E9_L_CONTEXT_REQUIRED",
+            "type": "partial_context_required",
+            "text": "ANC 1 reaches an encoded threshold, but the final action also depends on Assessment phase. Do not treat this as clearance."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /choose initial|no phase/i"
+    },
+    {
+      "code": "00749",
+      "name": "Invalid phase",
+      "input": {
+        "assessment_phase": "day99"
+      },
+      "expected": "consultant_review",
+      "pattern": "unrecognised",
+      "actual": {
+        "action": "proceed_with_caution",
+        "findings": [
+          {
+            "id": "PARTIAL_ASSESSMENT_PHASE_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Assessment phase day99 meets the encoded criterion or does not trigger the restrictive threshold in 10 assessed rules. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /unrecognised/i"
+    },
+    {
+      "code": "00749",
+      "name": "Cycle day1 strict ANC 0.5",
+      "input": {
+        "assessment_phase": "cycle_day_1",
+        "anc_x10e9_l": 0.5
+      },
+      "expected": "delay",
+      "pattern": "ANC.*>1|ANC.*above 1",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "GEM749_D1_ANC_LE1",
+            "type": "delay",
+            "text": "At the start of a new cycle, ANC must be above 1.0 ×10⁹/L. Delay if at or below this level. At the start of a new cycle, ANC must be above 1.0 ×10⁹/L. Delay if at or below this level.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Cycle day1 strict ANC 0.99",
+      "input": {
+        "assessment_phase": "cycle_day_1",
+        "anc_x10e9_l": 0.99
+      },
+      "expected": "delay",
+      "pattern": "ANC.*>1|ANC.*above 1",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "GEM749_D1_ANC_LE1",
+            "type": "delay",
+            "text": "At the start of a new cycle, ANC must be above 1.0 ×10⁹/L. Delay if at or below this level. At the start of a new cycle, ANC must be above 1.0 ×10⁹/L. Delay if at or below this level.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Cycle day1 strict ANC 1",
+      "input": {
+        "assessment_phase": "cycle_day_1",
+        "anc_x10e9_l": 1
+      },
+      "expected": "delay",
+      "pattern": "ANC.*>1|ANC.*above 1",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "GEM749_D1_ANC_LE1",
+            "type": "delay",
+            "text": "At the start of a new cycle, ANC must be above 1.0 ×10⁹/L. Delay if at or below this level. At the start of a new cycle, ANC must be above 1.0 ×10⁹/L. Delay if at or below this level.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Cycle day1 strict platelets 50",
+      "input": {
+        "assessment_phase": "cycle_day_1",
+        "platelets_x10e9_l": 50
+      },
+      "expected": "delay",
+      "pattern": "platelets.*>100|platelets.*above 100",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "GEM749_D1_PLT_LE100",
+            "type": "delay",
+            "text": "At the start of a new cycle, platelets must be above 100 ×10⁹/L. Delay if at or below this level. At the start of a new cycle, platelets must be above 100 ×10⁹/L. Delay if at or below this level.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Cycle day1 strict platelets 99",
+      "input": {
+        "assessment_phase": "cycle_day_1",
+        "platelets_x10e9_l": 99
+      },
+      "expected": "delay",
+      "pattern": "platelets.*>100|platelets.*above 100",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "GEM749_D1_PLT_LE100",
+            "type": "delay",
+            "text": "At the start of a new cycle, platelets must be above 100 ×10⁹/L. Delay if at or below this level. At the start of a new cycle, platelets must be above 100 ×10⁹/L. Delay if at or below this level.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Cycle day1 strict platelets 100",
+      "input": {
+        "assessment_phase": "cycle_day_1",
+        "platelets_x10e9_l": 100
+      },
+      "expected": "delay",
+      "pattern": "platelets.*>100|platelets.*above 100",
+      "actual": {
+        "action": "delay",
+        "findings": [
+          {
+            "id": "GEM749_D1_PLT_LE100",
+            "type": "delay",
+            "text": "At the start of a new cycle, platelets must be above 100 ×10⁹/L. Delay if at or below this level. At the start of a new cycle, platelets must be above 100 ×10⁹/L. Delay if at or below this level.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 omit ANC 0.49",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "anc_x10e9_l": 0.49
+      },
+      "expected": "omit",
+      "pattern": "omit",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_ANC_LT0_5",
+            "type": "omit",
+            "text": "On Day 8 or Day 15, ANC below 0.5 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L. On Day 8 or Day 15, ANC below 0.5 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 omit ANC 0",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "anc_x10e9_l": 0
+      },
+      "expected": "omit",
+      "pattern": "omit",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_ANC_LT0_5",
+            "type": "omit",
+            "text": "On Day 8 or Day 15, ANC below 0.5 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L. On Day 8 or Day 15, ANC below 0.5 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 omit platelet 49",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "platelets_x10e9_l": 49
+      },
+      "expected": "omit",
+      "pattern": "omit",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_PLT_LT50",
+            "type": "omit",
+            "text": "On Day 8 or Day 15, platelets below 50 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L. On Day 8 or Day 15, platelets below 50 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 omit platelet 0",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "platelets_x10e9_l": 0
+      },
+      "expected": "omit",
+      "pattern": "omit",
+      "actual": {
+        "action": "omit",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_PLT_LT50",
+            "type": "omit",
+            "text": "On Day 8 or Day 15, platelets below 50 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L. On Day 8 or Day 15, platelets below 50 ×10⁹/L: omit gemcitabine and do not restart until ANC is above 0.5 ×10⁹/L and platelets are above 50 ×10⁹/L.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 75% ANC 0.5",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "anc_x10e9_l": 0.5
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*gemcitabine|gemcitabine.*75%",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_ANC_0_5_1",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 75% ANC 0.75",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "anc_x10e9_l": 0.75
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*gemcitabine|gemcitabine.*75%",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_ANC_0_5_1",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 75% ANC 1",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "anc_x10e9_l": 1
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*gemcitabine|gemcitabine.*75%",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_ANC_0_5_1",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 75% platelet 50",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "platelets_x10e9_l": 50
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*gemcitabine|gemcitabine.*75%",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_PLT_50_100",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 75% platelet 75",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "platelets_x10e9_l": 75
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*gemcitabine|gemcitabine.*75%",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_PLT_50_100",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Day8/15 75% platelet 100",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "platelets_x10e9_l": 100
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*gemcitabine|gemcitabine.*75%",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_PLT_50_100",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Restart ANC exact0.5 not recovered",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "restarting_after_omission": true,
+        "anc_x10e9_l": 0.5,
+        "platelets_x10e9_l": 100
+      },
+      "expected": "withhold",
+      "pattern": "strictly >0.5",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_ANC_0_5_1",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          },
+          {
+            "id": "GEM749_D8_15_PLT_50_100",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing withhold /strictly >0.5/i"
+    },
+    {
+      "code": "00749",
+      "name": "Restart platelet exact50 not recovered",
+      "input": {
+        "assessment_phase": "cycle_day_8_15",
+        "restarting_after_omission": true,
+        "anc_x10e9_l": 1,
+        "platelets_x10e9_l": 50
+      },
+      "expected": "withhold",
+      "pattern": "strictly >50",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_D8_15_ANC_0_5_1",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, ANC 0.5 to 1.0 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          },
+          {
+            "id": "GEM749_D8_15_PLT_50_100",
+            "type": "dose_reduce",
+            "text": "On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose. On Day 8 or Day 15, platelets 50 to 100 ×10⁹/L: give 75% of the gemcitabine dose.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing withhold /strictly >50/i"
+    },
+    {
+      "code": "00749",
+      "name": "Current FN urgent",
+      "input": {
+        "febrile_neutropenia": true
+      },
+      "expected": "withhold",
+      "pattern": "urgent",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_SEVERE_NADIR",
+            "type": "dose_reduce",
+            "text": "A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles. A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing withhold /urgent/i"
+    },
+    {
+      "code": "00749",
+      "name": "Historical severe event previous_febrile_neutropenia",
+      "input": {
+        "previous_febrile_neutropenia": true
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*ORIGINAL",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /75%.*ORIGINAL/i"
+    },
+    {
+      "code": "00749",
+      "name": "Historical severe event anc_below_0_5_more_than_5_days",
+      "input": {
+        "anc_below_0_5_more_than_5_days": true
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_SEVERE_NADIR",
+            "type": "dose_reduce",
+            "text": "A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles. A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Historical severe event anc_below_0_1_more_than_3_days",
+      "input": {
+        "anc_below_0_1_more_than_3_days": true
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_SEVERE_NADIR",
+            "type": "dose_reduce",
+            "text": "A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles. A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Historical severe event platelet_nadir_below_25",
+      "input": {
+        "platelet_nadir_below_25": true
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_SEVERE_NADIR",
+            "type": "dose_reduce",
+            "text": "A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles. A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Historical severe event cycle_delay_more_than_1_week_due_toxicity",
+      "input": {
+        "cycle_delay_more_than_1_week_due_toxicity": true
+      },
+      "expected": "consultant_review",
+      "pattern": "75%.*ORIGINAL",
+      "actual": {
+        "action": "dose_reduce",
+        "findings": [
+          {
+            "id": "GEM749_SEVERE_NADIR",
+            "type": "dose_reduce",
+            "text": "A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles. A source specified severe nadir event, febrile neutropenia, platelet nadir below 25 ×10⁹/L or cycle delay longer than one week due to toxicity requires 75% of the original cycle initiation dose for subsequent cycles.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Renal<30 no mandatory reduction",
+      "input": {
+        "crcl_ml_min": "lt30"
+      },
+      "expected": "consultant_review",
+      "pattern": "no gemcitabine dose adjustment",
+      "actual": {
+        "action": "proceed_with_caution",
+        "findings": [
+          {
+            "id": "GEM749_CRCL_LT30",
+            "type": "proceed_with_caution",
+            "text": "CrCl below 30 mL/min: the NCCP source states that no dose adjustment is expected from renal function alone. Continue full clinical review. CrCl below 30 mL/min: the NCCP source states that no dose adjustment is expected from renal function alone. Continue full clinical review.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /no gemcitabine dose adjustment/i"
+    },
+    {
+      "code": "00749",
+      "name": "Bilirubin27 two alternatives",
+      "input": {
+        "bilirubin_umol_l": 27
+      },
+      "expected": "consultant_review",
+      "pattern": "80%.*OR full dose",
+      "actual": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "GEM749_BILI_GE27",
+            "type": "consultant_review",
+            "text": "Bilirubin at least 27 µmol/L: NCCP permits either an 80% starting dose with increase if tolerated or full dose with active monitoring. Confirm the selected pathway. Bilirubin at least 27 µmol/L: NCCP permits either an 80% starting dose with increase if tolerated or full dose with active monitoring. Confirm the selected pathway.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Grade3 source gap",
+      "input": {
+        "nonhaem_toxicity_grade": 3,
+        "toxicity_excludes_nausea_vomiting": true
+      },
+      "expected": "consultant_review",
+      "pattern": "printed.*>3.*>4",
+      "actual": {
+        "action": "proceed_with_caution",
+        "findings": [
+          {
+            "id": "PARTIAL_NONHAEM_TOXICITY_GRADE_NO_RESTRICTION",
+            "type": "proceed_with_caution",
+            "text": "Non haematological toxicity grade Grade 3 meets the encoded criterion or does not trigger the restrictive threshold in 1 assessed rule. This is an assessed-domain result only and does not clear unassessed parts of the regimen."
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing consultant_review /printed.*>3.*>4/i"
+    },
+    {
+      "code": "00749",
+      "name": "Grade4 source choice",
+      "input": {
+        "nonhaem_toxicity_grade": 4,
+        "toxicity_excludes_nausea_vomiting": true
+      },
+      "expected": "withhold",
+      "pattern": "50%.*OR discontinuation",
+      "actual": {
+        "action": "withhold_then_reduce",
+        "findings": [
+          {
+            "id": "GEM749_NONHAEM_G4",
+            "type": "withhold_then_reduce",
+            "text": "Grade 4 non haematological toxicity, excluding nausea or vomiting: withhold until recovery to grade 1 or lower; the NCCP table permits resumption at 50% or discontinuation at Consultant discretion. Grade 4 non haematological toxicity, excluding nausea or vomiting: withhold until recovery to grade 1 or lower; the NCCP table permits resumption at 50% or discontinuation at Consultant discretion.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "SCAR permanent stop",
+      "input": {
+        "severe_cutaneous_adverse_reaction": true
+      },
+      "expected": "permanently_discontinue",
+      "pattern": "cutaneous",
+      "actual": {
+        "action": "permanently_discontinue",
+        "findings": [
+          {
+            "id": "GEM749_SCAR",
+            "type": "permanently_discontinue",
+            "text": "Severe cutaneous adverse reaction such as SJS, TEN, DRESS or AGEP: discontinue gemcitabine. Severe cutaneous adverse reaction such as SJS, TEN, DRESS or AGEP: discontinue gemcitabine.",
+            "components": [
+              "gemcitabine"
+            ]
+          }
+        ],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": true
+    },
+    {
+      "code": "00749",
+      "name": "Suspected SCAR urgent",
+      "input": {
+        "suspected_severe_cutaneous_adverse_reaction": true
+      },
+      "expected": "withhold",
+      "pattern": "suspected",
+      "actual": {
+        "action": "incomplete",
+        "findings": [],
+        "errors": [],
+        "invalid": []
+      },
+      "pass": false,
+      "error": "Missing withhold /suspected/i"
+    },
+    {
+      "code": "00430",
+      "name": "Source schedule both drugs D1 and8 carboplatin AUC2 first",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    [\n      1,\n      1,\n-     'carboplatin',\n-     2\n-   ],\n-   [\n-     1,\n-     2,\n      'gemcitabine',\n      1000\n    ],\n    [\n-     8,\n      1,\n+     2,\n      'carboplatin',\n+     4\n-     2\n    ],\n    [\n      8,\n+     1,\n-     2,\n      'gemcitabine',\n      1000\n    ]\n  ]\n"
+    },
+    {
+      "code": "00430",
+      "name": "Exact TNBC indication with no ovarian choices",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n+   '00306a',\n+   '00306b',\n+   '00306c'\n-   '00430a'\n  ]\n"
+    },
+    {
+      "code": "00749",
+      "name": "Source schedule 800 D1,8,15 q28 and6to8 cycles",
+      "pass": false,
+      "error": "Cannot read properties of undefined (reading '0')"
+    }
+  ]
+}
