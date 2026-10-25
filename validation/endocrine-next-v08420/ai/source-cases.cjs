@@ -1,0 +1,95 @@
+'use strict';
+/* Independently specified clinical expectations from NCCP 00254 v5, 00371 v4,
+ * 00376 v4 and each linked HPRA SmPC. No live patient data are used. */
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const repo=process.env.SACT_REPO||path.resolve(__dirname,'../../..');
+const arg=process.argv.indexOf('--mode');const mode=arg>=0?process.argv[arg+1]:'proposed';assert(['baseline','proposed','integrated'].includes(mode),'Use --mode baseline|proposed|integrated');
+const protocolDir=mode==='baseline'?path.join(__dirname,'../baseline'):mode==='proposed'?path.join(__dirname,'proposed'):path.join(repo,'protocols/breast');
+const E=require(path.join(repo,'js/assessment-engine')),D=require(path.join(repo,'js/protocol-dose-schedule')),V=require(path.join(repo,'js/protocol-validator'));
+const codes=['00254','00371','00376'];
+const P=Object.fromEntries(codes.map(c=>[c,JSON.parse(fs.readFileSync(path.join(protocolDir,fs.readdirSync(protocolDir).find(f=>f.startsWith(c+'-'))),'utf8'))]));
+const results=[],coverage=new Set();let failed=0;
+const restrictive=new Set(['contraindicated','withhold','delay','dose_reduce','consultant_review','discontinue','permanently_discontinue']);
+const clinical=r=>r.findings.filter(f=>!f.domainAssessment&&!/^PARTIAL_/.test(f.ruleId||''));
+const text=r=>clinical(r).map(f=>f.explanation).join(' ');
+function has(r,type){assert(clinical(r).some(f=>f.actionType===type),`Expected ${type}; got ${r.actionType}`);}
+function noRestriction(r){assert(!clinical(r).some(f=>restrictive.has(f.actionType)),`Unexpected restriction: ${text(r)}`);}
+function noNumeric(m){assert(!m.rows.some(r=>r.quantified&&/^\s*\d/.test(r.protocolDose)),'Unsafe automatic numeric dose displayed');}
+function sourceRule(r,tag){assert(clinical(r).some(f=>f.ruleId.endsWith('_'+tag)),`Missing expected source rule ${tag}`);}
+function run(code,name,input,check,source){const result={code,name,input,source};try{const r=E.assess(P[code],input),m=D.buildModificationModel(P[code],r);assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);for(const f of clinical(r)){coverage.add(f.ruleId);assert.deepEqual(f.action.components,[P[code].metadata.drugs[0]]);}result.actual=r.actionType;result.findings=clinical(r).map(f=>({id:f.ruleId,action:f.actionType,explanation:f.explanation}));result.displayed_doses=m.rows.map(x=>({dose:x.protocolDose,quantified:x.quantified}));check(r,m);result.pass=true;}catch(e){result.pass=false;result.error=e.message;failed++;}results.push(result);}
+function structural(name,check){try{check();results.push({name,pass:true});}catch(e){failed++;results.push({name,pass:false,error:e.message});}}
+for(const code of codes){
+ run(code,'Empty form remains unassessed',{},(r,m)=>{assert.equal(r.actionType,'incomplete');noNumeric(m);},'Missing values never normal');
+ for(const [field,values]of [['anc_x10e9_l',[0.1,1,1.5,3]],['platelets_x10e9_l',[10,49,75,100,200]],['hb_g_dl',[6,12]],['haematological_toxicity_grade',[0,3,4]],['diarrhoea_grade',[0,2,3]],['alt_grade',[1,3,4]],['ast_grade',[1,3,4]]])for(const value of values)run(code,`${field}=${value} is monitoring, not a cytotoxic cutoff`,{[field]:value},(r,m)=>{assert.equal(r.actionType,'incomplete');assert.equal(clinical(r).length,0);noNumeric(m);},'NCCP p2 no count or CTCAE dose ladder; clinical assessment remains necessary');
+ for(const field of ['hypersensitivity','pregnancy','breastfeeding']){
+  run(code,`${field} independently excludes`,{[field]:true},(r,m)=>{has(r,'contraindicated');noNumeric(m);},'NCCP explicit exclusions');
+  run(code,`${field}=false does not clear other domains`,{[field]:false},(r,m)=>{noRestriction(r);assert(r.actionType!=='proceed');noNumeric(m);},'Single value partial assessment');
+ }
+ run(code,'Premenopausal monotherapy is blocked',{menopausal_status:'premenopausal'},(r,m)=>{has(r,code==='00254'?'withhold':'contraindicated');noNumeric(m);assert(/separate|ovarian/.test(text(r)));},'NCCP indication/exclusion and HPRA menopause warning');
+ run(code,'Uncertain menopause requires confirmation',{menopausal_status:'uncertain'},(r,m)=>{has(r,'consultant_review');noNumeric(m);assert(/FSH/.test(text(r)));},'NCCP p2');
+ run(code,'OFS plan does not silently authorise monotherapy',{menopausal_status:'ovarian_suppression_plan'},(r,m)=>{has(r,'consultant_review');noNumeric(m);},'Separate prescribed OFS combination boundary');
+ run(code,'Confirmed postmenopause clears only its domain',{menopausal_status:'postmenopausal'},(r,m)=>{noRestriction(r);noNumeric(m);assert.equal(r.actionType,'proceed_with_caution');},'NCCP menopause criterion');
+ run(code,'Return of ovarian function blocks continuation',{ovarian_function_return:true},(r,m)=>{has(r,'withhold');noNumeric(m);},'HPRA menopause precautions');
+ for(const status of ['negative','unknown','positive'])run(code,`HR ${status}`,{hormone_receptor_status:status},(r,m)=>{if(status==='positive')noRestriction(r);else has(r,'consultant_review');noNumeric(m);},'NCCP hormone-dependent pathway');
+ run(code,'Explicit need for menopause blood confirmation',{menopause_biochemistry_required:true},(r,m)=>{has(r,'consultant_review');sourceRule(r,'MENOPAUSE_BLOODS');noNumeric(m);},'NCCP p2');
+ for(const age of [54.99,55,55.01])for(const documented of [undefined,false,true])run(code,`Age ${age}, hysterectomy, biochemical confirmation ${documented}`,{age_years:age,prior_hysterectomy:true,...(documented===undefined?{}:{menopause_biochemistry_checked:documented})},(r,m)=>{if(age<55&&documented!==true){has(r,'consultant_review');sourceRule(r,'MENOPAUSE_BLOODS');}else noRestriction(r);noNumeric(m);},'NCCP p2 strict age <55/hysterectomy qualifier; uncertainty assessed separately');
+ run(code,'No age assumption when menopause unclear at 60',{age_years:60,menopausal_status:'uncertain'},(r,m)=>{has(r,'consultant_review');noNumeric(m);},'Uncertain menopause requires biochemical confirmation at any age');
+ for(const field of ['oestrogen_containing_medicine','tamoxifen_concurrent','bone_density_plan_missing','new_fracture','intolerable_endocrine_symptoms','disease_progression'])run(code,`${field} triggers clinical review without a reduction ladder`,{[field]:true},(r,m)=>{has(r,'consultant_review');noNumeric(m);},'NCCP/HPRA precautions and treatment duration');
+ run(code,'Osteoporosis risk creates bone plan, not automatic drug stop',{osteoporosis_or_fracture_risk:true},(r,m)=>{noRestriction(r);sourceRule(r,'BONE_RISK');assert(/bone|mineral/.test(text(r)));noNumeric(m);},'NCCP p2–3 and HPRA §4.4');
+ for(const value of ['A','B','C'])run(code,`Child–Pugh ${value}`,{child_pugh_class:value},(r,m)=>{
+  if(code==='00254'&&value==='C'){has(r,'withhold');noNumeric(m);assert(/not recommend/.test(text(r)));}
+  else if(code==='00371'&&value==='C'){has(r,'dose_reduce');assert(m.rows.some(x=>x.quantified&&x.protocolDose==='2.5 mg every other day'));assert(!m.rows.some(x=>/1.25/.test(x.protocolDose)));assert(/close supervision/.test(text(r)));}
+  else{noRestriction(r);noNumeric(m);assert(/no .*adjustment|no adjustment/i.test(text(r)));}
+ },'NCCP renal/hepatic table p2; drug-specific differences retained');
+ for(const field of ['pregnancy','breastfeeding','hypersensitivity','ovarian_function_return'])run(code,`Hepatic C plus ${field} prevents a restart dose`,{child_pugh_class:'C',[field]:true},(r,m)=>{has(r,field==='ovarian_function_return'?'withhold':'contraindicated');noNumeric(m);},'Safety exclusion overrides organ instruction');
+ for(const field of ['oestrogen_containing_medicine','intolerable_endocrine_symptoms'])run(code,`Hepatic C plus ${field} does not leak numeric instruction`,{child_pugh_class:'C',[field]:true},(r,m)=>{has(r,'consultant_review');noNumeric(m);},'Unresolved competing safety review blocks numeric dose display');
+ for(const option of P[code].input_definitions.renal_function_band.options)run(code,`Renal source band ${option.value}`,{renal_function_band:option.value},(r,m)=>{if(code==='00371'&&option.value!=='ge10')has(r,'consultant_review');else noRestriction(r);noNumeric(m);},'NCCP p2; linked HPRA renal precautions');
+ run(code,'Haemodialysis alone assessed',{haemodialysis:true},(r,m)=>{if(code==='00371')has(r,'consultant_review');else noRestriction(r);noNumeric(m);assert(/haemodialysis/i.test(text(r)));},'NCCP p2 dialysis recommendations');
+ for(const option of P[code].input_definitions.indication_code.options)run(code,`Select ${option.value} without inventing history`,{indication_code:option.value},(r,m)=>{if(['00254c','00371b','00376b'].includes(option.value))has(r,'consultant_review');else noRestriction(r);noNumeric(m);},'Exact published indication and targeted missing history');
+}
+for(const gfr of [0,29.99,30,30.01,90])run('00254',`Anastrozole numeric GFR ${gfr}`,{gfr_ml_min:gfr},(r,m)=>{noRestriction(r);sourceRule(r,gfr<30?'RENAL_SEVERE':'RENAL_STANDARD');noNumeric(m);},'HPRA §4.4 GFR <30 caution, NCCP no dose change');
+run('00254','Tamoxifen suitable does not bypass additional source eligibility wording',{tamoxifen_unsuitable:false},(r,m)=>{has(r,'consultant_review');noNumeric(m);},'NCCP00254 p1 eligibility wording');
+for(const years of [0,1.99,2,2.5,3,3.01,5])run('00254',`Switch after ${years} tamoxifen years`,{indication_code:'00254c',prior_tamoxifen_years:years},(r,m)=>{if(years<2||years>3)has(r,'consultant_review');else noRestriction(r);noNumeric(m);},'NCCP00254c 2–3 years');
+run('00254','Tamoxifen history not forced for initial adjuvant indication',{indication_code:'00254b'},(r,m)=>{noRestriction(r);noNumeric(m);},'Indication-specific history, no global prerequisite');
+for(const field of ['persistent_vaginal_bleeding','new_tendon_pain_or_swelling'])run('00254',field,{[field]:true},(r,m)=>{has(r,'consultant_review');noNumeric(m);},'HPRA anastrozole §4.8');
+for(const crcl of [0,9.99,10,10.01,90])run('00371',`Letrozole numeric CrCl ${crcl}`,{crcl_ml_min:crcl},(r,m)=>{if(crcl<10){has(r,'consultant_review');assert(/insufficient|evidence/.test(text(r)));}else noRestriction(r);noNumeric(m);},'HPRA §4.2/4.4 strict CrCl <10 evidence gap');
+run('00371','Severe renal plus severe hepatic has no automatic numeric frequency',{crcl_ml_min:9,child_pugh_class:'C'},(r,m)=>{has(r,'consultant_review');noNumeric(m);},'NCCP/HPRA source limitation overrides numeric dose display');
+for(const value of [false,true])run('00371',`Extended endocrine prior 5 years ${value}`,{indication_code:'00371b',prior_adjuvant_endocrine_5_years:value},(r,m)=>{if(!value)has(r,'consultant_review');else noRestriction(r);noNumeric(m);},'NCCP00371b');
+for(const field of ['neoadjuvant_response_inadequate','new_tendon_pain_or_swelling','cyp2a6_2c19_narrow_index_medicine'])run('00371',field,{[field]:true},(r,m)=>{has(r,'consultant_review');noNumeric(m);if(field.startsWith('neoadjuvant'))assert(/4–8|surgery/.test(text(r)));},'NCCP neoadjuvant/tendon guidance and HPRA interaction precautions');
+for(const value of [false,true])run('00376',`Exemestane prior adjuvant therapy ${value}`,{indication_code:'00376b',prior_adjuvant_endocrine_therapy:value},(r,m)=>{if(!value)has(r,'consultant_review');else noRestriction(r);noNumeric(m);},'NCCP00376b');
+for(const field of ['strong_cyp3a4_inducer','cyp3a4_narrow_index_medicine'])run('00376',field,{[field]:true},(r,m)=>{has(r,'consultant_review');noNumeric(m);assert(!m.rows.some(x=>/50 mg/.test(x.protocolDose)));},'Irish HPRA §4.5 does not authorise automatic dose doubling');
+run('00376','Vitamin D deficiency leads to supplementation planning, not AI hold',{vitamin_d_deficiency:true},(r,m)=>{noRestriction(r);sourceRule(r,'VITAMIN_D');noNumeric(m);},'HPRA §4.4');
+
+// Clinical expectations are invariant across modes. Baseline failures expose
+// observed missing safeguards against the same source-derived oracle.
+for(const schedule of ['standard_daily','hepatic_every_other_day','other_reduced','other_or_unknown']){
+ for(const hepatic of ['A','B','C'])run('00371',`Current schedule ${schedule}, Child–Pugh ${hepatic}`,{child_pugh_class:hepatic,letrozole_current_schedule:schedule},(r,m)=>{
+  const needsReview=hepatic==='C'&&['other_reduced','other_or_unknown'].includes(schedule);
+  if(needsReview){has(r,'consultant_review');sourceRule(r,'HEPATIC_CURRENT_SCHEDULE');noNumeric(m);}
+  else if(hepatic==='C'){has(r,'dose_reduce');assert(m.rows.some(x=>x.quantified&&x.protocolDose==='2.5 mg every other day'));}
+  else{noRestriction(r);noNumeric(m);}
+ },'NCCP00371 physical p2 50% original average dose; no inferred escalation of an existing custom prescription');
+ run('00371',`Current schedule ${schedule} alone remains partial`,{letrozole_current_schedule:schedule},(r,m)=>{assert(!clinical(r).some(f=>f.ruleId.endsWith('_HEPATIC_CURRENT_SCHEDULE')));noRestriction(r);noNumeric(m);},'Current prescription is context; no hepatic class is inferred');
+}
+for(const indication of ['00371a','00371d','00371e']){
+ for(const value of ['negative','positive','unknown'])run('00371',`${indication} with HER2 ${value}`,{indication_code:indication,her2_status:value},(r,m)=>{
+  if(indication==='00371d'&&value!=='negative'){has(r,'consultant_review');sourceRule(r,'NEOADJ_HER2');assert(/SmPC/.test(text(r)));}
+  else noRestriction(r);noNumeric(m);
+ },'HPRA00371 §4.1 neoadjuvant label scope; not a universal monotherapy HER2 exclusion');
+ for(const field of ['chemotherapy_unsuitable','immediate_surgery_not_indicated'])for(const value of [false,true])run('00371',`${indication} with ${field} ${value}`,{indication_code:indication,[field]:value},(r,m)=>{
+  if(indication==='00371d'&&!value){has(r,'consultant_review');sourceRule(r,field==='chemotherapy_unsuitable'?'NEOADJ_CHEMOTHERAPY':'NEOADJ_SURGERY');}
+  else noRestriction(r);noNumeric(m);
+ },'HPRA00371 §4.1 known neoadjuvant treatment-selection conflict requires review');
+}
+for(const input of [{her2_status:'positive'},{chemotherapy_unsuitable:false},{immediate_surgery_not_indicated:false}])run('00371','Neoadjuvant context without indication is not inferred '+JSON.stringify(input),input,(r,m)=>{noRestriction(r);noNumeric(m);},'Partial entry must not invent treatment setting');
+run('00371','Known neoadjuvant criteria met do not clear whole patient',{indication_code:'00371d',her2_status:'negative',chemotherapy_unsuitable:true,immediate_surgery_not_indicated:true},(r,m)=>{noRestriction(r);noNumeric(m);assert.notEqual(r.actionType,'proceed');},'Other independent eligibility domains remain unassessed');
+for(const input of [{her2_status:'positive'},{chemotherapy_unsuitable:false},{immediate_surgery_not_indicated:false},{letrozole_current_schedule:'other_reduced'}])run('00371','Competing new review blocks hepatic-C numeric dose '+JSON.stringify(input),{indication_code:'00371d',child_pugh_class:'C',...input},(r,m)=>{has(r,'consultant_review');noNumeric(m);},'Review takes precedence over automatic frequency output');
+
+structural('Three protocols validate and retain canonical IDs/optional assessment',()=>{for(const code of codes){const p=P[code],v=V.validate(p,{strict:true});assert(v.valid,V.formatIssues(v).join(';'));assert.equal(p.protocol_id,`nccp-${code}-v${code==='00254'?'5':'current'}`);assert.equal(p.metadata.canonical_protocol_id,`nccp-${code}-v${code==='00254'?'5':'4'}`);assert.deepEqual(p.required_inputs,[]);for(const d of Object.values(p.input_definitions)){assert.equal(d.required,false);assert.notEqual(d.demo_value,undefined);}assert.equal(p.metadata.validation.consultant_reviewed,false);assert.equal(p.metadata.validation.oncology_pharmacy_reviewed,false);assert.equal(p.metadata.validation.clinical_use_authorised,false);}});
+structural('Schedules show continuous daily tablet doses without artificial cycles',()=>{for(const[code,dose]of [['00254',1],['00371',2.5],['00376',25]]){const p=P[code],phase=p.treatment_phases[0],m=D.buildModel(p);assert.equal(phase.cycle_length_days,null);assert.deepEqual(phase.administration[0].day,['Continuous']);assert.equal(phase.administration[0].dose.value,dose);assert.equal(phase.administration[0].dose.frequency,'once_daily');assert(m.phases[0].components[0].dose.includes('once daily'));assert(m.phases[0].components[0].days.includes('Continuous'));assert(!/21|28/.test(phase.schedule_summary));}});
+structural('Indication counts and settings are exact',()=>{assert.equal(P['00254'].indications.length,3);assert.equal(P['00371'].indications.length,5);assert.equal(P['00376'].indications.length,3);assert(P['00371'].indications.some(i=>i.code==='00371d'&&i.setting==='neoadjuvant'));assert(!P['00254'].indications.some(i=>i.setting==='neoadjuvant'));assert(!P['00376'].indications.some(i=>i.setting==='neoadjuvant'));});
+structural('All source rules covered and attributable',()=>{for(const code of codes)for(const r of P[code].rule_engine.rules){assert(coverage.has(r.id),`Uncovered: ${r.id}`);assert(r.source.url&&r.source.page);assert.equal(r.source.checked_date,mode==='baseline'?'2026-10-18':'2026-10-25');assert(!/Legacy|pending/.test(r.source.document));}});
+structural('Source monitoring retains baseline/ongoing boundaries',()=>{for(const p of Object.values(P)){assert.equal(p.metadata.source_document_pages,4);assert.equal(p.metadata.sactcheck_encoding_version,mode==='baseline'?'0.84.2':'0.84.20');if(mode==='baseline')assert(!p.metadata.source_pdf_sha256);else assert.match(p.metadata.source_pdf_sha256,/^[a-f0-9]{64}$/);assert.match(p.metadata.source_text_sha256,/^[a-f0-9]{64}$/);assert(/no.*routine echo|do not mandate routine echo/.test(p.monitoring.disease));assert(/NCCP does not specify a universal fixed interval/.test(p.monitoring.regular.join(' ')));}assert(P['00376'].monitoring.baseline.some(x=>/25-hydroxy-vitamin D/.test(x)));assert(/4–8-month/.test(P['00371'].monitoring.neoadjuvant));});
+const output={checked_at:new Date().toISOString(),repo,mode,baseline_note:mode==='baseline'?'Frozen baseline judged against the same source-derived clinical oracle; observed failures identify missing safeguards.':undefined,total:results.length,passed:results.length-failed,failed,covered_rules:coverage.size,cases:results};
+fs.writeFileSync(path.join(__dirname,`source-cases-${mode}.json`),JSON.stringify(output,null,2)+'\n');
+console.log(`AI source audit (${mode}): ${results.length-failed}/${results.length} passed; ${coverage.size} rules covered.`);for(const r of results.filter(x=>!x.pass))console.error(`${r.code||'STRUCTURE'} ${r.name}: ${r.error}`);process.exitCode=failed?1:0;
