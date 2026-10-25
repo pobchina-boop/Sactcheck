@@ -1,7 +1,7 @@
 # SACTCheck v0.51.0 Solid Tumour Reconciliation
 
 **Reconciliation date:** 2026-07-29  
-**Indexed catalogue:** 376 protocols (361 Solid Tumour and 15 Haematology)  
+**Indexed catalogue:** 377 protocols (362 Solid Tumour and 15 Haematology)  
 **Automated structural result:** PASS
 
 ## Scope and boundary
@@ -10,13 +10,13 @@ This release reconciles the current SACTCheck solid tumour repository against th
 
 ## Catalogue counts
 
-There are **361 unique Solid Tumour protocol files**. Five shared protocols are intentionally cross-listed across more than one tumour site, so tumour-site coverage counts are placements and may total more than 361.
+There are **362 unique Solid Tumour protocol files**. Five shared protocols are intentionally cross-listed across more than one tumour site, so tumour-site coverage counts are placements and may total more than 362.
 
 ### Unique protocol files by primary storage group
 
 | Primary storage group | Unique protocols |
 |---|---:|
-| Breast | 79 |
+| Breast | 80 |
 | Cross-listed/shared | 5 |
 | Gastrointestinal | 85 |
 | Genitourinary | 48 |
@@ -33,7 +33,7 @@ There are **361 unique Solid Tumour protocol files**. Five shared protocols are 
 
 | Tumour site | Protocol placements |
 |---|---:|
-| Breast | 83 |
+| Breast | 84 |
 | Gastrointestinal | 93 |
 | Genitourinary | 67 |
 | Gynaecology | 48 |
@@ -71,10 +71,12 @@ Twelve protocols previously labelled only as `current` now carry the explicit ve
 | 00200 | 8 | 2014-02-10 | 2021-07-21 |
 | 00206 | 5 | 2015-10-01 | 2021-07-28 |
 | 00217 | 7 | 2015-01-11 | 2031-04-21 |
+| 00232 | 5 | — | 2030-11-11 |
 | 00250 | 9 | 2015-04-29 | 2026-04-01 |
 | 00252 | 7 | 2015-04-29 | 2021-05-12 |
 | 00253 | 6 | 2014-11-01 | 2030-12-19 |
 | 00254 | 5 | — | 2030-12-19 |
+| 00259 | 6 | — | review as required from 2026-05-20 |
 | 00260 | 7 | — | — |
 | 00262 | 8 | 2015-04-29 | 2021-05-12 |
 | 00263 | 7 | 2015-04-29 | 2021-05-12 |
@@ -99,17 +101,18 @@ Twelve protocols previously labelled only as `current` now carry the explicit ve
 | 00749 | 3 | 2024-08-26 | 2030-08-28 |
 | 00794 | 3 | 2024-02-23 | 2030-03-04 |
 | 00936 | 1 | 2026-02-18 | 2027-02-18 |
+| 00947 | 1 | 2026-08-04 | 2027-08-04 |
 
 ## Partial-assessment standardisation
 
-All 361 indexed solid tumour protocols now use the platform policy that every entered value is assessed independently. No static field, profile or phase is required merely to launch an assessment. Missing domains remain unassessed and are never assumed normal. Conditional follow-on fields may still be requested when a clinician enters a trigger that requires additional context.
+All 362 indexed solid tumour protocols now use the platform policy that every entered value is assessed independently. No static field, profile or phase is required merely to launch an assessment. Missing domains remain unassessed and are never assumed normal. Conditional follow-on fields may still be requested when a clinician enters a trigger that requires additional context.
 
 ## Governance metadata backlog
 
 These are not automated release failures, because older NCCP documents do not use a uniform publication/review header and many encodings pre-date the structured metadata model. They remain an explicit manual source-review queue.
 
 - Missing stored publication date: **251** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545, 00659 … plus 231 more)
-- Missing stored review or last-reviewed date: **246** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00545, 00659, 00720, 00736, 00743, 00745 … plus 226 more)
+- Missing stored review or last-reviewed date: **242** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00545, 00659, 00720, 00736, 00743, 00745 … plus 222 more)
 - Source document not explicitly marked as manually checked: **171** (00212, 00205, 00256, 00831, 00897, 00926, 00215, 00104, 00282, 00326, 00333, 00337, 00338, 00453, 00518, 00564, 00583, 00602, 00622, 00628 … plus 151 more)
 
 ## Clinical boundary
