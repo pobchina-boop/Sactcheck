@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 4,
     "source_url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
-    "sactcheck_encoding_version": "0.84.2",
+    "sactcheck_encoding_version": "0.84.20",
     "treatment_setting": [
       "adjuvant",
       "extended_adjuvant",
@@ -60,8 +60,8 @@
     "review_date": "2031-02-23",
     "review_date_basis": "scheduled_review",
     "source_version_verified": true,
-    "source_version_verified_date": "2026-10-18",
-    "source_version_verification_method": "manual comparison with current official NCCP PDF header and version-control information",
+    "source_version_verified_date": "2026-10-25",
+    "source_version_verification_method": "Official current NCCP PDF header and version history; physical PDF page 2 organ-function table rendered and visually inspected.",
     "legacy_internal_id_retained": true,
     "legacy_internal_id_note": "Stable internal ID retained to avoid breaking existing bookmarks and catalogue references; display metadata now records the explicit NCCP source version.",
     "encoding_maturity": {
@@ -71,27 +71,27 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "reconciled_release": "0.84.2",
-      "reconciled_date": "2026-10-18",
+      "reconciled_release": "0.84.20",
+      "reconciled_date": "2026-10-25",
       "scope_note": "Current NCCP indications, continuous schedule, menopause boundaries, organ impairment, source monitoring and linked HPRA safety information reconciled. No invented cytotoxic count threshold or CTCAE dose ladder."
     },
-    "catalogue_source_checked_date": "2026-10-18",
+    "catalogue_source_checked_date": "2026-10-25",
     "catalogue_source_check_scope": "Current breast and oral NCCP catalogue plus full published regimen text; linked product information cross-check.",
     "canonical_protocol_id": "nccp-00371-v4",
     "legacy_protocol_id_alias": "nccp-00371-vcurrent",
-    "source_checked_date": "2026-10-18",
+    "source_checked_date": "2026-10-25",
     "drugs": [
       "letrozole"
     ],
-    "source_text_sha256": "a2d72cb177c830ca09e432faca18a9c0253f059654268cb7e916a2c120b324f7",
-    "source_hash_basis": "Web tool extracted NCCP text snapshot; PDF bytes unavailable (HTTP 403), not a PDF checksum.",
-    "schedule_summary": "Letrozole 2.5 mg orally once daily continuously; no planned cycle break.",
+    "source_text_sha256": "9ca9b77ffc3d2a7ab0972b89bfe042cedd3a3232d04d295c88fc64a4d6f4df97",
+    "source_hash_basis": "SHA-256 of downloaded official NCCP PDF bytes; text hash of local pdftotext -layout extraction.",
+    "schedule_summary": "Take letrozole once daily continuously. The prescriber confirms whether the aim is before surgery, after surgery, extended adjuvant treatment or advanced-disease control.",
     "support_source_page": 3,
     "audit_limitations": [
       "Independent consultant and oncology pharmacy validation pending; source reconciliation is not clinical-use authorisation.",
       "This monotherapy card does not validate ovarian suppression plus aromatase inhibitor therapy or combination regimens. Confirm the separate consultant plan.",
       "No automatic restart or cycle-day clearance is encoded; clinically indicated tests and endocrine review are individualised.",
-      "PDF byte download returned HTTP 403. Web extracted text checked; screenshot retrieval supplied no image bytes, so table layout was checked from extracted column labels rather than claiming visual PDF verification."
+      "NCCP 00371d neoadjuvant wording is broader than the linked HPRA SmPC, which additionally requires HER2-negative disease, chemotherapy unsuitability and no indication for immediate surgery. Optional entered criteria trigger review; omitted criteria remain unassessed, not assumed satisfied."
     ],
     "audited_eligibility": [
       "Adjuvant treatment of hormone receptor-positive invasive early breast cancer in postmenopausal women.",
@@ -111,18 +111,22 @@
           "4.4",
           "4.5",
           "4.6",
-          "4.8"
+          "4.8",
+          "5.1"
         ],
-        "checked_date": "2026-10-18"
+        "checked_date": "2026-10-25"
       }
     ],
     "source_reconciliation": {
-      "release": "0.84.2",
-      "checked_date": "2026-10-18",
-      "validation_status": "full_source_audit_v0842_pending_independent_validation",
-      "evidence": "validation/endocrine-v0842/ai-audit.json",
-      "scenario_evidence": "validation/endocrine-v0842/ai-source-cases-results.json"
-    }
+      "release": "0.84.20",
+      "checked_date": "2026-10-25",
+      "validation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
+      "evidence": "validation/endocrine-next-v08420/ai/AUDIT.md",
+      "scenario_evidence": "validation/endocrine-next-v08420/ai/source-cases-integrated.json"
+    },
+    "source_pdf_sha256": "48af49cbf570718f6123cd820ea018c4d0947ad6b8b5935cabee84855964893b",
+    "full_suite_release": "0.84.20",
+    "source_schedule_interval_label": "Continuous daily oral treatment"
   },
   "clinical_governance": {
     "prescriptive_authority": "Initiated by a Consultant Medical Oncologist, or General Practitioner under the medical oncologist’s written plan.",
@@ -606,6 +610,66 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "letrozole_current_schedule": {
+      "label": "Current letrozole prescription, if already treated",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "standard_daily",
+          "label": "2.5 mg once daily"
+        },
+        {
+          "value": "hepatic_every_other_day",
+          "label": "2.5 mg every other day, already prescribed"
+        },
+        {
+          "value": "other_reduced",
+          "label": "Other reduced dose or frequency"
+        },
+        {
+          "value": "other_or_unknown",
+          "label": "Other or uncertain prescription"
+        }
+      ],
+      "demo_value": "standard_daily",
+      "input_role": "context"
+    },
+    "her2_status": {
+      "label": "HER2 status (neoadjuvant product-label context)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "negative",
+          "label": "Negative"
+        },
+        {
+          "value": "positive",
+          "label": "Positive"
+        },
+        {
+          "value": "unknown",
+          "label": "Unknown"
+        }
+      ],
+      "demo_value": "negative",
+      "input_role": "context"
+    },
+    "chemotherapy_unsuitable": {
+      "label": "Chemotherapy unsuitable for neoadjuvant pathway",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "context"
+    },
+    "immediate_surgery_not_indicated": {
+      "label": "Immediate surgery not indicated for neoadjuvant pathway",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "context"
     }
   },
   "required_inputs": [],
@@ -646,7 +710,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -669,7 +733,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -692,7 +756,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -715,7 +779,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -742,7 +806,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -769,7 +833,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -792,7 +856,7 @@
           "document": "HPRA Letrozole SmPC cited by NCCP",
           "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -819,7 +883,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 1,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -846,7 +910,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 1,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -904,7 +968,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -931,7 +995,7 @@
           "document": "HPRA Letrozole SmPC cited by NCCP",
           "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -958,7 +1022,7 @@
           "document": "HPRA Letrozole SmPC cited by NCCP",
           "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -981,7 +1045,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1008,7 +1072,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1035,7 +1099,7 @@
           "document": "HPRA Letrozole SmPC cited by NCCP",
           "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1062,7 +1126,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 1,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1089,7 +1153,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 1,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1125,7 +1189,7 @@
           "document": "HPRA Letrozole SmPC cited by NCCP",
           "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1157,7 +1221,7 @@
           "document": "HPRA Letrozole SmPC cited by NCCP",
           "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1193,7 +1257,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1219,7 +1283,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1247,7 +1311,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 2,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1291,7 +1355,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 1,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1318,7 +1382,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 1,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1345,7 +1409,7 @@
           "document": "NCCP 00371 v4",
           "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
           "page": 3,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -1372,7 +1436,157 @@
           "document": "HPRA Letrozole SmPC cited by NCCP",
           "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
           "page": 3,
-          "checked_date": "2026-10-18"
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "AI00371_HEPATIC_CURRENT_SCHEDULE",
+        "priority": 85,
+        "when": {
+          "all": [
+            {
+              "field": "child_pugh_class",
+              "operator": "==",
+              "value": "C"
+            },
+            {
+              "field": "letrozole_current_schedule",
+              "operator": "in",
+              "value": [
+                "other_reduced",
+                "other_or_unknown"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "letrozole"
+          ],
+          "message": "The NCCP Child–Pugh C instruction is 50% of the original average dose (2.5 mg every other day), not an instruction to increase or halve an already modified prescription. Current reduced/custom or uncertain dosing needs consultant and pharmacy reconciliation before any numeric schedule is displayed.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "The NCCP Child–Pugh C instruction is 50% of the original average dose (2.5 mg every other day), not an instruction to increase or halve an already modified prescription. Current reduced/custom or uncertain dosing needs consultant and pharmacy reconciliation before any numeric schedule is displayed."
+        },
+        "explanation": "The NCCP Child–Pugh C instruction is 50% of the original average dose (2.5 mg every other day), not an instruction to increase or halve an already modified prescription. Current reduced/custom or uncertain dosing needs consultant and pharmacy reconciliation before any numeric schedule is displayed.",
+        "source": {
+          "document": "NCCP 00371 v4, hepatic table; safe application to current prescription",
+          "url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
+          "page": 2,
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "AI00371_NEOADJ_HER2",
+        "priority": 85,
+        "when": {
+          "all": [
+            {
+              "field": "indication_code",
+              "operator": "==",
+              "value": "00371d"
+            },
+            {
+              "field": "her2_status",
+              "operator": "in",
+              "value": [
+                "positive",
+                "unknown"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "letrozole"
+          ],
+          "message": "The linked HPRA letrozole SmPC neoadjuvant indication specifies HER2-negative disease; NCCP 00371d uses broader HR-positive wording. Positive or uncertain HER2 status requires consultant review of the intended neoadjuvant plan. This is a product-label scope check, not a universal HER2 restriction for all letrozole settings.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "The linked HPRA letrozole SmPC neoadjuvant indication specifies HER2-negative disease; NCCP 00371d uses broader HR-positive wording. Positive or uncertain HER2 status requires consultant review of the intended neoadjuvant plan. This is a product-label scope check, not a universal HER2 restriction for all letrozole settings."
+        },
+        "explanation": "The linked HPRA letrozole SmPC neoadjuvant indication specifies HER2-negative disease; NCCP 00371d uses broader HR-positive wording. Positive or uncertain HER2 status requires consultant review of the intended neoadjuvant plan. This is a product-label scope check, not a universal HER2 restriction for all letrozole settings.",
+        "source": {
+          "document": "HPRA Letrozole Teva SmPC §4.1; NCCP 00371d scope comparison",
+          "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
+          "page": 1,
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "AI00371_NEOADJ_CHEMOTHERAPY",
+        "priority": 85,
+        "when": {
+          "all": [
+            {
+              "field": "indication_code",
+              "operator": "==",
+              "value": "00371d"
+            },
+            {
+              "field": "chemotherapy_unsuitable",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "letrozole"
+          ],
+          "message": "The linked HPRA letrozole SmPC neoadjuvant indication is for patients for whom chemotherapy is unsuitable. Chemotherapy suitability requires consultant review of treatment selection; the broader NCCP wording does not remove the product-label distinction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "The linked HPRA letrozole SmPC neoadjuvant indication is for patients for whom chemotherapy is unsuitable. Chemotherapy suitability requires consultant review of treatment selection; the broader NCCP wording does not remove the product-label distinction."
+        },
+        "explanation": "The linked HPRA letrozole SmPC neoadjuvant indication is for patients for whom chemotherapy is unsuitable. Chemotherapy suitability requires consultant review of treatment selection; the broader NCCP wording does not remove the product-label distinction.",
+        "source": {
+          "document": "HPRA Letrozole Teva SmPC §4.1; NCCP 00371d scope comparison",
+          "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
+          "page": 1,
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "AI00371_NEOADJ_SURGERY",
+        "priority": 85,
+        "when": {
+          "all": [
+            {
+              "field": "indication_code",
+              "operator": "==",
+              "value": "00371d"
+            },
+            {
+              "field": "immediate_surgery_not_indicated",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "letrozole"
+          ],
+          "message": "The linked HPRA letrozole SmPC neoadjuvant indication specifies that immediate surgery is not indicated. If immediate surgery is indicated, confirm the surgical and endocrine plan with the treating team; do not automatically defer surgery or infer a fixed preoperative course.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "The linked HPRA letrozole SmPC neoadjuvant indication specifies that immediate surgery is not indicated. If immediate surgery is indicated, confirm the surgical and endocrine plan with the treating team; do not automatically defer surgery or infer a fixed preoperative course."
+        },
+        "explanation": "The linked HPRA letrozole SmPC neoadjuvant indication specifies that immediate surgery is not indicated. If immediate surgery is indicated, confirm the surgical and endocrine plan with the treating team; do not automatically defer surgery or infer a fixed preoperative course.",
+        "source": {
+          "document": "HPRA Letrozole Teva SmPC §4.1; NCCP 00371d scope comparison",
+          "url": "https://assets.hpra.ie/products/Human/21055/Licence_PA0749-085-001_12112019144136.pdf",
+          "page": 1,
+          "checked_date": "2026-10-25"
         }
       }
     ]
@@ -1383,13 +1597,15 @@
     "supportive_medications_label": "NCCP antiemetic guidance",
     "script_id": "nccp-minimal-no-routine-prophylaxis",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Continuous AI monotherapy: no routine prophylactic antiemetic or cytotoxic chemotherapy premedication; review symptoms individually.",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf",
+    "mapping_basis": "NCCP endocrine monotherapy: minimal emetogenic risk, no routine prophylactic antiemetics.",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "bone_health": "Calcium/vitamin D and weight-bearing activity; bone-protective treatment according to fracture risk, bone density and the oncology plan.",
-    "source_checked_date": "2026-10-18"
+    "source_checked_date": "2026-10-18",
+    "phase_specific_plan": "patient/00371/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6817/371_Letrozole_.pdf"
   },
   "indications": [
     {

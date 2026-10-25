@@ -1,3 +1,9 @@
+// v0.84.20 explicitly supersedes the 2026-10-18 source snapshot and product conflicts.
+// Keep the historical oracle below for its original encoding; use the expanded source-derived oracle for migrated protocols.
+{ const fs=require('fs'),path=require('path'),cp=require('child_process'),root=path.resolve(__dirname,'../..');
+ const migrated=["00253", "00361"].every(c=>{const f=fs.readdirSync(path.join(root,'protocols/breast')).find(f=>f.startsWith(c+'-'));return JSON.parse(fs.readFileSync(path.join(root,'protocols/breast',f))).metadata.full_suite_release==='0.84.20'});
+ if(migrated){const result=cp.spawnSync(process.execPath,[path.join(root,'validation/endocrine-next-v08420/tam-fulv/source-cases.cjs'),'--mode','integrated'],{stdio:'inherit'});process.exit(result.status??1);}
+}
 'use strict';
 /* Source-derived endocrine audit, not generic chemotherapy thresholds.
  * NCCP00253v6 pp1–3; NCCP00361v4 pp1–3; linked manufacturer SmPC sections.

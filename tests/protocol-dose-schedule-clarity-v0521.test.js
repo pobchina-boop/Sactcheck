@@ -42,7 +42,7 @@ for (const entry of catalogue.protocols) {
   }
 }
 
-assert.strictEqual(catalogue.protocols.length, 376);
+assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.9 adds the four previously unstructured targeted schedules; olaparib gains its continuous schedule alongside its existing dose table.
 // PLD reductions depend on the toxicity/history pathway, so no generic ladder is inferred.
 // v0.84.16 adds the structured lapatinib/capecitabine schedule.
@@ -50,9 +50,9 @@ assert.strictEqual(catalogue.protocols.length, 376);
 // v0.84.18 adds oral CMF, IV CMF q28/q21 and gemcitabine 800 schedules;
 // gemcitabine/carboplatin already had a schedule and is corrected in place.
 // v0.84.19 adds structured talazoparib and neratinib schedules; combination schedules are corrected in place.
-assert.strictEqual(usefulCoverage, 140);
-assert.strictEqual(scheduleCoverage, 138);
-assert.strictEqual(doseLevelCoverage, 49);
+assert.strictEqual(usefulCoverage, 145);
+assert.strictEqual(scheduleCoverage, 143);
+assert.strictEqual(doseLevelCoverage, 50);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');

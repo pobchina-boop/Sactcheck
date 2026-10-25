@@ -1035,30 +1035,30 @@ const regimens={
     "basis": "Source-defined advanced gastric, breast, ovarian, small-cell lung or bladder indications; receptor eligibility and full indication require clinical confirmation"
   },
   "00251": {
+    "settings": [
+      "advanced"
+    ],
+    "receptors": [
+      "any"
+    ],
+    "basis": "NCCP advanced breast monotherapy indication. Treatment choice still requires full clinical and biomarker context.",
     "code": "00251",
     "protocol_id": "nccp-00251-v6",
-    "settings": [
-      "advanced"
-    ],
-    "receptors": [
-      "unspecified"
-    ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6355/251_CARBOplatin_AUC4-6_28days.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6355/251_CARBOplatin_AUC4-6_28days.pdf"
   },
   "00261": {
-    "code": "00261",
-    "protocol_id": "nccp-00261-v7",
     "settings": [
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6366/261_CARBOplatinAUC4-6_21days.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "NCCP advanced breast monotherapy indication. Treatment choice still requires full clinical and biomarker context.",
+    "code": "00261",
+    "protocol_id": "nccp-00261-v7",
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6366/261_CARBOplatinAUC4-6_21days.pdf"
   },
   "00205": {
     "code": "00205",
@@ -1074,30 +1074,30 @@ const regimens={
     "basis": "Metastatic breast cancer; advanced ovarian cancer after failed first-line platinum chemotherapy; metastatic soft-tissue sarcoma; or recurrent / advanced endometrial cancer. Eligibility differs by cancer type."
   },
   "00259": {
+    "settings": [
+      "advanced"
+    ],
+    "receptors": [
+      "any"
+    ],
+    "basis": "NCCP advanced breast monotherapy indication. Treatment choice still requires full clinical and biomarker context.",
     "code": "00259",
     "protocol_id": "nccp-00259-v6",
-    "settings": [
-      "advanced"
-    ],
-    "receptors": [
-      "unspecified"
-    ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6363/259_Vinorelbine_Oral.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6363/259_Vinorelbine_Oral.pdf"
   },
   "00232": {
-    "code": "00232",
-    "protocol_id": "nccp-00232-v5",
     "settings": [
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "NCCP advanced breast monotherapy indication. Treatment choice still requires full clinical and biomarker context.",
+    "code": "00232",
+    "protocol_id": "nccp-00232-v5",
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf"
   },
   "00228": {
     "code": "00228",
@@ -1141,6 +1141,19 @@ const regimens={
     "setting_qualifications": {
       "adjuvant": "NCCP 00588h only; germline BRCA1/2, HER2-negative high-risk early breast criteria apply."
     }
+  },
+  "00947": {
+    "settings": [
+      "advanced"
+    ],
+    "receptors": [
+      "hrpos-her2neg"
+    ],
+    "basis": "Adults with ER-positive, HER2-negative locally advanced or metastatic breast cancer with a validated PIK3CA, AKT1 or PTEN alteration, after recurrence/progression on or after an endocrine regimen. NCCP eligibility includes ECOG 0–2. This is not an unrestricted HR-positive breast regimen.",
+    "code": "00947",
+    "protocol_id": "nccp-00947-v1",
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/10966/00947_Capivasertib_Fulvestrant.pdf"
   }
 };
 const ids=['breastSetting','breastReceptor','breastSuite'];

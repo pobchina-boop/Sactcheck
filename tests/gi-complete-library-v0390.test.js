@@ -72,12 +72,12 @@ assert.strictEqual(new Set(codes).size, 93, 'The GI deck contains duplicate NCCP
 assert.strictEqual(new Set(gi.map(({ data }) => data.protocol_id)).size, 93, 'The GI deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root, 'protocols', 'index.json'), 'utf8'));
-assert.strictEqual(index.protocol_count, 376, 'Complete protocol index must contain 210 distinct protocols.');
-assert.strictEqual(index.protocols.length, 376, 'Complete protocol index array must contain 210 entries.');
+assert.strictEqual(index.protocol_count, 377, 'Complete protocol index must contain 210 distinct protocols.');
+assert.strictEqual(index.protocols.length, 377, 'Complete protocol index array must contain 210 entries.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
 assert.strictEqual(riskMap.release, '0.48.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 376, 'Central supportive-care map must cover all 210 protocols.');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 377, 'Central supportive-care map must cover all 210 protocols.');
 
 const ctcaeContext = { window: {} };
 vm.createContext(ctcaeContext);

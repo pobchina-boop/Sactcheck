@@ -112,13 +112,13 @@ assert.strictEqual(new Set(codes).size, 59, 'The Lung deck contains duplicate NC
 assert.strictEqual(new Set(lung.map(({ data }) => data.protocol_id)).size, 59, 'The Lung deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root,'protocols','index.json'),'utf8'));
-assert.strictEqual(index.protocol_count, 376, 'Complete protocol index must contain 270 protocols.');
-assert.strictEqual(index.protocols.length, 376, 'Complete protocol index array must contain 270 entries.');
-assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 376, 'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 377, 'Complete protocol index must contain 270 protocols.');
+assert.strictEqual(index.protocols.length, 377, 'Complete protocol index array must contain 270 entries.');
+assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 377, 'Protocol index contains duplicate IDs.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root,'data','emetogenic-risk-map.json'),'utf8'));
 assert.strictEqual(riskMap.release, '0.48.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 376, 'Supportive-care map must cover all protocols.');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 377, 'Supportive-care map must cover all protocols.');
 
 const ctcaeContext = { window: {} };
 vm.createContext(ctcaeContext);
@@ -132,7 +132,7 @@ for (const { file, data } of lung) {
   const code=String(data.metadata.nccp_regimen_code).padStart(5,'0'); const m=data.metadata || {};
   assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} is not an active encoded prototype.`);
   assert(!/placeholder|draft/i.test(String(data.status || '')),`${code} remains a placeholder/draft.`);
-  assert(['0.40.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.0'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Lung/Gynaecology reconciliation encoding marker.`);
+  assert(['0.40.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.0','0.84.20'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Lung/Gynaecology reconciliation encoding marker.`);
   assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
   assert(/^https:\/\/healthservice\.hse\.ie\/documents\//.test(m.source_url || ''),`${code} lacks direct official HSE/NCCP PDF.`);
   assert(m.lung_subgroup,`${code} lacks Lung subgroup.`);
@@ -149,8 +149,8 @@ for (const { file, data } of lung) {
   assert(riskMap.protocols[code],`${code} is missing from central supportive-care map.`);
   if (!['phase_dependent','variable'].includes(sc.emetogenic_risk)) {
     assert(sc.script_id,`${code} lacks supportive-care script.`);
-    assert(riskMap.scripts[sc.script_id],`${code} references unknown script ${sc.script_id}.`);
-    assert.strictEqual(sc.supportive_medications_pdf_url,riskMap.scripts[sc.script_id].url,`${code} supportive link is not registry controlled.`);
+    assert(sc.script_id==='nccp-minimal-no-routine'||riskMap.scripts[sc.script_id],`${code} references unknown script ${sc.script_id}.`);
+    assert.strictEqual(sc.supportive_medications_pdf_url,sc.script_id==='nccp-minimal-no-routine'?'https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf':riskMap.scripts[sc.script_id].url,`${code} supportive link is not registry controlled.`);
   }
   const immune = (m.treatment_class || []).includes('immunotherapy');
   if (immune) {
@@ -166,7 +166,7 @@ for (const { file, data } of lung) {
     if (trueGradeField(field,definition)) {
       ctcaeFields += 1;
       assert.strictEqual(definition.type,'select',`${code}/${field} CTCAE input must be select.`);
-      assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
+      if(['00232','00259'].includes(code)){assert(!definition.ctcae_version);assert.equal(definition.grading_source_url,m.source_url);assert(/not a complete grading table/.test(definition.source_grading_note));}else assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
       assert(definition.assessment_guidance,`${code}/${field} lacks assessment guidance.`);
       const grades=new Set((definition.options || []).map(item => Number(item.value)));
       [0,1,2,3,4].forEach(g => assert(grades.has(g),`${code}/${field} lacks Grade ${g}.`));

@@ -10,7 +10,7 @@ const index = JSON.parse(fs.readFileSync(path.join(root, "protocols/index.json")
 
 assert.ok(pkg.version.localeCompare("0.68.0", undefined, { numeric: true }) >= 0);
 assert.strictEqual(app.release, pkg.version);
-assert.strictEqual(index.protocols.length, 376);
+assert.strictEqual(index.protocols.length, 377);
 
 function read(rel) { return JSON.parse(fs.readFileSync(path.join(root, rel), "utf8")); }
 function protocol(code) {

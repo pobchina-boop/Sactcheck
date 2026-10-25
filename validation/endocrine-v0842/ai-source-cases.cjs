@@ -1,3 +1,9 @@
+// v0.84.20 explicitly supersedes the 2026-10-18 source snapshot and product conflicts.
+// Keep the historical oracle below for its original encoding; use the expanded source-derived oracle for migrated protocols.
+{ const fs=require('fs'),path=require('path'),cp=require('child_process'),root=path.resolve(__dirname,'../..');
+ const migrated=["00254", "00371", "00376"].every(c=>{const f=fs.readdirSync(path.join(root,'protocols/breast')).find(f=>f.startsWith(c+'-'));return JSON.parse(fs.readFileSync(path.join(root,'protocols/breast',f))).metadata.full_suite_release==='0.84.20'});
+ if(migrated){const result=cp.spawnSync(process.execPath,[path.join(root,'validation/endocrine-next-v08420/ai/source-cases.cjs'),'--mode','integrated'],{stdio:'inherit'});process.exit(result.status??1);}
+}
 'use strict';
 /* Independently specified clinical expectations from NCCP 00254 v5, 00371 v4,
  * 00376 v4 and each linked HPRA SmPC. No live patient data are used. */

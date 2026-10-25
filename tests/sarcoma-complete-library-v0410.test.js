@@ -51,13 +51,13 @@ assert.strictEqual(new Set(codes).size,25,'Sarcoma deck contains duplicate NCCP 
 assert.strictEqual(new Set(sarcoma.map(({data})=>data.protocol_id)).size,25,'Sarcoma deck contains duplicate protocol IDs.');
 
 const index=JSON.parse(fs.readFileSync(path.join(root,'protocols','index.json'),'utf8'));
-assert.strictEqual(index.protocol_count, 376,'Complete protocol index must contain 270 protocols.');
-assert.strictEqual(index.protocols.length, 376,'Complete protocol index array must contain 270 entries.');
-assert.strictEqual(new Set(index.protocols.map(item=>item.id)).size, 376,'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, 377,'Complete protocol index must contain 270 protocols.');
+assert.strictEqual(index.protocols.length, 377,'Complete protocol index array must contain 270 entries.');
+assert.strictEqual(new Set(index.protocols.map(item=>item.id)).size, 377,'Protocol index contains duplicate IDs.');
 
 const riskMap=JSON.parse(fs.readFileSync(path.join(root,'data','emetogenic-risk-map.json'),'utf8'));
 assert.strictEqual(riskMap.release,'0.48.0');
-assert.strictEqual(Object.keys(riskMap.protocols||{}).length,376,'Supportive-care map must cover all protocols.');
+assert.strictEqual(Object.keys(riskMap.protocols||{}).length,377,'Supportive-care map must cover all protocols.');
 
 const ctcaeContext={window:{}};vm.createContext(ctcaeContext);
 vm.runInContext(fs.readFileSync(path.join(root,'js','ctcae-descriptors.js'),'utf8'),ctcaeContext);

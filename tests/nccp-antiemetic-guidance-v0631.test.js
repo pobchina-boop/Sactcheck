@@ -65,6 +65,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00261": "high", // v0.84.20 NCCP carboplatin AUC >=4
+
     "00377": "oral_moderate_high", // v0.84.18 oral cyclophosphamide Days 1–14, NCCP Table 5
 
     "00225": "low", // v0.83.5: NCCP V6 table 7 and 00225 v6
@@ -99,6 +101,8 @@ for (const record of index.protocols || []) {
   if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
   else if (baseline) {
     const correctionByPath = {
+      "breast/00261-carboplatin-q21d.json": "high",
+
       "breast/00377-cmf-oral.json": "oral_moderate_high",
       "gastrointestinal/00225-panitumumab-6-mg-kg-therapy.json": "low",
       "gastrointestinal/00586-capecitabine-825-mg-m2-and-radiotherapy-7-day.json": "oral_minimal_low",
@@ -150,7 +154,7 @@ for (const record of index.protocols || []) {
   }
 }
 
-assert.strictEqual(protocolCount, 376);
+assert.strictEqual(protocolCount, 377);
 assert.ok(medicalLinks > 0, "medical oncology protocols must link national NCCP medical oncology antiemetic guidance");
 
 const localDir = path.join(root, "assets", "supportive-care");

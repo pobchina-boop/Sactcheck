@@ -80,8 +80,8 @@ assert(html.includes('<title>SACTCheck v0.56.1 — Five-Regimen Knowledge Base P
 assert(html.includes('<span class="header-version">v0.56.1</span>'), 'Current header version is missing.');
 assert(html.includes('v0.56.1 · What changed?'), 'Current release summary is missing.');
 assert(html.includes('js/protocol-loader.js?v=0.56.1'), 'Protocol-loader cache key is stale.');
-assert.equal(catalogue.protocols.length, 376, 'Expected 376 indexed protocols.');
-assert.equal(catalogue.protocol_count, 376, 'Catalogue protocol_count is not 376.');
+assert.equal(catalogue.protocols.length, 377, 'Expected 377 indexed protocols.');
+assert.equal(catalogue.protocol_count, 377, 'Catalogue protocol_count is not 377.');
 
 const loaded = catalogue.protocols.map(entry => ({
   entry,
@@ -89,7 +89,7 @@ const loaded = catalogue.protocols.map(entry => ({
 }));
 const solid = loaded.filter(item => !isHaematology(item.protocol));
 const haem = loaded.filter(item => isHaematology(item.protocol));
-assert.equal(solid.length, 361, 'Expected 361 Solid Tumour protocols.');
+assert.equal(solid.length, 362, 'Expected 362 Solid Tumour protocols.');
 assert.equal(haem.length, 15, 'Expected 15 Haematology protocols.');
 
 assert.equal(duplicateValues(solid.map(item => item.entry.id)).length, 0, 'Duplicate Solid Tumour index IDs found.');
@@ -124,8 +124,8 @@ for (const { entry, protocol } of solid) {
   }
   assert.equal(metadata.partial_assessment_supported, true, `${protocolCode}: partial-assessment flag is missing.`);
   assert(/entered value is assessed independently/i.test(metadata.partial_assessment_policy || ''), `${protocolCode}: partial-assessment policy is missing.`);
-  assert.equal(metadata.catalogue_reconciliation?.release, RECONCILIATION_RELEASE, `${protocolCode}: reconciliation release metadata is missing.`);
-  assert.equal(metadata.catalogue_reconciliation?.checked_date, CHECK_DATE, `${protocolCode}: reconciliation date metadata is missing.`);
+  assert.equal(metadata.catalogue_reconciliation?.release, protocolCode==='00947'?'0.84.20':RECONCILIATION_RELEASE, `${protocolCode}: reconciliation release metadata is missing.`);
+  assert.equal(metadata.catalogue_reconciliation?.checked_date, protocolCode==='00947'?'2026-10-25':CHECK_DATE, `${protocolCode}: reconciliation date metadata is missing.`);
   assert.equal(metadata.catalogue_reconciliation?.clinical_use_authorised, false, `${protocolCode}: reconciliation must not authorise clinical use.`);
   assert.notEqual(metadata.validation?.clinical_use_authorised, true, `${protocolCode}: protocol is incorrectly marked authorised.`);
   inputCount += Object.keys(protocol.input_definitions || {}).length;
@@ -157,7 +157,7 @@ for (const [protocolCode, expected] of Object.entries(expectedSourceResolutions)
   assert.equal(metadata.review_date || metadata.last_reviewed_date, expected.review, `${protocolCode}: review date mismatch.`);
   assert.equal(metadata.source_url, expected.url, `${protocolCode}: source URL mismatch.`);
   assert.equal(metadata.source_version_verified, true, `${protocolCode}: source version is not marked verified.`);
-  assert.equal(metadata.source_version_verified_date, ['00262','00263','00423'].includes(protocolCode) ? '2026-10-23' : ['00200','00201','00206','00217','00659','00726'].includes(protocolCode) ? '2026-10-21' : ['00253','00254','00361','00371','00376'].includes(protocolCode) ? '2026-10-18' : ['00200','00201','00206','00272','00285'].includes(protocolCode) ? '2026-10-17' : CHECK_DATE, `${protocolCode}: source verification date mismatch.`);
+  assert.equal(metadata.source_version_verified_date, ['00262','00263','00423'].includes(protocolCode) ? '2026-10-23' : ['00200','00201','00206','00217','00659','00726'].includes(protocolCode) ? '2026-10-21' : ['00253','00254','00361','00371','00376'].includes(protocolCode) ? '2026-10-25' : ['00200','00201','00206','00272','00285'].includes(protocolCode) ? '2026-10-17' : CHECK_DATE, `${protocolCode}: source verification date mismatch.`);
 }
 
 const context = { console };
@@ -195,7 +195,7 @@ for (const { protocol } of solid) {
   assert(protocolPassed, `${protocolCode}: no rule-linked field produced a meaningful single-value assessment.`);
   singleValueProtocols += 1;
 }
-assert.equal(singleValueProtocols, 361, 'Single-value assessment did not cover all 361 Solid Tumour protocols.');
+assert.equal(singleValueProtocols, 362, 'Single-value assessment did not cover all 362 Solid Tumour protocols.');
 
 let numericBoundaryLeaves = 0;
 const epsilonFor = value => Math.max(1e-9, Math.abs(value) * 1e-9);
@@ -238,10 +238,10 @@ execFileSync(process.execPath, [path.join(root, 'tools', 'reconcile-solid-tumour
 const report = readJson('V0510_SOLID_TUMOUR_RECONCILIATION.json');
 assert.equal(report.pass, true, 'Generated reconciliation report does not pass.');
 assert.equal(report.hard_failure_count, 0, 'Generated reconciliation report contains hard findings.');
-assert.equal(report.counts.solid_tumour_protocols, 361, 'Generated report Solid Tumour count is wrong.');
+assert.equal(report.counts.solid_tumour_protocols, 362, 'Generated report Solid Tumour count is wrong.');
 assert.equal(report.counts.haematology_protocols, 15, 'Generated report Haematology count is wrong.');
 assert.equal(report.counts.primary_storage_groups['Cross-listed/shared'], 5, 'Shared-protocol storage count is wrong.');
-assert.equal(report.counts.tumour_site_coverage.Breast, 83, 'Breast site-coverage count is wrong.');
+assert.equal(report.counts.tumour_site_coverage.Breast, 84, 'Breast site-coverage count is wrong.');
 assert.equal(report.counts.tumour_site_coverage.Gastrointestinal, 93, 'GI site-coverage count is wrong.');
 
-console.log(`v0.51.0 Solid Tumour reconciliation passed: 361 protocols, ${inputCount} inputs, ${ruleCount} rules, ${singleValueProtocols} single-value protocol checks and ${numericBoundaryLeaves} numeric boundary leaves.`);
+console.log(`v0.51.0 Solid Tumour reconciliation passed: 362 protocols, ${inputCount} inputs, ${ruleCount} rules, ${singleValueProtocols} single-value protocol checks and ${numericBoundaryLeaves} numeric boundary leaves.`);

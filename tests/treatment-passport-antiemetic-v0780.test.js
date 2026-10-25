@@ -53,9 +53,9 @@ assert(names(workflow.local_agent_proformas.temozolomide.local_prescription_item
 assert(names(workflow.local_agent_proformas.temozolomide.local_prescription_items).includes("Lactulose"),"temozolomide lactulose missing");
 
 const risk=json("data/emetogenic-risk-map.json");
-assert.equal(risk.release,"0.48.0","historical 376-regimen risk-map release must stay fixed");
+assert.equal(risk.release,"0.48.0","historical 377-regimen risk-map release must stay fixed");
 assert.equal(risk.content_update_release,"0.78.0","new antiemetic content update marker missing");
-assert.equal(Object.keys(risk.protocols||{}).length,376,"protocol risk classification map changed unexpectedly");
+assert.equal(Object.keys(risk.protocols||{}).length,377,"protocol risk classification map changed unexpectedly");
 
 const renderer=read("js/antiemetic-card-v0780.js");
 assert(renderer.includes("traffic-light")||renderer.includes("anti-dot"),"visible antiemetic traffic-light renderer missing");

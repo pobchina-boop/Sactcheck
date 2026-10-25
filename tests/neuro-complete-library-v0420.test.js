@@ -15,8 +15,8 @@ const all=allProtocols();const neuro=all.filter(x=>groups(x.data).includes('Neur
 const codes=neuro.map(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')).sort();
 assert.deepStrictEqual(codes,expected,'Neuro-oncology deck must match the current NCCP catalogue inventory.');
 assert.strictEqual(neuro.length,10);assert.strictEqual(new Set(codes).size,10);assert.strictEqual(new Set(neuro.map(x=>x.data.protocol_id)).size,10);
-const index=read('protocols/index.json');assert.strictEqual(index.protocol_count, 376);assert.strictEqual(index.protocols.length, 376);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size, 376);
-const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.48.0');assert.strictEqual(Object.keys(risk.protocols||{}).length,376);
+const index=read('protocols/index.json');assert.strictEqual(index.protocol_count, 377);assert.strictEqual(index.protocols.length, 377);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size, 377);
+const risk=read('data/emetogenic-risk-map.json');assert.strictEqual(risk.release,'0.48.0');assert.strictEqual(Object.keys(risk.protocols||{}).length,377);
 let inputs=0,rules=0,ctcae=0,renalBands=0;
 for(const {data,file} of neuro){
  const m=data.metadata,code=String(m.nccp_regimen_code).padStart(5,'0');

@@ -9,7 +9,7 @@ const pkg = JSON.parse(read("package.json"));
 const protocolIndex = JSON.parse(read("protocols/index.json"));
 
 assert(pkg.version.localeCompare("0.48.0", undefined, { numeric: true }) >= 0);
-assert.strictEqual(protocolIndex.protocol_count, 376);
+assert.strictEqual(protocolIndex.protocol_count, 377);
 assert(index.includes("SACTCheck v0.56.1 — Five-Regimen Knowledge Base Pilot"));
 assert(index.includes('class="app-header"'));
 assert(index.includes('assets/branding/sactcheck-mark.svg'));

@@ -7,7 +7,7 @@ const Validator=require("../js/protocol-validator.js");
 const root=path.join(__dirname,"..");
 const index=JSON.parse(fs.readFileSync(path.join(root,"protocols/index.json"),"utf8"));
 const ids=["nccp-00270-v3a","nccp-00435-v3","nccp-00416-v4","nccp-00643-v3","nccp-00275-v3"];
-assert.strictEqual(index.protocol_count,376);
+assert.strictEqual(index.protocol_count,377);
 const entries=ids.map(id=>{const hit=index.protocols.filter(item=>item.id===id);assert.strictEqual(hit.length,1,`${id} catalogue duplication/missing`);return hit[0];});
 let inputs=0,rules=0;
 for(const entry of entries){

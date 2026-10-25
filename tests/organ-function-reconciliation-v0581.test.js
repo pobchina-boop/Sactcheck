@@ -68,7 +68,7 @@ assert.ok(html.includes('js/protocol-loader.js?v=0.59.0'));
 execFileSync(process.execPath, [path.join(root, 'tools/audit-organ-function-rule-coverage.js'), '--fail-on-mismatch'], { cwd: root, stdio: 'pipe' });
 const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.json'), 'utf8'));
 assert.strictEqual(audit.summary.protocols_with_rule_level_claim_mismatch, 0);
-assert.strictEqual(audit.summary.protocols_scanned, 381);
+assert.strictEqual(audit.summary.protocols_scanned, 382);
 
 const partial = audit.records.filter(record => record.encoding_maturity === 'partial_rule_encoding');
 assert.strictEqual(partial.length, 0, 'v0.59.0 should reconcile all records previously marked partial.');

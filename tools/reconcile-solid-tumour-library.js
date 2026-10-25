@@ -113,7 +113,10 @@ for (const { entry, protocol } of solid) {
   }
   if (metadata.partial_assessment_supported !== true) findings.missing_partial_assessment_flag.push(protocolCode);
   const reconciliation = metadata.catalogue_reconciliation || {};
-  if (reconciliation.release !== RELEASE || reconciliation.checked_date !== CHECK_DATE) findings.missing_reconciliation_metadata.push(protocolCode);
+  const expectedReconciliation = protocolCode === "00947"
+    ? { release: "0.84.20", checked_date: "2026-10-25" }
+    : { release: RELEASE, checked_date: CHECK_DATE };
+  if (reconciliation.release !== expectedReconciliation.release || reconciliation.checked_date !== expectedReconciliation.checked_date) findings.missing_reconciliation_metadata.push(protocolCode);
   if (entry.id !== protocol.protocol_id) findings.index_protocol_id_mismatch.push({ code: protocolCode, index_id: entry.id, protocol_id: protocol.protocol_id });
   const expectedPath = path.relative(root, path.join(root, entry.path)).replace(/\\/g, "/");
   if (expectedPath !== entry.path) findings.index_path_mismatch.push({ code: protocolCode, path: entry.path });
@@ -172,7 +175,7 @@ const report = {
     protocols_marked_source_document_checked: solid.length - findings.source_document_not_marked_checked.length
   },
   hard_failure_count: hardFailureCount,
-  pass: hardFailureCount === 0 && solid.length === 361 && loaded.length === 376,
+  pass: hardFailureCount === 0 && solid.length === 362 && loaded.length === 377,
   findings,
   governance_backlog: {
     missing_published_date: findings.missing_published_date,
@@ -200,7 +203,7 @@ const md = `# SACTCheck v0.51.0 Solid Tumour Reconciliation\n\n`+
 `## Catalogue counts\n\nThere are **${solid.length} unique Solid Tumour protocol files**. Five shared protocols are intentionally cross-listed across more than one tumour site, so tumour-site coverage counts are placements and may total more than ${solid.length}.\n\n### Unique protocol files by primary storage group\n\n| Primary storage group | Unique protocols |\n|---|---:|\n${primaryGroupTable}\n\n### Tumour-site coverage\n\n| Tumour site | Protocol placements |\n|---|---:|\n${coverageTable}\n\n`+
 `## Automated checks\n\n| Check | Result |\n|---|---:|\n| Duplicate protocol IDs | ${findings.duplicate_protocol_ids.length} |\n| Duplicate NCCP codes | ${findings.duplicate_nccp_codes.length} |\n| Duplicate indexed paths | ${findings.duplicate_paths.length} |\n| Duplicate official source URLs | ${findings.duplicate_source_urls.length} |\n| Orphaned protocol JSON files | ${findings.orphan_protocol_files.length} |\n| Non-HSE source URLs | ${findings.non_official_source_urls.length} |\n| Unspecified source versions | ${findings.unspecified_source_versions.length} |\n| Protocols with forced launch inputs | ${findings.forced_launch_protocols.length} |\n| Statically required input fields | ${findings.required_input_flags.length} |\n| Protocols without partial-assessment flag | ${findings.missing_partial_assessment_flag.length} |\n| Protocols missing v0.51.0 reconciliation metadata | ${findings.missing_reconciliation_metadata.length} |\n\n`+
 `## Explicit source-version resolutions\n\nTwelve protocols previously labelled only as \`current\` now carry the explicit version shown in the current official NCCP PDF. Stable internal IDs were retained to avoid breaking existing bookmarks.\n\n| NCCP code | Version | Published | Review / last reviewed |\n|---|---:|---:|---:|\n${versionRows}\n\n`+
-`## Partial-assessment standardisation\n\nAll 361 indexed solid tumour protocols now use the platform policy that every entered value is assessed independently. No static field, profile or phase is required merely to launch an assessment. Missing domains remain unassessed and are never assumed normal. Conditional follow-on fields may still be requested when a clinician enters a trigger that requires additional context.\n\n`+
+`## Partial-assessment standardisation\n\nAll ${solid.length} indexed solid tumour protocols now use the platform policy that every entered value is assessed independently. No static field, profile or phase is required merely to launch an assessment. Missing domains remain unassessed and are never assumed normal. Conditional follow-on fields may still be requested when a clinician enters a trigger that requires additional context.\n\n`+
 `## Governance metadata backlog\n\nThese are not automated release failures, because older NCCP documents do not use a uniform publication/review header and many encodings pre-date the structured metadata model. They remain an explicit manual source-review queue.\n\n- Missing stored publication date: **${findings.missing_published_date.length}** (${backlog(findings.missing_published_date)})\n- Missing stored review or last-reviewed date: **${findings.missing_review_date.length}** (${backlog(findings.missing_review_date)})\n- Source document not explicitly marked as manually checked: **${findings.source_document_not_marked_checked.length}** (${backlog(findings.source_document_not_marked_checked)})\n\n`+
 `## Clinical boundary\n\nNo treatment threshold, dose-modification condition or recommendation was intentionally changed in v0.51.0. All protocols remain decision-support encodings pending the level of consultant and oncology-pharmacy validation recorded in their individual metadata. The current official NCCP protocol and clinician judgement remain authoritative.\n`;
 fs.writeFileSync(path.join(root, "SOLID_TUMOUR_RECONCILIATION_v0.51.0.md"), md, "utf8");
