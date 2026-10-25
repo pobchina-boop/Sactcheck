@@ -5,15 +5,15 @@
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00265",
-    "nccp_version": "6b",
+    "nccp_version": "7",
     "tumour_group": "Breast",
     "title": "5-Fluorouracil, Epirubicin 100 and Cyclophosphamide (FEC100)",
     "short_title": "FEC100",
     "indication": "Neoadjuvant or adjuvant treatment for breast carcinoma.",
     "icd10": "C50",
     "source_document_pages": 7,
-    "source_url": "https://healthservice.hse.ie/documents/6690/265_v6b_FEC_100.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "source_url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf",
+    "sactcheck_encoding_version": "0.84.17",
     "treatment_setting": [
       "neoadjuvant",
       "adjuvant"
@@ -58,19 +58,24 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled encoding · independent clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "reconciled_release": "0.84.17",
+      "reconciled_date": "2026-10-23",
+      "scope_note": "NCCP source and boundary cases reviewed; not clinical validation or authorisation."
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00265-v6b"
+    "canonical_protocol_id": "nccp-00265-v7",
+    "source_checked_date": "2026-10-23",
+    "source_version_verified_date": "2026-10-23",
+    "source_version_verified": true,
+    "full_suite_release": "0.84.17",
+    "schedule_summary": "Fluorouracil, epirubicin and cyclophosphamide on Day 1 every 21 days for six cycles. Radiotherapy must not overlap FEC."
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -79,107 +84,372 @@
   },
   "input_definitions": {
     "anc_x10e9_l": {
-      "label": "ANC",
+      "label": "ANC (×10⁹/L)",
       "type": "number",
-      "unit": "×10⁹/L",
-      "required": false,
       "min": 0,
+      "max": 100,
       "step": 0.01,
-      "demo_value": 2,
-      "always_show": true,
-      "input_role": "decision"
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 3
     },
     "platelets_x10e9_l": {
-      "label": "Platelets",
+      "label": "Platelets (×10⁹/L)",
       "type": "number",
-      "unit": "×10⁹/L",
-      "required": false,
       "min": 0,
+      "max": 2000,
       "step": 1,
-      "demo_value": 200,
-      "always_show": true,
-      "input_role": "decision"
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 200
     },
     "hb_g_dl": {
-      "label": "Haemoglobin",
+      "label": "Haemoglobin (g/dL)",
       "type": "number",
-      "unit": "g/dL",
-      "required": false,
       "min": 0,
-      "step": 0.1,
-      "demo_value": 12,
-      "always_show": true,
-      "input_role": "monitoring"
+      "max": 30,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 12
     },
-    "treatment_phase": {
-      "label": "Treatment phase",
+    "assessment_stage": {
+      "label": "Assessment stage",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": "anthracycline",
-          "label": "Anthracycline phase"
+          "value": "baseline",
+          "label": "Before starting"
         },
         {
-          "value": "paclitaxel",
-          "label": "Paclitaxel phase"
-        },
-        {
-          "value": "trastuzumab_maintenance",
-          "label": "Trastuzumab maintenance"
+          "value": "ongoing",
+          "label": "During treatment"
         }
       ],
-      "demo_value": "anthracycline",
-      "always_show": true,
-      "input_role": "context"
+      "demo_value": "baseline"
     },
-    "febrile_neutropenia": {
-      "label": "Febrile neutropenia",
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "indication_eligible": {
+      "label": "Regimen indication confirmed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "always_show": true,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": true
     },
-    "neuropathy_grade": {
-      "label": "Peripheral neuropathy grade",
-      "type": "select",
-      "unit": "CTCAE grade",
+    "febrile_neutropenia": {
+      "label": "Current suspected febrile neutropenia",
+      "type": "boolean",
       "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_febrile_neutropenia": {
+      "label": "Febrile neutropenia in a previous cycle",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin (µmol/L)",
+      "type": "number",
+      "min": 0,
+      "max": 1000,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 10
+    },
+    "ast_uln_multiple": {
+      "label": "AST (×ULN)",
+      "type": "number",
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 1,
+      "derived_actual_field": "ast_u_l"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "min": 0,
+      "max": 300,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 80,
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf",
+        "reason": "Source renal bands use creatinine clearance in mL/min, not indexed eGFR."
+      }
+    },
+    "renal_measure_type": {
+      "label": "Renal measurement",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "crcl",
+          "label": "Creatinine clearance"
+        },
+        {
+          "value": "egfr",
+          "label": "Indexed eGFR"
+        },
+        {
+          "value": "unknown",
+          "label": "Unconfirmed"
+        }
+      ],
+      "demo_value": "crcl"
+    },
+    "severe_renal_impairment": {
+      "label": "Severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "lvef_percent": {
+      "label": "Current LVEF (%)",
+      "type": "number",
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 60
+    },
+    "clinically_significant_cardiac_symptoms": {
+      "label": "New clinically significant cardiac symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "significant_cardiac_disease": {
+      "label": "Source cardiac exclusion present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "anthracycline_lifetime_limit_reached": {
+      "label": "Previous anthracycline lifetime limit reached",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy_or_lactation": {
+      "label": "Pregnant or breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "drug_hypersensitivity": {
+      "label": "Known hypersensitivity to regimen medicine",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cyclophosphamide_severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment affecting cyclophosphamide",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "count_context": {
+      "label": "Blood-count context",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "cycle_start",
+          "label": "Day1 before a cycle"
+        },
+        {
+          "value": "after_one_week_delay",
+          "label": "After one-week delay"
+        },
+        {
+          "value": "nadir",
+          "label": "Nadir during a cycle"
+        }
+      ],
+      "demo_value": "cycle_start"
+    },
+    "low_count_occurrence": {
+      "label": "Low-count occurrence",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        }
+      ],
+      "demo_value": 1
+    },
+    "fn_occurrence": {
+      "label": "Previous febrile-neutropenia episode",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "demo_value": 1
+    },
+    "dpd_status": {
+      "label": "DPD assessment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "normal",
+          "label": "No deficiency identified"
+        },
+        {
+          "value": "partial",
+          "label": "Partial deficiency"
+        },
+        {
+          "value": "complete",
+          "label": "Complete deficiency"
+        },
+        {
+          "value": "unknown",
+          "label": "Result unavailable/not tested"
+        }
+      ],
+      "demo_value": "normal"
+    },
+    "concurrent_radiotherapy": {
+      "label": "Radiotherapy planned concurrently with FEC",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ast_u_l": {
+      "label": "AST (U/L)",
+      "type": "number",
+      "min": 0,
+      "max": 10000,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 25,
+      "ui_derived_from": "ast_uln_multiple"
+    },
+    "fluorouracil_hepatic_impairment": {
+      "label": "5-FU hepatic impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "moderate"
+    },
+    "stomatitis_grade": {
+      "label": "Stomatitis grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
+      "grading_source_label": "NCCP named toxicity assessment",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf",
+      "assessment_guidance": "Confirm the named adverse event and clinician-assessed grade; the regimen lists action thresholds, not a complete grading manual.",
+      "unit": "Clinician-assessed grade",
+      "source_grading_note": "The NCCP regimen specifies action thresholds, not a complete grading table. Confirm the named adverse event and grade using the approved clinical grading reference before applying the source action.",
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0
+          "description": "Clinician-assessed grade 0. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1
+          "description": "Clinician-assessed grade 1. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2
+          "description": "Clinician-assessed grade 2. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3
+          "description": "Clinician-assessed grade 3. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4
+          "description": "Clinician-assessed grade 4. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         }
-      ],
-      "always_show": true,
-      "input_role": "context"
+      ]
+    },
+    "fluorouracil_cardiac_symptoms": {
+      "label": "New ischaemic symptoms or arrhythmia during 5-FU",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -213,115 +483,1854 @@
     ],
     "rules": [
       {
-        "rule_id": "FEC_DELAY",
-        "any": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": "<",
-            "value": 1.0
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": "<",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "delay",
-          "components": [
-            "whole_regimen"
-          ]
+        "rule_id": "INDICATION",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
         },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L or platelets below 100 ×10⁹/L triggers delay until recovery."
-      },
-      {
-        "rule_id": "FEC_FULL_DOSE",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 100
-          }
-        ],
-        "action": {
-          "type": "proceed",
-          "components": [
-            "whole_regimen"
-          ]
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Counts meet the full-dose FEC100 threshold."
-      },
-      {
-        "rule_id": "FEC_INTERMEDIATE_ANC",
-        "any": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": "between_inclusive",
-            "value": [
-              1.0,
-              1.49
-            ]
-          }
-        ],
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
-          ]
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Confirm indication, receptor biology, previous therapies and treatment intent before selecting this regimen.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Confirm indication, receptor biology, previous therapies and treatment intent before selecting this regimen.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ANC 1.0–1.49 ×10⁹/L requires the occurrence-specific 75% dose or G-CSF pathway."
+          "document": "NCCP 00265 v7",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
       },
       {
-        "rule_id": "FEC_FN",
-        "any": [
-          {
-            "field": "febrile_neutropenia",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "rule_id": "ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "ECOG performance status is outside the source eligibility range; consultant selection review required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ECOG performance status is outside the source eligibility range; consultant selection review required.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "CARDIAC_EXCLUSION",
+        "when": {
+          "field": "significant_cardiac_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Source cardiac exclusion: do not initiate pending specialist review.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source cardiac exclusion: do not initiate pending specialist review.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "PRIOR_ANTHRA_MAX",
+        "when": {
+          "field": "anthracycline_lifetime_limit_reached",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Previous anthracycline maximum is a source exclusion. Reconcile lifetime exposure across all previous treatments; do not add different anthracycline doses directly.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Previous anthracycline maximum is a source exclusion. Reconcile lifetime exposure across all previous treatments; do not add different anthracycline doses directly.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy_or_lactation",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Pregnancy or lactation is a source exclusion; specialist discussion required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Pregnancy or lactation is a source exclusion; specialist discussion required.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "HYPERSENSITIVITY",
+        "when": {
+          "field": "drug_hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Known hypersensitivity is a source exclusion; review the implicated medicine and alternative treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Known hypersensitivity is a source exclusion; review the implicated medicine and alternative treatment.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "ACUTE_FN",
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Suspected current febrile neutropenia: withhold treatment and arrange urgent clinical assessment. This is not the previous-cycle dose-reduction pathway.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Suspected current febrile neutropenia: withhold treatment and arrange urgent clinical assessment. This is not the previous-cycle dose-reduction pathway.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "CARDIAC_SYMPTOMS",
+        "when": {
+          "field": "clinically_significant_cardiac_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "epirubicin"
+          ],
+          "recommendation": "Withhold and urgently assess new chest pain, breathlessness, palpitations or heart-failure symptoms; investigate before further anthracycline.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Withhold and urgently assess new chest pain, breathlessness, palpitations or heart-failure symptoms; investigate before further anthracycline.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "LVEF_REVIEW",
+        "when": {
+          "field": "lvef_percent",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin"
+          ],
+          "recommendation": "Interpret current LVEF with baseline, symptoms, measurement trend and cardiovascular risk; a single number is not cardiac clearance. Arrange oncology/cardiology review where abnormal.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Interpret current LVEF with baseline, symptoms, measurement trend and cardiovascular risk; a single number is not cardiac clearance. Arrange oncology/cardiology review where abnormal.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "RENAL_METHOD",
+        "when": {
+          "field": "renal_measure_type",
+          "operator": "in",
+          "value": [
+            "egfr",
+            "unknown"
           ]
         },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Confirm creatinine clearance in mL/min; indexed eGFR is not directly interchangeable with the NCCP CrCl thresholds.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
-        "explanation": "Febrile neutropenia triggers the occurrence-specific dose-reduction or G-CSF pathway."
+        "explanation": "Confirm creatinine clearance in mL/min; indexed eGFR is not directly interchangeable with the NCCP CrCl thresholds.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_ASSESSMENT_STAGE",
+        "when": {
+          "field": "assessment_stage",
+          "operator": "not_in",
+          "value": [
+            "baseline",
+            "ongoing"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Unrecognised assessment stage: reconcile context; no inferred clearance.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised assessment stage: reconcile context; no inferred clearance.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_RENAL_MEASURE_TYPE",
+        "when": {
+          "field": "renal_measure_type",
+          "operator": "not_in",
+          "value": [
+            "crcl",
+            "egfr",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Unrecognised renal measure type: reconcile context; no inferred clearance.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised renal measure type: reconcile context; no inferred clearance.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "CYCLO_LIVER",
+        "when": {
+          "field": "cyclophosphamide_severe_hepatic_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "Severe hepatic impairment: cyclophosphamide dose is a clinical decision; no universal reduction is specified.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe hepatic impairment: cyclophosphamide dose is a clinical decision; no universal reduction is specified.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "CYCLO_RENAL_LT10",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "renal_measure_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "renal_measure_type",
+                  "operator": "==",
+                  "value": "crcl"
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "NCCP cyclophosphamide renal row specifies 50% of dose. Confirm CrCl, current prescribed dose and other reductions with oncology/pharmacy.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "NCCP cyclophosphamide renal row specifies 50% of dose. Confirm CrCl, current prescribed dose and other reductions with oncology/pharmacy.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "CYCLO_RENAL_10_20",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "renal_measure_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "renal_measure_type",
+                  "operator": "==",
+                  "value": "crcl"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 20
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "recommendation": "NCCP cyclophosphamide renal row specifies 75% of dose. Confirm CrCl, current prescribed dose and other reductions with oncology/pharmacy.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "NCCP cyclophosphamide renal row specifies 75% of dose. Confirm CrCl, current prescribed dose and other reductions with oncology/pharmacy.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "EPI_RENAL_LT10",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "renal_measure_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "renal_measure_type",
+                  "operator": "==",
+                  "value": "crcl"
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin"
+          ],
+          "recommendation": "Epirubicin at CrCl<10mL/min requires a clinical dose decision; no fixed percentage is specified.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Epirubicin at CrCl<10mL/min requires a clinical dose decision; no fixed percentage is specified.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "EPI_BILI_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 24
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin"
+          ],
+          "recommendation": "Epirubicin source row specifies 50% of dose. Interpret bilirubin and AST together; resolve discordant rows, prior reductions and current dose with the consultant rather than multiplying reductions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Epirubicin source row specifies 50% of dose. Interpret bilirubin and AST together; resolve discordant rows, prior reductions and current dose with the consultant rather than multiplying reductions.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "EPI_BILI_HIGH",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 51
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 85
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin"
+          ],
+          "recommendation": "Epirubicin source row specifies 25% of dose. Interpret bilirubin and AST together; resolve discordant rows, prior reductions and current dose with the consultant rather than multiplying reductions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Epirubicin source row specifies 25% of dose. Interpret bilirubin and AST together; resolve discordant rows, prior reductions and current dose with the consultant rather than multiplying reductions.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "EPI_AST_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin"
+          ],
+          "recommendation": "Epirubicin source row specifies 50% of dose. Interpret bilirubin and AST together; resolve discordant rows, prior reductions and current dose with the consultant rather than multiplying reductions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Epirubicin source row specifies 50% of dose. Interpret bilirubin and AST together; resolve discordant rows, prior reductions and current dose with the consultant rather than multiplying reductions.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "EPI_AST_HIGH",
+        "when": {
+          "field": "ast_uln_multiple",
+          "operator": ">",
+          "value": 4
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin"
+          ],
+          "recommendation": "Epirubicin source row specifies 25% of dose. Interpret bilirubin and AST together; resolve discordant rows, prior reductions and current dose with the consultant rather than multiplying reductions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Epirubicin source row specifies 25% of dose. Interpret bilirubin and AST together; resolve discordant rows, prior reductions and current dose with the consultant rather than multiplying reductions.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "EPI_BILI51_OVERLAP",
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": "==",
+          "value": 51
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin"
+          ],
+          "recommendation": "Bilirubin exactly51µmol/L overlaps50% and25% epirubicin rows; source clarification required, no automatic numeric dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Bilirubin exactly51µmol/L overlaps50% and25% epirubicin rows; source clarification required, no automatic numeric dose.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "EPI_BILI_OMIT",
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 85
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "epirubicin"
+          ],
+          "recommendation": "Bilirubin>85µmol/L: omit epirubicin.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Bilirubin>85µmol/L: omit epirubicin.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_DAY1_DELAY",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "count_context",
+                  "operator": "missing"
+                },
+                {
+                  "field": "count_context",
+                  "operator": "==",
+                  "value": "cycle_start"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "At the beginning of a cycle, ANC<1.5 or platelets<100 requires one-week delay. The after-delay table is a separate decision; confirm context and prior febrile neutropenia.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "At the beginning of a cycle, ANC<1.5 or platelets<100 requires one-week delay. The after-delay table is a separate decision; confirm context and prior febrile neutropenia.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_NADIR",
+        "when": {
+          "field": "count_context",
+          "operator": "==",
+          "value": "nadir"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Nadir counts alone must not cause a FEC dose reduction. Assess infection/bleeding urgently if indicated and obtain the actual Day 1 counts; never use a nadir result to clear the next cycle.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Nadir counts alone must not cause a FEC dose reduction. Assess infection/bleeding urgently if indicated and obtain the actual Day 1 counts; never use a nadir result to clear the next cycle.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_AFTER_DELAY",
+        "when": {
+          "field": "count_context",
+          "operator": "==",
+          "value": "after_one_week_delay"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "After a one-week delay, use Table1 only if there was no previous febrile neutropenia. Confirm both counts, occurrence number, previous dose and G-CSF plan; otherwise use Table2. No automatic dose is calculated.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After a one-week delay, use Table1 only if there was no previous febrile neutropenia. Confirm both counts, occurrence number, previous dose and G-CSF plan; otherwise use Table2. No automatic dose is calculated.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_AFTER_RECOVERED_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "count_context",
+                  "operator": "==",
+                  "value": "after_one_week_delay"
+                },
+                {
+                  "field": "prior_febrile_neutropenia",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "low_count_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "100% after first occurrence; second occurrence75% of previous cycle dose OR100% original regimen with G-CSF. Select the appropriate occurrence; no automatic re-escalation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "100% after first occurrence; second occurrence75% of previous cycle dose OR100% original regimen with G-CSF. Select the appropriate occurrence; no automatic re-escalation.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_AFTER_INTERMEDIATE_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "count_context",
+                  "operator": "==",
+                  "value": "after_one_week_delay"
+                },
+                {
+                  "field": "prior_febrile_neutropenia",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "low_count_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<=",
+                  "value": 1.49
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "First occurrence:75% of previous dose, or100% original regimen with G-CSF. If ANC>1.0,100% previous dose may be considered at consultant discretion.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "First occurrence:75% of previous dose, or100% original regimen with G-CSF. If ANC>1.0,100% previous dose may be considered at consultant discretion.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_AFTER_LOW_1",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "count_context",
+                  "operator": "==",
+                  "value": "after_one_week_delay"
+                },
+                {
+                  "field": "prior_febrile_neutropenia",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "low_count_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Delay until ANC≥1.5 and platelets≥100 then75% previous dose. After first occurrence,100% original regimen with G-CSF is a consultant-selected alternative; do not use it after an unspecified recurrence.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Delay until ANC≥1.5 and platelets≥100 then75% previous dose. After first occurrence,100% original regimen with G-CSF is a consultant-selected alternative; do not use it after an unspecified recurrence.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_AFTER_RECOVERED_2",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "count_context",
+                  "operator": "==",
+                  "value": "after_one_week_delay"
+                },
+                {
+                  "field": "prior_febrile_neutropenia",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "low_count_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "100% after first occurrence; second occurrence75% of previous cycle dose OR100% original regimen with G-CSF. Select the appropriate occurrence; no automatic re-escalation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "100% after first occurrence; second occurrence75% of previous cycle dose OR100% original regimen with G-CSF. Select the appropriate occurrence; no automatic re-escalation.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_AFTER_INTERMEDIATE_2",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "count_context",
+                  "operator": "==",
+                  "value": "after_one_week_delay"
+                },
+                {
+                  "field": "prior_febrile_neutropenia",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "low_count_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<=",
+                  "value": 1.49
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Second occurrence: delay until ANC≥1.5 then75% previous dose; alternative75% original regimen with G-CSF requires explicit consultant selection.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Second occurrence: delay until ANC≥1.5 then75% previous dose; alternative75% original regimen with G-CSF requires explicit consultant selection.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_AFTER_LOW_2",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "count_context",
+                  "operator": "==",
+                  "value": "after_one_week_delay"
+                },
+                {
+                  "field": "prior_febrile_neutropenia",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "low_count_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Delay until ANC≥1.5 and platelets≥100 then75% previous dose. After first occurrence,100% original regimen with G-CSF is a consultant-selected alternative; do not use it after an unspecified recurrence.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Delay until ANC≥1.5 and platelets≥100 then75% previous dose. After first occurrence,100% original regimen with G-CSF is a consultant-selected alternative; do not use it after an unspecified recurrence.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_ANC_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "count_context",
+              "operator": "==",
+              "value": "after_one_week_delay"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">",
+              "value": 1.49
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "ANC lies between1.49 and1.5 in the printed after-delay table; do not round into a dose band.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ANC lies between1.49 and1.5 in the printed after-delay table; do not round into a dose band.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_THIRD_LOW",
+        "when": {
+          "field": "low_count_occurrence",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Third or later low-count occurrence is not specified by Table1; consultant review, no extrapolated dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Third or later low-count occurrence is not specified by Table1; consultant review, no extrapolated dose.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_PRIOR_FN",
+        "when": {
+          "field": "prior_febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Use the previous febrile-neutropenia table after recovery of ANC≥1.5 and platelets≥100. Establish episode number and G-CSF plan; do not use Table1.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Use the previous febrile-neutropenia table after recovery of ANC≥1.5 and platelets≥100. Establish episode number and G-CSF plan; do not use Table1.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_FN_1",
+        "when": {
+          "all": [
+            {
+              "field": "prior_febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "fn_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "First previous FN:75% previous-cycle dose OR100% original regimen with G-CSF. Restart only after both counts recover and clinical review. Episode number is not a CTCAE grade.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "First previous FN:75% previous-cycle dose OR100% original regimen with G-CSF. Restart only after both counts recover and clinical review. Episode number is not a CTCAE grade.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_FN_2",
+        "when": {
+          "all": [
+            {
+              "field": "prior_febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "fn_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Second previous FN:50% previous-cycle dose OR75% original regimen with G-CSF. Restart only after both counts recover and clinical review. Episode number is not a CTCAE grade.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Second previous FN:50% previous-cycle dose OR75% original regimen with G-CSF. Restart only after both counts recover and clinical review. Episode number is not a CTCAE grade.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_FN_3",
+        "when": {
+          "all": [
+            {
+              "field": "prior_febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "fn_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Third previous FN: no dose-reduction-only option is printed;75% original regimen with G-CSF requires consultant selection. Restart only after both counts recover and clinical review. Episode number is not a CTCAE grade.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Third previous FN: no dose-reduction-only option is printed;75% original regimen with G-CSF requires consultant selection. Restart only after both counts recover and clinical review. Episode number is not a CTCAE grade.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_FN_4",
+        "when": {
+          "all": [
+            {
+              "field": "prior_febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "fn_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Fourth or later FN is not specified; no extrapolated restart dose. Restart only after both counts recover and clinical review. Episode number is not a CTCAE grade.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Fourth or later FN is not specified; no extrapolated restart dose. Restart only after both counts recover and clinical review. Episode number is not a CTCAE grade.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_COMPLETE",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "complete"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Complete DPD deficiency: do not administer 5-fluorouracil. Specialist alternative treatment required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Complete DPD deficiency: do not administer 5-fluorouracil. Specialist alternative treatment required.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_PARTIAL",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "partial"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Partial DPD deficiency: consider reduced starting5-FU dose; no universal percentage is given here. Escalation only after careful monitoring and prescribing review.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Partial DPD deficiency: consider reduced starting5-FU dose; no universal percentage is given here. Escalation only after careful monitoring and prescribing review.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_UNKNOWN",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "unknown"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Establish DPD testing/result before first5-FU. Renal impairment can confound uracil phenotyping; consider genotyping.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Establish DPD testing/result before first5-FU. Renal impairment can confound uracil phenotyping; consider genotyping.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_MISSING_BASELINE",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "dpd_status",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Confirm DPD test/result before first5-FU; missing information is not a normal result.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm DPD test/result before first5-FU; missing information is not a normal result.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_RT",
+        "when": {
+          "field": "concurrent_radiotherapy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "NCCP states concurrent radiotherapy with FEC is contraindicated. Agree a sequential plan; do not automatically overlap treatments.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "NCCP states concurrent radiotherapy with FEC is contraindicated. Agree a sequential plan; do not automatically overlap treatments.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FU_HEP_CONTRA",
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 85
+            },
+            {
+              "field": "ast_u_l",
+              "operator": ">",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "5-FU is contraindicated when bilirubin>85µmol/L OR AST>180U/L. This AST threshold is absolute U/L, not×ULN.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "5-FU is contraindicated when bilirubin>85µmol/L OR AST>180U/L. This AST threshold is absolute U/L, not×ULN.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FU_HEP_BOUNDARY",
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "==",
+              "value": 85
+            },
+            {
+              "field": "ast_u_l",
+              "operator": "==",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Exactly85µmol/L bilirubin or180U/L AST is unassigned between the printed5-FU rows. Resolve the boundary before dose selection.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Exactly85µmol/L bilirubin or180U/L AST is unassigned between the printed5-FU rows. Resolve the boundary before dose selection.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FU_HEP_MODERATE",
+        "when": {
+          "field": "fluorouracil_hepatic_impairment",
+          "operator": "==",
+          "value": "moderate"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "For moderate hepatic impairment the source advises reduce initial dose by one third; reconcile absolute AST/bilirubin restrictions and current dose first. Subsequent escalation is a clinical decision if no toxicity.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "For moderate hepatic impairment the source advises reduce initial dose by one third; reconcile absolute AST/bilirubin restrictions and current dose first. Subsequent escalation is a clinical decision if no toxicity.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FU_HEP_SEVERE",
+        "when": {
+          "field": "fluorouracil_hepatic_impairment",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "For severe hepatic impairment the source advises reduce initial dose by one half; reconcile absolute AST/bilirubin restrictions and current dose first. Subsequent escalation is a clinical decision if no toxicity.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "For severe hepatic impairment the source advises reduce initial dose by one half; reconcile absolute AST/bilirubin restrictions and current dose first. Subsequent escalation is a clinical decision if no toxicity.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FU_RENAL_SEVERE",
+        "when": {
+          "field": "severe_renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Consider5-FU dose reduction in severe renal impairment; specialist decision, no fixed percentage.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Consider5-FU dose reduction in severe renal impairment; specialist decision, no fixed percentage.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FEC_STOMATITIS",
+        "when": {
+          "field": "stomatitis_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Delay until stomatitis has recovered, then75% of Day 1 dose of the previous cycle; maintain this reduction subsequently. Verify clinical recovery and current dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Delay until stomatitis has recovered, then75% of Day 1 dose of the previous cycle; maintain this reduction subsequently. Verify clinical recovery and current dose.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "FU_CARDIAC",
+        "when": {
+          "field": "fluorouracil_cardiac_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil"
+          ],
+          "recommendation": "Discontinue5-FU for new ischaemic symptoms or arrhythmia and urgently investigate. Rechallenge is generally not recommended; specialist cardiac review required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Discontinue5-FU for new ischaemic symptoms or arrhythmia and urgently investigate. Rechallenge is generally not recommended; specialist cardiac review required.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_COUNT_CONTEXT",
+        "when": {
+          "field": "count_context",
+          "operator": "not_in",
+          "value": [
+            "cycle_start",
+            "after_one_week_delay",
+            "nadir"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Unrecognised count context: resolve before selecting a dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised count context: resolve before selecting a dose.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_DPD_STATUS",
+        "when": {
+          "field": "dpd_status",
+          "operator": "not_in",
+          "value": [
+            "normal",
+            "partial",
+            "complete",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Unrecognised dpd status: resolve before selecting a dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised dpd status: resolve before selecting a dose.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_LOW_COUNT_OCCURRENCE",
+        "when": {
+          "field": "low_count_occurrence",
+          "operator": "not_in",
+          "value": [
+            1,
+            2,
+            3
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Unrecognised low count occurrence: resolve before selecting a dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised low count occurrence: resolve before selecting a dose.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_FN_OCCURRENCE",
+        "when": {
+          "field": "fn_occurrence",
+          "operator": "not_in",
+          "value": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Unrecognised fn occurrence: resolve before selecting a dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised fn occurrence: resolve before selecting a dose.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": "not_in",
+          "value": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Invalid ecog: select a recognised integer grade/status.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Invalid ecog: select a recognised integer grade/status.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_STOMATITIS_GRADE",
+        "when": {
+          "field": "stomatitis_grade",
+          "operator": "not_in",
+          "value": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "epirubicin",
+            "cyclophosphamide",
+            "fluorouracil"
+          ],
+          "recommendation": "Invalid stomatitis grade: select a recognised integer grade/status.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Invalid stomatitis grade: select a recognised integer grade/status.",
+        "source": {
+          "document": "NCCP 00265 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+        }
       }
     ]
   },
   "supportive_care": {
     "emetogenic_risk": "high",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "display_status": "Awaiting user proforma mapping",
-    "script_id": "nccp-parenteral-high",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "script_id": "nccp-v8-ac-v08417",
+    "mapping_source": "NCCP regimen, emetogenic classification and V8 Medical Oncology antiemetic medicines; reviewed 2026-10-23",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Anthracycline/cyclophosphamide combination is high emetogenic risk in NCCP V6 Table 7.",
+    "mapping_basis": "Anthracycline/cyclophosphamide combination: high; NCCP dedicated AC antiemetic row.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk",
+    "phase_specific_plan": "patient/00265/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "combination",
+      "name": "FEC100",
+      "label": "FEC100",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "fluorouracil",
+          "dose": {
+            "value": 500,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV injection",
+          "notes": "Use the exact source administration instructions and local policy."
+        },
+        {
+          "drug": "epirubicin",
+          "dose": {
+            "value": 100,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV injection",
+          "notes": "Use the exact source administration instructions and local policy."
+        },
+        {
+          "drug": "cyclophosphamide",
+          "dose": {
+            "value": 500,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV infusion",
+          "notes": "Use the exact source administration instructions and local policy."
+        }
+      ],
+      "cycles": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    }
+  ]
 }

@@ -28,7 +28,7 @@
       "combination_sact"
     ],
     "cytotoxic": true,
-    "sactcheck_encoding_version": "0.84.0",
+    "sactcheck_encoding_version": "0.84.17",
     "source_title_exact": "DOCEtaxel / cycloPHOSphamide (TC) Therapy – 21 day",
     "display_title_normalised": true,
     "display_title_normalisation_version": "0.41.1",
@@ -51,25 +51,26 @@
       "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "source_document_checked": true,
-      "software_tests_completed": false,
+      "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false
     },
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "label": "Source reconciled encoding · independent clinical and pharmacy review pending",
       "source_reconciled": true,
-      "reconciled_release": "0.84.0",
-      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.84.17",
+      "reconciled_date": "2026-10-23",
+      "scope_note": "NCCP source and boundary cases reviewed; not clinical validation or authorisation."
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00250-v8",
-    "source_checked_date": "2026-10-17",
-    "source_version_verified_date": "2026-10-17",
+    "canonical_protocol_id": "nccp-00250-v9",
+    "source_checked_date": "2026-10-23",
+    "source_version_verified_date": "2026-10-23",
     "audit_limitations": [
       "Source hepatic / boundary ambiguities are explicit review actions.",
       "Independent clinical and pharmacy validation pending.",
@@ -94,7 +95,8 @@
     "schedule_summary": "Docetaxel and cyclophosphamide on Day 1 every 21 days for four to six cycles. The team confirms the planned course before treatment. Radiotherapy, when indicated, follows chemotherapy.",
     "treatment_setting": [
       "adjuvant"
-    ]
+    ],
+    "source_version_verified": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -555,6 +557,13 @@
       "required": false,
       "always_show": true,
       "input_role": "decision"
+    },
+    "pretreatment_tests_unresolved": {
+      "label": "Required pretreatment tests/results unresolved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -1737,6 +1746,29 @@
           "url": "https://healthservice.hse.ie/documents/6353/250_DOCEtaxel-cycloPHOS_TC.pdf",
           "page": 3
         }
+      },
+      {
+        "rule_id": "V17_TESTS_UNRESOLVED",
+        "when": {
+          "field": "pretreatment_tests_unresolved",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Required baseline or cycle tests are unresolved. Obtain/review the source-required blood results and the applicable cardiac/phase assessment before prescribing; missing results are not clearance. Check the longitudinal schedule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Required baseline or cycle tests are unresolved. Obtain/review the source-required blood results and the applicable cardiac/phase assessment before prescribing; missing results are not clearance. Check the longitudinal schedule.",
+        "source": {
+          "document": "NCCP 00250 v9",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6353/250_DOCEtaxel-cycloPHOS_TC.pdf"
+        }
       }
     ]
   },
@@ -1752,16 +1784,17 @@
   },
   "supportive_care": {
     "emetogenic_risk": "moderate",
-    "mapping_source": "NCCP regimen and antiemetic classification; phase-specific source review v0.84.0",
+    "mapping_source": "NCCP regimen, emetogenic classification and V8 Medical Oncology antiemetic medicines; reviewed 2026-10-23",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "AC: high; taxane: low; TC: moderate; carboplatin AUC 6 combination: high; HER2-only continuation: minimal. Use only the active phase.",
+    "mapping_basis": "TC: moderate emetogenic risk; reconcile docetaxel steroid premedication.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "summary": "See the phase-specific drafts in patient/00250/supportive-care.html",
     "source_url": "https://healthservice.hse.ie/documents/6353/250_DOCEtaxel-cycloPHOS_TC.pdf",
-    "script_id": "nccp-parenteral-moderate",
+    "script_id": "nccp-v8-docetaxel-moderate-v08417",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
+    "phase_specific_plan": "patient/00250/supportive-care.html"
   }
 }

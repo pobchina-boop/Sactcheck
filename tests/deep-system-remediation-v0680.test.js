@@ -81,7 +81,7 @@ const sourceReconciled = ["00202","00815","00423","00377","00378","00381","00262
 for (const code of sourceReconciled) {
   const p = protocol(code);
   assert.strictEqual(p.metadata.encoding_maturity.source_reconciled, true, `${code} source reconciliation flag`);
-  assert.strictEqual(p.metadata.encoding_maturity.reconciled_release, code==="00743"?"0.84.1":code==="00202"?"0.84.0":code==="00815"?"0.83.8":"0.68.0", `${code} reconciliation release`);
+  assert.strictEqual(p.metadata.encoding_maturity.reconciled_release, ["00423","00262","00263","00269"].includes(code)?"0.84.17":code==="00743"?"0.84.1":code==="00202"?"0.84.0":code==="00815"?"0.83.8":"0.68.0", `${code} reconciliation release`);
 }
 
 // Source fidelity sentinels from the v0.68.0 audit remediation.
@@ -111,8 +111,11 @@ for (const code of ["00377","00378","00381"]) {
 for (const code of ["00262","00263"]) {
   result = assess(code, { bilirubin_umol_l: 90 });
   assert(["omit","withhold","contraindicated"].includes(result.actionType), `${code}: high bilirubin epirubicin action`);
-  result = assess(code, { crcl_ml_min: "10_20" });
-  assert.strictEqual(result.actionType, "dose_reduce", `${code}: cyclophosphamide renal action`);
+  result = assess(code, { crcl_ml_min: 15 });
+  assert.strictEqual(result.actionType, "consultant_review", `${code}: cyclophosphamide renal action requires prescribing review`);
+  assert(result.findings.some(f => f.action?.components?.includes("cyclophosphamide") && /75%/.test(f.explanation)));
+  result = assess(code, { crcl_ml_min: 20 });
+  assert(result.findings.some(f => /overlap/.test(f.explanation)), `${code}: source overlap at 20 is not rounded into a dose band`);
 }
 
 result = assess("00269", { dpd_status: "complete" });

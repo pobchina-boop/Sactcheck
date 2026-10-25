@@ -171,7 +171,8 @@ if (fs.existsSync(localDir)) {
       const selected=risk.get(protocol,{treatmentPhase:phase});
       assert.strictEqual(selected.level,level,code+'/'+phase);
       const migrated=['00204','00507','00258','00526','00798','00775','00722','00731'].includes(code);
-      const expectedScript=migrated ? (['high','variable'].includes(level)?null:level==='minimal'?'nccp-minimal-no-routine-prophylaxis':level==='oral_moderate_high'?'nccp-oral-moderate-high':'nccp-parenteral-'+level) : ['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level;
+      const v17Scripts={high:'nccp-v8-ac-v08417',low:'nccp-v8-paclitaxel-v08417',minimal:'nccp-v8-trastuzumab-v08417'};
+      const expectedScript=['00260','00278','00432'].includes(code) ? v17Scripts[level] : migrated ? (['high','variable'].includes(level)?null:level==='minimal'?'nccp-minimal-no-routine-prophylaxis':level==='oral_moderate_high'?'nccp-oral-moderate-high':'nccp-parenteral-'+level) : ['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level;
       assert.strictEqual(selected.scriptId,expectedScript,code+'/'+phase+' must use the source-specific support pathway');
     }
     for (const [alias,phase] of Object.entries(protocol.supportive_care.phase_aliases || {})) assert.strictEqual(risk.get(protocol,{treatmentPhase:alias}).level,phases[phase]);

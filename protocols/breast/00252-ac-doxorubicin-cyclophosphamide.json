@@ -28,7 +28,7 @@
       "combination_sact"
     ],
     "cytotoxic": true,
-    "sactcheck_encoding_version": "0.84.0",
+    "sactcheck_encoding_version": "0.84.17",
     "source_title_exact": "DOXOrubicin and cycloPHOSphamide (AC 60/600) Therapy – 21 day",
     "display_title_normalised": true,
     "display_title_normalisation_version": "0.41.1",
@@ -51,25 +51,26 @@
       "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
       "clinical_use_authorised": false,
       "source_document_checked": true,
-      "software_tests_completed": false,
+      "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false
     },
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "label": "Source reconciled encoding · independent clinical and pharmacy review pending",
       "source_reconciled": true,
-      "reconciled_release": "0.84.0",
-      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.84.17",
+      "reconciled_date": "2026-10-23",
+      "scope_note": "NCCP source and boundary cases reviewed; not clinical validation or authorisation."
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00252-v7",
-    "source_checked_date": "2026-10-17",
-    "source_version_verified_date": "2026-10-17",
+    "source_checked_date": "2026-10-23",
+    "source_version_verified_date": "2026-10-23",
     "audit_limitations": [
       "Doxorubicin bilirubin51 lies in both50% and25% bands. Source does not specify how bilirubin and AST reductions combine. Flag51 and competing actions for review; do not multiply reductions or silently infer a choice.",
       "Educational / software source reconciliation is not consultant, pharmacy or clinical-use authorisation."
@@ -97,7 +98,8 @@
     "schedule_summary": "Doxorubicin and cyclophosphamide on Day 1 every 21 days for four cycles. Any subsequent taxane follows a separately agreed regimen.",
     "treatment_setting": [
       "adjuvant"
-    ]
+    ],
+    "source_version_verified": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -620,6 +622,20 @@
       "required": false,
       "always_show": true,
       "input_role": "decision"
+    },
+    "pretreatment_tests_unresolved": {
+      "label": "Required pretreatment tests/results unresolved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "anthracycline_lifetime_limit_reached": {
+      "label": "Previous anthracycline lifetime limit reached",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -1594,6 +1610,52 @@
           "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
           "page": 2
         }
+      },
+      {
+        "rule_id": "V17_TESTS_UNRESOLVED",
+        "when": {
+          "field": "pretreatment_tests_unresolved",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Required baseline or cycle tests are unresolved. Obtain/review the source-required blood results and the applicable cardiac/phase assessment before prescribing; missing results are not clearance. Check the longitudinal schedule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Required baseline or cycle tests are unresolved. Obtain/review the source-required blood results and the applicable cardiac/phase assessment before prescribing; missing results are not clearance. Check the longitudinal schedule.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf"
+        }
+      },
+      {
+        "rule_id": "V17_PRIOR_ANTHRA_MAX",
+        "when": {
+          "field": "anthracycline_lifetime_limit_reached",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Previous anthracycline lifetime limit reached: do not administer further doxorubicin before specialist reconciliation of lifetime exposure. A new phase or course does not reset the cumulative dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Previous anthracycline lifetime limit reached: do not administer further doxorubicin before specialist reconciliation of lifetime exposure. A new phase or course does not reset the cumulative dose.",
+        "source": {
+          "document": "NCCP 00252 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf"
+        }
       }
     ]
   },
@@ -1609,16 +1671,17 @@
   },
   "supportive_care": {
     "emetogenic_risk": "high",
-    "mapping_source": "NCCP regimen and antiemetic classification; phase-specific source review v0.84.0",
+    "mapping_source": "NCCP regimen, emetogenic classification and V8 Medical Oncology antiemetic medicines; reviewed 2026-10-23",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "AC: high; taxane: low; TC: moderate; carboplatin AUC 6 combination: high; HER2-only continuation: minimal. Use only the active phase.",
+    "mapping_basis": "AC: high emetogenic risk; use the dedicated anthracycline/cyclophosphamide row.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "summary": "See the phase-specific drafts in patient/00252/supportive-care.html",
     "source_url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
-    "script_id": "nccp-parenteral-high",
+    "script_id": "nccp-v8-ac-v08417",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk",
+    "phase_specific_plan": "patient/00252/supportive-care.html"
   }
 }

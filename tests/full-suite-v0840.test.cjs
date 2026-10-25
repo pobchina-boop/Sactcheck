@@ -2,12 +2,13 @@
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),cp=require('child_process');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
 const index=json('data/breast-family-v0840-source-index.json'),codes=index.codes,R=require('../js/patient-asset-registry-v0810'),J=require('../js/treatment-journey-v0837'),B=require('../js/breast-library-v0837'),D=require('../js/protocol-dose-schedule');
-const migrated=new Set(['00204','00507','00258','00731']);
+const migrated17=new Set(['00250','00252','00260','00278','00432']);
+const migrated=new Set(['00204','00507','00258','00731',...migrated17]);
 const kb=json('data/regimen-knowledge-base-v0840-addendum.json'),support=json('data/phase-support-v0838.json').regimens;
 assert.equal(codes.length,16);assert.equal(kb.regimen_profiles.length,16);assert.equal(kb.evidence_records.length,16);
 for(const code of codes){
  const d=json(`data/patient-knowledge/${code}.json`),p=json('protocols/breast/'+fs.readdirSync(path.join(root,'protocols/breast')).find(n=>n.startsWith(code)));
- assert.equal(d.suite_release,migrated.has(code)?'0.84.16':'0.84.0');assert.equal(d.cycle_display,'reference-chronology');assert.equal(p.metadata.sactcheck_encoding_version,migrated.has(code)?'0.84.16':'0.84.0');assert.equal(d.protocol_version,String(p.metadata.nccp_version));
+ assert.equal(d.suite_release,migrated17.has(code)?'0.84.17':migrated.has(code)?'0.84.16':'0.84.0');assert.equal(d.cycle_display,'reference-chronology');assert.equal(p.metadata.sactcheck_encoding_version,migrated17.has(code)?'0.84.17':migrated.has(code)?'0.84.16':'0.84.0');assert.equal(d.protocol_version,String(p.metadata.nccp_version));
  if(!migrated.has(code))assert.equal(index.regimens[code].rule_count,p.rule_engine.rules.length);else assert(p.rule_engine.rules.length>=index.regimens[code].rule_count,'Retrospective rules retain coverage; source cases test changed semantics');assert.match(index.regimens[code].source_sha256,/^[a-f0-9]{64}$/);assert.equal(p.metadata.validation.clinical_use_authorised,false);
  assert(p.rule_engine.rules.every(r=>r.source?.url&&r.source.page));assert.equal(new Set(p.rule_engine.rules.map(r=>r.rule_id)).size,p.rule_engine.rules.length);
  assert(d.anatomy.length>=3&&d.anatomy.length<=8);assert.equal(J.definitions[code].has_patient_dates,false);assert.equal(J.definitions[code].schedule_type,'relative-educational');

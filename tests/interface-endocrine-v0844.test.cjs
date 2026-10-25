@@ -49,7 +49,9 @@ for(const edit of edits)check(()=>{
   assert.equal(phesgo.before,current.after);
   const breast=JSON.parse(read('validation/breast-expansion-v08416/builder-revision.json'));
   assert.equal(breast.before,phesgo.after);
-  assert.equal(crypto.createHash('sha256').update(content).digest('hex'),breast.after);
+  const anthra=JSON.parse(read('validation/anthracycline-v08417/builder-revision.json'));
+  assert.equal(anthra.before,breast.after);
+  assert.equal(crypto.createHash('sha256').update(content).digest('hex'),anthra.after);
   assert(content.toString().includes('Insert numbers here'));
  }else assert.equal(crypto.createHash('sha256').update(content).digest('hex'),require('./helpers/retrospective-v08413.cjs').expectedHash(edit.path,edit.after),edit.path);
 

@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf",
-    "sactcheck_encoding_version": "0.68.0",
+    "sactcheck_encoding_version": "0.84.17",
     "treatment_setting": [
       "locally_advanced",
       "metastatic"
@@ -63,24 +63,26 @@
     "review_date_basis": "date_last_reviewed",
     "review_schedule": "as_required_from_2026-05-20",
     "source_version_verified": true,
-    "source_version_verified_date": "2026-07-29",
+    "source_version_verified_date": "2026-10-23",
     "source_version_verification_method": "manual comparison with current official NCCP PDF header and version-control information",
     "legacy_internal_id_retained": true,
     "legacy_internal_id_note": "Stable internal ID retained to avoid breaking existing bookmarks and catalogue references; display metadata now records the explicit NCCP source version.",
-    "source_checked_date": "2026-08-15",
+    "source_checked_date": "2026-10-23",
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source reconciled rule encoding · independent clinical and oncology pharmacy review pending",
+      "label": "Source reconciled encoding · independent clinical and pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "reconciled_release": "0.68.0",
-      "reconciled_date": "2026-08-15",
-      "scope_note": "Rebuilt against NCCP 00423 Version 5 with haematology, cardiac exclusion, doxorubicin and docetaxel organ function and adverse event pathways."
+      "reconciled_release": "0.84.17",
+      "reconciled_date": "2026-10-23",
+      "scope_note": "NCCP source and boundary cases reviewed; not clinical validation or authorisation."
     },
     "canonical_protocol_id": "nccp-00423-v5",
-    "legacy_protocol_id_alias": "nccp-00423-vcurrent"
+    "legacy_protocol_id_alias": "nccp-00423-vcurrent",
+    "full_suite_release": "0.84.17",
+    "schedule_summary": "Doxorubicin followed by docetaxel on Day 1 every 21 days, for up to six cycles unless progression or unacceptable toxicity changes the plan."
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -89,239 +91,371 @@
   },
   "input_definitions": {
     "anc_x10e9_l": {
-      "label": "ANC",
+      "label": "ANC (×10⁹/L)",
       "type": "number",
-      "required": false,
       "min": 0,
+      "max": 100,
       "step": 0.01,
-      "always_show": true,
+      "required": false,
       "input_role": "decision",
-      "unit": "×10⁹/L",
-      "demo_value": 2
+      "demo_value": 3
     },
     "platelets_x10e9_l": {
-      "label": "Platelets",
+      "label": "Platelets (×10⁹/L)",
       "type": "number",
-      "required": false,
       "min": 0,
+      "max": 2000,
       "step": 1,
-      "always_show": true,
+      "required": false,
       "input_role": "decision",
-      "unit": "×10⁹/L",
       "demo_value": 200
     },
     "hb_g_dl": {
-      "label": "Haemoglobin",
+      "label": "Haemoglobin (g/dL)",
       "type": "number",
-      "required": false,
       "min": 0,
-      "step": 0.1,
-      "always_show": true,
-      "input_role": "monitoring",
-      "unit": "g/dL",
+      "max": 30,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
       "demo_value": 12
     },
-    "febrile_neutropenia": {
-      "label": "Febrile neutropenia",
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before starting"
+        },
+        {
+          "value": "ongoing",
+          "label": "During treatment"
+        }
+      ],
+      "demo_value": "baseline"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "indication_eligible": {
+      "label": "Regimen indication confirmed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "always_show": true,
-      "input_role": "context"
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "febrile_neutropenia": {
+      "label": "Current suspected febrile neutropenia",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_febrile_neutropenia": {
+      "label": "Febrile neutropenia in a previous cycle",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bilirubin_umol_l": {
+      "label": "Bilirubin (µmol/L)",
+      "type": "number",
+      "min": 0,
+      "max": 1000,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 10,
+      "ui_derived_from": "bilirubin_uln_multiple"
+    },
+    "ast_uln_multiple": {
+      "label": "AST (×ULN)",
+      "type": "number",
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
+      "min": 0,
+      "max": 300,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 80,
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf",
+        "reason": "Source renal bands use creatinine clearance in mL/min, not indexed eGFR."
+      }
+    },
+    "renal_measure_type": {
+      "label": "Renal measurement",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "crcl",
+          "label": "Creatinine clearance"
+        },
+        {
+          "value": "egfr",
+          "label": "Indexed eGFR"
+        },
+        {
+          "value": "unknown",
+          "label": "Unconfirmed"
+        }
+      ],
+      "demo_value": "crcl"
+    },
+    "severe_renal_impairment": {
+      "label": "Severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "lvef_percent": {
+      "label": "Current LVEF (%)",
+      "type": "number",
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 60
+    },
+    "clinically_significant_cardiac_symptoms": {
+      "label": "New clinically significant cardiac symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "significant_cardiac_disease": {
+      "label": "Source cardiac exclusion present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "anthracycline_lifetime_limit_reached": {
+      "label": "Previous anthracycline lifetime limit reached",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy_or_lactation": {
+      "label": "Pregnant or breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "drug_hypersensitivity": {
+      "label": "Known hypersensitivity to regimen medicine",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "alt_uln_multiple": {
+      "label": "ALT (×ULN)",
+      "type": "number",
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "alp_uln_multiple": {
+      "label": "ALP (×ULN)",
+      "type": "number",
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin (×ULN)",
+      "type": "number",
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 1,
+      "derived_actual_field": "bilirubin_umol_l"
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_label": "NCCP named toxicity assessment",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf",
+      "assessment_guidance": "Confirm the named adverse event and clinician-assessed grade; the regimen lists action thresholds, not a complete grading manual.",
+      "unit": "Clinician-assessed grade",
+      "source_grading_note": "The NCCP regimen specifies action thresholds, not a complete grading table. Confirm the named adverse event and grade using the approved clinical grading reference before applying the source action.",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "description": "Clinician-assessed grade 0. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "description": "Clinician-assessed grade 1. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "description": "Clinician-assessed grade 2. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "description": "Clinician-assessed grade 3. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "description": "Clinician-assessed grade 4. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         }
-      ],
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "CTCAE grade",
-      "ctcae_version": "5.0",
-      "demo_value": 0,
-      "ctcae_category": "neuropathy",
-      "assessment_guidance": "Assess sensory and motor symptoms, gait, dexterity and impact on instrumental or self care activities."
-    },
-    "lvef_percent": {
-      "label": "LVEF",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "%",
-      "demo_value": 60
-    },
-    "renal_impairment_severity": {
-      "label": "Renal impairment severity",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "mild",
-          "label": "Mild"
-        },
-        {
-          "value": "moderate",
-          "label": "Moderate"
-        },
-        {
-          "value": "severe",
-          "label": "Severe"
-        }
-      ],
-      "always_show": true,
-      "input_role": "decision",
-      "demo_value": "none"
-    },
-    "bilirubin_umol_l": {
-      "label": "Bilirubin",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "µmol/L",
-      "demo_value": 10
-    },
-    "ast_uln_multiple": {
-      "label": "AST multiple of ULN",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "× ULN",
-      "demo_value": 1
-    },
-    "alp_uln_multiple": {
-      "label": "ALP multiple of ULN",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "× ULN",
-      "demo_value": 1
-    },
-    "ast_alt_uln_multiple": {
-      "label": "Highest AST or ALT multiple of ULN",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "× ULN",
-      "demo_value": 1
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin multiple of ULN",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "× ULN",
-      "demo_value": 1
+      ]
     },
     "skin_reaction_grade": {
       "label": "Skin reaction grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_label": "NCCP named toxicity assessment",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf",
+      "assessment_guidance": "Confirm the named adverse event and clinician-assessed grade; the regimen lists action thresholds, not a complete grading manual.",
+      "unit": "Clinician-assessed grade",
+      "source_grading_note": "The NCCP regimen specifies action thresholds, not a complete grading table. Confirm the named adverse event and grade using the approved clinical grading reference before applying the source action.",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "description": "Clinician-assessed grade 0. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "description": "Clinician-assessed grade 1. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "description": "Clinician-assessed grade 2. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "description": "Clinician-assessed grade 3. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "description": "Clinician-assessed grade 4. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         }
-      ],
-      "always_show": true,
-      "input_role": "decision",
-      "unit": "CTCAE grade",
-      "ctcae_version": "5.0",
-      "demo_value": 0,
-      "ctcae_category": "cutaneous",
-      "assessment_guidance": "Use the most specific CTCAE skin term available and assess body surface area, symptoms, mucosal or systemic involvement and functional impact."
+      ]
     },
     "stomatitis_grade": {
       "label": "Stomatitis grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_label": "NCCP named toxicity assessment",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf",
+      "assessment_guidance": "Confirm the named adverse event and clinician-assessed grade; the regimen lists action thresholds, not a complete grading manual.",
+      "unit": "Clinician-assessed grade",
+      "source_grading_note": "The NCCP regimen specifies action thresholds, not a complete grading table. Confirm the named adverse event and grade using the approved clinical grading reference before applying the source action.",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "description": "Clinician-assessed grade 0. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "description": "Clinician-assessed grade 1. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "description": "Clinician-assessed grade 2. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "description": "Clinician-assessed grade 3. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "description": "Clinician-assessed grade 4. Confirm the named adverse event and functional impact using the approved clinical grading reference; the NCCP source specifies treatment actions, not a complete grading definition."
         }
-      ],
-      "always_show": true,
+      ]
+    },
+    "docetaxel_current_mg_m2": {
+      "label": "Current docetaxel dose (mg/m²)",
+      "type": "number",
+      "min": 0,
+      "max": 150,
+      "step": 0.01,
+      "required": false,
       "input_role": "decision",
-      "unit": "CTCAE grade",
-      "ctcae_version": "5.0",
-      "demo_value": 0,
-      "ctcae_category": "mucositis",
-      "assessment_guidance": "Assess pain, ulceration, oral intake and nutritional consequences."
+      "demo_value": 75
+    },
+    "toxicity_persists_at_60": {
+      "label": "Relevant toxicity persists at docetaxel60mg/m²",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_docetaxel_hypersensitivity": {
+      "label": "Severe docetaxel hypersensitivity reaction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "docetaxel_premedication_incomplete": {
+      "label": "Docetaxel steroid premedication incomplete",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -343,47 +477,410 @@
     "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "id": "AT423_ANC_LT1_5",
+        "rule_id": "INDICATION",
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1.5
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Confirm indication, receptor biology, previous therapies and treatment intent before selecting this regimen.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm indication, receptor biology, previous therapies and treatment intent before selecting this regimen.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "ECOG performance status is outside the source eligibility range; consultant selection review required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ECOG performance status is outside the source eligibility range; consultant selection review required.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "CARDIAC_EXCLUSION",
+        "when": {
+          "field": "significant_cardiac_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Source cardiac exclusion: do not initiate pending specialist review.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source cardiac exclusion: do not initiate pending specialist review.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "PRIOR_ANTHRA_MAX",
+        "when": {
+          "field": "anthracycline_lifetime_limit_reached",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Previous anthracycline maximum is a source exclusion. Reconcile lifetime exposure across all previous treatments; do not add different anthracycline doses directly.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Previous anthracycline maximum is a source exclusion. Reconcile lifetime exposure across all previous treatments; do not add different anthracycline doses directly.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy_or_lactation",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Pregnancy or lactation is a source exclusion; specialist discussion required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Pregnancy or lactation is a source exclusion; specialist discussion required.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "HYPERSENSITIVITY",
+        "when": {
+          "field": "drug_hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Known hypersensitivity is a source exclusion; review the implicated medicine and alternative treatment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Known hypersensitivity is a source exclusion; review the implicated medicine and alternative treatment.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "ACUTE_FN",
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Suspected current febrile neutropenia: withhold treatment and arrange urgent clinical assessment. This is not the previous-cycle dose-reduction pathway.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Suspected current febrile neutropenia: withhold treatment and arrange urgent clinical assessment. This is not the previous-cycle dose-reduction pathway.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "CARDIAC_SYMPTOMS",
+        "when": {
+          "field": "clinically_significant_cardiac_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Withhold and urgently assess new chest pain, breathlessness, palpitations or heart-failure symptoms; investigate before further anthracycline.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Withhold and urgently assess new chest pain, breathlessness, palpitations or heart-failure symptoms; investigate before further anthracycline.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "LVEF_REVIEW",
+        "when": {
+          "field": "lvef_percent",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Interpret current LVEF with baseline, symptoms, measurement trend and cardiovascular risk; a single number is not cardiac clearance. Arrange oncology/cardiology review where abnormal.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Interpret current LVEF with baseline, symptoms, measurement trend and cardiovascular risk; a single number is not cardiac clearance. Arrange oncology/cardiology review where abnormal.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "RENAL_METHOD",
+        "when": {
+          "field": "renal_measure_type",
+          "operator": "in",
+          "value": [
+            "egfr",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Confirm creatinine clearance in mL/min; indexed eGFR is not directly interchangeable with the NCCP CrCl thresholds.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm creatinine clearance in mL/min; indexed eGFR is not directly interchangeable with the NCCP CrCl thresholds.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_ASSESSMENT_STAGE",
+        "when": {
+          "field": "assessment_stage",
+          "operator": "not_in",
+          "value": [
+            "baseline",
+            "ongoing"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Unrecognised assessment stage: reconcile context; no inferred clearance.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised assessment stage: reconcile context; no inferred clearance.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_RENAL_MEASURE_TYPE",
+        "when": {
+          "field": "renal_measure_type",
+          "operator": "not_in",
+          "value": [
+            "crcl",
+            "egfr",
+            "unknown"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Unrecognised renal measure type: reconcile context; no inferred clearance.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Unrecognised renal measure type: reconcile context; no inferred clearance.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "AT_COUNTS_LOW",
+        "when": {
+          "any": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 100
+            }
+          ]
         },
         "action": {
           "type": "delay",
-          "message": "ANC below 1.5 ×10⁹/L: delay treatment for one week.",
           "components": [
-            "whole_regimen"
-          ]
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Delay one week for ANC<1.5 or platelets<100; reassess before restarting.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Delay one week for ANC<1.5 or platelets<100; reassess before restarting.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 1"
-        },
-        "explanation": "ANC below 1.5 ×10⁹/L: delay treatment for one week."
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_PLT_LT100",
+        "rule_id": "AT_BASELINE_COUNTS_BOUNDARY",
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 100
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "==",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "==",
+                  "value": 100
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "delay",
-          "message": "Platelets below 100 ×10⁹/L: delay treatment for one week.",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
-          ]
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Baseline eligibility uses ANC>1.5 and platelets>100 whereas the treatment table uses≥. Clarify exact initiation boundaries before starting.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Baseline eligibility uses ANC>1.5 and platelets>100 whereas the treatment table uses≥. Clarify exact initiation boundaries before starting.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 1"
-        },
-        "explanation": "Platelets below 100 ×10⁹/L: delay treatment for one week."
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_LVEF_LT50",
+        "rule_id": "AT_BASELINE_NEURO",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Baseline neuropathy grade≥2 is an explicit NCCP exclusion for AT; review alternative regimen.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Baseline neuropathy grade≥2 is an explicit NCCP exclusion for AT; review alternative regimen.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "AT_LVEF_LOW",
         "when": {
           "field": "lvef_percent",
           "operator": "<",
@@ -391,40 +888,45 @@
         },
         "action": {
           "type": "contraindicated",
-          "message": "LVEF below 50% is an exclusion for this regimen.",
           "components": [
             "doxorubicin"
-          ]
+          ],
+          "recommendation": "LVEF<50% is an NCCP cardiac exclusion; do not initiate doxorubicin pending specialist review. During therapy assess cause and trend urgently.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "LVEF<50% is an NCCP cardiac exclusion; do not initiate doxorubicin pending specialist review. During therapy assess cause and trend urgently.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 2, Exclusions"
-        },
-        "explanation": "LVEF below 50% is an exclusion for this regimen.",
-        "priority": 98
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_DOXO_SEVERE_RENAL",
+        "rule_id": "AT_LVEF50",
         "when": {
-          "field": "renal_impairment_severity",
+          "field": "lvef_percent",
           "operator": "==",
-          "value": "severe"
+          "value": 50
         },
         "action": {
           "type": "consultant_review",
-          "message": "Severe renal impairment: doxorubicin dosing is a clinical decision.",
           "components": [
             "doxorubicin"
-          ]
+          ],
+          "recommendation": "LVEF exactly50% does not satisfy the source baseline requirement >50%; clarify before doxorubicin.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "LVEF exactly50% does not satisfy the source baseline requirement >50%; clarify before doxorubicin.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 2"
-        },
-        "explanation": "Severe renal impairment: doxorubicin dosing is a clinical decision."
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_DOXO_BILI_20_50",
+        "rule_id": "DOXO_BILI_20_50",
         "when": {
           "all": [
             {
@@ -440,20 +942,23 @@
           ]
         },
         "action": {
-          "type": "dose_reduce",
-          "message": "Bilirubin 20 to 50 µmol/L: use 50% of the doxorubicin dose.",
+          "type": "consultant_review",
           "components": [
             "doxorubicin"
-          ]
+          ],
+          "recommendation": "Doxorubicin source row specifies 50%; reconcile bilirubin and AST together, prior reductions and current dose. Do not multiply discordant reductions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Doxorubicin source row specifies 50%; reconcile bilirubin and AST together, prior reductions and current dose. Do not multiply discordant reductions.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 2"
-        },
-        "explanation": "Bilirubin 20 to 50 µmol/L: use 50% of the doxorubicin dose."
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_DOXO_BILI_51_85",
+        "rule_id": "DOXO_BILI_51_85",
         "when": {
           "all": [
             {
@@ -469,41 +974,23 @@
           ]
         },
         "action": {
-          "type": "dose_reduce",
-          "message": "Bilirubin 51 to 85 µmol/L: use 25% of the doxorubicin dose.",
+          "type": "consultant_review",
           "components": [
             "doxorubicin"
-          ]
+          ],
+          "recommendation": "Doxorubicin source row specifies 25%; reconcile bilirubin and AST together, prior reductions and current dose. Do not multiply discordant reductions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Doxorubicin source row specifies 25%; reconcile bilirubin and AST together, prior reductions and current dose. Do not multiply discordant reductions.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 2"
-        },
-        "explanation": "Bilirubin 51 to 85 µmol/L: use 25% of the doxorubicin dose."
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_DOXO_BILI_GT85",
-        "when": {
-          "field": "bilirubin_umol_l",
-          "operator": ">",
-          "value": 85
-        },
-        "action": {
-          "type": "omit",
-          "message": "Bilirubin above 85 µmol/L: omit doxorubicin.",
-          "components": [
-            "doxorubicin"
-          ]
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 2"
-        },
-        "explanation": "Bilirubin above 85 µmol/L: omit doxorubicin.",
-        "priority": 90
-      },
-      {
-        "id": "AT423_DOXO_AST_2_3",
+        "rule_id": "DOXO_AST_2_3",
         "when": {
           "all": [
             {
@@ -519,40 +1006,124 @@
           ]
         },
         "action": {
-          "type": "dose_reduce",
-          "message": "AST 2 to 3 × ULN: use 75% of the doxorubicin dose.",
+          "type": "consultant_review",
           "components": [
             "doxorubicin"
-          ]
+          ],
+          "recommendation": "Doxorubicin source row specifies 75%; reconcile bilirubin and AST together, prior reductions and current dose. Do not multiply discordant reductions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Doxorubicin source row specifies 75%; reconcile bilirubin and AST together, prior reductions and current dose. Do not multiply discordant reductions.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 2"
-        },
-        "explanation": "AST 2 to 3 × ULN: use 75% of the doxorubicin dose."
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_DOXO_AST_GT3",
+        "rule_id": "DOXO_AST_GT3",
         "when": {
           "field": "ast_uln_multiple",
           "operator": ">",
           "value": 3
         },
         "action": {
-          "type": "dose_reduce",
-          "message": "AST above 3 × ULN: use 50% of the doxorubicin dose.",
+          "type": "consultant_review",
           "components": [
             "doxorubicin"
-          ]
+          ],
+          "recommendation": "Doxorubicin source row specifies 50%; reconcile bilirubin and AST together, prior reductions and current dose. Do not multiply discordant reductions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Doxorubicin source row specifies 50%; reconcile bilirubin and AST together, prior reductions and current dose. Do not multiply discordant reductions.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 2"
-        },
-        "explanation": "AST above 3 × ULN: use 50% of the doxorubicin dose."
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_DOC_HEP_75",
+        "rule_id": "DOXO_BILI_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 50
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Bilirubin between50 and51 is outside the printed AT rows; resolve source gap without rounding.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Bilirubin between50 and51 is outside the printed AT rows; resolve source gap without rounding.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "DOXO_BILI_OMIT",
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 85
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Bilirubin>85µmol/L: omit doxorubicin.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Bilirubin>85µmol/L: omit doxorubicin.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "DOXO_RENAL",
+        "when": {
+          "field": "severe_renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Severe renal impairment: doxorubicin dose is a clinical decision.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe renal impairment: doxorubicin dose is a clinical decision.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "DOC_HEP_75",
         "when": {
           "all": [
             {
@@ -561,42 +1132,55 @@
               "value": 2.5
             },
             {
-              "field": "ast_alt_uln_multiple",
-              "operator": ">",
-              "value": 1.5
+              "any": [
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                }
+              ]
             }
           ]
         },
         "action": {
-          "type": "dose_reduce",
-          "message": "ALP above 2.5 × ULN with AST or ALT above 1.5 × ULN: docetaxel dose 75 mg/m².",
+          "type": "consultant_review",
           "components": [
             "docetaxel"
-          ]
+          ],
+          "recommendation": "Docetaxel table lists75 mg/m² in this hepatic pattern: that is already the AT starting dose, not a25% reduction. Check the severe hepatic row, bilirubin and current dose before prescribing.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Docetaxel table lists75 mg/m² in this hepatic pattern: that is already the AT starting dose, not a25% reduction. Check the severe hepatic row, bilirubin and current dose before prescribing.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 3"
-        },
-        "explanation": "ALP above 2.5 × ULN with AST or ALT above 1.5 × ULN: docetaxel dose 75 mg/m²."
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_DOC_HEP_STOP",
+        "rule_id": "DOC_HEP_SEVERE",
         "when": {
-          "all": [
+          "any": [
             {
-              "any": [
-                {
-                  "field": "alp_uln_multiple",
-                  "operator": ">",
-                  "value": 6
-                },
-                {
-                  "field": "ast_alt_uln_multiple",
-                  "operator": ">",
-                  "value": 3.5
-                }
-              ]
+              "field": "alp_uln_multiple",
+              "operator": ">",
+              "value": 6
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 3.5
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 3.5
             },
             {
               "field": "bilirubin_uln_multiple",
@@ -606,78 +1190,347 @@
           ]
         },
         "action": {
-          "type": "withhold",
-          "message": "Marked hepatic dysfunction with bilirubin above ULN: stop docetaxel unless strictly indicated and discuss with a Consultant.",
+          "type": "consultant_review",
           "components": [
             "docetaxel"
-          ]
+          ],
+          "recommendation": "Evaluate the full severe hepatic pattern in Table3: ALP>6×ULN and/or AST and ALT>3.5×ULN, with bilirubin>ULN. Stop docetaxel unless strictly indicated by consultant. A single abnormality does not establish the complete table pattern; obtain missing values and resolve the AND/OR wording. No automatic dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Evaluate the full severe hepatic pattern in Table3: ALP>6×ULN and/or AST and ALT>3.5×ULN, with bilirubin>ULN. Stop docetaxel unless strictly indicated by consultant. A single abnormality does not establish the complete table pattern; obtain missing values and resolve the AND/OR wording. No automatic dose.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 3, Table 3"
-        },
-        "explanation": "Marked hepatic dysfunction with bilirubin above ULN: stop docetaxel unless strictly indicated and discuss with a Consultant.",
-        "priority": 96
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_SKIN_G3",
+        "rule_id": "DOC_HEP_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 6
+                },
+                {
+                  "all": [
+                    {
+                      "field": "ast_uln_multiple",
+                      "operator": ">",
+                      "value": 3.5
+                    },
+                    {
+                      "field": "alt_uln_multiple",
+                      "operator": ">",
+                      "value": 3.5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Severe docetaxel hepatic pattern meets the printed stop criterion. Stop unless strictly indicated following explicit consultant decision.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe docetaxel hepatic pattern meets the printed stop criterion. Stop unless strictly indicated following explicit consultant decision.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "DOC_TOX60",
+        "when": {
+          "any": [
+            {
+              "field": "skin_reaction_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "stomatitis_grade",
+              "operator": "in",
+              "value": [
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Grade 3 skin reaction, neuropathy>grade 2 or grade 3/4 stomatitis: source reduces docetaxel to60 mg/m². If the relevant toxicity persists at 60 mg/m² discontinue; establish current dose and persistence before restart.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Grade 3 skin reaction, neuropathy>grade 2 or grade 3/4 stomatitis: source reduces docetaxel to60 mg/m². If the relevant toxicity persists at 60 mg/m² discontinue; establish current dose and persistence before restart.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "DOC_PERSIST60",
+        "when": {
+          "field": "toxicity_persists_at_60",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Relevant source toxicity persists at docetaxel60 mg/m²: discontinue docetaxel.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Relevant source toxicity persists at docetaxel60 mg/m²: discontinue docetaxel.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "DOC_SKIN4",
         "when": {
           "field": "skin_reaction_grade",
-          "operator": ">=",
-          "value": 3
+          "operator": "==",
+          "value": 4
         },
         "action": {
-          "type": "dose_reduce",
-          "message": "Grade 3 skin reaction: reduce docetaxel to 60 mg/m².",
+          "type": "withhold",
           "components": [
             "docetaxel"
-          ]
+          ],
+          "recommendation": "Grade 4 skin toxicity: withhold and urgently review. The printed grade 3 reduction must not be automatically applied to grade 4.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Grade 4 skin toxicity: withhold and urgently review. The printed grade 3 reduction must not be automatically applied to grade 4.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 4, adverse events"
-        },
-        "explanation": "Grade 3 skin reaction: reduce docetaxel to 60 mg/m²."
+          "document": "NCCP 00423 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_NEURO_GT2",
+        "rule_id": "DOC_SEVERE_HYPERSENS",
+        "when": {
+          "field": "severe_docetaxel_hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Severe hypersensitivity: stop docetaxel, provide emergency management and do not rechallenge.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe hypersensitivity: stop docetaxel, provide emergency management and do not rechallenge.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "DOC_PREMED",
+        "when": {
+          "field": "docetaxel_premedication_incomplete",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Verify dexamethasone8 mg twice daily for 3 days starting the day before docetaxel, minimum3doses before infusion. Missed doses need a consultant-selected rescue plan; reconcile with antiemetic steroid to avoid duplication.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Verify dexamethasone8 mg twice daily for 3 days starting the day before docetaxel, minimum3doses before infusion. Missed doses need a consultant-selected rescue plan; reconcile with antiemetic steroid to avoid duplication.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "AT_PRIOR_FN",
+        "when": {
+          "field": "prior_febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Review prior febrile neutropenia, recovery and G-CSF prophylaxis. This AT source does not specify a universal75% FN reduction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Review prior febrile neutropenia, recovery and G-CSF prophylaxis. This AT source does not specify a universal75% FN reduction.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": "not_in",
+          "value": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Invalid ecog: select a recognised integer grade/status.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Invalid ecog: select a recognised integer grade/status.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_NEUROPATHY_GRADE",
         "when": {
           "field": "neuropathy_grade",
-          "operator": ">",
-          "value": 2
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "Peripheral neuropathy above grade 2: reduce docetaxel to 60 mg/m².",
-          "components": [
-            "docetaxel"
+          "operator": "not_in",
+          "value": [
+            0,
+            1,
+            2,
+            3,
+            4
           ]
         },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 4, adverse events"
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Invalid neuropathy grade: select a recognised integer grade/status.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
-        "explanation": "Peripheral neuropathy above grade 2: reduce docetaxel to 60 mg/m²."
+        "explanation": "Invalid neuropathy grade: select a recognised integer grade/status.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       },
       {
-        "id": "AT423_STOM_G3",
+        "rule_id": "INVALID_SKIN_REACTION_GRADE",
         "when": {
-          "field": "stomatitis_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "dose_reduce",
-          "message": "Grade 3 or 4 stomatitis: reduce docetaxel to 60 mg/m².",
-          "components": [
-            "docetaxel"
+          "field": "skin_reaction_grade",
+          "operator": "not_in",
+          "value": [
+            0,
+            1,
+            2,
+            3,
+            4
           ]
         },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Page 4, adverse events"
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Invalid skin reaction grade: select a recognised integer grade/status.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
-        "explanation": "Grade 3 or 4 stomatitis: reduce docetaxel to 60 mg/m²."
+        "explanation": "Invalid skin reaction grade: select a recognised integer grade/status.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
+      },
+      {
+        "rule_id": "INVALID_STOMATITIS_GRADE",
+        "when": {
+          "field": "stomatitis_grade",
+          "operator": "not_in",
+          "value": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "docetaxel"
+          ],
+          "recommendation": "Invalid stomatitis grade: select a recognised integer grade/status.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Invalid stomatitis grade: select a recognised integer grade/status.",
+        "source": {
+          "document": "NCCP 00423 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+        }
       }
     ]
   },
@@ -685,12 +1538,52 @@
     "emetogenic_risk": "moderate",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
-    "script_id": "nccp-parenteral-moderate",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
+    "script_id": "nccp-v8-docetaxel-moderate-v08417",
+    "mapping_source": "NCCP regimen, emetogenic classification and V8 Medical Oncology antiemetic medicines; reviewed 2026-10-23",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Doxorubicin below 60 mg/m2 is moderate emetogenic risk in NCCP V6 Table 7.",
+    "mapping_basis": "Doxorubicin50/docetaxel combination: moderate; reconcile docetaxel steroid course.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
-    "breakthrough_profile_id": "nccp-breakthrough-general"
-  }
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "phase_specific_plan": "patient/00423/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "combination",
+      "name": "AT 50/75",
+      "label": "AT 50/75",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "doxorubicin",
+          "dose": {
+            "value": 50,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV injection",
+          "notes": "Use the exact source administration instructions and local policy."
+        },
+        {
+          "drug": "docetaxel",
+          "dose": {
+            "value": 75,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV infusion",
+          "notes": "Use the exact source administration instructions and local policy."
+        }
+      ],
+      "cycles": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    }
+  ]
 }

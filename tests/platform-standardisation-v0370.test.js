@@ -165,7 +165,7 @@ for (const { file, data } of protocols) {
       const everolimusSource = code === '00322';
       const palbociclibSource = code === '00414' && field === 'nonhaem_toxicity_grade';
       const pldSource = code === '00205' && ['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field);
-      const newSourceGrade = (code === '00217' && ['cardiac_toxicity_grade','pulmonary_toxicity_grade'].includes(field)) || (code === '00350' && field === 'her2_hypersensitivity_grade');
+      const newSourceGrade = (code === '00217' && ['cardiac_toxicity_grade','pulmonary_toxicity_grade'].includes(field)) || (code === '00350' && field === 'her2_hypersensitivity_grade') || (['00265','00269'].includes(code) && field === 'stomatitis_grade') || (code === '00423' && ['stomatitis_grade','neuropathy_grade','skin_reaction_grade'].includes(field));
       if(newSourceGrade){assert.equal(def.grading_source_url,metadata.source_url);assert.match(def.source_grading_note,/not a complete grading table/);assert(!def.ctcae_version);}else if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, everolimusSource ? '3.0' : palbociclibSource ? '4.0' : folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea || ['00858','00860','00861','00348','00734'].includes(code) ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
       if(palbociclibSource){assert.equal(def.grading_source_label,'NCCP 00414 / CTCAE v4.0');assert.match(def.grading_source_url,/cancer.gov.*ctcae-v403/);assert(def.options.every(x=>x.description));}
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
@@ -218,7 +218,7 @@ for (const { file, data } of protocols) {
       assert.equal(def.renal_input?.exact_value_required, true, `${code}/${field} exact renal field must declare why a continuous value is required`);
       assert(String(def.renal_input?.reason || '').length >= 20, `${code}/${field} exact renal field lacks a source-specific rationale`);
     } else if (mode === 'source_threshold_numeric') {
-      assert(['00205','00217','00228','00230','00736','00743','00254','00371'].includes(code),`${code}: numeric threshold entry requires an audited source`);
+      assert(['00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423'].includes(code),`${code}: numeric threshold entry requires an audited source`);
       assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);
       const auditedSources=[metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)];
       assert(auditedSources.includes(def.renal_input.source_url),`${code}/${field}: numeric renal source must be NCCP or an explicitly audited supplement`);assert(def.renal_input.reason.length>=20);

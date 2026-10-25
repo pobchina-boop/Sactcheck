@@ -104,7 +104,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6353/250_DOCEtaxel-cycloPHOS_TC.pdf",
-    "basis": "Adjuvant high-risk node-positive or node-negative operable breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00252": {
     "code": "00252",
@@ -117,7 +117,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf",
-    "basis": "Adjuvant breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00253": {
     "code": "00253",
@@ -176,7 +176,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6364/260_v7_AC-T.pdf",
-    "basis": "neoadjuvant or adjuvant high-risk breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00262": {
     "code": "00262",
@@ -185,24 +185,24 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6367/262_EC90.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00263": {
     "code": "00263",
     "protocol_id": "nccp-00263-vcurrent",
     "settings": [
-      "advanced"
+      "metastatic"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6368/263_EC75.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00265": {
     "code": "00265",
@@ -212,24 +212,24 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6690/265_v6b_FEC_100.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf",
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00269": {
     "code": "00269",
     "protocol_id": "nccp-00269-v7a",
     "settings": [
-      "advanced"
+      "metastatic"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
-    "source_url": "https://healthservice.hse.ie/documents/6693/269_v7a_FEC50.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "longitudinal": true,
+    "source_url": "https://healthservice.hse.ie/documents/6693/269_FEC50.pdf",
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00272": {
     "code": "00272",
@@ -257,7 +257,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6696/278_v7_Dose_DenseAC-T_Pacli_14_day.pdf",
-    "basis": "neoadjuvant or adjuvant high-risk breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00285": {
     "code": "00285",
@@ -443,14 +443,15 @@ const regimens={
     "code": "00423",
     "protocol_id": "nccp-00423-vcurrent",
     "settings": [
-      "advanced"
+      "locally_advanced",
+      "metastatic"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00430": {
     "code": "00430",
@@ -473,11 +474,11 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "her2pos"
+      "her2_positive"
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6470/432_v5_AC-TH_weekly.pdf",
-    "basis": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "NCCP indication; receptor/line suitability requires MDT interpretation, not automatic matching."
   },
   "00433": {
     "code": "00433",

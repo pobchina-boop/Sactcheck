@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6696/278_v7_Dose_DenseAC-T_Pacli_14_day.pdf",
-    "sactcheck_encoding_version": "0.84.0",
+    "sactcheck_encoding_version": "0.84.17",
     "treatment_setting": [
       "neoadjuvant",
       "adjuvant"
@@ -26,7 +26,7 @@
     },
     "validation": {
       "source_document_checked": true,
-      "software_tests_completed": false,
+      "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
@@ -59,19 +59,20 @@
     },
     "encoding_maturity": {
       "level": "source_reconciled_rule_encoding",
-      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "label": "Source reconciled encoding · independent clinical and pharmacy review pending",
       "source_reconciled": true,
-      "reconciled_release": "0.84.0",
-      "reconciled_date": "2026-10-17",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.84.17",
+      "reconciled_date": "2026-10-23",
+      "scope_note": "NCCP source and boundary cases reviewed; not clinical validation or authorisation."
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00278-v7",
-    "source_checked_date": "2026-10-17",
-    "source_version_verified_date": "2026-10-17",
+    "source_checked_date": "2026-10-23",
+    "source_version_verified_date": "2026-10-23",
     "audit_limitations": [
       "Routine full-dose platelets threshold is>100 but low-platelet row<100 and ANC-low row>=100. Exactly100 with ANC>=1 is not covered by routine rows; recovery text differs. Explicit boundary review is needed.",
       "Doxorubicin bilirubin51 lies in both50% and25% bands. Source does not specify how bilirubin and AST reductions combine. Flag51 and competing actions for review; do not multiply reductions or silently infer a choice.",
@@ -98,7 +99,8 @@
       "echo_cycle_mapping": null
     },
     "support_source_page": 0,
-    "schedule_summary": "Four AC cycles 14 days apart, followed by four paclitaxel doses 14 days apart. Growth-factor support accompanies the dose-dense course."
+    "schedule_summary": "Four AC cycles 14 days apart, followed by four paclitaxel doses 14 days apart. Growth-factor support accompanies the dose-dense course.",
+    "source_version_verified": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -618,6 +620,20 @@
       "required": false,
       "always_show": true,
       "input_role": "decision"
+    },
+    "pretreatment_tests_unresolved": {
+      "label": "Required pretreatment tests/results unresolved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "anthracycline_lifetime_limit_reached": {
+      "label": "Previous anthracycline lifetime limit reached",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -2300,14 +2316,60 @@
           "url": "https://healthservice.hse.ie/documents/6696/278_v7_Dose_DenseAC-T_Pacli_14_day.pdf",
           "page": 3
         }
+      },
+      {
+        "rule_id": "V17_TESTS_UNRESOLVED",
+        "when": {
+          "field": "pretreatment_tests_unresolved",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Required baseline or cycle tests are unresolved. Obtain/review the source-required blood results and the applicable cardiac/phase assessment before prescribing; missing results are not clearance. Check the longitudinal schedule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Required baseline or cycle tests are unresolved. Obtain/review the source-required blood results and the applicable cardiac/phase assessment before prescribing; missing results are not clearance. Check the longitudinal schedule.",
+        "source": {
+          "document": "NCCP 00278 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6696/278_v7_Dose_DenseAC-T_Pacli_14_day.pdf"
+        }
+      },
+      {
+        "rule_id": "V17_PRIOR_ANTHRA_MAX",
+        "when": {
+          "field": "anthracycline_lifetime_limit_reached",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin"
+          ],
+          "recommendation": "Previous anthracycline lifetime limit reached: do not administer further doxorubicin before specialist reconciliation of lifetime exposure. A new phase or course does not reset the cumulative dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Previous anthracycline lifetime limit reached: do not administer further doxorubicin before specialist reconciliation of lifetime exposure. A new phase or course does not reset the cumulative dose.",
+        "source": {
+          "document": "NCCP 00278 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6696/278_v7_Dose_DenseAC-T_Pacli_14_day.pdf"
+        }
       }
     ]
   },
   "supportive_care": {
     "emetogenic_risk": "phase_dependent",
-    "mapping_source": "NCCP regimen and antiemetic classification; phase-specific source review v0.84.0",
+    "mapping_source": "NCCP regimen, emetogenic classification and V8 Medical Oncology antiemetic medicines; reviewed 2026-10-23",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "AC: high; taxane: low; TC: moderate; carboplatin AUC 6 combination: high; HER2-only continuation: minimal. Use only the active phase.",
+    "mapping_basis": "AC: high; subsequent paclitaxel: low. Select the active phase and use its separate supportive-care plan.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
@@ -2317,13 +2379,14 @@
     "phase_profiles": {
       "ac": {
         "level": "high",
-        "script_id": "nccp-parenteral-high"
+        "script_id": "nccp-v8-ac-v08417"
       },
       "paclitaxel": {
         "level": "low",
-        "script_id": "nccp-parenteral-low"
+        "script_id": "nccp-v8-paclitaxel-v08417"
       }
-    }
+    },
+    "phase_specific_plan": "patient/00278/supportive-care.html"
   },
   "treatment_phases": [
     {
@@ -2374,7 +2437,7 @@
             1
           ],
           "route": "IV infusion",
-          "notes": "Starts14days after final AC dose"
+          "notes": "Starts14 days after final AC dose"
         }
       ],
       "cycles": [

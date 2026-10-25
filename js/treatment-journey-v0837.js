@@ -3483,32 +3483,32 @@ const definitions={
   },
   "00252": {
     "code": "00252",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "AC · every 3 weeks: the whole pathway",
+    "title": "AC · every 3 weeks: treatment and checks",
     "setting": "Adjuvant breast cancer",
     "summary": "Doxorubicin and cyclophosphamide on Day 1 every 21 days for four cycles. Any subsequent taxane follows a separately agreed regimen.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Confirm indication, organ function and access",
-          "AC ×4",
-          "Review tolerance and response",
-          "Complete planned course",
-          "Review outcome and next treatment"
+          "Agree aim, indication and medicines",
+          "AC · every 3 weeks starts",
+          "Review response, toxicity and exposure",
+          "Complete planned course / next decision",
+          "Ongoing review / subsequent plan"
         ],
+        "kind": "treatment",
         "source_ids": [
           "00252"
         ],
@@ -3516,152 +3516,181 @@ const definitions={
       },
       {
         "label": "Surgery",
-        "kind": "local",
         "cells": [
-          "Early adjuvant: surgery usually already completed",
-          "No automatic surgery during these cycles",
-          "Reassess local-treatment needs",
-          "Pathology / recovery guide next steps",
-          "Local follow-up"
+          "Adjuvant: surgery already completed",
+          "No automatic operation during cycles",
+          "Review response / surgical plan",
+          "Surgery after neoadjuvant therapy, if applicable",
+          "Pathology and recovery guide next steps"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Lumpectomy versus mastectomy is an individual surgical decision; this map does not choose it."
+        "note": "Surgery → this adjuvant chemotherapy → radiotherapy if indicated. The surgical team decides lumpectomy versus mastectomy; the radiation plan depends on surgery, pathology and individual risk."
       },
       {
         "label": "Radiotherapy",
-        "kind": "local",
         "cells": [
           "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "Radiation team agrees timing",
-          "Assess late effects / local follow-up"
+          "Usually after cytotoxic chemotherapy",
+          "Arrange sequential timing",
+          "Radiation team confirms start",
+          "Review effects / follow-up"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "In adjuvant care, radiotherapy usually follows chemotherapy when indicated; endocrine therapy follows its own receptor-specific plan."
+        "note": "Surgery → this adjuvant chemotherapy → radiotherapy if indicated. The surgical team decides lumpectomy versus mastectomy; the radiation plan depends on surgery, pathology and individual risk."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
           "00252"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": ""
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Echo / heart",
         "cells": [
-          "Baseline echo / MUGA",
-          "Symptoms can prompt earlier tests",
-          "According to cardiac risk",
-          "No universal fixed-cycle echo",
-          "Agree post-treatment cardiac plan"
+          "Baseline echo (ESC); assess risk",
+          "High cardiac risk: repeat after 2 anthracycline cycles",
+          "If continuing: repeat after 4 cycles at high risk",
+          "Review cardiac symptoms and total lifetime exposure",
+          "Echo within 12 months; high risk within 3 months"
         ],
+        "kind": "heart",
         "source_ids": [
           "00252",
-          "smpc",
           "esc"
         ],
-        "note": "Baseline cardiac assessment before AC. Repeat imaging according to symptoms, anthracycline exposure and cardiac risk; no universal 12-week echo schedule is assigned to AC alone. ESC guidance supplements the source: baseline echo before anthracyclines; high / very-high cardiac risk may need echo every two cycles and within 3 months after treatment. Test timing follows the treatment, clinical findings and local pathway. ESC supplementary guidance: echo within 12 months after anthracycline completion; high / very-high cardiac risk also needs earlier review, including within 3 months. The team individualises biomarkers and further surveillance."
+        "note": ""
       },
       {
-        "label": "Scans / markers",
-        "kind": "imaging",
+        "label": "ECG",
         "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
+          "Baseline ECG in the NCCP anthracycline source; repeat for symptoms or clinical risk. An ECG does not replace an echo.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "metastatic"
+          "00252"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": ""
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Cancer imaging",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "If before surgery: plan response review",
+          "Arrange selected surgery / next treatment",
+          "Planned breast imaging; no routine CT/PET"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "bone"
+          "00252"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": ""
+      },
+      {
+        "label": "Markers / bone health",
+        "cells": [
+          "Tests selected for active medicines",
+          "No routine tumour-marker clearance",
+          "No routine blood tumour markers when well",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00252"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle.",
+        "action": "Confirm tests and consent before prescribing.",
         "source_ids": [
           "00252"
         ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
+        "clinical": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle."
       },
       {
-        "title": "Heart assessment",
-        "when": "Baseline cardiac assessment before AC. Repeat imaging according to symptoms, anthracycline exposure and cardiac risk; no universal 12-week echo schedule is assigned to AC alone. ESC guidance supplements the source: baseline echo before anthracyclines; high / very-high cardiac risk may need echo every two cycles and within 3 months after treatment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+        "action": "Name the team responsible for booking and reviewing results.",
         "source_ids": [
           "00252",
-          "smpc",
           "esc"
         ],
-        "clinical": "Test timing follows the treatment, clinical findings and local pathway. ESC supplementary guidance: echo within 12 months after anthracycline completion; high / very-high cardiac risk also needs earlier review, including within 3 months. The team individualises biomarkers and further surveillance."
+        "clinical": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms."
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
-        "source_ids": [
-          "early",
-          "metastatic"
-        ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
-      },
-      {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Doxorubicin and cyclophosphamide on Day 1 every 21 days for four cycles. Any subsequent taxane follows a separately agreed regimen.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
         "source_ids": [
           "00252"
         ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        "clinical": "Doxorubicin and cyclophosphamide on Day 1 every 21 days for four cycles. Any subsequent taxane follows a separately agreed regimen."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00252"
+        ],
+        "clinical": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns."
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "The whole pathway is individualised by the MDT."
+      "Surgery → this adjuvant chemotherapy → radiotherapy if indicated. The surgical team decides lumpectomy versus mastectomy; the radiation plan depends on surgery, pathology and individual risk.",
+      "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+      "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
     ],
     "sources": [
       {
         "id": "00252",
-        "title": "NCCP 00252 v7 · official source",
+        "title": "NCCP 00252 v7 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf"
       },
       {
@@ -3715,45 +3744,40 @@ const definitions={
         "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       },
       {
-        "id": "smpc",
-        "title": "EMA Herceptin product information",
-        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
-      },
-      {
         "id": "trial",
-        "title": "NCCP regimen rationale and references",
+        "title": "Regimen selection and source references",
         "url": "https://healthservice.hse.ie/documents/6356/252_DOXO_cycloPHOS_AC.pdf"
       }
     ]
   },
   "00260": {
     "code": "00260",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "AC every 3 weeks → weekly paclitaxel: the whole pathway",
+    "title": "AC every 3 weeks → weekly paclitaxel: treatment and checks",
     "setting": "neoadjuvant or adjuvant high-risk breast cancer",
     "summary": "Four AC cycles 21 days apart, followed by 12 weekly paclitaxel doses. The team confirms recovery and the transition appointment.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Confirm indication, organ function and access",
-          "AC ×4",
-          "Taxane ",
-          "Complete planned course",
-          "Review outcome and next treatment"
+          "Agree aim, indication and medicines",
+          "AC every 3 weeks → weekly paclitaxel starts",
+          "Change from AC to paclitaxel; select new support script",
+          "Complete planned course / next decision",
+          "Ongoing review / subsequent plan"
         ],
+        "kind": "treatment",
         "source_ids": [
           "00260"
         ],
@@ -3761,152 +3785,181 @@ const definitions={
       },
       {
         "label": "Surgery",
-        "kind": "local",
         "cells": [
-          "Choose preoperative or postoperative pathway",
-          "Neoadjuvant: systemic treatment before surgery",
-          "Neoadjuvant: surgery / pathology after recovery",
-          "Adjuvant: surgery already completed before systemic treatment",
-          "Follow the selected local-care pathway"
+          "Adjuvant: surgery already completed",
+          "Neoadjuvant: chemotherapy first",
+          "Review response / surgical plan",
+          "Surgery after neoadjuvant therapy, if applicable",
+          "Pathology and recovery guide next steps"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
+        "note": "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision."
       },
       {
         "label": "Radiotherapy",
-        "kind": "local",
         "cells": [
           "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "Radiation team agrees timing",
-          "Assess late effects / local follow-up"
+          "Usually after cytotoxic chemotherapy",
+          "Arrange sequential timing",
+          "Radiation team confirms start",
+          "Review effects / follow-up"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
+        "note": "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
           "00260"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": ""
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Echo / heart",
         "cells": [
-          "Baseline echo / MUGA",
-          "Symptoms can prompt earlier tests",
-          "According to cardiac risk",
-          "No universal fixed-cycle echo",
-          "Agree post-treatment cardiac plan"
+          "Baseline echo (ESC); assess risk",
+          "High cardiac risk: repeat after 2 anthracycline cycles",
+          "If continuing: repeat after 4 cycles at high risk",
+          "Review cardiac symptoms and total lifetime exposure",
+          "Echo within 12 months; high risk within 3 months"
         ],
+        "kind": "heart",
         "source_ids": [
           "00260",
-          "smpc",
           "esc"
         ],
-        "note": "Baseline cardiac assessment before AC. Repeat imaging according to symptoms, anthracycline exposure and cardiac risk; no universal 12-week echo schedule is assigned to AC alone. ESC guidance supplements the source: baseline echo before anthracyclines; high / very-high cardiac risk may need echo every two cycles and within 3 months after treatment. Test timing follows the treatment, clinical findings and local pathway. ESC supplementary guidance: echo within 12 months after anthracycline completion; high / very-high cardiac risk also needs earlier review, including within 3 months. The team individualises biomarkers and further surveillance."
+        "note": ""
       },
       {
-        "label": "Scans / markers",
-        "kind": "imaging",
+        "label": "ECG",
         "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
+          "Baseline ECG in the NCCP anthracycline source; repeat for symptoms or clinical risk. An ECG does not replace an echo.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "metastatic"
+          "00260"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": ""
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Cancer imaging",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "If before surgery: plan response review",
+          "Arrange selected surgery / next treatment",
+          "Planned breast imaging; no routine CT/PET"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "bone"
+          "00260"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": ""
+      },
+      {
+        "label": "Markers / bone health",
+        "cells": [
+          "Tests selected for active medicines",
+          "No routine tumour-marker clearance",
+          "No routine blood tumour markers when well",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00260"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Baseline FBC, kidney and liver tests; review before each AC cycle and each paclitaxel administration under the regimen and local testing plan.",
+        "action": "Confirm tests and consent before prescribing.",
         "source_ids": [
           "00260"
         ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
+        "clinical": "Baseline FBC, kidney and liver tests; review before each AC cycle and each paclitaxel administration under the regimen and local testing plan."
       },
       {
-        "title": "Heart assessment",
-        "when": "Baseline cardiac assessment before AC. Repeat imaging according to symptoms, anthracycline exposure and cardiac risk; no universal 12-week echo schedule is assigned to AC alone. ESC guidance supplements the source: baseline echo before anthracyclines; high / very-high cardiac risk may need echo every two cycles and within 3 months after treatment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+        "action": "Name the team responsible for booking and reviewing results.",
         "source_ids": [
           "00260",
-          "smpc",
           "esc"
         ],
-        "clinical": "Test timing follows the treatment, clinical findings and local pathway. ESC supplementary guidance: echo within 12 months after anthracycline completion; high / very-high cardiac risk also needs earlier review, including within 3 months. The team individualises biomarkers and further surveillance."
+        "clinical": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms."
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
-        "source_ids": [
-          "early",
-          "metastatic"
-        ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
-      },
-      {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Four AC cycles 21 days apart, followed by 12 weekly paclitaxel doses. The team confirms recovery and the transition appointment.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
         "source_ids": [
           "00260"
         ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        "clinical": "Four AC cycles 21 days apart, followed by 12 weekly paclitaxel doses. The team confirms recovery and the transition appointment."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00260"
+        ],
+        "clinical": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns."
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "The whole pathway is individualised by the MDT."
+      "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision.",
+      "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+      "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
     ],
     "sources": [
       {
         "id": "00260",
-        "title": "NCCP 00260 v7 · official source",
+        "title": "NCCP 00260 v7 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6364/260_v7_AC-T.pdf"
       },
       {
@@ -3960,45 +4013,40 @@ const definitions={
         "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       },
       {
-        "id": "smpc",
-        "title": "EMA Herceptin product information",
-        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
-      },
-      {
         "id": "trial",
-        "title": "E1199 · adjuvant taxane schedules",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/18420499/"
+        "title": "Regimen selection and source references",
+        "url": "https://healthservice.hse.ie/documents/6364/260_v7_AC-T.pdf"
       }
     ]
   },
   "00278": {
     "code": "00278",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "Dose-dense AC → paclitaxel every 2 weeks: the whole pathway",
+    "title": "Dose-dense AC → paclitaxel every 2 weeks: treatment and checks",
     "setting": "neoadjuvant or adjuvant high-risk breast cancer",
     "summary": "Four AC cycles 14 days apart, followed by four paclitaxel doses 14 days apart. Growth-factor support accompanies the dose-dense course.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Confirm indication, organ function and access",
-          "AC ×4",
-          "Taxane ",
-          "Complete planned course",
-          "Review outcome and next treatment"
+          "Agree aim, indication and medicines",
+          "Dose-dense AC → paclitaxel every 2 weeks starts",
+          "Change from AC to paclitaxel; select new support script",
+          "Complete planned course / next decision",
+          "Ongoing review / subsequent plan"
         ],
+        "kind": "treatment",
         "source_ids": [
           "00278"
         ],
@@ -4006,152 +4054,181 @@ const definitions={
       },
       {
         "label": "Surgery",
-        "kind": "local",
         "cells": [
-          "Choose preoperative or postoperative pathway",
-          "Neoadjuvant: systemic treatment before surgery",
-          "Neoadjuvant: surgery / pathology after recovery",
-          "Adjuvant: surgery already completed before systemic treatment",
-          "Follow the selected local-care pathway"
+          "Adjuvant: surgery already completed",
+          "Neoadjuvant: chemotherapy first",
+          "Review response / surgical plan",
+          "Surgery after neoadjuvant therapy, if applicable",
+          "Pathology and recovery guide next steps"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
+        "note": "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision."
       },
       {
         "label": "Radiotherapy",
-        "kind": "local",
         "cells": [
           "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "Radiation team agrees timing",
-          "Assess late effects / local follow-up"
+          "Usually after cytotoxic chemotherapy",
+          "Arrange sequential timing",
+          "Radiation team confirms start",
+          "Review effects / follow-up"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
+        "note": "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
           "00278"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": ""
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Echo / heart",
         "cells": [
-          "Baseline echo / MUGA",
-          "Symptoms can prompt earlier tests",
-          "According to cardiac risk",
-          "No universal fixed-cycle echo",
-          "Agree post-treatment cardiac plan"
+          "Baseline echo (ESC); assess risk",
+          "High cardiac risk: repeat after 2 anthracycline cycles",
+          "If continuing: repeat after 4 cycles at high risk",
+          "Review cardiac symptoms and total lifetime exposure",
+          "Echo within 12 months; high risk within 3 months"
         ],
+        "kind": "heart",
         "source_ids": [
           "00278",
-          "smpc",
           "esc"
         ],
-        "note": "Baseline cardiac assessment before AC. Repeat imaging according to symptoms, anthracycline exposure and cardiac risk; no universal 12-week echo schedule is assigned to AC alone. ESC guidance supplements the source: baseline echo before anthracyclines; high / very-high cardiac risk may need echo every two cycles and within 3 months after treatment. Test timing follows the treatment, clinical findings and local pathway. ESC supplementary guidance: echo within 12 months after anthracycline completion; high / very-high cardiac risk also needs earlier review, including within 3 months. The team individualises biomarkers and further surveillance."
+        "note": ""
       },
       {
-        "label": "Scans / markers",
-        "kind": "imaging",
+        "label": "ECG",
         "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
+          "Baseline ECG in the NCCP anthracycline source; repeat for symptoms or clinical risk. An ECG does not replace an echo.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "metastatic"
+          "00278"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": ""
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Cancer imaging",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "If before surgery: plan response review",
+          "Arrange selected surgery / next treatment",
+          "Planned breast imaging; no routine CT/PET"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "bone"
+          "00278"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": ""
+      },
+      {
+        "label": "Markers / bone health",
+        "cells": [
+          "Tests selected for active medicines",
+          "No routine tumour-marker clearance",
+          "No routine blood tumour markers when well",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00278"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver profile before each cycle. Weekly-day checks follow the active regimen and local delivery policy.",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Baseline FBC, kidney and liver tests; review before each AC cycle and each paclitaxel administration under the regimen and local testing plan.",
+        "action": "Confirm tests and consent before prescribing.",
         "source_ids": [
           "00278"
         ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
+        "clinical": "Baseline FBC, kidney and liver tests; review before each AC cycle and each paclitaxel administration under the regimen and local testing plan."
       },
       {
-        "title": "Heart assessment",
-        "when": "Baseline cardiac assessment before AC. Repeat imaging according to symptoms, anthracycline exposure and cardiac risk; no universal 12-week echo schedule is assigned to AC alone. ESC guidance supplements the source: baseline echo before anthracyclines; high / very-high cardiac risk may need echo every two cycles and within 3 months after treatment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+        "action": "Name the team responsible for booking and reviewing results.",
         "source_ids": [
           "00278",
-          "smpc",
           "esc"
         ],
-        "clinical": "Test timing follows the treatment, clinical findings and local pathway. ESC supplementary guidance: echo within 12 months after anthracycline completion; high / very-high cardiac risk also needs earlier review, including within 3 months. The team individualises biomarkers and further surveillance."
+        "clinical": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms."
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
-        "source_ids": [
-          "early",
-          "metastatic"
-        ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
-      },
-      {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Four AC cycles 14 days apart, followed by four paclitaxel doses 14 days apart. Growth-factor support accompanies the dose-dense course.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
         "source_ids": [
           "00278"
         ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        "clinical": "Four AC cycles 14 days apart, followed by four paclitaxel doses 14 days apart. Growth-factor support accompanies the dose-dense course."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00278"
+        ],
+        "clinical": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns."
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "The whole pathway is individualised by the MDT."
+      "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision.",
+      "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+      "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
     ],
     "sources": [
       {
         "id": "00278",
-        "title": "NCCP 00278 v7 · official source",
+        "title": "NCCP 00278 v7 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6696/278_v7_Dose_DenseAC-T_Pacli_14_day.pdf"
       },
       {
@@ -4205,14 +4282,9 @@ const definitions={
         "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       },
       {
-        "id": "smpc",
-        "title": "EMA Herceptin product information",
-        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
-      },
-      {
         "id": "trial",
-        "title": "CALGB 9741 · dose density",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/12668651/"
+        "title": "Regimen selection and source references",
+        "url": "https://healthservice.hse.ie/documents/6696/278_v7_Dose_DenseAC-T_Pacli_14_day.pdf"
       }
     ]
   },
@@ -4463,32 +4535,32 @@ const definitions={
   },
   "00432": {
     "code": "00432",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "AC → weekly paclitaxel + weekly trastuzumab: the whole pathway",
+    "title": "AC → weekly paclitaxel + weekly trastuzumab: treatment and checks",
     "setting": "HER2-positive neoadjuvant or adjuvant high-risk breast cancer",
     "summary": "Four AC cycles 21 days apart, then 12 weekly paclitaxel doses with weekly trastuzumab. Continue trastuzumab to complete one year total, without overlapping it with AC.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Confirm indication, organ function and access",
-          "AC ×4",
-          "Taxane with trastuzumab",
-          "HER2 continuation under the agreed plan",
-          "Review outcome and next treatment"
+          "Agree aim, indication and medicines",
+          "AC → weekly paclitaxel + weekly trastuzumab starts",
+          "Change from AC to paclitaxel; select new support script",
+          "Stop paclitaxel → trastuzumab alone",
+          "Complete one total year of trastuzumab"
         ],
+        "kind": "treatment",
         "source_ids": [
           "00432"
         ],
@@ -4496,152 +4568,181 @@ const definitions={
       },
       {
         "label": "Surgery",
-        "kind": "local",
         "cells": [
-          "Choose preoperative or postoperative pathway",
-          "Neoadjuvant: systemic treatment before surgery",
-          "Neoadjuvant: surgery / pathology after recovery",
-          "Adjuvant: surgery already completed before systemic treatment",
-          "Follow the selected local-care pathway"
+          "Adjuvant: surgery already completed",
+          "Neoadjuvant: chemotherapy first",
+          "Review response / surgical plan",
+          "Surgery after neoadjuvant therapy, if applicable",
+          "Pathology and recovery guide next steps"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
+        "note": "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision. Trastuzumab continuation may overlap radiotherapy under the MDT plan; it must not overlap the AC phase."
       },
       {
         "label": "Radiotherapy",
-        "kind": "local",
         "cells": [
           "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "May overlap HER2-only treatment when agreed",
-          "Assess late effects / local follow-up"
+          "Usually after cytotoxic chemotherapy",
+          "Arrange sequential timing",
+          "Radiotherapy if indicated; HER2 may overlap by MDT plan",
+          "Review effects / follow-up"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Two possible pathways: neoadjuvant systemic treatment → surgery / pathology → postoperative plan; or surgery first → adjuvant systemic treatment → radiotherapy when indicated. HER2-only treatment, if prescribed, may overlap radiation / endocrine therapy under MDT review. These are alternatives, not two consecutive surgery courses."
+        "note": "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision. Trastuzumab continuation may overlap radiotherapy under the MDT plan; it must not overlap the AC phase."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
-          "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
           "00432"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": ""
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Echo / heart",
         "cells": [
-          "Baseline echo / MUGA",
-          "Before HER2 starts after AC",
-          "At 12 weeks from HER2 start",
-          "Every 12 weeks / 3 months during HER2",
-          "Agree post-treatment cardiac plan"
+          "Baseline before AC",
+          "Reassess before starting trastuzumab",
+          "Every 12 weeks during trastuzumab",
+          "Continue the same12-week clock after paclitaxel",
+          "After trastuzumab: follow EMA/ESC and cardiac risk plan"
         ],
+        "kind": "heart",
         "source_ids": [
           "00432",
-          "smpc",
           "esc"
         ],
-        "note": "Baseline before AC; reassess before starting trastuzumab. Then every 12 weeks during HER2 treatment. Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "note": ""
       },
       {
-        "label": "Scans / markers",
-        "kind": "imaging",
+        "label": "ECG",
         "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
+          "Baseline ECG in the NCCP anthracycline source; repeat for symptoms or clinical risk. An ECG does not replace an echo.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "metastatic"
+          "00432"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": ""
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Cancer imaging",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "If before surgery: plan response review",
+          "Arrange selected surgery / next treatment",
+          "Planned breast imaging; no routine CT/PET"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "bone"
+          "00432"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": ""
+      },
+      {
+        "label": "Markers / bone health",
+        "cells": [
+          "Tests selected for active medicines",
+          "No routine tumour-marker clearance",
+          "No routine blood tumour markers when well",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00432"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "FBC, renal and liver checks through chemotherapy; the team confirms the pre-dose schedule",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Baseline FBC, kidney and liver tests; review before each AC cycle and each paclitaxel administration under the regimen and local testing plan.",
+        "action": "Confirm tests and consent before prescribing.",
         "source_ids": [
           "00432"
         ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
+        "clinical": "Baseline FBC, kidney and liver tests; review before each AC cycle and each paclitaxel administration under the regimen and local testing plan."
       },
       {
-        "title": "Heart assessment",
-        "when": "Baseline before AC; reassess before starting trastuzumab. Then every 12 weeks during HER2 treatment.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms. Reassess before the first trastuzumab, then echo/MUGA every 12 weeks during trastuzumab. In an uninterrupted weekly taxane phase,12 weeks is near its end; in21-day continuation this is about every 4 cycles. Keep the original clock through the transition. Earlier assessment is needed for concern.",
+        "action": "Name the team responsible for booking and reviewing results.",
         "source_ids": [
           "00432",
-          "smpc",
           "esc"
         ],
-        "clinical": "Count 12 weeks from first HER2 treatment (after AC where applicable): around weekly antibody dose 13 or q21-day cycle 5. Preserve elapsed time across later phase / route changes and delays. EMA: cardiac checks every 6 months after trastuzumab ends until 24 months; after anthracyclines in early disease, yearly to 5 years from the last trastuzumab dose or longer if function falls."
+        "clinical": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms. Reassess before the first trastuzumab, then echo/MUGA every 12 weeks during trastuzumab. In an uninterrupted weekly taxane phase,12 weeks is near its end; in21-day continuation this is about every 4 cycles. Keep the original clock through the transition. Earlier assessment is needed for concern."
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
-        "source_ids": [
-          "early",
-          "metastatic"
-        ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
-      },
-      {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Four AC cycles 21 days apart, then 12 weekly paclitaxel doses with weekly trastuzumab. Continue trastuzumab to complete one year total, without overlapping it with AC.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
         "source_ids": [
           "00432"
         ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        "clinical": "Four AC cycles 21 days apart, then 12 weekly paclitaxel doses with weekly trastuzumab. Continue trastuzumab to complete one year total, without overlapping it with AC."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00432"
+        ],
+        "clinical": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns."
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "HER2 treatment does not overlap AC in these sequential regimens."
+      "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision. Trastuzumab continuation may overlap radiotherapy under the MDT plan; it must not overlap the AC phase.",
+      "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms. Reassess before the first trastuzumab, then echo/MUGA every 12 weeks during trastuzumab. In an uninterrupted weekly taxane phase,12 weeks is near its end; in21-day continuation this is about every 4 cycles. Keep the original clock through the transition. Earlier assessment is needed for concern.",
+      "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
     ],
     "sources": [
       {
         "id": "00432",
-        "title": "NCCP 00432 v5 · official source",
+        "title": "NCCP 00432 v5 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6470/432_v5_AC-TH_weekly.pdf"
       },
       {
@@ -4701,8 +4802,8 @@ const definitions={
       },
       {
         "id": "trial",
-        "title": "NSABP B-31 / NCCTG N9831 · AC-taxane-trastuzumab",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/16236738/"
+        "title": "Regimen selection and source references",
+        "url": "https://healthservice.hse.ie/documents/6470/432_v5_AC-TH_weekly.pdf"
       }
     ]
   },
@@ -5688,32 +5789,32 @@ const definitions={
   },
   "00250": {
     "code": "00250",
-    "release": "0.84.0",
-    "checked": "2026-10-17",
-    "status": "Source reconciled; independent clinical, pharmacy and patient review pending",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
-    "title": "Docetaxel + cyclophosphamide (TC): the whole pathway",
+    "title": "Docetaxel + cyclophosphamide (TC): treatment and checks",
     "setting": "Adjuvant high-risk node-positive or node-negative operable breast cancer",
     "summary": "Docetaxel and cyclophosphamide on Day 1 every 21 days for four to six cycles. The team confirms the planned course before treatment. Radiotherapy, when indicated, follows chemotherapy.",
     "stages": [
-      "Before systemic treatment",
-      "Chemotherapy phase",
-      "Next phase / reassessment",
-      "Local / continuing treatment",
-      "Follow-up / change"
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
     ],
     "lanes": [
       {
         "label": "Cancer medicines",
-        "kind": "treatment",
         "cells": [
-          "Confirm indication, organ function and access",
-          "Taxane ± HER2 treatment",
-          "Review tolerance and response",
-          "Complete planned course",
-          "Review outcome and next treatment"
+          "Agree aim, indication and medicines",
+          "Docetaxel + cyclophosphamide (TC) starts",
+          "Review response, toxicity and exposure",
+          "Complete planned course / next decision",
+          "Ongoing review / subsequent plan"
         ],
+        "kind": "treatment",
         "source_ids": [
           "00250"
         ],
@@ -5721,152 +5822,181 @@ const definitions={
       },
       {
         "label": "Surgery",
-        "kind": "local",
         "cells": [
-          "Early adjuvant: surgery usually already completed",
-          "No automatic surgery during these cycles",
-          "Reassess local-treatment needs",
-          "Pathology / recovery guide next steps",
-          "Local follow-up"
+          "Adjuvant: surgery already completed",
+          "No automatic operation during cycles",
+          "Review response / surgical plan",
+          "Surgery after neoadjuvant therapy, if applicable",
+          "Pathology and recovery guide next steps"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "Lumpectomy versus mastectomy is an individual surgical decision; this map does not choose it."
+        "note": "Surgery → this adjuvant chemotherapy → radiotherapy if indicated. The surgical team decides lumpectomy versus mastectomy; the radiation plan depends on surgery, pathology and individual risk."
       },
       {
         "label": "Radiotherapy",
-        "kind": "local",
         "cells": [
           "Assess indication",
-          "Usually after chemotherapy in adjuvant care",
-          "Coordinate surgery and recovery",
-          "Radiation team agrees timing",
-          "Assess late effects / local follow-up"
+          "Usually after cytotoxic chemotherapy",
+          "Arrange sequential timing",
+          "Radiation team confirms start",
+          "Review effects / follow-up"
         ],
+        "kind": "local",
         "source_ids": [
           "early"
         ],
-        "note": "In adjuvant care, radiotherapy usually follows chemotherapy when indicated; endocrine therapy follows its own receptor-specific plan."
+        "note": "Surgery → this adjuvant chemotherapy → radiotherapy if indicated. The surgical team decides lumpectomy versus mastectomy; the radiation plan depends on surgery, pathology and individual risk."
       },
       {
         "label": "Blood tests",
-        "kind": "blood",
         "cells": [
-          "Baseline FBC, renal, liver",
-          "Baseline FBC, renal and liver profile. NCCP repeats as clinically indicated; confirm local pre-cycle blood appointments.",
-          "Review before transition",
-          "Continue according to active medicines",
-          "Follow abnormalities"
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
         ],
+        "kind": "blood",
         "source_ids": [
           "00250"
         ],
-        "note": "Missing results are not assumed normal."
+        "note": ""
       },
       {
-        "label": "Heart tests",
-        "kind": "heart",
+        "label": "Echo / heart",
         "cells": [
-          "Risk-based cardiac assessment",
-          "Symptoms can prompt earlier tests",
-          "According to cardiac risk",
-          "No universal fixed-cycle echo",
-          "Agree post-treatment cardiac plan"
+          "History / symptoms review",
+          "No routine TC-specific echo",
+          "Investigate if clinically indicated",
+          "Follow any cardiac concern",
+          "Individual plan"
         ],
+        "kind": "heart",
         "source_ids": [
           "00250",
-          "smpc",
           "esc"
         ],
-        "note": "No routine fixed-cycle echo or ECG is mandated for this regimen alone; assess symptoms and individual cardiac risk. Test timing follows the treatment, clinical findings and local pathway. At a change or completion, agree cardiac follow-up from treatment exposure, symptoms and results."
+        "note": ""
       },
       {
-        "label": "Scans / markers",
-        "kind": "imaging",
+        "label": "ECG",
         "cells": [
-          "Baseline staging as indicated",
-          "Clinical response / symptoms",
-          "Not automatic CT screening",
-          "Breast surveillance plan",
-          "Symptoms can trigger earlier tests"
+          "ECG only for clinical indications or interacting medicines; not a routine TC-cycle requirement.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "metastatic"
+          "00250"
         ],
-        "note": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated."
+        "note": ""
       },
       {
-        "label": "Endocrine / bone health",
-        "kind": "local",
+        "label": "Cancer imaging",
         "cells": [
-          "Check receptors / endocrine indication",
-          "Discuss the later plan",
-          "Start / continue when agreed",
-          "May overlap HER2 / RT if appropriate",
-          "Longer-term bone health and endocrine review"
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "If before surgery: plan response review",
+          "Arrange selected surgery / next treatment",
+          "Planned breast imaging; no routine CT/PET"
         ],
+        "kind": "monitoring",
         "source_ids": [
-          "early",
-          "bone"
+          "00250"
         ],
-        "note": "If hormone-receptor-positive disease leads to an aromatase inhibitor / ovarian suppression, assess baseline DEXA and fracture risk. Repeat according to risk, results and the endocrine plan; this is not a universal chemotherapy test."
+        "note": ""
+      },
+      {
+        "label": "Markers / bone health",
+        "cells": [
+          "Tests selected for active medicines",
+          "No routine tumour-marker clearance",
+          "No routine blood tumour markers when well",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00250"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
       }
     ],
     "milestones": [
       {
-        "title": "Blood checks",
-        "when": "Baseline FBC, renal and liver profile. NCCP repeats as clinically indicated; confirm local pre-cycle blood appointments.",
-        "why": "Results help the team judge treatment safety.",
-        "action": "Confirm the next test and who reviews it.",
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle.",
+        "action": "Confirm tests and consent before prescribing.",
         "source_ids": [
           "00250"
         ],
-        "clinical": "Source intervals and local pre-dose workflow are distinguished above."
+        "clinical": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle."
       },
       {
-        "title": "Heart assessment",
-        "when": "No routine fixed-cycle echo or ECG is mandated for this regimen alone; assess symptoms and individual cardiac risk.",
-        "why": "Some heart changes occur without symptoms.",
-        "action": "Keep the appointment and report new symptoms between scans.",
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "TC contains no anthracycline or HER2-targeted antibody. There is no routine three-month echo programme for TC alone; arrange cardiac tests for symptoms, prior exposure or other clinical indications.",
+        "action": "Name the team responsible for booking and reviewing results.",
         "source_ids": [
           "00250",
-          "smpc",
           "esc"
         ],
-        "clinical": "Test timing follows the treatment, clinical findings and local pathway. At a change or completion, agree cardiac follow-up from treatment exposure, symptoms and results."
+        "clinical": "TC contains no anthracycline or HER2-targeted antibody. There is no routine three-month echo programme for TC alone; arrange cardiac tests for symptoms, prior exposure or other clinical indications."
       },
       {
-        "title": "Imaging and markers",
-        "when": "Early breast follow-up uses planned breast imaging. Routine CT / PET, blood tumour markers or other distant-recurrence screening are not recommended without symptoms or a clinical indication. After local treatment: annual mammography of remaining breast tissue; additional imaging when indicated.",
-        "why": "Each scan should answer a defined clinical question.",
-        "action": "Ask when the result will be reviewed.",
-        "source_ids": [
-          "early",
-          "metastatic"
-        ],
-        "clinical": "Do not turn an educational interval into an automatically authorised test."
-      },
-      {
-        "title": "Booking and handover",
-        "when": "At initiation, phase changes and completion",
-        "why": "Expected tests can be missed without an owner.",
-        "action": "Record booking owner, result reviewer, due window and escalation contact.",
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Docetaxel and cyclophosphamide on Day 1 every 21 days for four to six cycles. The team confirms the planned course before treatment. Radiotherapy, when indicated, follows chemotherapy.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
         "source_ids": [
           "00250"
         ],
-        "clinical": "This map does not record appointments as completed or interpret missing results."
+        "clinical": "Docetaxel and cyclophosphamide on Day 1 every 21 days for four to six cycles. The team confirms the planned course before treatment. Radiotherapy, when indicated, follows chemotherapy."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00250"
+        ],
+        "clinical": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns."
       }
     ],
     "clinical_notes": [
-      "Columns show sequence, not equal durations.",
-      "The whole pathway is individualised by the MDT."
+      "Surgery → this adjuvant chemotherapy → radiotherapy if indicated. The surgical team decides lumpectomy versus mastectomy; the radiation plan depends on surgery, pathology and individual risk.",
+      "TC contains no anthracycline or HER2-targeted antibody. There is no routine three-month echo programme for TC alone; arrange cardiac tests for symptoms, prior exposure or other clinical indications.",
+      "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
     ],
     "sources": [
       {
         "id": "00250",
-        "title": "NCCP 00250 v9 · official source",
+        "title": "NCCP 00250 v9 · official regimen",
         "url": "https://healthservice.hse.ie/documents/6353/250_DOCEtaxel-cycloPHOS_TC.pdf"
       },
       {
@@ -5920,14 +6050,9 @@ const definitions={
         "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
       },
       {
-        "id": "smpc",
-        "title": "EMA Herceptin product information",
-        "url": "https://www.ema.europa.eu/en/documents/product-information/herceptin-epar-product-information_en.pdf"
-      },
-      {
         "id": "trial",
-        "title": "US Oncology 9735 · TC versus AC",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/19204201/"
+        "title": "Regimen selection and source references",
+        "url": "https://healthservice.hse.ie/documents/6353/250_DOCEtaxel-cycloPHOS_TC.pdf"
       }
     ]
   },
@@ -14014,6 +14139,1351 @@ const definitions={
         "id": "vinorelbine-oral",
         "title": "Irish Navelbine oral product information",
         "url": "https://medicines.ie/medicines/navelbine-r-20-mg-soft-capsule~A0000682/spc"
+      }
+    ]
+  },
+  "00262": {
+    "code": "00262",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "EC90: treatment and checks",
+    "setting": "Adjuvant breast cancer",
+    "summary": "Epirubicin and cyclophosphamide on Day 1, repeated every 21 days for four cycles.",
+    "stages": [
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Agree aim, indication and medicines",
+          "EC90 starts",
+          "Review response, toxicity and exposure",
+          "Complete planned course / next decision",
+          "Ongoing review / subsequent plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00262"
+        ],
+        "note": "Epirubicin and cyclophosphamide on Day 1, repeated every 21 days for four cycles."
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "Adjuvant: surgery already completed",
+          "No automatic operation during cycles",
+          "Review response / surgical plan",
+          "Surgery after neoadjuvant therapy, if applicable",
+          "Pathology and recovery guide next steps"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "early"
+        ],
+        "note": "Surgery → this adjuvant chemotherapy → radiotherapy if indicated. The surgical team decides lumpectomy versus mastectomy; the radiation plan depends on surgery, pathology and individual risk."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Usually after cytotoxic chemotherapy",
+          "Arrange sequential timing",
+          "Radiation team confirms start",
+          "Review effects / follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "early"
+        ],
+        "note": "Surgery → this adjuvant chemotherapy → radiotherapy if indicated. The surgical team decides lumpectomy versus mastectomy; the radiation plan depends on surgery, pathology and individual risk."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "00262"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Echo / heart",
+        "cells": [
+          "Baseline echo (ESC); assess risk",
+          "High cardiac risk: repeat after 2 anthracycline cycles",
+          "If continuing: repeat after 4 cycles at high risk",
+          "Review cardiac symptoms and total lifetime exposure",
+          "Echo within 12 months; high risk within 3 months"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00262",
+          "esc"
+        ],
+        "note": ""
+      },
+      {
+        "label": "ECG",
+        "cells": [
+          "Baseline ECG in the NCCP anthracycline source; repeat for symptoms or clinical risk. An ECG does not replace an echo.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00262"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Cancer imaging",
+        "cells": [
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "If before surgery: plan response review",
+          "Arrange selected surgery / next treatment",
+          "Planned breast imaging; no routine CT/PET"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00262"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Markers / bone health",
+        "cells": [
+          "Tests selected for active medicines",
+          "No routine tumour-marker clearance",
+          "No routine blood tumour markers when well",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00262"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle.",
+        "action": "Confirm tests and consent before prescribing.",
+        "source_ids": [
+          "00262"
+        ],
+        "clinical": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle."
+      },
+      {
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+        "action": "Name the team responsible for booking and reviewing results.",
+        "source_ids": [
+          "00262",
+          "esc"
+        ],
+        "clinical": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms."
+      },
+      {
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Epirubicin and cyclophosphamide on Day 1, repeated every 21 days for four cycles.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
+        "source_ids": [
+          "00262"
+        ],
+        "clinical": "Epirubicin and cyclophosphamide on Day 1, repeated every 21 days for four cycles."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00262"
+        ],
+        "clinical": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns."
+      }
+    ],
+    "clinical_notes": [
+      "Surgery → this adjuvant chemotherapy → radiotherapy if indicated. The surgical team decides lumpectomy versus mastectomy; the radiation plan depends on surgery, pathology and individual risk.",
+      "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+      "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
+    ],
+    "sources": [
+      {
+        "id": "00262",
+        "title": "NCCP 00262 v8 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6367/262_EC90.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "trial",
+        "title": "Regimen selection and source references",
+        "url": "https://healthservice.hse.ie/documents/6367/262_EC90.pdf"
+      }
+    ]
+  },
+  "00263": {
+    "code": "00263",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "EC75: treatment and checks",
+    "setting": "Metastatic breast cancer",
+    "summary": "Epirubicin and cyclophosphamide on Day 1 every 21 days while beneficial and tolerated, within the lifetime anthracycline limit.",
+    "stages": [
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Agree aim, indication and medicines",
+          "EC75 starts",
+          "Review response, toxicity and exposure",
+          "Complete planned course / next decision",
+          "Ongoing review / subsequent plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00263"
+        ],
+        "note": "Epirubicin and cyclophosphamide on Day 1 every 21 days while beneficial and tolerated, within the lifetime anthracycline limit."
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "MDT-selected local treatment",
+          "No automatic operation during cycles",
+          "Review response / surgical plan",
+          "Selected for local need",
+          "Pathology and recovery guide next steps"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "metastatic"
+        ],
+        "note": "In metastatic disease, surgery and radiotherapy are individual decisions for symptoms or selected local-control needs; they are not automatic steps after every course."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Usually after cytotoxic chemotherapy",
+          "Arrange sequential timing",
+          "Radiation team confirms start",
+          "Review effects / follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "early"
+        ],
+        "note": "In metastatic disease, surgery and radiotherapy are individual decisions for symptoms or selected local-control needs; they are not automatic steps after every course."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "00263"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Echo / heart",
+        "cells": [
+          "Baseline echo (ESC); assess risk",
+          "High cardiac risk: repeat after 2 anthracycline cycles",
+          "If continuing: repeat after 4 cycles at high risk",
+          "Review cardiac symptoms and total lifetime exposure",
+          "Echo within 12 months; high risk within 3 months"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00263",
+          "esc"
+        ],
+        "note": ""
+      },
+      {
+        "label": "ECG",
+        "cells": [
+          "Baseline ECG in the NCCP anthracycline source; repeat for symptoms or clinical risk. An ECG does not replace an echo.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00263"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Cancer imaging",
+        "cells": [
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "Metastatic: review about2–4 months",
+          "Arrange selected surgery / next treatment",
+          "Metastatic response plan continues"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00263"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Markers / bone health",
+        "cells": [
+          "Tests selected for active medicines",
+          "No routine tumour-marker clearance",
+          "Markers only as selected adjunct in metastatic care",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00263"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle.",
+        "action": "Confirm tests and consent before prescribing.",
+        "source_ids": [
+          "00263"
+        ],
+        "clinical": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle."
+      },
+      {
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+        "action": "Name the team responsible for booking and reviewing results.",
+        "source_ids": [
+          "00263",
+          "esc"
+        ],
+        "clinical": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms."
+      },
+      {
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Epirubicin and cyclophosphamide on Day 1 every 21 days while beneficial and tolerated, within the lifetime anthracycline limit.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
+        "source_ids": [
+          "00263"
+        ],
+        "clinical": "Epirubicin and cyclophosphamide on Day 1 every 21 days while beneficial and tolerated, within the lifetime anthracycline limit."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "Record disease sites before treatment. Response imaging is generally considered every 2–4 months under ESMO guidance, adjusted to symptoms and disease pace. For a 21-day course this is approximately after 3–6 cycles; the team chooses the scan and exact checkpoint. New symptoms may need earlier assessment.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00263"
+        ],
+        "clinical": "Record disease sites before treatment. Response imaging is generally considered every 2–4 months under ESMO guidance, adjusted to symptoms and disease pace. For a 21-day course this is approximately after 3–6 cycles; the team chooses the scan and exact checkpoint. New symptoms may need earlier assessment."
+      }
+    ],
+    "clinical_notes": [
+      "In metastatic disease, surgery and radiotherapy are individual decisions for symptoms or selected local-control needs; they are not automatic steps after every course.",
+      "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+      "Record disease sites before treatment. Response imaging is generally considered every 2–4 months under ESMO guidance, adjusted to symptoms and disease pace. For a 21-day course this is approximately after 3–6 cycles; the team chooses the scan and exact checkpoint. New symptoms may need earlier assessment.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
+    ],
+    "sources": [
+      {
+        "id": "00263",
+        "title": "NCCP 00263 v7 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6368/263_EC75.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "trial",
+        "title": "Regimen selection and source references",
+        "url": "https://healthservice.hse.ie/documents/6368/263_EC75.pdf"
+      }
+    ]
+  },
+  "00265": {
+    "code": "00265",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "FEC100: treatment and checks",
+    "setting": "Neoadjuvant or adjuvant breast cancer",
+    "summary": "Fluorouracil, epirubicin and cyclophosphamide on Day 1 every 21 days for six cycles. Radiotherapy must not overlap FEC.",
+    "stages": [
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Agree aim, indication and medicines",
+          "FEC100 starts",
+          "Review response, toxicity and exposure",
+          "Complete planned course / next decision",
+          "Ongoing review / subsequent plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00265"
+        ],
+        "note": "Fluorouracil, epirubicin and cyclophosphamide on Day 1 every 21 days for six cycles. Radiotherapy must not overlap FEC."
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "Adjuvant: surgery already completed",
+          "Neoadjuvant: chemotherapy first",
+          "Review response / surgical plan",
+          "Surgery after neoadjuvant therapy, if applicable",
+          "Pathology and recovery guide next steps"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "early"
+        ],
+        "note": "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision. Concurrent radiotherapy during FEC is contraindicated in the NCCP source; agree a sequential plan."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Do not give concurrently with FEC",
+          "Arrange sequential timing",
+          "Radiation team confirms start",
+          "Review effects / follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "00265"
+        ],
+        "note": "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision. Concurrent radiotherapy during FEC is contraindicated in the NCCP source; agree a sequential plan."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "00265"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Echo / heart",
+        "cells": [
+          "Baseline echo (ESC); assess risk",
+          "High cardiac risk: repeat after 2 anthracycline cycles",
+          "If continuing: repeat after 4 cycles at high risk",
+          "Review cardiac symptoms and total lifetime exposure",
+          "Echo within 12 months; high risk within 3 months"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00265",
+          "esc"
+        ],
+        "note": ""
+      },
+      {
+        "label": "ECG",
+        "cells": [
+          "Baseline ECG in the NCCP anthracycline source; repeat for symptoms or clinical risk. An ECG does not replace an echo.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00265"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Cancer imaging",
+        "cells": [
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "If before surgery: plan response review",
+          "Arrange selected surgery / next treatment",
+          "Planned breast imaging; no routine CT/PET"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00265"
+        ],
+        "note": ""
+      },
+      {
+        "label": "DPD / markers / bone",
+        "cells": [
+          "DPD before 5-FU",
+          "No routine tumour-marker clearance",
+          "No routine blood tumour markers when well",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00265"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Confirm DPD testing before first 5-FU; interpret uracil results cautiously in renal impairment. Keep the result available when treatment changes. Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle.",
+        "action": "Confirm tests and consent before prescribing.",
+        "source_ids": [
+          "00265"
+        ],
+        "clinical": "Confirm DPD testing before first 5-FU; interpret uracil results cautiously in renal impairment. Keep the result available when treatment changes. Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle."
+      },
+      {
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+        "action": "Name the team responsible for booking and reviewing results.",
+        "source_ids": [
+          "00265",
+          "esc"
+        ],
+        "clinical": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms."
+      },
+      {
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Fluorouracil, epirubicin and cyclophosphamide on Day 1 every 21 days for six cycles. Radiotherapy must not overlap FEC.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
+        "source_ids": [
+          "00265"
+        ],
+        "clinical": "Fluorouracil, epirubicin and cyclophosphamide on Day 1 every 21 days for six cycles. Radiotherapy must not overlap FEC."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00265"
+        ],
+        "clinical": "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns."
+      }
+    ],
+    "clinical_notes": [
+      "Adjuvant pathway: surgery → chemotherapy → radiotherapy if indicated. Neoadjuvant pathway, where this regimen is indicated: chemotherapy → surgery → selected postoperative treatment and radiotherapy. Lumpectomy versus mastectomy is a surgical/MDT decision. Concurrent radiotherapy during FEC is contraindicated in the NCCP source; agree a sequential plan.",
+      "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+      "For early breast cancer, breast imaging and clinical review follow the agreed pathway. Routine CT/PET scans and blood tumour markers are not used to look for distant recurrence when there are no symptoms or clinical concerns.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
+    ],
+    "sources": [
+      {
+        "id": "00265",
+        "title": "NCCP 00265 v7 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "trial",
+        "title": "Regimen selection and source references",
+        "url": "https://healthservice.hse.ie/documents/6690/265_FEC_100.pdf"
+      }
+    ]
+  },
+  "00269": {
+    "code": "00269",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "FEC50: treatment and checks",
+    "setting": "Metastatic breast cancer",
+    "summary": "Fluorouracil, epirubicin and cyclophosphamide on Day 1 every 21 days while beneficial and tolerated, within the lifetime anthracycline limit. Radiotherapy must not overlap FEC.",
+    "stages": [
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Agree aim, indication and medicines",
+          "FEC50 starts",
+          "Review response, toxicity and exposure",
+          "Complete planned course / next decision",
+          "Ongoing review / subsequent plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00269"
+        ],
+        "note": "Fluorouracil, epirubicin and cyclophosphamide on Day 1 every 21 days while beneficial and tolerated, within the lifetime anthracycline limit. Radiotherapy must not overlap FEC."
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "MDT-selected local treatment",
+          "No automatic operation during cycles",
+          "Review response / surgical plan",
+          "Selected for local need",
+          "Pathology and recovery guide next steps"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "metastatic"
+        ],
+        "note": "In metastatic disease, surgery and radiotherapy are individual decisions for symptoms or selected local-control needs; they are not automatic steps after every course. Concurrent radiotherapy during FEC is contraindicated in the NCCP source; agree a sequential plan."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Do not give concurrently with FEC",
+          "Arrange sequential timing",
+          "Radiation team confirms start",
+          "Review effects / follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "00269"
+        ],
+        "note": "In metastatic disease, surgery and radiotherapy are individual decisions for symptoms or selected local-control needs; they are not automatic steps after every course. Concurrent radiotherapy during FEC is contraindicated in the NCCP source; agree a sequential plan."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "00269"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Echo / heart",
+        "cells": [
+          "Baseline echo (ESC); assess risk",
+          "High cardiac risk: repeat after 2 anthracycline cycles",
+          "If continuing: repeat after 4 cycles at high risk",
+          "Review cardiac symptoms and total lifetime exposure",
+          "Echo within 12 months; high risk within 3 months"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00269",
+          "esc"
+        ],
+        "note": ""
+      },
+      {
+        "label": "ECG",
+        "cells": [
+          "Baseline ECG in the NCCP anthracycline source; repeat for symptoms or clinical risk. An ECG does not replace an echo.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00269"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Cancer imaging",
+        "cells": [
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "Metastatic: review about2–4 months",
+          "Arrange selected surgery / next treatment",
+          "Metastatic response plan continues"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00269"
+        ],
+        "note": ""
+      },
+      {
+        "label": "DPD / markers / bone",
+        "cells": [
+          "DPD before 5-FU",
+          "No routine tumour-marker clearance",
+          "Markers only as selected adjunct in metastatic care",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00269"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Confirm DPD testing before first 5-FU; interpret uracil results cautiously in renal impairment. Keep the result available when treatment changes. Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle.",
+        "action": "Confirm tests and consent before prescribing.",
+        "source_ids": [
+          "00269"
+        ],
+        "clinical": "Confirm DPD testing before first 5-FU; interpret uracil results cautiously in renal impairment. Keep the result available when treatment changes. Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle."
+      },
+      {
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+        "action": "Name the team responsible for booking and reviewing results.",
+        "source_ids": [
+          "00269",
+          "esc"
+        ],
+        "clinical": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms."
+      },
+      {
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Fluorouracil, epirubicin and cyclophosphamide on Day 1 every 21 days while beneficial and tolerated, within the lifetime anthracycline limit. Radiotherapy must not overlap FEC.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
+        "source_ids": [
+          "00269"
+        ],
+        "clinical": "Fluorouracil, epirubicin and cyclophosphamide on Day 1 every 21 days while beneficial and tolerated, within the lifetime anthracycline limit. Radiotherapy must not overlap FEC."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "Record disease sites before treatment. Response imaging is generally considered every 2–4 months under ESMO guidance, adjusted to symptoms and disease pace. For a 21-day course this is approximately after 3–6 cycles; the team chooses the scan and exact checkpoint. New symptoms may need earlier assessment.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00269"
+        ],
+        "clinical": "Record disease sites before treatment. Response imaging is generally considered every 2–4 months under ESMO guidance, adjusted to symptoms and disease pace. For a 21-day course this is approximately after 3–6 cycles; the team chooses the scan and exact checkpoint. New symptoms may need earlier assessment."
+      }
+    ],
+    "clinical_notes": [
+      "In metastatic disease, surgery and radiotherapy are individual decisions for symptoms or selected local-control needs; they are not automatic steps after every course. Concurrent radiotherapy during FEC is contraindicated in the NCCP source; agree a sequential plan.",
+      "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+      "Record disease sites before treatment. Response imaging is generally considered every 2–4 months under ESMO guidance, adjusted to symptoms and disease pace. For a 21-day course this is approximately after 3–6 cycles; the team chooses the scan and exact checkpoint. New symptoms may need earlier assessment.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
+    ],
+    "sources": [
+      {
+        "id": "00269",
+        "title": "NCCP 00269 v8 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6693/269_FEC50.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "trial",
+        "title": "Regimen selection and source references",
+        "url": "https://healthservice.hse.ie/documents/6693/269_FEC50.pdf"
+      }
+    ]
+  },
+  "00423": {
+    "code": "00423",
+    "release": "0.84.17",
+    "checked": "2026-10-23",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "AT 50/75: treatment and checks",
+    "setting": "Locally advanced or metastatic breast cancer",
+    "summary": "Doxorubicin followed by docetaxel on Day 1 every 21 days, for up to six cycles unless progression or unacceptable toxicity changes the plan.",
+    "stages": [
+      "Before starting",
+      "Early cycles",
+      "Later cycles / transition",
+      "Next treatment / completion",
+      "Follow-up"
+    ],
+    "lanes": [
+      {
+        "label": "Cancer medicines",
+        "cells": [
+          "Agree aim, indication and medicines",
+          "AT 50/75 starts",
+          "Review response, toxicity and exposure",
+          "Complete planned course / next decision",
+          "Ongoing review / subsequent plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00423"
+        ],
+        "note": "Doxorubicin followed by docetaxel on Day 1 every 21 days, for up to six cycles unless progression or unacceptable toxicity changes the plan."
+      },
+      {
+        "label": "Surgery",
+        "cells": [
+          "MDT-selected local treatment",
+          "No automatic operation during cycles",
+          "Review response / surgical plan",
+          "Selected for local need",
+          "Pathology and recovery guide next steps"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "metastatic"
+        ],
+        "note": "In metastatic disease, surgery and radiotherapy are individual decisions for symptoms or selected local-control needs; they are not automatic steps after every course."
+      },
+      {
+        "label": "Radiotherapy",
+        "cells": [
+          "Assess indication",
+          "Usually after cytotoxic chemotherapy",
+          "Arrange sequential timing",
+          "Radiation team confirms start",
+          "Review effects / follow-up"
+        ],
+        "kind": "local",
+        "source_ids": [
+          "early"
+        ],
+        "note": "In metastatic disease, surgery and radiotherapy are individual decisions for symptoms or selected local-control needs; they are not automatic steps after every course."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "FBC, kidney and liver profile",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
+          "Follow active medicines and abnormalities",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "blood",
+        "source_ids": [
+          "00423"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Echo / heart",
+        "cells": [
+          "Baseline echo (ESC); assess risk",
+          "High cardiac risk: repeat after 2 anthracycline cycles",
+          "If continuing: repeat after 4 cycles at high risk",
+          "Review cardiac symptoms and total lifetime exposure",
+          "Echo within 12 months; high risk within 3 months"
+        ],
+        "kind": "heart",
+        "source_ids": [
+          "00423",
+          "esc"
+        ],
+        "note": ""
+      },
+      {
+        "label": "ECG",
+        "cells": [
+          "Baseline ECG in the NCCP anthracycline source; repeat for symptoms or clinical risk. An ECG does not replace an echo.",
+          "Symptoms / risk-based repeat",
+          "Review if cardiac concern",
+          "ECG and echo answer different questions",
+          "Clinical indication"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00423"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Cancer imaging",
+        "cells": [
+          "Record baseline extent as appropriate",
+          "Clinical response / symptoms review",
+          "Metastatic: review about2–4 months",
+          "Arrange selected surgery / next treatment",
+          "Metastatic response plan continues"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00423"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Markers / bone health",
+        "cells": [
+          "Tests selected for active medicines",
+          "No routine tumour-marker clearance",
+          "Markers only as selected adjunct in metastatic care",
+          "DEXA if endocrine/bone-risk indication",
+          "Follow the endocrine and bone-health plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00423"
+        ],
+        "note": ""
+      },
+      {
+        "label": "Endocrine / bone",
+        "cells": [
+          "Confirm hormone receptors",
+          "Plan endocrine therapy when appropriate",
+          "Separate from this chemotherapy prescription",
+          "Start/continue per MDT; DEXA when indicated",
+          "Risk-based bone review"
+        ],
+        "kind": "endocrine",
+        "source_ids": [
+          "bone",
+          "early"
+        ],
+        "note": "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before first dose",
+        "when": "Baseline",
+        "why": "Baseline FBC, kidney and liver tests; regular tests are required by NCCP. The unit should confirm pre-cycle timing and review results before prescribing.",
+        "action": "Confirm tests and consent before prescribing.",
+        "source_ids": [
+          "00423"
+        ],
+        "clinical": "Baseline FBC, kidney and liver tests; regular tests are required by NCCP. The unit should confirm pre-cycle timing and review results before prescribing."
+      },
+      {
+        "title": "Heart-monitoring plan",
+        "when": "Baseline → cycles → after treatment",
+        "why": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+        "action": "Name the team responsible for booking and reviewing results.",
+        "source_ids": [
+          "00423",
+          "esc"
+        ],
+        "clinical": "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms."
+      },
+      {
+        "title": "Treatment-phase review",
+        "when": "Before each transition",
+        "why": "Doxorubicin followed by docetaxel on Day 1 every 21 days, for up to six cycles unless progression or unacceptable toxicity changes the plan.",
+        "action": "Confirm active medicines, support script and the next test checkpoint.",
+        "source_ids": [
+          "00423"
+        ],
+        "clinical": "Doxorubicin followed by docetaxel on Day 1 every 21 days, for up to six cycles unless progression or unacceptable toxicity changes the plan."
+      },
+      {
+        "title": "Response and follow-up",
+        "when": "Planned review points",
+        "why": "Record disease sites before treatment. Response imaging is generally considered every 2–4 months under ESMO guidance, adjusted to symptoms and disease pace. For a 21-day course this is approximately after 3–6 cycles; the team chooses the scan and exact checkpoint. New symptoms may need earlier assessment.",
+        "action": "Review symptoms and imaging together; do not change treatment on tumour markers alone.",
+        "source_ids": [
+          "00423"
+        ],
+        "clinical": "Record disease sites before treatment. Response imaging is generally considered every 2–4 months under ESMO guidance, adjusted to symptoms and disease pace. For a 21-day course this is approximately after 3–6 cycles; the team chooses the scan and exact checkpoint. New symptoms may need earlier assessment."
+      }
+    ],
+    "clinical_notes": [
+      "In metastatic disease, surgery and radiotherapy are individual decisions for symptoms or selected local-control needs; they are not automatic steps after every course.",
+      "ESC supplementary guidance: baseline echo before anthracycline treatment. High/very-high cardiac risk: echo every two anthracycline cycles (for example before cycles 3 and 5 when continuing), and within 3 months after completion. All adults: echo within 12 months after completion. Other repeat tests depend on risk, cumulative exposure and symptoms.",
+      "Record disease sites before treatment. Response imaging is generally considered every 2–4 months under ESMO guidance, adjusted to symptoms and disease pace. For a 21-day course this is approximately after 3–6 cycles; the team chooses the scan and exact checkpoint. New symptoms may need earlier assessment.",
+      "DEXA is linked to an aromatase inhibitor, ovarian suppression, treatment-induced menopause or other bone risk—not automatically to every chemotherapy course. The endocrine team confirms baseline testing and risk-based repeat scans.",
+      "Educational planning only; no appointments are booked and no test completion is inferred."
+    ],
+    "sources": [
+      {
+        "id": "00423",
+        "title": "NCCP 00423 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
+      },
+      {
+        "id": "early",
+        "title": "ESMO 2024 early breast cancer guideline · treatment and follow-up",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(23)05104-9/fulltext"
+      },
+      {
+        "id": "esc",
+        "title": "ESC 2022 cardio-oncology guideline · cardiac surveillance and risk",
+        "url": "https://academic.oup.com/eurheartj/article/43/41/4229/6673995"
+      },
+      {
+        "id": "hse",
+        "title": "HSE · chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "bone",
+        "title": "NICE NG101 · bone health and follow-up",
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      },
+      {
+        "id": "nogg",
+        "title": "NOGG · section 7, aromatase inhibitors and fracture risk",
+        "url": "https://www.nogg.org.uk/full-guideline/section-7-strategies-management-osteoporosis-and-fracture-risk"
+      },
+      {
+        "id": "port",
+        "title": "eviQ · implanted port patient information",
+        "url": "https://www.eviq.org.au/p/507"
+      },
+      {
+        "id": "picc",
+        "title": "eviQ · PICC patient information",
+        "url": "https://www.eviq.org.au/p/543"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics v8 (2025), Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "markers",
+        "title": "ASCO · biomarkers in metastatic breast cancer",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2015.61.1459"
+      },
+      {
+        "id": "metastatic",
+        "title": "ESMO metastatic breast cancer guideline · 2026",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(26)00902-6/fulltext"
+      },
+      {
+        "id": "trial",
+        "title": "Regimen selection and source references",
+        "url": "https://healthservice.hse.ie/documents/6823/423_DOXO_DOCEtaxel_AT_50_75-21day.pdf"
       }
     ]
   }

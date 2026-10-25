@@ -640,7 +640,7 @@
     // Remove the two routine immunotherapy cards from the form only.
     // The engine retains every rule and continues to mark omitted domains unassessed.
     return Engine.getInputDefinitions(protocol, profileId, rawInputs).filter(definition =>
-      !(isImmunotherapyBlood(definition) && ["glucose_mmol_l", "ketones_mmol_l"].includes(definition.id))
+      !definition.ui_derived_from && !(isImmunotherapyBlood(definition) && ["glucose_mmol_l", "ketones_mmol_l"].includes(definition.id))
     );
   }
 

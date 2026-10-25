@@ -69,9 +69,15 @@ for (const row of require('../protocols/index.json').protocols) {
     const presented = context.testAssessment.definitions(p, profile.id);
     for (const definition of original) {
       const extra = ['glucose_mmol_l', 'ketones_mmol_l'].includes(definition.id);
-      const removedHere = extra && definition.ui_section === 'immunotherapy_bloods';
+      const derived = Boolean(definition.ui_derived_from);
+      if (derived) {
+        const source = original.find(d => d.id === definition.ui_derived_from);
+        assert.equal(source?.derived_actual_field, definition.id, 'Hidden absolute input must have an explicit visible source');
+        assert(presented.some(d => d.id === source.id));
+      }
+      const removedHere = derived || (extra && definition.ui_section === 'immunotherapy_bloods');
       assert.equal(presented.some(d => d.id === definition.id), !removedHere, row.id + '/' + definition.id);
-      if (removedHere) removed++;
+      if (removedHere && extra) removed++;
       if (extra && !removedHere) retainedOutsideImmunotherapy++;
     }
     profiles++;
