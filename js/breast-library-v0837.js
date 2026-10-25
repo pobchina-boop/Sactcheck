@@ -39,7 +39,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6541/202_DOCEtaxel_100-21day.pdf",
-    "basis": "Locally advanced or metastatic breast cancer; receptor eligibility and full indication require clinical confirmation"
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00204": {
     "code": "00204",
@@ -91,7 +91,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6565/230_v7_nab-PACLitaxel.pdf",
-    "basis": "Metastatic breast cancer in adults after failed first-line treatment for metastatic disease when standard anthracycline-containing therapy is not indicated."
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00250": {
     "code": "00250",
@@ -503,11 +503,11 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6500/485_v6_Dose_DenseAC-T.pdf",
-    "basis": "Neoadjuvant or adjuvant · early breast cancer; indication remains a clinician decision"
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00507": {
     "code": "00507",
@@ -568,11 +568,11 @@ const regimens={
       "adjuvant"
     ],
     "receptors": [
-      "unspecified"
+      "any"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6381/545_Zoledronic_acid.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00605": {
     "code": "00605",
@@ -581,11 +581,13 @@ const regimens={
       "advanced"
     ],
     "receptors": [
+      "hrpos-her2neg",
+      "tnbc",
       "her2neg"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00619": {
     "code": "00619",
@@ -622,23 +624,22 @@ const regimens={
     "receptors": [
       "tnbc"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6530/688_v2a_Atezolizumab_nab-PACLitaxel.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00720": {
     "code": "00720",
     "protocol_id": "nccp-00720-v2",
     "settings": [
-      "extended"
+      "adjuvant"
     ],
     "receptors": [
-      "her2pos",
       "hrpos-her2pos"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00722": {
     "code": "00722",
@@ -704,7 +705,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6619/736_v2_nab-PACLitaxel_weekly.pdf",
-    "basis": "Metastatic breast cancer after anthracycline failure or when anthracyclines are unsuitable; this regimen is intended when hypersensitivity or intolerance prevents standard paclitaxel. It is an off-label schedule."
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00738": {
     "code": "00738",
@@ -713,11 +714,13 @@ const regimens={
       "advanced"
     ],
     "receptors": [
-      "unspecified"
+      "hrpos-her2neg",
+      "tnbc",
+      "her2neg"
     ],
-    "longitudinal": false,
+    "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6671/738.pdf",
-    "basis": "Existing NCCP catalogue indication; navigation classification only, not a fresh eligibility audit"
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00743": {
     "code": "00743",
@@ -730,7 +733,7 @@ const regimens={
     ],
     "longitudinal": true,
     "source_url": "https://healthservice.hse.ie/documents/6623/743_v3_eriBULin_Monotherapy_28_day.pdf",
-    "basis": "Locally advanced or metastatic breast cancer after at least one chemotherapy regimen for advanced disease; prior anthracycline and taxane unless unsuitable. The 28-day posology is unlicensed and needs informed consent and local approval."
+    "basis": "Source indication; individual suitability requires clinical interpretation."
   },
   "00745": {
     "code": "00745",

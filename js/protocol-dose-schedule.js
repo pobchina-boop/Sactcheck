@@ -200,6 +200,7 @@
       id: phase.phase_id || `phase_${index + 1}`,
       label: phaseLabel(phase, index),
       cycleLength: phase.cycle_length_days ?? phase.cycle_days ?? null,
+      intervalLabel: phase.schedule_interval_label || null,
       cycles: phase.cycles ?? phase.planned_cycles ?? null,
       duration: phase.duration_text || phase.duration || "",
       summary: phase.schedule_summary || "",
@@ -817,7 +818,7 @@
       </div>` : ""}
 
       ${phase ? `<div class="dose-schedule-summary-row">
-        ${phase.cycleLength ? `<span><strong>Cycle:</strong> q${escapeHtml(phase.cycleLength)}d</span>` : ""}
+        ${phase.cycleLength ? `<span><strong>Cycle:</strong> ${escapeHtml(phase.intervalLabel || `q${phase.cycleLength}d`)}</span>` : ""}
         ${course ? `<span><strong>Course:</strong> ${escapeHtml(course)}</span>` : ""}
         ${activeModel.phases.length > 1 ? `<span><strong>Phase:</strong> ${escapeHtml(phase.label)}</span>` : ""}
       </div>` : ""}

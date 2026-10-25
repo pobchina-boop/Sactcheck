@@ -299,6 +299,13 @@
       expanded = false;
       fields.slice().forEach(field => {
         const definition = explicitDefinitions.get(field) || {};
+        // Opt-in arithmetic operands belong to the form even if no rule names them directly.
+        asArray(definition.derived_value?.fields).forEach(dependency => {
+          if (!fields.includes(dependency) && explicitDefinitions.has(dependency)) {
+            fields.push(dependency);
+            expanded = true;
+          }
+        });
         [definition.visible_when, definition.required_when].forEach(condition => {
           RuleEngine.collectConditionFields(condition).forEach(dependency => {
             if (!fields.includes(dependency)) {
@@ -534,6 +541,30 @@
       Object.entries(assignments).forEach(([field, value]) => {
         inputs[field] = value;
       });
+    });
+
+    // Derived results are recomputed from validated direct numeric operands.
+    // Do not trust supplied deltas/ratios, support chains or infer a missing value as zero.
+    const definitionById = new Map(definitions.map(definition => [definition.id, definition]));
+    definitions.filter(definition => definition.derived_value).forEach(definition => {
+      inputs[definition.id] = null;
+      const config = definition.derived_value;
+      if (!config || !["difference", "ratio"].includes(config.operation) ||
+          !Array.isArray(config.fields) || config.fields.length !== 2) return;
+      const operands = config.fields.map(field => {
+        const operand = definitionById.get(field);
+        const value = inputs[field];
+        if (!operand || operand.type !== "number" || operand.derived_value ||
+            value === null || value === undefined || !Number.isFinite(value) ||
+            (operand.min !== undefined && value < Number(operand.min)) ||
+            (operand.max !== undefined && value > Number(operand.max))) return null;
+        return value;
+      });
+      if (operands.some(value => value === null)) return;
+      if (config.operation === "ratio" && operands[1] <= 0) return;
+      const result = config.operation === "difference" ? operands[0] - operands[1] : operands[0] / operands[1];
+      // Remove floating-point representation noise without clinical rounding to a dose band.
+      if (Number.isFinite(result)) inputs[definition.id] = Number(result.toPrecision(15));
     });
 
     return inputs;

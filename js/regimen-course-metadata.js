@@ -427,7 +427,7 @@
   function summarise(protocol) {
     const contexts = deriveContexts(protocol);
     const intentValues = contexts.map(context => context.intent_label || null);
-    const intervalValues = contexts.map(context => formatInterval(context.cycle_length_days) || null);
+    const intervalValues = contexts.map(context => cleanText(protocol?.metadata?.source_schedule_interval_label) || formatInterval(context.cycle_length_days) || null);
     const durationValues = contexts.map(context => context.duration?.label || null);
     const intents = unique(intentValues);
     const intervals = unique(intervalValues);

@@ -91,7 +91,11 @@ Twelve protocols previously labelled only as `current` now carry the explicit ve
 | 00423 | 5 | 2017-07-07 | 2021-06-23 |
 | 00430 | 6 | 2017-07-07 | 2031-04-01 |
 | 00432 | 5 | — | — |
+| 00605 | 2 | 2021-05-01 | 2028-09-06 |
 | 00619 | 4a | 2024-05-31 | 2030-08-11 |
+| 00688 | 2a | 2022-01-20 | 2027-12-16 |
+| 00720 | 2 | — | — |
+| 00738 | 3 | 2022-07-11 | 2029-01-31 |
 | 00749 | 3 | 2024-08-26 | 2030-08-28 |
 | 00794 | 3 | 2024-02-23 | 2030-03-04 |
 | 00936 | 1 | 2026-02-18 | 2027-02-18 |
@@ -104,8 +108,8 @@ All 361 indexed solid tumour protocols now use the platform policy that every en
 
 These are not automated release failures, because older NCCP documents do not use a uniform publication/review header and many encodings pre-date the structured metadata model. They remain an explicit manual source-review queue.
 
-- Missing stored publication date: **252** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545, 00659 … plus 232 more)
-- Missing stored review or last-reviewed date: **247** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00545, 00659, 00720, 00736, 00738, 00743 … plus 227 more)
+- Missing stored publication date: **251** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545, 00659 … plus 231 more)
+- Missing stored review or last-reviewed date: **246** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00545, 00659, 00720, 00736, 00743, 00745 … plus 226 more)
 - Source document not explicitly marked as manually checked: **171** (00212, 00205, 00256, 00831, 00897, 00926, 00215, 00104, 00282, 00326, 00333, 00337, 00338, 00453, 00518, 00564, 00583, 00602, 00622, 00628 … plus 151 more)
 
 ## Clinical boundary

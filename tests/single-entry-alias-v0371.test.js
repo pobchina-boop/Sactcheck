@@ -52,6 +52,7 @@ for (const file of protocolFiles()) {
   assert(candidates.length, `${code} has no testable single-entry rule input.`);
   for (const candidate of candidates) {
     const result = Engine.assess(protocol, { [candidate.id]: demoValue(candidate) }, { profileId });
+    if(candidate.derived_value){assert.equal(result.inputs[candidate.id],null,'Calculated fields ignore supplied values without their operands');continue;}
     assert(result.findings.length > 0, `${code}/${candidate.id} produced no meaningful partial finding.`);
     assert.notEqual(result.status, 'Partial assessment — insufficient data for an action', `${code}/${candidate.id} returned the obsolete generic partial status.`);
     auditedFields += 1;

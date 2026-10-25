@@ -16,6 +16,9 @@ const classificationBaseline = readJson("V0630_EMETOGENIC_CLASSIFICATION_SNAPSHO
 const clinicalCoreBaseline = readJson("V0630_CLINICAL_CORE_HASHES.json");
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
 const familyPhases = {
+  '00688':{combination:'low',atezolizumab:'minimal'},
+  '00738':{combination:'low',bevacizumab_only:'minimal',paclitaxel_only:'low'},
+  '00485':{anthracycline:'high',paclitaxel:'low'},
   '00815':{combination:'low',trastuzumab_maintenance:'minimal'},
   '00858':{taxane_platinum:'moderate',ac:'high',adjuvant:'minimal'},'00860':{taxane_platinum:'high',ac:'high',paclitaxel_only:'low',adjuvant:'minimal'},'00861':{taxane_platinum:'moderate',ac:'high',adjuvant:'minimal'},'00348':{taxane_platinum:'high',ac:'high',paclitaxel_only:'low'},'00734':{taxane_platinum:'moderate',ac:'high'},
   '00260':{ac:'high',paclitaxel:'low'}, '00278':{ac:'high',paclitaxel:'low'},
@@ -74,7 +77,7 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
     "00431": "low"
   };
   for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
-    const migratedMap = ['00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
+    const migratedMap = ['00688','00738','00485','00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
     const expected = migratedMap ? 'phase_dependent' : allowedCorrections[code] || baseline.level;
     if(migratedMap) assert.deepStrictEqual(currentMapLevels[code].phase_levels,familyPhases[code],code+' source-reconciled phase risks');
     assert.strictEqual(currentMapLevels[code]?.level, expected, `${code} emetogenic classification differs from the retained baseline or approved v0.64.0 correction`);
@@ -176,7 +179,7 @@ if (fs.existsSync(localDir)) {
       assert.strictEqual(selected.level,level,code+'/'+phase);
       const migrated=['00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
       const v17Scripts={high:'nccp-v8-ac-v08417',low:'nccp-v8-paclitaxel-v08417',minimal:'nccp-v8-trastuzumab-v08417'};
-      const expectedScript=['00260','00278','00432','00316','00433','00745','00512','00815'].includes(code) ? v17Scripts[level] : migrated ? (['high','variable'].includes(level)?null:level==='minimal'?'nccp-minimal-no-routine-prophylaxis':level==='oral_moderate_high'?'nccp-oral-moderate-high':'nccp-parenteral-'+level) : ['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level;
+      const expectedScript=['00688','00738','00485'].includes(code)?({high:'nccp-v8-ac-v08417',low:'nccp-v8-low-v08418',minimal:'nccp-minimal-no-routine-prophylaxis'})[level]:['00260','00278','00432','00316','00433','00745','00512','00815'].includes(code) ? v17Scripts[level] : migrated ? (['high','variable'].includes(level)?null:level==='minimal'?'nccp-minimal-no-routine-prophylaxis':level==='oral_moderate_high'?'nccp-oral-moderate-high':'nccp-parenteral-'+level) : ['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level;
       assert.strictEqual(selected.scriptId,expectedScript,code+'/'+phase+' must use the source-specific support pathway');
     }
     for (const [alias,phase] of Object.entries(protocol.supportive_care.phase_aliases || {})) assert.strictEqual(risk.get(protocol,{treatmentPhase:alias}).level,phases[phase]);

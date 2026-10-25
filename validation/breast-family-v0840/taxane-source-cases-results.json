@@ -1,6 +1,6 @@
 {
-  "checked_at": "2026-10-20T20:19:59.521Z",
-  "repo": "/workspace/scratch/aa44ad62d693/sactcheck-v08413",
+  "checked_at": "2026-10-25T10:11:34.348Z",
+  "repo": "/workspace/scratch/bca730129437/sactcheck-v08419",
   "total": 116,
   "passed": 116,
   "failed": 0,
@@ -990,15 +990,15 @@
         "febrile_neutropenia": true
       },
       "source_note": "Table2FNsharesmergeddelay/reductioncell; considerGCSF; doseoptional.",
-      "actual": "delay_then_dose_reduce",
+      "actual": "withhold",
       "findings": [
         {
           "id": "PAC_FN",
-          "action": "delay_then_dose_reduce",
+          "action": "withhold",
           "components": [
             "paclitaxel"
           ],
-          "explanation": "Delay and treat febrile neutropenia urgently; reduce one level after recovery and consider G-CSF."
+          "explanation": "Withhold paclitaxel and assess febrile neutropenia urgently. Consider G-CSF after recovery. FN alone does not assign an automatic one-level reduction in this source; apply any separate count/duration criteria and review the actual dose."
         }
       ],
       "pass": true
@@ -1701,7 +1701,7 @@
           "components": [
             "docetaxel"
           ],
-          "explanation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review the exact component and any HER2-only plan separately."
+          "explanation": "Severe hepatic impairment is an NCCP docetaxel exclusion. Do not administer docetaxel; obtain specialist review of the treatment plan."
         }
       ],
       "pass": true
@@ -2001,16 +2001,24 @@
       "pass": true
     },
     {
-      "name": "Docetaxel100 source does not inherit docetaxel75 cessation rule",
+      "name": "Docetaxel100 persistent severe toxicity at60: explicit EMA supplement",
       "code": "00202",
       "input": {
         "neuropathy_grade": 3,
         "current_docetaxel_mg_m2": 60,
         "toxicity_persists_at_reduced_dose": true
       },
-      "source_note": "00202Table3 stops its ladder at60 without a persistent-at60 cessation instruction.",
-      "actual": "consultant_review",
+      "source_note": "v0.84.19: NCCP Table3 ends at60; EMA Taxotere SmPC4.2 explicitly supplements persistent severe toxicity at60. It is not attributed to the NCCP table.",
+      "actual": "discontinue",
       "findings": [
+        {
+          "id": "DOC_NEURO_PERSISTENT",
+          "action": "discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "explanation": "Persistent severe neuropathy despite 60 mg/m²: discontinue docetaxel according to EMA Taxotere section 4.2. NCCP Table 3 ends its numeric ladder at 60 mg/m²; the cessation instruction is explicitly supplemented from the current SmPC."
+        },
         {
           "id": "DOC_NEURO",
           "action": "consultant_review",
@@ -2018,14 +2026,6 @@
             "docetaxel"
           ],
           "explanation": "Source ladder for neuropathy is 100 →75 →60 mg/m²; stomatitis grade 3/4 reduces to 60 mg/m²."
-        },
-        {
-          "id": "DOC_NEURO_PERSISTENT",
-          "action": "consultant_review",
-          "components": [
-            "docetaxel"
-          ],
-          "explanation": "Persistent neuropathy at 60 mg/m²: source supplies no further numeric reduction / cessation row here. Obtain consultant review; do not borrow another regimen’s stop rule."
         }
       ],
       "pass": true

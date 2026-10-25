@@ -53,7 +53,9 @@ for(const edit of edits)check(()=>{
   assert.equal(anthra.before,breast.after);
   const cmfgem=JSON.parse(read('validation/cmf-gem-v08418/builder-revision.json'));
   assert.equal(cmfgem.before,anthra.after);
-  assert.equal(crypto.createHash('sha256').update(content).digest('hex'),cmfgem.after);
+  const finalBreast=JSON.parse(read('validation/breast-final-v08419/builder-revision.json'));
+  assert.equal(finalBreast.before,cmfgem.after);
+  assert.equal(crypto.createHash('sha256').update(content).digest('hex'),finalBreast.after);
   assert(content.toString().includes('Insert numbers here'));
  }else assert.equal(crypto.createHash('sha256').update(content).digest('hex'),require('./helpers/retrospective-v08413.cjs').expectedHash(edit.path,edit.after),edit.path);
 

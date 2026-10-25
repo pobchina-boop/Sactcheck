@@ -72,7 +72,12 @@ for (const row of require('../protocols/index.json').protocols) {
       const derived = Boolean(definition.ui_derived_from);
       if (derived) {
         const source = original.find(d => d.id === definition.ui_derived_from);
-        assert.equal(source?.derived_actual_field, definition.id, 'Hidden absolute input must have an explicit visible source');
+        if(definition.derived_value){
+          assert(['difference','ratio'].includes(definition.derived_value.operation));
+          assert.equal(definition.derived_value.fields.length,2);
+          for(const field of definition.derived_value.fields)assert(presented.some(d=>d.id===field&&d.type==='number'),'Calculated field requires visible numeric operands');
+          assert.equal(Engine.assess(p,{[definition.id]:99}).inputs[definition.id],null,'Supplied calculated values cannot replace missing operands');
+        }else assert.equal(source?.derived_actual_field, definition.id, 'Hidden absolute input must have an explicit visible source');
         assert(presented.some(d => d.id === source.id));
       }
       const removedHere = derived || (extra && definition.ui_section === 'immunotherapy_bloods');

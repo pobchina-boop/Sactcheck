@@ -1,0 +1,108 @@
+'use strict';
+// Independent cases: NCCP 00605 v2 pp1–5, 00720 v2 pp1–6; EMA breast monotherapy supplements.
+const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
+const H=__dirname,R=path.resolve(H,'../../..'),mode=process.argv[2]||'proposed';
+const dir=mode==='integrated'?path.join(R,'protocols/breast'):mode==='baseline'?path.join(H,'../baseline'):path.join(H,'proposed');
+const E=require(path.join(R,'js/assessment-engine')),D=require(path.join(R,'js/protocol-dose-schedule'));
+const ps=Object.fromEntries(['00605','00720'].map(c=>[c,JSON.parse(fs.readFileSync(path.join(dir,fs.readdirSync(dir).find(n=>n.startsWith(c+'-')))))])),rows=[];
+function run(c,name,input,check,page=3){const p=ps[c],row={code:c,name,input,source:{url:p.metadata.source_url,page}};try{const r=E.assess(p,input),f=r.findings.filter(x=>!x.domainAssessment&&!/^PARTIAL_/.test(x.ruleId||'')),m=D.buildModificationModel(p,r);row.actual={action:r.actionType,inputs:r.inputs,findings:f.map(x=>({id:x.ruleId,type:x.actionType,text:x.explanation})),invalid:r.invalid,errors:r.errors};assert.deepEqual(r.errors,[]);check({r,f,m});row.pass=true}catch(e){row.pass=false;row.error=e.message}rows.push(row)}
+function content(c,name,fn){const row={code:c,name,source:{url:ps[c].metadata.source_url}};try{fn(ps[c]);row.pass=true}catch(e){row.pass=false;row.error=e.message}rows.push(row)}
+const has=(type,pat)=>q=>{assert.deepEqual(q.r.invalid,[]);assert(q.f.some(x=>x.actionType===type&&(!pat||new RegExp(pat,'i').test(x.explanation))),type+' / '+pat);assert.notEqual(q.r.actionType,'proceed');assert(!q.m.rows.some(x=>/^\d+(?:\.\d+)?\s*mg/.test(x.protocolDose||'')),'Unresolved clinical decision must not generate a numeric prescribed dose')};
+const absent=(pat)=>q=>{assert.deepEqual(q.r.invalid,[]);assert(!q.f.some(x=>new RegExp(pat,'i').test(x.ruleId+' '+x.explanation)),pat+' unexpectedly fired');assert.notEqual(q.r.actionType,'proceed')};
+for(const c of ['00605','00720']){
+ run(c,'Blank never clears',{},q=>assert.equal(q.r.actionType,'incomplete'));
+ for(const input of [{anc:''},{crcl:''},{platelets:null}])run(c,'Empty value '+JSON.stringify(input),input,q=>{assert.notEqual(q.r.actionType,'proceed');assert.equal(q.f.length,0)});
+ run(c,'Isolated normal counts do not clear',{anc:2,platelets:200},absent('withhold|delay|reduce'));
+ for(const f of ['hypersensitivity','breastfeeding'])run(c,f+' exclusion',{[f]:true},has('contraindicated',f==='hypersensitivity'?'Hypersensitivity':'breastfeeding'),2);
+ run(c,'Pregnancy',{pregnancy:true},has(c==='00605'?'withhold':'contraindicated','pregnan'),2);
+ run(c,'Unresolved tests',{pretreatment_tests_unresolved:true},has('consultant_review','tests|checks'),2);
+ for(const n of [-1,'NaN','Infinity',999])run(c,'Invalid renal value '+n,{crcl:n},q=>{assert(q.r.invalid.length);assert.equal(q.r.actionType,'incomplete')});
+ for(const input of [{renal_measure_type:'egfr',crcl:25},{renal_measure_type:'unknown',crcl:25}])run(c,'Indexed/unconfirmed renal measure '+input.renal_measure_type,input,q=>{has('consultant_review','indexed eGFR')(q);assert(!q.f.some(f=>/RENAL_(15|30|SEVERE)/.test(f.ruleId)))});
+ for(const fld of ['renal_measure_type','assessment_stage'])run(c,'Unrecognised '+fld,{[fld]:'invalid'},has('consultant_review','Unrecognised'));
+ content(c,'Governance remains pending',p=>{for(const f of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[f],false);assert.equal(p.metadata.nccp_version,2);assert(p.metadata.source_version_verified)});
+ content(c,'Continuous oral dose schedule',p=>{const a=p.treatment_phases[0].administration[0];assert.equal(a.dose.value,c==='00605'?1:240);assert.equal(a.route,'PO');assert.equal(a.days,'Continuous');assert.match(a.notes,/not a tablet-free/);assert.equal(D.buildModel(p).phases.length,1)});
+ content(c,'No routine cytotoxic antiemetic premedication',p=>{assert.equal(p.supportive_care.emetogenic_risk,'oral_minimal_low');assert.equal(p.supportive_care.script_id,'nccp-oral-minimal-low')});
+}
+const t='00605';
+for(const [f,low,rec,target]of [['hb_g_dl',8,'restart_for_hb',9],['anc',1,'restart_for_anc',1.5],['platelets',50,'restart_for_platelets',75]]){
+ for(const n of [0,low-.01])run(t,f+' below hold threshold '+n,{[f]:n},has('withhold','Withhold talazoparib'));
+ for(const n of [low,low+.01])run(t,f+' no hold at/above '+n,{[f]:n},absent('HOLD'));
+ for(const n of [low,target-.01])run(t,f+' restart not recovered '+n,{[f]:n,[rec]:true},has('withhold','restart threshold'));
+ for(const n of [target,target+.01])run(t,f+' restart recovered '+n,{[f]:n,[rec]:true},has('consultant_review','next lower current dose'));
+ run(t,f+' restart result missing',{[rec]:true},has('consultant_review','missing'));
+}
+for(const n of [0,14,14.999])run(t,'No renal evidence below15 '+n,{crcl:n},has('consultant_review','no studied dose'));
+for(const n of [15,15.001,29,29.999])run(t,'CrCl15–<30 starting0.5 '+n,{crcl:n},has('consultant_review','starting dose 0.5 mg'));
+for(const n of [30,30.001,59,59.999])run(t,'CrCl30–<60 starting0.75 '+n,{crcl:n},has('consultant_review','starting dose 0.75 mg'));
+for(const n of [60,60.001,80])run(t,'CrCl>=60 no reduction '+n,{crcl:n},absent('starting dose 0.[57]|no studied'));
+run(t,'Renal starting dose not repeated toxicity step',{crcl:40,current_dose_mg:.5},has('consultant_review','starting-dose recommendation, not an automatic'));
+run(t,'Dialysis no data',{haemodialysis:true},has('consultant_review','not been studied'));
+for(const n of [3,4])run(t,'Severe nonhaem toxicity '+n,{nonhaem_toxicity_grade:n},has('withhold','lower dose or discontinuation'));
+for(const n of [0,1,2])run(t,'Nonsevere nonhaem no invented reduction '+n,{nonhaem_toxicity_grade:n},absent('NONHAEM_G3'));
+for(const [fld,pat]of [['strong_pgp_inhibitor','next lower current'],['pgp_inhibitor_recently_stopped','3–5'],['strong_bcrp_inhibitor','No universal'],['dose_not_tolerated_at025','ends at 0.25']])run(t,fld,{[fld]:true},has('consultant_review',pat),4);
+run(t,'Confirmed MDS AML',{suspected_mds_aml:'confirmed'},has('permanently_discontinue','Confirmed'),4);
+run(t,'Suspected MDS AML has no invented four-week rule',{suspected_mds_aml:'suspected'},has('consultant_review','no|without a fixed'),4);
+for(const fld of ['prior_parp_inhibitor','symptomatic_cns_or_leptomeningeal','platinum_progression_advanced','platinum_relapse_under6mo','active_inflammatory_breast_cancer','significant_cardiac_exclusion'])run(t,fld+' exclusion',{[fld]:true},has('contraindicated','exclusion'),2);
+run(t,'HER2 positive exclusion',{her2_status:'positive'},has('contraindicated','HER2'),2);
+for(const status of ['not_eligible','unknown'])run(t,'BRCA '+status,{brca_status:status},has('consultant_review','BRCA'),1);
+for(const status of ['not_met','unknown'])for(const fld of ['prior_chemotherapy_eligibility','hr_positive_endocrine_eligibility'])run(t,fld+status,{[fld]:status},has('consultant_review','prior|previous'),1);
+run(t,'ECOG2 source eligible but partial',{ecog:2},absent('outside NCCP'),1);
+run(t,'ECOG3 outside',{ecog:3},has('consultant_review','outside NCCP'),1);
+run(t,'Three prior advanced regimens not over3',{prior_advanced_chemo_regimens:3},absent('More than three'),1);
+run(t,'Four prior advanced regimens',{prior_advanced_chemo_regimens:4},has('consultant_review','More than three'),1);
+run(t,'Baseline missing count recovery',{assessment_stage:'baseline'},has('consultant_review','Confirm recovery'),4);
+run(t,'Baseline unrecovered counts',{assessment_stage:'baseline',prior_haem_toxicity_recovered:false},has('withhold','Do not initiate'),4);
+for(const input of [{bilirubin_uln:4,ast_uln:6},{bilirubin_uln:2,ast_uln:1}])run(t,'Hepatic does not import prostate dosing '+JSON.stringify(input),input,absent('dose_reduce|dose reduction|0.35|0.2 mg'));
+content(t,'Complete monotherapy ladder and source-specific grade',p=>{assert.deepEqual(Object.values(p.dose_levels.talazoparib).map(v=>v.value),[1,.75,.5,.25]);assert(!p.input_definitions.nonhaem_toxicity_grade.ctcae_version);assert.equal(p.input_definitions.crcl.type,'number');assert(!p.input_definitions.persistent_cytopenia_after4weeks)});
+const n='00720';
+for(const [anc,pl]of [[.9,99],[.89,99],[.9,98],[0,0]])run(n,'Both low counts '+anc+'/'+pl,{anc,platelets:pl},has('delay','Both ANC'));
+for(const [anc,pl]of [[.9,100],[1,99],[.9,undefined],[undefined,99]])run(n,'Discordant/missing counts '+anc+'/'+pl,{...(anc!==undefined?{anc}:{}),...(pl!==undefined?{platelets:pl}:{})},has('consultant_review','normal or missing counterpart'));
+for(const [anc,pl]of [[.901,99.001],[1,100]])run(n,'Both counts above cutoffs '+anc+'/'+pl,{anc,platelets:pl},absent('BLOODS'));
+for(const r of [0,29,29.999])run(n,'Severe renal source conflict '+r,{crcl:r},has('withhold','Source conflict'));
+for(const r of [30,30.001,60])run(n,'CrCl>=30 no conflict '+r,{crcl:r},absent('renal impairment.*Withhold|RENAL_SEVERE'));
+run(n,'Dialysis source conflict',{haemodialysis:true},has('withhold','Source conflict'));
+run(n,'ChildPughC source conflict no33%',{child_pugh:'C'},has('withhold','EMA contraindicates'));
+for(const v of ['A','B'])run(n,'ChildPugh'+v+' no reduction',{child_pugh:v},absent('CP_C'));
+run(n,'General grade3',{other_toxicity_grade:3},has('withhold','next lower current'));
+for(const g of [3,4])run(n,'Hand-foot is general event grade'+g,{hand_foot_grade:g},has(g===3?'withhold':'permanently_discontinue','Grade '+g));
+run(n,'Stopped inhibitor must not reset reduced history to240',{current_dose_mg:80,cyp3a_pgp_inhibitor_recently_stopped:true},has('consultant_review','do not automatically reset'),5);
+run(n,'Strong inhibitor40mg history supported',{current_dose_mg:40,cyp3a_pgp_inhibitor_strength:'strong'},has('consultant_review','40 mg'),5);
+run(n,'General grade4',{other_toxicity_grade:4},has('permanently_discontinue','Grade 4'));
+for(const v of [3,2.999])run(n,'Delay not beyond3 '+v,{toxicity_delay_weeks:v},absent('DELAY_GT3'));
+for(const v of [3.001,4])run(n,'Delay beyond3 '+v,{toxicity_delay_weeks:v},has('permanently_discontinue','longer than three'));
+run(n,'Intolerant lowest dose',{cannot_tolerate_120mg:true},has('permanently_discontinue','120 mg'));
+for(const g of [0,1,2,3])run(n,'Complicated diarrhoea any grade '+g,{diarrhoea_grade:g,complicated_diarrhoea:true},has('withhold','dehydration'),4);
+run(n,'Diarrhoea grade4',{diarrhoea_grade:4},has('permanently_discontinue','Grade 4'),4);
+for(const day of [2,2.0])run(n,'Diarrhoea exact2-day overlap '+day,{diarrhoea_grade:3,diarrhoea_duration_days:day,diarrhoea_optimal_therapy:true},has('consultant_review','overlaps'),4);
+for(const day of [2.001,3,21])run(n,'Grade3 prolonged '+day,{diarrhoea_grade:3,diarrhoea_duration_days:day,diarrhoea_optimal_therapy:true},has('withhold','Persistent grade 3'),4);
+for(const day of [21.001,22])run(n,'Grade3 beyond3weeks '+day,{diarrhoea_grade:3,diarrhoea_duration_days:day},has('permanently_discontinue','longer than three'),4);
+for(const day of [5,5.001,21,22])run(n,'Grade2 five days or longer '+day,{diarrhoea_grade:2,diarrhoea_duration_days:day,diarrhoea_optimal_therapy:true},has('withhold','Persistent grade 2'),4);
+for(const [g,day]of [[2,4.999],[3,1.999]])run(n,'Short diarrhoea not automatic interruption '+g+'/'+day,{diarrhoea_grade:g,diarrhoea_duration_days:day,diarrhoea_optimal_therapy:true},absent('DIARR_G[23]_LONG|DIARR_TWO'),4);
+for(const input of [{diarrhoea_grade:2},{diarrhoea_grade:3},{diarrhoea_grade:2,diarrhoea_duration_days:5},{diarrhoea_grade:3,diarrhoea_duration_days:3}])run(n,'Diarrhoea missing context '+JSON.stringify(input),input,has('consultant_review','duration|Confirm optimal'),4);
+for(const g of [2,3])run(n,'Recurrent diarrhoea at120 '+g,{diarrhoea_grade:g,current_dose_mg:120,diarrhoea_recurrence:true},has('permanently_discontinue','Recurrent'),4);
+run(n,'First grade2 episode at120 not automatic permanent stop',{diarrhoea_grade:2,diarrhoea_duration_days:2,current_dose_mg:120,diarrhoea_recurrence:false},absent('DIARR_RECUR120'),4);
+for(const v of [0,7])run(n,'Restart recovered within7 '+v,{restart_after_diarrhoea:true,diarrhoea_grade:1,diarrhoea_recovery_days:v},has('consultant_review','same prior dose'),4);
+for(const v of [7.001,8])run(n,'Restart recovered after7 '+v,{restart_after_diarrhoea:true,diarrhoea_grade:1,diarrhoea_recovery_days:v},has('consultant_review','reduced dose'),4);
+for(const input of [{restart_after_diarrhoea:true},{restart_after_diarrhoea:true,diarrhoea_grade:0},{restart_after_diarrhoea:true,diarrhoea_recovery_days:7}])run(n,'Restart incomplete '+JSON.stringify(input),input,has('consultant_review','both required'),4);
+run(n,'Restart diarrhoea still2',{restart_after_diarrhoea:true,diarrhoea_grade:2,diarrhoea_recovery_days:7},has('withhold','Do not restart'),4);
+for(const [f,low,high]of [['alt_uln',5,20],['bilirubin_uln',3,10]]){
+ run(n,f+' at lower limit',{[f]:low},absent('HEPATIC_G3|G4'),4);
+ for(const v of [low+.001,high])run(n,f+' grade3 '+v,{[f]:v},has('withhold','Grade 3 ALT'),4);
+ run(n,f+' beyond high',{[f]:high+.001},has('permanently_discontinue','Grade 4'),4);
+ run(n,f+' grade3 recurrence',{[f]:low+1,hepatic_grade3_recurrence:true},has('permanently_discontinue','recurring'),4);
+}
+for(const f of ['alt_grade','bilirubin_grade'])for(const g of [3,4])run(n,f+' sourcegrade'+g,{[f]:g},has(g===3?'withhold':'permanently_discontinue','Grade '+g),4);
+for(const [f,v,pat,type]of [['cyp3a_pgp_inhibitor',true,'Confirm inhibitor','consultant_review'],['cyp3a_pgp_inhibitor_strength','strong','40 mg','consultant_review'],['cyp3a_pgp_inhibitor_strength','moderate','160 mg','consultant_review'],['cyp3a_pgp_inhibitor_strength','unknown','Confirm','consultant_review'],['cyp3a_pgp_inducer','strong','contraindicated','contraindicated'],['cyp3a_pgp_inducer','moderate','Avoid','consultant_review'],['acid_suppressant','ppi','not recommended','consultant_review'],['acid_suppressant','h2','two hours before or ten','consultant_review'],['acid_suppressant','antacid','three hours','consultant_review'],['pgp_narrow_therapeutic_index_substrate',true,'monitor','consultant_review']])run(n,'Interaction '+f+'='+v,{[f]:v},has(type,pat),5);
+for(const v of [11.999])run(n,'Indication interval below12 '+v,{months_since_trastuzumab:v},absent('ELIGIBILITY_INTERVAL'),1);
+for(const v of [12,12.001])run(n,'Indication interval12+ '+v,{months_since_trastuzumab:v},has('consultant_review','less than one year'),1);
+run(n,'HR/HER2 requirement',{hr_positive_her2_positive:false},has('consultant_review','HR-positive'),1);
+run(n,'ECOG2 outside',{ecog:2},has('consultant_review','eligibility'),1);
+run(n,'Baseline abnormalLVEF',{assessment_stage:'baseline',baseline_lvef_normal:false},has('withhold','Baseline LVEF'),1);
+for(const v of [40,45])run(n,'LVEF caution '+v,{lvef_percent:v},has('consultant_review','45%'),1);
+run(n,'LVEF justabove45',{lvef_percent:45.01},absent('LVEF_CAUTION'),1);
+for(const f of ['history_heart_disease','gi_disease_diarrhoea'])run(n,f,{[f]:true},has('contraindicated','exclusion'),2);
+run(n,'QTc0.45 not above',{qtc_seconds:.45},absent('EXCL_QT'),2);
+run(n,'QTcabove0.45',{qtc_seconds:.451},has('contraindicated','QTc'),2);
+run(n,'Prophylaxis missing plan',{assessment_stage:'baseline',diarrhoea_prophylaxis_confirmed:false},has('consultant_review','first dose'),5);
+content(n,'Complete ladder and corrected ALT grading',p=>{assert.deepEqual(Object.values(p.dose_levels.neratinib).map(v=>v.value),[240,200,160,120]);assert.equal(p.input_definitions.alt_grade.ctcae_version,'4.0');assert.match(p.input_definitions.alt_grade.label,/not AST/);assert.match(p.supportive_care.regimen_specific_notes.join(' '),/weeks 1–2 4 mg three times.*weeks 3–8 4 mg twice.*weeks 9–52 4 mg as required/)});
+const out={checked:'2026-10-25',mode,total:rows.length,passed:rows.filter(x=>x.pass).length,failed:rows.filter(x=>!x.pass).length,scope:'Source-derived software checks; not independent clinical/pharmacy authorisation',results:rows};fs.writeFileSync(path.join(H,mode+'-results.json'),JSON.stringify(out,null,2)+'\n');console.log(`Oral ${mode}: ${out.passed}/${out.total} source-derived checks passed`);for(const x of rows.filter(x=>!x.pass))console.error(x.code+' '+x.name+': '+x.error);if(mode!=='baseline'&&out.failed)process.exitCode=1;

@@ -13,9 +13,9 @@
     "icd10": "C50",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.84.19",
     "treatment_setting": [
-      "adjuvant"
+      "extended_adjuvant"
     ],
     "catalog": {
       "enabled": true
@@ -30,7 +30,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "targeted_her2_therapy",
     "catalogue_section_label": "Targeted & HER2 therapies",
@@ -54,19 +54,44 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled encoding · independent clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "audit_release": "0.68.0",
       "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "scope_note": "Source-specific oral dosing, toxicity history, eligibility and supportive care; source conflicts require specialist review.",
+      "reconciled_release": "0.84.19",
+      "reconciled_date": "2026-10-25"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00720-v2"
+    "canonical_protocol_id": "nccp-00720-v2",
+    "source_checked_date": "2026-10-25",
+    "source_version_verified_date": "2026-10-25",
+    "source_version_verified": true,
+    "full_suite_release": "0.84.19",
+    "source_supplements": [
+      {
+        "title": "EMA Nerlynx product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/nerlynx-epar-product-information_en.pdf",
+        "checked": "2026-10-25",
+        "scope": "Breast monotherapy; formulation, organ function, interactions and unresolved NCCP/SmPC differences"
+      }
+    ],
+    "schedule_summary": "Neratinib is taken once daily with food for one year. The usual starting dose is 240 mg; the team may interrupt or reduce it for toxicity. Treatment starts less than one year after completing adjuvant trastuzumab.",
+    "source_boundaries": [
+      "NCCP Child-Pugh C 33% conflicts with EMA contraindication; no automatic dosing.",
+      "NCCP CrCl<30/dialysis no-adjustment expectation conflicts with EMA not-recommended use; require specialist review.",
+      "NCCP grade-3 diarrhoea rows overlap exactly at two days.",
+      "The count table prints ANC≤0.9 AND platelets≤99; discordant/missing counts require review rather than converting the source AND to OR.",
+      "Hepatic table is ALT, not a combined ALT/AST rule. Use source CTCAE v4.0 and explicit ULN thresholds.",
+      "NCCP/EMA return-to-240mg interaction wording requires review if the pre-interaction dose had already been reduced."
+    ],
+    "source_schedule_interval_label": "Continuous daily oral treatment",
+    "duration_text": "For 1 year"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -75,25 +100,25 @@
   },
   "input_definitions": {
     "hypersensitivity": {
-      "label": "Relevant drug/excipient hypersensitivity",
+      "label": "Hypersensitivity to this medicine or excipients",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "pregnancy": {
-      "label": "Pregnant",
+      "label": "Pregnant or pregnancy test positive",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "anc": {
       "label": "ANC (×10⁹/L)",
@@ -121,9 +146,17 @@
       "required": false,
       "min": 0,
       "max": 250,
-      "step": 1,
+      "step": 0.01,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "always_show": true,
       "demo_value": 80,
-      "input_role": "context"
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+        "reason": "Continuous entry preserves the source renal thresholds; EMA defines the exact half-open CrCl bands and clarifies the severe-impairment limitations."
+      }
     },
     "diarrhoea_grade": {
       "label": "Diarrhoea grade",
@@ -157,11 +190,13 @@
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.0",
       "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v403.pdf",
       "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00720 / CTCAE v4.0",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf"
     },
     "hand_foot_grade": {
       "label": "Palmar-plantar erythrodysaesthesia grade",
@@ -195,11 +230,13 @@
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.0",
       "ctcae_category": "ppe",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v403.pdf",
       "assessment_guidance": "Assess painful erythema, swelling, hyperkeratosis, peeling or blistering of palms/soles and the effect on instrumental or self-care activities.",
-      "input_role": "context"
+      "input_role": "context",
+      "grading_source_label": "NCCP 00720 / CTCAE v4.0",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf"
     },
     "other_toxicity_grade": {
       "label": "Other treatment-related toxicity grade",
@@ -233,14 +270,16 @@
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.0",
       "ctcae_category": "generic",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the actual adverse event first, then apply that toxicity-specific CTCAE definition. The generic severity anchors are not a substitute for the named CTCAE criterion.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v403.pdf",
+      "assessment_guidance": "Grade the actual named event using CTCAE v4.0. Excludes diarrhoea and hepatotoxicity, which have separate source tables.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00720 / CTCAE v4.0",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf"
     },
     "alt_grade": {
-      "label": "ALT/AST elevation grade",
+      "label": "ALT elevation grade (NCCP CTCAE v4.0; not AST)",
       "type": "select",
       "required": false,
       "options": [
@@ -271,11 +310,13 @@
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.0",
       "ctcae_category": "hepatic_alt_ast",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use the measured ALT/AST and laboratory ULN; account for an abnormal baseline where CTCAE specifies a baseline-relative definition. Assess bilirubin and alternative causes concurrently.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v403.pdf",
+      "assessment_guidance": "NCCP Table 6 specifies ALT >5–20 × ULN for grade 3 and >20 × ULN for grade 4. Do not silently substitute AST.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00720 / CTCAE v4.0",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf"
     },
     "bilirubin_grade": {
       "label": "Bilirubin elevation grade",
@@ -309,11 +350,13 @@
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.0",
       "ctcae_category": "hepatic_bilirubin",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v403.pdf",
       "assessment_guidance": "Use the measured bilirubin and laboratory ULN; account for an abnormal baseline where CTCAE specifies a baseline-relative definition and assess the overall hepatic pattern.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00720 / CTCAE v4.0",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf"
     },
     "lvef_percent": {
       "label": "Current LVEF (%)",
@@ -403,6 +446,14 @@
         {
           "value": 120,
           "label": "120 mg"
+        },
+        {
+          "value": 80,
+          "label": "80 mg (supervised interaction dose)"
+        },
+        {
+          "value": 40,
+          "label": "40 mg (supervised interaction dose)"
         }
       ],
       "demo_value": 240,
@@ -435,6 +486,284 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first dose"
+        },
+        {
+          "value": "ongoing",
+          "label": "During treatment"
+        },
+        {
+          "value": "restart",
+          "label": "Restart after interruption"
+        }
+      ],
+      "demo_value": "baseline"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "pretreatment_tests_unresolved": {
+      "label": "Required blood tests / eligibility checks unresolved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "renal_measure_type": {
+      "label": "Renal measure used",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "crcl",
+          "label": "Creatinine clearance (mL/min)"
+        },
+        {
+          "value": "egfr",
+          "label": "Indexed eGFR only"
+        },
+        {
+          "value": "unknown",
+          "label": "Method not confirmed"
+        }
+      ],
+      "demo_value": "crcl"
+    },
+    "hr_positive_her2_positive": {
+      "label": "HR-positive and HER2-overexpressed/amplified early breast cancer confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "months_since_trastuzumab": {
+      "label": "Months since completing adjuvant trastuzumab",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 120,
+      "step": 0.01,
+      "unit": "months",
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": 0
+    },
+    "baseline_lvef_normal": {
+      "label": "Baseline LVEF within the local normal range",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "diarrhoea_optimal_therapy": {
+      "label": "Diarrhoea persists despite optimal medical treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "diarrhoea_recurrence": {
+      "label": "Diarrhoea has recurred after prior resolution/restart",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "restart_after_diarrhoea": {
+      "label": "Restart following diarrhoea interruption",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "diarrhoea_recovery_days": {
+      "label": "Days to diarrhoea recovery to grade 0–1",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "unit": "days",
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": 0
+    },
+    "cannot_tolerate_120mg": {
+      "label": "Cannot tolerate 120 mg daily",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_grade3_recurrence": {
+      "label": "Grade 3 ALT/bilirubin has recurred despite one dose reduction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "alt_uln": {
+      "label": "ALT (× ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "unit": "× ULN",
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": 0
+    },
+    "bilirubin_uln": {
+      "label": "Bilirubin (× ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.01,
+      "unit": "× ULN",
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": 0
+    },
+    "cyp3a_pgp_inhibitor_strength": {
+      "label": "Unavoidable CYP3A4/P-gp inhibitor strength",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "strong",
+          "label": "Strong"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "unknown",
+          "label": "Unconfirmed"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "cyp3a_pgp_inducer": {
+      "label": "CYP3A4/P-gp inducer",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "strong",
+          "label": "Strong"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "unknown",
+          "label": "Unconfirmed"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "acid_suppressant": {
+      "label": "Gastric acid-reducing medicine",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "ppi",
+          "label": "Proton-pump inhibitor"
+        },
+        {
+          "value": "h2",
+          "label": "H2 blocker"
+        },
+        {
+          "value": "antacid",
+          "label": "Antacid"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "pgp_narrow_therapeutic_index_substrate": {
+      "label": "Narrow therapeutic-index P-gp substrate",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "diarrhoea_prophylaxis_confirmed": {
+      "label": "First-dose and early anti-diarrhoeal plan confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cyp3a_pgp_inhibitor_recently_stopped": {
+      "label": "Strong/moderate CYP3A4/P-gp inhibitor recently stopped",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -443,25 +772,7 @@
     "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "report_unassessed_coverage_gap",
-    "actions_ranked_most_to_least_restrictive": [
-      "permanently_discontinue",
-      "contraindicated",
-      "discontinue",
-      "cease",
-      "omit",
-      "withhold_then_reduce",
-      "withhold",
-      "delay_then_dose_reduce",
-      "delay",
-      "consultant_review",
-      "dose_reduce_two_levels",
-      "dose_reduce_one_level",
-      "dose_reduce",
-      "proceed_with_caution",
-      "proceed"
-    ],
+    "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
         "rule_id": "EXCL_HS",
@@ -473,13 +784,238 @@
           "components": [
             "neratinib"
           ],
-          "recommendation": "Do not administer neratinib."
+          "recommendation": "Hypersensitivity: do not administer neratinib.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Do not administer neratinib."
+        "explanation": "Hypersensitivity: do not administer neratinib."
+      },
+      {
+        "rule_id": "PREGNANCY",
+        "field": "pregnancy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Do not start or continue pending urgent specialist pregnancy review; neratinib can harm the fetus.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Do not start or continue pending urgent specialist pregnancy review; neratinib can harm the fetus."
+      },
+      {
+        "rule_id": "BREASTFEED",
+        "field": "breastfeeding",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Do not administer while breastfeeding.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Do not administer while breastfeeding."
+      },
+      {
+        "rule_id": "TESTS_UNRESOLVED",
+        "field": "pretreatment_tests_unresolved",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Resolve the required baseline and ongoing blood tests, eligibility and interaction checks before prescribing.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Resolve the required baseline and ongoing blood tests, eligibility and interaction checks before prescribing."
+      },
+      {
+        "rule_id": "RENAL_METHOD",
+        "field": "renal_measure_type",
+        "operator": "in",
+        "value": [
+          "egfr",
+          "unknown"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Verify creatinine clearance in mL/min; indexed eGFR is not interchangeable with the source CrCl threshold.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Verify creatinine clearance in mL/min; indexed eGFR is not interchangeable with the source CrCl threshold."
+      },
+      {
+        "rule_id": "ELIGIBILITY_BIOMARKERS",
+        "field": "hr_positive_her2_positive",
+        "operator": "==",
+        "value": false,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "The NCCP indication requires HR-positive, HER2-positive early breast cancer; confirm the treatment setting and biomarker results.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The NCCP indication requires HR-positive, HER2-positive early breast cancer; confirm the treatment setting and biomarker results."
+      },
+      {
+        "rule_id": "ELIGIBILITY_INTERVAL",
+        "field": "months_since_trastuzumab",
+        "operator": ">=",
+        "value": 12,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "The indication specifies less than one year since adjuvant trastuzumab completion. Exactly 12 months or later is not automatic eligibility; confirm dates and consultant intent.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The indication specifies less than one year since adjuvant trastuzumab completion. Exactly 12 months or later is not automatic eligibility; confirm dates and consultant intent."
+      },
+      {
+        "rule_id": "ECOG",
+        "field": "ecog",
+        "operator": ">",
+        "value": 1,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "ECOG above 1 is outside the source eligibility criteria.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "ECOG above 1 is outside the source eligibility criteria."
+      },
+      {
+        "rule_id": "LVEF_BASELINE",
+        "all": [
+          {
+            "field": "assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "baseline_lvef_normal",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Baseline LVEF is not within normal range; do not initiate before specialist eligibility review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Baseline LVEF is not within normal range; do not initiate before specialist eligibility review."
+      },
+      {
+        "rule_id": "LVEF_CAUTION",
+        "field": "lvef_percent",
+        "operator": "<=",
+        "value": 45,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "LVEF at or below 45% is a source caution. Review cardiac status and the treatment plan; no automatic trastuzumab-style monitoring interval or dose rule is supplied.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "LVEF at or below 45% is a source caution. Review cardiac status and the treatment plan; no automatic trastuzumab-style monitoring interval or dose rule is supplied."
+      },
+      {
+        "rule_id": "SYMPTOMATIC_CHF",
+        "field": "symptomatic_chf",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "New or symptomatic heart failure requires prompt cardiac assessment before further neratinib; the source does not supply a numerical rechallenge rule.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "New or symptomatic heart failure requires prompt cardiac assessment before further neratinib; the source does not supply a numerical rechallenge rule."
       },
       {
         "rule_id": "EXCL_HEART",
@@ -491,11 +1027,14 @@
           "components": [
             "neratinib"
           ],
-          "recommendation": "History of heart disease is an NCCP exclusion."
+          "recommendation": "History of heart disease is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "History of heart disease is an NCCP exclusion."
       },
@@ -509,13 +1048,16 @@
           "components": [
             "neratinib"
           ],
-          "recommendation": "QTc >0.45 seconds is an NCCP exclusion."
+          "recommendation": "QTc above 0.45 seconds is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "QTc >0.45 seconds is an NCCP exclusion."
+        "explanation": "QTc above 0.45 seconds is an NCCP exclusion."
       },
       {
         "rule_id": "EXCL_GI",
@@ -527,49 +1069,16 @@
           "components": [
             "neratinib"
           ],
-          "recommendation": "GI disease with diarrhoea as the major symptom is an NCCP exclusion."
+          "recommendation": "Gastrointestinal disease with diarrhoea as the major symptom is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "GI disease with diarrhoea as the major symptom is an NCCP exclusion."
-      },
-      {
-        "rule_id": "EXCL_PREG",
-        "field": "pregnancy",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "neratinib"
-          ],
-          "recommendation": "Do not administer during pregnancy."
-        },
-        "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Do not administer during pregnancy."
-      },
-      {
-        "rule_id": "EXCL_BF",
-        "field": "breastfeeding",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "neratinib"
-          ],
-          "recommendation": "Do not administer while breastfeeding."
-        },
-        "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Do not administer while breastfeeding."
+        "explanation": "Gastrointestinal disease with diarrhoea as the major symptom is an NCCP exclusion."
       },
       {
         "rule_id": "BLOODS_DELAY",
@@ -590,13 +1099,80 @@
           "components": [
             "neratinib"
           ],
-          "recommendation": "Delay neratinib by one week and repeat blood counts."
+          "recommendation": "Both ANC ≤0.9 and platelets ≤99: the printed NCCP table specifies a one-week delay and repeat counts.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "ANC ≤0.9 and platelets ≤99 triggers a one-week delay."
+        "explanation": "Both ANC ≤0.9 and platelets ≤99: the printed NCCP table specifies a one-week delay and repeat counts."
+      },
+      {
+        "rule_id": "BLOODS_DISCORDANT",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "anc",
+                "operator": "<=",
+                "value": 0.9
+              },
+              {
+                "any": [
+                  {
+                    "field": "platelets",
+                    "operator": ">",
+                    "value": 99
+                  },
+                  {
+                    "field": "platelets",
+                    "operator": "missing"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "platelets",
+                "operator": "<=",
+                "value": 99
+              },
+              {
+                "any": [
+                  {
+                    "field": "anc",
+                    "operator": ">",
+                    "value": 0.9
+                  },
+                  {
+                    "field": "anc",
+                    "operator": "missing"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "A low count with a normal or missing counterpart is not assigned by the printed AND row. Do not clear treatment by assuming the other count; obtain clinical review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "A low count with a normal or missing counterpart is not assigned by the printed AND row. Do not clear treatment by assuming the other count; obtain clinical review."
       },
       {
         "rule_id": "CP_C",
@@ -604,53 +1180,139 @@
         "operator": "==",
         "value": "C",
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Child-Pugh C: use approximately 33% of the original dose with specialist verification."
+          "recommendation": "Source conflict: NCCP lists 33% of original dose for Child-Pugh C, but EMA contraindicates severe hepatic impairment. Do not calculate a dose or administer before oncology/pharmacy resolves this discrepancy.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "EMA product information supplement",
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nerlynx-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Child-Pugh C: use approximately 33% of the original dose with specialist verification."
+        "explanation": "Source conflict: NCCP lists 33% of original dose for Child-Pugh C, but EMA contraindicates severe hepatic impairment. Do not calculate a dose or administer before oncology/pharmacy resolves this discrepancy."
+      },
+      {
+        "rule_id": "RENAL_SEVERE_CONFLICT",
+        "all": [
+          {
+            "any": [
+              {
+                "field": "renal_measure_type",
+                "operator": "missing"
+              },
+              {
+                "field": "renal_measure_type",
+                "operator": "==",
+                "value": "crcl"
+              }
+            ]
+          },
+          {
+            "field": "crcl",
+            "operator": "<",
+            "value": 30
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Source conflict: NCCP anticipates no renal adjustment below CrCl 30, but EMA does not recommend treatment in severe renal impairment. Withhold pending specialist assessment; do not infer a full dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA product information supplement",
+          "page": 5,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nerlynx-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Source conflict: NCCP anticipates no renal adjustment below CrCl 30, but EMA does not recommend treatment in severe renal impairment. Withhold pending specialist assessment; do not infer a full dose."
+      },
+      {
+        "rule_id": "DIALYSIS_CONFLICT",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Source conflict: NCCP anticipates no dialysis adjustment, but EMA does not recommend use on dialysis. Resolve with oncology/pharmacy before treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA product information supplement",
+          "page": 5,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nerlynx-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Source conflict: NCCP anticipates no dialysis adjustment, but EMA does not recommend use on dialysis. Resolve with oncology/pharmacy before treatment."
       },
       {
         "rule_id": "GEN_G4",
-        "field": "other_toxicity_grade",
-        "operator": ">=",
-        "value": 4,
+        "any": [
+          {
+            "field": "other_toxicity_grade",
+            "operator": ">=",
+            "value": 4
+          },
+          {
+            "field": "hand_foot_grade",
+            "operator": ">=",
+            "value": 4
+          }
+        ],
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Permanently discontinue for grade 4 treatment-related toxicity."
+          "recommendation": "Grade 4 other treatment-related toxicity: permanently discontinue. Use the separate diarrhoea and hepatic pathways for those events.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Permanently discontinue for grade 4 treatment-related toxicity."
+        "explanation": "Grade 4 other treatment-related toxicity: permanently discontinue. Use the separate diarrhoea and hepatic pathways for those events."
       },
       {
         "rule_id": "GEN_G3",
-        "field": "other_toxicity_grade",
-        "operator": "==",
-        "value": 3,
+        "any": [
+          {
+            "field": "other_toxicity_grade",
+            "operator": "==",
+            "value": 3
+          },
+          {
+            "field": "hand_foot_grade",
+            "operator": "==",
+            "value": 3
+          }
+        ],
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "withhold",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Stop until recovery to grade 0-1/baseline within 3 weeks, then resume at the next lower dose; permanently discontinue if not recovered within 3 weeks."
+          "recommendation": "Grade 3 other toxicity: stop until grade 0–1 or baseline within three weeks, then consider the next lower current dose. If it has not recovered within three weeks, discontinue permanently.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Stop until recovery to grade 0-1/baseline within 3 weeks, then resume at the next lower dose; permanently discontinue if not recovered within 3 weeks."
+        "explanation": "Grade 3 other toxicity: stop until grade 0–1 or baseline within three weeks, then consider the next lower current dose. If it has not recovered within three weeks, discontinue permanently."
       },
       {
         "rule_id": "DELAY_GT3",
@@ -662,13 +1324,37 @@
           "components": [
             "neratinib"
           ],
-          "recommendation": "Permanently discontinue when treatment-related toxicity causes a delay longer than 3 weeks."
+          "recommendation": "Treatment-related toxicity causing a delay longer than three weeks requires permanent discontinuation.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00720 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Permanently discontinue when treatment-related toxicity causes a delay longer than 3 weeks."
+        "explanation": "Treatment-related toxicity causing a delay longer than three weeks requires permanent discontinuation."
+      },
+      {
+        "rule_id": "LOWEST_DOSE",
+        "field": "cannot_tolerate_120mg",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Unable to tolerate 120 mg daily: discontinue neratinib; do not invent another toxicity dose level.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Unable to tolerate 120 mg daily: discontinue neratinib; do not invent another toxicity dose level."
       },
       {
         "rule_id": "DIARR_COMPLICATED",
@@ -676,17 +1362,20 @@
         "operator": "==",
         "value": true,
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "withhold",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Interrupt neratinib, institute active diarrhoea management and hydration; resume according to time-to-recovery and dose-reduction pathway."
+          "recommendation": "Interrupt for diarrhoea with dehydration, fever, hypotension, renal failure or grade 3/4 neutropenia. Urgently assess hydration/electrolytes and cause. Restart depends on recovery time, not an automatic dose reduction.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Any-grade diarrhoea with complicated features requires interruption."
+        "explanation": "Interrupt for diarrhoea with dehydration, fever, hypotension, renal failure or grade 3/4 neutropenia. Urgently assess hydration/electrolytes and cause. Restart depends on recovery time, not an automatic dose reduction."
       },
       {
         "rule_id": "DIARR_G4",
@@ -698,16 +1387,19 @@
           "components": [
             "neratinib"
           ],
-          "recommendation": "Permanently discontinue neratinib for grade 4 diarrhoea."
+          "recommendation": "Grade 4 diarrhoea requires emergency clinical management and permanent neratinib discontinuation.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Grade 4 diarrhoea requires permanent discontinuation."
+        "explanation": "Grade 4 diarrhoea requires emergency clinical management and permanent neratinib discontinuation."
       },
       {
-        "rule_id": "DIARR_G3_LONG",
+        "rule_id": "DIARR_G3_OVER3W",
         "all": [
           {
             "field": "diarrhoea_grade",
@@ -717,120 +1409,625 @@
           {
             "field": "diarrhoea_duration_days",
             "operator": ">",
+            "value": 21
+          }
+        ],
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Grade 3 diarrhoea persisting longer than three weeks: permanently discontinue neratinib.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Grade 3 diarrhoea persisting longer than three weeks: permanently discontinue neratinib."
+      },
+      {
+        "rule_id": "DIARR_TWO_DAY_BOUNDARY",
+        "all": [
+          {
+            "field": "diarrhoea_grade",
+            "operator": "==",
+            "value": 3
+          },
+          {
+            "field": "diarrhoea_duration_days",
+            "operator": "==",
             "value": 2
           }
         ],
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "consultant_review",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Interrupt neratinib. If recovery to grade 0-1 occurs within 1 week resume same dose; if later, resume at a reduced dose. Permanently discontinue if grade 3 persists >3 weeks."
+          "recommendation": "Exactly two days of grade 3 diarrhoea overlaps the printed ≤2-day and 2-day-to-3-week rows. Obtain same-day clinical review and reconcile interruption; do not automatically continue or calculate a restart dose.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Grade 3 diarrhoea lasting over 2 days requires interruption."
+        "explanation": "Exactly two days of grade 3 diarrhoea overlaps the printed ≤2-day and 2-day-to-3-week rows. Obtain same-day clinical review and reconcile interruption; do not automatically continue or calculate a restart dose."
       },
       {
         "rule_id": "DIARR_G2_LONG",
         "all": [
           {
-            "field": "diarrhoea_grade",
-            "operator": "==",
-            "value": 2
+            "all": [
+              {
+                "field": "diarrhoea_grade",
+                "operator": "==",
+                "value": 2
+              },
+              {
+                "field": "diarrhoea_duration_days",
+                "operator": ">=",
+                "value": 5
+              }
+            ]
           },
           {
-            "field": "diarrhoea_duration_days",
-            "operator": ">=",
-            "value": 5
+            "field": "diarrhoea_optimal_therapy",
+            "operator": "==",
+            "value": true
           }
         ],
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "withhold",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Interrupt neratinib; resume according to time-to-recovery and dose-reduction pathway."
+          "recommendation": "Persistent grade 2 diarrhoea despite optimal therapy: interrupt neratinib and manage fluids/diet. Recovery within seven days allows consideration of the same dose; later recovery requires a reduced dose, with consultant review.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Grade 2 diarrhoea lasting 5 days or longer requires interruption."
+        "explanation": "Persistent grade 2 diarrhoea despite optimal therapy: interrupt neratinib and manage fluids/diet. Recovery within seven days allows consideration of the same dose; later recovery requires a reduced dose, with consultant review."
+      },
+      {
+        "rule_id": "DIARR_G2_CONTEXT",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "diarrhoea_grade",
+                "operator": "==",
+                "value": 2
+              },
+              {
+                "field": "diarrhoea_duration_days",
+                "operator": ">=",
+                "value": 5
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "diarrhoea_optimal_therapy",
+                "operator": "missing"
+              },
+              {
+                "field": "diarrhoea_optimal_therapy",
+                "operator": "==",
+                "value": false
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Persistent grade 2 diarrhoea needs prompt clinical management. Confirm optimal therapy and complications before applying the interruption/restart table; no clearance or automatic dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Persistent grade 2 diarrhoea needs prompt clinical management. Confirm optimal therapy and complications before applying the interruption/restart table; no clearance or automatic dose."
+      },
+      {
+        "rule_id": "DIARR_G3_LONG",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "diarrhoea_grade",
+                "operator": "==",
+                "value": 3
+              },
+              {
+                "field": "diarrhoea_duration_days",
+                "operator": ">",
+                "value": 2
+              },
+              {
+                "field": "diarrhoea_duration_days",
+                "operator": "<=",
+                "value": 21
+              }
+            ]
+          },
+          {
+            "field": "diarrhoea_optimal_therapy",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Persistent grade 3 diarrhoea despite optimal therapy: interrupt neratinib and manage fluids/diet. Recovery within seven days allows consideration of the same dose; later recovery requires a reduced dose, with consultant review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Persistent grade 3 diarrhoea despite optimal therapy: interrupt neratinib and manage fluids/diet. Recovery within seven days allows consideration of the same dose; later recovery requires a reduced dose, with consultant review."
+      },
+      {
+        "rule_id": "DIARR_G3_CONTEXT",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "diarrhoea_grade",
+                "operator": "==",
+                "value": 3
+              },
+              {
+                "field": "diarrhoea_duration_days",
+                "operator": ">",
+                "value": 2
+              },
+              {
+                "field": "diarrhoea_duration_days",
+                "operator": "<=",
+                "value": 21
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "diarrhoea_optimal_therapy",
+                "operator": "missing"
+              },
+              {
+                "field": "diarrhoea_optimal_therapy",
+                "operator": "==",
+                "value": false
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Persistent grade 3 diarrhoea needs prompt clinical management. Confirm optimal therapy and complications before applying the interruption/restart table; no clearance or automatic dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Persistent grade 3 diarrhoea needs prompt clinical management. Confirm optimal therapy and complications before applying the interruption/restart table; no clearance or automatic dose."
+      },
+      {
+        "rule_id": "DIARR_DURATION_MISSING",
+        "all": [
+          {
+            "field": "diarrhoea_grade",
+            "operator": "in",
+            "value": [
+              2,
+              3
+            ]
+          },
+          {
+            "field": "diarrhoea_duration_days",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Record diarrhoea duration, complications and treatment before applying the source decision pathway.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Record diarrhoea duration, complications and treatment before applying the source decision pathway."
+      },
+      {
+        "rule_id": "DIARR_RECUR120",
+        "all": [
+          {
+            "field": "diarrhoea_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "current_dose_mg",
+            "operator": "==",
+            "value": 120
+          },
+          {
+            "field": "diarrhoea_recurrence",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Recurrent grade 2 or worse diarrhoea at 120 mg daily: permanently discontinue neratinib.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Recurrent grade 2 or worse diarrhoea at 120 mg daily: permanently discontinue neratinib."
+      },
+      {
+        "rule_id": "DIARR_RESTART_MISSING",
+        "all": [
+          {
+            "field": "restart_after_diarrhoea",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "field": "diarrhoea_grade",
+                "operator": "missing"
+              },
+              {
+                "field": "diarrhoea_recovery_days",
+                "operator": "missing"
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Recovery grade and time to recovery are both required to apply the restart table; missing context does not establish a restart dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Recovery grade and time to recovery are both required to apply the restart table; missing context does not establish a restart dose."
+      },
+      {
+        "rule_id": "DIARR_RESTART_ACTIVE",
+        "all": [
+          {
+            "field": "restart_after_diarrhoea",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diarrhoea_grade",
+            "operator": ">",
+            "value": 1
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Do not restart while diarrhoea remains above grade 1.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Do not restart while diarrhoea remains above grade 1."
+      },
+      {
+        "rule_id": "DIARR_RESTART_EARLY",
+        "all": [
+          {
+            "field": "restart_after_diarrhoea",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diarrhoea_grade",
+            "operator": "<=",
+            "value": 1
+          },
+          {
+            "field": "diarrhoea_recovery_days",
+            "operator": "<=",
+            "value": 7
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Diarrhoea recovered to grade 0–1 within seven days: the source permits the same prior dose. Verify complications, recurrence, other toxicity and the authorised prescription before restarting.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Diarrhoea recovered to grade 0–1 within seven days: the source permits the same prior dose. Verify complications, recurrence, other toxicity and the authorised prescription before restarting."
+      },
+      {
+        "rule_id": "DIARR_RESTART_LATE",
+        "all": [
+          {
+            "field": "restart_after_diarrhoea",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diarrhoea_grade",
+            "operator": "<=",
+            "value": 1
+          },
+          {
+            "field": "diarrhoea_recovery_days",
+            "operator": ">",
+            "value": 7
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Diarrhoea recovered after seven days: source restart is at a reduced dose. Check duration of interruption and current dose; do not automatically prescribe the initial dose ladder.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Diarrhoea recovered after seven days: source restart is at a reduced dose. Check duration of interruption and current dose; do not automatically prescribe the initial dose ladder."
       },
       {
         "rule_id": "ALT_G4",
-        "field": "alt_grade",
-        "operator": ">=",
-        "value": 4,
+        "any": [
+          {
+            "field": "alt_grade",
+            "operator": ">=",
+            "value": 4
+          },
+          {
+            "field": "alt_uln",
+            "operator": ">",
+            "value": 20
+          }
+        ],
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Permanently discontinue for grade 4 ALT elevation."
+          "recommendation": "Grade 4 ALT elevation (>20 × ULN): permanently discontinue and investigate other causes.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Permanently discontinue for grade 4 ALT elevation."
+        "explanation": "Grade 4 ALT elevation (>20 × ULN): permanently discontinue and investigate other causes."
       },
       {
         "rule_id": "BILI_G4",
-        "field": "bilirubin_grade",
-        "operator": ">=",
-        "value": 4,
+        "any": [
+          {
+            "field": "bilirubin_grade",
+            "operator": ">=",
+            "value": 4
+          },
+          {
+            "field": "bilirubin_uln",
+            "operator": ">",
+            "value": 10
+          }
+        ],
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Permanently discontinue for grade 4 bilirubin elevation."
+          "recommendation": "Grade 4 bilirubin elevation (>10 × ULN): permanently discontinue and investigate other causes.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Permanently discontinue for grade 4 bilirubin elevation."
+        "explanation": "Grade 4 bilirubin elevation (>10 × ULN): permanently discontinue and investigate other causes."
       },
       {
-        "rule_id": "ALT_G3",
-        "field": "alt_grade",
-        "operator": "==",
-        "value": 3,
+        "rule_id": "HEPATIC_G3",
+        "any": [
+          {
+            "field": "alt_grade",
+            "operator": "==",
+            "value": 3
+          },
+          {
+            "field": "bilirubin_grade",
+            "operator": "==",
+            "value": 3
+          },
+          {
+            "all": [
+              {
+                "field": "alt_uln",
+                "operator": ">",
+                "value": 5
+              },
+              {
+                "field": "alt_uln",
+                "operator": "<=",
+                "value": 20
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "bilirubin_uln",
+                "operator": ">",
+                "value": 3
+              },
+              {
+                "field": "bilirubin_uln",
+                "operator": "<=",
+                "value": 10
+              }
+            ]
+          }
+        ],
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "withhold",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Stop until recovery to grade 0-1; if recovered within 3 weeks resume at the next lower dose. Discontinue for recurrence or persistence beyond 3 weeks."
+          "recommendation": "Grade 3 ALT (>5–20 × ULN) or bilirubin (>3–10 × ULN): stop and investigate causes. After grade 0–1 recovery within three weeks, consider the next lower current dose; recurrent grade 3 after reduction or persistence beyond three weeks requires permanent discontinuation.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Stop until recovery to grade 0-1; if recovered within 3 weeks resume at the next lower dose. Discontinue for recurrence or persistence beyond 3 weeks."
+        "explanation": "Grade 3 ALT (>5–20 × ULN) or bilirubin (>3–10 × ULN): stop and investigate causes. After grade 0–1 recovery within three weeks, consider the next lower current dose; recurrent grade 3 after reduction or persistence beyond three weeks requires permanent discontinuation."
       },
       {
-        "rule_id": "BILI_G3",
-        "field": "bilirubin_grade",
-        "operator": "==",
-        "value": 3,
+        "rule_id": "HEPATIC_RECURRENCE",
+        "all": [
+          {
+            "any": [
+              {
+                "field": "alt_grade",
+                "operator": "==",
+                "value": 3
+              },
+              {
+                "field": "bilirubin_grade",
+                "operator": "==",
+                "value": 3
+              },
+              {
+                "all": [
+                  {
+                    "field": "alt_uln",
+                    "operator": ">",
+                    "value": 5
+                  },
+                  {
+                    "field": "alt_uln",
+                    "operator": "<=",
+                    "value": 20
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "bilirubin_uln",
+                    "operator": ">",
+                    "value": 3
+                  },
+                  {
+                    "field": "bilirubin_uln",
+                    "operator": "<=",
+                    "value": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "hepatic_grade3_recurrence",
+            "operator": "==",
+            "value": true
+          }
+        ],
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "permanently_discontinue",
           "components": [
             "neratinib"
           ],
-          "recommendation": "Stop until recovery to grade 0-1; if recovered within 3 weeks resume at the next lower dose. Discontinue for recurrence or persistence beyond 3 weeks."
+          "recommendation": "Grade 3 ALT/bilirubin recurring despite one dose reduction: permanently discontinue neratinib.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Stop until recovery to grade 0-1; if recovered within 3 weeks resume at the next lower dose. Discontinue for recurrence or persistence beyond 3 weeks."
+        "explanation": "Grade 3 ALT/bilirubin recurring despite one dose reduction: permanently discontinue neratinib."
       },
       {
         "rule_id": "CYP_INH",
@@ -842,13 +2039,309 @@
           "components": [
             "neratinib"
           ],
-          "recommendation": "Avoid strong/moderate CYP3A and P-gp inhibitors where possible; specialist dose adjustment and pharmacy review are required if unavoidable."
+          "recommendation": "Confirm inhibitor strength and whether it can be stopped. Strong/moderate CYP3A4/P-gp inhibitors can increase toxicity; no automatic dose selection from this legacy yes/no field.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00720 v2",
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Avoid strong/moderate CYP3A and P-gp inhibitors where possible; specialist dose adjustment and pharmacy review are required if unavoidable."
+        "explanation": "Confirm inhibitor strength and whether it can be stopped. Strong/moderate CYP3A4/P-gp inhibitors can increase toxicity; no automatic dose selection from this legacy yes/no field."
+      },
+      {
+        "rule_id": "CYP_STOPPED",
+        "field": "cyp3a_pgp_inhibitor_recently_stopped",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "NCCP says to resume the previous neratinib dose of 240 mg after the inhibitor is stopped. If the pre-interaction dose was already reduced, this wording needs oncology/pharmacy reconciliation. Confirm inhibitor clearance and prior toxicity; do not automatically reset to 240 mg.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "NCCP says to resume the previous neratinib dose of 240 mg after the inhibitor is stopped. If the pre-interaction dose was already reduced, this wording needs oncology/pharmacy reconciliation. Confirm inhibitor clearance and prior toxicity; do not automatically reset to 240 mg."
+      },
+      {
+        "rule_id": "CYP_UNKNOWN",
+        "field": "cyp3a_pgp_inhibitor_strength",
+        "operator": "==",
+        "value": "unknown",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Confirm the inhibitor and its interaction strength before selecting any neratinib dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Confirm the inhibitor and its interaction strength before selecting any neratinib dose."
+      },
+      {
+        "rule_id": "CYP_STRONG",
+        "field": "cyp3a_pgp_inhibitor_strength",
+        "operator": "==",
+        "value": "strong",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Avoid a strong CYP3A4/P-gp inhibitor. If unavoidable, source interaction dose is 40 mg once daily under specialist/pharmacy direction. This is a distinct interaction adjustment, not the routine toxicity ladder.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Avoid a strong CYP3A4/P-gp inhibitor. If unavoidable, source interaction dose is 40 mg once daily under specialist/pharmacy direction. This is a distinct interaction adjustment, not the routine toxicity ladder."
+      },
+      {
+        "rule_id": "CYP_MODERATE",
+        "field": "cyp3a_pgp_inhibitor_strength",
+        "operator": "==",
+        "value": "moderate",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Avoid a moderate CYP3A4/P-gp inhibitor. If unavoidable, source starts at 40 mg daily; if tolerated consider 80 mg for at least a week, then 120 mg for at least a week, to maximum 160 mg. A supervised prescription and toxicity monitoring are required.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Avoid a moderate CYP3A4/P-gp inhibitor. If unavoidable, source starts at 40 mg daily; if tolerated consider 80 mg for at least a week, then 120 mg for at least a week, to maximum 160 mg. A supervised prescription and toxicity monitoring are required."
+      },
+      {
+        "rule_id": "INDUCER_STRONG",
+        "field": "cyp3a_pgp_inducer",
+        "operator": "==",
+        "value": "strong",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Strong CYP3A4/P-gp inducers are contraindicated by EMA because exposure and efficacy may fall.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA product information supplement",
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nerlynx-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Strong CYP3A4/P-gp inducers are contraindicated by EMA because exposure and efficacy may fall."
+      },
+      {
+        "rule_id": "INDUCER_MODERATE",
+        "field": "cyp3a_pgp_inducer",
+        "operator": "in",
+        "value": [
+          "moderate",
+          "unknown"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Avoid moderate CYP3A4/P-gp inducers and resolve unconfirmed interactions before treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Avoid moderate CYP3A4/P-gp inducers and resolve unconfirmed interactions before treatment."
+      },
+      {
+        "rule_id": "ACID_PPI",
+        "field": "acid_suppressant",
+        "operator": "==",
+        "value": "ppi",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Proton-pump inhibitor coadministration is not recommended because neratinib absorption may fall.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA product information supplement",
+          "page": 5,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nerlynx-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Proton-pump inhibitor coadministration is not recommended because neratinib absorption may fall."
+      },
+      {
+        "rule_id": "ACID_H2",
+        "field": "acid_suppressant",
+        "operator": "==",
+        "value": "h2",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Take neratinib at least two hours before or ten hours after an H2 blocker; confirm the actual medicine schedule.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA product information supplement",
+          "page": 5,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nerlynx-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Take neratinib at least two hours before or ten hours after an H2 blocker; confirm the actual medicine schedule."
+      },
+      {
+        "rule_id": "ACID_ANTACID",
+        "field": "acid_suppressant",
+        "operator": "==",
+        "value": "antacid",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Separate neratinib and antacid dosing by at least three hours; confirm the actual medicine schedule.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA product information supplement",
+          "page": 5,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nerlynx-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Separate neratinib and antacid dosing by at least three hours; confirm the actual medicine schedule."
+      },
+      {
+        "rule_id": "PGP_SUBSTRATE",
+        "field": "pgp_narrow_therapeutic_index_substrate",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Review and closely monitor narrow therapeutic-index P-gp substrates; specialist interaction advice is required.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Review and closely monitor narrow therapeutic-index P-gp substrates; specialist interaction advice is required."
+      },
+      {
+        "rule_id": "PROPHYLAXIS",
+        "all": [
+          {
+            "field": "assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "diarrhoea_prophylaxis_confirmed",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Confirm anti-diarrhoeal prophylaxis before the first dose and through the first two months, with written escalation and hydration advice.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Confirm anti-diarrhoeal prophylaxis before the first dose and through the first two months, with written escalation and hydration advice."
+      },
+      {
+        "rule_id": "INVALID_ASSESSMENT_STAGE",
+        "field": "assessment_stage",
+        "operator": "not_in",
+        "value": [
+          "baseline",
+          "ongoing",
+          "restart"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Unrecognised assessment stage: verify entered context before treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Unrecognised assessment stage: verify entered context before treatment."
+      },
+      {
+        "rule_id": "INVALID_RENAL_MEASURE_TYPE",
+        "field": "renal_measure_type",
+        "operator": "not_in",
+        "value": [
+          "crcl",
+          "egfr",
+          "unknown"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "neratinib"
+          ],
+          "recommendation": "Unrecognised renal measure type: verify entered context before treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00720 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Unrecognised renal measure type: verify entered context before treatment."
       }
     ]
   },
@@ -865,9 +2358,61 @@
     "script_id": "nccp-oral-minimal-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Oral SACT classification from NCCP V6 Table 8.",
+    "mapping_basis": "NCCP oral classification v6 Table 8: minimal-to-low; diarrhoea prevention is a separate requirement.",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
-    "breakthrough_profile_id": "nccp-breakthrough-general"
-  }
+    "validation_status": "source_reconciled_pending_oncology_pharmacy_review",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "regimen_specific_notes": [
+      "Loperamide from the first dose: NCCP weeks 1–2 4 mg three times daily; weeks 3–8 4 mg twice daily; weeks 9–52 4 mg as required. Titrate to 1–2 bowel movements/day and provide individual maximum-dose/escalation instructions.",
+      "FBC monthly for six months then every three months. LFTs at week 1, monthly for three months, then every six weeks. Extra tests are needed for toxicity.",
+      "Baseline renal/hepatic profile; cardiac function/LVEF when clinically indicated. Do not copy a routine trastuzumab echo calendar.",
+      "Take whole tablets with food, preferably morning. Do not replace missed doses. Review acid suppression, CYP3A4/P-gp medicines, grapefruit and pomegranate.",
+      "CONTROL dose escalation is evidence for tolerability but is not the 240 mg initial schedule printed in NCCP v2; any alternative requires local approval."
+    ],
+    "source_url": "https://healthservice.hse.ie/documents/6596/720_v2_Neratinib.pdf",
+    "source_checked_date": "2026-10-25",
+    "phase_specific_plan": "patient/00720/supportive-care.html"
+  },
+  "dose_levels": {
+    "neratinib": {
+      "0": {
+        "value": 240,
+        "unit": "mg once daily"
+      },
+      "-1": {
+        "value": 200,
+        "unit": "mg once daily"
+      },
+      "-2": {
+        "value": 160,
+        "unit": "mg once daily"
+      },
+      "-3": {
+        "value": 120,
+        "unit": "mg once daily"
+      }
+    }
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "continuous",
+      "label": "Neratinib continuous oral treatment",
+      "cycle_length_days": 28,
+      "duration_text": "For 1 year, unless progression or unacceptable toxicity",
+      "administration": [
+        {
+          "drug": "neratinib",
+          "dose": {
+            "value": 240,
+            "unit": "mg once daily"
+          },
+          "days": "Continuous",
+          "route": "PO",
+          "order": 1,
+          "notes": "Neratinib 240 mg orally once daily with food for one year, starting within one year after adjuvant trastuzumab; prescribed reductions or interruption may be needed. The 28-day display is a review block, not a tablet-free interval."
+        }
+      ],
+      "schedule_interval_label": "Continuous daily oral treatment"
+    }
+  ]
 }

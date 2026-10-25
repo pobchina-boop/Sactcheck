@@ -49,9 +49,10 @@ assert.strictEqual(catalogue.protocols.length, 376);
 // v0.84.17 adds EC90, EC75, FEC100, FEC50 and AT schedules.
 // v0.84.18 adds oral CMF, IV CMF q28/q21 and gemcitabine 800 schedules;
 // gemcitabine/carboplatin already had a schedule and is corrected in place.
-assert.strictEqual(usefulCoverage, 138);
-assert.strictEqual(scheduleCoverage, 136);
-assert.strictEqual(doseLevelCoverage, 45);
+// v0.84.19 adds structured talazoparib and neratinib schedules; combination schedules are corrected in place.
+assert.strictEqual(usefulCoverage, 140);
+assert.strictEqual(scheduleCoverage, 138);
+assert.strictEqual(doseLevelCoverage, 49);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');

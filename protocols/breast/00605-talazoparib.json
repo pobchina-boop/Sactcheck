@@ -15,8 +15,9 @@
     "source_url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
     "published_date": "2021-05-01",
     "review_date": "2028-09-06",
-    "sactcheck_encoding_version": "0.37.0",
+    "sactcheck_encoding_version": "0.84.19",
     "treatment_setting": [
+      "locally_advanced",
       "metastatic"
     ],
     "catalog": {
@@ -32,7 +33,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation"
     },
     "catalogue_section": "targeted_her2_therapy",
     "catalogue_section_label": "Targeted & HER2 therapies",
@@ -56,19 +57,40 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source reconciled encoding · independent clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "audit_release": "0.68.0",
       "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "scope_note": "Source-specific oral dosing, toxicity history, eligibility and supportive care; source conflicts require specialist review.",
+      "reconciled_release": "0.84.19",
+      "reconciled_date": "2026-10-25"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00605-v2"
+    "canonical_protocol_id": "nccp-00605-v2",
+    "source_checked_date": "2026-10-25",
+    "source_version_verified_date": "2026-10-25",
+    "source_version_verified": true,
+    "full_suite_release": "0.84.19",
+    "source_supplements": [
+      {
+        "title": "EMA Talzenna product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/talzenna-epar-product-information_en.pdf",
+        "checked": "2026-10-25",
+        "scope": "Breast monotherapy; formulation, organ function, interactions and unresolved NCCP/SmPC differences"
+      }
+    ],
+    "schedule_summary": "Talazoparib is taken once daily continuously until disease progression or unacceptable toxicity. The usual starting dose is 1 mg; kidney function, interactions and side effects can require a different prescription.",
+    "source_boundaries": [
+      "Renal selector was previously <15 versus ≥15 only; four correct CrCl intervals are now reachable through numeric entry. EMA specifies 15≤CrCl<30 and 30≤CrCl<60.",
+      "Renal doses are recommended starting doses; toxicity reduction and P-gp interaction adjustments depend on current history.",
+      "The source does not require dose reduction for mild, moderate or severe hepatic impairment in breast monotherapy. Prostate combination dosing must not be imported."
+    ],
+    "source_schedule_interval_label": "Continuous daily oral treatment"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -84,20 +106,23 @@
   "treatment_phases": [
     {
       "phase_id": "continuous",
+      "label": "Talazoparib continuous oral treatment",
       "cycle_length_days": 28,
+      "duration_text": "Until progression or unacceptable toxicity",
       "administration": [
         {
-          "day": "daily",
-          "order": 1,
           "drug": "talazoparib",
           "dose": {
             "value": 1,
-            "unit": "mg"
+            "unit": "mg once daily"
           },
+          "days": "Continuous",
           "route": "PO",
-          "administration_note": "Continuous once daily until progression or unacceptable toxicity. Do not replace a vomited or missed dose."
+          "order": 1,
+          "notes": "Talazoparib 1 mg orally once daily continuously until progression or unacceptable toxicity; renal function, interactions and toxicity may require a lower prescription. The 28-day display is a review block, not a tablet-free interval."
         }
-      ]
+      ],
+      "schedule_interval_label": "Continuous daily oral treatment"
     }
   ],
   "input_definitions": {
@@ -135,34 +160,22 @@
       "input_role": "decision"
     },
     "crcl": {
-      "label": "Creatinine clearance category",
-      "type": "select",
+      "label": "Creatinine clearance (mL/min)",
+      "type": "number",
       "required": false,
-      "demo_value": "renal_15_plus",
+      "min": 0,
+      "max": 250,
+      "step": 0.01,
       "unit": "mL/min",
-      "options": [
-        {
-          "value": "renal_0_14",
-          "label": "<15 mL/min",
-          "decision_value": 7,
-          "range_min_inclusive": 0,
-          "range_max_inclusive": 14
-        },
-        {
-          "value": "renal_15_plus",
-          "label": ">=15 mL/min",
-          "decision_value": 15,
-          "range_min_inclusive": 15,
-          "range_max_inclusive": null
-        }
-      ],
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": 80,
       "renal_input": {
-        "mode": "protocol_specific_band",
-        "source": "Encoded rule thresholds",
-        "exact_value_required": false
-      },
-      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation.",
-      "input_role": "decision"
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+        "reason": "Continuous entry preserves the source renal thresholds; EMA defines the exact half-open CrCl bands and clarifies the severe-impairment limitations."
+      }
     },
     "bilirubin_uln": {
       "label": "Bilirubin (× ULN)",
@@ -187,42 +200,38 @@
       "input_role": "context"
     },
     "nonhaem_toxicity_grade": {
-      "label": "Worst non-haematological toxicity grade",
+      "label": "NCCP non-haematological toxicity grade",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "label": "Grade 0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "label": "Grade 1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "label": "Grade 2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
+          "label": "Grade 3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "label": "Grade 4"
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Name the exact non-haematological adverse event first and apply that event's own CTCAE v5.0 criterion. The general Grade 1-4 severity anchors are a screening aid only and are not a substitute for the named term.",
-      "input_role": "decision"
+      "grading_source_label": "NCCP named toxicity grade",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+      "source_grading_note": "The source gives grade 3/4 actions without naming a CTCAE edition. The regimen is not a complete grading table; identify the named adverse event and verify its grade.",
+      "assessment_guidance": "The source gives grade 3/4 actions without naming a CTCAE edition.",
+      "ctcae_category": "other_nonhaematological"
     },
     "strong_pgp_inhibitor": {
       "label": "Unavoidable strong P-gp inhibitor",
@@ -267,11 +276,312 @@
       "input_role": "decision"
     },
     "breastfeeding": {
-      "label": "Breast-feeding",
+      "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first dose"
+        },
+        {
+          "value": "ongoing",
+          "label": "During treatment"
+        },
+        {
+          "value": "restart",
+          "label": "Restart after interruption"
+        }
+      ],
+      "demo_value": "baseline"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity to this medicine or excipients",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant or pregnancy test positive",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pretreatment_tests_unresolved": {
+      "label": "Required blood tests / eligibility checks unresolved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "renal_measure_type": {
+      "label": "Renal measure used",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "crcl",
+          "label": "Creatinine clearance (mL/min)"
+        },
+        {
+          "value": "egfr",
+          "label": "Indexed eGFR only"
+        },
+        {
+          "value": "unknown",
+          "label": "Method not confirmed"
+        }
+      ],
+      "demo_value": "crcl"
+    },
+    "brca_status": {
+      "label": "Germline BRCA1/2 status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "eligible",
+          "label": "Deleterious / suspected deleterious mutation, validated test"
+        },
+        {
+          "value": "not_eligible",
+          "label": "No qualifying germline BRCA1/2 mutation"
+        },
+        {
+          "value": "unknown",
+          "label": "Result not confirmed"
+        }
+      ],
+      "demo_value": "eligible"
+    },
+    "her2_status": {
+      "label": "HER2 status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "negative",
+          "label": "Negative"
+        },
+        {
+          "value": "positive",
+          "label": "Positive"
+        },
+        {
+          "value": "unknown",
+          "label": "Not confirmed"
+        }
+      ],
+      "demo_value": "negative"
+    },
+    "prior_chemotherapy_eligibility": {
+      "label": "Prior anthracycline / taxane",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "met",
+          "label": "Previously received or medically unsuitable"
+        },
+        {
+          "value": "not_met",
+          "label": "Neither given and no documented unsuitability"
+        },
+        {
+          "value": "unknown",
+          "label": "Not confirmed"
+        }
+      ],
+      "demo_value": "met"
+    },
+    "hr_positive_endocrine_eligibility": {
+      "label": "HR-positive endocrine requirement",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "met",
+          "label": "Prior endocrine therapy or unsuitable"
+        },
+        {
+          "value": "not_met",
+          "label": "HR-positive, requirement not met"
+        },
+        {
+          "value": "not_applicable",
+          "label": "HR-negative"
+        },
+        {
+          "value": "unknown",
+          "label": "Not confirmed"
+        }
+      ],
+      "demo_value": "met"
+    },
+    "prior_advanced_chemo_regimens": {
+      "label": "Prior chemotherapy-inclusive regimens for advanced disease",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "regimens",
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": 0
+    },
+    "platinum_progression_advanced": {
+      "label": "Progression during platinum for advanced disease",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "platinum_relapse_under6mo": {
+      "label": "Relapse within 6 months after adjuvant/neoadjuvant platinum",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "active_inflammatory_breast_cancer": {
+      "label": "Active inflammatory breast cancer",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "significant_cardiac_exclusion": {
+      "label": "MI in last 6 months, symptomatic CHF NYHA >II, unstable angina or treated unstable arrhythmia",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_haem_toxicity_recovered": {
+      "label": "Prior-treatment haematological toxicity recovered to grade ≤1",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "restart_for_hb": {
+      "label": "Restart after haemoglobin-related interruption",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "restart_for_anc": {
+      "label": "Restart after neutropenia-related interruption",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "restart_for_platelets": {
+      "label": "Restart after platelet-related interruption",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_dose_mg": {
+      "label": "Current talazoparib dose (mg daily)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "1 mg"
+        },
+        {
+          "value": 0.75,
+          "label": "0.75 mg"
+        },
+        {
+          "value": 0.5,
+          "label": "0.5 mg"
+        },
+        {
+          "value": 0.25,
+          "label": "0.25 mg"
+        }
+      ],
+      "demo_value": 1
+    },
+    "strong_bcrp_inhibitor": {
+      "label": "Strong BCRP inhibitor",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pgp_inhibitor_recently_stopped": {
+      "label": "Strong P-gp inhibitor recently stopped",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "dose_not_tolerated_at025": {
+      "label": "Further toxicity reduction needed at 0.25 mg daily",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -280,241 +590,49 @@
     "coverage_gap": "Only entered values were assessed; unentered clinically relevant fields remain unassessed."
   },
   "rule_engine": {
-    "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "report_unassessed_coverage_gap",
-    "actions_ranked_most_to_least_restrictive": [
-      "permanently_discontinue",
-      "contraindicated",
-      "discontinue",
-      "withhold_then_reduce",
-      "withhold",
-      "dose_reduce_one_level",
-      "consultant_review",
-      "proceed_with_caution",
-      "proceed"
-    ],
+    "evaluation_mode": "highest_priority_triggered",
     "rules": [
       {
-        "rule_id": "HB_INTERRUPT",
-        "field": "hb_g_dl",
-        "operator": "<",
-        "value": 8,
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "Withhold talazoparib. Resume only when Hb ≥9 g/dL and at the next lower dose level."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold talazoparib. Resume only when Hb ≥9 g/dL and at the next lower dose level."
-      },
-      {
-        "rule_id": "ANC_INTERRUPT",
-        "field": "anc",
-        "operator": "<",
-        "value": 1.0,
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "Withhold talazoparib. Resume only when ANC ≥1.5 ×10⁹/L and at the next lower dose level."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold talazoparib. Resume only when ANC ≥1.5 ×10⁹/L and at the next lower dose level."
-      },
-      {
-        "rule_id": "PLT_INTERRUPT",
-        "field": "platelets",
-        "operator": "<",
-        "value": 50,
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "Withhold talazoparib. Resume only when platelets ≥75 ×10⁹/L and at the next lower dose level."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold talazoparib. Resume only when platelets ≥75 ×10⁹/L and at the next lower dose level."
-      },
-      {
-        "rule_id": "RENAL_30_59",
-        "field": "crcl",
-        "operator": "between",
-        "value": [
-          30,
-          59.999
-        ],
-        "action": {
-          "type": "dose_reduce_one_level",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "Creatinine clearance 30–59 mL/min: recommended starting dose is 0.75 mg once daily."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Creatinine clearance 30–59 mL/min: recommended starting dose is 0.75 mg once daily."
-      },
-      {
-        "rule_id": "RENAL_15_29",
-        "field": "crcl",
-        "operator": "between",
-        "value": [
-          15,
-          29.999
-        ],
-        "action": {
-          "type": "dose_reduce_one_level",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "Creatinine clearance 15–29 mL/min: recommended starting dose is 0.5 mg once daily."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Creatinine clearance 15–29 mL/min: recommended starting dose is 0.5 mg once daily."
-      },
-      {
-        "rule_id": "RENAL_LT15",
-        "field": "crcl",
-        "operator": "<",
-        "value": 15,
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "CrCl <15 mL/min or haemodialysis: talazoparib has not been studied; no dosing recommendation is available."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "CrCl <15 mL/min or haemodialysis: talazoparib has not been studied; no dosing recommendation is available."
-      },
-      {
-        "rule_id": "NONHAEM_G3",
-        "field": "nonhaem_toxicity_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "Withhold for grade 3–4 non-haematological toxicity until recovery to grade ≤1; consider resuming at the next lower dose or discontinue."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold for grade 3–4 non-haematological toxicity until recovery to grade ≤1; consider resuming at the next lower dose or discontinue."
-      },
-      {
-        "rule_id": "PGP_STRONG",
-        "field": "strong_pgp_inhibitor",
+        "rule_id": "EXCL_HS",
+        "field": "hypersensitivity",
         "operator": "==",
         "value": true,
         "action": {
-          "type": "dose_reduce_one_level",
+          "type": "contraindicated",
           "components": [
             "talazoparib"
           ],
-          "recommendation": "Avoid strong P-gp inhibitors. If unavoidable, reduce talazoparib to the next lower dose and reassess after the inhibitor is stopped."
+          "recommendation": "Hypersensitivity: do not administer talazoparib.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Avoid strong P-gp inhibitors. If unavoidable, reduce talazoparib to the next lower dose and reassess after the inhibitor is stopped."
+        "explanation": "Hypersensitivity: do not administer talazoparib."
       },
       {
-        "rule_id": "MDS_CONF",
-        "field": "suspected_mds_aml",
+        "rule_id": "PREGNANCY",
+        "field": "pregnancy",
         "operator": "==",
-        "value": "confirmed",
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "Confirmed MDS/AML: discontinue talazoparib."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Confirmed MDS/AML: discontinue talazoparib."
-      },
-      {
-        "rule_id": "MDS_SUSP",
-        "field": "suspected_mds_aml",
-        "operator": "==",
-        "value": "suspected",
+        "value": true,
         "action": {
           "type": "withhold",
           "components": [
             "talazoparib"
           ],
-          "recommendation": "Suspected MDS/AML or persistent unexplained cytopenia: withhold and investigate, including haematology review as appropriate."
+          "recommendation": "Do not start or continue pending urgent specialist pregnancy review; talazoparib can harm the fetus.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00605 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Suspected MDS/AML or persistent unexplained cytopenia: withhold and investigate, including haematology review as appropriate."
-      },
-      {
-        "rule_id": "PRIOR_PARP",
-        "field": "prior_parp_inhibitor",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "Prior PARP inhibitor treatment is listed as an NCCP exclusion."
-        },
-        "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Prior PARP inhibitor treatment is listed as an NCCP exclusion."
-      },
-      {
-        "rule_id": "CNS_LMD",
-        "field": "symptomatic_cns_or_leptomeningeal",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "talazoparib"
-          ],
-          "recommendation": "Symptomatic CNS metastases or leptomeningeal disease is listed as an NCCP exclusion."
-        },
-        "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Symptomatic CNS metastases or leptomeningeal disease is listed as an NCCP exclusion."
+        "explanation": "Do not start or continue pending urgent specialist pregnancy review; talazoparib can harm the fetus."
       },
       {
         "rule_id": "BREASTFEED",
@@ -526,13 +644,1074 @@
           "components": [
             "talazoparib"
           ],
-          "recommendation": "Breast-feeding is an NCCP exclusion during talazoparib treatment."
+          "recommendation": "Do not administer while breastfeeding.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
+          "document": "NCCP 00605 v2",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Breast-feeding is an NCCP exclusion during talazoparib treatment."
+        "explanation": "Do not administer while breastfeeding."
+      },
+      {
+        "rule_id": "TESTS_UNRESOLVED",
+        "field": "pretreatment_tests_unresolved",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Resolve the required baseline and ongoing blood tests, eligibility and interaction checks before prescribing.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Resolve the required baseline and ongoing blood tests, eligibility and interaction checks before prescribing."
+      },
+      {
+        "rule_id": "RENAL_METHOD",
+        "field": "renal_measure_type",
+        "operator": "in",
+        "value": [
+          "egfr",
+          "unknown"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Verify creatinine clearance in mL/min; indexed eGFR is not interchangeable with the source CrCl threshold.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Verify creatinine clearance in mL/min; indexed eGFR is not interchangeable with the source CrCl threshold."
+      },
+      {
+        "rule_id": "BRCA",
+        "field": "brca_status",
+        "operator": "in",
+        "value": [
+          "not_eligible",
+          "unknown"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Confirm qualifying germline BRCA1/2 status by a validated method; no eligibility inference from an absent or non-qualifying result.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Confirm qualifying germline BRCA1/2 status by a validated method; no eligibility inference from an absent or non-qualifying result."
+      },
+      {
+        "rule_id": "HER2",
+        "field": "her2_status",
+        "operator": "==",
+        "value": "unknown",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Confirm HER2-negative status before initiation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Confirm HER2-negative status before initiation."
+      },
+      {
+        "rule_id": "PRIOR_CHEMO",
+        "field": "prior_chemotherapy_eligibility",
+        "operator": "in",
+        "value": [
+          "not_met",
+          "unknown"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Confirm previous anthracycline/taxane treatment or documented medical unsuitability.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Confirm previous anthracycline/taxane treatment or documented medical unsuitability."
+      },
+      {
+        "rule_id": "ENDOCRINE",
+        "field": "hr_positive_endocrine_eligibility",
+        "operator": "in",
+        "value": [
+          "not_met",
+          "unknown"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "For HR-positive disease, confirm prior endocrine therapy or unsuitability.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "For HR-positive disease, confirm prior endocrine therapy or unsuitability."
+      },
+      {
+        "rule_id": "PRIOR_LINES",
+        "field": "prior_advanced_chemo_regimens",
+        "operator": ">",
+        "value": 3,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "More than three prior chemotherapy-inclusive advanced-disease regimens falls outside NCCP eligibility.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "More than three prior chemotherapy-inclusive advanced-disease regimens falls outside NCCP eligibility."
+      },
+      {
+        "rule_id": "ECOG",
+        "field": "ecog",
+        "operator": ">",
+        "value": 2,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "ECOG above 2 falls outside NCCP eligibility.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "ECOG above 2 falls outside NCCP eligibility."
+      },
+      {
+        "rule_id": "HER2_POS",
+        "field": "her2_status",
+        "operator": "==",
+        "value": "positive",
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "HER2-positive breast cancer is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "HER2-positive breast cancer is an NCCP exclusion."
+      },
+      {
+        "rule_id": "PLAT_PROGRESSION",
+        "field": "platinum_progression_advanced",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Progression during platinum for locally advanced/metastatic disease is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Progression during platinum for locally advanced/metastatic disease is an NCCP exclusion."
+      },
+      {
+        "rule_id": "PLAT_RELAPSE",
+        "field": "platinum_relapse_under6mo",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Relapse within six months after adjuvant/neoadjuvant platinum is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Relapse within six months after adjuvant/neoadjuvant platinum is an NCCP exclusion."
+      },
+      {
+        "rule_id": "INFLAMMATORY",
+        "field": "active_inflammatory_breast_cancer",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Active inflammatory breast cancer is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Active inflammatory breast cancer is an NCCP exclusion."
+      },
+      {
+        "rule_id": "CARDIAC",
+        "field": "significant_cardiac_exclusion",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Specified significant recent/unstable cardiac condition is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Specified significant recent/unstable cardiac condition is an NCCP exclusion."
+      },
+      {
+        "rule_id": "PRIOR_PARP",
+        "field": "prior_parp_inhibitor",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Prior PARP inhibitor is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Prior PARP inhibitor is an NCCP exclusion."
+      },
+      {
+        "rule_id": "CNS_LMD",
+        "field": "symptomatic_cns_or_leptomeningeal",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Symptomatic CNS metastases or leptomeningeal disease is an NCCP exclusion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Symptomatic CNS metastases or leptomeningeal disease is an NCCP exclusion."
+      },
+      {
+        "rule_id": "BASELINE_RECOVERY",
+        "all": [
+          {
+            "field": "assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "prior_haem_toxicity_recovered",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Do not initiate until prior-treatment haematological toxicity has recovered to grade 1 or lower.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Do not initiate until prior-treatment haematological toxicity has recovered to grade 1 or lower."
+      },
+      {
+        "rule_id": "BASELINE_RECOVERY_MISSING",
+        "all": [
+          {
+            "field": "assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "prior_haem_toxicity_recovered",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Confirm recovery of prior-treatment blood-count toxicity to grade 1 or lower before first dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Confirm recovery of prior-treatment blood-count toxicity to grade 1 or lower before first dose."
+      },
+      {
+        "rule_id": "HB_G_DL_HOLD",
+        "field": "hb_g_dl",
+        "operator": "<",
+        "value": 8,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Withhold talazoparib for hb_g_dl below 8. Resume only after recovery to at least 9 and an agreed lower dose; confirm the current dose and other abnormalities.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Withhold talazoparib for hb_g_dl below 8. Resume only after recovery to at least 9 and an agreed lower dose; confirm the current dose and other abnormalities."
+      },
+      {
+        "rule_id": "HB_G_DL_RESTART_LOW",
+        "all": [
+          {
+            "field": "restart_for_hb",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "hb_g_dl",
+            "operator": "<",
+            "value": 9
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The hb_g_dl restart threshold is not met. Continue the interruption until 9 or higher; do not use the lower hold threshold as restart clearance.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The hb_g_dl restart threshold is not met. Continue the interruption until 9 or higher; do not use the lower hold threshold as restart clearance."
+      },
+      {
+        "rule_id": "HB_G_DL_RESTART_RECOVERED",
+        "all": [
+          {
+            "field": "restart_for_hb",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "hb_g_dl",
+            "operator": ">=",
+            "value": 9
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The hb_g_dl recovery threshold is met, but resumption requires the next lower current dose and reconciliation of other toxicity and organ-function findings.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The hb_g_dl recovery threshold is met, but resumption requires the next lower current dose and reconciliation of other toxicity and organ-function findings."
+      },
+      {
+        "rule_id": "HB_G_DL_RESTART_MISSING",
+        "all": [
+          {
+            "field": "restart_for_hb",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "hb_g_dl",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The hb_g_dl recovery result is missing; do not infer recovery or a restart dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The hb_g_dl recovery result is missing; do not infer recovery or a restart dose."
+      },
+      {
+        "rule_id": "ANC_HOLD",
+        "field": "anc",
+        "operator": "<",
+        "value": 1,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Withhold talazoparib for anc below 1. Resume only after recovery to at least 1.5 and an agreed lower dose; confirm the current dose and other abnormalities.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Withhold talazoparib for anc below 1. Resume only after recovery to at least 1.5 and an agreed lower dose; confirm the current dose and other abnormalities."
+      },
+      {
+        "rule_id": "ANC_RESTART_LOW",
+        "all": [
+          {
+            "field": "restart_for_anc",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "anc",
+            "operator": "<",
+            "value": 1.5
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The anc restart threshold is not met. Continue the interruption until 1.5 or higher; do not use the lower hold threshold as restart clearance.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The anc restart threshold is not met. Continue the interruption until 1.5 or higher; do not use the lower hold threshold as restart clearance."
+      },
+      {
+        "rule_id": "ANC_RESTART_RECOVERED",
+        "all": [
+          {
+            "field": "restart_for_anc",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 1.5
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The anc recovery threshold is met, but resumption requires the next lower current dose and reconciliation of other toxicity and organ-function findings.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The anc recovery threshold is met, but resumption requires the next lower current dose and reconciliation of other toxicity and organ-function findings."
+      },
+      {
+        "rule_id": "ANC_RESTART_MISSING",
+        "all": [
+          {
+            "field": "restart_for_anc",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "anc",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The anc recovery result is missing; do not infer recovery or a restart dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The anc recovery result is missing; do not infer recovery or a restart dose."
+      },
+      {
+        "rule_id": "PLATELETS_HOLD",
+        "field": "platelets",
+        "operator": "<",
+        "value": 50,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Withhold talazoparib for platelets below 50. Resume only after recovery to at least 75 and an agreed lower dose; confirm the current dose and other abnormalities.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Withhold talazoparib for platelets below 50. Resume only after recovery to at least 75 and an agreed lower dose; confirm the current dose and other abnormalities."
+      },
+      {
+        "rule_id": "PLATELETS_RESTART_LOW",
+        "all": [
+          {
+            "field": "restart_for_platelets",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 75
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The platelets restart threshold is not met. Continue the interruption until 75 or higher; do not use the lower hold threshold as restart clearance.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The platelets restart threshold is not met. Continue the interruption until 75 or higher; do not use the lower hold threshold as restart clearance."
+      },
+      {
+        "rule_id": "PLATELETS_RESTART_RECOVERED",
+        "all": [
+          {
+            "field": "restart_for_platelets",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 75
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The platelets recovery threshold is met, but resumption requires the next lower current dose and reconciliation of other toxicity and organ-function findings.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The platelets recovery threshold is met, but resumption requires the next lower current dose and reconciliation of other toxicity and organ-function findings."
+      },
+      {
+        "rule_id": "PLATELETS_RESTART_MISSING",
+        "all": [
+          {
+            "field": "restart_for_platelets",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "platelets",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The platelets recovery result is missing; do not infer recovery or a restart dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The platelets recovery result is missing; do not infer recovery or a restart dose."
+      },
+      {
+        "rule_id": "RENAL_30_59",
+        "all": [
+          {
+            "any": [
+              {
+                "field": "renal_measure_type",
+                "operator": "missing"
+              },
+              {
+                "field": "renal_measure_type",
+                "operator": "==",
+                "value": "crcl"
+              }
+            ]
+          },
+          {
+            "field": "crcl",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "field": "crcl",
+            "operator": "<",
+            "value": 60
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "CrCl 30 to below 60 mL/min: source starting dose 0.75 mg once daily. This is a starting-dose recommendation, not an automatic new reduction from the current dose; reconcile toxicity and interactions.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA product information supplement",
+          "page": 5,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/talzenna-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "CrCl 30 to below 60 mL/min: source starting dose 0.75 mg once daily. This is a starting-dose recommendation, not an automatic new reduction from the current dose; reconcile toxicity and interactions."
+      },
+      {
+        "rule_id": "RENAL_15_29",
+        "all": [
+          {
+            "any": [
+              {
+                "field": "renal_measure_type",
+                "operator": "missing"
+              },
+              {
+                "field": "renal_measure_type",
+                "operator": "==",
+                "value": "crcl"
+              }
+            ]
+          },
+          {
+            "field": "crcl",
+            "operator": ">=",
+            "value": 15
+          },
+          {
+            "field": "crcl",
+            "operator": "<",
+            "value": 30
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "CrCl 15 to below 30 mL/min: source starting dose 0.5 mg once daily. This is a starting-dose recommendation, not an automatic new reduction from the current dose; reconcile toxicity and interactions.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA product information supplement",
+          "page": 5,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/talzenna-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "CrCl 15 to below 30 mL/min: source starting dose 0.5 mg once daily. This is a starting-dose recommendation, not an automatic new reduction from the current dose; reconcile toxicity and interactions."
+      },
+      {
+        "rule_id": "RENAL_LT15",
+        "all": [
+          {
+            "any": [
+              {
+                "field": "renal_measure_type",
+                "operator": "missing"
+              },
+              {
+                "field": "renal_measure_type",
+                "operator": "==",
+                "value": "crcl"
+              }
+            ]
+          },
+          {
+            "field": "crcl",
+            "operator": "<",
+            "value": 15
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "CrCl below 15 mL/min: no studied dose recommendation. Obtain specialist advice; do not infer a dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "CrCl below 15 mL/min: no studied dose recommendation. Obtain specialist advice; do not infer a dose."
+      },
+      {
+        "rule_id": "DIALYSIS",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Haemodialysis: talazoparib has not been studied; no dose recommendation is available.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Haemodialysis: talazoparib has not been studied; no dose recommendation is available."
+      },
+      {
+        "rule_id": "NONHAEM_G3",
+        "field": "nonhaem_toxicity_grade",
+        "operator": ">=",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Withhold until the event resolves to grade 1 or lower. The source permits consideration of a lower dose or discontinuation; the choice is not an automatic reduction.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Withhold until the event resolves to grade 1 or lower. The source permits consideration of a lower dose or discontinuation; the choice is not an automatic reduction."
+      },
+      {
+        "rule_id": "PGP_STRONG",
+        "field": "strong_pgp_inhibitor",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Avoid strong P-gp inhibitors. If unavoidable, use the next lower current talazoparib dose after benefit-risk and pharmacy review; reconcile renal impairment and previous reductions.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Avoid strong P-gp inhibitors. If unavoidable, use the next lower current talazoparib dose after benefit-risk and pharmacy review; reconcile renal impairment and previous reductions."
+      },
+      {
+        "rule_id": "PGP_STOP",
+        "field": "pgp_inhibitor_recently_stopped",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "After a strong P-gp inhibitor is stopped, wait 3–5 inhibitor half-lives before returning to the pre-inhibitor dose; verify the medicine, timing and other dose-limiting findings.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "After a strong P-gp inhibitor is stopped, wait 3–5 inhibitor half-lives before returning to the pre-inhibitor dose; verify the medicine, timing and other dose-limiting findings."
+      },
+      {
+        "rule_id": "BCRP_STRONG",
+        "field": "strong_bcrp_inhibitor",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Avoid strong BCRP inhibitors; if unavoidable, monitor for increased adverse effects. No universal numerical reduction is specified.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Avoid strong BCRP inhibitors; if unavoidable, monitor for increased adverse effects. No universal numerical reduction is specified."
+      },
+      {
+        "rule_id": "MDS_CONF",
+        "field": "suspected_mds_aml",
+        "operator": "==",
+        "value": "confirmed",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Confirmed MDS/AML: discontinue talazoparib.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Confirmed MDS/AML: discontinue talazoparib."
+      },
+      {
+        "rule_id": "MDS_SUSP",
+        "field": "suspected_mds_aml",
+        "operator": "==",
+        "value": "suspected",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Suspected MDS/AML or persistent unexplained cytopenia requires specialist investigation; the source specifies permanent discontinuation once MDS/AML is confirmed, without a fixed four-week restart threshold.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA product information supplement",
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/talzenna-epar-product-information_en.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Suspected MDS/AML or persistent unexplained cytopenia requires specialist investigation; the source specifies permanent discontinuation once MDS/AML is confirmed, without a fixed four-week restart threshold."
+      },
+      {
+        "rule_id": "LOWEST_DOSE",
+        "field": "dose_not_tolerated_at025",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "The source dose ladder ends at 0.25 mg daily. A further reduction is not specified; seek a consultant continuation/discontinuation decision.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "The source dose ladder ends at 0.25 mg daily. A further reduction is not specified; seek a consultant continuation/discontinuation decision."
+      },
+      {
+        "rule_id": "INVALID_ASSESSMENT_STAGE",
+        "field": "assessment_stage",
+        "operator": "not_in",
+        "value": [
+          "baseline",
+          "ongoing",
+          "restart"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Unrecognised assessment stage: verify entered context before treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Unrecognised assessment stage: verify entered context before treatment."
+      },
+      {
+        "rule_id": "INVALID_RENAL_MEASURE_TYPE",
+        "field": "renal_measure_type",
+        "operator": "not_in",
+        "value": [
+          "crcl",
+          "egfr",
+          "unknown"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "talazoparib"
+          ],
+          "recommendation": "Unrecognised renal measure type: verify entered context before treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00605 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Unrecognised renal measure type: verify entered context before treatment."
       }
     ]
   },
@@ -546,11 +1725,40 @@
       "No routine premedication specified by NCCP.",
       "Monitor FBC monthly and provide transfusion or growth-factor support when clinically appropriate."
     ],
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_oncology_pharmacy_review",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Oral SACT classification from NCCP V6 Table 8.",
+    "mapping_basis": "NCCP oral classification v6 Table 8: minimal-to-low; Table 5 supports PRN antiemetics.",
     "mapping_confidence": "high",
-    "breakthrough_profile_id": "nccp-breakthrough-general"
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "regimen_specific_notes": [
+      "No routine premedication; symptom-led antiemetics under the oral minimal/low plan.",
+      "FBC, renal and liver profile at baseline and every four weeks or as indicated.",
+      "Swallow capsules whole, with or without food. Do not replace a missed or vomited dose.",
+      "Female contraception during treatment and seven months afterwards; male contraception four months afterwards; breastfeeding excluded during treatment and for at least one month after."
+    ],
+    "source_url": "https://healthservice.hse.ie/documents/6414/605_v2_Talazoparib_Therapy.pdf",
+    "source_checked_date": "2026-10-25",
+    "phase_specific_plan": "patient/00605/supportive-care.html"
+  },
+  "dose_levels": {
+    "talazoparib": {
+      "0": {
+        "value": 1,
+        "unit": "mg once daily"
+      },
+      "-1": {
+        "value": 0.75,
+        "unit": "mg once daily"
+      },
+      "-2": {
+        "value": 0.5,
+        "unit": "mg once daily"
+      },
+      "-3": {
+        "value": 0.25,
+        "unit": "mg once daily"
+      }
+    }
   }
 }
