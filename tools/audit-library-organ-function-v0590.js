@@ -44,8 +44,8 @@ const records = files(protocolRoot).filter(file => !file.includes(`${path.sep}_t
   const inputs = organInputs(protocol);
   const rules = organRules(protocol);
   const issues = [];
-  const v0836 = ['00207','00732','00328','00585','00330','00331','00692','00733','00210','00213'].includes(code) && m.validation?.audit_release === '0.83.6';
-  const superseded = v0836 || (['00586','00623'].includes(code) && m.validation?.audit_release === '0.83.4') || (code === '00225' && m.validation?.audit_release === '0.83.5');
+  const v0836 = ['00207','00732','00328','00585','00330','00331','00692','00733','00210','00213'].includes(code) && ['0.83.6','0.84.21'].includes(m.validation?.audit_release);
+  const superseded = v0836 || (['00586','00623'].includes(code) && ['0.83.4','0.84.21'].includes(m.validation?.audit_release)) || (code === '00225' && ['0.83.5','0.84.21'].includes(m.validation?.audit_release));
   if (inScope) {
     if (!rec) issues.push('missing_reconciliation_metadata');
     if (rec?.release !== (code === '00205' ? '0.84.1' : '0.59.0')) issues.push('wrong_reconciliation_release');

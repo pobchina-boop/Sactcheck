@@ -58,15 +58,18 @@ function assess(code, overrides = {}) {
   return Engine.assess(protocol, demo(protocol, overrides), { profileId: "default" });
 }
 
-let result = assess("00215", { proteinuria_dipstick: "4+" });
+let result = assess("00215", { proteinuria_dipstick: "4+", urine_protein_g_24h: null });
 assert.strictEqual(result.actionType, "withhold", "4+ dipstick should withhold bevacizumab pending 24-hour urine protein");
 result = assess("00215", { proteinuria_dipstick: "4+", urine_protein_g_24h: 5 });
 assert.strictEqual(result.actionType, "discontinue", "Urine protein >4 g/24 h should discontinue bevacizumab");
 result = assess("00215", { fbc_clinical_concern: true });
 assert.strictEqual(result.actionType, "consultant_review", "Bevacizumab FBC concern should be a clinical review flag, not an invented count hold");
 const bevRules = JSON.stringify(protocols["00215"].rule_engine.rules);
-assert.ok(!bevRules.includes('"field":"anc"'), "NCCP 00215 must not invent a cycle-by-cycle ANC threshold");
-assert.ok(!bevRules.includes('"field":"platelets"'), "NCCP 00215 must not invent a cycle-by-cycle platelet threshold");
+for (const field of ['anc','platelets']) {
+  const rules=protocols['00215'].rule_engine.rules.filter(r=>JSON.stringify(r).includes('"field":"'+field+'"'));
+  assert(rules.length>0,'Current source initial eligibility is represented');
+  for (const rule of rules) { assert.equal(rule.action.type,'consultant_review'); assert(/initial eligibility/.test(rule.action.recommendation)); }
+}
 
 result = assess("00306", { treatment_day: "day1", anc: 1.5, platelets: 200 });
 assert.strictEqual(result.actionType, "delay", "Day-1 ANC exactly 1.5 should delay because NCCP requires >1.5");

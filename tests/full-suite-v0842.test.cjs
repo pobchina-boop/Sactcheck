@@ -1,3 +1,4 @@
+const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),crypto=require('crypto'),cp=require('child_process'),vm=require('vm');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
@@ -7,7 +8,7 @@ assert.deepEqual([...index.retrospective_codes].sort(),[...codes].sort());assert
 let rules=0;
 for(const code of codes){
  const d=json(`data/patient-knowledge/${code}.json`),p=json('protocols/breast/'+fs.readdirSync(path.join(root,'protocols/breast')).find(n=>n.startsWith(code)));
- assert.equal(d.suite_release,'0.84.20');assert.equal(p.metadata.sactcheck_encoding_version,'0.84.20');assert.equal(d.protocol_version,String(p.metadata.nccp_version));assert.equal(p.metadata.validation.clinical_use_authorised,false);
+ assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.20'));assert.equal(p.metadata.sactcheck_encoding_version,current21.has(d.code)?'0.84.21':('0.84.20'));assert.equal(d.protocol_version,String(p.metadata.nccp_version));assert.equal(p.metadata.validation.clinical_use_authorised,false);
  assert.equal(index.regimens[code].rule_count,p.rule_engine.rules.length);rules+=p.rule_engine.rules.length;
  assert(p.rule_engine.rules.every(r=>r.source?.url&&r.source.page));assert.equal(new Set(p.rule_engine.rules.map(r=>r.rule_id||r.id)).size,p.rule_engine.rules.length);
  assert.equal(d.agents.length,1);assert.equal(d.anatomy.length,4);assert.equal(d.service_kind,'endocrine');assert.equal(d.cycle_days,code==='00361'?28:null);assert.equal(d.schedule_kind,code==='00361'?'loading_then_q28':'continuous_oral');

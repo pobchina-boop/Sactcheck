@@ -194,8 +194,10 @@
   function phaseFromTreatmentPhase(protocol, phase, index) {
     const raw = asArray(phase.administration);
     const components = raw.map(componentFromAdministration).filter(Boolean);
-    const expected = expectedDrugCount(protocol);
-    const complete = raw.length > 0 && components.length === raw.length && (!expected || components.length >= expected);
+    const phaseDrugs = Object.prototype.hasOwnProperty.call(phase, "active_drugs") ? asArray(phase.active_drugs) : null;
+    const expected = phaseDrugs ? new Set(phaseDrugs.map(componentKey).filter(Boolean)).size : expectedDrugCount(protocol);
+    const declaredComponentsPresent = phaseDrugs === null || (expected > 0 && phaseDrugs.every(drug => components.some(component => componentMatches(component.id, drug))));
+    const complete = raw.length > 0 && components.length === raw.length && (!expected || components.length >= expected) && declaredComponentsPresent;
     return {
       id: phase.phase_id || `phase_${index + 1}`,
       label: phaseLabel(phase, index),

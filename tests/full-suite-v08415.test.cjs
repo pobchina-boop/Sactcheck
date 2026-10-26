@@ -1,3 +1,4 @@
+const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),vm=require('vm'),crypto=require('crypto');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
@@ -5,7 +6,7 @@ const codes=['00785','00796','00797','00789','00790'],R=require('../js/patient-a
 const forbidden=/hazard ratio|evidence_at_a_glance|data-clinician-evidence|median overall survival|median progression.free survival|CLEOPATRA|FeDeriCa|TRYPHAENA|hazard ratio/;
 for(const code of codes){
  const d=json(`data/patient-knowledge/${code}.json`),phases=json('data/phase-support-v0838.json').regimens[code];
- assert.equal(d.suite_release,'0.84.15');assert.equal(d.cycle_display,'reference-chronology');assert(!d.evidence);assert(!d.evidence_at_a_glance);assert(d.chapters.some(x=>x.id==='treatment-rationale'));
+ assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.15'));assert.equal(d.cycle_display,'reference-chronology');assert(!d.evidence);assert(!d.evidence_at_a_glance);assert(d.chapters.some(x=>x.id==='treatment-rationale'));
  const src=new Set(d.sources.map(s=>s.id));for(const ch of d.chapters)for(const it of ch.items)for(const id of it.source_ids)assert(src.has(id),code+':'+id);
  const j=J.definitions[code];assert.equal(j.has_patient_dates,false);for(const l of j.lanes){assert.equal(l.cells.length,j.stages.length);for(const id of l.source_ids)assert(j.sources.some(s=>s.id===id));}
  for(const name of ['index','knowledge','consent','consent-form','guide','passport','sactcard','logistics','supportive-care','supportive-care-overview','treatment-journey',...phases.map(p=>'support-'+p.id)]){

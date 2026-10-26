@@ -2,6 +2,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.SACTCheckTreatmentEvidence=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
   'use strict';
   const endpoints={
+    'Locoregional events':{name:'Locoregional events',family:'events',icon:'◇',definition:'Recurrence or progression at the primary site or regional nodes, using the trial definition and stated follow-up. This is not overall survival.'},
     OS:{name:'Overall survival',family:'survival',icon:'◷',definition:'Time to death from any cause, from the study-defined starting point.'},
     PFS:{name:'Progression-free survival',family:'progression',icon:'◫',definition:'Time to progression or death; preserve the study assessment criteria.'},
     TTP:{name:'Time to progression',family:'progression',icon:'◫',definition:'Time to the trial-defined progression event. Death handling varies by trial; TTP is not interchangeable with PFS.'},

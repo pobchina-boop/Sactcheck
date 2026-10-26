@@ -1,9 +1,10 @@
+const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),vm=require('vm'),crypto=require('crypto');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
 const codes=['00858','00860','00861','00348','00734','00857'],R=require('../js/patient-asset-registry-v0810'),J=require('../js/treatment-journey-v0837'),B=require('../js/breast-library-v0837'),V=require('../js/treatment-evidence-v08413'),KB=json('data/regimen-knowledge-base-v08413-addendum.json');
 for(const code of codes){
- const d=json(`data/patient-knowledge/${code}.json`),phases=json('data/phase-support-v0838.json').regimens[code],immune=!['00348','00734'].includes(code);assert.equal(d.suite_release,'0.84.13');assert.equal(d.cycle_display,'reference-chronology');assert(!d.evidence);assert(!d.evidence_at_a_glance);
+ const d=json(`data/patient-knowledge/${code}.json`),phases=json('data/phase-support-v0838.json').regimens[code],immune=!['00348','00734'].includes(code);assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.13'));assert.equal(d.cycle_display,'reference-chronology');assert(!d.evidence);assert(!d.evidence_at_a_glance);
  const src=new Set(d.sources.map(s=>s.id));for(const ch of d.chapters)for(const it of ch.items)for(const id of it.source_ids)assert(src.has(id),id);
  const j=J.definitions[code];assert.equal(j.has_patient_dates,false);for(const l of j.lanes){assert.equal(l.cells.length,j.stages.length);for(const id of l.source_ids)assert(j.sources.some(s=>s.id===id));}
  const patientNumerics=/85\.1|77\.2|78\.3|69\.8|86\.6|81\.7|64\.8|51\.2|hazard ratio|evidence_at_a_glance|data-clinician-evidence/;
@@ -26,7 +27,7 @@ for(const code of codes){
 }
 assert(!V.render({treatment_rationale:{summary:'<script>bad()</script>',sources:[{label:'bad',url:'javascript:alert(1)'}]}}).includes('<script>'));assert(!V.render({treatment_rationale:{sources:[{url:'javascript:alert(1)'}]}}).includes('href="javascript:'));
 assert(!V.render(KB.regimen_profiles.find(x=>x.protocol_id.includes('00734'))).includes('data-endpoint="OS"'));
-const updates=json('validation/tnbc-v08413/retrospective-00857-hashes.json');for(const [p,c] of Object.entries(updates.files))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),c.after);
+const updates=json('validation/tnbc-v08413/retrospective-00857-hashes.json');for(const [p,c] of Object.entries(updates.files))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),require('./helpers/retrospective-v08414.cjs').expectedHash(p,c.after));
 (async()=>{
  const target={innerHTML:''},cl={add(){},remove(){},toggle(){}},overlay={classList:cl,querySelector:s=>s==='[data-regimen-info-content]'?target:null};const context={console,fetch:async u=>({ok:fs.existsSync(path.join(root,u)),json:async()=>json(u)}),document:{readyState:'loading',addEventListener(){},getElementById:()=>overlay,body:{classList:cl}}};vm.createContext(context);vm.runInContext(read('js/treatment-evidence-v08413.js'),context);vm.runInContext(read('js/regimen-knowledge-base.js'),context);const api=context.SACTCheckRegimenKnowledgeBase;await api.load();
  for(const code of codes){const f=fs.readdirSync(path.join(root,'protocols/breast')).find(x=>x.startsWith(code+'-')),p=json('protocols/breast/'+f);assert(api.open(p));await new Promise(r=>setImmediate(r));assert(target.innerHTML.includes('Why this regimen?'));assert(target.innerHTML.includes('Longitudinal monitoring schedule'));assert(!/undefined|\[object Object\]|could not be loaded/.test(target.innerHTML));assert.equal(api.regimenProfileForProtocol(p).full_suite_release,'0.84.13');}

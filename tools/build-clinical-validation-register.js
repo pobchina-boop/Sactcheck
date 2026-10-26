@@ -53,6 +53,10 @@ function domainHints(protocol) {
 const index = readJson(indexPath);
 const knowledge = fs.existsSync(kbPath) ? readJson(kbPath) : { regimen_profiles: [] };
 const kbIds = new Set(asArray(knowledge.regimen_profiles).map(item => item.protocol_id));
+// Active addenda replace/extend base profiles; include them in coverage reporting.
+for (const file of fs.readdirSync(path.join(root,'data')).filter(n=>/^regimen-knowledge-base-v[0-9]+-addendum\.json$/.test(n))) {
+  for (const item of asArray(readJson(path.join(root,'data',file)).regimen_profiles)) kbIds.add(item.protocol_id);
+}
 const protocols = [];
 
 for (const record of asArray(index.protocols)) {

@@ -11,8 +11,8 @@
     "short_title": "Pembrolizumab, Pemetrexed and Carboplatin AUC5 Therapy",
     "indication": "First-line metastatic non-squamous NSCLC without EGFR or ALK alterations.",
     "source_url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.40.0",
+    "source_document_pages": 11,
+    "sactcheck_encoding_version": "0.84.21",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "lung_subgroup": "metastatic_nonsquamous_nsclc",
@@ -45,10 +45,16 @@
     "validation": {
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true,
+      "source_reconciled": true,
+      "audit_release": "0.84.21",
+      "audit_date": "2026-10-25",
+      "software_validation_record": "validation/breast-completion-v08421/source-schedule/AUDIT.md",
+      "scope_note": "Source-specific boundary and omission repairs added for 00568 v5; unresolved attribution and conflicting text require consultant judgment. This is not independent clinical validation."
     },
     "source_title_exact": "Pembrolizumab, PEMEtrexed and CARBOplatin AUC5 Therapy",
     "display_title_normalised": true,
@@ -69,22 +75,32 @@
     "encoding_maturity": {
       "level": "legacy_encoded_pending_source_fidelity_review",
       "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.21",
+      "audit_date": "2026-10-25",
+      "scope_note": "Official binary NCCP PDF retrieved and checked; clinical, pharmacy and patient/PPI review remain pending.",
+      "source_document_checked": true,
+      "reconciled_release": "0.84.21",
+      "reconciled_date": "2026-10-25"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00568-v5"
+    "canonical_protocol_id": "nccp-00568-v5",
+    "source_checked_date": "2026-10-25",
+    "source_pdf_sha256": "ff693436d769891f90374389059ea134eb0cc297ec0dbb1314332b9de6a31d14",
+    "current_source_id": "nccp-00568-v5",
+    "source_version_change_date": "2025-10-06",
+    "full_suite_release": "0.84.21",
+    "schedule_summary": "Induction: all three medicines on Day 1 every 21 days for up to four cycles. Maintenance: carboplatin stops; pembrolizumab and pemetrexed may continue every 21 days while appropriate."
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00568 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00568 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "clinical_use_authorised": false
   },
   "indications": [
     {
@@ -516,7 +532,7 @@
       "input_role": "decision"
     },
     "creatinine_ratio_baseline_or_uln": {
-      "label": "Creatinine result (actual value entered; ×ULN calculated automatically)",
+      "label": "Creatinine / laboratory ULN (immune nephritis; do not use baseline ratio)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -525,7 +541,8 @@
       "unit": "×ULN",
       "input_role": "decision",
       "actual_result_adapter": "creatinine_uln",
-      "help": "NCCP 00568 v5 Table 3 uses creatinine relative to laboratory ULN. This does not calculate CrCl/GFR or establish a diagnosis of immune nephritis."
+      "help": "NCCP 00568 v5 Table 3 uses creatinine relative to laboratory ULN. This does not calculate CrCl/GFR or establish a diagnosis of immune nephritis.",
+      "assessment_guidance": "Source Table 3 uses ULN. The stored input key is retained for portability but the entered ratio must be creatinine divided by the laboratory ULN."
     },
     "tsh_miu_l": {
       "label": "TSH (optional immunotherapy blood)",
@@ -592,6 +609,252 @@
       "unit": "mmol/L",
       "ui_section": "immunotherapy_bloods",
       "input_role": "context"
+    },
+    "treatment_phase": {
+      "label": "Current treatment phase",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "induction",
+          "label": "Induction: pembrolizumab + pemetrexed + carboplatin"
+        },
+        {
+          "value": "maintenance",
+          "label": "Maintenance: pembrolizumab + pemetrexed"
+        }
+      ],
+      "demo_value": ""
+    },
+    "thrombocytopenia_with_bleeding": {
+      "label": "Bleeding associated with thrombocytopenia",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "previous_febrile_neutropenia": {
+      "label": "Febrile neutropenia since the previous chemotherapy dose",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "active_unstable_cns_metastases": {
+      "label": "Active or unstable CNS metastases",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "immunosuppressive_systemic_therapy": {
+      "label": "Systemic immunosuppression >10 mg/day prednisolone equivalent or another immunosuppressant (excluding topical/inhaled therapy)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "history_ild_pneumonitis": {
+      "label": "History of interstitial lung disease or pneumonitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "serious_autoimmune_history": {
+      "label": "History of serious autoimmune disease",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_metastases": {
+      "label": "Hepatic metastases present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recurrent_grade2_pneumonitis": {
+      "label": "Recurrent grade 2 immune pneumonitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recurrent_grade3_colitis": {
+      "label": "Recurrent grade 3 immune colitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "symptomatic_hypophysitis": {
+      "label": "Symptomatic hypophysitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "type1_diabetes_ketoacidosis": {
+      "label": "Type 1 diabetes with ketoacidosis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hyperthyroidism_grade3_plus": {
+      "label": "Grade ≥3 hyperthyroidism",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "type1_diabetes": {
+      "label": "Type 1 diabetes / suspected immune diabetes",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_sjs_ten": {
+      "label": "Suspected Stevens–Johnson syndrome / toxic epidermal necrolysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "confirmed_sjs_ten": {
+      "label": "Confirmed Stevens–Johnson syndrome / toxic epidermal necrolysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "other_immune_grade2_3": {
+      "label": "Other immune-related toxicity requiring withholding (grade 2 or 3, depending on type)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "immune_permanent_stop_event": {
+      "label": "Grade 4 or recurrent grade 3 immune toxicity; or grade 3–4 myocarditis, encephalitis or Guillain–Barré syndrome",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ici_failed_recovery_12_weeks": {
+      "label": "Treatment-related toxicity has not recovered to grade 0–1 within 12 weeks after last pembrolizumab",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ici_steroid_gt10_at_12_weeks": {
+      "label": "Unable to reduce systemic prednisone equivalent to ≤10 mg/day within 12 weeks",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "immune_liver_metastasis_baseline_g2": {
+      "label": "Liver metastases with baseline grade 2 AST/ALT elevation",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ast_alt_increase_percent": {
+      "label": "AST/ALT increase from baseline",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "ast_alt_elevation_days": {
+      "label": "Duration of this AST/ALT increase",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "unit": "days",
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "diarrhoea_hospitalisation": {
+      "label": "Diarrhoea of any grade requiring hospitalisation",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "neuropathy_grade": {
+      "label": "Neurotoxicity grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": "",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No neurotoxicity."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-assigned grade 1; establish the neurological adverse event and verify its grading criteria before selecting."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-assigned grade 2; establish the neurological adverse event and verify its grading criteria before selecting."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-assigned grade 3; establish the neurological adverse event and verify its grading criteria before selecting."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-assigned grade 4; establish the neurological adverse event and verify its grading criteria before selecting."
+        }
+      ],
+      "grading_source_url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+      "grading_source_label": "NCCP 00568 Table 2",
+      "source_grading_note": "The NCCP dose-modification table is not a complete grading table and does not name a CTCAE edition. Verify the clinical grade locally.",
+      "assessment_guidance": "Identify the neurological adverse event and establish its clinical grade before selecting the NCCP treatment-action band."
+    },
+    "recurrent_neurotoxicity": {
+      "label": "Any recurrence of neurotoxicity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_chemotherapy_dose_reductions": {
+      "label": "Number of previous pemetrexed/carboplatin dose reductions",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "unit": "reductions",
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "treatment_related_hepatotoxicity": {
+      "label": "Liver abnormality considered treatment-related",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -631,20 +894,23 @@
         "when": {
           "field": "ecog",
           "operator": ">",
-          "value": 2
+          "value": 1
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG is outside the usual source eligibility range; review the selected indication and protocol."
+          "message": "ECOG above 1 is outside the NCCP 00568 eligibility range (0–1); consultant review is required.",
+          "recommendation": "ECOG above 1 is outside the NCCP 00568 eligibility range (0–1); consultant review is required."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "ECOG is outside the usual source eligibility range; review the selected indication and protocol."
+        "explanation": "ECOG above 1 is outside the NCCP 00568 eligibility range (0–1); consultant review is required."
       },
       {
         "id": "HYPERSENSITIVITY",
@@ -659,11 +925,14 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Known hypersensitivity to a regimen component triggers the exclusion pathway."
+          "message": "Known hypersensitivity to a regimen component triggers the exclusion pathway.",
+          "recommendation": "Known hypersensitivity to a regimen component triggers the exclusion pathway."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Known hypersensitivity to a regimen component triggers the exclusion pathway."
       },
@@ -685,59 +954,104 @@
           ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "Pregnancy or breastfeeding triggers the protocol exclusion pathway."
+          "message": "Pregnancy or breastfeeding requires urgent specialist review of this combination and each product’s precautions; do not issue routine treatment clearance. NCCP00568 does not specify an independent pregnancy dose rule.",
+          "recommendation": "Pregnancy or breastfeeding requires urgent specialist review of this combination and each product’s precautions; do not issue routine treatment clearance. NCCP00568 does not specify an independent pregnancy dose rule."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
+          "document": "NCCP00568 v5: product-specific adverse effects and clinical judgment",
+          "page": "2,7–10",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Pregnancy or breastfeeding triggers the protocol exclusion pathway."
+        "explanation": "Pregnancy or breastfeeding requires urgent specialist review of this combination and each product’s precautions; do not issue routine treatment clearance. NCCP00568 does not specify an independent pregnancy dose rule."
       },
       {
         "id": "LOW_ANC",
         "priority": 9,
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pemetrexed",
+            "carboplatin"
           ],
-          "message": "ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway."
+          "message": "ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately.",
+          "recommendation": "ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway."
+        "explanation": "ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately."
       },
       {
         "id": "LOW_PLATELETS",
         "priority": 9,
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pemetrexed",
+            "carboplatin"
           ],
-          "message": "Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway."
+          "message": "Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately.",
+          "recommendation": "Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway."
+        "explanation": "Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately."
       },
       {
         "id": "INFECTION",
@@ -752,11 +1066,14 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Withhold treatment and urgently assess fever, febrile neutropenia or active infection."
+          "message": "Withhold treatment and urgently assess fever, febrile neutropenia or active infection.",
+          "recommendation": "Withhold treatment and urgently assess fever, febrile neutropenia or active infection."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Withhold treatment and urgently assess fever, febrile neutropenia or active infection."
       },
@@ -764,41 +1081,82 @@
         "id": "SEVERE_NONHAEM",
         "priority": 8,
         "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pemetrexed",
+            "carboplatin"
           ],
-          "message": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
+          "message": "Hold pemetrexed/carboplatin for grade ≥3 other non-haematological toxicity until recovery to baseline; source advises resuming at 75% of previous doses. Consultant confirms attribution, recovery and active components; assess immune toxicity separately.",
+          "recommendation": "Hold pemetrexed/carboplatin for grade ≥3 other non-haematological toxicity until recovery to baseline; source advises resuming at 75% of previous doses. Consultant confirms attribution, recovery and active components; assess immune toxicity separately."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
+        "explanation": "Hold pemetrexed/carboplatin for grade ≥3 other non-haematological toxicity until recovery to baseline; source advises resuming at 75% of previous doses. Consultant confirms attribution, recovery and active components; assess immune toxicity separately."
       },
       {
         "id": "CARBO_GFR_20_OR_LESS",
         "priority": 10,
         "when": {
-          "field": "gfr_crcl_ml_min",
-          "operator": "<=",
-          "value": 20
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "gfr_crcl_ml_min",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "carboplatin"
           ],
-          "message": "GFR/CrCl ≤20 mL/min is outside the routine carboplatin pathway."
+          "message": "GFR/CrCl ≤20 mL/min is outside the routine carboplatin pathway.",
+          "recommendation": "GFR/CrCl ≤20 mL/min is outside the routine carboplatin pathway."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "GFR/CrCl ≤20 mL/min is outside the routine carboplatin pathway."
       },
@@ -806,20 +1164,45 @@
         "id": "CARBO_GFR_20_30",
         "priority": 8,
         "when": {
-          "field": "gfr_crcl_ml_min",
-          "operator": "<=",
-          "value": 30
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "gfr_crcl_ml_min",
+              "operator": ">",
+              "value": 20
+            },
+            {
+              "field": "gfr_crcl_ml_min",
+              "operator": "<=",
+              "value": 30
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "carboplatin"
           ],
-          "message": "GFR/CrCl 20–30 mL/min requires extreme caution and specialist dosing review."
+          "message": "GFR/CrCl 20–30 mL/min requires extreme caution and specialist dosing review.",
+          "recommendation": "GFR/CrCl 20–30 mL/min requires extreme caution and specialist dosing review."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "GFR/CrCl 20–30 mL/min requires extreme caution and specialist dosing review."
       },
@@ -834,13 +1217,16 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "CrCl below 45 mL/min is outside the routine pemetrexed pathway."
+          "message": "CrCl below 45 mL/min is outside the routine pemetrexed pathway.",
+          "recommendation": "CrCl below 45 mL/min is outside the routine pemetrexed pathway."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "CrCl below 45 mL/min is outside the routine pemetrexed pathway."
       },
@@ -855,13 +1241,16 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Severe renal impairment is outside the routine pemetrexed pathway."
+          "message": "Severe renal impairment is outside the routine pemetrexed pathway.",
+          "recommendation": "Severe renal impairment is outside the routine pemetrexed pathway."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Severe renal impairment is outside the routine pemetrexed pathway."
       },
@@ -876,13 +1265,16 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Dialysis is outside the routine pemetrexed pathway."
+          "message": "Dialysis is outside the routine pemetrexed pathway.",
+          "recommendation": "Dialysis is outside the routine pemetrexed pathway."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Dialysis is outside the routine pemetrexed pathway."
       },
@@ -897,13 +1289,16 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Confirm folic acid and vitamin B12 supplementation before pemetrexed."
+          "message": "Confirm folic acid and vitamin B12 supplementation before pemetrexed.",
+          "recommendation": "Confirm folic acid and vitamin B12 supplementation before pemetrexed."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Confirm folic acid and vitamin B12 supplementation before pemetrexed."
       },
@@ -918,13 +1313,16 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Confirm dexamethasone rash prophylaxis unless specifically contraindicated."
+          "message": "Confirm dexamethasone rash prophylaxis unless specifically contraindicated.",
+          "recommendation": "Confirm dexamethasone rash prophylaxis unless specifically contraindicated."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Confirm dexamethasone rash prophylaxis unless specifically contraindicated."
       },
@@ -932,41 +1330,74 @@
         "id": "PEME_MUCOSITIS",
         "priority": 8,
         "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pemetrexed",
+            "carboplatin"
           ],
-          "message": "Grade 3 or worse mucositis requires withholding and dose-modification review."
+          "message": "Hold chemotherapy for grade ≥3 mucositis until recovery to baseline. Source restart: pemetrexed 50% of previous dose, carboplatin 100% if still in induction; consultant confirms restart.",
+          "recommendation": "Hold chemotherapy for grade ≥3 mucositis until recovery to baseline. Source restart: pemetrexed 50% of previous dose, carboplatin 100% if still in induction; consultant confirms restart."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Grade 3 or worse mucositis requires withholding and dose-modification review."
+        "explanation": "Hold chemotherapy for grade ≥3 mucositis until recovery to baseline. Source restart: pemetrexed 50% of previous dose, carboplatin 100% if still in induction; consultant confirms restart."
       },
       {
         "id": "ICI_PNEUMONITIS_G2",
         "priority": 10,
         "when": {
-          "field": "pneumonitis_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "pneumonitis_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "pneumonitis_grade",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Grade 2 immune-mediated pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
+          "message": "Grade 2 immune-mediated pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation.",
+          "recommendation": "Grade 2 immune-mediated pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Grade 2 immune-mediated pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
       },
@@ -981,13 +1412,16 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Grade 3–4 immune-mediated pneumonitis requires permanent discontinuation."
+          "message": "Grade 3–4 immune-mediated pneumonitis requires permanent discontinuation.",
+          "recommendation": "Grade 3–4 immune-mediated pneumonitis requires permanent discontinuation."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Grade 3–4 immune-mediated pneumonitis requires permanent discontinuation."
       },
@@ -995,20 +1429,32 @@
         "id": "ICI_COLITIS_G2",
         "priority": 9,
         "when": {
-          "field": "diarrhoea_colitis_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "diarrhoea_colitis_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_colitis_grade",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Grade 2 or worse immune-mediated diarrhoea/colitis requires withholding and immune-toxicity management."
+          "message": "Grade 2 or worse immune-mediated diarrhoea/colitis requires withholding and immune-toxicity management.",
+          "recommendation": "Grade 2 or worse immune-mediated diarrhoea/colitis requires withholding and immune-toxicity management."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Grade 2 or worse immune-mediated diarrhoea/colitis requires withholding and immune-toxicity management."
       },
@@ -1023,13 +1469,16 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Grade 4 immune-mediated diarrhoea/colitis requires permanent discontinuation."
+          "message": "Grade 4 immune-mediated diarrhoea/colitis requires permanent discontinuation.",
+          "recommendation": "Grade 4 immune-mediated diarrhoea/colitis requires permanent discontinuation."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Grade 4 immune-mediated diarrhoea/colitis requires permanent discontinuation."
       },
@@ -1037,20 +1486,32 @@
         "id": "ICI_HEPATITIS_WITHHOLD",
         "priority": 9,
         "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 3
+          "all": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "ALT/AST >3 ×ULN requires immune-mediated hepatitis assessment and withholding."
+          "message": "ALT/AST >3 ×ULN requires immune-mediated hepatitis assessment and withholding.",
+          "recommendation": "ALT/AST >3 ×ULN requires immune-mediated hepatitis assessment and withholding."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "ALT/AST >3 ×ULN requires immune-mediated hepatitis assessment and withholding."
       },
@@ -1065,13 +1526,16 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis discontinuation pathway."
+          "message": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis discontinuation pathway.",
+          "recommendation": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis discontinuation pathway."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis discontinuation pathway."
       },
@@ -1079,20 +1543,32 @@
         "id": "ICI_BILI_WITHHOLD",
         "priority": 9,
         "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1.5
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Bilirubin >1.5 ×ULN requires immune-mediated hepatitis assessment and withholding."
+          "message": "Bilirubin >1.5 ×ULN requires immune-mediated hepatitis assessment and withholding.",
+          "recommendation": "Bilirubin >1.5 ×ULN requires immune-mediated hepatitis assessment and withholding."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Bilirubin >1.5 ×ULN requires immune-mediated hepatitis assessment and withholding."
       },
@@ -1100,22 +1576,34 @@
         "id": "ICI_RENAL_G2",
         "priority": 9,
         "when": {
-          "field": "creatinine_ratio_baseline_or_uln",
-          "operator": ">",
-          "value": 1.5
+          "all": [
+            {
+              "field": "creatinine_ratio_baseline_or_uln",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "creatinine_ratio_baseline_or_uln",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Creatinine >1.5 ×ULN triggers the NCCP nephritis review/withholding pathway; assess the cause of renal dysfunction."
+          "message": "Possible immune nephritis: withhold pembrolizumab for grade 2 with creatinine >1.5 to ≤3 times ULN. Confirm grade, cause and consultant management; this input is a multiple of ULN, not baseline.",
+          "recommendation": "Possible immune nephritis: withhold pembrolizumab for grade 2 with creatinine >1.5 to ≤3 times ULN. Confirm grade, cause and consultant management; this input is a multiple of ULN, not baseline."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Creatinine >1.5 ×ULN triggers the NCCP nephritis review/withholding pathway; assess the cause of renal dysfunction."
+        "explanation": "Possible immune nephritis: withhold pembrolizumab for grade 2 with creatinine >1.5 to ≤3 times ULN. Confirm grade, cause and consultant management; this input is a multiple of ULN, not baseline."
       },
       {
         "id": "ICI_RENAL_G3",
@@ -1128,15 +1616,18 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Creatinine >3 ×ULN triggers the NCCP severe nephritis review pathway; exclude other causes of renal dysfunction."
+          "message": "Possible immune nephritis: permanently discontinue pembrolizumab for grade ≥3 with creatinine >3 times ULN. Confirm grade, cause and consultant management; this input is a multiple of ULN, not baseline.",
+          "recommendation": "Possible immune nephritis: permanently discontinue pembrolizumab for grade ≥3 with creatinine >3 times ULN. Confirm grade, cause and consultant management; this input is a multiple of ULN, not baseline."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
-        "explanation": "Creatinine >3 ×ULN triggers the NCCP severe nephritis review pathway; exclude other causes of renal dysfunction."
+        "explanation": "Possible immune nephritis: permanently discontinue pembrolizumab for grade ≥3 with creatinine >3 times ULN. Confirm grade, cause and consultant management; this input is a multiple of ULN, not baseline."
       },
       {
         "id": "ICI_INFUSION_G3",
@@ -1149,15 +1640,1875 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Grade 3–4 infusion reaction requires permanent discontinuation."
+          "message": "Grade 3–4 infusion reaction requires permanent discontinuation.",
+          "recommendation": "Grade 3–4 infusion reaction requires permanent discontinuation."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
         },
         "explanation": "Grade 3–4 infusion reaction requires permanent discontinuation."
+      },
+      {
+        "id": "ANC_REVIEW_1_TO_1_5",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "ANC 1.0 to <1.5: consult treating team; continuation may be considered only if clinically well. Do not issue automatic clearance.",
+          "recommendation": "ANC 1.0 to <1.5: consult treating team; continuation may be considered only if clinically well. Do not issue automatic clearance."
+        },
+        "explanation": "ANC 1.0 to <1.5: consult treating team; continuation may be considered only if clinically well. Do not issue automatic clearance.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ANC_BELOW_0_5_REDUCTION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 0.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "ANC <0.5: delay chemotherapy until recovery and source advises a 25% reduction of previous pemetrexed/carboplatin doses; consultant confirms active phase and restart.",
+          "recommendation": "ANC <0.5: delay chemotherapy until recovery and source advises a 25% reduction of previous pemetrexed/carboplatin doses; consultant confirms active phase and restart."
+        },
+        "explanation": "ANC <0.5: delay chemotherapy until recovery and source advises a 25% reduction of previous pemetrexed/carboplatin doses; consultant confirms active phase and restart.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PLATELETS_REVIEW_75_100",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Platelets 75 to <100: consult treating team and consider continuation only if clinically well; no automatic clearance.",
+          "recommendation": "Platelets 75 to <100: consult treating team and consider continuation only if clinically well; no automatic clearance."
+        },
+        "explanation": "Platelets 75 to <100: consult treating team and consider continuation only if clinically well; no automatic clearance.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PLATELETS_BELOW_50_REDUCTION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Platelets <50: delay chemotherapy until recovery; source advises 25% reduction, or 50% if bleeding. Confirm bleeding status and consultant restart plan.",
+          "recommendation": "Platelets <50: delay chemotherapy until recovery; source advises 25% reduction, or 50% if bleeding. Confirm bleeding status and consultant restart plan."
+        },
+        "explanation": "Platelets <50: delay chemotherapy until recovery; source advises 25% reduction, or 50% if bleeding. Confirm bleeding status and consultant restart plan.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PLATELETS_BELOW_50_BLEEDING",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "field": "thrombocytopenia_with_bleeding",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Platelets <50 with bleeding: delay chemotherapy until recovery and reduce previous pemetrexed/carboplatin doses by 50% on consultant-directed restart.",
+          "recommendation": "Platelets <50 with bleeding: delay chemotherapy until recovery and reduce previous pemetrexed/carboplatin doses by 50% on consultant-directed restart."
+        },
+        "explanation": "Platelets <50 with bleeding: delay chemotherapy until recovery and reduce previous pemetrexed/carboplatin doses by 50% on consultant-directed restart.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "FEBRILE_NEUTROPENIA_RESTART",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "previous_febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Delay chemotherapy until recovery after febrile neutropenia; source advises 25% reduction of previous pemetrexed/carboplatin doses. Active fever/infection needs urgent assessment.",
+          "recommendation": "Delay chemotherapy until recovery after febrile neutropenia; source advises 25% reduction of previous pemetrexed/carboplatin doses. Active fever/infection needs urgent assessment."
+        },
+        "explanation": "Delay chemotherapy until recovery after febrile neutropenia; source advises 25% reduction of previous pemetrexed/carboplatin doses. Active fever/infection needs urgent assessment.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PEME_NUMERIC_CRCL_LT45",
+        "priority": 10,
+        "when": {
+          "field": "gfr_crcl_ml_min",
+          "operator": "<",
+          "value": 45
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "CrCl <45 mL/min is an NCCP exclusion and pemetrexed is not recommended. Verify that the renal estimate is appropriate; do not allow a numeric entry to bypass the categorical renal pathway.",
+          "recommendation": "CrCl <45 mL/min is an NCCP exclusion and pemetrexed is not recommended. Verify that the renal estimate is appropriate; do not allow a numeric entry to bypass the categorical renal pathway."
+        },
+        "explanation": "CrCl <45 mL/min is an NCCP exclusion and pemetrexed is not recommended. Verify that the renal estimate is appropriate; do not allow a numeric entry to bypass the categorical renal pathway.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CARBO_CRCL_LT60",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "gfr_crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "CrCl <60 increases carboplatin myelosuppression risk. Verify renal method, source renal precautions and current induction phase; this does not prescribe a final dose.",
+          "recommendation": "CrCl <60 increases carboplatin myelosuppression risk. Verify renal method, source renal precautions and current induction phase; this does not prescribe a final dose."
+        },
+        "explanation": "CrCl <60 increases carboplatin myelosuppression risk. Verify renal method, source renal precautions and current induction phase; this does not prescribe a final dose.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ACTIVE_UNSTABLE_CNS_METASTASES",
+        "priority": 8,
+        "when": {
+          "field": "active_unstable_cns_metastases",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "NCCP exclusion: Active or unstable CNS metastases. Confirm specialist suitability before treatment.",
+          "recommendation": "NCCP exclusion: Active or unstable CNS metastases. Confirm specialist suitability before treatment."
+        },
+        "explanation": "NCCP exclusion: Active or unstable CNS metastases. Confirm specialist suitability before treatment.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "IMMUNOSUPPRESSIVE_SYSTEMIC_THERAPY",
+        "priority": 8,
+        "when": {
+          "field": "immunosuppressive_systemic_therapy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "NCCP exclusion: Systemic immunosuppression >10 mg/day prednisolone equivalent or another immunosuppressant (excluding topical/inhaled therapy). Confirm specialist suitability before treatment.",
+          "recommendation": "NCCP exclusion: Systemic immunosuppression >10 mg/day prednisolone equivalent or another immunosuppressant (excluding topical/inhaled therapy). Confirm specialist suitability before treatment."
+        },
+        "explanation": "NCCP exclusion: Systemic immunosuppression >10 mg/day prednisolone equivalent or another immunosuppressant (excluding topical/inhaled therapy). Confirm specialist suitability before treatment.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "HISTORY_ILD_PNEUMONITIS",
+        "priority": 8,
+        "when": {
+          "field": "history_ild_pneumonitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "NCCP exclusion: History of interstitial lung disease or pneumonitis. Confirm specialist suitability before treatment.",
+          "recommendation": "NCCP exclusion: History of interstitial lung disease or pneumonitis. Confirm specialist suitability before treatment."
+        },
+        "explanation": "NCCP exclusion: History of interstitial lung disease or pneumonitis. Confirm specialist suitability before treatment.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "SERIOUS_AUTOIMMUNE_HISTORY",
+        "priority": 8,
+        "when": {
+          "field": "serious_autoimmune_history",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "NCCP caution: History of serious autoimmune disease. Confirm specialist suitability before treatment.",
+          "recommendation": "NCCP caution: History of serious autoimmune disease. Confirm specialist suitability before treatment."
+        },
+        "explanation": "NCCP caution: History of serious autoimmune disease. Confirm specialist suitability before treatment.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PEME_HEPATIC_BILIRUBIN",
+        "priority": 8,
+        "when": {
+          "field": "bilirubin_uln_multiple",
+          "operator": ">",
+          "value": 1.5
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Pemetrexed is not recommended with bilirubin >1.5×ULN; NCCP requires a clinical decision. Distinguish baseline impairment from treatment-related hepatotoxicity.",
+          "recommendation": "Pemetrexed is not recommended with bilirubin >1.5×ULN; NCCP requires a clinical decision. Distinguish baseline impairment from treatment-related hepatotoxicity."
+        },
+        "explanation": "Pemetrexed is not recommended with bilirubin >1.5×ULN; NCCP requires a clinical decision. Distinguish baseline impairment from treatment-related hepatotoxicity.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PEME_HEPATIC_AST_NO_METS",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_metastases",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Without hepatic metastases, aminotransferases >3×ULN: pemetrexed not recommended; clinical decision required.",
+          "recommendation": "Without hepatic metastases, aminotransferases >3×ULN: pemetrexed not recommended; clinical decision required."
+        },
+        "explanation": "Without hepatic metastases, aminotransferases >3×ULN: pemetrexed not recommended; clinical decision required.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PEME_HEPATIC_AST_METS",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_metastases",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "With hepatic metastases, aminotransferases >5×ULN: pemetrexed not recommended; clinical decision required.",
+          "recommendation": "With hepatic metastases, aminotransferases >5×ULN: pemetrexed not recommended; clinical decision required."
+        },
+        "explanation": "With hepatic metastases, aminotransferases >5×ULN: pemetrexed not recommended; clinical decision required.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PEME_HEPATIC_CONTEXT",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_metastases",
+              "operator": "missing"
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Confirm hepatic metastasis status to apply pemetrexed baseline liver thresholds (>3×ULN without, >5×ULN with metastases). Assess possible immune hepatitis separately.",
+          "recommendation": "Confirm hepatic metastasis status to apply pemetrexed baseline liver thresholds (>3×ULN without, >5×ULN with metastases). Assess possible immune hepatitis separately."
+        },
+        "explanation": "Confirm hepatic metastasis status to apply pemetrexed baseline liver thresholds (>3×ULN without, >5×ULN with metastases). Assess possible immune hepatitis separately.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_BILI_STOP",
+        "priority": 10,
+        "when": {
+          "field": "bilirubin_uln_multiple",
+          "operator": ">",
+          "value": 3
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "For treatment-related immune hepatitis with bilirubin >3×ULN, permanently discontinue pembrolizumab. Urgently assess cause and consultant management.",
+          "recommendation": "For treatment-related immune hepatitis with bilirubin >3×ULN, permanently discontinue pembrolizumab. Urgently assess cause and consultant management."
+        },
+        "explanation": "For treatment-related immune hepatitis with bilirubin >3×ULN, permanently discontinue pembrolizumab. Urgently assess cause and consultant management.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_RECURRENT_PNEUMONITIS",
+        "priority": 10,
+        "when": {
+          "field": "recurrent_grade2_pneumonitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Recurrent grade 2 immune pneumonitis: permanently discontinue pembrolizumab according to Table 3.",
+          "recommendation": "Recurrent grade 2 immune pneumonitis: permanently discontinue pembrolizumab according to Table 3."
+        },
+        "explanation": "Recurrent grade 2 immune pneumonitis: permanently discontinue pembrolizumab according to Table 3.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_RECURRENT_COLITIS",
+        "priority": 10,
+        "when": {
+          "field": "recurrent_grade3_colitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Recurrent grade 3 immune colitis: permanently discontinue pembrolizumab according to Table 3.",
+          "recommendation": "Recurrent grade 3 immune colitis: permanently discontinue pembrolizumab according to Table 3."
+        },
+        "explanation": "Recurrent grade 3 immune colitis: permanently discontinue pembrolizumab according to Table 3.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "SYMPTOMATIC_HYPOPHYSITIS",
+        "priority": 10,
+        "when": {
+          "field": "symptomatic_hypophysitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Symptomatic hypophysitis: withhold pembrolizumab and arrange prompt specialist assessment. Controlled endocrinopathy may permit continuation after recovery and steroid taper, per consultant plan.",
+          "recommendation": "Symptomatic hypophysitis: withhold pembrolizumab and arrange prompt specialist assessment. Controlled endocrinopathy may permit continuation after recovery and steroid taper, per consultant plan."
+        },
+        "explanation": "Symptomatic hypophysitis: withhold pembrolizumab and arrange prompt specialist assessment. Controlled endocrinopathy may permit continuation after recovery and steroid taper, per consultant plan.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "TYPE1_DIABETES_KETOACIDOSIS",
+        "priority": 10,
+        "when": {
+          "field": "type1_diabetes_ketoacidosis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Type 1 diabetes with ketoacidosis: withhold pembrolizumab and arrange prompt specialist assessment. Controlled endocrinopathy may permit continuation after recovery and steroid taper, per consultant plan.",
+          "recommendation": "Type 1 diabetes with ketoacidosis: withhold pembrolizumab and arrange prompt specialist assessment. Controlled endocrinopathy may permit continuation after recovery and steroid taper, per consultant plan."
+        },
+        "explanation": "Type 1 diabetes with ketoacidosis: withhold pembrolizumab and arrange prompt specialist assessment. Controlled endocrinopathy may permit continuation after recovery and steroid taper, per consultant plan.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "HYPERTHYROIDISM_GRADE3_PLUS",
+        "priority": 10,
+        "when": {
+          "field": "hyperthyroidism_grade3_plus",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Grade ≥3 hyperthyroidism: withhold pembrolizumab and arrange prompt specialist assessment. Controlled endocrinopathy may permit continuation after recovery and steroid taper, per consultant plan.",
+          "recommendation": "Grade ≥3 hyperthyroidism: withhold pembrolizumab and arrange prompt specialist assessment. Controlled endocrinopathy may permit continuation after recovery and steroid taper, per consultant plan."
+        },
+        "explanation": "Grade ≥3 hyperthyroidism: withhold pembrolizumab and arrange prompt specialist assessment. Controlled endocrinopathy may permit continuation after recovery and steroid taper, per consultant plan.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_TYPE1_HIGH_GLUCOSE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "type1_diabetes",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "glucose_mmol_l",
+              "operator": ">",
+              "value": 13.9
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Type 1 diabetes with glucose >13.9 mmol/L is the NCCP grade ≥3 hyperglycaemia trigger: withhold pembrolizumab and urgently assess, including ketones.",
+          "recommendation": "Type 1 diabetes with glucose >13.9 mmol/L is the NCCP grade ≥3 hyperglycaemia trigger: withhold pembrolizumab and urgently assess, including ketones."
+        },
+        "explanation": "Type 1 diabetes with glucose >13.9 mmol/L is the NCCP grade ≥3 hyperglycaemia trigger: withhold pembrolizumab and urgently assess, including ketones.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_SKIN_HOLD",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "rash_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "suspected_sjs_ten",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Grade 3 skin reaction or suspected SJS/TEN: withhold pembrolizumab and arrange urgent specialist assessment.",
+          "recommendation": "Grade 3 skin reaction or suspected SJS/TEN: withhold pembrolizumab and arrange urgent specialist assessment."
+        },
+        "explanation": "Grade 3 skin reaction or suspected SJS/TEN: withhold pembrolizumab and arrange urgent specialist assessment.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_SKIN_STOP",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "rash_grade",
+              "operator": ">=",
+              "value": 4
+            },
+            {
+              "field": "confirmed_sjs_ten",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Grade 4 skin reaction or confirmed SJS/TEN: permanently discontinue pembrolizumab.",
+          "recommendation": "Grade 4 skin reaction or confirmed SJS/TEN: permanently discontinue pembrolizumab."
+        },
+        "explanation": "Grade 4 skin reaction or confirmed SJS/TEN: permanently discontinue pembrolizumab.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_OTHER_HOLD",
+        "priority": 10,
+        "when": {
+          "field": "other_immune_grade2_3",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Withhold pembrolizumab for other immune toxicity according to grade and organ-specific management; seek consultant review.",
+          "recommendation": "Withhold pembrolizumab for other immune toxicity according to grade and organ-specific management; seek consultant review."
+        },
+        "explanation": "Withhold pembrolizumab for other immune toxicity according to grade and organ-specific management; seek consultant review.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_OTHER_STOP",
+        "priority": 10,
+        "when": {
+          "field": "immune_permanent_stop_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Permanently discontinue pembrolizumab for the specified severe/recurrent immune event, except source-defined controlled endocrine exceptions requiring consultant agreement.",
+          "recommendation": "Permanently discontinue pembrolizumab for the specified severe/recurrent immune event, except source-defined controlled endocrine exceptions requiring consultant agreement."
+        },
+        "explanation": "Permanently discontinue pembrolizumab for the specified severe/recurrent immune event, except source-defined controlled endocrine exceptions requiring consultant agreement.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_12_WEEK_STOP",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "ici_failed_recovery_12_weeks",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "ici_steroid_gt10_at_12_weeks",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "The NCCP 12-week recovery/steroid condition is not met: permanently discontinue pembrolizumab under consultant management; never stop or taper steroids abruptly.",
+          "recommendation": "The NCCP 12-week recovery/steroid condition is not met: permanently discontinue pembrolizumab under consultant management; never stop or taper steroids abruptly."
+        },
+        "explanation": "The NCCP 12-week recovery/steroid condition is not met: permanently discontinue pembrolizumab under consultant management; never stop or taper steroids abruptly.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ICI_LIVER_METS_BASELINE_G2_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "immune_liver_metastasis_baseline_g2",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "ast_alt_increase_percent",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "ast_alt_elevation_days",
+              "operator": ">=",
+              "value": 7
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "With liver metastases and baseline grade 2 AST/ALT, an increase ≥50% lasting ≥1 week meets the NCCP pembrolizumab discontinuation pathway; confirm immune attribution and consultant management.",
+          "recommendation": "With liver metastases and baseline grade 2 AST/ALT, an increase ≥50% lasting ≥1 week meets the NCCP pembrolizumab discontinuation pathway; confirm immune attribution and consultant management."
+        },
+        "explanation": "With liver metastases and baseline grade 2 AST/ALT, an increase ≥50% lasting ≥1 week meets the NCCP pembrolizumab discontinuation pathway; confirm immune attribution and consultant management.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_DIARRHOEA",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "diarrhoea_colitis_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_hospitalisation",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Hold pemetrexed/carboplatin until diarrhoea resolves to baseline; source restart at 75% of previous doses. Assess the separate pembrolizumab colitis pathway.",
+          "recommendation": "Hold pemetrexed/carboplatin until diarrhoea resolves to baseline; source restart at 75% of previous doses. Assess the separate pembrolizumab colitis pathway."
+        },
+        "explanation": "Hold pemetrexed/carboplatin until diarrhoea resolves to baseline; source restart at 75% of previous doses. Assess the separate pembrolizumab colitis pathway.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_NEURO_G2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Hold chemotherapy until neurotoxicity returns to baseline. Source restart: pemetrexed 100%, carboplatin 50% of previous dose if still in induction.",
+          "recommendation": "Hold chemotherapy until neurotoxicity returns to baseline. Source restart: pemetrexed 100%, carboplatin 50% of previous dose if still in induction."
+        },
+        "explanation": "Hold chemotherapy until neurotoxicity returns to baseline. Source restart: pemetrexed 100%, carboplatin 50% of previous dose if still in induction.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_NEURO_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "recurrent_neurotoxicity",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Grade ≥3 neurotoxicity or any recurrence: discontinue pemetrexed/carboplatin per NCCP; assess active phase and attribution.",
+          "recommendation": "Grade ≥3 neurotoxicity or any recurrence: discontinue pemetrexed/carboplatin per NCCP; assess active phase and attribution."
+        },
+        "explanation": "Grade ≥3 neurotoxicity or any recurrence: discontinue pemetrexed/carboplatin per NCCP; assess active phase and attribution.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_TWO_REDUCTIONS",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "prior_chemotherapy_dose_reductions",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Grade ≥3 toxicity after two chemotherapy dose reductions: Table 4 says consider discontinuation of both drugs and discuss with consultant. Introductory wording differs (>grade 3); do not automate a restart.",
+          "recommendation": "Grade ≥3 toxicity after two chemotherapy dose reductions: Table 4 says consider discontinuation of both drugs and discuss with consultant. Introductory wording differs (>grade 3); do not automate a restart."
+        },
+        "explanation": "Grade ≥3 toxicity after two chemotherapy dose reductions: Table 4 says consider discontinuation of both drugs and discuss with consultant. Introductory wording differs (>grade 3); do not automate a restart.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_LIVER_HOLD",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "treatment_related_hepatotoxicity",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "any": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Hold pemetrexed/carboplatin until treatment-related liver toxicity returns to baseline; restart at 75% of previous doses only after consultant review. More severe values meet a separate stop rule.",
+          "recommendation": "Hold pemetrexed/carboplatin until treatment-related liver toxicity returns to baseline; restart at 75% of previous doses only after consultant review. More severe values meet a separate stop rule."
+        },
+        "explanation": "Hold pemetrexed/carboplatin until treatment-related liver toxicity returns to baseline; restart at 75% of previous doses only after consultant review. More severe values meet a separate stop rule.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_LIVER_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "induction"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "treatment_related_hepatotoxicity",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "any": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">",
+                      "value": 10
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 20
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pemetrexed",
+            "carboplatin"
+          ],
+          "message": "Treatment-related bilirubin >10×ULN or AST/ALT >20×ULN: discontinue pemetrexed/carboplatin.",
+          "recommendation": "Treatment-related bilirubin >10×ULN or AST/ALT >20×ULN: discontinue pemetrexed/carboplatin."
+        },
+        "explanation": "Treatment-related bilirubin >10×ULN or AST/ALT >20×ULN: discontinue pemetrexed/carboplatin.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "LOW_ANC_MAINTENANCE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately."
+        },
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately."
+      },
+      {
+        "id": "LOW_PLATELETS_MAINTENANCE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately."
+        },
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway. This applies to the chemotherapy components; pembrolizumab suitability is assessed separately."
+      },
+      {
+        "id": "SEVERE_NONHAEM_MAINTENANCE",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Hold pemetrexed/carboplatin for grade ≥3 other non-haematological toxicity until recovery to baseline; source advises resuming at 75% of previous doses. Consultant confirms attribution, recovery and active components; assess immune toxicity separately.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Hold pemetrexed/carboplatin for grade ≥3 other non-haematological toxicity until recovery to baseline; source advises resuming at 75% of previous doses. Consultant confirms attribution, recovery and active components; assess immune toxicity separately."
+        },
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Hold pemetrexed/carboplatin for grade ≥3 other non-haematological toxicity until recovery to baseline; source advises resuming at 75% of previous doses. Consultant confirms attribution, recovery and active components; assess immune toxicity separately."
+      },
+      {
+        "id": "PEME_MUCOSITIS_MAINTENANCE",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Hold chemotherapy for grade ≥3 mucositis until recovery to baseline. Source restart: pemetrexed 50% of previous dose, carboplatin 100% if still in induction; consultant confirms restart.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Hold chemotherapy for grade ≥3 mucositis until recovery to baseline. Source restart: pemetrexed 50% of previous dose, carboplatin 100% if still in induction; consultant confirms restart."
+        },
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": "2–6",
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Hold chemotherapy for grade ≥3 mucositis until recovery to baseline. Source restart: pemetrexed 50% of previous dose, carboplatin 100% if still in induction; consultant confirms restart."
+      },
+      {
+        "id": "ANC_REVIEW_1_TO_1_5_MAINTENANCE",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. ANC 1.0 to <1.5: consult treating team; continuation may be considered only if clinically well. Do not issue automatic clearance.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. ANC 1.0 to <1.5: consult treating team; continuation may be considered only if clinically well. Do not issue automatic clearance."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. ANC 1.0 to <1.5: consult treating team; continuation may be considered only if clinically well. Do not issue automatic clearance.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "ANC_BELOW_0_5_REDUCTION_MAINTENANCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 0.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. ANC <0.5: delay chemotherapy until recovery and source advises a 25% reduction of previous pemetrexed/carboplatin doses; consultant confirms active phase and restart.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. ANC <0.5: delay chemotherapy until recovery and source advises a 25% reduction of previous pemetrexed/carboplatin doses; consultant confirms active phase and restart."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. ANC <0.5: delay chemotherapy until recovery and source advises a 25% reduction of previous pemetrexed/carboplatin doses; consultant confirms active phase and restart.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PLATELETS_REVIEW_75_100_MAINTENANCE",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Platelets 75 to <100: consult treating team and consider continuation only if clinically well; no automatic clearance.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Platelets 75 to <100: consult treating team and consider continuation only if clinically well; no automatic clearance."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Platelets 75 to <100: consult treating team and consider continuation only if clinically well; no automatic clearance.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PLATELETS_BELOW_50_REDUCTION_MAINTENANCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Platelets <50: delay chemotherapy until recovery; source advises 25% reduction, or 50% if bleeding. Confirm bleeding status and consultant restart plan.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Platelets <50: delay chemotherapy until recovery; source advises 25% reduction, or 50% if bleeding. Confirm bleeding status and consultant restart plan."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Platelets <50: delay chemotherapy until recovery; source advises 25% reduction, or 50% if bleeding. Confirm bleeding status and consultant restart plan.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "PLATELETS_BELOW_50_BLEEDING_MAINTENANCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "field": "thrombocytopenia_with_bleeding",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Platelets <50 with bleeding: delay chemotherapy until recovery and reduce previous pemetrexed/carboplatin doses by 50% on consultant-directed restart.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Platelets <50 with bleeding: delay chemotherapy until recovery and reduce previous pemetrexed/carboplatin doses by 50% on consultant-directed restart."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Platelets <50 with bleeding: delay chemotherapy until recovery and reduce previous pemetrexed/carboplatin doses by 50% on consultant-directed restart.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "FEBRILE_NEUTROPENIA_RESTART_MAINTENANCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "field": "previous_febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Delay chemotherapy until recovery after febrile neutropenia; source advises 25% reduction of previous pemetrexed/carboplatin doses. Active fever/infection needs urgent assessment.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Delay chemotherapy until recovery after febrile neutropenia; source advises 25% reduction of previous pemetrexed/carboplatin doses. Active fever/infection needs urgent assessment."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Delay chemotherapy until recovery after febrile neutropenia; source advises 25% reduction of previous pemetrexed/carboplatin doses. Active fever/infection needs urgent assessment.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_DIARRHOEA_MAINTENANCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "any": [
+                {
+                  "field": "diarrhoea_colitis_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_hospitalisation",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Hold pemetrexed/carboplatin until diarrhoea resolves to baseline; source restart at 75% of previous doses. Assess the separate pembrolizumab colitis pathway.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Hold pemetrexed/carboplatin until diarrhoea resolves to baseline; source restart at 75% of previous doses. Assess the separate pembrolizumab colitis pathway."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Hold pemetrexed/carboplatin until diarrhoea resolves to baseline; source restart at 75% of previous doses. Assess the separate pembrolizumab colitis pathway.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_NEURO_G2_MAINTENANCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Hold chemotherapy until neurotoxicity returns to baseline. Source restart: pemetrexed 100%, carboplatin 50% of previous dose if still in induction.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Hold chemotherapy until neurotoxicity returns to baseline. Source restart: pemetrexed 100%, carboplatin 50% of previous dose if still in induction."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Hold chemotherapy until neurotoxicity returns to baseline. Source restart: pemetrexed 100%, carboplatin 50% of previous dose if still in induction.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_NEURO_STOP_MAINTENANCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "any": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "recurrent_neurotoxicity",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Grade ≥3 neurotoxicity or any recurrence: discontinue pemetrexed/carboplatin per NCCP; assess active phase and attribution.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Grade ≥3 neurotoxicity or any recurrence: discontinue pemetrexed/carboplatin per NCCP; assess active phase and attribution."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Grade ≥3 neurotoxicity or any recurrence: discontinue pemetrexed/carboplatin per NCCP; assess active phase and attribution.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_TWO_REDUCTIONS_MAINTENANCE",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "all": [
+                {
+                  "field": "prior_chemotherapy_dose_reductions",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Grade ≥3 toxicity after two chemotherapy dose reductions: Table 4 says consider discontinuation of both drugs and discuss with consultant. Introductory wording differs (>grade 3); do not automate a restart.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Grade ≥3 toxicity after two chemotherapy dose reductions: Table 4 says consider discontinuation of both drugs and discuss with consultant. Introductory wording differs (>grade 3); do not automate a restart."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Grade ≥3 toxicity after two chemotherapy dose reductions: Table 4 says consider discontinuation of both drugs and discuss with consultant. Introductory wording differs (>grade 3); do not automate a restart.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_LIVER_HOLD_MAINTENANCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "all": [
+                {
+                  "field": "treatment_related_hepatotoxicity",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "any": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Hold pemetrexed/carboplatin until treatment-related liver toxicity returns to baseline; restart at 75% of previous doses only after consultant review. More severe values meet a separate stop rule.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Hold pemetrexed/carboplatin until treatment-related liver toxicity returns to baseline; restart at 75% of previous doses only after consultant review. More severe values meet a separate stop rule."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Hold pemetrexed/carboplatin until treatment-related liver toxicity returns to baseline; restart at 75% of previous doses only after consultant review. More severe values meet a separate stop rule.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CHEMO_LIVER_STOP_MAINTENANCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "maintenance"
+            },
+            {
+              "all": [
+                {
+                  "field": "treatment_related_hepatotoxicity",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "any": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">",
+                      "value": 10
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 20
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pemetrexed"
+          ],
+          "message": "Maintenance phase: carboplatin is no longer active. Treatment-related bilirubin >10×ULN or AST/ALT >20×ULN: discontinue pemetrexed/carboplatin.",
+          "recommendation": "Maintenance phase: carboplatin is no longer active. Treatment-related bilirubin >10×ULN or AST/ALT >20×ULN: discontinue pemetrexed/carboplatin."
+        },
+        "explanation": "Maintenance phase: carboplatin is no longer active. Treatment-related bilirubin >10×ULN or AST/ALT >20×ULN: discontinue pemetrexed/carboplatin.",
+        "source": {
+          "document": "NCCP 00568 v5",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+          "checked_date": "2026-10-25"
+        }
       }
     ]
   },
@@ -1172,20 +3523,26 @@
     "Regimen-specific exclusions encoded in the interactive assessment"
   ],
   "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Treatment-specific pulmonary, cardiac, endocrine, neurological and biomarker monitoring as applicable"
+    "FBC, renal/liver profile, glucose and thyroid function; measured isotope GFR preferred or validated GFR/CrCl estimate.",
+    "HBsAg, hepatitis B core antibody and hepatitis C screening. Confirm metastatic non-squamous histology, no EGFR/ALK alteration and ECOG 0–1.",
+    "Review autoimmune disease, pneumonitis, infection, immunosuppression, CNS disease, medicines and adequacy of folate/B12 supplementation.",
+    "FBC, renal/liver profile and glucose before every cycle in induction and maintenance. Pemetrexed requires CrCl at least 45 mL/min.",
+    "Thyroid function every 3–6 weeks; screen for immune toxicity every visit.",
+    "Assess ototoxicity and sensory neural damage before each platinum-containing cycle. Verify phase and stop carboplatin after induction.",
+    "Folic acid continues throughout pemetrexed and for 21 days after its last dose. Vitamin B12 remains due every three cycles while pemetrexed continues.",
+    "Immune-related symptoms can arise during or after treatment; maintain alert-card and urgent-contact education. Response imaging follows the consultant plan."
   ],
   "dose_modifications": [
     "Component-specific haematological, renal, hepatic and non-haematological pathways are encoded as independently actionable rules."
   ],
   "supportive_care": {
-    "emetogenic_risk": "moderate",
-    "script_id": "nccp-parenteral-moderate",
+    "emetogenic_risk": "phase_dependent",
+    "script_id": null,
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+    "mapping_basis": "Carboplatin AUC5 induction is high risk; separate pembrolizumab/pemetrexed maintenance is low risk. Use phase support and reconcile pemetrexed rash dexamethasone.",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
@@ -1193,6 +3550,103 @@
       "Folic acid supplementation",
       "Vitamin B12 supplementation",
       "Dexamethasone rash prophylaxis"
-    ]
-  }
+    ],
+    "emetogenic_risk_note": "Phase-specific support: high induction; low maintenance. Do not carry the induction NK1/steroid course unchanged into maintenance.",
+    "phase_specific_plan": "patient/00568/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6891/568_V5_Pembrolizumab_PEMEtrexed_CARBOplatin.pdf",
+    "phase_profiles": {
+      "induction": {
+        "level": "high",
+        "script_id": "nccp-v8-carboplatin-v08420"
+      },
+      "maintenance": {
+        "level": "low",
+        "script_id": "nccp-parenteral-low"
+      }
+    }
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "induction",
+      "label": "Induction: up to four cycles",
+      "cycle_length_days": 21,
+      "planned_cycles": 4,
+      "active_drugs": [
+        "pembrolizumab",
+        "pemetrexed",
+        "carboplatin"
+      ],
+      "duration_text": "Up to four 21-day cycles",
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "pembrolizumab",
+          "dose": {
+            "value": 200,
+            "unit": "mg"
+          },
+          "route": "IV infusion",
+          "notes": "Over 30 minutes; 0.2–5 micrometre in-line filter. Administer first."
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "drug": "pemetrexed",
+          "dose": {
+            "value": 500,
+            "unit": "mg/m2"
+          },
+          "route": "IV infusion",
+          "notes": "Over 10 minutes; folic acid, B12 and rash prophylaxis required during induction and maintenance."
+        },
+        {
+          "day": 1,
+          "order": 3,
+          "drug": "carboplatin",
+          "dose": {
+            "value": 5,
+            "unit": "AUC"
+          },
+          "route": "IV infusion",
+          "notes": "Over 30 minutes; cycles 1–4 only. NCCP maximum 750 mg. Final dose and renal estimate require prescribing/pharmacy review; do not calculate from this educational schedule."
+        }
+      ]
+    },
+    {
+      "phase_id": "maintenance",
+      "label": "Maintenance after induction",
+      "cycle_length_days": 21,
+      "planned_cycles": null,
+      "active_drugs": [
+        "pembrolizumab",
+        "pemetrexed"
+      ],
+      "duration_text": "Continue pembrolizumab and pemetrexed until progression or unacceptable toxicity, according to the consultant plan. Trial pembrolizumab maximum 35 cycles is not a universal NCCP stop rule.",
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "pembrolizumab",
+          "dose": {
+            "value": 200,
+            "unit": "mg"
+          },
+          "route": "IV infusion",
+          "notes": "Over 30 minutes; 0.2–5 micrometre in-line filter. Administer first."
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "drug": "pemetrexed",
+          "dose": {
+            "value": 500,
+            "unit": "mg/m2"
+          },
+          "route": "IV infusion",
+          "notes": "Over 10 minutes; folic acid, B12 and rash prophylaxis required during induction and maintenance."
+        }
+      ]
+    }
+  ]
 }

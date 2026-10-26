@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 8,
     "source_url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
-    "sactcheck_encoding_version": "0.83.8",
+    "sactcheck_encoding_version": "0.84.21",
     "treatment_setting": [
       "metastatic"
     ],
@@ -68,8 +68,8 @@
       "level": "source_reconciled_rule_encoding",
       "label": "Source reconciled · independent clinical/pharmacy review pending",
       "source_reconciled": true,
-      "reconciled_release": "0.83.8",
-      "reconciled_date": "2026-10-17",
+      "reconciled_release": "0.84.21",
+      "reconciled_date": "2026-10-25",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
@@ -78,7 +78,10 @@
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00936-v1",
     "legacy_protocol_id_alias": "nccp-00936-vcurrent",
-    "source_checked_date": "2026-10-17"
+    "source_checked_date": "2026-10-25",
+    "full_suite_release": "0.84.21",
+    "schedule_summary": "Tucatinib twice daily every day; capecitabine twice daily on Days 1–14 then off on Days 15–21; trastuzumab every 21 days by IV infusion or a locally approved under-the-skin injection. Continue while beneficial and tolerated, with clinician-approved changes.",
+    "source_pdf_sha256": "f1f02692bbe6dba4267d6e94c8c3d9a313acdd7d679786bf2595b885825358f1"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -238,7 +241,7 @@
       "input_role": "decision"
     },
     "days_overdue_trastuzumab": {
-      "label": "Days overdue for IV trastuzumab",
+      "label": "Days overdue for trastuzumab (confirm formulation)",
       "type": "number",
       "demo_value": 2,
       "required": false,
@@ -583,6 +586,24 @@
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "ctcae_category": "allergic_reaction",
       "assessment_guidance": "Assign the toxicity grade using the clinical descriptors; assess symptoms, baseline and functional impact. The source protocol action takes precedence over educational grading."
+    },
+    "trastuzumab_formulation": {
+      "label": "Trastuzumab formulation",
+      "type": "select",
+      "required": false,
+      "always_show": true,
+      "input_role": "context",
+      "demo_value": "iv",
+      "options": [
+        {
+          "value": "iv",
+          "label": "Intravenous trastuzumab"
+        },
+        {
+          "value": "sc",
+          "label": "Locally approved subcutaneous trastuzumab"
+        }
+      ]
     }
   },
   "required_inputs": [],
@@ -2521,24 +2542,34 @@
       {
         "rule_id": "HER2_RELOAD",
         "when": {
-          "field": "days_overdue_trastuzumab",
-          "operator": ">",
-          "value": 7
+          "all": [
+            {
+              "field": "trastuzumab_formulation",
+              "operator": "==",
+              "value": "iv"
+            },
+            {
+              "field": "days_overdue_trastuzumab",
+              "operator": ">",
+              "value": 7
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "trastuzumab"
           ],
-          "recommendation": "IV trastuzumab more than one week overdue may require 8 mg/kg reloading, then 6 mg/kg every three weeks. Confirm the individual prescription.",
+          "recommendation": "IV trastuzumab more than one week overdue: the NCCP source specifies reloading with 8 mg/kg, then 6 mg/kg every three weeks. Confirm the individual prescription and the new administration date. This is not the SC missed-dose rule.",
           "dose_calculation": "specialist_review",
           "show_in_dose_actions": true
         },
-        "explanation": "IV trastuzumab more than one week overdue may require 8 mg/kg reloading, then 6 mg/kg every three weeks. Confirm the individual prescription.",
+        "explanation": "IV trastuzumab more than one week overdue: the NCCP source specifies reloading with 8 mg/kg, then 6 mg/kg every three weeks. Confirm the individual prescription and the new administration date. This is not the SC missed-dose rule.",
         "source": {
           "document": "NCCP 00936 v1",
           "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
-          "page": 4
+          "page": 4,
+          "checked_date": "2026-10-25"
         }
       },
       {
@@ -2602,6 +2633,95 @@
           "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
           "page": 11
         }
+      },
+      {
+        "rule_id": "HER2_FORMULATION_NEEDED",
+        "when": {
+          "all": [
+            {
+              "field": "trastuzumab_formulation",
+              "operator": "missing"
+            },
+            {
+              "field": "days_overdue_trastuzumab",
+              "operator": ">",
+              "value": 0
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Confirm IV versus locally approved SC trastuzumab before missed-dose advice. IV reloading must not be applied to the fixed 600 mg SC formulation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm IV versus locally approved SC trastuzumab before missed-dose advice. IV reloading must not be applied to the fixed 600 mg SC formulation.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 4,
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "rule_id": "HER2_SC_PRESCRIPTION",
+        "when": {
+          "field": "trastuzumab_formulation",
+          "operator": "==",
+          "value": "sc"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Locally approved SC trastuzumab is an alternative fixed 600 mg injection every 21 days with no loading dose. Confirm the formulation-specific prescription; do not calculate a weight-based IV dose for this route.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Locally approved SC trastuzumab is an alternative fixed 600 mg injection every 21 days with no loading dose. Confirm the formulation-specific prescription; do not calculate a weight-based IV dose for this route.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 3,
+          "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "rule_id": "HER2_SC_MISSED",
+        "when": {
+          "all": [
+            {
+              "field": "trastuzumab_formulation",
+              "operator": "==",
+              "value": "sc"
+            },
+            {
+              "field": "days_overdue_trastuzumab",
+              "operator": ">",
+              "value": 0
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab"
+          ],
+          "recommendation": "Missed SC trastuzumab: rearrange the 600 mg dose as soon as possible; keep at least three weeks between consecutive SC doses. There is no SC reloading dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Missed SC trastuzumab: rearrange the 600 mg dose as soon as possible; keep at least three weeks between consecutive SC doses. There is no SC reloading dose.",
+        "source": {
+          "document": "NCCP 00936 v1",
+          "url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
+          "page": 4,
+          "checked_date": "2026-10-25"
+        }
       }
     ]
   },
@@ -2617,11 +2737,13 @@
     "provenance": "National NCCP antiemetic guidance is linked for antiemetic support. Confirm regimen specific supportive care against the current NCCP protocol and applicable local policy.",
     "script_id": "nccp-oral-minimal-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf",
     "mapping_basis": "Oral SACT classification from NCCP V6 Table 8.",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
-    "breakthrough_profile_id": "nccp-breakthrough-general"
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
+    "breakthrough_profile_id": "nccp-breakthrough-general",
+    "phase_specific_plan": "patient/00936/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/8391/936_Tucatinib_Regimen.pdf"
   },
   "treatment_phases": [
     {
@@ -2692,7 +2814,7 @@
           },
           "day": 1,
           "route": "IV infusion",
-          "notes": "IV 8 mg/kg loading dose initially; use verified formulation-specific prescription."
+          "notes": "This row is the IV schedule: 8 mg/kg loading initially, then 6 mg/kg. NCCP also permits locally approved SC trastuzumab 600 mg every 21 days without loading, as an alternative rather than an additional medicine. Confirm formulation; the SC selection suppresses the IV numeric suggestion."
         }
       ]
     }

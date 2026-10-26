@@ -1,9 +1,10 @@
+const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),crypto=require('crypto'),vm=require('vm');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
 const codes=['00785','00789','00790','00796','00797'],R=require('../js/patient-asset-registry-v0810'),J=require('../js/treatment-journey-v0837'),B=require('../js/breast-library-v0837'),kb=json('data/regimen-knowledge-base-v08412-addendum.json');
 for(const code of codes){
- const d=json(`data/patient-knowledge/${code}.json`),phases=json('data/phase-support-v0838.json').regimens[code];assert.equal(d.suite_release,'0.84.15');assert.equal(d.cycle_display,'reference-chronology');assert.equal(d.cycle_days,21);
+ const d=json(`data/patient-knowledge/${code}.json`),phases=json('data/phase-support-v0838.json').regimens[code];assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.15'));assert.equal(d.cycle_display,'reference-chronology');assert.equal(d.cycle_days,21);
  const src=new Set(d.sources.map(s=>s.id));for(const ch of d.chapters)for(const it of ch.items)for(const id of it.source_ids)assert(src.has(id));
  const j=J.definitions[code];assert.equal(j.has_patient_dates,false);for(const l of j.lanes){assert.equal(l.cells.length,j.stages.length);for(const id of l.source_ids)assert(j.sources.some(s=>s.id===id));}
  assert(/12 weeks/.test(JSON.stringify(d.monitoring_schedule)));assert(/cycle 5/.test(JSON.stringify(d.monitoring_schedule)));for(const row of d.monitoring_schedule.rows)assert.equal(row.cells.length,5);

@@ -55,9 +55,9 @@ for(const edit of edits)check(()=>{
   assert.equal(cmfgem.before,anthra.after);
   const finalBreast=JSON.parse(read('validation/breast-final-v08419/builder-revision.json'));
   assert.equal(finalBreast.before,cmfgem.after);
-  const nextEndocrine=JSON.parse(read('validation/endocrine-next-v08420/builder-revision.json'));assert.equal(nextEndocrine.before,finalBreast.after);assert.equal(crypto.createHash('sha256').update(content).digest('hex'),nextEndocrine.after);
+  const nextEndocrine=JSON.parse(read('validation/endocrine-next-v08420/builder-revision.json'));assert.equal(nextEndocrine.before,finalBreast.after);const completion=JSON.parse(read('validation/breast-completion-v08421/builder-revision.json'));assert.equal(completion.before,nextEndocrine.after);assert.equal(crypto.createHash('sha256').update(content).digest('hex'),completion.after);
   assert(content.toString().includes('Insert numbers here'));
- }else if(edit.path==='tools/endocrine-patient-suite-v0842.cjs'){const revision=JSON.parse(read('validation/endocrine-next-v08420/shared-builder-revisions.json'))[edit.path];assert.equal(revision.before,edit.after);assert.equal(crypto.createHash('sha256').update(content).digest('hex'),revision.after);}else assert.equal(crypto.createHash('sha256').update(content).digest('hex'),require('./helpers/retrospective-v08413.cjs').expectedHash(edit.path,edit.after),edit.path);
+ }else if(edit.path==='tools/endocrine-patient-suite-v0842.cjs'){const revision=JSON.parse(read('validation/endocrine-next-v08420/shared-builder-revisions.json'))[edit.path];assert.equal(revision.before,edit.after);const completion=JSON.parse(read('validation/breast-completion-v08421/shared-builder-revisions.json'))[edit.path];assert.equal(completion.before,revision.after);assert.equal(crypto.createHash('sha256').update(content).digest('hex'),completion.after);}else assert.equal(crypto.createHash('sha256').update(content).digest('hex'),require('./helpers/retrospective-v08413.cjs').expectedHash(edit.path,edit.after),edit.path);
 
 });
 console.log(`${checks} interface, source-range boundary, partial-input, steroid context, export and contact-migration checks passed.`);

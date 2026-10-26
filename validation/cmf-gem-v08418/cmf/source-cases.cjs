@@ -11,7 +11,7 @@ function check(code,name,input,type,pattern,component,absent=false){
  try{
   const r=E.assess(ps[code],input),f=r.findings.filter(x=>!x.domainAssessment&&!/^PARTIAL_/.test(x.ruleId||''));
   row.actual={action:r.actionType,findings:f.map(x=>({type:x.actionType,text:x.explanation,components:x.action?.components})),errors:r.errors,invalid:r.invalid};
-  assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);
+  assert.deepEqual(r.errors,[]);require("../../../tests/helpers/source-input-validation-v08421.cjs")(r);
   if(type==='incomplete')assert.equal(r.actionType,'incomplete');
   else {const hits=f.filter(x=>(!type||x.actionType===type)&&(!pattern||new RegExp(pattern,'i').test(x.explanation))&&(!component||x.action?.components?.includes(component)));assert.equal(hits.length>0,!absent,name);}
   if(!absent&&type!=='incomplete'){assert(!['proceed','proceed_with_caution'].includes(r.actionType));const m=D.buildModificationModel(ps[code],r);assert(!m.rows.some(x=>/^\d+(\.\d+)?\s*mg/.test(x.protocolDose||'')),'Unresolved review generated a numeric prescribed dose');}

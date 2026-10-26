@@ -1,3 +1,4 @@
+const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),cp=require('child_process'),crypto=require('crypto');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
@@ -7,7 +8,7 @@ assert.deepEqual(codes,['00228','00743','00230','00736','00205']);assert.equal(k
 const expected={'00228':[21,[1,8]],'00743':[28,[1,15]],'00230':[21,[1]],'00736':[28,[1,8,15]],'00205':[28,[1]]};
 for(const code of codes){
  const d=json(`data/patient-knowledge/${code}.json`),p=json('protocols/breast/'+fs.readdirSync(path.join(root,'protocols/breast')).find(n=>n.startsWith(code)));
- const migrated=['00743','00230','00736'].includes(code);assert.equal(d.suite_release,migrated?'0.84.19':'0.84.1');assert.equal(d.cycle_display,'reference-chronology');assert.equal(p.metadata.sactcheck_encoding_version,migrated?'0.84.19':'0.84.1');assert.equal(d.protocol_version,String(p.metadata.nccp_version));
+ const migrated=['00743','00230','00736'].includes(code);assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':(migrated?'0.84.19':'0.84.1'));assert.equal(d.cycle_display,'reference-chronology');assert.equal(p.metadata.sactcheck_encoding_version,current21.has(d.code)?'0.84.21':(migrated?'0.84.19':'0.84.1'));assert.equal(d.protocol_version,String(p.metadata.nccp_version));
  assert.equal((migrated?json('data/breast-final-v08419-source-index.json'):index).regimens[code].rule_count,p.rule_engine.rules.length);assert.match(index.regimens[code].source_sha256,/^[a-f0-9]{64}$/);assert.equal(p.metadata.validation.clinical_use_authorised,false);
  assert(p.rule_engine.rules.every(r=>r.source?.url&&r.source.page));assert.equal(new Set(p.rule_engine.rules.map(r=>(r.rule_id||r.id))).size,p.rule_engine.rules.length);
  assert.equal(d.anatomy.length,4,'Sparse medicine-specific map');assert.equal(J.definitions[code].has_patient_dates,false);assert.equal(J.definitions[code].schedule_type,'relative-educational');assert.equal(d.phases.length,1);assert(!JSON.stringify(d).includes('Docetaxel'));
@@ -23,7 +24,7 @@ for(const code of codes){
  for(const name of ['guide','passport','consent-form','sactcard','logistics','supportive-care','treatment-journey','support-treatment'])assert.deepEqual(fs.readFileSync(path.join(root,`patient/${code}/${name}.pdf`)),fs.readFileSync(path.join(root,`docs/patient/${code}/${name}.pdf`)));
  assert(read(`docs/patient/${code}/guide.html`).includes(`../../../patient/${code}/guide.pdf`));
  assert.equal(R.relativePath(code,'supportive-care-selector'),`patient/${code}/supportive-care.html`);assert.equal(R.relativePath(code,'longitudinal'),`patient/${code}/treatment-journey.html`);assert(read('404.html').includes(code));
- const k=(migrated?json('data/regimen-knowledge-base-v08419-addendum.json'):kb).regimen_profiles.find(k=>k.protocol_id===d.protocol_id);assert(k);assert.deepEqual(k.monitoring_and_toxicity.longitudinal_schedule,d.monitoring_schedule);assert(kb.evidence_records.some(k=>k.protocol_id===d.protocol_id));assert(D.buildModel(p).phases.length>=1);
+ const k=(current21.has(code)?json('data/regimen-knowledge-base-v08421-addendum.json'):migrated?json('data/regimen-knowledge-base-v08419-addendum.json'):kb).regimen_profiles.find(k=>k.protocol_id===d.protocol_id);assert(k);assert.deepEqual(k.monitoring_and_toxicity.longitudinal_schedule,d.monitoring_schedule);assert(kb.evidence_records.some(k=>k.protocol_id===d.protocol_id));assert(D.buildModel(p).phases.length>=1);
  assert(B.matchesReceptor(json('data/breast-library-contexts-v0837.json').regimens[code],'hrpos-her2neg'));assert.deepEqual(json('data/breast-library-contexts-v0837.json').regimens[code].settings,['advanced']);
  const sm=json('data/sustainability-regimen-metadata-v0691.json').profiles[p.protocol_id];assert.equal(sm.administration_frequency.value,d.schedule_summary);assert.equal(sm.ambulatory_pump.value,false);
  assert.equal(support[code].length,1);assert.equal(support[code][0].emetogenic_risk,'Low');assert(!JSON.stringify(support[code]).includes('Dexamethasone'));assert(!JSON.stringify(d).includes('Oncotype'));
@@ -31,7 +32,7 @@ for(const code of codes){
 }
 const p230=json('data/patient-knowledge/00230.json');assert(/two cycles/.test(p230.schedule_summary));assert(/two cycles|2 cycles/i.test(JSON.stringify(p230.monitoring_schedule)));
 const p736=json('data/patient-knowledge/00736.json');assert(p736.timeline.some(r=>r.id==='break'&&r.start===22));assert(JSON.stringify(p736.monitoring_schedule).includes('Day 8'));assert(/off-label/.test(p736.schedule_summary));
-const p205=json('data/patient-knowledge/00205.json');assert(JSON.stringify(p205.monitoring_schedule).includes('450 mg/m²'));assert(JSON.stringify(p205.monitoring_schedule).includes('Baseline echo'));assert(!/every (3 months|12 weeks)/.test(JSON.stringify(p205.monitoring_schedule)));
+const p205=json('data/patient-knowledge/00205.json');assert(JSON.stringify(p205.monitoring_schedule).includes('450 mg/m²'));assert(JSON.stringify(p205.monitoring_schedule).includes('Baseline ECG and echo/MUGA'));assert(!/every (3 months|12 weeks)/.test(JSON.stringify(p205.monitoring_schedule)));
 for(const c of ['00228','00743'])assert(JSON.stringify(json(`data/patient-knowledge/${c}.json`).monitoring_schedule).includes('before every dose'));
 const protectedFiles=json('validation/advanced-breast-v0841/protected-patient-baseline.json');for(const [p,h] of Object.entries(protectedFiles))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),require('./helpers/contact-migration-v0844.cjs').expectedHash(p,h),'Prior patient asset changed outside the approved contact migration: '+p);
 for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});

@@ -1,3 +1,4 @@
+const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),cp=require('child_process');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
@@ -9,7 +10,7 @@ const kb=json('data/regimen-knowledge-base-v0840-addendum.json'),support=json('d
 assert.equal(codes.length,16);assert.equal(kb.regimen_profiles.length,16);assert.equal(kb.evidence_records.length,16);
 for(const code of codes){
  const d=json(`data/patient-knowledge/${code}.json`),p=json('protocols/breast/'+fs.readdirSync(path.join(root,'protocols/breast')).find(n=>n.startsWith(code)));
- assert.equal(d.suite_release,['00202','00485'].includes(code)?'0.84.19':migrated18.has(code)?'0.84.18':migrated17.has(code)?'0.84.17':migrated.has(code)?'0.84.16':'0.84.0');assert.equal(d.cycle_display,'reference-chronology');assert.equal(p.metadata.sactcheck_encoding_version,['00202','00485'].includes(code)?'0.84.19':migrated18.has(code)?'0.84.18':migrated17.has(code)?'0.84.17':migrated.has(code)?'0.84.16':'0.84.0');assert.equal(d.protocol_version,String(p.metadata.nccp_version));
+ assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':(['00202','00485'].includes(code)?'0.84.19':migrated18.has(code)?'0.84.18':migrated17.has(code)?'0.84.17':migrated.has(code)?'0.84.16':'0.84.0'));assert.equal(d.cycle_display,'reference-chronology');assert.equal(p.metadata.sactcheck_encoding_version,current21.has(d.code)?'0.84.21':(['00202','00485'].includes(code)?'0.84.19':migrated18.has(code)?'0.84.18':migrated17.has(code)?'0.84.17':migrated.has(code)?'0.84.16':'0.84.0'));assert.equal(d.protocol_version,String(p.metadata.nccp_version));
  if(!migrated.has(code))assert.equal(index.regimens[code].rule_count,p.rule_engine.rules.length);else assert(p.rule_engine.rules.length>=index.regimens[code].rule_count,'Retrospective rules retain coverage; source cases test changed semantics');assert.match(index.regimens[code].source_sha256,/^[a-f0-9]{64}$/);assert.equal(p.metadata.validation.clinical_use_authorised,false);
  assert(p.rule_engine.rules.every(r=>r.source?.url&&r.source.page));assert.equal(new Set(p.rule_engine.rules.map(r=>r.rule_id)).size,p.rule_engine.rules.length);
  assert(d.anatomy.length>=3&&d.anatomy.length<=8);assert.equal(J.definitions[code].has_patient_dates,false);assert.equal(J.definitions[code].schedule_type,'relative-educational');

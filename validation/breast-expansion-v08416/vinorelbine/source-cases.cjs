@@ -7,7 +7,7 @@ const dir=mode==='integrated'?path.join(root,'protocols/breast'):path.join(__dir
 const codes=['00526','00798'];
 const ps=Object.fromEntries(codes.map(c=>[c,JSON.parse(fs.readFileSync(path.join(dir,fs.readdirSync(dir).find(f=>f.startsWith(c+'-')))))]));
 const rows=[];
-function t(code,name,input,source,check){let x={code,name,input,source};try{const r=E.assess(ps[code],input);const f=r.findings.filter(f=>!f.domainAssessment&&!/^PARTIAL_/.test(f.ruleId||''));const text=f.map(x=>(x.explanation||'')+' '+(x.recommendation||'')).join(' ');x.actual={action:r.actionType,findings:f.map(x=>({ruleId:x.ruleId,action:x.actionType,recommendation:x.recommendation})),errors:r.errors,invalid:r.invalid};assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);check({r,f,text,p:ps[code]});x.pass=true;}catch(e){x.pass=false;x.error=e.message;}rows.push(x)}
+function t(code,name,input,source,check){let x={code,name,input,source};try{const r=E.assess(ps[code],input);const f=r.findings.filter(f=>!f.domainAssessment&&!/^PARTIAL_/.test(f.ruleId||''));const text=f.map(x=>(x.explanation||'')+' '+(x.recommendation||'')).join(' ');x.actual={action:r.actionType,findings:f.map(x=>({ruleId:x.ruleId,action:x.actionType,recommendation:x.recommendation})),errors:r.errors,invalid:r.invalid};assert.deepEqual(r.errors,[]);require("../../../tests/helpers/source-input-validation-v08421.cjs")(r);check({r,f,text,p:ps[code]});x.pass=true;}catch(e){x.pass=false;x.error=e.message;}rows.push(x)}
 const act=a=>q=>assert.equal(q.r.actionType,a),has=id=>q=>assert(q.f.some(x=>x.ruleId===id)),lacks=id=>q=>assert(!q.f.some(x=>x.ruleId===id));
 for(const c of codes){
  const n='NCCP '+c+' p5 haematology';

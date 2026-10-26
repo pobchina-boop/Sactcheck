@@ -1,0 +1,159 @@
+{
+  "release": "0.84.21",
+  "audit_baseline": "0.84.20",
+  "findings": [
+    {
+      "id": "A01",
+      "priority": "High",
+      "type": "Source freshness",
+      "codes": [
+        "00212",
+        "00207",
+        "00447",
+        "00448"
+      ],
+      "finding": "Four stored source links return 404; replacements have newer versions.",
+      "status": "Closed in development package; independent clinical/pharmacy/PPI approval remains pending",
+      "resolution": "Reconciled current NCCP 00212 v7, 00207 v6, 00447 v7 and 00448 v5; updated sources, source registers and affected assessment/knowledge/patient records.",
+      "evidence": [
+        "bevacizumab/sources.json",
+        "source-schedule/sources.json"
+      ]
+    },
+    {
+      "id": "A02",
+      "priority": "Medium",
+      "type": "Clinician service gap",
+      "codes": [
+        "00526",
+        "00798",
+        "00568",
+        "00586"
+      ],
+      "finding": "Three authored suites have no useful structured clinician schedule; 00586 has dose levels but no phases.",
+      "status": "Closed in development package; independent clinical/pharmacy/PPI approval remains pending",
+      "resolution": "Added complete schedules for 00526/00798; phase-aware 00568 induction and maintenance; 00586 capecitabine schedule separates radiotherapy modality.",
+      "evidence": [
+        "shared-breast",
+        "source-schedule",
+        "engine-audit.json"
+      ]
+    },
+    {
+      "id": "A03",
+      "priority": "Medium",
+      "type": "Document layout",
+      "codes": [
+        "00222",
+        "00317",
+        "00318",
+        "00382",
+        "00569",
+        "00713",
+        "00714",
+        "00831"
+      ],
+      "finding": "Older passport instruction line clipped on pages 2\u20138, 56 pages total.",
+      "status": "Closed in development package; independent clinical/pharmacy/PPI approval remains pending",
+      "resolution": "Repaired the clipped instruction line on 56 pages across eight legacy passports and retained identical docs copies.",
+      "evidence": [
+        "passport-layout-repairs.json",
+        "static-audit.json"
+      ]
+    },
+    {
+      "id": "A04",
+      "priority": "Low",
+      "type": "Navigation",
+      "codes": [
+        "00348",
+        "00734",
+        "00857",
+        "00858",
+        "00860",
+        "00861",
+        "00775"
+      ],
+      "finding": "Eight dead in-page links: six evidence anchors and two source anchors.",
+      "status": "Closed in development package; independent clinical/pharmacy/PPI approval remains pending",
+      "resolution": "Corrected eight dead evidence/source anchors; global local-link and fragment checks pass.",
+      "evidence": [
+        "static-audit.json"
+      ]
+    },
+    {
+      "id": "A05",
+      "priority": "Low",
+      "type": "Source references",
+      "codes": [
+        "00775",
+        "00947"
+      ],
+      "finding": "Three undefined source-ID references: two visible agent citations and one latent urgent-source ID.",
+      "status": "Closed in development package; independent clinical/pharmacy/PPI approval remains pending",
+      "resolution": "Resolved undefined source IDs in 00775 and 00947; rebuilt affected pages and 00947 logistics PDF.",
+      "evidence": [
+        "static-audit.json",
+        "retrospective-hashes.json"
+      ]
+    },
+    {
+      "id": "A06",
+      "priority": "Low",
+      "type": "Download compatibility",
+      "codes": [
+        "00568"
+      ],
+      "finding": "Canonical consent PDF exists, compatibility docs copy absent.",
+      "status": "Closed in development package; independent clinical/pharmacy/PPI approval remains pending",
+      "resolution": "00568 consent PDF regenerated from the immutable consent scaffold and copied identically to docs/patient/00568.",
+      "evidence": [
+        "pdf-validation.json",
+        "static-audit.json"
+      ]
+    },
+    {
+      "id": "A07",
+      "priority": "Low",
+      "type": "Engine hardening",
+      "codes": [
+        "00947"
+      ],
+      "finding": "Direct engine probes silently coerce invalid boolean and retain invalid select token. Normal UI route not demonstrated.",
+      "status": "Closed in development package; independent clinical/pharmacy/PPI approval remains pending",
+      "resolution": "Reject malformed boolean, numeric and select inputs, keep invalid results incomplete, retain source-defined urgent holds and unknown-phase safeguards. Derived creatinine operands cannot produce a numerical trend or dose; a valid single operand retains the source missing-pair review.",
+      "evidence": [
+        "engine-audit.json",
+        "../../tests/helpers/source-input-validation-v08421.cjs",
+        "../../js/assessment-engine.js"
+      ]
+    },
+    {
+      "id": "A08",
+      "priority": "Planned backlog",
+      "type": "Suite maturity",
+      "codes": [],
+      "finding": "23 authored suites lack at least one newer-template asset; 22 retain numeric patient trial metrics in data.",
+      "status": "Closed in development package; independent clinical/pharmacy/PPI approval remains pending",
+      "resolution": "All 106 authored suites now have the 17 checked core pages/PDFs. The 38 remaining retrospectives are complete; no authored patient evidence.metrics lists retain numeric trial results.",
+      "evidence": [
+        "static-audit.json",
+        "retrospective-inventory.json"
+      ]
+    },
+    {
+      "id": "A09",
+      "priority": "Medium",
+      "type": "Coverage reporting",
+      "codes": [],
+      "finding": "82/84 counts authored breast catalogue suites, not complete services or clinical approval. Shared-regimen gaps exceed the exact-Breast retrospective queue.",
+      "status": "Closed in development package; independent clinical/pharmacy/PPI approval remains pending",
+      "resolution": "Report current official breast catalogue coverage (84/84), exact-Breast local coverage (72/72), full-suite asset presence and development retrospective coverage (106/106) separately. Independent clinical/pharmacy/PPI approval remains pending.",
+      "evidence": [
+        "breast-coverage.json",
+        "retrospective-inventory.json",
+        "static-audit.json"
+      ]
+    }
+  ]
+}

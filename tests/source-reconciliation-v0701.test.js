@@ -30,7 +30,7 @@ function patched(code){
   const ids=(protocol.rule_engine?.rules||[]).map(ruleId).filter(Boolean);
   assert.strictEqual(new Set(ids).size,ids.length,`${code}: hotfix must be idempotent`);
   if(code!=="00619"){
-    assert.strictEqual((protocol.metadata.encoding_maturity.reconciled_release||protocol.metadata.encoding_maturity.audit_release),code==="00525"?"0.83.7":code==="00892"?"0.83.8":"0.70.1");
+    assert.strictEqual((protocol.metadata.encoding_maturity.reconciled_release||protocol.metadata.encoding_maturity.audit_release),code==="00525"?"0.84.21":code==="00892"?"0.84.21":"0.70.1");
     assert.strictEqual(protocol.metadata.validation.consultant_reviewed,false);
     assert.strictEqual(protocol.metadata.validation.oncology_pharmacy_reviewed,false);
     assert.strictEqual(protocol.metadata.validation.clinical_use_authorised,false);

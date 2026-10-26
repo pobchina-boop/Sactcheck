@@ -16,10 +16,10 @@ cp.execFileSync(process.execPath,['tools/build-patient-knowledge.cjs','--check']
 const code=fs.readFileSync(path.join(root,'assets/patient/patient-knowledge.js'),'utf8');
 assert.doesNotMatch(code,/localStorage|sessionStorage|fetch\(|XMLHttpRequest|sendBeacon/,'patient knowledge must not persist or transmit patient-entered data');
 const consent=fs.readFileSync(path.join(root,'patient/00568/consent-form.html'),'utf8');
-assert.match(consent,/Generic SACT risks \/ discussion points/i);
+assert.match(consent,/Treatment discussion/i);
 assert.match(consent,/Regimen \/ agent-specific material risks/i);
 for(const drug of ['Pembrolizumab','Pemetrexed','Carboplatin']) assert.match(consent,new RegExp(drug,'i'));
-for(const risk of ['Pneumonitis','Colitis','Hepatitis','Endocrine','Nephritis','Mouth soreness','Renal \/ kidney toxicity','Hypersensitivity']) assert.match(consent,new RegExp(risk,'i'));
+for(const risk of ['Immune inflammation','lungs','bowel','liver','kidneys','glands','Mouth soreness','Kidney toxicity','Allergic reactions']) assert.match(consent,new RegExp(risk,'i'));
 assert.doesNotMatch(consent,/textarea|discussion-benefit|discussion-alternatives/,'clinician consent generator should be a concise one-page form, not the old discussion worksheet');
 const consentPdf=path.join(root,'patient/00568/consent-form.pdf');assert.ok(fs.existsSync(consentPdf)&&fs.statSync(consentPdf).size>10000,'one-page consent PDF must be present');
 let opened='';global.open=url=>{opened=url;return {};};

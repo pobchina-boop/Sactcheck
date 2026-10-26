@@ -1,0 +1,3 @@
+// Legacy source cases deliberately probe unlisted enums. They must now also be flagged invalid.
+const assert=require('node:assert/strict');
+module.exports=r=>{const expected=r.definitions.filter(d=>d.visible!==false&&d.type==='select'&&r.inputs[d.id]!=null&&!(d.renal_input?.mode==='protocol_specific_band'&&typeof r.inputs[d.id]==='number')&&!d.options.some(o=>String(Object.hasOwn(o,'decision_value')?o.decision_value:o.value)===String(r.inputs[d.id]))).map(d=>d.id).sort();assert.deepEqual(r.invalid.map(x=>x.id).sort(),expected);if(expected.length){assert(!r.complete);assert(!['proceed','proceed_with_caution'].includes(r.actionType));}};

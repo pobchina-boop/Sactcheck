@@ -506,21 +506,22 @@
 
     definitions.forEach(definition => {
       const raw = rawInputs[definition.id];
-      if (raw === undefined || raw === null || raw === "") {
+      if (raw === undefined || raw === null || raw === "" || (typeof raw === "string" && raw.trim() === "")) {
         inputs[definition.id] = null;
         return;
       }
 
       if (definition.type === "number") {
-        inputs[definition.id] = Number(raw);
+        inputs[definition.id] = ["number", "string"].includes(typeof raw) ? Number(raw) : NaN;
         return;
       }
       if (definition.type === "boolean") {
-        inputs[definition.id] = raw === true || raw === "true";
+        inputs[definition.id] = raw === true || raw === "true" ? true
+          : raw === false || raw === "false" ? false : raw;
         return;
       }
       if (definition.type === "select") {
-        const option = asArray(definition.options).find(item => String(item?.value) === String(raw));
+        const option = ["string", "number", "boolean"].includes(typeof raw) ? asArray(definition.options).find(item => String(item?.value) === String(raw)) : null;
         if (option) {
           inputs[definition.id] = Object.prototype.hasOwnProperty.call(option, "decision_value")
             ? option.decision_value
@@ -528,6 +529,13 @@
           if (option.sets_fields && typeof option.sets_fields === "object") {
             derivedAssignments.push(option.sets_fields);
           }
+          return;
+        }
+        // Legacy renal-band integrations also accept a verified exact number.
+        // Preserve that documented input contract without accepting arbitrary tokens.
+        if (definition.renal_input?.mode === "protocol_specific_band" &&
+            ["number", "string"].includes(typeof raw) && Number.isFinite(Number(raw))) {
+          inputs[definition.id] = Number(raw);
           return;
         }
       }
@@ -575,7 +583,7 @@
     definitions.forEach(definition => {
       const raw = rawInputs?.[definition.id];
       if (definition.type === "select" && raw !== undefined && raw !== null && raw !== "") {
-        const option = asArray(definition.options).find(item => String(item?.value) === String(raw));
+        const option = ["string", "number", "boolean"].includes(typeof raw) ? asArray(definition.options).find(item => String(item?.value) === String(raw)) : null;
         display[definition.id] = option?.label || String(raw);
         return;
       }
@@ -594,7 +602,18 @@
     definitions.forEach(definition => {
       if (definition.visible === false) return;
       const value = inputs[definition.id];
-      if (definition.type === "number" && value !== null) {
+      const exactRenalValue = definition.type === "select" && definition.renal_input?.mode === "protocol_specific_band" && typeof value === "number" && Number.isFinite(value);
+      if (value !== null && value !== undefined && definition.type === "boolean" && typeof value !== "boolean") {
+        invalid.push({ id: definition.id, label: definition.label, reason: "must be an explicit true or false value" });
+      }
+      if (value !== null && value !== undefined && definition.type === "select" && !exactRenalValue) {
+        const allowed = ["string", "number", "boolean"].includes(typeof value) && asArray(definition.options).some(option => {
+          const expected = Object.prototype.hasOwnProperty.call(option || {}, "decision_value") ? option.decision_value : option?.value;
+          return String(expected) === String(value);
+        });
+        if (!allowed) invalid.push({ id: definition.id, label: definition.label, reason: "must be one of the listed options" });
+      }
+      if ((definition.type === "number" || exactRenalValue) && value !== null) {
         if (!Number.isFinite(value)) {
           invalid.push({ id: definition.id, label: definition.label, reason: "must be a valid number" });
           return;
@@ -839,7 +858,31 @@
     // rule engine evaluates every rule it can and reports the remainder as
     // unassessed coverage.
     if (validation.invalid.length) {
-      return buildIncompleteResult(protocol, profile, context, inputs, definitions, validation, rawInputs || {});
+      // Invalid values cannot drive dosing, but must not hide an independent
+      // urgent finding. Explicit source enum guards remain review-only findings.
+      const invalidIds = new Set(validation.invalid.map(item => item.id));
+      definitions.forEach(def => {
+        if (invalidIds.has(def.id) && def.derived_value) asArray(def.derived_value.fields).forEach(id=>invalidIds.add(id));
+        if (asArray(def.options).some(option => Object.keys(option.sets_fields || {}).some(id=>invalidIds.has(id)))) invalidIds.add(def.id);
+      });
+      const cleanRaw = Object.fromEntries(Object.entries(rawInputs || {}).filter(([id]) => !invalidIds.has(id)));
+      const safe = assess(protocol, cleanRaw, options);
+      const guardInputs = { ...safe.inputs }, guardIds = new Set();
+      definitions.forEach(def => {
+        if (invalidIds.has(def.id) && def.type === "select" && ["string", "number"].includes(typeof inputs[def.id])) {guardInputs[def.id] = inputs[def.id]; guardIds.add(def.id); }
+      });
+      const guards = RuleEngine.evaluate(protocol, guardInputs, buildContext(protocol, profile, guardInputs)).findings.filter(f => f.actionType === "consultant_review" && (f.conditionFields || []).some(id => guardIds.has(id)));
+      // A source rule may explicitly act when a phase is missing. Keep those
+      // conservative findings too: every invalid value was removed before this
+      // assessment, so none can supply a dose or erase a known urgent hold.
+      const restricted = [...safe.findings.filter(f => !f.domainAssessment && !/^PARTIAL_/.test(f.ruleId || "") && f.actionType !== "proceed"), ...guards].filter((f,i,a) => a.findIndex(x=>x.ruleId===f.ruleId)===i).sort((a,b)=>(b.priority||0)-(a.priority||0));
+      const blocked = buildIncompleteResult(protocol, profile, context, inputs, definitions, validation, rawInputs || {});
+      return { ...blocked, findings: restricted, skippedRules: safe.skippedRules, unassessed: safe.unassessed,
+        actionType: restricted[0]?.actionType || "incomplete",
+        recommendation: (restricted.length ? buildRecommendation(protocol, restricted[0].actionType, restricted) + " " : "") + blocked.recommendation,
+        status: restricted.length ? (ACTION_LABELS[restricted[0].actionType] || "Clinical review required") : "Assessment contains invalid values",
+        statusClass: restricted.length ? (STATUS_CLASS[restricted[0].actionType] || "warn") : "warn"
+      };
     }
 
     const endocrineContext = isImmunotherapyProtocol(protocol) && Endocrine ? Endocrine.assess(inputs, options.endocrineReferences) : {rows:[],reviewRequired:false};

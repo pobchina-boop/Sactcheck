@@ -139,7 +139,7 @@
   function toJsonInput(input) {
     const repeat = input.assessmentType === "repeat" || Number(input.delayWeeks) > 0;
     return {
-      assessment_type: input.assessmentType,
+      assessment_type: input.assessmentType === "baseline" ? "baseline" : "current",
       cycle_number: input.cycle,
       delay_weeks: input.delayWeeks,
       current_oxaliplatin_level: input.currentOxLevel,

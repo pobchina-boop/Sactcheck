@@ -1,0 +1,32 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const repo=path.resolve(__dirname,'../../..'),mode=process.argv[2]||'proposed';
+const E=require(path.join(repo,'js/assessment-engine')),D=require(path.join(repo,'js/protocol-dose-schedule'));
+const codes=['00272','00285','00776','00794','00936'];
+const P=Object.fromEntries(codes.map(c=>{let dir=c==='00936'&&mode==='proposed'?path.join(__dirname,'proposed'):path.join(repo,'protocols/breast');return[c,JSON.parse(fs.readFileSync(path.join(dir,fs.readdirSync(dir).find(f=>f.startsWith(c+'-')&&f.endsWith('.json')))))];}));
+const results=[];const ids=r=>r.findings.map(x=>x.ruleId);const has=(r,id)=>assert(ids(r).includes(id),'Missing '+id+': '+ids(r));const lacks=(r,id)=>assert(!ids(r).includes(id),'Unexpected '+id);
+function run(c,name,inputs,check,source){const z={code:c,name,inputs,source};try{const r=E.assess(P[c],inputs);assert.deepEqual(r.invalid,[]);assert.deepEqual(r.errors,[]);const m=D.buildModificationModel(P[c],r);check(r,m);z.pass=true;z.findings=ids(r);}catch(e){z.pass=false;z.error=e.message;}results.push(z);}
+function structure(name,check){try{check();results.push({name,pass:true});}catch(e){results.push({name,pass:false,error:e.message});}}
+for(const c of ['00272','00285']){
+ for(const [lvef,drop,hold] of [[49.9,10,true],[50,10,false],[49.9,9.9,false],[45,15,true]])run(c,'Combined LVEF threshold '+lvef+'/'+drop,{lvef_percent:lvef,lvef_drop_points:drop},r=>(hold?has:lacks)(r,'LVEF_HOLD'),'NCCP p3: LVEF<50 AND absolute fall≥10');
+ run(c,'Low LVEF with unknown fall',{lvef_percent:49},r=>has(r,'LVEF_CHANGE_MISSING'),'NCCP p3 combined condition; missing baseline cannot clear');
+ for(const days of [20.9,21,21.1])run(c,'SC minimum interval '+days,{days_since_last_dose:days},r=>(days<21?has:lacks)(r,'SC_INTERVAL_TOO_SHORT'),'NCCP p3: ≥3 weeks between SC doses');
+ run(c,'SC late dose',{days_overdue:8},r=>has(r,'SC_LATE'),'NCCP p3 SC 600mg as soon as possible, no IV reload');
+}
+for(const grade of [0,1,2,3,4])run('00776','ILD grade '+grade,{ild_pneumonitis_grade:grade},r=>{if(grade===1){has(r,'ILD_G1');lacks(r,'ILD_G2PLUS');}else if(grade>=2)has(r,'ILD_G2PLUS');else{lacks(r,'ILD_G1');lacks(r,'ILD_G2PLUS');}},'NCCP00776p4 grade1 hold; symptomatic grade≥2 permanent stop');
+for(const days of [27.9,28,28.1])run('00776','Grade1 recovery '+days,{ild_pneumonitis_grade:0,ild_grade1_resolution_days:days},r=>(days>28?has:lacks)(r,'ILD_G1_LONG'),'NCCP00776p4: >28days reduce, ≤28same dose after grade0');
+for(const anc of [.49,.5,.99,1])run('00776','ANC '+anc,{anc},r=>{if(anc<.5)has(r,'ANC_G4');else if(anc<1)has(r,'ANC_G3');else{lacks(r,'ANC_G4');lacks(r,'ANC_G3');}},'NCCP00776p4 neutropenia boundaries');
+for(const day of [1,8])for(const anc of [.99,1,1.49,1.5])run('00794','D'+day+' ANC'+anc,{cycle_day:day,anc},r=>(anc<(day===1?1.5:1)?has:lacks)(r,day===1?'D1_ANC':'D8_ANC'),'NCCP00794p2 distinct Day1/Day8 cutoffs');
+run('00794','ANC between thresholds with unknown day',{anc:1.2},r=>has(r,'ANC_DAY_NEEDED'),'NCCP00794p2 treatment day must be known');
+for(const grade of [1,2,3,4])run('00794','Diarrhoea grade'+grade,{diarrhoea_grade:grade},r=>(grade>=3?has:lacks)(r,'DIARRHOEA_HOLD'),'NCCP00794p5: hold grade3–4, resume only grade≤1');
+for(const [dpd,id]of [['complete','DPD_COMPLETE'],['partial','DPD_PARTIAL'],['untested','DPD_UNTESTED']])run('00936','DPD '+dpd,{dpd_status:dpd},r=>has(r,id),'NCCP00936p3–4/11 DPD complete/partial/unknown distinct');
+for(const crcl of [29.9,30,50,50.5,51])run('00936','Renal '+crcl,{crcl_ml_min:crcl},r=>{if(crcl<30)has(r,'RENAL_LT30');else if(crcl<=50)has(r,'RENAL_30_50');else if(crcl<51)has(r,'RENAL_GAP');else{lacks(r,'RENAL_LT30');lacks(r,'RENAL_30_50');lacks(r,'RENAL_GAP');}},'NCCP00936p6 source-specific capecitabine table and decimal gap');
+for(const days of [7,7.01,14])run('00936','IV overdue '+days,{trastuzumab_formulation:'iv',days_overdue_trastuzumab:days},r=>(days>7?has:lacks)(r,'HER2_RELOAD'),'NCCP00936p4 IV missed by >one week');
+for(const days of [1,8,14])run('00936','SC cannot receive IV reload '+days,{trastuzumab_formulation:'sc',days_overdue_trastuzumab:days},(r,m)=>{has(r,'HER2_SC_MISSED');has(r,'HER2_SC_PRESCRIPTION');lacks(r,'HER2_RELOAD');const h=m.rows.filter(x=>/trastuzumab/.test(x.componentId));assert(h.length);assert(!h.some(x=>x.quantified&&/mg\/kg/.test(x.protocolDose||'')),'SC exposed quantified IV dose');},'NCCP00936p3–4: SC fixed600 no loading; min3week interval');
+run('00936','Unknown route does not imply IV reload',{days_overdue_trastuzumab:14},r=>{has(r,'HER2_FORMULATION_NEEDED');lacks(r,'HER2_RELOAD');},'NCCP00936 separate IV and SC missed-dose rules');
+structure('All clinical approvals remain false',()=>{for(const c of codes)for(const k of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(P[c].metadata.validation[k],false,c+' '+k);});
+const A=JSON.parse(fs.readFileSync(path.join(__dirname,'authoring.json'))).regimens;
+for(const c of codes){structure(c+' qualitative patient evidence',()=>{assert.deepEqual(A[c].patient.evidence.metrics,[]);assert(!/\bHR\s*[0-9.]|\d+(?:\.\d+)?\s*(?:%|months)|\d+(?:\.\d+)?\s*(?:versus|vs\.?)/i.test(A[c].patient.evidence.interpretation));});structure(c+' monitor grid and source links',()=>{const p=A[c].patient,m=p.monitoring_schedule;assert(m.rows.length>=5);for(const r of m.rows)assert.equal(r.cells.length,m.columns.length);const ids=new Set(p.sources.map(s=>s.id));for(const i of m.source_ids)assert(ids.has(i),i);for(const i of p.evidence.source_ids)assert(ids.has(i),i);});}
+structure('Early SC no metastatic scan copy',()=>assert(!A['00285'].patient.monitoring_schedule.rows.find(x=>/Cancer scans/.test(x.label)).cells.some(x=>/Metastatic: often/.test(x))));
+structure('Final evidence analysis labels retained',()=>{assert(/final/i.test(A['00936'].evidence.trial));assert(/full-population/.test(A['00794'].evidence.trial));assert(A['00776'].evidence.endpoints.filter(x=>/investigator/.test(x.metric)).length===2);});
+const report={mode,total:results.length,passed:results.filter(x=>x.pass).length,failed:results.filter(x=>!x.pass).length,cases:results};fs.writeFileSync(path.join(__dirname,mode+'-results.json'),JSON.stringify(report,null,2)+'\n');console.log(`${mode}: ${report.passed}/${report.total}`);for(const x of results.filter(x=>!x.pass))console.error(x.code,x.name,x.error);process.exitCode=report.failed?1:0;

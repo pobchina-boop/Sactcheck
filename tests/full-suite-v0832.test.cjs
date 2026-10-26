@@ -31,7 +31,7 @@ for(const code of ['00227','00449','00446']){
  const defs=protocol.input_definitions;const anc=Object.keys(defs).find(k=>/anc.*x10|^anc$/i.test(k));assert(anc,`${code}: ANC input`);const result=engine.assess(protocol,{[anc]:0.3});assert.equal(result.complete,false,`${code}: missing domains must stay unassessed`);assert(result.findings.length>0,`${code}: ANC-only should yield a finding`);
  for(const f of ['index.html','knowledge.html']){const h=read(`patient/${code}/${f}`);assert(h.includes('data-port-pump'));assert(!/<input|<select/.test(h));assert(h.includes(require('../tools/cycle-chronology.cjs').render(d)));}
  assert.equal(d.anatomy.length,8);assert.equal(d.timeline.find(x=>x.id==='pump').end,3);
- if(code==='00446'){assert.doesNotMatch(read(`patient/${code}/index.html`),/Irinotecan|MOSAIC|adjuvant colon/i);assert(read(`patient/${code}/knowledge.html`).includes('9.4 months'));}
+ if(code==='00446'){assert.doesNotMatch(read(`patient/${code}/index.html`),/Irinotecan|MOSAIC|adjuvant colon/i);assert.equal(d.evidence.metrics.length,0);assert(!read(`patient/${code}/knowledge.html`).includes('9.4 months'));assert(JSON.stringify(json('data/regimen-knowledge-base-v08421-addendum.json')).includes('9.4'));}
  else assert.doesNotMatch(read(`patient/${code}/index.html`),/Oxaliplatin|Cold sensitivity|MOSAIC/i);
  assert(d.chapters.length>=6&&d.questions.length>=6);assert(d.agents.every(a=>a.risks.length&&a.symptoms.length));
  const ids=new Set(d.sources.map(x=>x.id));for(const a of d.agents)for(const id of a.source_ids)assert(ids.has(id));for(const id of d.evidence.source_ids)assert(ids.has(id));
