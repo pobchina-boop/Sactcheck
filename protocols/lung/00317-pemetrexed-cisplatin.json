@@ -19,9 +19,9 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.40.0",
+    "sactcheck_encoding_version": "0.84.22",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-07-20",
+    "source_checked_date": "2026-10-26",
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
     "treatment_class": [
@@ -42,10 +42,11 @@
     "validation": {
       "official_catalogue_and_source_link_checked": true,
       "software_tests_completed": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true
     },
     "source_title_exact": "PEMEtrexed 500 mg/m² and CISplatin 75 mg/m² Therapy",
     "display_title_normalised": true,
@@ -64,17 +65,26 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source reconciled; independent clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.22",
+      "audit_date": "2026-10-26",
+      "scope_note": "NCCP indication, count, renal, hepatic and adverse-event pathways reconciled. Clinical decisions and ambiguities require consultant/pharmacy review.",
+      "reconciled_release": "0.84.22",
+      "reconciled_date": "2026-10-26"
     },
-    "canonical_protocol_id": "nccp-00317-v7"
+    "canonical_protocol_id": "nccp-00317-v7",
+    "source_page_count": 6,
+    "source_pdf_sha256": "42a47a58ef471e0d712ba53b285ffc2e2f31beed35cba18ea9438a4844d5b421",
+    "source_retrieval_method": "Fresh official HSE binary PDF downloaded with curl; text extracted and critical source tables visually inspected",
+    "source_text_snapshot_sha256": "84d88f983094063a8650feb32df78f6fd694856832fb7b24bf221f02e0645644",
+    "source_text_snapshot": "validation/lung-core-v08422/pem-platinum/research/nccp-retrieval.txt",
+    "full_suite_release": "0.84.22",
+    "schedule_summary": "Both chemotherapy medicines are planned on Day 1 of a 21-day cycle. For pleural mesothelioma, the source describes up to 4–6 cycles. For advanced non-squamous NSCLC, it describes 4–6 combination cycles followed, when appropriate, by a separate pemetrexed maintenance plan (NCCP00222). The selected preoperative nivolumab combination uses three cycles and a separate immunotherapy plan (NCCP00849). Your team confirms which course applies and may stop or change it earlier."
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -106,6 +116,7 @@
   "treatment_phases": [
     {
       "phase_id": "21_day_cycle",
+      "label": "Day 1 chemotherapy in a 21-day cycle",
       "cycle_length_days": 21,
       "cycles": [],
       "administration": [
@@ -128,8 +139,13 @@
             "value": 75,
             "unit": "mg/m²"
           },
-          "route": "IV infusion"
+          "route": "IV infusion",
+          "duration_minutes": 60
         }
+      ],
+      "notes": [
+        "Pemetrexed then cisplatin. Cisplatin starts 30 minutes after pemetrexed; pre/post hydration under local policy.",
+        "Mesothelioma: maximum 4–6 cycles; advanced NSCLC: 4–6 cycles then separately assessed pemetrexed maintenance NCCP00222 if appropriate; neoadjuvant nivolumab context: three cycles with separate NCCP00849 plan."
       ]
     }
   ],
@@ -138,24 +154,24 @@
       "label": "Indication",
       "type": "select",
       "required": false,
+      "demo_value": "mesothelioma",
+      "ui_section": "treatment_context",
+      "input_role": "context",
       "options": [
         {
           "value": "mesothelioma",
-          "label": "00317a — Chemotherapy-naïve unresectable malignant pleural mesothelioma."
+          "label": "Chemotherapy-naïve unresectable malignant pleural mesothelioma."
         },
         {
           "value": "advanced_nsclc",
-          "label": "00317b — First-line treatment of locally advanced or metastatic non-small cell lung cancer."
+          "label": "First-line treatment of locally advanced or metastatic non-small cell lung cancer."
         },
         {
           "value": "neoadjuvant_nsclc_nivolumab",
-          "label": "00317c — With nivolumab for neoadjuvant treatment of resectable NSCLC at high risk of recurrence with PD-L1 expression ≥1% (3 cycles)."
+          "label": "With nivolumab for neoadjuvant treatment of resectable NSCLC at high risk of recurrence with PD-L1 expression ≥1% (3 cycles)."
         }
       ],
-      "ui_section": "treatment_context",
-      "demo_value": "mesothelioma",
-      "always_show": true,
-      "input_role": "context"
+      "always_show": true
     },
     "assessment_type": {
       "label": "Assessment stage",
@@ -241,16 +257,11 @@
       "input_role": "decision"
     },
     "platelet_bleeding": {
-      "label": "Platelets <50 ×10⁹/L with bleeding",
+      "label": "Platelets below 50 with bleeding (confirmed event)",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "ui_section": "clinical",
-      "visible_when": {
-        "field": "platelets",
-        "operator": "<",
-        "value": 50
-      },
       "input_role": "decision"
     },
     "crcl_ml_min": {
@@ -309,7 +320,7 @@
         "mode": "protocol_specific_band",
         "exact_value_required": false
       },
-      "assessment_guidance": "Select the protocol-specific renal band containing the verified CrCl/eGFR/GFR. Do not estimate a band without a valid renal-function calculation.",
+      "assessment_guidance": "Enter a verified CrCl or select a source band. The printed cisplatin ranges are 40–49 and 50–59: fractional gaps above 49 or 59 require review; do not round for dosing.",
       "input_role": "decision"
     },
     "haemodialysis": {
@@ -318,13 +329,6 @@
       "required": false,
       "demo_value": false,
       "ui_section": "clinical",
-      "visible_when": {
-        "field": "crcl_ml_min",
-        "operator": "<",
-        "value": 45
-      },
-      "visible": false,
-      "derived_from": "crcl_ml_min",
       "input_role": "decision"
     },
     "severe_hepatic_impairment": {
@@ -344,40 +348,41 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No increase above the patient's usual stool frequency or ostomy output."
+          "description": "Documented grade 0 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+          "description": "Documented grade 1 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+          "description": "Documented grade 2 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+          "description": "Documented grade 3 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Documented grade 4 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
       "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated.",
-      "input_role": "decision"
+      "assessment_guidance": "Record the clinician-assessed grade of the named event using the source-specific definition. Assess alternative causes and recovery separately; a generic grade does not diagnose immune toxicity.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+      "source_grading_note": "This NCCP dose table is not a complete grading table and does not specify a grading edition. Confirm the named event and grading definition under verified local policy."
     },
     "diarrhoea_hospitalisation": {
       "label": "Diarrhoea requiring hospitalisation",
@@ -396,40 +401,41 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No oral mucositis."
+          "description": "Documented grade 0 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+          "description": "Documented grade 1 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+          "description": "Documented grade 2 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Severe pain that interferes with oral intake."
+          "description": "Documented grade 3 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Documented grade 4 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
       "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
-      "input_role": "decision"
+      "assessment_guidance": "Record the clinician-assessed grade of the named event using the source-specific definition. Assess alternative causes and recovery separately; a generic grade does not diagnose immune toxicity.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+      "source_grading_note": "This NCCP dose table is not a complete grading table and does not specify a grading edition. Confirm the named event and grading definition under verified local policy."
     },
     "neuropathy_grade": {
       "label": "Neurotoxicity grade",
@@ -440,40 +446,41 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No peripheral sensory or motor neuropathy."
+          "description": "Documented grade 0 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Asymptomatic; clinical or diagnostic observations only. CTCAE v5.0 grades symptomatic paraesthesia separately when that is the more accurate term."
+          "description": "Documented grade 1 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Moderate symptoms that limit instrumental activities of daily living."
+          "description": "Documented grade 2 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Severe symptoms that limit self-care activities of daily living."
+          "description": "Documented grade 3 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening neurological consequences; urgent intervention required."
+          "description": "Documented grade 4 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
       "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
-      "input_role": "decision"
+      "assessment_guidance": "Record the clinician-assessed grade of the named event using the source-specific definition. Assess alternative causes and recovery separately; a generic grade does not diagnose immune toxicity.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+      "source_grading_note": "This NCCP dose table is not a complete grading table and does not specify a grading edition. Confirm the named event and grading definition under verified local policy."
     },
     "recurrent_neurotoxicity": {
       "label": "Recurrent neurotoxicity",
@@ -497,40 +504,41 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No other non-haematological adverse event."
+          "description": "Documented grade 0 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
+          "description": "Documented grade 1 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
+          "description": "Documented grade 2 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
+          "description": "Documented grade 3 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
+          "description": "Documented grade 4 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
       "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Name the exact non-haematological adverse event first and apply that event's own CTCAE v5.0 criterion. The general Grade 1-4 severity anchors are a screening aid only and are not a substitute for the named term.",
-      "input_role": "decision"
+      "assessment_guidance": "Record the clinician-assessed grade of the named event using the source-specific definition. Assess alternative causes and recovery separately; a generic grade does not diagnose immune toxicity.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+      "source_grading_note": "This NCCP dose table is not a complete grading table and does not specify a grading edition. Confirm the named event and grading definition under verified local policy."
     },
     "dose_reduction_count": {
       "label": "Previous dose reductions",
@@ -552,46 +560,145 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No allergic reaction."
+          "description": "Documented grade 0 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Systemic intervention is not indicated."
+          "description": "Documented grade 1 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Oral intervention is indicated."
+          "description": "Documented grade 2 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Bronchospasm, hospitalisation for clinical sequelae, or IV intervention is indicated."
+          "description": "Documented grade 3 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Documented grade 4 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
       "ctcae_category": "allergic_reaction",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess whether systemic treatment is required, route of treatment, bronchospasm, angioedema, hypotension, hospitalisation and life-threatening features. If the event is infusion-related, use the CTCAE infusion-related reaction term rather than double-reporting both.",
+      "assessment_guidance": "Record the clinician-assessed grade of the named event using the source-specific definition. Assess alternative causes and recovery separately; a generic grade does not diagnose immune toxicity.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+      "source_grading_note": "This NCCP dose table is not a complete grading table and does not specify a grading edition. Confirm the named event and grading definition under verified local policy."
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "required": false,
+      "demo_value": 0,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "max": 4
+    },
+    "preexisting_neuropathy_grade": {
+      "label": "Pre-existing neuropathy grade (baseline exclusion)",
+      "type": "select",
+      "required": false,
+      "demo_value": 0,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "Documented grade 0 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Documented grade 1 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Documented grade 2 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Documented grade 3 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Documented grade 4 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        }
+      ],
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+      "source_grading_note": "This NCCP dose table is not a complete grading table and does not specify a grading edition. Confirm the named event and grading definition under verified local policy.",
+      "assessment_guidance": "Record the clinician-assessed grade of the named event using the source-specific definition. Assess alternative causes and recovery separately; a generic grade does not diagnose immune toxicity."
+    },
+    "significant_hearing_impairment_tinnitus": {
+      "label": "Significant hearing impairment or tinnitus",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
+      "input_role": "decision"
+    },
+    "folic_acid_b12_given": {
+      "label": "Required folic acid and vitamin B12 supplementation in place",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "ui_section": "clinical",
+      "input_role": "decision"
+    },
+    "dexamethasone_skin_prophylaxis": {
+      "label": "Pemetrexed rash prophylaxis prescribed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "ui_section": "clinical",
+      "input_role": "decision"
+    },
+    "nonsquamous_histology": {
+      "label": "Non-squamous NSCLC histology confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "ui_section": "clinical",
+      "input_role": "decision"
+    },
+    "nivolumab_plan_assessed_separately": {
+      "label": "Separate NCCP00849 nivolumab plan and immune monitoring assessed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "ui_section": "clinical",
+      "input_role": "decision"
+    },
+    "preexisting_renal_impairment": {
+      "label": "Pre-existing renal impairment (cisplatin exclusion)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "ui_section": "clinical",
       "input_role": "decision"
     }
   },
   "required_inputs": [],
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "Missing optional inputs are never interpreted as normal; report unassessed domains.",
+    "missing_data_policy": "Only entered valid values are assessed; omitted domains remain unassessed and are never assumed normal.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -612,178 +719,288 @@
     "rules": [
       {
         "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Do not administer this regimen; obtain consultant review."
+          "recommendation": "Do not administer; relevant drug hypersensitivity is an exclusion. "
         },
         "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 2
         },
-        "explanation": "Relevant hypersensitivity is an exclusion."
+        "explanation": "Do not administer; relevant drug hypersensitivity is an exclusion. "
       },
       {
         "rule_id": "PREGNANCY_LACTATION",
-        "field": "pregnancy_or_breastfeeding",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "field": "pregnancy_or_breastfeeding",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Do not administer without urgent consultant review."
+          "recommendation": "Pregnancy or breastfeeding is an exclusion; consultant review required."
         },
         "source": {
-          "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 2
         },
-        "explanation": "Pregnancy or breastfeeding requires urgent specialist review."
+        "explanation": "Pregnancy or breastfeeding is an exclusion; consultant review required."
+      },
+      {
+        "rule_id": "ECOG_OUTSIDE_USUAL_RANGE",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed",
+            "cisplatin"
+          ],
+          "recommendation": "Source eligibility is ECOG 0–2; review suitability."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 2
+        },
+        "explanation": "Source eligibility is ECOG 0–2; review suitability."
+      },
+      {
+        "rule_id": "BASELINE_NEUROPATHY_EXCLUSION",
+        "when": {
+          "field": "preexisting_neuropathy_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Pre-existing grade ≥2 neuropathy is a cisplatin exclusion; distinguish baseline disease from the treatment-emergent modification table."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 2
+        },
+        "explanation": "Pre-existing grade ≥2 neuropathy is a cisplatin exclusion; distinguish baseline disease from the treatment-emergent modification table."
+      },
+      {
+        "rule_id": "HEARING_EXCLUSION",
+        "when": {
+          "field": "significant_hearing_impairment_tinnitus",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Significant hearing impairment/tinnitus is a cisplatin exclusion."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 2
+        },
+        "explanation": "Significant hearing impairment/tinnitus is a cisplatin exclusion."
+      },
+      {
+        "rule_id": "BASELINE_RENAL_EXCLUSION",
+        "when": {
+          "field": "preexisting_renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Pre-existing renal impairment is a cisplatin exclusion. The separate on-treatment renal table does not override baseline suitability; resolve with consultant/pharmacy."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 2
+        },
+        "explanation": "Pre-existing renal impairment is a cisplatin exclusion. The separate on-treatment renal table does not override baseline suitability; resolve with consultant/pharmacy."
       },
       {
         "rule_id": "ACTIVE_INFECTION",
-        "field": "active_infection",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "field": "active_infection",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "withhold",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Withhold treatment and assess/treat the infection."
+          "recommendation": "Clinically significant infection requires urgent assessment before SACT. This legacy safety flag does not by itself establish the source febrile-neutropenia dose reduction."
         },
         "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "section": "Clinical safety synthesis; not a numeric NCCP infection dose table"
         },
-        "explanation": "Clinically significant infection requires review."
+        "explanation": "Clinically significant infection requires urgent assessment before SACT. This legacy safety flag does not by itself establish the source febrile-neutropenia dose reduction."
       },
       {
         "rule_id": "ANC_1_TO_LT1_5",
-        "all": [
-          {
-            "field": "anc",
-            "operator": ">=",
-            "value": 1
-          },
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1.5
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "anc",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Consult the treating team; if clinically well, treatment may continue."
+          "recommendation": "Consult the team; if clinically well, treatment may continue."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Intermediate ANC requires team review."
+        "explanation": "Consult the team; if clinically well, treatment may continue."
       },
       {
         "rule_id": "ANC_0_5_TO_LT1",
-        "all": [
-          {
-            "field": "anc",
-            "operator": ">=",
-            "value": 0.5
-          },
-          {
-            "field": "anc",
-            "operator": "<",
-            "value": 1
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "anc",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            }
+          ]
+        },
         "action": {
           "type": "delay",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Delay treatment until count recovery."
+          "recommendation": "Delay treatment until recovery."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "ANC 0.5 to <1.0 requires delay."
+        "explanation": "Delay treatment until recovery."
       },
       {
         "rule_id": "ANC_LT0_5",
-        "field": "anc",
-        "operator": "<",
-        "value": 0.5,
+        "when": {
+          "field": "anc",
+          "operator": "<",
+          "value": 0.5
+        },
         "action": {
           "type": "delay_then_dose_reduce",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Delay until recovery, then reduce both pemetrexed and cisplatin by 25%."
+          "recommendation": "Delay until recovery, then reduce both drugs by 25%; discuss the dose basis and any prior reductions with the consultant.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Severe neutropenia requires delay and reduction."
+        "explanation": "Delay until recovery, then reduce both drugs by 25%; discuss the dose basis and any prior reductions with the consultant."
       },
       {
         "rule_id": "PLATELETS_75_TO_LT100",
-        "all": [
-          {
-            "field": "platelets",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "platelets",
-            "operator": "<",
-            "value": 100
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "platelets",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 100
+            }
+          ]
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Consult the treating team; if clinically well, treatment may continue."
+          "recommendation": "Consult the team; if clinically well, consider continuing."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Intermediate platelet count requires team review."
+        "explanation": "Consult the team; if clinically well, consider continuing."
       },
       {
         "rule_id": "PLATELETS_50_TO_LT75",
-        "all": [
-          {
-            "field": "platelets",
-            "operator": ">=",
-            "value": 50
-          },
-          {
-            "field": "platelets",
-            "operator": "<",
-            "value": 75
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "platelets",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
         "action": {
           "type": "delay",
           "components": [
@@ -793,421 +1010,818 @@
           "recommendation": "Delay treatment until platelet recovery."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Platelets 50 to <75 require delay."
+        "explanation": "Delay treatment until platelet recovery."
+      },
+      {
+        "rule_id": "PLATELETS_LT50_HOLD",
+        "when": {
+          "field": "platelets",
+          "operator": "<",
+          "value": 50
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "cisplatin"
+          ],
+          "recommendation": "Delay until recovery. Confirm bleeding: source reduction is 25% without bleeding or 50% with bleeding. Unknown bleeding must not be treated as absent.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
+        },
+        "explanation": "Delay until recovery. Confirm bleeding: source reduction is 25% without bleeding or 50% with bleeding. Unknown bleeding must not be treated as absent."
       },
       {
         "rule_id": "PLATELETS_LT50_NO_BLEED",
-        "all": [
-          {
-            "field": "platelets",
-            "operator": "<",
-            "value": 50
-          },
-          {
-            "field": "platelet_bleeding",
-            "operator": "==",
-            "value": false
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "platelet_bleeding",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
         "action": {
           "type": "delay_then_dose_reduce",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Delay until recovery, then reduce both drugs by 25%."
+          "recommendation": "Delay until recovery, then reduce both drugs by 25%; confirm dose history and consultant plan.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Platelets <50 require delay and reduction."
+        "explanation": "Delay until recovery, then reduce both drugs by 25%; confirm dose history and consultant plan."
       },
       {
         "rule_id": "PLATELETS_LT50_WITH_BLEED",
-        "all": [
-          {
-            "field": "platelets",
-            "operator": "<",
-            "value": 50
-          },
-          {
-            "field": "platelet_bleeding",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "when": {
+          "field": "platelet_bleeding",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "delay_then_dose_reduce",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Delay until recovery, then reduce both drugs by 50%."
+          "recommendation": "Confirmed platelets below 50 with bleeding: delay until recovery, then reduce both drugs by 50%; confirm dose history and consultant plan.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Platelets <50 with bleeding require a 50% reduction."
+        "explanation": "Confirmed platelets below 50 with bleeding: delay until recovery, then reduce both drugs by 50%; confirm dose history and consultant plan."
       },
       {
         "rule_id": "FEBRILE_NEUTROPENIA",
-        "field": "febrile_neutropenia",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "delay_then_dose_reduce",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Delay until recovery, then reduce both drugs by 25%."
+          "recommendation": "Febrile neutropenia: delay until recovery, then reduce both drugs by 25%; confirm consultant plan.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Febrile neutropenia requires delay and reduction."
+        "explanation": "Febrile neutropenia: delay until recovery, then reduce both drugs by 25%; confirm consultant plan."
       },
       {
         "rule_id": "PEMETREXED_CRCL_LT45",
-        "field": "crcl_ml_min",
-        "operator": "<",
-        "value": 45,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 45
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "pemetrexed"
           ],
-          "recommendation": "Pemetrexed is not recommended at creatinine clearance <45 mL/min."
+          "recommendation": "Pemetrexed is not recommended when verified creatinine clearance is below 45 mL/min."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Pemetrexed renal threshold."
-      },
-      {
-        "rule_id": "CISPLATIN_CRCL_50_TO59",
-        "all": [
-          {
-            "field": "crcl_ml_min",
-            "operator": ">=",
-            "value": 50
-          },
-          {
-            "field": "crcl_ml_min",
-            "operator": "<=",
-            "value": 59
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "recommendation": "Use cisplatin at 75% of the original dose."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Cisplatin renal reduction."
-      },
-      {
-        "rule_id": "CISPLATIN_CRCL_40_TO49",
-        "all": [
-          {
-            "field": "crcl_ml_min",
-            "operator": ">=",
-            "value": 40
-          },
-          {
-            "field": "crcl_ml_min",
-            "operator": "<",
-            "value": 50
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "recommendation": "Use cisplatin at 50% of the original dose."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Cisplatin renal reduction."
-      },
-      {
-        "rule_id": "CISPLATIN_CRCL_LT40",
-        "field": "crcl_ml_min",
-        "operator": "<",
-        "value": 40,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "cisplatin"
-          ],
-          "recommendation": "Cisplatin is not recommended at creatinine clearance <40 mL/min."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Cisplatin renal threshold."
+        "explanation": "Pemetrexed is not recommended when verified creatinine clearance is below 45 mL/min."
       },
       {
         "rule_id": "HAEMODIALYSIS",
-        "field": "haemodialysis",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "pemetrexed"
           ],
-          "recommendation": "Pemetrexed is not recommended in haemodialysis; urgent consultant/pharmacy review is required."
+          "recommendation": "Pemetrexed is not recommended during haemodialysis; specialist review is required."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Pemetrexed is not recommended in haemodialysis."
+        "explanation": "Pemetrexed is not recommended during haemodialysis; specialist review is required."
+      },
+      {
+        "rule_id": "CISPLATIN_CRCL_50_TO59",
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 59
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Cisplatin: 75% of the original dose, after consultant review of suitability and prior treatment.",
+          "dose_percent_of_original": 75
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
+        },
+        "explanation": "Cisplatin: 75% of the original dose, after consultant review of suitability and prior treatment."
+      },
+      {
+        "rule_id": "CISPLATIN_CRCL_40_TO49",
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 40
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 49
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Cisplatin: 50% of the original dose, after consultant review of suitability and prior treatment.",
+          "dose_percent_of_original": 50
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
+        },
+        "explanation": "Cisplatin: 50% of the original dose, after consultant review of suitability and prior treatment."
+      },
+      {
+        "rule_id": "CISPLATIN_CRCL_LT40",
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 40
+            },
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing"
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Cisplatin is not recommended below CrCl 40 mL/min. If haemodialysis is confirmed, the source separately says 50% of original dose may be considered by specialists; pemetrexed remains not recommended."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
+        },
+        "explanation": "Cisplatin is not recommended below CrCl 40 mL/min. If haemodialysis is confirmed, the source separately says 50% of original dose may be considered by specialists; pemetrexed remains not recommended."
+      },
+      {
+        "rule_id": "CISPLATIN_FRACTIONAL_BOUNDARY",
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">",
+                  "value": 49
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">",
+                  "value": 59
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "The source integer ranges leave this fractional CrCl boundary unassigned. Do not round or generate a definitive cisplatin dose; obtain consultant/pharmacy interpretation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
+        },
+        "explanation": "The source integer ranges leave this fractional CrCl boundary unassigned. Do not round or generate a definitive cisplatin dose; obtain consultant/pharmacy interpretation."
+      },
+      {
+        "rule_id": "CISPLATIN_DIALYSIS_REVIEW",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "In haemodialysis the source permits consideration of cisplatin at 50% of the original dose, requiring specialist review; this does not permit the combination because pemetrexed is not recommended.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
+        },
+        "explanation": "In haemodialysis the source permits consideration of cisplatin at 50% of the original dose, requiring specialist review; this does not permit the combination because pemetrexed is not recommended."
       },
       {
         "rule_id": "SEVERE_HEPATIC_IMPAIRMENT",
-        "field": "severe_hepatic_impairment",
-        "operator": "==",
-        "value": true,
+        "when": {
+          "field": "severe_hepatic_impairment",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "pemetrexed"
           ],
-          "recommendation": "Pemetrexed is not recommended in severe hepatic impairment because of liver dysfunction risk."
+          "recommendation": "Pemetrexed is not recommended in severe hepatic impairment because of liver-dysfunction risk. Mild/moderate hepatic impairment needs no expected reduction; the platinum has no hepatic adjustment in this table."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 3
         },
-        "explanation": "Severe hepatic impairment requires avoidance."
+        "explanation": "Pemetrexed is not recommended in severe hepatic impairment because of liver-dysfunction risk. Mild/moderate hepatic impairment needs no expected reduction; the platinum has no hepatic adjustment in this table."
       },
       {
         "rule_id": "DIARRHOEA_G3_OR_HOSPITAL",
-        "any": [
-          {
-            "field": "diarrhoea_grade",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "diarrhoea_hospitalisation",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "when": {
+          "any": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_hospitalisation",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "withhold_then_reduce",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Withhold until resolution to at most the pre-therapy value, then resume both drugs at 75%."
+          "recommendation": "Withhold until at or below the pre-therapy baseline; then both drugs at 75% of their previous doses. A current-dose history and consultant decision are required.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 4
         },
-        "explanation": "Severe or hospitalised diarrhoea requires withholding and reduction."
+        "explanation": "Withhold until at or below the pre-therapy baseline; then both drugs at 75% of their previous doses. A current-dose history and consultant decision are required."
       },
       {
         "rule_id": "MUCOSITIS_G3PLUS",
-        "field": "mucositis_grade",
-        "operator": ">=",
-        "value": 3,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 3
+        },
         "action": {
           "type": "withhold_then_reduce",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Withhold until resolution, then resume pemetrexed at 50% and cisplatin at 100%."
+          "recommendation": "Withhold until at or below the pre-therapy baseline; then pemetrexed at 50% and cisplatin at 100% of their previous doses. Confirm current-dose history.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 4
         },
-        "explanation": "Grade ≥3 mucositis requires component-specific modification."
+        "explanation": "Withhold until at or below the pre-therapy baseline; then pemetrexed at 50% and cisplatin at 100% of their previous doses. Confirm current-dose history."
+      },
+      {
+        "rule_id": "NEURO_G2_HOLD",
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "cisplatin"
+          ],
+          "recommendation": "Withhold until at or below pre-therapy baseline. Establish recurrence: any recurrence requires discontinuation; the first-event grade 2 restart table differs.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 4
+        },
+        "explanation": "Withhold until at or below pre-therapy baseline. Establish recurrence: any recurrence requires discontinuation; the first-event grade 2 restart table differs."
       },
       {
         "rule_id": "NEURO_G2",
-        "all": [
-          {
-            "field": "neuropathy_grade",
-            "operator": "==",
-            "value": 2
-          },
-          {
-            "field": "recurrent_neurotoxicity",
-            "operator": "==",
-            "value": false
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "recurrent_neurotoxicity",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
         "action": {
           "type": "withhold_then_reduce",
           "components": [
+            "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Withhold until resolution, then resume pemetrexed at 100% and cisplatin at 50%."
+          "recommendation": "Withhold until at or below pre-therapy baseline; then pemetrexed 100% and reduce cisplatin by 50%. Confirm previous doses with consultant/pharmacy.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 4
         },
-        "explanation": "Grade 2 neurotoxicity requires cisplatin reduction."
+        "explanation": "Withhold until at or below pre-therapy baseline; then pemetrexed 100% and reduce cisplatin by 50%. Confirm previous doses with consultant/pharmacy."
       },
       {
         "rule_id": "NEURO_G3_OR_RECURRENT",
-        "any": [
-          {
-            "field": "neuropathy_grade",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "recurrent_neurotoxicity",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "when": {
+          "any": [
+            {
+              "field": "neuropathy_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "recurrent_neurotoxicity",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "discontinue",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Discontinue the regimen for grade ≥3 or recurrent neurotoxicity."
+          "recommendation": "Discontinue for grade ≥3 neurotoxicity or any recurrence of neurotoxicity."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 4
         },
-        "explanation": "Severe or recurrent neurotoxicity requires discontinuation."
+        "explanation": "Discontinue for grade ≥3 neurotoxicity or any recurrence of neurotoxicity."
+      },
+      {
+        "rule_id": "OTHER_G3_HOLD",
+        "when": {
+          "field": "other_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed",
+            "cisplatin"
+          ],
+          "recommendation": "Withhold other grade ≥3 toxicity until at or below pre-therapy baseline. Confirm prior reductions before choosing restart or discontinuation review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 4
+        },
+        "explanation": "Withhold other grade ≥3 toxicity until at or below pre-therapy baseline. Confirm prior reductions before choosing restart or discontinuation review."
       },
       {
         "rule_id": "OTHER_G3PLUS",
-        "all": [
-          {
-            "field": "other_toxicity_grade",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "dose_reduction_count",
-            "operator": "<",
-            "value": 2
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "dose_reduction_count",
+              "operator": "<",
+              "value": 2
+            }
+          ]
+        },
         "action": {
           "type": "withhold_then_reduce",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Withhold until resolution, then resume both drugs at 75%."
+          "recommendation": "Withhold until at or below pre-therapy baseline, then both drugs at 75% of previous doses after consultant review.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 4
         },
-        "explanation": "Other grade ≥3 toxicity requires withholding and reduction."
+        "explanation": "Withhold until at or below pre-therapy baseline, then both drugs at 75% of previous doses after consultant review."
       },
       {
         "rule_id": "OTHER_G3_AFTER_TWO_REDUCTIONS",
-        "all": [
-          {
-            "field": "other_toxicity_grade",
-            "operator": ">=",
-            "value": 3
-          },
-          {
-            "field": "dose_reduction_count",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "other_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "mucositis_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "dose_reduction_count",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Consider discontinuation of both drugs; discuss with the consultant."
+          "recommendation": "Grade ≥3 toxicity after two dose reductions: consider discontinuing both drugs; discuss with consultant. This is a decision, not an automatic permanent stop.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 4
         },
-        "explanation": "Persistent grade ≥3 toxicity after two reductions requires discontinuation review."
+        "explanation": "Grade ≥3 toxicity after two dose reductions: consider discontinuing both drugs; discuss with consultant. This is a decision, not an automatic permanent stop."
       },
       {
         "rule_id": "ALLERGY_G3PLUS",
-        "field": "allergic_reaction_grade",
-        "operator": ">=",
-        "value": 3,
+        "when": {
+          "field": "allergic_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "pemetrexed",
             "cisplatin"
           ],
-          "recommendation": "Clinician decision: consider discontinuing the causative drug."
+          "recommendation": "Clinician decision: consider discontinuing whichever drug caused the grade ≥3 allergy. Identify the culprit and manage the acute reaction; do not infer that both drugs must permanently stop.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 4
         },
-        "explanation": "Grade ≥3 allergy requires consultant decision."
+        "explanation": "Clinician decision: consider discontinuing whichever drug caused the grade ≥3 allergy. Identify the culprit and manage the acute reaction; do not infer that both drugs must permanently stop."
       },
       {
-        "rule_id": "PROCEED_IF_NO_RESTRICTIVE_RULE",
-        "field": "cycle_number",
-        "operator": ">=",
-        "value": 1,
+        "rule_id": "PEMETREXED_SUPPLEMENTS",
+        "when": {
+          "field": "folic_acid_b12_given",
+          "operator": "==",
+          "value": false
+        },
         "action": {
-          "type": "proceed",
-          "components": [],
-          "recommendation": "No restrictive encoded rule was triggered by the entered assessment data."
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Verify required folic acid and B12 before pemetrexed: at least five folate doses in the preceding seven days; B12 in the preceding week. Resolve missing supplementation with the prescriber.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 1,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 5
         },
-        "explanation": "Fallback proceed finding; any restrictive matched rule takes precedence."
+        "explanation": "Verify required folic acid and B12 before pemetrexed: at least five folate doses in the preceding seven days; B12 in the preceding week. Resolve missing supplementation with the prescriber."
+      },
+      {
+        "rule_id": "PEMETREXED_RASH_PROPHYLAXIS",
+        "when": {
+          "field": "dexamethasone_skin_prophylaxis",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Confirm pemetrexed rash prophylaxis equivalent to dexamethasone 4 mg twice daily on the day before, day of and day after treatment. Reconcile with the antiemetic steroid into one prescription."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 5
+        },
+        "explanation": "Confirm pemetrexed rash prophylaxis equivalent to dexamethasone 4 mg twice daily on the day before, day of and day after treatment. Reconcile with the antiemetic steroid into one prescription."
+      },
+      {
+        "rule_id": "NSCLC_HISTOLOGY_SCOPE",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "advanced_nsclc",
+                "neoadjuvant_nsclc_nivolumab"
+              ]
+            },
+            {
+              "field": "nonsquamous_histology",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed",
+            "cisplatin"
+          ],
+          "recommendation": "Pemetrexed NSCLC use requires non-squamous histology selection. Review the treatment plan; the mesothelioma indication is separate."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 1,
+          "additional_url": "https://www.ema.europa.eu/en/documents/product-information/alimta-epar-product-information_en.pdf"
+        },
+        "explanation": "Pemetrexed NSCLC use requires non-squamous histology selection. Review the treatment plan; the mesothelioma indication is separate."
+      },
+      {
+        "rule_id": "NIVOLUMAB_SEPARATE_PLAN",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "neoadjuvant_nsclc_nivolumab"
+            },
+            {
+              "field": "nivolumab_plan_assessed_separately",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed",
+            "cisplatin"
+          ],
+          "recommendation": "NCCP00849 nivolumab eligibility, immune toxicity, monitoring and consent must be assessed separately. This is the chemotherapy component assessment."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 1
+        },
+        "explanation": "NCCP00849 nivolumab eligibility, immune toxicity, monitoring and consent must be assessed separately. This is the chemotherapy component assessment."
+      },
+      {
+        "rule_id": "NEOADJUVANT_THREE_CYCLES",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "neoadjuvant_nsclc_nivolumab"
+            },
+            {
+              "field": "cycle_number",
+              "operator": ">",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed",
+            "cisplatin"
+          ],
+          "recommendation": "The selected neoadjuvant nivolumab combination is three cycles only. Reconcile the plan before any additional combination cycle."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 1
+        },
+        "explanation": "The selected neoadjuvant nivolumab combination is three cycles only. Reconcile the plan before any additional combination cycle."
+      },
+      {
+        "rule_id": "PLATINUM_COURSE_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "mesothelioma",
+                "advanced_nsclc"
+              ]
+            },
+            {
+              "field": "cycle_number",
+              "operator": ">",
+              "value": 6
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed",
+            "cisplatin"
+          ],
+          "recommendation": "The source combination course is at most 4–6 cycles for mesothelioma or 4–6 for advanced NSCLC. Review any further platinum combination cycle; pemetrexed maintenance is a separate NCCP00222 plan."
+        },
+        "source": {
+          "document": "NCCP 00317 v7",
+          "url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+          "page": 1
+        },
+        "explanation": "The source combination course is at most 4–6 cycles for mesothelioma or 4–6 for advanced NSCLC. Review any further platinum combination cycle; pemetrexed maintenance is a separate NCCP00222 plan."
       }
     ]
   },
   "output_templates": {
-    "proceed": "No encoded hold, discontinuation, or modification criterion was triggered by the entered data.",
+    "proceed": "No restriction identified in entered domains only; this is not treatment clearance.",
     "coverage_gap": "One or more optional clinical domains were not assessed. Missing values have not been interpreted as normal."
   },
   "supportive_care": {
     "emetogenic_risk": "high",
     "script_id": "nccp-parenteral-high",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Cisplatin is high emetogenic risk in NCCP V6 Table 7.",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf",
+    "mapping_basis": "Cisplatin high risk; general NCIS V8 row.",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP NCIS Medical Oncology V8: general high emetogenic risk",
+    "phase_specific_plan": "patient/00317/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6922/317_V7_PEMEtrexed_and_CISplatin.pdf"
+  },
+  "monitoring": [
+    "Baseline FBC, renal and liver profile; audiology if clinically indicated. Review cisplatin hydration/electrolytes and baseline renal suitability.",
+    "Repeat FBC, renal and liver profile before each cycle. Review infection, bleeding, gastrointestinal toxicity, neuropathy, hearing and medicines.",
+    "Disease assessment and additional tests follow the consultant treatment plan; no universal scan interval is specified."
+  ],
+  "dose_modifications": [
+    "Source count thresholds use current pretreatment counts; nadir wording was removed in the October 2025 source update.",
+    "All dose modifications require consultant discussion. Previous-dose adverse-event percentages are not automatically applied to the original protocol doses."
+  ]
 }

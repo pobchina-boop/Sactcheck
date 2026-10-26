@@ -91,7 +91,9 @@ for (const row of require('../protocols/index.json').protocols) {
 assert.ok(removed > 0);
 const pembro = require('../protocols/shared/00455-pembrolizumab-200-mg-monotherapy.json');
 const partial = Engine.assess(pembro, {cortisol_nmol_l: 400, cortisol_sample_time: '09:00'});
-for (const id of ['glucose_mmol_l', 'ketones_mmol_l']) {
+// v0.84.22 uses NCCP's diagnosed type-1 ketoacidosis pathway; a ketone
+// number alone no longer supplies an invented treatment-action threshold.
+for (const id of ['glucose_mmol_l', 'type1_diabetes_ketoacidosis']) {
   assert.ok(partial.unassessed.some(d => d.id === id), id + ' must remain unassessed');
 }
 assert.equal(partial.complete, false);

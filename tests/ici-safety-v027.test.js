@@ -25,26 +25,29 @@ for (const [name, protocol] of [["durvalumab", durvalumab], ["atezolizumab", ate
   assert(!serialisedRules.includes('"field":"platelets"'), `${name} must not evaluate platelets as a protocol hold threshold`);
   const result = Engine.assess(protocol, { ...demo(protocol), anc: 0.1, platelets: 5 }, { profileId: "default" });
   assert(!["delay", "withhold", "permanently_discontinue"].includes(result.actionType), `${name}: low count values supplied outside the ICI schema must not create an automatic hold`);
-  assert(!result.findings.some(finding => /ANC|PLATELET/i.test(finding.ruleId)), `${name}: no count finding expected`);
+  assert(!result.findings.some(finding => /(?:^|_)ANC(?:_|$)|PLATELET/i.test(finding.ruleId)), `${name}: no count finding expected`);
 }
 
-let result = Engine.assess(durvalumab, { ...demo(durvalumab), pneumonitis_grade: 2 }, { profileId: "default" });
+let result = Engine.assess(durvalumab, { pneumonitis_grade: 2 }, { profileId: "default" });
 assert.equal(result.actionType, "withhold");
 assert(result.findings.some(finding => finding.ruleId === "PNEUMONITIS_G2"));
 
-result = Engine.assess(durvalumab, { ...demo(durvalumab), pneumonitis_grade: 3 }, { profileId: "default" });
+result = Engine.assess(durvalumab, { pneumonitis_grade: 3 }, { profileId: "default" });
 assert.equal(result.actionType, "permanently_discontinue");
 
-result = Engine.assess(durvalumab, { ...demo(durvalumab), endocrine_status: "symptomatic_hypothyroidism" }, { profileId: "default" });
+result = Engine.assess(durvalumab, { endocrine_status: "symptomatic_hypothyroidism" }, { profileId: "default" });
 assert.equal(result.actionType, "proceed_with_caution");
 
-result = Engine.assess(durvalumab, { ...demo(durvalumab), endocrine_status: "symptomatic_hyperthyroidism_or_thyroiditis" }, { profileId: "default" });
+result = Engine.assess(durvalumab, { endocrine_status: "symptomatic_hyperthyroidism_or_thyroiditis" }, { profileId: "default" });
 assert.equal(result.actionType, "withhold");
 
-result = Engine.assess(durvalumab, { ...demo(durvalumab), alt_ast_uln_multiple: 4 }, { profileId: "default" });
+result = Engine.assess(durvalumab, { alt_ast_uln_multiple: 4 }, { profileId: "default" });
 assert.equal(result.actionType, "withhold");
 
-result = Engine.assess(durvalumab, { ...demo(durvalumab), alt_ast_uln_multiple: 6 }, { profileId: "default" });
+result = Engine.assess(durvalumab, { alt_ast_uln_multiple: 6 }, { profileId: "default" });
+// NCCP00655 v3a Table1 p3: the merged WITHHOLD cell covers >3 through10xULN.
+assert.equal(result.actionType, "withhold");
+result = Engine.assess(durvalumab, { alt_ast_uln_multiple: 10.01 }, { profileId: "default" });
 assert.equal(result.actionType, "permanently_discontinue");
 
 result = Engine.assess(atezolizumab, { ...demo(atezolizumab), endocrine_status: "symptomatic_hypothyroidism" }, { profileId: "default" });

@@ -19,6 +19,8 @@
   const DEFAULT_INDEX_URL = "protocols/index.json";
   const DEFAULT_SIDECAR_URL = "data/regimen-card-metadata.json";
   const PHASED_SCHEDULE_LABELS = Object.freeze({
+    "00713": "42-day cycle · visits on Days 1 and 22",
+    "00714": "42-day cycle · visits on Days 1 and 22",
     "00260": "AC q21d → paclitaxel q7d",
     "00278": "DD AC q14d → paclitaxel q14d",
     "00316": "DD AC q14d → paclitaxel + trastuzumab q14d",

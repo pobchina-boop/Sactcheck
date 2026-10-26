@@ -142,6 +142,13 @@
     const maximumCycles = firstFinite(value.maximum_cycles, value.maximumCycles, value.max_cycles, value.maxCycles, value.cycle?.maximum_cycles, value.cycle?.max_cycles);
     const durationText = cleanText(value.duration_text || value.durationText || value.text || value.planned_duration);
 
+    // Explicit source course labels must survive sidecar serialization. A cycle
+    // count alone cannot describe induction followed by maintenance or a range.
+    if (["phased_course", "cycle_range", "fixed_duration"].includes(type) && durationText) {
+      return { type, ...(plannedCycles ? { planned_cycles: plannedCycles } : {}),
+        label: durationText, source: "structured" };
+    }
+
     if (maximumCycles) {
       return {
         type: "maximum_cycles",

@@ -120,7 +120,12 @@ assert.strictEqual(result.actionType, "discontinue", "00317 grade ≥3 neurotoxi
 
 for (const code of Object.keys(protocols)) {
   result = assess(code);
-  assert.strictEqual(result.actionType, "proceed", `${code} demonstration values should produce a proceed output`);
+  if(code === "00317") {
+    // The source-specific pathway requires a documented plan before clearance;
+    // evaluating the legacy demo does not itself establish treatment suitability.
+    assert.strictEqual(result.actionType, "partial_context_required");
+    assert.notStrictEqual(result.actionType, "proceed");
+  } else assert.strictEqual(result.actionType, "proceed", `${code} demonstration values should produce a proceed output`);
 }
 
 const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");

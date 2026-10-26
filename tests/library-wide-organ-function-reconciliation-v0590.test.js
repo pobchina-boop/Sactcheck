@@ -29,6 +29,7 @@ for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
   const rec = m.organ_function_reconciliation;
+  const v08422 = item.nccp_code === '00318' && m.sactcheck_encoding_version === '0.84.22';
   const v0836 = m.validation?.audit_release === '0.83.6';
   const superseded = (['00207','00447','00448','00732','00328','00585','00330','00331','00692','00733','00210','00213','00586','00623','00225'].includes(item.nccp_code) && m.validation?.audit_release === '0.84.21') || v0836 || (['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4') || (item.nccp_code === '00225' && m.validation?.audit_release === '0.83.5');
   assert(rec, `${item.nccp_code}: missing organ-function reconciliation metadata`);
@@ -38,8 +39,8 @@ for (const item of register.records) {
   assert.strictEqual(rec.consultant_reviewed, false);
   assert.strictEqual(rec.oncology_pharmacy_reviewed, false);
   assert.strictEqual(rec.clinical_use_authorised, false);
-  assert.strictEqual(m.encoding_maturity.level, 'source_reconciled_rule_encoding');
-  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
+  assert.strictEqual(m.encoding_maturity.level, v08422 ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
   for (const [field, def] of Object.entries(p.input_definitions || {})) {
     if (/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label || ''}`)) {
       assert.strictEqual(def.required, false, `${item.nccp_code}/${field} must remain optional for independent partial assessment`);
@@ -48,7 +49,10 @@ for (const item of register.records) {
   }
   const releaseRules = (p.rule_engine?.rules || []).filter(r => String(r.id || r.rule_id || '').startsWith('OF590_'));
   if (rec.resolution === 'structured_rules') {
-    if(superseded) {
+    if(v08422){
+      for(const id of ['PEMETREXED_CRCL_LT45','CARBO_GFR_20_OR_LESS','CARBO_GFR_20_30','SEVERE_HEPATIC_IMPAIRMENT'])assert(p.rule_engine.rules.some(r=>r.rule_id===id && r.source.url===m.source_url));
+      assert.equal(releaseRules.length,0);
+    } else if(superseded) {
       for(const id of (v0836 ? (['00207','00732'].includes(item.nccp_code)?['ORGAN_REVIEW']:['00213','00330','00331'].includes(item.nccp_code)?['RENAL_IRI','BILI_CI']:['FU_HEPATIC_CI','FU_HEPATIC_EQUALITY']) : ['RENAL_LT30','HEPATOTOXICITY'])) assert(p.rule_engine.rules.some(r=>r.rule_id===id && r.source.url===m.source_url && r.source.page), `${item.nccp_code}: missing replacement source-mapped rule ${id}`);
       assert.equal(releaseRules.length,0,'Superseded renal rules must not remain active');
     } else assert(releaseRules.length > 0, `${item.nccp_code}: structured resolution lacks v0.59.0 rules`);
@@ -107,7 +111,7 @@ for (const p of allProtocols) {
     );
   }
 }
-assert.strictEqual(triggerableRuleCount, 246, 'All 246 retained v0.59.0 rules remain executable; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
+assert.strictEqual(triggerableRuleCount, 242, 'All 242 retained v0.59.0 rules remain executable; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
 
 // Sentinel source pathways and single-value partial assessments.
 let result = assess('00205', { pld_bilirubin_band: '51_86' });
@@ -155,6 +159,6 @@ const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_R
 assert.strictEqual(audit.summary.protocols_in_reconciliation_scope, 74);
 assert.strictEqual(audit.summary.remaining_partial_rule_encoding_records, 0);
 assert.strictEqual(audit.summary.records_with_audit_issues, 0);
-assert.strictEqual(audit.summary.total_v0590_rules, 246);
+assert.strictEqual(audit.summary.total_v0590_rules, 242);
 
 console.log('v0.59.0 library-wide organ-function reconciliation tests passed.');

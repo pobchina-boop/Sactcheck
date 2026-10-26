@@ -66,6 +66,8 @@ function collectComparisons(node, field, output = []) {
 }
 
 function trueGradeField(id, def) {
+  // History flags and an aggregate recovery score are not named-event grading aids.
+  if(def?.type==='boolean' || id==='restart_residual_immune_grade') return false;
   const text = `${id} ${def?.label || ''}`.toLowerCase();
   if (!text.includes('grade') && !text.includes('ctcae')) return false;
   const exclusions = ['occurrence', 'duration', ' days', 'weeks', 'recurrent', 'prior grade', 'prior_grade', 'not recovered', 'persists', 'over one week', 'resolution', 'requiring interruption', 'unresolved', 'meeting protocol criteria', 'with fever', 'fever or infection', 'complicated diarrhoea', 'grade4_', 'grade3_', 'grade2_', 'grade1_'];
@@ -166,11 +168,12 @@ for (const { file, data } of protocols) {
       const palbociclibSource = code === '00414' && field === 'nonhaem_toxicity_grade';
       const pldSource = code === '00205' && ['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field);
       const newSourceGrade = (['00212','00215','00568'].includes(code) && !def.ctcae_version) || (['00232','00259'].includes(code) && field.endsWith('_grade')) || (code==='00947' && field.endsWith('_event_peak_grade')) || (code === '00605' && field === 'nonhaem_toxicity_grade') || (['00430','00749'].includes(code) && ['nonhaem_toxicity_grade','pneumonitis_grade'].includes(field)) || (code === '00217' && ['cardiac_toxicity_grade','pulmonary_toxicity_grade'].includes(field)) || (code === '00350' && field === 'her2_hypersensitivity_grade') || (['00265','00269'].includes(code) && field === 'stomatitis_grade') || (code === '00423' && ['stomatitis_grade','neuropathy_grade','skin_reaction_grade'].includes(field));
-      if(newSourceGrade){assert.equal(def.grading_source_url,metadata.source_url);assert.match(def.source_grading_note,/not a complete grading table/);assert(!def.ctcae_version);}else if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, everolimusSource ? '3.0' : palbociclibSource ? '4.0' : folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea || ['00858','00860','00861','00348','00734','00688','00720'].includes(code) ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
+      const lungSource=["00455","00558","00569","00579","00576","00655","00713","00714","00317","00318"].includes(code);
+      if(lungSource){assert.equal(def.grading_source_url,metadata.source_url);assert.match(def.source_grading_note,/not a complete grading table/);assert([undefined,"4.0","4.03"].includes(def.ctcae_version));}else if(newSourceGrade){assert.equal(def.grading_source_url,metadata.source_url);assert.match(def.source_grading_note,/not a complete grading table/);assert(!def.ctcae_version);}else if(pldSource){assert.equal(def.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert.match(def.grading_source_url,/ema\.europa\.eu/);assert(!def.ctcae_version);}else assert.equal(def.ctcae_version, everolimusSource ? '3.0' : palbociclibSource ? '4.0' : folfoxSourceDiarrhoea ? 'NCCP source table 6' : sourceDiarrhoea || ['00858','00860','00861','00348','00734','00688','00720'].includes(code) ? '4.0' : '5.0', `${code}/${field} has wrong source grading version`);
       if(palbociclibSource){assert.equal(def.grading_source_label,'NCCP 00414 / CTCAE v4.0');assert.match(def.grading_source_url,/cancer.gov.*ctcae-v403/);assert(def.options.every(x=>x.description));}
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
-      if(!pldSource && !newSourceGrade) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
+      if(!pldSource && !newSourceGrade && !lungSource) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
       const sourceHfs = (['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field)) || (code === '00217' && field === 'hand_foot_grade');
@@ -188,7 +191,9 @@ for (const { file, data } of protocols) {
       const guide = ctcae.guide({ ...def, id: field });
       assert(guide && guide.grades.length >= expectedGrades.length, `${code}/${field} has no rendered CTCAE grade guide`);
       guide.grades.forEach(item => assert(item.description, `${code}/${field} Grade ${item.grade} has no explanation`));
+      if(lungSource)assert(guide.sourceSpecific, 'Source-specific grading must override generic descriptors');
       const fieldText = `${field} ${def.label || ''}`.toLowerCase();
+      if(!lungSource){
       if (/non[-_ ]?ha?em|non[-_ ]?hemat|non[-_ ]?haemat/.test(fieldText)) {
         assert.equal(def.ctcae_category, 'other_nonhaematological', `${code}/${field} is incorrectly classified as haematological`);
       }
@@ -204,10 +209,11 @@ for (const { file, data } of protocols) {
       if (fieldText.includes('anaphyl')) {
         assert.equal(def.ctcae_category, 'hypersensitivity_anaphylaxis', `${code}/${field} lacks hypersensitivity/anaphylaxis criteria`);
       }
+      }
     }
 
     // These fields qualify the age/reuse of a GFR estimate; they are not GFR measurements.
-    if(['00430','00251','00261'].includes(code) && ['creatinine_sample_age_hours','creatinine_percent_of_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
+    if(['00430','00251','00261','00318','00579','00713'].includes(code) && ['creatinine_sample_age_hours','creatinine_age_hours','creatinine_percent_of_isotope_baseline','creatinine_percent_reference','serum_creatinine_percent_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
     const renalText = `${field} ${def?.label || ''}`.toLowerCase();
     if (!/crcl|creatinine clearance|\bgfr\b|egfr/.test(renalText)) continue;
     if (!['number', 'select'].includes(def.type)) continue;
@@ -220,7 +226,7 @@ for (const { file, data } of protocols) {
       assert.equal(def.renal_input?.exact_value_required, true, `${code}/${field} exact renal field must declare why a continuous value is required`);
       assert(String(def.renal_input?.reason || '').length >= 20, `${code}/${field} exact renal field lacks a source-specific rationale`);
     } else if (mode === 'source_threshold_numeric') {
-      assert(['00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
+      assert(['00455','00558','00569','00579','00576','00655','00713','00714','00317','00318','00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
       assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);
       const auditedSources=[metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)];
       assert(auditedSources.includes(def.renal_input.source_url),`${code}/${field}: numeric renal source must be NCCP or an explicitly audited supplement`);assert(def.renal_input.reason.length>=20);
