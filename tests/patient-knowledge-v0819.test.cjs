@@ -7,7 +7,8 @@ const protocol=require('../protocols/lung/00568-pembrolizumab-pemetrexed-and-car
 assert.equal(profile.protocol_id,protocol.protocol_id);
 assert.equal(registry.relativePath(protocol,'knowledge'),'patient/00568/knowledge.html');
 assert.equal(registry.relativePath(protocol,'consent-draft'),'patient/00568/consent-form.html');
-assert.equal(registry.relativePath('00222','consent-draft'),null,'unsupported consent forms must not silently resolve to patient portals');
+assert.equal(registry.relativePath('00382','consent-draft'),null,'unsupported consent forms must not silently resolve to patient portals');
+assert.equal(registry.relativePath('00222','consent-draft'),'patient/00222/consent-form.html');
 assert.deepEqual(profile.phases[0].agents,['pembrolizumab','pemetrexed','carboplatin']);
 assert.deepEqual(profile.phases[1].agents,['pembrolizumab','pemetrexed']);
 assert.equal(profile.cycle_days,21);

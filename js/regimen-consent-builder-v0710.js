@@ -151,7 +151,7 @@
 
   function isImmuneProfile(profile){
     const hay=normalise([profile?.category,profile?.module,profile?.display_name].filter(Boolean).join(" "));
-    return /immune|checkpoint|pembrolizumab|nivolumab|atezolizumab|durvalumab|cemiplimab|ipilimumab|avelumab/.test(hay);
+    return /immune|checkpoint|pembrolizumab|nivolumab|atezolizumab|serplulimab|durvalumab|cemiplimab|ipilimumab|avelumab/.test(hay);
   }
 
   function riskRows(matches){

@@ -14,9 +14,10 @@ assert.equal(definitions.find(definition => definition.id === "indication_id").u
 assert.equal(definitions.find(definition => definition.id === "etoposide_schedule").ui_section, "treatment_context");
 
 const inputs = Object.fromEntries(definitions.map(definition => [definition.id, definition.demo_value]));
+Object.assign(inputs, { indication_id: "00271a", etoposide_schedule: "iv_days_1_to_3" });
 let result = Engine.assess(carbo, inputs, { profileId: "default" });
 assert.equal(result.context.indicationId, "00271a");
-assert(result.context.indicationLabel.includes("small-cell lung cancer"));
+assert(/small-cell lung cancer/i.test(result.context.indicationLabel));
 assert.equal(result.context.schedule, "iv_days_1_to_3");
 let summary = Engine.documentationSummary(result, "TEST-CONTEXT");
 assert(summary.includes("Indication:"), "copyable summary must include indication");

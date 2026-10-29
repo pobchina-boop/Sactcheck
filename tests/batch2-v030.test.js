@@ -52,9 +52,11 @@ function assess(code, overrides = {}) {
 let result = assess("00689", { treatment_phase: "induction", anc: 0.8 });
 assert.strictEqual(result.actionType, "delay", "00689 induction ANC 0.5–<1.0 should delay chemotherapy");
 result = assess("00689", { treatment_phase: "induction", anc: 0.4 });
-assert.strictEqual(result.actionType, "delay_then_dose_reduce", "00689 induction ANC <0.5 should delay and prompt 25% chemotherapy reduction review");
+assert.strictEqual(result.actionType, "delay", "00689 induction ANC <0.5 should delay and prompt 25% chemotherapy reduction review");
+assert(/consider.*25%/i.test(result.recommendation), "The 25% reduction remains a clinical consideration");
 result = assess("00689", { treatment_phase: "induction", platelets: 40 });
-assert.strictEqual(result.actionType, "delay_then_dose_reduce", "00689 induction platelets <50 should delay and prompt chemotherapy reduction review");
+assert.strictEqual(result.actionType, "delay", "00689 induction platelets <50 should delay and prompt chemotherapy reduction review");
+assert(/consider.*25%/i.test(result.recommendation));
 result = assess("00689", { treatment_phase: "maintenance", anc: 0.4, fbc_clinical_concern: false });
 assert.ok(!["delay", "delay_then_dose_reduce", "contraindicated"].includes(result.actionType), "00689 maintenance must not inherit induction ANC holds");
 result = assess("00689", { treatment_phase: "maintenance", pneumonitis_grade: 2 });
@@ -120,7 +122,10 @@ assert.strictEqual(result.actionType, "discontinue", "00317 grade ≥3 neurotoxi
 
 for (const code of Object.keys(protocols)) {
   result = assess(code);
-  if(code === "00317") {
+  if(code === "00689") {
+    assert.strictEqual(result.actionType, "consultant_review", "Legacy demo values do not establish the new source-specific hepatic context");
+    assert(result.findings.some(f=>f.ruleId === "ETOPOSIDE_HEPATIC_NORMAL_CONTEXT"));
+  } else if(code === "00317") {
     // The source-specific pathway requires a documented plan before clearance;
     // evaluating the legacy demo does not itself establish treatment suitability.
     assert.strictEqual(result.actionType, "partial_context_required");

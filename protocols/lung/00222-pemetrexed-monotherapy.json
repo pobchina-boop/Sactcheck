@@ -11,8 +11,8 @@
     "short_title": "Pemetrexed Monotherapy",
     "indication": "Maintenance or second-line non-squamous NSCLC.",
     "source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 5,
+    "sactcheck_encoding_version": "0.84.23",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "lung_subgroup": "maintenance_later_line_nsclc",
@@ -40,11 +40,12 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
       "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "software_test_release": "0.84.23"
     },
     "source_title_exact": "PEMEtrexed Monotherapy",
     "display_title_normalised": true,
@@ -63,12 +64,17 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "source_reconciled_rule_encoding",
-      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source reconciled; independent clinical and pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.23",
+      "audit_date": "2026-10-26",
+      "scope_note": "Current NCCP count, renal, hepatic, adverse-event and support pathways audited; source ambiguities remain consultant decisions.",
+      "reconciled_release": "0.84.23",
+      "reconciled_date": "2026-10-26"
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -88,23 +94,40 @@
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00222-v5"
+    "canonical_protocol_id": "nccp-00222-v5",
+    "source_checked_date": "2026-10-26",
+    "published_date": "2014-04-05",
+    "source_version_date": "2025-10-07",
+    "review_date": "2030-10-07",
+    "source_page_count": 5,
+    "source_pdf_sha256": "7561004e726021664c969f37a76c2d9edd416fa57534abf7dbf472087b6eddeb",
+    "source_text_snapshot_sha256": "19e8c99fce65fce3740c4486f44769b0589c9b9be0d541f5f1fa2b0a2620c617",
+    "source_retrieval_method": "Fresh official HSE PDF downloaded; all pages read and tables on pages 2–3 rendered and visually inspected",
+    "source_text_snapshot": "validation/lung-next-v08423/pem-mono/research/00222-v5.txt",
+    "full_suite_release": "0.84.23",
+    "schedule_summary": "One pemetrexed infusion on Day 1 of each 21-day cycle. Treatment is planned every three weeks while it is helping and side effects remain acceptable. There is no fixed total number of cycles in this regimen. Scans, symptoms, blood results, your priorities and the oncology review guide continuation, delays, changes or stopping."
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
-    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
+    "dose_modification_note": "Discuss every dose change with a Consultant. Recovery, previous dose and prior reductions must be reviewed. Source percentages are displayed as guidance without an unsupported absolute dose calculation.",
     "disclaimer": "Decision-support encoding derived from NCCP 00222 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
-    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
+    "organ_function_rule_status": "Source reconciled in 0.84.23; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
     {
       "indication_id": "00222a",
-      "description": "Maintenance or second-line non-squamous NSCLC."
+      "code": "00222a",
+      "description": "Maintenance of locally advanced or metastatic NSCLC other than predominantly squamous histology, with no progression immediately after platinum-based chemotherapy."
+    },
+    {
+      "indication_id": "00222b",
+      "code": "00222b",
+      "description": "Second-line treatment of locally advanced or metastatic NSCLC other than predominantly squamous histology."
     }
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Pemetrexed Monotherapy",
+    "schedule_summary": "Pemetrexed 500 mg/m² IV over 10 minutes on Day 1, every 21 days until progression or unacceptable toxicity.",
     "drugs": [
       "pemetrexed"
     ]
@@ -185,50 +208,47 @@
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "This preserved safety flag requires immediate assessment; only separately confirmed febrile neutropenia selects the source dose-reduction pathway."
     },
     "other_nonhaem_toxicity_grade": {
-      "label": "Worst relevant non-haematological toxicity",
+      "label": "Other non-haematological toxicity grade (exclude separately entered events)",
       "type": "select",
       "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No other non-haematological adverse event."
+          "description": "Documented grade 0 of this event; confirm the event-specific grading definition."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
+          "description": "Documented grade 1 of this event; confirm the event-specific grading definition."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
+          "description": "Documented grade 2 of this event; confirm the event-specific grading definition."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
+          "description": "Documented grade 3 of this event; confirm the event-specific grading definition."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
+          "description": "Documented grade 4 of this event; confirm the event-specific grading definition."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the exact adverse event, grade it with its own CTCAE criteria and assess functional impact before selecting a grade.",
-      "input_role": "decision"
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+      "source_grading_note": "NCCP Table 3 is not a complete grading table. Its grading edition is unspecified; confirm the named event and verified local grading definition. No CTCAE v5 descriptor conversion is assumed.",
+      "assessment_guidance": "Use a clinically documented grade for this named event. Distinguish pre-therapy baseline, current severity and previous episodes."
     },
     "pemetrexed_renal_band": {
       "label": "Renal function for pemetrexed",
@@ -262,7 +282,8 @@
         "exact_value_required": false
       },
       "always_show": true,
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "Preserved legacy CrCl bands. The 30–44 label is historical; use the exact CrCl field for decimal values. Any CrCl <45 is outside this regimen; do not round up. Haemodialysis is not recommended."
     },
     "folic_acid_b12_given": {
       "label": "Folic acid and vitamin B12 supplementation in place",
@@ -279,47 +300,43 @@
       "input_role": "decision"
     },
     "mucositis_grade": {
-      "label": "Oral mucositis/stomatitis grade",
+      "label": "Mucositis grade",
       "type": "select",
       "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No oral mucositis."
+          "description": "Documented grade 0 of this event; confirm the event-specific grading definition."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+          "description": "Documented grade 1 of this event; confirm the event-specific grading definition."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+          "description": "Documented grade 2 of this event; confirm the event-specific grading definition."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe pain that interferes with oral intake."
+          "description": "Documented grade 3 of this event; confirm the event-specific grading definition."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Documented grade 4 of this event; confirm the event-specific grading definition."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Inspect oral mucosa and assess pain, diet modification and ability to maintain oral intake.",
-      "input_role": "decision"
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+      "source_grading_note": "NCCP Table 3 is not a complete grading table. Its grading edition is unspecified; confirm the named event and verified local grading definition. No CTCAE v5 descriptor conversion is assumed.",
+      "assessment_guidance": "Use a clinically documented grade for this named event. Distinguish pre-therapy baseline, current severity and previous episodes."
     },
     "pemetrexed_severe_hepatic": {
       "label": "Severe hepatic impairment",
@@ -329,11 +346,259 @@
       "ui_section": "clinical",
       "always_show": true,
       "input_role": "decision"
+    },
+    "indication_id": {
+      "label": "Selected indication",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "context",
+      "ui_section": "treatment_context",
+      "options": [
+        {
+          "value": "00222a",
+          "label": "Maintenance of locally advanced or metastatic NSCLC other than predominantly squamous histology, with no progression immediately after platinum-based chemotherapy."
+        },
+        {
+          "value": "00222b",
+          "label": "Second-line treatment of locally advanced or metastatic NSCLC other than predominantly squamous histology."
+        }
+      ],
+      "always_show": true
+    },
+    "nonsquamous_histology": {
+      "label": "NSCLC other than predominantly squamous histology confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "no_progression_after_platinum": {
+      "label": "Maintenance: no progression immediately after platinum-based chemotherapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "combination_immunotherapy_planned": {
+      "label": "Immunotherapy also planned with this pemetrexed dose",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "pemetrexed_crcl_ml_min": {
+      "label": "Verified creatinine clearance for pemetrexed",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+        "reason": "The NCCP medicine-specific renal table uses numeric thresholds. Preserve its exact boundary; this field does not perform carboplatin Calvert dosing."
+      }
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "febrile_neutropenia": {
+      "label": "Confirmed febrile neutropenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "platelet_bleeding": {
+      "label": "Confirmed platelets below 50 ×10⁹/L with bleeding meeting source ≥CTC grade 2 (CTC v2.0, NCI 1998)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "grading_source_label": "CTC v2.0; NCI 1998, bleeding ≥grade 2",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+      "source_grading_note": "NCCP page 2 footnote specifies this edition for bleeding. This combined confirmed-event flag independently records both platelets <50 and qualifying bleeding; do not infer it from an ungraded symptom.",
+      "assessment_guidance": "Select Yes only for the confirmed combined event. If platelets <50 are known but bleeding status is unknown, leave blank: the count still triggers a hold."
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "Documented grade 0 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Documented grade 1 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Documented grade 2 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Documented grade 3 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Documented grade 4 of this event; confirm the event-specific grading definition."
+        }
+      ],
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+      "source_grading_note": "NCCP Table 3 is not a complete grading table. Its grading edition is unspecified; confirm the named event and verified local grading definition. No CTCAE v5 descriptor conversion is assumed.",
+      "assessment_guidance": "Use a clinically documented grade for this named event. Distinguish pre-therapy baseline, current severity and previous episodes."
+    },
+    "diarrhoea_hospitalisation": {
+      "label": "Diarrhoea requiring hospitalisation, irrespective of grade",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "neuropathy_grade": {
+      "label": "Treatment-emergent neurotoxicity grade",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "Documented grade 0 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Documented grade 1 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Documented grade 2 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Documented grade 3 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Documented grade 4 of this event; confirm the event-specific grading definition."
+        }
+      ],
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+      "source_grading_note": "NCCP Table 3 is not a complete grading table. Its grading edition is unspecified; confirm the named event and verified local grading definition. No CTCAE v5 descriptor conversion is assumed.",
+      "assessment_guidance": "Use a clinically documented grade for this named event. Distinguish pre-therapy baseline, current severity and previous episodes."
+    },
+    "recurrent_neurotoxicity": {
+      "label": "Any recurrence of neurotoxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "dose_reduction_count": {
+      "label": "Number of previous pemetrexed dose reductions",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "min": 0,
+      "step": 1,
+      "max": 20
+    },
+    "allergic_reaction_grade": {
+      "label": "Allergic reaction grade",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "Documented grade 0 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Documented grade 1 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Documented grade 2 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Documented grade 3 of this event; confirm the event-specific grading definition."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Documented grade 4 of this event; confirm the event-specific grading definition."
+        }
+      ],
+      "grading_source_label": "NCCP named-event assessment; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+      "source_grading_note": "NCCP Table 3 is not a complete grading table. Its grading edition is unspecified; confirm the named event and verified local grading definition. No CTCAE v5 descriptor conversion is assumed.",
+      "assessment_guidance": "Use a clinically documented grade for this named event. Distinguish pre-therapy baseline, current severity and previous episodes."
+    },
+    "nsaid_or_high_dose_aspirin": {
+      "label": "NSAID or high-dose aspirin use around pemetrexed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "long_half_life_nsaid": {
+      "label": "Long elimination half-life NSAID use around pemetrexed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
     }
   },
   "required_inputs": [],
   "output_templates": {
-    "proceed": "No encoded restriction was triggered in the entered domain(s). This is not an overall treatment clearance.",
+    "proceed": "No encoded restriction in entered domains only; this is not overall treatment clearance.",
     "coverage_gap": "Only entered values were assessed; omitted clinically relevant domains remain unassessed.",
     "consultant_review": "The entered value requires protocol-specific Consultant/pharmacy review.",
     "withhold": "Withhold treatment and reassess according to the official NCCP pathway.",
@@ -343,7 +608,7 @@
   },
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "report_unassessed_coverage_gap",
+    "missing_data_policy": "Only entered valid values are assessed; missing domains remain unassessed and are never assumed normal.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -363,8 +628,7 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_RANGE",
-        "priority": 8,
+        "rule_id": "ECOG_OUTSIDE_USUAL_RANGE",
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -373,19 +637,19 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "ECOG is outside the usual source eligibility range; review the selected indication and protocol."
+          "recommendation": "NCCP eligibility is ECOG 0–2. Confirm suitability with the Consultant."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 1
         },
-        "explanation": "ECOG is outside the usual source eligibility range; review the selected indication and protocol."
+        "explanation": "NCCP eligibility is ECOG 0–2. Confirm suitability with the Consultant."
       },
       {
-        "id": "HYPERSENSITIVITY",
-        "priority": 10,
+        "rule_id": "HYPERSENSITIVITY",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -394,91 +658,135 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Known hypersensitivity to a regimen component triggers the exclusion pathway."
+          "recommendation": "Known pemetrexed or excipient hypersensitivity is an exclusion."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 1
         },
-        "explanation": "Known hypersensitivity to a regimen component triggers the exclusion pathway."
+        "explanation": "Known pemetrexed or excipient hypersensitivity is an exclusion."
       },
       {
-        "id": "PREGNANCY_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "BREASTFEEDING",
         "when": {
-          "any": [
-            {
-              "field": "pregnancy",
-              "operator": "==",
-              "value": true
-            },
-            {
-              "field": "breastfeeding",
-              "operator": "==",
-              "value": true
-            }
-          ]
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Pregnancy or breastfeeding triggers the protocol exclusion pathway."
+          "recommendation": "Breastfeeding is excluded; it must be discontinued during pemetrexed treatment."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 1
         },
-        "explanation": "Pregnancy or breastfeeding triggers the protocol exclusion pathway."
+        "explanation": "Breastfeeding is excluded; it must be discontinued during pemetrexed treatment."
       },
       {
-        "id": "LOW_ANC",
-        "priority": 9,
+        "rule_id": "PREGNANCY_REVIEW",
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway."
+          "recommendation": "Withhold pending specialist assessment: pemetrexed should not be used during pregnancy unless clearly necessary after maternal and fetal risk assessment. Pregnancy is not listed as an absolute NCCP00222 exclusion."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "EMA ALIMTA product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/alimta-epar-product-information_en.pdf",
+          "page": 8,
+          "section": "4.6; specialist review, not an absolute NCCP exclusion"
         },
-        "explanation": "ANC below 1.0 ×10⁹/L requires withholding/delay according to the encoded source pathway."
+        "explanation": "Withhold pending specialist assessment: pemetrexed should not be used during pregnancy unless clearly necessary after maternal and fetal risk assessment. Pregnancy is not listed as an absolute NCCP00222 exclusion."
       },
       {
-        "id": "LOW_PLATELETS",
-        "priority": 9,
+        "rule_id": "NSCLC_HISTOLOGY_SCOPE",
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
+          "field": "nonsquamous_histology",
+          "operator": "==",
+          "value": false
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway."
+          "recommendation": "Both indications require NSCLC other than predominantly squamous histology. Confirm the appropriate treatment plan."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 1
         },
-        "explanation": "Platelets below 75 ×10⁹/L require withholding/delay according to the encoded source pathway."
+        "explanation": "Both indications require NSCLC other than predominantly squamous histology. Confirm the appropriate treatment plan."
       },
       {
-        "id": "INFECTION",
-        "priority": 10,
+        "rule_id": "MAINTENANCE_PROGRESSION_SCOPE",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00222a"
+            },
+            {
+              "field": "no_progression_after_platinum",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "The maintenance indication requires no progression immediately following platinum-based chemotherapy. Reconcile the indication; second-line therapy is a separate treatment decision."
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 1
+        },
+        "explanation": "The maintenance indication requires no progression immediately following platinum-based chemotherapy. Reconcile the indication; second-line therapy is a separate treatment decision."
+      },
+      {
+        "rule_id": "IMMUNOTHERAPY_SEPARATE_PLAN",
+        "when": {
+          "field": "combination_immunotherapy_planned",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "This is standalone pemetrexed monotherapy. Pembrolizumab/pemetrexed maintenance belongs to its combination regimen with separate immune eligibility, toxicity, consent and monitoring."
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 1,
+          "section": "Scope safeguard based on the single-agent treatment table; combination protocols are separate"
+        },
+        "explanation": "This is standalone pemetrexed monotherapy. Pembrolizumab/pemetrexed maintenance belongs to its combination regimen with separate immune eligibility, toxicity, consent and monitoring."
+      },
+      {
+        "rule_id": "INFECTION",
         "when": {
           "field": "febrile_or_active_infection",
           "operator": "==",
@@ -487,173 +795,274 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Withhold treatment and urgently assess fever, febrile neutropenia or active infection."
+          "recommendation": "Urgently assess fever or active infection before further chemotherapy. This general safety flag alone does not establish source-confirmed febrile neutropenia or a 25% dose reduction."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2,
+          "section": "Clinical safety synthesis; numeric FN reduction requires confirmed FN input"
         },
-        "explanation": "Withhold treatment and urgently assess fever, febrile neutropenia or active infection."
+        "explanation": "Urgently assess fever or active infection before further chemotherapy. This general safety flag alone does not establish source-confirmed febrile neutropenia or a 25% dose reduction."
       },
       {
-        "id": "SEVERE_NONHAEM",
-        "priority": 8,
+        "rule_id": "ANC_1_TO_LT1_5",
         "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-      },
-      {
-        "id": "PEME_RENAL_30_44",
-        "priority": 10,
-        "when": {
-          "field": "pemetrexed_renal_band",
-          "operator": "==",
-          "value": "30_44"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "CrCl below 45 mL/min is outside the routine pemetrexed pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
-        },
-        "explanation": "CrCl below 45 mL/min is outside the routine pemetrexed pathway."
-      },
-      {
-        "id": "PEME_RENAL_LT30",
-        "priority": 10,
-        "when": {
-          "field": "pemetrexed_renal_band",
-          "operator": "==",
-          "value": "lt30"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Severe renal impairment is outside the routine pemetrexed pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
-        },
-        "explanation": "Severe renal impairment is outside the routine pemetrexed pathway."
-      },
-      {
-        "id": "PEME_DIALYSIS",
-        "priority": 10,
-        "when": {
-          "field": "pemetrexed_renal_band",
-          "operator": "==",
-          "value": "dialysis"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Dialysis is outside the routine pemetrexed pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
-        },
-        "explanation": "Dialysis is outside the routine pemetrexed pathway."
-      },
-      {
-        "id": "PEME_SUPPLEMENTS",
-        "priority": 9,
-        "when": {
-          "field": "folic_acid_b12_given",
-          "operator": "==",
-          "value": false
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Confirm folic acid and vitamin B12 supplementation before pemetrexed."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
-        },
-        "explanation": "Confirm folic acid and vitamin B12 supplementation before pemetrexed."
-      },
-      {
-        "id": "PEME_DEX",
-        "priority": 7,
-        "when": {
-          "field": "dexamethasone_skin_prophylaxis",
-          "operator": "==",
-          "value": false
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Confirm dexamethasone rash prophylaxis unless specifically contraindicated."
+          "recommendation": "Consult the team; if clinically well, continuation may be considered."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2
         },
-        "explanation": "Confirm dexamethasone rash prophylaxis unless specifically contraindicated."
+        "explanation": "Consult the team; if clinically well, continuation may be considered."
       },
       {
-        "id": "PEME_MUCOSITIS",
-        "priority": 8,
+        "rule_id": "ANC_0_5_TO_LT1",
         "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Delay pemetrexed until count recovery."
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2
+        },
+        "explanation": "Delay pemetrexed until count recovery."
+      },
+      {
+        "rule_id": "ANC_LT0_5",
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 0.5
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Delay until recovery, then reduce pemetrexed by 25%. Discuss dose basis and prior reductions with the Consultant.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2
+        },
+        "explanation": "Delay until recovery, then reduce pemetrexed by 25%. Discuss dose basis and prior reductions with the Consultant."
+      },
+      {
+        "rule_id": "PLATELETS_75_TO_LT100",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Consult the team; if clinically well, consider continuation."
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2
+        },
+        "explanation": "Consult the team; if clinically well, consider continuation."
+      },
+      {
+        "rule_id": "PLATELETS_50_TO_LT75",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Delay pemetrexed until platelet recovery."
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2
+        },
+        "explanation": "Delay pemetrexed until platelet recovery."
+      },
+      {
+        "rule_id": "PLATELETS_LT50_HOLD",
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 50
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pemetrexed"
           ],
-          "message": "Grade 3 or worse mucositis requires withholding and dose-modification review."
+          "recommendation": "Delay until recovery. Confirm bleeding: the source reduction is 25% for the <50 row or 50% with source-defined bleeding. Missing bleeding status is not a negative result.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "eligibility, exclusions or dose-modification section"
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2
         },
-        "explanation": "Grade 3 or worse mucositis requires withholding and dose-modification review."
+        "explanation": "Delay until recovery. Confirm bleeding: the source reduction is 25% for the <50 row or 50% with source-defined bleeding. Missing bleeding status is not a negative result."
       },
       {
-        "id": "OF590_00222_PEME_LT45",
-        "priority": 20,
+        "rule_id": "PLATELETS_LT50_NO_BLEED",
         "when": {
-          "field": "pemetrexed_renal_band",
-          "operator": "in",
-          "value": [
-            "30_44",
-            "lt30",
-            "dialysis"
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "platelet_bleeding",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Delay until recovery, then reduce pemetrexed by 25%; confirm prior dose and the Consultant plan.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2
+        },
+        "explanation": "Delay until recovery, then reduce pemetrexed by 25%; confirm prior dose and the Consultant plan."
+      },
+      {
+        "rule_id": "PLATELETS_LT50_WITH_BLEED",
+        "when": {
+          "field": "platelet_bleeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Confirmed platelets <50 with bleeding meeting ≥grade 2 under CTC v2.0 (NCI 1998): delay until recovery, then reduce pemetrexed by 50%.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2
+        },
+        "explanation": "Confirmed platelets <50 with bleeding meeting ≥grade 2 under CTC v2.0 (NCI 1998): delay until recovery, then reduce pemetrexed by 50%."
+      },
+      {
+        "rule_id": "FEBRILE_NEUTROPENIA",
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Confirmed febrile neutropenia: delay until recovery, then reduce pemetrexed by 25%; discuss with the Consultant.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 2
+        },
+        "explanation": "Confirmed febrile neutropenia: delay until recovery, then reduce pemetrexed by 25%; discuss with the Consultant."
+      },
+      {
+        "rule_id": "PEMETREXED_CRCL_LT45",
+        "when": {
+          "any": [
+            {
+              "field": "pemetrexed_crcl_ml_min",
+              "operator": "<",
+              "value": 45
+            },
+            {
+              "field": "pemetrexed_renal_band",
+              "operator": "in",
+              "value": [
+                "30_44",
+                "lt30"
+              ]
+            }
           ]
         },
         "action": {
@@ -661,18 +1070,47 @@
           "components": [
             "pemetrexed"
           ],
-          "message": "CrCl <45 mL/min or dialysis: pemetrexed is not recommended.",
-          "recommendation": "CrCl <45 mL/min or dialysis: pemetrexed is not recommended."
+          "recommendation": "Creatinine clearance below 45 mL/min is excluded and pemetrexed is not recommended. At ≥45 no renal adjustment is specified, but other domains remain necessary."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
         },
-        "explanation": "CrCl <45 mL/min or dialysis: pemetrexed is not recommended."
+        "explanation": "Creatinine clearance below 45 mL/min is excluded and pemetrexed is not recommended. At ≥45 no renal adjustment is specified, but other domains remain necessary."
       },
       {
-        "id": "OF590_00222_PEME_HEP_SEV",
-        "priority": 20,
+        "rule_id": "HAEMODIALYSIS",
+        "when": {
+          "any": [
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "pemetrexed_renal_band",
+              "operator": "==",
+              "value": "dialysis"
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Pemetrexed is not recommended during haemodialysis."
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "Pemetrexed is not recommended during haemodialysis."
+      },
+      {
+        "rule_id": "SEVERE_HEPATIC_IMPAIRMENT",
         "when": {
           "field": "pemetrexed_severe_hepatic",
           "operator": "==",
@@ -683,49 +1121,418 @@
           "components": [
             "pemetrexed"
           ],
-          "message": "Severe hepatic impairment: pemetrexed is not recommended in the routine source pathway.",
-          "recommendation": "Severe hepatic impairment: pemetrexed is not recommended in the routine source pathway."
+          "recommendation": "Pemetrexed is not recommended in severe hepatic impairment because of liver dysfunction risk. Mild/moderate impairment needs no expected dose reduction. The NCCP table does not define numerical severe-hepatic thresholds."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
         },
-        "explanation": "Severe hepatic impairment: pemetrexed is not recommended in the routine source pathway."
+        "explanation": "Pemetrexed is not recommended in severe hepatic impairment because of liver dysfunction risk. Mild/moderate impairment needs no expected dose reduction. The NCCP table does not define numerical severe-hepatic thresholds."
+      },
+      {
+        "rule_id": "DIARRHOEA_G3_OR_HOSPITAL",
+        "when": {
+          "any": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_hospitalisation",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Withhold until at or below the pre-therapy baseline; then resume pemetrexed at 75% of the previous dose. Confirm previous dose and Consultant plan.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "Withhold until at or below the pre-therapy baseline; then resume pemetrexed at 75% of the previous dose. Confirm previous dose and Consultant plan."
+      },
+      {
+        "rule_id": "PEME_MUCOSITIS",
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Withhold until at or below the pre-therapy baseline; then resume pemetrexed at 50% of the previous dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "Withhold until at or below the pre-therapy baseline; then resume pemetrexed at 50% of the previous dose."
+      },
+      {
+        "rule_id": "NEURO_G2_HOLD",
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Withhold until at or below the pre-therapy baseline. Establish recurrence: any recurrent neurotoxicity requires discontinuation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "Withhold until at or below the pre-therapy baseline. Establish recurrence: any recurrent neurotoxicity requires discontinuation."
+      },
+      {
+        "rule_id": "NEURO_G2_FIRST",
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "recurrent_neurotoxicity",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "First grade 2 neurotoxicity: withhold until at or below baseline, then resume pemetrexed at 100% dose following Consultant review. This monotherapy table contains no platinum dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "First grade 2 neurotoxicity: withhold until at or below baseline, then resume pemetrexed at 100% dose following Consultant review. This monotherapy table contains no platinum dose."
+      },
+      {
+        "rule_id": "NEURO_G3_OR_RECURRENT",
+        "when": {
+          "any": [
+            {
+              "field": "neuropathy_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "recurrent_neurotoxicity",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Discontinue pemetrexed for grade ≥3 neurotoxicity or any recurrence of neurotoxicity."
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "Discontinue pemetrexed for grade ≥3 neurotoxicity or any recurrence of neurotoxicity."
+      },
+      {
+        "rule_id": "OTHER_G3_HOLD",
+        "when": {
+          "field": "other_nonhaem_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Withhold other grade ≥3 toxicity until at or below pre-therapy baseline. Confirm dose-reduction history before selecting a restart or discontinuation discussion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "Withhold other grade ≥3 toxicity until at or below pre-therapy baseline. Confirm dose-reduction history before selecting a restart or discontinuation discussion."
+      },
+      {
+        "rule_id": "OTHER_G3_RESTART",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "dose_reduction_count",
+              "operator": "<",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "After recovery to at or below pre-therapy baseline, resume pemetrexed at 75% of its previous dose, subject to Consultant review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "After recovery to at or below pre-therapy baseline, resume pemetrexed at 75% of its previous dose, subject to Consultant review."
+      },
+      {
+        "rule_id": "G3_AFTER_TWO_REDUCTIONS",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "mucositis_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "allergic_reaction_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "dose_reduction_count",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Grade ≥3 toxicity after two dose reductions: consider discontinuation and discuss with the Consultant. This is not an automatic permanent stop and does not remove any independent hold or neurotoxicity stop.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "Grade ≥3 toxicity after two dose reductions: consider discontinuation and discuss with the Consultant. This is not an automatic permanent stop and does not remove any independent hold or neurotoxicity stop."
+      },
+      {
+        "rule_id": "ALLERGY_G3PLUS",
+        "when": {
+          "field": "allergic_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Grade ≥3 allergic reaction: clinician decision; consider discontinuation. Manage the acute reaction immediately. The printed source places the ≥ symbol after Grade 3; interpretation as ≥3 requires independent review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 3
+        },
+        "explanation": "Grade ≥3 allergic reaction: clinician decision; consider discontinuation. Manage the acute reaction immediately. The printed source places the ≥ symbol after Grade 3; interpretation as ≥3 requires independent review."
+      },
+      {
+        "rule_id": "PEME_SUPPLEMENTS",
+        "when": {
+          "field": "folic_acid_b12_given",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Resolve absent required vitamins before pemetrexed: at least five folate doses in the preceding seven days and B12 in the preceding week. Continue folate throughout and for 21 days after the last dose; B12 every three cycles thereafter.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 4
+        },
+        "explanation": "Resolve absent required vitamins before pemetrexed: at least five folate doses in the preceding seven days and B12 in the preceding week. Continue folate throughout and for 21 days after the last dose; B12 every three cycles thereafter."
+      },
+      {
+        "rule_id": "PEME_DEX",
+        "when": {
+          "field": "dexamethasone_skin_prophylaxis",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Confirm rash prophylaxis equivalent to dexamethasone 4 mg orally twice daily the day before, day of and day after pemetrexed. Reconcile into one steroid prescription with any antiemetic plan."
+        },
+        "source": {
+          "document": "NCCP00222 v5",
+          "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+          "page": 4
+        },
+        "explanation": "Confirm rash prophylaxis equivalent to dexamethasone 4 mg orally twice daily the day before, day of and day after pemetrexed. Reconcile into one steroid prescription with any antiemetic plan."
+      },
+      {
+        "rule_id": "NSAID_INTERACTION_REVIEW",
+        "when": {
+          "any": [
+            {
+              "field": "nsaid_or_high_dose_aspirin",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "long_half_life_nsaid",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pemetrexed"
+          ],
+          "recommendation": "Check medicine, dose, renal function and timing. At CrCl 45–79, avoid NSAIDs and high-dose aspirin for 2 days before, treatment day and 2 days after pemetrexed; long-half-life NSAIDs require at least 5 days before, treatment day and at least 2 days after. If necessary coadministration cannot be avoided, monitor closely for marrow and GI toxicity. High NSAID/aspirin doses also warrant caution with normal renal function. Do not stop prescribed medicines without a clinician plan."
+        },
+        "source": {
+          "document": "EMA ALIMTA product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/alimta-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.5; conditional advice, not autonomous stop-date or renal-band calculation"
+        },
+        "explanation": "Check medicine, dose, renal function and timing. At CrCl 45–79, avoid NSAIDs and high-dose aspirin for 2 days before, treatment day and 2 days after pemetrexed; long-half-life NSAIDs require at least 5 days before, treatment day and at least 2 days after. If necessary coadministration cannot be avoided, monitor closely for marrow and GI toxicity. High NSAID/aspirin doses also warrant caution with normal renal function. Do not stop prescribed medicines without a clinician plan."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status, histology, stage and biomarker eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "NCCP00222a maintenance after platinum chemotherapy without immediate progression, or NCCP00222b second-line advanced NSCLC.",
+    "NSCLC other than predominantly squamous histology.",
+    "ECOG 0–2."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the interactive assessment"
+    "Pemetrexed or excipient hypersensitivity.",
+    "CrCl <45 mL/min.",
+    "Breastfeeding."
   ],
   "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Treatment-specific pulmonary, cardiac, endocrine, neurological and biomarker monitoring as applicable"
+    "Baseline FBC, renal and liver profile.",
+    "Repeat FBC, renal and liver profile before every cycle.",
+    "Review interval toxicity, prior reductions, vitamin adherence, steroid plan and interacting medicines.",
+    "Disease monitoring follows the Consultant treatment plan; no fixed scan interval is encoded."
   ],
   "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
+    "NCCP current-count Table1, renal/hepatic Table2 and adverse-event Table3 reconciled with explicit source pages.",
+    "All changes require Consultant discussion; percentage guidance is conditional on recovery and prior-dose review.",
+    "Bleeding footnote: CTC v2.0 NCI1998 ≥grade2; other adverse-event grading edition unspecified."
   ],
   "supportive_care": {
     "emetogenic_risk": "low",
     "script_id": "nccp-parenteral-low",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "mapping_source": "NCCP00222 v5 page4 and NCIS Medical Oncology antiemetics V8 2025",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
+    "mapping_basis": "NCCP00222 v5 names pemetrexed low emetogenic risk; NCIS V8 low-risk support, separate from prior platinum.",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
     "additional_supportive_care": [
-      "Folic acid supplementation",
-      "Vitamin B12 supplementation",
-      "Dexamethasone rash prophylaxis"
-    ]
-  }
+      "Folic acid 350–1000 micrograms daily: ≥5 doses in the week before first pemetrexed, throughout and 21 days after the last dose.",
+      "Vitamin B12 hydroxocobalamin 1000 micrograms IM in the preceding week and every three cycles; later injections may be on treatment day.",
+      "Dexamethasone equivalent 4 mg orally twice daily day before, day of and day after; one reconciled prescription, no double steroid course.",
+      "NSAID/aspirin and renal interaction review; follow the current SmPC and local policy."
+    ],
+    "phase_specific_plan": "patient/00222/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "21_day_cycle",
+      "label": "Standalone pemetrexed every 21 days",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "pemetrexed",
+          "dose": {
+            "value": 500,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion",
+          "duration_minutes": 10
+        }
+      ],
+      "duration_note": "No fixed cycle count; continue until disease progression or unacceptable toxicity under the Consultant plan."
+    }
+  ]
 }

@@ -32,7 +32,7 @@ function protocolFiles() {
   return walk(path.join(root, 'protocols')).filter(file => file.endsWith('.json') && !['index.json','protocol-schema.json','package.json'].includes(path.basename(file)));
 }
 function demoValue(definition) {
-  if (definition.demo_value !== undefined && definition.demo_value !== null) return String(definition.demo_value);
+  if (definition.demo_value !== undefined && definition.demo_value !== null && definition.demo_value !== '') return String(definition.demo_value);
   if (definition.type === 'select') return String(definition.options?.[0]?.value ?? '');
   if (definition.type === 'boolean') return 'false';
   if (definition.type === 'number') return String(definition.min !== undefined && Number(definition.min) > 0 ? definition.min : 0);

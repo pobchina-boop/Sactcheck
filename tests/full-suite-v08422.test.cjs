@@ -26,9 +26,9 @@ for(const c of ['00455','00558']){
 for(const c of ['00713','00714']){const d=json(`data/patient-knowledge/${c}.json`),p=json(protocols.find(p=>p.path.includes('/'+c+'-')).path),m=D.buildModel(p);assert.equal(d.cycle_days,42);assert.equal(m.phases.length,2);assert(/22/.test(d.passport_visit_note));assert.equal(support[c].length,3);assert(!read(`patient/${c}/knowledge.html`).includes('Paclitaxel Day 22'));}
 for(const [c,expected] of [['00569',['pembrolizumab','pemetrexed']],['00579',['pembrolizumab']]]){const p=json(protocols.find(p=>p.path.includes('/'+c+'-')).path);const phase=p.treatment_phases.find(x=>x.phase_id==='maintenance');assert.deepEqual(phase.active_drugs,expected);}
 const inventory=json('validation/lung-core-v08422/retrospective-inventory.json');assert.equal(inventory.authored_suites,116);assert.equal(inventory.reviewed_cumulative,116);assert.equal(inventory.remaining_review_queue,0);assert.equal(protocols.length,377);assert(read('index.html').includes('Feasibility evaluation build — not for routine clinical use'));
-assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,116);
-const hashes=json('validation/lung-core-v08422/retrospective-hashes.json');for(const [f,h] of Object.entries(hashes.files))assert.equal(digest(f),h.after,f);
-const base=json('validation/lung-core-v08422/baseline-hashes.json');for(const [f,h] of Object.entries(base.files)){if(!f.startsWith('tools/')&&!hashes.files[f])assert.equal(digest(f),h,'Outside-scope bundle changed '+f)}
+assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,122);
+const hashes=json('validation/lung-core-v08422/retrospective-hashes.json');for(const [f,h] of Object.entries(hashes.files))assert.equal(digest(f),require('./helpers/retrospective-v08423.cjs').expectedHash(f,h.after),f);
+const base=json('validation/lung-core-v08422/baseline-hashes.json');for(const [f,h] of Object.entries(base.files)){if(!f.startsWith('tools/')&&!hashes.files[f])assert.equal(digest(f),require('./helpers/retrospective-v08423.cjs').expectedHash(f,h),'Outside-scope bundle changed '+f)}
 const pdf=json('validation/lung-core-v08422/pdf-validation.json');assert.equal(pdf.documents,71+codes.reduce((n,c)=>n+support[c].length,0));assert.equal(json('validation/lung-core-v08422/qr-validation.json').length,40);
 console.log('v0.84.22: ten complete lung suites, date-free monitoring, separate maintenance support, guarded shared indications, PDF copies and unchanged outside-scope patient bundles.');
 

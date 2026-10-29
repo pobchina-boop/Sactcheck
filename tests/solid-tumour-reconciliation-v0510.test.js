@@ -58,7 +58,7 @@ function conditionLeaves(node, output = []) {
   return output;
 }
 function demoValue(definition) {
-  if (definition.demo_value !== undefined && definition.demo_value !== null) return String(definition.demo_value);
+  if (definition.demo_value !== undefined && definition.demo_value !== null && definition.demo_value !== '') return String(definition.demo_value);
   if (definition.type === 'select') {
     const option = (definition.options || []).find(item => item && item.value !== undefined && item.value !== '');
     return option ? String(option.value) : '';

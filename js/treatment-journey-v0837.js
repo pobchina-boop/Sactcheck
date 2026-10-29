@@ -24267,6 +24267,1170 @@ const definitions={
         "url": "https://pubmed.ncbi.nlm.nih.gov/35403841/"
       }
     ]
+  },
+  "00689": {
+    "stages": [
+      "Before starting",
+      "Induction Day 1",
+      "Induction Days 2–21",
+      "Maintenance review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and hormones",
+        "cells": [
+          "FBC, liver/kidney, glucose, thyroid, hepatitis B/C and GFR baseline",
+          "Review results and current symptoms",
+          "FBC, liver/kidney and glucose each cycle; thyroid every 3–6 weeks",
+          "Continue cycle bloods and thyroid checks",
+          "Follow unresolved problems and the team’s plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00689"
+        ],
+        "note": "Use the prescribed phase and route; checks follow NCCP and the local booking plan."
+      },
+      {
+        "label": "Treatment and routes",
+        "cells": [
+          "Agree IV/SC atezolizumab and IV versus IV/oral etoposide",
+          "All three medicines in the source sequence",
+          "Etoposide Days 2–3; next cycle usually after 21 days",
+          "Carboplatin and etoposide stop after up to four cycles",
+          "Agree follow-up and next treatment decisions"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00689"
+        ],
+        "note": "Use the prescribed phase and route; checks follow NCCP and the local booking plan."
+      },
+      {
+        "label": "Support medicines",
+        "cells": [
+          "Prepare one reconciled day-by-day anti-sickness plan",
+          "Carboplatin-specific high-risk cover",
+          "Account for etoposide Days 2–3 and two days afterwards",
+          "No automatic continuation of chemotherapy prophylaxis",
+          "Continue only individually prescribed medicines"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00689"
+        ],
+        "note": "Use the prescribed phase and route; checks follow NCCP and the local booking plan."
+      },
+      {
+        "label": "Immune effects and cancer review",
+        "cells": [
+          "Baseline breathing, bowel, skin and endocrine symptoms; alert card",
+          "Report administration reactions immediately",
+          "Report new cough, diarrhoea, rash or unusual weakness promptly",
+          "Review benefit and symptoms; scans per consultant",
+          "Delayed immune effects remain possible"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00689"
+        ],
+        "note": "Use the prescribed phase and route; checks follow NCCP and the local booking plan."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before treatment",
+        "when": "Before first dose",
+        "why": "Confirm suitability, phase and routes",
+        "clinical": "Confirm adult first-line ES-SCLC, ECOG 0–1 and adequate marrow/organ function; review symptoms, medicines and pregnancy possibility. FBC, renal/liver profile, glucose, thyroid function, hepatitis B (HBsAg and HBcoreAb) and hepatitis C screening. Measured isotope GFR preferred; otherwise verify a suitable estimate. Record baseline breathing, bowel, skin and endocrine symptoms.",
+        "action": "Review results, contraindications, medicines and explicit route prescriptions.",
+        "source_ids": [
+          "00689"
+        ]
+      },
+      {
+        "title": "Phase change",
+        "when": "After up to four induction cycles",
+        "why": "Chemotherapy ends; immune treatment may continue",
+        "clinical": "Induction: atezolizumab and carboplatin on Day 1, with etoposide on Days 1–3, repeated every 21 days for up to four cycles. Maintenance: carboplatin and etoposide stop; atezolizumab alone continues every 21 days while appropriate. The fourth cycle ends about 12 weeks after starting if there are no delays; maintenance has no fixed total duration in this regimen.",
+        "action": "Confirm atezolizumab schedule and revise anti-sickness medicines without stopping required hormone replacement.",
+        "source_ids": [
+          "00689"
+        ]
+      },
+      {
+        "title": "After treatment",
+        "when": "Completion or change of plan",
+        "why": "Delayed effects and follow-up",
+        "clinical": "FBC, liver, renal and glucose profile before every cycle; thyroid tests every 3–6 weeks. Scans and other disease assessment follow the consultant plan. Continue symptom review during maintenance and after atezolizumab stops because immune effects may be delayed.",
+        "action": "Give follow-up arrangements, alert-card advice and urgent contact details.",
+        "source_ids": [
+          "00689"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "IMpower133 studied IV atezolizumab with IV etoposide. It did not directly randomise the SC formulation or the Day 2–3 oral etoposide alternative; those are separate NCCP-listed schedules. Trial averages are not an individual prognosis or a comparison with another immunotherapy.",
+      "Do not infer immune hepatitis or nephritis from unattributed labs; distinguish baseline, cytotoxic and immune causes.",
+      "Table 5 visual inspection confirms ≥1 ANC and ≥100 platelets; platelets 50–<75 remain unassigned and need consultant review.",
+      "No dose reduction of atezolizumab; use named-event hold/discontinue and restart criteria.",
+      "Current CTCAE is requested by source without an edition; do not silently convert grade definitions.",
+      "IV/SC atezolizumab and IV/oral etoposide doses are not interchangeable; explicit prescribing required."
+    ],
+    "code": "00689",
+    "release": "0.84.23",
+    "checked": "2026-10-26",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Atezolizumab + carboplatin + etoposide: treatment and checks",
+    "setting": "First-line extensive-stage small-cell lung cancer",
+    "summary": "Induction: atezolizumab and carboplatin on Day 1, with etoposide on Days 1–3, repeated every 21 days for up to four cycles. Maintenance: carboplatin and etoposide stop; atezolizumab alone continues every 21 days while appropriate. The fourth cycle ends about 12 weeks after starting if there are no delays; maintenance has no fixed total duration in this regimen.",
+    "sources": [
+      {
+        "id": "00689",
+        "title": "NCCP 00689 v4 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6882/689_V4_Atezolizumab_Etoposide_CARBOplatin.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS Medical Oncology antiemetics V8 (2025)",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "trial-v08423",
+        "title": "IMpower133 updated overall survival (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33439693/"
+      },
+      {
+        "id": "trial-primary",
+        "title": "IMpower133 primary randomised analysis (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30280641/"
+      },
+      {
+        "id": "smpc",
+        "title": "Tecentriq IV · manufacturer product information",
+        "url": "https://www.medicines.org.uk/emc/product/8442/smpc"
+      },
+      {
+        "id": "hse",
+        "title": "HSE chemotherapy safety and urgent symptoms",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "etoposide-smpc",
+        "title": "Etoposide capsules · manufacturer product information and shared etoposide safety",
+        "url": "https://www.medicines.org.uk/emc/product/10533/smpc"
+      }
+    ]
+  },
+  "00908": {
+    "stages": [
+      "Before starting",
+      "Induction Day 1",
+      "Induction Days 2–3",
+      "Maintenance",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "cells": [
+          "Confirm suitability and chosen etoposide route",
+          "Serplulimab → carboplatin → etoposide",
+          "Etoposide IV each day or prescribed oral BID alternative",
+          "Serplulimab alone every21days after four induction cycles",
+          "Follow-up or next treatment per team"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00908"
+        ],
+        "note": "Induction lasts four planned 21-day cycles unless treatment needs to stop earlier. On Day 1 you receive serplulimab, carboplatin and etoposide by drip. With the standard IV schedule, etoposide is repeated on Days 2 and 3. After induction, carboplatin and etoposide stop. Serplulimab alone can continue every three weeks while it is helping and its risks remain acceptable. There is no fixed universal number of maintenance cycles in this NCCP regimen. Your team may instead prescribe etoposide by drip on Day 1 and capsules twice daily on Days 2 and 3. This is a separate alternative, not extra treatment. Oral and IV doses are not interchangeable milligram for milligram. Confirm which plan you have; take the capsules on an empty stomach as prescribed."
+      },
+      {
+        "label": "Blood counts, organs and hormones",
+        "cells": [
+          "FBC, kidney/liver, glucose, thyroid and pancreatic enzymes; baseline suitability",
+          "Review symptoms and cycle bloods before dosing",
+          "Report symptoms between visits; extra tests if needed",
+          "Cycle bloods; thyroid every 3–6 weeks; pancreatic enzymes periodically/as needed",
+          "Follow unresolved changes and the team’s plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00908",
+          "serplulimab-smpc"
+        ],
+        "note": "Arrange and review according to the source, symptoms and local plan; pancreatic enzymes are a current SmPC supplement to NCCP."
+      },
+      {
+        "label": "Kidneys, hearing and other checks",
+        "cells": [
+          "Measured GFR preferred; audiology if indicated",
+          "Validate renal dose and recent creatinine",
+          "Report low urine, hearing changes or weakness",
+          "ECG, cortisol, lipids and audiology as indicated",
+          "Persistent or new problems still need review"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00908",
+          "serplulimab-smpc"
+        ],
+        "note": "Arrange and review according to the source, symptoms and local plan; pancreatic enzymes are a current SmPC supplement to NCCP."
+      },
+      {
+        "label": "Support and route",
+        "cells": [
+          "Confirm IV or oral etoposide route; written anti-sickness plan",
+          "Carboplatin-specific high-risk anti-sickness plan",
+          "Etoposide on both days; reconcile support through two days afterwards",
+          "No routine induction chemotherapy antiemetics",
+          "Keep the current medicine and contact plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00908",
+          "serplulimab-smpc"
+        ],
+        "note": "Arrange and review according to the source, symptoms and local plan; pancreatic enzymes are a current SmPC supplement to NCCP."
+      },
+      {
+        "label": "Immune effects and cancer review",
+        "cells": [
+          "Record symptoms; explain immunotherapy alert card",
+          "Report infusion symptoms immediately",
+          "Immune symptoms can start any day",
+          "Continue symptom vigilance; scans per consultant plan",
+          "Delayed immune effects remain possible"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00908",
+          "serplulimab-smpc"
+        ],
+        "note": "Arrange and review according to the source, symptoms and local plan; pancreatic enzymes are a current SmPC supplement to NCCP."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Baseline and route",
+        "when": "Before the first cycle",
+        "why": "Confirm suitability and correct schedule",
+        "clinical": "Confirm adult first-line ES-SCLC (00908a), ECOG 0–2, adequate organ function, baseline ANC ≥1.5 and platelets ≥100 ×10⁹/L. Baseline FBC, renal/liver profile, glucose and thyroid; current EMA SmPC additionally recommends amylase/lipase at treatment start and periodically. Measured isotope GFR preferred, or validated GFR/CrCl estimate; audiology as clinically indicated. Review the current SmPC trial-population cautions (autoimmune history, active TB/hepatitis/HIV, recent live vaccine, pneumonitis/ILD history and significant cardiovascular disease); these are not automatically added NCCP contraindications. Review untreated CNS metastases, symptomatic ILD, clinically significant infection and systemic immunosuppression >10 mg/day prednisolone equivalent (excluding topical/inhaled). Review previous anti-PD-1/PD-L1 treatment against current NCCP policy. Check pregnancy/breastfeeding and component/excipient hypersensitivity. Exceptional mild carboplatin rechallenge needs immunology advice and controlled desensitisation.",
+        "action": "Document IV versus oral etoposide, GFR method, medicines and urgent contacts.",
+        "source_ids": [
+          "00908"
+        ]
+      },
+      {
+        "title": "Induction to maintenance",
+        "when": "After four planned induction cycles",
+        "why": "Chemotherapy and routine support stop",
+        "clinical": "After induction, carboplatin and etoposide stop. Serplulimab alone can continue every three weeks while it is helping and its risks remain acceptable. There is no fixed universal number of maintenance cycles in this NCCP regimen.",
+        "action": "Confirm maintenance plan and continue cycle bloods and immune checks.",
+        "source_ids": [
+          "00908"
+        ]
+      },
+      {
+        "title": "Treatment pause or completion",
+        "when": "For toxicity, progression or agreed change",
+        "why": "Delayed effects and ongoing care",
+        "clinical": "Disease monitoring and scans follow the supervising consultant’s treatment plan; the source does not impose the ASTRUM-005 research scan calendar. Immune effects may appear after the final dose. Keep the patient alert card, urgent contacts and symptom vigilance; follow unresolved cytopenias, renal, liver or hormone abnormalities. Current EMA SmPC adds amylase/lipase at baseline and periodically/as clinically indicated; assess affected organs more closely if immune toxicity occurs. Give an alert card with each prescription. Lipid profile, ECG, cortisol and audiology are obtained as clinically indicated. Contraception for women of childbearing potential is required during serplulimab and at least six months after the last dose; reconcile all drug requirements.",
+        "action": "Give a follow-up, hormone-replacement if needed and urgent-contact plan.",
+        "source_ids": [
+          "00908"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Serplulimab is not dose-reduced/escalated; use its own event-specific hold/stop/recovery rules. Withholding for tolerability is acceptable up to 12 weeks, not an automatic restart permission.",
+      "Counts and renal/hepatic rules apply to the relevant active component. Baseline ANC ≥1.5 differs from on-treatment ANC ≥1.0; the platelet 50–<75 source gap requires review.",
+      "Etoposide CrCl 10–50 suggests 75% original dose; bilirubin ≥50 µmol/L or decreased albumin suggests considering 50%. Reconcile simultaneous limitations and prior doses rather than multiplying fractions.",
+      "Serplulimab grade-4 endocrine table rows and the hormone-controlled footnote exception require specialist adjudication. Retreatment safety after immune myocarditis is unclear.",
+      "Grade 4 amylase/lipase laboratory elevation has a specific withhold row but conflicts with the general Grade 4 immune-event permanent-stop footnote; obtain consultant adjudication before restart.",
+      "NCCP etoposide renal standardisation uses CrCl10–50 for75% original dose, whereas product SmPC tables use15–50; reconcile product-specific dosing with pharmacy, particularly below15 or on dialysis.",
+      "Current EMA SmPC adds myasthenia Grade2 hold/Grades3–4 stop, SJS/TEN stop, acute thyroiditis and poorly controlled type1diabetes holds. These are labelled supplements to NCCP, not borrowed checkpoint-inhibitor rules.",
+      "An isolated high liver/creatinine value is not proof of immune toxicity. Confirm grade and attribution before a permanent-stop decision.",
+      "ASTRUM-005 enrolled ECOG 0–1; NCCP eligibility is 0–2. The trial population does not provide a separate estimate for ECOG 2.",
+      "The trial used IV etoposide Days 1–3. NCCP’s IV/oral alternative is not separately randomised evidence.",
+      "This trial compared serplulimab with placebo, each with chemotherapy. It does not show superiority to atezolizumab or another immunotherapy.",
+      "The 2026 OS analysis and original 2022 PFS estimate have different data cutoffs; they are labelled separately.",
+      "Group medians and hazard ratios do not predict an individual outcome. Trial scan timing and treatment beyond progression are not universal NCCP instructions.",
+      "The October 2026 correction restored a missing eTable 6 in Supplement 3; the cited main-report OS estimates were not revised by that notice."
+    ],
+    "code": "00908",
+    "release": "0.84.23",
+    "checked": "2026-10-26",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Serplulimab, carboplatin and etoposide: treatment and checks",
+    "setting": "First-line extensive-stage small-cell lung cancer",
+    "summary": "Induction lasts four planned 21-day cycles unless treatment needs to stop earlier. On Day 1 you receive serplulimab, carboplatin and etoposide by drip. With the standard IV schedule, etoposide is repeated on Days 2 and 3. After induction, carboplatin and etoposide stop. Serplulimab alone can continue every three weeks while it is helping and its risks remain acceptable. There is no fixed universal number of maintenance cycles in this NCCP regimen. Your team may instead prescribe etoposide by drip on Day 1 and capsules twice daily on Days 2 and 3. This is a separate alternative, not extra treatment. Oral and IV doses are not interchangeable milligram for milligram. Confirm which plan you have; take the capsules on an empty stomach as prescribed.",
+    "sources": [
+      {
+        "id": "00908",
+        "title": "NCCP 00908 v1b · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6856/908_NCCP_SACT_Regimen_Serplulimab.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS Medical Oncology antiemetic medicines V8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "serplulimab-smpc",
+        "title": "EMA Hetronifly SmPC · updated8October2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/hetronifly-epar-product-information_en.pdf"
+      },
+      {
+        "id": "ema",
+        "title": "EMA Hetronifly overview and current product-information link",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/hetronifly"
+      },
+      {
+        "id": "trial-v08423",
+        "title": "ASTRUM-005 long-term secondary analysis · JAMA Oncology 2026",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42240984/"
+      },
+      {
+        "id": "trial-original",
+        "title": "ASTRUM-005 original randomised trial · JAMA 2022",
+        "url": "https://jamanetwork.com/journals/jama/fullarticle/2796691"
+      },
+      {
+        "id": "trial-correction",
+        "title": "October 2026 correction: omitted eTable 6 restored in Supplement 3",
+        "url": "https://jamanetwork.com/journals/jamaoncology/fullarticle/2854861"
+      },
+      {
+        "id": "hse",
+        "title": "HSE chemotherapy side effects and urgent contact advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "etoposide-oral",
+        "title": "HPRA Vepesid oral product information",
+        "url": "https://assets.hpra.ie/products/Human/30580/Licence_PA2239-006-001_27022024163103.pdf"
+      },
+      {
+        "id": "etoposide-smpc",
+        "title": "HPRA etoposide product information cited by NCCP00908",
+        "url": "https://assets.hpra.ie/products/Human/27660/Licence_PA2315-201-001_13032024133422.pdf"
+      }
+    ]
+  },
+  "00271": {
+    "stages": [
+      "Before starting",
+      "Days 1–3 of each cycle",
+      "Between visits",
+      "Course / response review",
+      "After chemotherapy"
+    ],
+    "lanes": [
+      {
+        "label": "Chemotherapy course",
+        "kind": "treatment",
+        "cells": [
+          "Agree indication, route and course",
+          "Day 1 Carboplatin + etoposide; etoposide continues Days 2–3",
+          "Recovery and symptom monitoring",
+          "The source describes 4–6 cycles every 21 days, or stopping for cancer progression or unacceptable side effects. Your team confirms the intended course and may change it earlier.",
+          "Follow-up or a separately prescribed next plan"
+        ],
+        "source_ids": [
+          "00271"
+        ],
+        "note": "The IV and capsule etoposide patterns are alternatives, not sequential phases."
+      },
+      {
+        "label": "Blood counts",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline blood count",
+          "Review results before treatment",
+          "Blood count weekly before treatment",
+          "Review infection, bleeding and previous toxicity",
+          "Follow unresolved low counts"
+        ],
+        "source_ids": [
+          "00271"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      },
+      {
+        "label": "Kidneys, liver and fluids",
+        "kind": "monitoring",
+        "cells": [
+          "Renal/liver profile; verify clearance and dose suitability",
+          "Renal/liver tests before each cycle; verify current carboplatin GFR",
+          "Repeat sooner after dehydration or illness",
+          "Review organ function before continuation or modification",
+          "Follow kidney/electrolyte/liver abnormalities"
+        ],
+        "source_ids": [
+          "00271"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      },
+      {
+        "label": "Carboplatin dose verification",
+        "kind": "monitoring",
+        "cells": [
+          "Measured GFR preferred or validated estimate",
+          "If estimated: creatinine within 48 hours of dosing",
+          "Reassess if health or kidney function changes",
+          "If creatinine >110% of isotope-baseline value, reassess GFR",
+          "A future regimen requires its own dose review"
+        ],
+        "source_ids": [
+          "00271"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      },
+      {
+        "label": "Hearing and nerves",
+        "kind": "monitoring",
+        "cells": [
+          "Record hearing/nerve symptoms and previous platinum exposure",
+          "Regular hearing and neurological review",
+          "Report tinnitus, hearing loss, numbness or loss of function",
+          "Balance benefit and lasting toxicity",
+          "Review persistent changes"
+        ],
+        "source_ids": [
+          "00271"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      },
+      {
+        "label": "Prevention and route",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm infusion or capsule plan and a written multi-day anti-sickness schedule",
+          "Check support before each treatment day; pharmacy confirms oral doses",
+          "Follow support through two days after last SACT; do not extend medicines yourself",
+          "Review interactions and support after any dose/route change",
+          "Confirm which support medicines stop or continue"
+        ],
+        "source_ids": [
+          "00271",
+          "antiemetic"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      },
+      {
+        "label": "Disease assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm extensive-stage SCLC and individual treatment aim",
+          "Assess symptoms and fitness",
+          "Extra assessment for new concerns",
+          "Scans/tests as directed by consultant; no universal scan interval",
+          "Agree follow-up or a separate next treatment plan"
+        ],
+        "source_ids": [
+          "00271"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before first treatment",
+        "when": "Before dose authorisation",
+        "why": "Confirm suitability and route.",
+        "clinical": "Baseline counts, renal/liver function, hearing and nerves; verify selected etoposide schedule.",
+        "action": "Confirm the complete plan with the consultant and pharmacy.",
+        "source_ids": [
+          "00271"
+        ]
+      },
+      {
+        "title": "Across Days 1–3",
+        "when": "Every treatment day",
+        "why": "The active medicines and route change within each cycle.",
+        "clinical": "Platinum Day 1; etoposide Days 1–3, with prescribed IV/oral alternative.",
+        "action": "Confirm dose, route and today’s supportive medicines.",
+        "source_ids": [
+          "00271"
+        ]
+      },
+      {
+        "title": "After the last treatment day",
+        "when": "Two days after multi-day SACT",
+        "why": "Prevention extends beyond the final dose.",
+        "clinical": "NCIS multi-day guidance requires risk-appropriate support through Day 5 for this standard course.",
+        "action": "Provide an individual written schedule and rescue instructions.",
+        "source_ids": [
+          "antiemetic"
+        ]
+      },
+      {
+        "title": "Course and response review",
+        "when": "During and at the end of planned chemotherapy",
+        "why": "Benefit and toxicity guide the next step.",
+        "clinical": "The source describes 4–6 cycles every 21 days, or stopping for cancer progression or unacceptable side effects. Your team confirms the intended course and may change it earlier.",
+        "action": "Confirm completion, persistent-toxicity follow-up and any separate next regimen.",
+        "source_ids": [
+          "00271"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This guide covers Carboplatin + Etoposide chemotherapy for extensive-stage small-cell lung cancer. Immunotherapy combinations and limited-stage treatment with radiotherapy use separate regimens. If an additional medicine or radiotherapy is prescribed, obtain its own plan and consent information.",
+      "The source describes 4–6 cycles every 21 days, or stopping for cancer progression or unacceptable side effects. Your team confirms the intended course and may change it earlier.",
+      "Do not infer a fixed radiotherapy course, immune maintenance or date-based patient schedule."
+    ],
+    "code": "00271",
+    "release": "0.84.23",
+    "checked": "2026-10-26",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Carboplatin + Etoposide: treatment and checks",
+    "setting": "Extensive-stage small-cell lung cancer · chemotherapy",
+    "summary": "Carboplatin is planned on Day 1. Etoposide is planned on Days 1–3: usually all three days by infusion, or a prescribed alternative with an infusion on Day 1 and capsules twice daily on Days 2–3. The source describes 4–6 cycles every 21 days, or stopping for cancer progression or unacceptable side effects. Your team confirms the intended course and may change it earlier.",
+    "sources": [
+      {
+        "id": "00271",
+        "title": "NCCP 00271 v6 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6931/271_CarboplatinAUC5Etop100.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "Manufacturer etoposide product information: mechanism, risks and precautions",
+        "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/United_Kingdom/Etoposide-spc-gb.pdf"
+      },
+      {
+        "id": "hse",
+        "title": "HSE chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS Medical Oncology antiemetics V8, Table 1 and multi-day guidance",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "cocis",
+        "title": "COCIS: individual-patient meta-analysis of first-line platinum chemotherapy in SCLC",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22473169/"
+      },
+      {
+        "id": "jcog9702",
+        "title": "JCOG9702: carboplatin/etoposide versus split cisplatin/etoposide in elderly or poor-risk extensive SCLC",
+        "url": "https://www.nature.com/articles/6603810"
+      },
+      {
+        "id": "oral",
+        "title": "HPRA Vepesid capsules: patient leaflet",
+        "url": "https://assets.hpra.ie/products/Human/30581/94054f4b-91cf-4c49-8063-040ead5c4a92.pdf"
+      },
+      {
+        "id": "platinum",
+        "title": "Manufacturer carboplatin product information",
+        "url": "https://www.medicines.org.uk/emc/product/3787/smpc"
+      }
+    ]
+  },
+  "00280": {
+    "stages": [
+      "Before starting",
+      "Days 1–3 of each cycle",
+      "Between visits",
+      "Course / response review",
+      "After chemotherapy"
+    ],
+    "lanes": [
+      {
+        "label": "Chemotherapy course",
+        "kind": "treatment",
+        "cells": [
+          "Agree indication, route and course",
+          "Day 1 Cisplatin + etoposide; etoposide continues Days 2–3",
+          "Recovery and symptom monitoring",
+          "The source plans 4–6 cycles, usually every 21 days. The team may delay, reduce or stop treatment according to your health and response.",
+          "Follow-up or a separately prescribed next plan"
+        ],
+        "source_ids": [
+          "00280"
+        ],
+        "note": "The IV and capsule etoposide patterns are alternatives, not sequential phases."
+      },
+      {
+        "label": "Blood counts",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline blood count",
+          "Review results before treatment",
+          "Further counts if symptoms or clinical plan require",
+          "Review infection, bleeding and previous toxicity",
+          "Follow unresolved low counts"
+        ],
+        "source_ids": [
+          "00280"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      },
+      {
+        "label": "Kidneys, liver and fluids",
+        "kind": "monitoring",
+        "cells": [
+          "Renal/liver profile; verify clearance and dose suitability",
+          "Renal/liver tests before each cycle; hydration/electrolytes with cisplatin",
+          "Repeat sooner after dehydration or illness",
+          "Review organ function before continuation or modification",
+          "Follow kidney/electrolyte/liver abnormalities"
+        ],
+        "source_ids": [
+          "00280"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      },
+      {
+        "label": "Hearing and nerves",
+        "kind": "monitoring",
+        "cells": [
+          "Record baseline symptoms; audiology if indicated",
+          "Review symptoms before each cycle",
+          "Report tinnitus, hearing loss, numbness or loss of function",
+          "Balance benefit and lasting toxicity",
+          "Review persistent changes"
+        ],
+        "source_ids": [
+          "00280"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      },
+      {
+        "label": "Prevention and route",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm infusion or capsule plan and a written multi-day anti-sickness schedule",
+          "Check support before each treatment day; pharmacy confirms oral doses",
+          "Follow support through two days after last SACT; do not extend medicines yourself",
+          "Review interactions and support after any dose/route change",
+          "Confirm which support medicines stop or continue"
+        ],
+        "source_ids": [
+          "00280",
+          "antiemetic"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      },
+      {
+        "label": "Disease assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm extensive-stage SCLC and individual treatment aim",
+          "Assess symptoms and fitness",
+          "Extra assessment for new concerns",
+          "Scans/tests as directed by consultant; no universal scan interval",
+          "Agree follow-up or a separate next treatment plan"
+        ],
+        "source_ids": [
+          "00280"
+        ],
+        "note": "Relative care sequence; no patient dates and no universal scan interval."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before first treatment",
+        "when": "Before dose authorisation",
+        "why": "Confirm suitability and route.",
+        "clinical": "Baseline counts, renal/liver function, hearing and nerves; verify selected etoposide schedule.",
+        "action": "Confirm the complete plan with the consultant and pharmacy.",
+        "source_ids": [
+          "00280"
+        ]
+      },
+      {
+        "title": "Across Days 1–3",
+        "when": "Every treatment day",
+        "why": "The active medicines and route change within each cycle.",
+        "clinical": "Platinum Day 1; etoposide Days 1–3, with prescribed IV/oral alternative.",
+        "action": "Confirm dose, route and today’s supportive medicines.",
+        "source_ids": [
+          "00280"
+        ]
+      },
+      {
+        "title": "After the last treatment day",
+        "when": "Two days after multi-day SACT",
+        "why": "Prevention extends beyond the final dose.",
+        "clinical": "NCIS multi-day guidance requires risk-appropriate support through Day 5 for this standard course.",
+        "action": "Provide an individual written schedule and rescue instructions.",
+        "source_ids": [
+          "antiemetic"
+        ]
+      },
+      {
+        "title": "Course and response review",
+        "when": "During and at the end of planned chemotherapy",
+        "why": "Benefit and toxicity guide the next step.",
+        "clinical": "The source plans 4–6 cycles, usually every 21 days. The team may delay, reduce or stop treatment according to your health and response.",
+        "action": "Confirm completion, persistent-toxicity follow-up and any separate next regimen.",
+        "source_ids": [
+          "00280"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This guide covers Cisplatin + Etoposide chemotherapy for extensive-stage small-cell lung cancer. Immunotherapy combinations and limited-stage treatment with radiotherapy use separate regimens. If an additional medicine or radiotherapy is prescribed, obtain its own plan and consent information.",
+      "The source plans 4–6 cycles, usually every 21 days. The team may delay, reduce or stop treatment according to your health and response.",
+      "Do not infer a fixed radiotherapy course, immune maintenance or date-based patient schedule."
+    ],
+    "code": "00280",
+    "release": "0.84.23",
+    "checked": "2026-10-26",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Cisplatin + Etoposide: treatment and checks",
+    "setting": "Extensive-stage small-cell lung cancer · chemotherapy",
+    "summary": "Cisplatin is planned on Day 1. Etoposide is planned on Days 1–3: usually all three days by infusion, or a prescribed alternative with an infusion on Day 1 and capsules twice daily on Days 2–3. The source plans 4–6 cycles, usually every 21 days. The team may delay, reduce or stop treatment according to your health and response.",
+    "sources": [
+      {
+        "id": "00280",
+        "title": "NCCP 00280 v7 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6927/280_CISplatin_and_Etoposide.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "Manufacturer etoposide product information: mechanism, risks and precautions",
+        "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/United_Kingdom/Etoposide-spc-gb.pdf"
+      },
+      {
+        "id": "hse",
+        "title": "HSE chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS Medical Oncology antiemetics V8, Table 1 and multi-day guidance",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "cocis",
+        "title": "COCIS: individual-patient meta-analysis of first-line platinum chemotherapy in SCLC",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22473169/"
+      },
+      {
+        "id": "jcog9702",
+        "title": "JCOG9702: carboplatin/etoposide versus split cisplatin/etoposide in elderly or poor-risk extensive SCLC",
+        "url": "https://www.nature.com/articles/6603810"
+      },
+      {
+        "id": "oral",
+        "title": "HPRA Vepesid capsules: patient leaflet",
+        "url": "https://assets.hpra.ie/products/Human/30581/94054f4b-91cf-4c49-8063-040ead5c4a92.pdf"
+      },
+      {
+        "id": "platinum",
+        "title": "Manufacturer cisplatin product information",
+        "url": "https://www.medicines.org.uk/emc/product/6960/smpc"
+      }
+    ]
+  },
+  "00319": {
+    "stages": [
+      "Before starting",
+      "Day 1",
+      "Days 2–3",
+      "Recovery / next cycle",
+      "Course review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment and oral doses",
+        "kind": "treatment",
+        "cells": [
+          "Confirm extensive SCLC and cisplatin unsuitability",
+          "Carboplatin infusion before oral etoposide",
+          "Oral etoposide twice daily on both days",
+          "No further etoposide until next authorised cycle",
+          "Continue only while benefit/tolerability support it"
+        ],
+        "source_ids": [
+          "00319"
+        ],
+        "note": "Relative chronology; no patient dates or fixed scan interval."
+      },
+      {
+        "label": "Blood counts",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline blood profile",
+          "Review pretreatment results",
+          "Extra review if illness or bleeding",
+          "FBC weekly prior to treatment, as arranged",
+          "Follow any persistent low counts"
+        ],
+        "source_ids": [
+          "00319"
+        ],
+        "note": "Relative chronology; no patient dates or fixed scan interval."
+      },
+      {
+        "label": "Kidneys, liver and albumin",
+        "kind": "monitoring",
+        "cells": [
+          "Renal/liver profile; measured GFR preferred",
+          "Verify kidney-based carboplatin dose",
+          "Report poor intake or low urine",
+          "Renal/liver profile before each cycle",
+          "Reassess after illness or organ change"
+        ],
+        "source_ids": [
+          "00319"
+        ],
+        "note": "Relative chronology; no patient dates or fixed scan interval."
+      },
+      {
+        "label": "Hearing and nerves",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline symptoms; audiology if indicated",
+          "Report new changes",
+          "Report tinnitus, numbness or functional problems",
+          "Regular hearing/neurological review",
+          "Follow symptoms that persist"
+        ],
+        "source_ids": [
+          "00319"
+        ],
+        "note": "Relative chronology; no patient dates or fixed scan interval."
+      },
+      {
+        "label": "Prevention, adherence and safety",
+        "kind": "monitoring",
+        "cells": [
+          "Pharmacy capsule teaching; contact number",
+          "Dedicated carboplatin antiemetics; capsule sequence",
+          "Record capsules; follow reconciled antiemetics",
+          "Support plan covers two days after last SACT; report missed/vomited doses",
+          "Review medicines and unused capsule return"
+        ],
+        "source_ids": [
+          "00319"
+        ],
+        "note": "Relative chronology; no patient dates or fixed scan interval."
+      },
+      {
+        "label": "Disease assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm treatment aim",
+          "Clinical review",
+          "Report significant new symptoms",
+          "Tests/scans according to Consultant plan",
+          "Agree continuation, change or stop"
+        ],
+        "source_ids": [
+          "00319"
+        ],
+        "note": "Relative chronology; no patient dates or fixed scan interval."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before the first cycle",
+        "when": "Before treatment authorisation",
+        "why": "Confirm disease, organ function and safe home dosing.",
+        "clinical": "Extensive SCLC; unsuitable for cisplatin; ECOG0–2 or3ifage<70; baseline labs/GFR.",
+        "action": "Confirm consent, capsule teaching and prevention plan.",
+        "source_ids": [
+          "00319"
+        ]
+      },
+      {
+        "title": "After Day 3",
+        "when": "After the last prescribed capsule doses",
+        "why": "Avoid unintended continuation or replacement.",
+        "clinical": "This source prescribes oral etoposide twice daily on Days1–3 only.",
+        "action": "Record doses and follow support plan; contact team about omissions/vomiting.",
+        "source_ids": [
+          "00319",
+          "leaflet",
+          "oralcare"
+        ]
+      },
+      {
+        "title": "Before each new cycle",
+        "when": "After recovery and review",
+        "why": "Counts, organ function and tolerability may change.",
+        "clinical": "FBC weekly prior to treatment; renal/liver profile before each cycle; verified renal dose.",
+        "action": "Start another capsule course only after authorisation.",
+        "source_ids": [
+          "00319"
+        ]
+      },
+      {
+        "title": "Course review",
+        "when": "According to Consultant plan",
+        "why": "Treatment should continue only while appropriate.",
+        "clinical": "Current source specifies progression or unacceptable toxicity as course endpoint.",
+        "action": "Discuss benefit, toxicity and next plan; return unused capsules.",
+        "source_ids": [
+          "00319",
+          "leaflet"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This guide covers carboplatin plus oral etoposide for extensive-disease small-cell lung cancer in people unsuitable for cisplatin-based treatment. It does not cover an intravenous etoposide schedule or an added immunotherapy medicine. If the prescription differs, ask for its matching guide and consent discussion.",
+      "NCISV8 multi-day antiemetics follow the risk on each day plus two days afterwards. Reconcile with the dedicated carboplatin row; do not add duplicated high-risk courses.",
+      "The source does not specify a fixed number of cycles.",
+      "Patient/PPI, consultant and oncology-pharmacy approval remain pending."
+    ],
+    "code": "00319",
+    "release": "0.84.23",
+    "checked": "2026-10-26",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Carboplatin + Oral Etoposide: treatment and checks",
+    "setting": "Extensive-disease small-cell lung cancer · carboplatin + oral etoposide",
+    "summary": "Carboplatin is planned into a vein on Day 1, before oral etoposide. Etoposide capsules are prescribed twice daily on Days 1, 2 and 3 only, on an empty stomach. The cycle repeats every 21 days while treatment is helping and side effects remain acceptable. Your team decides when to delay, change or stop; the source does not set a fixed number of cycles.",
+    "sources": [
+      {
+        "id": "00319",
+        "title": "NCCP 00319 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6920/319_V5_CarboplatinEtoposide_21days.pdf"
+      },
+      {
+        "id": "carboplatin_smpc",
+        "title": "Carboplatin manufacturer product information: mechanism and safety",
+        "url": "https://www.medicines.org.uk/emc/product/3787/smpc"
+      },
+      {
+        "id": "smpc",
+        "title": "Etoposide capsules: manufacturer product information (Neon Healthcare)",
+        "url": "https://www.medicines.org.uk/emc/product/10534/smpc"
+      },
+      {
+        "id": "leaflet",
+        "title": "Etoposide capsules manufacturer patient leaflet, January2024",
+        "url": "https://www.medicines.org.uk/emc/files/pil.10534.pdf"
+      },
+      {
+        "id": "oralcare",
+        "title": "BC Cancer: oral etoposide patient information (vomited-dose advice)",
+        "url": "https://www.bccancer.bc.ca/drug-database-site/Drug%20Index/Etoposide_oral_handout.pdf"
+      },
+      {
+        "id": "oralhandling",
+        "title": "Macmillan: etoposide capsules swallowing and handling advice",
+        "url": "https://www.macmillan.org.uk/cancer-information-and-support/treatments-and-drugs/etoposide"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: chemotherapy side effects and urgent contact advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS Medical Oncology antiemetics V8, Table1 and multi-day note",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "johnson",
+        "title": "Johnson1991 randomised cisplatin with IV versus mixed IV/oral etoposide",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/1845847/"
+      },
+      {
+        "id": "cocis",
+        "title": "Rossi2012 COCIS individual-patient meta-analysis: platinum choice in SCLC",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22473169/"
+      }
+    ]
+  },
+  "00222": {
+    "stages": [
+      "Before starting / phase change",
+      "Each 21-day cycle",
+      "Between visits",
+      "Benefit and toxicity review",
+      "After last pemetrexed"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment course",
+        "kind": "treatment",
+        "cells": [
+          "Confirm standalone maintenance or second-line",
+          "Day 1 pemetrexed; repeat every 21 days if appropriate",
+          "Recovery, daily folate and symptom reporting",
+          "Continue only while benefit and tolerability remain acceptable",
+          "Agree next treatment or follow-up plan"
+        ],
+        "source_ids": [
+          "00222"
+        ],
+        "note": "Treatment is planned every three weeks while it is helping and side effects remain acceptable. There is no fixed total number of cycles in this regimen. Scans, symptoms, blood results, your priorities and the oncology review guide continuation, delays, changes or stopping."
+      },
+      {
+        "label": "Blood count, kidneys and liver",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline FBC, renal and liver profile",
+          "Repeat before each cycle",
+          "Earlier tests if clinically needed",
+          "Review recovery and any dose change",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00222"
+        ],
+        "note": "Relative sequence; no patient-entered dates or fixed scan interval."
+      },
+      {
+        "label": "Vitamins and steroids",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm folate, last B12 and one steroid schedule",
+          "Folate daily; B12 every three cycles; steroid around each dose",
+          "Report missed medicines or poor intake",
+          "Check adherence and changes to support medicines",
+          "Continue folate for 21 days after final dose"
+        ],
+        "source_ids": [
+          "00222"
+        ],
+        "note": "Relative sequence; no patient-entered dates or fixed scan interval."
+      },
+      {
+        "label": "Symptoms and medicine interactions",
+        "kind": "monitoring",
+        "cells": [
+          "Review prior toxicity and all medicines",
+          "Assess interval symptoms before authorising treatment",
+          "Urgent contact for illness; check NSAID/aspirin use",
+          "Discuss prior reductions, nerve recurrence and daily function",
+          "Follow persistent kidney, nerve, blood or other problems"
+        ],
+        "source_ids": [
+          "00222",
+          "smpc"
+        ],
+        "note": "Relative sequence; no patient-entered dates or fixed scan interval."
+      },
+      {
+        "label": "Disease and treatment aim",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm maintenance versus second-line indication",
+          "Review symptoms and clinical progress",
+          "Extra assessment if needed",
+          "Scans and tests according to Consultant plan",
+          "Agree follow-up or a different treatment plan"
+        ],
+        "source_ids": [
+          "00222"
+        ],
+        "note": "Relative sequence; no patient-entered dates or fixed scan interval."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Vitamin preparation or carry-forward",
+        "when": "Before first pemetrexed or a phase change",
+        "why": "Vitamins lower serious pemetrexed toxicity.",
+        "clinical": "At least five folate doses in seven days before first dose and B12 in preceding week; continue the established schedule when already treated.",
+        "action": "Confirm last B12 and next due date, daily folate and one steroid prescription.",
+        "source_ids": [
+          "00222"
+        ]
+      },
+      {
+        "title": "Review each dose",
+        "when": "Before every 21-day cycle",
+        "why": "Counts, organ function and toxicity can change.",
+        "clinical": "FBC, renal and liver profile and interval clinical review.",
+        "action": "Confirm whether to continue, delay, modify or stop.",
+        "source_ids": [
+          "00222"
+        ]
+      },
+      {
+        "title": "Benefit review",
+        "when": "According to Consultant plan",
+        "why": "There is no fixed total cycle number.",
+        "clinical": "Assess disease, symptoms, harms and priorities; scans as planned.",
+        "action": "Confirm ongoing benefit and the next plan.",
+        "source_ids": [
+          "00222"
+        ]
+      },
+      {
+        "title": "Final dose follow-up",
+        "when": "After the final pemetrexed",
+        "why": "Protection and recovery continue after the infusion.",
+        "clinical": "Continue folic acid for 21 days after the last dose.",
+        "action": "Agree medicine stop dates and review persistent symptoms.",
+        "source_ids": [
+          "00222"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This guide covers pemetrexed on its own for maintenance or second-line treatment of selected non-squamous non-small-cell lung cancer. If pembrolizumab or another immunotherapy is also prescribed, use the matching combination regimen and its additional consent, monitoring and urgent advice. Pemetrexed with pembrolizumab maintenance is a different treatment plan.",
+      "Standalone chemotherapy does not imply immune-specific endocrine monitoring; additional immunotherapy requires its matching protocol.",
+      "Treatment is planned every three weeks while it is helping and side effects remain acceptable. There is no fixed total number of cycles in this regimen. Scans, symptoms, blood results, your priorities and the oncology review guide continuation, delays, changes or stopping."
+    ],
+    "code": "00222",
+    "release": "0.84.23",
+    "checked": "2026-10-26",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pemetrexed Monotherapy: treatment and checks",
+    "setting": "Non-squamous NSCLC · standalone maintenance or second-line chemotherapy",
+    "summary": "One pemetrexed infusion on Day 1 of each 21-day cycle. Treatment is planned every three weeks while it is helping and side effects remain acceptable. There is no fixed total number of cycles in this regimen. Scans, symptoms, blood results, your priorities and the oncology review guide continuation, delays, changes or stopping.",
+    "sources": [
+      {
+        "id": "00222",
+        "title": "NCCP 00222 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA ALIMTA product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/alimta-epar-product-information_en.pdf"
+      },
+      {
+        "id": "hse",
+        "title": "HSE chemotherapy side effects and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS Medical Oncology antiemetics V8, Table 1 low-risk row",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "hanna",
+        "title": "Hanna 2004: second-line pemetrexed versus docetaxel",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15117980/"
+      },
+      {
+        "id": "jmen",
+        "title": "JMEN 2009: switch maintenance pemetrexed versus placebo",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19767093/?dopt=Abstract"
+      },
+      {
+        "id": "paramount",
+        "title": "PARAMOUNT final OS 2013: continuation maintenance after pemetrexed/cisplatin",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23835707/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

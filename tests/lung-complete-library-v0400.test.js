@@ -96,7 +96,7 @@ function trueGradeField(field, definition) {
   return field.endsWith('_grade') || field.includes('current_grade') || field.includes('highest_grade');
 }
 function demoValue(definition) {
-  if (definition.demo_value !== undefined && definition.demo_value !== null) return String(definition.demo_value);
+  if (definition.demo_value !== undefined && definition.demo_value !== null && definition.demo_value !== '') return String(definition.demo_value);
   if (definition.type === 'select') return String(definition.options?.[0]?.value ?? '');
   if (definition.type === 'boolean') return 'false';
   if (definition.type === 'number') return String(Number.isFinite(Number(definition.min)) ? definition.min : 0);
@@ -132,7 +132,8 @@ for (const { file, data } of lung) {
   const code=String(data.metadata.nccp_regimen_code).padStart(5,'0'); const m=data.metadata || {};
   assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} is not an active encoded prototype.`);
   assert(!/placeholder|draft/i.test(String(data.status || '')),`${code} remains a placeholder/draft.`);
-  assert((['00317','00318','00455','00558','00569','00579','00576','00655','00713','00714'].includes(code)&&m.sactcheck_encoding_version==='0.84.22') || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.40.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.0','0.84.20'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Lung/Gynaecology reconciliation encoding marker.`);
+  const v08423=['00689','00908','00271','00280','00319','00222'].includes(code)&&m.sactcheck_encoding_version==='0.84.23';
+  assert(v08423 || (['00317','00318','00455','00558','00569','00579','00576','00655','00713','00714'].includes(code)&&m.sactcheck_encoding_version==='0.84.22') || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.40.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.0','0.84.20'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Lung/Gynaecology reconciliation encoding marker.`);
   assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
   assert(/^https:\/\/healthservice\.hse\.ie\/documents\//.test(m.source_url || ''),`${code} lacks direct official HSE/NCCP PDF.`);
   assert(m.lung_subgroup,`${code} lacks Lung subgroup.`);
@@ -166,7 +167,7 @@ for (const { file, data } of lung) {
     if (trueGradeField(field,definition)) {
       ctcaeFields += 1;
       assert.strictEqual(definition.type,'select',`${code}/${field} CTCAE input must be select.`);
-      if(m.sactcheck_encoding_version==='0.84.22'){assert(definition.grading_source_label);assert.equal(definition.grading_source_url,m.source_url);assert(/not a complete grading table/.test(definition.source_grading_note));assert(['4.0','4.03',undefined].includes(definition.ctcae_version));}else if((['00232','00259'].includes(code)||(['00568','00215'].includes(code)&&!definition.ctcae_version))){assert(!definition.ctcae_version);assert.equal(definition.grading_source_url,m.source_url);assert(/not a complete grading table/.test(definition.source_grading_note));}else assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
+      if(v08423){assert(definition.grading_source_label);assert.equal(definition.grading_source_url,m.source_url);assert(definition.source_grading_note);assert([undefined,'5.0'].includes(definition.ctcae_version));}else if(m.sactcheck_encoding_version==='0.84.22'){assert(definition.grading_source_label);assert.equal(definition.grading_source_url,m.source_url);assert(/not a complete grading table/.test(definition.source_grading_note));assert(['4.0','4.03',undefined].includes(definition.ctcae_version));}else if((['00232','00259'].includes(code)||(['00568','00215'].includes(code)&&!definition.ctcae_version))){assert(!definition.ctcae_version);assert.equal(definition.grading_source_url,m.source_url);assert(/not a complete grading table/.test(definition.source_grading_note));}else assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
       assert(definition.assessment_guidance,`${code}/${field} lacks assessment guidance.`);
       const grades=new Set((definition.options || []).map(item => Number(item.value)));
       [0,1,2,3,4].forEach(g => assert(grades.has(g),`${code}/${field} lacks Grade ${g}.`));
@@ -180,6 +181,10 @@ for (const { file, data } of lung) {
         assert.strictEqual(definition.renal_input?.mode,'protocol_specific_band',`${code}/${field} lacks renal-band metadata.`);
         assert.strictEqual(definition.renal_input?.exact_value_required,false,`${code}/${field} incorrectly requires exact value.`);
         assert((definition.options || []).length>=2,`${code}/${field} lacks tiered renal choices.`);
+      } else if (v08423 && definition.type==='boolean') {
+        assert(definition.assessment_guidance || definition.help || definition.description || definition.label);
+      } else if(v08423 && definition.renal_input?.mode==='source_threshold_numeric') {
+        assert.equal(definition.type,'number'); assert.equal(definition.renal_input.exact_value_required,false); assert.equal(definition.renal_input.source_url,m.source_url);
       } else if (/carboplatin|calvert/i.test(`${m.title} ${text}`)) {
         exactCarboplatin += 1;
         assert.strictEqual(definition.renal_input?.mode,'exact_continuous',`${code}/${field} lacks Calvert exact-value declaration.`);
