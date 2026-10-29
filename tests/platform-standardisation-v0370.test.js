@@ -172,7 +172,8 @@ for (const { file, data } of protocols) {
       const lungSource=["00455","00558","00569","00579","00576","00655","00713","00714","00317","00318"].includes(code)||lungNextSource;
       const targetedV24Source=metadata.sactcheck_encoding_version==='0.84.24'&&['00353','00401','00562','00570','00243','00382','00831'].includes(code);
       const targetedV25Source=metadata.sactcheck_encoding_version==='0.84.25'&&['00823','00702','00221','00565','00340','00203','00226','00232','00259','00215'].includes(code);
-      if(targetedV25Source){assert.equal(def.grading_source_url,metadata.source_url);assert.equal(def.ctcae_version,['00702','00565'].includes(code)?'4.0':undefined);assert(def.grading_source_label&&def.source_grading_note);assert(def.options.every(o=>o.description)||/not a complete grading table/.test(def.source_grading_note));}else if(targetedV24Source){
+      const lungV26Source=metadata.sactcheck_encoding_version==='0.84.26'&&['00219','00220','00544','00592','00593','00455','00558','00576','00655','00689'].includes(code);
+      if(lungV26Source){assert.equal(def.grading_source_url,metadata.source_url);assert.equal(def.ctcae_version,['00455','00558'].includes(code)?'4.0':['00576','00655'].includes(code)?'4.03':undefined);assert(def.grading_source_label&&def.source_grading_note);}else if(targetedV25Source){assert.equal(def.grading_source_url,metadata.source_url);assert.equal(def.ctcae_version,['00702','00565'].includes(code)?'4.0':undefined);assert(def.grading_source_label&&def.source_grading_note);assert(def.options.every(o=>o.description)||/not a complete grading table/.test(def.source_grading_note));}else if(targetedV24Source){
         const avastin=code==='00831'&&['haemorrhage_grade','venous_thromboembolism_grade'].includes(field);
         const hccImmune=code==='00831'&&!['hypertension_grade','infection_grade','other_nonimmune_toxicity_grade'].includes(field)&&!avastin;
         const source=code==='00353'?'https://evs.nci.nih.gov/ftp1/CTCAE/CTCAE_4.03/CTCAE_4.03_2010-06-14_QuickReference_5x7.pdf':avastin?'https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf':metadata.source_url;
@@ -183,7 +184,7 @@ for (const { file, data } of protocols) {
       if(palbociclibSource){assert.equal(def.grading_source_label,'NCCP 00414 / CTCAE v4.0');assert.match(def.grading_source_url,/cancer.gov.*ctcae-v403/);assert(def.options.every(x=>x.description));}
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
-      if(!pldSource && !newSourceGrade && !lungSource && !targetedV24Source && !targetedV25Source) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
+      if(!pldSource && !newSourceGrade && !lungSource && !targetedV24Source && !targetedV25Source && !lungV26Source) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
       const sourceHfs = (['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field)) || (code === '00217' && field === 'hand_foot_grade');
@@ -236,7 +237,7 @@ for (const { file, data } of protocols) {
       assert.equal(def.renal_input?.exact_value_required, true, `${code}/${field} exact renal field must declare why a continuous value is required`);
       assert(String(def.renal_input?.reason || '').length >= 20, `${code}/${field} exact renal field lacks a source-specific rationale`);
     } else if (mode === 'source_threshold_numeric') {
-      assert(['00823','00702','00221','00565','00340','00203','00226','00232','00259','00215','00353','00401','00562','00570','00243','00382','00831','00689','00908','00271','00280','00319','00222','00455','00558','00569','00579','00576','00655','00713','00714','00317','00318','00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
+      assert(['00219','00220','00544','00592','00593','00823','00702','00221','00565','00340','00203','00226','00232','00259','00215','00353','00401','00562','00570','00243','00382','00831','00689','00908','00271','00280','00319','00222','00455','00558','00569','00579','00576','00655','00713','00714','00317','00318','00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
       assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);
       const auditedSources=[metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)];
       assert(auditedSources.includes(def.renal_input.source_url),`${code}/${field}: numeric renal source must be NCCP or an explicitly audited supplement`);assert(def.renal_input.reason.length>=20);

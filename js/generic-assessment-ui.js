@@ -51,6 +51,8 @@
     if (!definition) return false;
     if (isEcogDefinition(definition)) return true;
     const text = definitionSearchText(definition);
+    // EGFR molecular eligibility is distinct from renal eGFR.
+    if (/(?:\begfr\b|(?:^|_)egfr(?:_|$))/i.test(text) && /mutation|mutant|exon|activating|sensiti[sz]|wild.?type/i.test(text)) return true;
     return /\b(?:pregnan(?:t|cy)|breastfeed(?:ing)?|hypersensitiv(?:e|ity)|allerg(?:y|ic)|dpd|brivudine|consent|contraception|fertility)\b/i.test(text);
   }
 

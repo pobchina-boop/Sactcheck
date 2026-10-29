@@ -88,3 +88,11 @@ assert(scanned > 5000, `Expected a library-wide input scan; saw ${scanned}.`);
 assert(protectedCount > 100, `Expected substantial ECOG/reproductive criteria coverage; saw ${protectedCount}.`);
 
 console.log(`v0.55.0 input-classification and ECOG tests passed across ${scanned} input definitions; ${protectedCount} ECOG/reproductive fields protected from laboratory classification.`);
+
+// Biomarker EGFR must not be mistaken for estimated glomerular filtration rate.
+for(const definition of [
+ {id:'egfr_activating_mutation',label:'Activating EGFR mutation present?',type:'boolean'},
+ {id:'egfr_status',label:'EGFR sensitising mutation confirmed',type:'select'},
+ {id:'egfr',label:'eGFR',unit:'mL/min/1.73m2',type:'number'},
+ {id:'egfr',label:'Estimated glomerular filtration rate',unit:'mL/min',type:'number'}
+])assert.equal(Classification.laboratoryDomain(definition),definition.unit?'renal':null,definition.label);

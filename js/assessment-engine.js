@@ -643,8 +643,8 @@
       : profile.context.activeComponents;
 
     const indicationId = inputs.indication_id || null;
-    const selectedIndication = asArray(protocol.indications).find(item =>
-      String(item.indication_id || item.code || "") === String(indicationId || "")
+    const selectedIndication = indicationId === null ? undefined : asArray(protocol.indications).find(item =>
+      [item.indication_id, item.id, item.code].some(id => id !== null && id !== undefined && String(id) === String(indicationId))
     );
 
     return {

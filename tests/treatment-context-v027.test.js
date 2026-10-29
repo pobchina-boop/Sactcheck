@@ -25,7 +25,10 @@ assert(summary.includes("Indication:"), "copyable summary must include indicatio
 const atezoDefinitions = Engine.getInputDefinitions(atezo, "default");
 const indication = atezoDefinitions.find(definition => definition.id === "indication_id");
 assert(indication, "multi-indication ICI must expose an indication dropdown");
-assert.equal(indication.options.length, 6, "current atezolizumab v10a indications must be selectable");
+assert.equal(atezo.indications.length,6,"Six source indications remain distinct from legacy aliases");
+for(const source of atezo.indications)assert(indication.options.some(o=>o.value===(source.indication_id||source.id)),"Every current source indication is selectable");
+const legacy=indication.options.filter(o=>!atezo.indications.some(i=>(i.indication_id||i.id)===o.value));
+assert.equal(legacy.length,2);assert(legacy.every(o=>/Legacy.*select the specific/i.test(o.label)),"Legacy saved contexts must visibly require a specific current indication");
 
 const ui = fs.readFileSync("js/generic-assessment-ui.js", "utf8");
 assert(ui.includes("Protocol and treatment context"));
@@ -34,3 +37,9 @@ assert(ui.includes("isTreatmentContext"));
 assert(ui.includes("jsonOfficialPdf"));
 
 console.log("v0.27 protocol and treatment-context tests passed.");
+
+// Blank input must never match an id-only legacy record; support every declared identifier.
+const pembro=JSON.parse(fs.readFileSync('protocols/shared/00455-pembrolizumab-200-mg-monotherapy.json','utf8'));
+for(const indication_id of [undefined,null,''])assert.equal(Engine.assess(pembro,{indication_id},{profileId:'default'}).context.indicationLabel,pembro.metadata.indication);
+for(const indication_id of ['00455-lung','00455a'])assert.match(Engine.assess(pembro,{indication_id},{profileId:'default'}).context.indicationLabel,/First-line metastatic NSCLC/);
+assert.match(Engine.assess(pembro,{indication_id:'00455-gu'},{profileId:'default'}).context.indicationLabel,/Legacy genitourinary/);

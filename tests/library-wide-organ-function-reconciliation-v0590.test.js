@@ -30,6 +30,7 @@ for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
   const rec = m.organ_function_reconciliation;
+  const migration26=m.sactcheck_encoding_version==='0.84.26'&&require('../validation/lung-next-v08426/organ-function-migrations.json').records[item.nccp_code];
   const migration25=m.sactcheck_encoding_version==='0.84.25'&&require('../validation/targeted-lung-v08425/organ-function-migrations.json').records[item.nccp_code];
   const migration24=m.sactcheck_encoding_version==='0.84.24'&&migrations24[item.nccp_code];
   const v08422 = (item.nccp_code === '00318' && m.sactcheck_encoding_version === '0.84.22') || (item.nccp_code === '00222' && m.sactcheck_encoding_version === '0.84.23');
@@ -42,8 +43,8 @@ for (const item of register.records) {
   assert.strictEqual(rec.consultant_reviewed, false);
   assert.strictEqual(rec.oncology_pharmacy_reviewed, false);
   assert.strictEqual(rec.clinical_use_authorised, false);
-  assert.strictEqual(m.encoding_maturity.level, (v08422||migration24||migration25) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
-  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
+  assert.strictEqual(m.encoding_maturity.level, (v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
   for (const [field, def] of Object.entries(p.input_definitions || {})) {
     if (/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label || ''}`)) {
       assert.strictEqual(def.required, false, `${item.nccp_code}/${field} must remain optional for independent partial assessment`);
@@ -51,7 +52,8 @@ for (const item of register.records) {
     }
   }
   const releaseRules = (p.rule_engine?.rules || []).filter(r => String(r.id || r.rule_id || '').startsWith('OF590_'));
-  if(migration25){assert.equal(rec.resolution,migration25.resolution);for(const id of migration25.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page),item.nccp_code+': missing audited v25 rule '+id);assert(fs.existsSync(path.join(root,'validation/targeted-lung-v08425',migration25.group,'source-cases.cjs')));}
+  if(migration26){assert.equal(rec.reconciled_release,'0.84.26');assert.equal(rec.resolution,migration26.resolution);for(const id of migration26.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page));assert(fs.existsSync(path.join(root,'validation/lung-next-v08426',migration26.group,'source-cases.cjs')));}
+  else if(migration25){assert.equal(rec.resolution,migration25.resolution);for(const id of migration25.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page),item.nccp_code+': missing audited v25 rule '+id);assert(fs.existsSync(path.join(root,'validation/targeted-lung-v08425',migration25.group,'source-cases.cjs')));}
   else if (rec.resolution === 'structured_rules') {
     if(migration24){
       for(const id of migration24.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page),item.nccp_code+': missing audited replacement '+id);

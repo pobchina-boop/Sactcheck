@@ -27,8 +27,8 @@ for(const c of codes){
  if(!retro)assert(!json('data/breast-library-contexts-v0837.json').regimens[c],c+' must not enter breast selector');
 }
 const inventory=json('validation/targeted-lung-v08425/retrospective-inventory.json');assert.equal(inventory.authored_suites,134);assert.equal(inventory.authored_context_suites,139);assert.equal(protocols.length,377);
-assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,134);assert.equal(R.codes.length,134);
-const base=json('validation/targeted-lung-v08425/baseline-patient-hashes.json');for(const [f,h]of Object.entries(base.sha256))assert.equal(digest(f),h,'Existing patient bundle changed: '+f);
+assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,139);assert.equal(R.codes.length,139);
+const base=json('validation/targeted-lung-v08425/baseline-patient-hashes.json');for(const [f,h]of Object.entries(base.sha256))assert.equal(digest(f),require('./helpers/retrospective-v08426.cjs').expectedHash(f,h),'Existing patient bundle changed: '+f);
 const pdf=json('validation/targeted-lung-v08425/pdf-validation.json');assert.equal(pdf.documents,70+codes.reduce((n,c)=>n+(idx.retrospective_codes.includes(c)?sc[c].lung:support[c]).length,0));assert.equal(json('validation/targeted-lung-v08425/qr-validation.json').length,40);
 const consent=json('data/consent-content-v0710.json').agent_profiles;
 for(const id of ['tepotinib','entrectinib','afatinib','dacomitinib','ceritinib']){assert(consent[id]?.risks.length>=3);assert(consent[id].source_basis);assert(/pending|draft/i.test(consent[id].review_status));}

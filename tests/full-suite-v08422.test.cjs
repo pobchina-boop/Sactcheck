@@ -3,13 +3,14 @@ const fs=require('fs'),path=require('path'),assert=require('node:assert/strict')
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p)),digest=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
 const idx=json('data/lung-core-v08422-source-index.json'),codes=idx.codes,KB=json('data/regimen-knowledge-base-v08422-addendum.json'),support=json('data/phase-support-v0838.json').regimens,J=require('../js/treatment-journey-v0837'),V=require('../js/treatment-evidence-v08413'),D=require('../js/protocol-dose-schedule'),R=require('../js/patient-asset-registry-v0810'),E=require('../js/assessment-engine');
 const protocols=json('protocols/index.json').protocols;
+const migrated26=new Set(json('validation/lung-next-v08426/scope.json').retrospective_codes),latestKB=json('data/regimen-knowledge-base-v08426-addendum.json');
 assert.equal(codes.length,10);assert.equal(idx.new_codes.length,5);assert.equal(idx.retrospective_codes.length,5);assert.equal(KB.regimen_profiles.length,10);
 for(const c of codes){
- const d=json(`data/patient-knowledge/${c}.json`),p=json(protocols.find(p=>p.path.includes('/'+c+'-')).path),k=KB.regimen_profiles.find(x=>x.protocol_id===p.protocol_id),plans=support[c];
- assert.equal(d.suite_release,'0.84.22');assert.equal(String(d.protocol_version),String(p.metadata.nccp_version));
+ const d=json(`data/patient-knowledge/${c}.json`),p=json(protocols.find(p=>p.path.includes('/'+c+'-')).path),k=(migrated26.has(c)?latestKB:KB).regimen_profiles.find(x=>x.protocol_id===p.protocol_id),plans=support[c];
+ assert.equal(d.suite_release,migrated26.has(c)?'0.84.26':'0.84.22');assert.equal(String(d.protocol_version),String(p.metadata.nccp_version));
  for(const key of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[key],false,c+'/'+key);
  assert.equal(E.assess(p,{}).complete,false);assert.notEqual(E.assess(p,{}).actionType,'proceed');
- assert.equal(d.evidence.metrics.length,0);assert.equal(d.cycle_display,'reference-chronology');assert(k.treatment_rationale.line);assert.equal(k.full_suite_release,'0.84.22');assert.deepEqual(k.monitoring_and_toxicity.longitudinal_schedule,d.monitoring_schedule);
+ assert.equal(d.evidence.metrics.length,0);assert.equal(d.cycle_display,'reference-chronology');assert(k.treatment_rationale.line);assert.equal(k.full_suite_release,migrated26.has(c)?'0.84.26':'0.84.22');assert.deepEqual(k.monitoring_and_toxicity.longitudinal_schedule,d.monitoring_schedule);
  assert(k.evidence_at_a_glance.sources.length);for(const e of k.evidence_at_a_glance.endpoints){assert(V.endpoints[e.endpoint],c+': unsupported endpoint '+e.endpoint);assert(e.metric&&e.interpretation&&e.sources.length)}assert(!/undefined|\[object Object\]/.test(V.render(k)));
  const j=J.definitions[c];assert.equal(j.has_patient_dates,false);for(const lane of j.lanes){assert.equal(lane.cells.length,j.stages.length);for(const id of lane.source_ids)assert(j.sources.some(x=>x.id===id))}
  assert(D.buildModel(p).phases.length,c+' lacks complete schedule');assert.equal(R.relativePath(c,'knowledge'),['00455','00558'].includes(c)?`patient/${c}/scope.html?asset=knowledge`:`patient/${c}/knowledge.html`);
@@ -26,7 +27,7 @@ for(const c of ['00455','00558']){
 for(const c of ['00713','00714']){const d=json(`data/patient-knowledge/${c}.json`),p=json(protocols.find(p=>p.path.includes('/'+c+'-')).path),m=D.buildModel(p);assert.equal(d.cycle_days,42);assert.equal(m.phases.length,2);assert(/22/.test(d.passport_visit_note));assert.equal(support[c].length,3);assert(!read(`patient/${c}/knowledge.html`).includes('Paclitaxel Day 22'));}
 for(const [c,expected] of [['00569',['pembrolizumab','pemetrexed']],['00579',['pembrolizumab']]]){const p=json(protocols.find(p=>p.path.includes('/'+c+'-')).path);const phase=p.treatment_phases.find(x=>x.phase_id==='maintenance');assert.deepEqual(phase.active_drugs,expected);}
 const inventory=json('validation/lung-core-v08422/retrospective-inventory.json');assert.equal(inventory.authored_suites,116);assert.equal(inventory.reviewed_cumulative,116);assert.equal(inventory.remaining_review_queue,0);assert.equal(protocols.length,377);assert(read('index.html').includes('Feasibility evaluation build — not for routine clinical use'));
-assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,134);
+assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,139);
 const hashes=json('validation/lung-core-v08422/retrospective-hashes.json');for(const [f,h] of Object.entries(hashes.files))assert.equal(digest(f),require('./helpers/retrospective-v08423.cjs').expectedHash(f,h.after),f);
 const base=json('validation/lung-core-v08422/baseline-hashes.json');for(const [f,h] of Object.entries(base.files)){if(!f.startsWith('tools/')&&!hashes.files[f])assert.equal(digest(f),require('./helpers/retrospective-v08423.cjs').expectedHash(f,h),'Outside-scope bundle changed '+f)}
 const pdf=json('validation/lung-core-v08422/pdf-validation.json');assert.equal(pdf.documents,71+codes.reduce((n,c)=>n+support[c].length,0));assert.equal(json('validation/lung-core-v08422/qr-validation.json').length,40);

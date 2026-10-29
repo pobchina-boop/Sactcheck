@@ -11,7 +11,7 @@
     "indication": "Shared pembrolizumab monotherapy protocol. Select the exact NCCP indication; this release adds lung-specific patient services only.",
     "source_url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
     "source_document_pages": 10,
-    "sactcheck_encoding_version": "0.84.22",
+    "sactcheck_encoding_version": "0.84.26",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -54,7 +54,7 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "rule_level_source_reconciliation_status": "source_reconciled_development_audit_independent_review_pending"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08426_independent_review_pending"
     },
     "tumour_groups": [
       "Gastrointestinal",
@@ -68,7 +68,7 @@
     "lung_subgroup": "immunotherapy",
     "tumour_group": "Gastrointestinal",
     "gynaecology_subgroup": "cervical_immunotherapy",
-    "source_checked_date": "2026-10-26",
+    "source_checked_date": "2026-10-29",
     "genitourinary_subgroups": [
       "bladder",
       "renal"
@@ -224,27 +224,44 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.84.22",
-      "audit_date": "2026-10-26",
-      "reconciled_release": "0.84.22",
-      "reconciled_date": "2026-10-26"
+      "audit_release": "0.84.26",
+      "audit_date": "2026-10-29",
+      "reconciled_release": "0.84.26",
+      "reconciled_date": "2026-10-29"
     },
     "canonical_protocol_id": "nccp-00455-v15b",
     "source_pdf_sha256": "d0f0a2689dcc887a348442192feae9ab65777507936c33ead5693a1793b1e6d6",
     "source_text_snapshot_sha256": "b1cd54bfd01c8d4d008cfa80fd7579fb3ac384dfe101c54a76794ef704357b82",
-    "patient_service_scope": {
-      "tumour_groups": [
-        "Lung"
-      ],
-      "indication_ids": [
-        "00455-lung",
-        "00455n"
-      ],
-      "note": "Only lung patient content authored in this release. Shared clinical toxicity rules apply across listed indications."
-    },
+    "patient_service_scope": [
+      "Lung"
+    ],
     "indication_id_policy": "Local id is stable selection identity; code is the official NCCP indication identifier. 00455a local id remains legacy CRC and maps to official00455k.",
-    "full_suite_release": "0.84.22",
-    "schedule_summary": "Pembrolizumab 200 mg is given as a drip over about 30 minutes on Day 1 every 3 weeks (21 days). The hospital visit is longer because of checks and preparation. After complete surgery and platinum chemotherapy, the adjuvant course lasts up to 12 months. For metastatic cancer, treatment continues while it remains helpful and tolerable; the team may consider stopping after 24 months of sustained response without progression, or continuing when appropriate."
+    "full_suite_release": "0.84.26",
+    "schedule_summary": "Pembrolizumab 200 mg is given as a drip over about 30 minutes on Day 1 every 3 weeks (21 days). The hospital visit is longer because of checks and preparation. After complete surgery and platinum chemotherapy, the adjuvant course lasts up to 12 months. For metastatic cancer, treatment continues while it remains helpful and tolerable; the team may consider stopping after 24 months of sustained response without progression, or continuing when appropriate.",
+    "retrospective_audit_v08426": {
+      "sources_unchanged": true,
+      "source_bytes_retrieved": "2026-10-29",
+      "change": "Explicit clinical attribution before immune hepatitis/nephritis actions; abnormal unclassified laboratory results require review, never automatic permanent stop.",
+      "supplemental_source": {
+        "document": "EMA Keytruda IV SmPC",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
+        "section": "4.4 immune-mediated hepatitis and nephritis: exclude other causes"
+      },
+      "independent_clinical_approval": false
+    },
+    "review_release": "0.84.26",
+    "source_version_changed": false,
+    "retrospective_findings": [
+      "Explicit immune hepatitis/nephritis attribution",
+      "KEYNOTE-091 ESMO 2026 final OS and chemotherapy-subgroup DFS update"
+    ],
+    "source_supplements": [
+      {
+        "label": "EMA Keytruda IV product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
+        "basis": "Audited product information supplement; NCCP differences remain explicit"
+      }
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment initiated by a Consultant Medical Oncologist or a Consultant Medical Haematologist experienced in haematological malignancies, as applicable to the indication.",
@@ -643,7 +660,7 @@
       "source_grading_note": "This NCCP dose table names CTCAE v4.0, but is not a complete grading table. Confirm the exact event-specific definition in that edition; no CTCAE5/6 conversion is applied."
     },
     "creatinine_ratio_baseline_or_uln": {
-      "label": "Creatinine in immune-nephritis assessment (× ULN)",
+      "label": "Creatinine (× ULN; immune-nephritis threshold assessment)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -653,7 +670,7 @@
       "ui_section": "labs",
       "unit": "× ULN",
       "input_role": "decision",
-      "help": "ULN only, never fold-change from baseline. Use in suspected/confirmed immune nephritis assessment. Stable chronic renal impairment has a separate no-adjustment pathway."
+      "help": "ULN only, never fold-change from baseline. A raised result requires clinical assessment of immune causality and alternative causes before source hold/stop rules are applied. Stable chronic impairment remains a separate no-adjustment pathway."
     },
     "endocrine_status": {
       "label": "Immune-mediated endocrine status",
@@ -757,7 +774,7 @@
       "ui_section": "labs",
       "unit": "× ULN",
       "input_role": "decision",
-      "help": "Highest AST or ALT multiple of its ULN in immune-hepatitis assessment; investigate other causes."
+      "help": "Highest AST or ALT multiple of its ULN in immune-hepatitis assessment; investigate other causes. A laboratory elevation alone does not diagnose immune hepatitis; record clinical attribution separately."
     },
     "bilirubin_uln_multiple": {
       "label": "Bilirubin (× ULN)",
@@ -769,7 +786,8 @@
       "demo_value": 1,
       "ui_section": "labs",
       "unit": "× ULN",
-      "input_role": "decision"
+      "input_role": "decision",
+      "help": "A laboratory elevation alone does not diagnose immune hepatitis; record clinical attribution separately."
     },
     "liver_metastases_baseline_grade2": {
       "label": "Liver metastases with baseline grade 2 AST/ALT elevation",
@@ -1406,6 +1424,24 @@
       "input_role": "decision",
       "help": "",
       "demo_value": ""
+    },
+    "pembro_immune_hepatitis_assessed": {
+      "label": "Liver abnormality clinically assessed as immune-mediated hepatitis?",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "help": "Yes means the treating clinician has assessed immune-mediated toxicity and evaluated alternative causes; a raised laboratory result alone does not establish this. No or blank keeps an abnormal result in a clinical-review pathway. This does not require biopsy confirmation. EMA Keytruda IV SmPC §4.4; NCCP Table 1 applies to immune-related adverse reactions."
+    },
+    "pembro_immune_nephritis_assessed": {
+      "label": "Renal abnormality clinically assessed as immune-mediated nephritis?",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "help": "Yes means the treating clinician has assessed immune-mediated toxicity and evaluated alternative causes; a raised laboratory result alone does not establish this. No or blank keeps an abnormal result in a clinical-review pathway. This does not require biopsy confirmation. EMA Keytruda IV SmPC §4.4; NCCP Table 1 applies to immune-related adverse reactions."
     }
   },
   "required_inputs": [],
@@ -1457,7 +1493,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Exclusions",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1486,7 +1522,7 @@
           "document": "EMA Keytruda IV SmPC",
           "section": "4.6",
           "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1507,7 +1543,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Cautions",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1528,7 +1564,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Cautions",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1549,7 +1585,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Cautions",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1570,7 +1606,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Cautions",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1591,7 +1627,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Cautions",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1612,7 +1648,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Exclusions",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1633,7 +1669,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 5,
           "table": "Monitoring",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1671,7 +1707,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 3,
           "table": "Eligibility",
-          "checked_date": "2026-10-26",
+          "checked_date": "2026-10-29",
           "pages": [
             3,
             4
@@ -1712,7 +1748,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 3,
           "table": "Eligibility",
-          "checked_date": "2026-10-26",
+          "checked_date": "2026-10-29",
           "pages": [
             3,
             4
@@ -1745,7 +1781,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 3,
           "table": "Eligibility",
-          "checked_date": "2026-10-26",
+          "checked_date": "2026-10-29",
           "pages": [
             3,
             4
@@ -1781,7 +1817,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 3,
           "table": "Eligibility",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1813,7 +1849,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 3,
           "table": "Eligibility",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1854,7 +1890,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 3,
           "table": "Eligibility",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1886,7 +1922,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 3,
           "table": "Eligibility",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1918,7 +1954,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 3,
           "table": "Eligibility",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1950,7 +1986,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Eligibility",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -1982,7 +2018,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Eligibility",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2014,7 +2050,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 4,
           "table": "Eligibility",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2046,7 +2082,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 3,
           "table": "Eligibility / indication table",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2067,7 +2103,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 5,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2097,7 +2133,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 5,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2127,7 +2163,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 5,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2157,185 +2193,230 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 5,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
         "rule_id": "NEPHRITIS_G2",
-        "all": [
-          {
-            "field": "creatinine_ratio_baseline_or_uln",
-            "operator": ">",
-            "value": 1.5
-          },
-          {
-            "field": "creatinine_ratio_baseline_or_uln",
-            "operator": "<=",
-            "value": 3
-          }
-        ],
         "action": {
           "type": "withhold",
           "components": [
             "pembrolizumab"
           ],
-          "recommendation": "In immune nephritis, creatinine >1.5 to ≤3×ULN requires withholding. Confirm ULN basis and investigate other renal causes."
+          "recommendation": "In immune nephritis, creatinine >1.5 to ≤3×ULN requires withholding. Confirm ULN basis and investigate other renal causes. This action requires clinician-assessed immune attribution after evaluation of alternative causes."
         },
-        "explanation": "In immune nephritis, creatinine >1.5 to ≤3×ULN requires withholding. Confirm ULN basis and investigate other renal causes.",
+        "explanation": "In immune nephritis, creatinine >1.5 to ≤3×ULN requires withholding. Confirm ULN basis and investigate other renal causes. This action requires clinician-assessed immune attribution after evaluation of alternative causes.",
         "source": {
           "document": "NCCP 00455 v16",
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 5,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
-        }
-      },
-      {
-        "rule_id": "NEPHRITIS_G3_PLUS",
-        "field": "creatinine_ratio_baseline_or_uln",
-        "operator": ">",
-        "value": 3,
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "pembrolizumab"
-          ],
-          "recommendation": "Immune nephritis with creatinine >3×ULN requires permanent discontinuation; this is not a chronic renal impairment dose rule."
+          "checked_date": "2026-10-29"
         },
-        "explanation": "Immune nephritis with creatinine >3×ULN requires permanent discontinuation; this is not a chronic renal impairment dose rule.",
-        "source": {
-          "document": "NCCP 00455 v16",
-          "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
-          "page": 5,
-          "table": "Table 1",
-          "checked_date": "2026-10-26"
-        }
-      },
-      {
-        "rule_id": "HEPATITIS_WITHHOLD",
-        "any": [
+        "all": [
           {
-            "all": [
-              {
-                "field": "alt_ast_uln_multiple",
-                "operator": ">",
-                "value": 3
-              },
-              {
-                "field": "alt_ast_uln_multiple",
-                "operator": "<=",
-                "value": 5
-              }
-            ]
+            "field": "pembro_immune_nephritis_assessed",
+            "operator": "==",
+            "value": true
           },
           {
             "all": [
               {
-                "field": "bilirubin_uln_multiple",
+                "field": "creatinine_ratio_baseline_or_uln",
                 "operator": ">",
                 "value": 1.5
               },
               {
-                "field": "bilirubin_uln_multiple",
+                "field": "creatinine_ratio_baseline_or_uln",
                 "operator": "<=",
                 "value": 3
               }
             ]
           }
-        ],
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pembrolizumab"
-          ],
-          "recommendation": "Withhold for immune hepatitis: AST/ALT >3 to ≤5×ULN or bilirubin >1.5 to ≤3×ULN."
-        },
-        "explanation": "Withhold for immune hepatitis: AST/ALT >3 to ≤5×ULN or bilirubin >1.5 to ≤3×ULN.",
-        "source": {
-          "document": "NCCP 00455 v16",
-          "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
-          "page": 6,
-          "table": "Table 1",
-          "checked_date": "2026-10-26"
-        }
+        ]
       },
       {
-        "rule_id": "HEPATITIS_PERMANENT",
-        "any": [
-          {
-            "field": "alt_ast_uln_multiple",
-            "operator": ">",
-            "value": 5
-          },
-          {
-            "field": "bilirubin_uln_multiple",
-            "operator": ">",
-            "value": 3
-          }
-        ],
+        "rule_id": "NEPHRITIS_G3_PLUS",
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "pembrolizumab"
           ],
-          "recommendation": "Permanently discontinue for immune hepatitis with AST/ALT >5×ULN or bilirubin >3×ULN."
+          "recommendation": "Immune nephritis with creatinine >3×ULN requires permanent discontinuation; this is not a chronic renal impairment dose rule. This action requires clinician-assessed immune attribution after evaluation of alternative causes."
         },
-        "explanation": "Permanently discontinue for immune hepatitis with AST/ALT >5×ULN or bilirubin >3×ULN.",
+        "explanation": "Immune nephritis with creatinine >3×ULN requires permanent discontinuation; this is not a chronic renal impairment dose rule. This action requires clinician-assessed immune attribution after evaluation of alternative causes.",
+        "source": {
+          "document": "NCCP 00455 v16",
+          "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
+          "page": 5,
+          "table": "Table 1",
+          "checked_date": "2026-10-29"
+        },
+        "all": [
+          {
+            "field": "pembro_immune_nephritis_assessed",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "creatinine_ratio_baseline_or_uln",
+            "operator": ">",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "rule_id": "HEPATITIS_WITHHOLD",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Withhold for immune hepatitis: AST/ALT >3 to ≤5×ULN or bilirubin >1.5 to ≤3×ULN. This action requires clinician-assessed immune attribution after evaluation of alternative causes."
+        },
+        "explanation": "Withhold for immune hepatitis: AST/ALT >3 to ≤5×ULN or bilirubin >1.5 to ≤3×ULN. This action requires clinician-assessed immune attribution after evaluation of alternative causes.",
         "source": {
           "document": "NCCP 00455 v16",
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
-        }
-      },
-      {
-        "rule_id": "LIVER_METS_BASELINE_G2_STOP",
+          "checked_date": "2026-10-29"
+        },
         "all": [
           {
-            "field": "liver_metastases_baseline_grade2",
+            "field": "pembro_immune_hepatitis_assessed",
             "operator": "==",
             "value": true
           },
           {
             "any": [
               {
-                "field": "ast_alt_increase_50_percent_for_week",
-                "operator": "==",
-                "value": true
+                "all": [
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": ">",
+                    "value": 3
+                  },
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": "<=",
+                    "value": 5
+                  }
+                ]
               },
               {
                 "all": [
                   {
-                    "field": "ast_alt_increase_percent",
-                    "operator": ">=",
-                    "value": 50
+                    "field": "bilirubin_uln_multiple",
+                    "operator": ">",
+                    "value": 1.5
                   },
                   {
-                    "field": "ast_alt_elevation_days",
-                    "operator": ">=",
-                    "value": 7
+                    "field": "bilirubin_uln_multiple",
+                    "operator": "<=",
+                    "value": 3
                   }
                 ]
               }
             ]
           }
-        ],
+        ]
+      },
+      {
+        "rule_id": "HEPATITIS_PERMANENT",
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "pembrolizumab"
           ],
-          "recommendation": "With liver metastases and baseline grade 2 AST/ALT elevation, a ≥50% rise persisting ≥1 week requires permanent discontinuation for hepatitis."
+          "recommendation": "Permanently discontinue for immune hepatitis with AST/ALT >5×ULN or bilirubin >3×ULN. This action requires clinician-assessed immune attribution after evaluation of alternative causes."
         },
-        "explanation": "With liver metastases and baseline grade 2 AST/ALT elevation, a ≥50% rise persisting ≥1 week requires permanent discontinuation for hepatitis.",
+        "explanation": "Permanently discontinue for immune hepatitis with AST/ALT >5×ULN or bilirubin >3×ULN. This action requires clinician-assessed immune attribution after evaluation of alternative causes.",
         "source": {
           "document": "NCCP 00455 v16",
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
-        }
+          "checked_date": "2026-10-29"
+        },
+        "all": [
+          {
+            "field": "pembro_immune_hepatitis_assessed",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "field": "alt_ast_uln_multiple",
+                "operator": ">",
+                "value": 5
+              },
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": ">",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "rule_id": "LIVER_METS_BASELINE_G2_STOP",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "With liver metastases and baseline grade 2 AST/ALT elevation, a ≥50% rise persisting ≥1 week requires permanent discontinuation for hepatitis. This action requires clinician-assessed immune attribution after evaluation of alternative causes."
+        },
+        "explanation": "With liver metastases and baseline grade 2 AST/ALT elevation, a ≥50% rise persisting ≥1 week requires permanent discontinuation for hepatitis. This action requires clinician-assessed immune attribution after evaluation of alternative causes.",
+        "source": {
+          "document": "NCCP 00455 v16",
+          "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
+          "page": 6,
+          "table": "Table 1",
+          "checked_date": "2026-10-29"
+        },
+        "all": [
+          {
+            "field": "pembro_immune_hepatitis_assessed",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "all": [
+              {
+                "field": "liver_metastases_baseline_grade2",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "any": [
+                  {
+                    "field": "ast_alt_increase_50_percent_for_week",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "all": [
+                      {
+                        "field": "ast_alt_increase_percent",
+                        "operator": ">=",
+                        "value": 50
+                      },
+                      {
+                        "field": "ast_alt_elevation_days",
+                        "operator": ">=",
+                        "value": 7
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       {
         "rule_id": "SKIN_WITHHOLD",
@@ -2364,7 +2445,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2394,7 +2475,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2429,7 +2510,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2459,7 +2540,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2489,7 +2570,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2510,7 +2591,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2530,7 +2611,7 @@
           "document": "EMA Keytruda IV SmPC",
           "section": "4.4",
           "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2556,7 +2637,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2586,7 +2667,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2607,7 +2688,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2628,7 +2709,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2649,7 +2730,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2670,7 +2751,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2700,7 +2781,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 6,
           "table": "Table 1",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2730,7 +2811,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 7,
           "table": "Table 2",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2755,7 +2836,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 7,
           "table": "Table 2",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2790,7 +2871,7 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 2,
           "table": "Treatment",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
         }
       },
       {
@@ -2830,7 +2911,180 @@
           "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
           "page": 2,
           "table": "Treatment",
-          "checked_date": "2026-10-26"
+          "checked_date": "2026-10-29"
+        }
+      },
+      {
+        "rule_id": "LIVER_ATTRIBUTION_REVIEW",
+        "all": [
+          {
+            "any": [
+              {
+                "any": [
+                  {
+                    "all": [
+                      {
+                        "field": "alt_ast_uln_multiple",
+                        "operator": ">",
+                        "value": 3
+                      },
+                      {
+                        "field": "alt_ast_uln_multiple",
+                        "operator": "<=",
+                        "value": 5
+                      }
+                    ]
+                  },
+                  {
+                    "all": [
+                      {
+                        "field": "bilirubin_uln_multiple",
+                        "operator": ">",
+                        "value": 1.5
+                      },
+                      {
+                        "field": "bilirubin_uln_multiple",
+                        "operator": "<=",
+                        "value": 3
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": ">",
+                    "value": 5
+                  },
+                  {
+                    "field": "bilirubin_uln_multiple",
+                    "operator": ">",
+                    "value": 3
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "liver_metastases_baseline_grade2",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "any": [
+                      {
+                        "field": "ast_alt_increase_50_percent_for_week",
+                        "operator": "==",
+                        "value": true
+                      },
+                      {
+                        "all": [
+                          {
+                            "field": "ast_alt_increase_percent",
+                            "operator": ">=",
+                            "value": 50
+                          },
+                          {
+                            "field": "ast_alt_elevation_days",
+                            "operator": ">=",
+                            "value": 7
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "pembro_immune_hepatitis_assessed",
+                "operator": "missing"
+              },
+              {
+                "field": "pembro_immune_hepatitis_assessed",
+                "operator": "==",
+                "value": false
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Abnormal liver result crosses an immune-toxicity table threshold, but immune causality has not been established. Obtain prompt clinical assessment, investigate alternative causes and document the treatment decision. Do not administer automatically or apply permanent immune-toxicity discontinuation from an isolated laboratory result. No dose reduction is calculated."
+        },
+        "explanation": "Abnormal liver result crosses an immune-toxicity table threshold, but immune causality has not been established. Obtain prompt clinical assessment, investigate alternative causes and document the treatment decision. Do not administer automatically or apply permanent immune-toxicity discontinuation from an isolated laboratory result. No dose reduction is calculated.",
+        "source": {
+          "document": "NCCP 00455 v16; EMA Keytruda IV SmPC §4.4",
+          "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
+          "page": 6,
+          "table": "Table 1: immune-related adverse reactions",
+          "checked_date": "2026-10-29",
+          "supplemental_url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf"
+        }
+      },
+      {
+        "rule_id": "RENAL_ATTRIBUTION_REVIEW",
+        "all": [
+          {
+            "any": [
+              {
+                "all": [
+                  {
+                    "field": "creatinine_ratio_baseline_or_uln",
+                    "operator": ">",
+                    "value": 1.5
+                  },
+                  {
+                    "field": "creatinine_ratio_baseline_or_uln",
+                    "operator": "<=",
+                    "value": 3
+                  }
+                ]
+              },
+              {
+                "field": "creatinine_ratio_baseline_or_uln",
+                "operator": ">",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "pembro_immune_nephritis_assessed",
+                "operator": "missing"
+              },
+              {
+                "field": "pembro_immune_nephritis_assessed",
+                "operator": "==",
+                "value": false
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Abnormal renal result crosses an immune-toxicity table threshold, but immune causality has not been established. Obtain prompt clinical assessment, investigate alternative causes and document the treatment decision. Do not administer automatically or apply permanent immune-toxicity discontinuation from an isolated laboratory result. No dose reduction is calculated."
+        },
+        "explanation": "Abnormal renal result crosses an immune-toxicity table threshold, but immune causality has not been established. Obtain prompt clinical assessment, investigate alternative causes and document the treatment decision. Do not administer automatically or apply permanent immune-toxicity discontinuation from an isolated laboratory result. No dose reduction is calculated.",
+        "source": {
+          "document": "NCCP 00455 v16; EMA Keytruda IV SmPC §4.4",
+          "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
+          "page": 5,
+          "table": "Table 1: immune-related adverse reactions",
+          "checked_date": "2026-10-29",
+          "supplemental_url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf"
         }
       }
     ]

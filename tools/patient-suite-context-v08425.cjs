@@ -12,10 +12,10 @@ function readPath(p){const m=p.match(/^data\/patient-knowledge\/(\d{5})\.json$/)
 function output(file,html){
  const relative=path.isAbsolute(file)?path.relative(root,file):file;
  const patient=relative.match(/^patient\/(\d{5})\/(.+)$/);
- if(patient&&profile(patient[1]).suite_release==='0.84.25'){
+ if(patient&&['0.84.25','0.84.26'].includes(profile(patient[1]).suite_release)){
   html=html.replace('</head>','<link rel="stylesheet" href="../../assets/patient/lung-suite-v08425.css"></head>');
   html=html.replace('<body class="','<body class="suite-v08425 ').replace('<body>','<body class="suite-v08425">');
-  if(['00823','00702','00221','00565','00340'].includes(patient[1]))html=html.replace('class="suite-v08425 ','class="suite-v08425 new-targeted-v08425 ');
+  if(['00823','00702','00221','00565','00340','00219','00220'].includes(patient[1]))html=html.replace('class="suite-v08425 ','class="suite-v08425 new-targeted-v08425 ');
   if(patient[1]==='00226'&&patient[2]==='sactcard.html')html=html.replace('<div class="suite-stamps">','<p>Recording boxes — not a fixed treatment course.</p><div class="suite-stamps">');
  }
  if(!context)return {file,html};

@@ -6,7 +6,15 @@ const manifest=JSON.parse(fs.readFileSync(path.join(__dirname,'proposed/integrat
 const P=Object.fromEntries(Object.entries(manifest.protocols).map(([c,x])=>[c,JSON.parse(fs.readFileSync(path.join(root,mode==='integrated'?x.source_path:x.proposed_path)))]));
 const results=[];
 function check(name,fn){let row={name};try{fn(row);row.pass=true}catch(e){row.pass=false;row.error=e.message}results.push(row)}
-function t(c,name,input,yes=[],no=[],action=null){check(c+' '+name,row=>{const p=P[c],r=E.assess(p,input),m=D.buildModificationModel(p,r);row.input=input;row.actual={action:r.actionType,findings:r.findings.filter(f=>!f.domainAssessment&&!/^PARTIAL_/.test(f.ruleId||'')).map(f=>({id:f.ruleId,action:f.actionType})),invalid:r.invalid,errors:r.errors};row.sources=p.rule_engine.rules.filter(x=>yes.includes(x.rule_id)||no.includes(x.rule_id)).map(x=>x.source);assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);require(path.join(root,'tests/helpers/source-input-validation-v08421.cjs'))(r);const ids=r.findings.map(f=>f.ruleId);for(const id of yes)assert(ids.includes(id),'Missing '+id+'; got '+ids);for(const id of no)assert(!ids.includes(id),'Unexpected '+id);if(action)assert.equal(r.actionType,action);assert(!m.rows.some(x=>/dose_reduce|withhold_then_reduce/.test(x.actionType||'')),'Never invent a pembrolizumab dose reduction');assert.notEqual(r.actionType,'proceed','Partial cases cannot clear whole regimen');});}
+function t(c,name,input,yes=[],no=[],action=null){check(c+' '+name,row=>{const p=P[c];
+// Legacy threshold cases represent assessed immune toxicity. Keep the old
+// boundaries, explicitly supply causality only for their relevant fixtures.
+if(mode==='integrated'&&p.input_definitions.pembro_immune_hepatitis_assessed){
+ input={...input};const ids=[...yes,...no];
+ if(ids.some(id=>/HEPATITIS|LIVER_METS/.test(id))&&['alt_ast_uln_multiple','bilirubin_uln_multiple','liver_metastases_baseline_grade2','ast_alt_increase_percent','ast_alt_elevation_days','ast_alt_increase_50_percent_for_week'].some(k=>Object.hasOwn(input,k)))input.pembro_immune_hepatitis_assessed=true;
+ if(ids.some(id=>/NEPHRITIS/.test(id))&&Object.hasOwn(input,'creatinine_ratio_baseline_or_uln'))input.pembro_immune_nephritis_assessed=true;
+}
+const r=E.assess(p,input),m=D.buildModificationModel(p,r);row.input=input;row.actual={action:r.actionType,findings:r.findings.filter(f=>!f.domainAssessment&&!/^PARTIAL_/.test(f.ruleId||'')).map(f=>({id:f.ruleId,action:f.actionType})),invalid:r.invalid,errors:r.errors};row.sources=p.rule_engine.rules.filter(x=>yes.includes(x.rule_id)||no.includes(x.rule_id)).map(x=>x.source);assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);require(path.join(root,'tests/helpers/source-input-validation-v08421.cjs'))(r);const ids=r.findings.map(f=>f.ruleId);for(const id of yes)assert(ids.includes(id),'Missing '+id+'; got '+ids);for(const id of no)assert(!ids.includes(id),'Unexpected '+id);if(action)assert.equal(r.actionType,action);assert(!m.rows.some(x=>/dose_reduce|withhold_then_reduce/.test(x.actionType||'')),'Never invent a pembrolizumab dose reduction');assert.notEqual(r.actionType,'proceed','Partial cases cannot clear whole regimen');});}
 for(const c of Object.keys(P)){
  const lung=c==='00455'?'00455-lung':'00558a',adjuvant=c+'n';
  t(c,'blank input remains unassessed',{});
