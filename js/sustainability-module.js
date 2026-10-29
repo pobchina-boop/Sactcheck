@@ -35,6 +35,11 @@
   function profileFor(data, ctx) {
     const profile = JSON.parse(JSON.stringify(data.default_profile || {}));
     if (ctx.protocol && data.profiles?.[ctx.protocol]) Object.assign(profile, data.profiles[ctx.protocol]);
+    if(profile.context_profiles){
+      const context=String(ctx.tumour||'').toLowerCase();
+      if(profile.context_profiles[context])Object.assign(profile,profile.context_profiles[context]);
+      else profile.administration_frequency={status:'evidence_required',value:'Confirm the treatment indication, schedule and planned doses with the oncology team.',source:'Indication-specific lung and breast profiles; exact context has not been selected.'};
+    }
     if (ctx.route) profile.route_classification = {
       status:"catalogue_derived", value:ctx.route, source:"SACTCheck regimen catalogue metadata"
     };

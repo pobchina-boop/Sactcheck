@@ -51,7 +51,7 @@
         return response.json();
       })
       .then(async payload => {
-        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json", "data/regimen-knowledge-base-v0849-addendum.json", "data/regimen-knowledge-base-v08412-addendum.json", "data/regimen-knowledge-base-v08413-addendum.json", "data/regimen-knowledge-base-v08414-addendum.json", "data/regimen-knowledge-base-v08415-addendum.json", "data/regimen-knowledge-base-v08416-addendum.json", "data/regimen-knowledge-base-v08417-addendum.json", "data/regimen-knowledge-base-v08418-addendum.json", "data/regimen-knowledge-base-v08419-addendum.json", "data/regimen-knowledge-base-v08420-addendum.json", "data/regimen-knowledge-base-v08421-addendum.json", "data/regimen-knowledge-base-v08422-addendum.json", "data/regimen-knowledge-base-v08423-addendum.json", "data/regimen-knowledge-base-v08424-addendum.json"]) {
+        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json", "data/regimen-knowledge-base-v0849-addendum.json", "data/regimen-knowledge-base-v08412-addendum.json", "data/regimen-knowledge-base-v08413-addendum.json", "data/regimen-knowledge-base-v08414-addendum.json", "data/regimen-knowledge-base-v08415-addendum.json", "data/regimen-knowledge-base-v08416-addendum.json", "data/regimen-knowledge-base-v08417-addendum.json", "data/regimen-knowledge-base-v08418-addendum.json", "data/regimen-knowledge-base-v08419-addendum.json", "data/regimen-knowledge-base-v08420-addendum.json", "data/regimen-knowledge-base-v08421-addendum.json", "data/regimen-knowledge-base-v08422-addendum.json", "data/regimen-knowledge-base-v08423-addendum.json", "data/regimen-knowledge-base-v08424-addendum.json", "data/regimen-knowledge-base-v08425-addendum.json"]) {
         const response = await fetch(extraUrl, { cache: "no-store" });
         if (!response.ok) throw new Error(`Could not load regimen knowledge (${response.status}).`);
         const extra = await response.json();
@@ -317,7 +317,7 @@
     </section>`;
   }
 
-  function render(protocol, payload) {
+  function render(protocol, payload, selectedContext) {
     const overlay = ensurePanel();
     const target = overlay?.querySelector("[data-regimen-info-content]");
     if (!target || !protocol) return;
@@ -325,7 +325,11 @@
     const components = componentNames(protocol);
     const profiles = profilesForProtocol(protocol, payload);
     const evidence = evidenceForProtocol(protocol, payload);
-    const regimenProfile = regimenProfileForProtocol(protocol, payload);
+    const baseProfile = regimenProfileForProtocol(protocol, payload);
+    const contextProfiles = baseProfile?.context_profiles || [];
+    const contextId = String(selectedContext ?? root.SACTCheckProtocolContext?.activeTumourGroup?.() ?? '').toLowerCase();
+    const regimenProfile = contextProfiles.length ? contextProfiles.find(p=>p.context_id===contextId) : baseProfile;
+    const contextPicker = contextProfiles.length ? `<section class="regimen-information-section"><label for="regimen-info-context"><strong>Select the treatment context</strong></label><p>Evidence, treatment aims and patient resources are specific to the selected indication.</p><select id="regimen-info-context" data-regimen-info-context><option value="">Choose an indication context…</option>${contextProfiles.map(p=>`<option value="${escapeHtml(p.context_id)}"${p.context_id===contextId?' selected':''}>${escapeHtml(p.context_label)}</option>`).join('')}</select>${regimenProfile?'':'<p>For other tumour sites, use the official protocol. A dedicated patient suite has not been established here.</p>'}</section>` : '';
     const official = metadata.source_url ? `<a class="btn" href="${escapeHtml(metadata.source_url)}" target="_blank" rel="noopener noreferrer">Open official NCCP protocol</a>` : "";
     const missingComponents = components.filter(component => !profileForComponent(component, payload?.drug_profiles || []));
     let sectionIndex = 1;
@@ -348,13 +352,14 @@
         <div class="regimen-information-actions">${official}</div>
       </section>
 
+      ${contextPicker}
       ${root.SACTCheckTreatmentEvidence?.render(regimenProfile)||""}
       ${overview}
       ${regimenProfile?.reference_links?.length ? `<section class="regimen-information-section"><h3>Regimen sources and patient resources</h3><div class="regimen-information-actions">${regimenProfile.reference_links.map(item => publicationLink(item, item.label)).join("")}</div></section>` : ""}
       ${patientSelection}
       ${supportiveCare}
       ${monitoring}
-      ${root.SACTCheckTreatmentJourney?.renderForCode(protocolCode(protocol),"clinician")||""}
+      ${regimenProfile ? (root.SACTCheckTreatmentJourney?.renderForCode(regimenProfile.journey_key||protocolCode(protocol),"clinician")||"") : ""}
       ${administration}
       ${evidenceAudit}
 
@@ -365,7 +370,7 @@
         ${missingComponents.length ? `<p class="regimen-info-note"><strong>Not yet mapped:</strong> ${escapeHtml(missingComponents.join(" · "))}</p>` : ""}
       </section>
 
-      ${regimenProfile?.evidence_at_a_glance ? "" : `<section class="regimen-information-section">
+      ${contextProfiles.length || regimenProfile?.evidence_at_a_glance ? "" : `<section class="regimen-information-section">
         ${sectionHeadMarkup(evidenceSectionNumber, "Evidence supporting this regimen and indication", "Primary publications provide context. The current NCCP protocol remains the operational source.")}
         ${evidence.length ? `<div class="regimen-evidence-list">${evidence.map(evidenceMarkup).join("")}</div>` : '<div class="regimen-info-empty"><strong>No evidence mapping is available yet.</strong><p>The official NCCP protocol remains available above. Evidence records are being added in controlled batches.</p></div>'}
       </section>`}
@@ -374,6 +379,7 @@
         <strong>Decision support and educational boundary</strong>
         <p>This page provides source-linked context on treatment intent, patient selection, supportive care, monitoring, administration, drug mechanisms and selected publications. It does not independently determine eligibility, diagnose toxicity, prescribe treatment or alter the deterministic SACTCheck result. The current NCCP protocol and local clinical governance remain authoritative.</p>
       </aside>`;
+    target.querySelector?.('[data-regimen-info-context]')?.addEventListener('change',event=>render(protocol,payload,event.target.value));
   }
 
   function resolveProtocol(protocolOrId) {

@@ -91,7 +91,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
     "00449": "moderate", // v0.83.3: NCCP 00449 v6a p6
     "00446": "moderate", // v0.83.3: NCCP 00446 v7b p6
     "00945": "low",
-    "00431": "low"
+    "00431": "low",
+    "00340": "oral_moderate_high" // NCCP00340 v4 p6; source-derived v0.84.25 audit
   };
   for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
     const migratedMap = ['00689','00908','00569','00579','00713','00714','00568','00688','00738','00485','00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
@@ -132,7 +133,8 @@ for (const record of index.protocols || []) {
       "gastrointestinal/00449-bevacizumab-folfiri.json": "moderate",
       "gastrointestinal/00446-bevacizumab-modified-folfox6.json": "moderate",
       "genitourinary/00945-enfortumab-vedotin-and-pembrolizumab-therapy.json": "low",
-      "skin/00431-nivolumab-1-mg-kg-and-ipilimumab-3-mg-kg-therapy.json": "low"
+      "skin/00431-nivolumab-1-mg-kg-and-ipilimumab-3-mg-kg-therapy.json": "low",
+      "lung/00340-ceritinib-monotherapy.json": "oral_moderate_high"
     };
     const expectedRisk = pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
       ? correctionByPath[relative]

@@ -26,6 +26,10 @@ function base(overrides = {}) {
     bilirubin_ratio_uln: 1,
     neuropathy_grade: 0,
     other_nonhaematological_highest_grade: 0,
+    other_nonhaematological_current_grade: 0,
+    previous_dose_reductions: 0,
+    ecog: 0,
+    off_label_consent_confirmed: true,
     ...overrides
   };
 }
@@ -38,7 +42,7 @@ const cases = [
   ['normal values proceed', assess(), 'proceed'],
   ['ANC exactly 1.0 proceeds', assess({ anc_x10e9_l: 1 }), 'proceed'],
   ['ANC 0.99 delays', assess({ anc_x10e9_l: 0.99 }), 'delay'],
-  ['platelets exactly 90 proceed', assess({ platelets_x10e9_l: 90 }), 'proceed'],
+  ['platelets exactly 90 requires review of overlapping source rows', assess({ platelets_x10e9_l: 90 }), 'consultant_review'],
   ['platelets 89 delay', assess({ platelets_x10e9_l: 89 }), 'delay'],
   ['ANC below 0.5 for 6 days delays only', assess({ anc_x10e9_l: 0.49, anc_below_0_5_duration_days: 6 }), 'delay'],
   ['ANC below 0.5 for 7 days delays and reduces', assess({ anc_x10e9_l: 0.49, anc_below_0_5_duration_days: 7 }), 'delay_then_dose_reduce'],
@@ -78,7 +82,7 @@ assert.equal(missingDuration.actionType, 'delay');
 assert.ok(missingDuration.unassessed.some(item => item.id === 'anc_below_0_5_duration_days'));
 console.log('✓ ANC below 0.5 triggers immediate delay while duration remains a dose-refinement gap');
 
-const missingOtherCurrent = Engine.assess(protocol, base({ other_nonhaematological_highest_grade: 2 }), { profileId: 'default' });
+const missingOtherCurrent = Engine.assess(protocol, base({ other_nonhaematological_highest_grade: 2, other_nonhaematological_current_grade: undefined, previous_dose_reductions: undefined }), { profileId: 'default' });
 assert.equal(missingOtherCurrent.complete, false);
 assert.ok(missingOtherCurrent.unassessed.some(item => item.id === 'other_nonhaematological_current_grade'));
 assert.ok(missingOtherCurrent.unassessed.some(item => item.id === 'previous_dose_reductions'));

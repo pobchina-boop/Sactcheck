@@ -30,19 +30,20 @@ for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
   const rec = m.organ_function_reconciliation;
+  const migration25=m.sactcheck_encoding_version==='0.84.25'&&require('../validation/targeted-lung-v08425/organ-function-migrations.json').records[item.nccp_code];
   const migration24=m.sactcheck_encoding_version==='0.84.24'&&migrations24[item.nccp_code];
   const v08422 = (item.nccp_code === '00318' && m.sactcheck_encoding_version === '0.84.22') || (item.nccp_code === '00222' && m.sactcheck_encoding_version === '0.84.23');
   const v0836 = m.validation?.audit_release === '0.83.6';
   const superseded = (['00207','00447','00448','00732','00328','00585','00330','00331','00692','00733','00210','00213','00586','00623','00225'].includes(item.nccp_code) && m.validation?.audit_release === '0.84.21') || v0836 || (['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4') || (item.nccp_code === '00225' && m.validation?.audit_release === '0.83.5');
   assert(rec, `${item.nccp_code}: missing organ-function reconciliation metadata`);
-  assert.strictEqual(rec.release, migration24&&item.nccp_code==='00243'?'0.84.24':item.nccp_code === '00205' ? '0.84.1' : '0.59.0');
+  assert.strictEqual(rec.release, migration25?migration25.release:migration24&&item.nccp_code==='00243'?'0.84.24':item.nccp_code === '00205' ? '0.84.1' : '0.59.0');
   assert.strictEqual(rec.source_reconciled, true);
   assert.strictEqual(rec.partial_assessment_supported, true);
   assert.strictEqual(rec.consultant_reviewed, false);
   assert.strictEqual(rec.oncology_pharmacy_reviewed, false);
   assert.strictEqual(rec.clinical_use_authorised, false);
-  assert.strictEqual(m.encoding_maturity.level, (v08422||migration24) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
-  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
+  assert.strictEqual(m.encoding_maturity.level, (v08422||migration24||migration25) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
   for (const [field, def] of Object.entries(p.input_definitions || {})) {
     if (/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label || ''}`)) {
       assert.strictEqual(def.required, false, `${item.nccp_code}/${field} must remain optional for independent partial assessment`);
@@ -50,7 +51,8 @@ for (const item of register.records) {
     }
   }
   const releaseRules = (p.rule_engine?.rules || []).filter(r => String(r.id || r.rule_id || '').startsWith('OF590_'));
-  if (rec.resolution === 'structured_rules') {
+  if(migration25){assert.equal(rec.resolution,migration25.resolution);for(const id of migration25.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page),item.nccp_code+': missing audited v25 rule '+id);assert(fs.existsSync(path.join(root,'validation/targeted-lung-v08425',migration25.group,'source-cases.cjs')));}
+  else if (rec.resolution === 'structured_rules') {
     if(migration24){
       for(const id of migration24.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page),item.nccp_code+': missing audited replacement '+id);
       assert(fs.existsSync(path.join(root,'validation/targeted-lung-v08424',migration24.group,'source-cases.cjs')));
@@ -116,7 +118,7 @@ for (const p of allProtocols) {
     );
   }
 }
-assert.strictEqual(triggerableRuleCount, 231, 'All 231 retained v0.59.0 rules remain executable; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
+assert.strictEqual(triggerableRuleCount, 229, 'All 229 retained v0.59.0 rules remain executable; two ceritinib rules are replaced by four source-conflict review rules verified by v0.84.25 cases; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
 
 // Sentinel source pathways and single-value partial assessments.
 let result = assess('00205', { pld_bilirubin_band: '51_86' });
@@ -149,7 +151,7 @@ assert.strictEqual(result.actionType, 'dose_reduce');
 result = assess('00890', { targeted_hepatic_band: 'severe' });
 assert.strictEqual(result.actionType, 'contraindicated');
 result = assess('00823', { targeted_hepatic_band: 'C' });
-assert.strictEqual(result.actionType, 'contraindicated');
+assert.strictEqual(result.actionType, 'consultant_review'); // v2/SmPC evidence gap is not a formal contraindication
 result = assess('00320', { child_pugh_class: 'B' });
 assert.strictEqual(result.actionType, 'dose_reduce');
 
@@ -164,6 +166,6 @@ const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_R
 assert.strictEqual(audit.summary.protocols_in_reconciliation_scope, 74);
 assert.strictEqual(audit.summary.remaining_partial_rule_encoding_records, 0);
 assert.strictEqual(audit.summary.records_with_audit_issues, 0);
-assert.strictEqual(audit.summary.total_v0590_rules, 231);
+assert.strictEqual(audit.summary.total_v0590_rules, 229);
 
 console.log('v0.59.0 library-wide organ-function reconciliation tests passed.');

@@ -17,8 +17,8 @@ for(const code of ['00209','00321','00226']){
  for(const key of ['patient_selection','supportive_care','monitoring_and_toxicity','administration','evidence_audit'])assert(kp[key],`${code} clinical ${key}`);
  assert(kb.evidence_records.some(e=>e.protocol_id===d.protocol_id),`${code} evidence missing`);
  assert(kp.reference_links.some(x=>x.url===`patient/${code}/knowledge.html`));
- for(const [asset,file] of [['knowledge','knowledge.html'],['consent-draft','consent-form.html'],['guide','guide.pdf'],['passport','passport.pdf'],['sact-card','sactcard.pdf']])assert.equal(registry.relativePath(protocol,asset),`patient/${code}/${file}`);
- let opened;global.location={href:'https://test.example/subpath/index.html'};global.open=u=>{opened=u;return {}};workflow.openConsentSupport(protocol);assert.equal(opened,`https://test.example/subpath/patient/${code}/consent-form.html`);
+ for(const [asset,file] of [['knowledge','knowledge.html'],['consent-draft','consent-form.html'],['guide','guide.pdf'],['passport','passport.pdf'],['sact-card','sactcard.pdf']])assert.equal(registry.relativePath(protocol,asset,'breast'),`patient/${code}/${file}`);
+ let opened;global.location={href:'https://test.example/subpath/index.html'};global.open=u=>{opened=u;return {}};workflow.openConsentSupport({...protocol,patient_context:'breast'});assert.equal(opened,`https://test.example/subpath/patient/${code}/consent-form.html`);
  for(const file of ['index.html','knowledge.html','consent.html','consent-form.html','guide.html','passport.html','sactcard.html']){
   const html=read(`patient/${code}/${file}`);assert(html.includes(code));
   assert.doesNotMatch(html,/Pembrolizumab|pemetrexed|carboplatin|KEYNOTE|immune effects|folic acid.*B12/i,`${code}/${file} inherited lung content`);

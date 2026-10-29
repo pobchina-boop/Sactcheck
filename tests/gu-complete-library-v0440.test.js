@@ -11,7 +11,7 @@ const expected=[
 const newlyAdded=new Set(['00104','00282','00326','00333','00337','00338','00450','00453','00518','00535','00564','00583','00602','00622','00628','00759','00807','00846','00885','00894','00945']);
 function read(f){return JSON.parse(fs.readFileSync(path.join(root,f),'utf8'));}
 function groups(d){const m=d.metadata||{},o=[];if(typeof m.tumour_group==='string')o.push(m.tumour_group);for(const v of m.tumour_groups||[])if(!o.includes(v))o.push(v);return o;}
-function demo(d){if(d.demo_value!==undefined&&d.demo_value!==null)return String(d.demo_value);if(d.type==='select')return String(d.options?.[0]?.value??'');if(d.type==='boolean')return 'false';if(d.type==='number')return String(Number.isFinite(Number(d.min))?d.min:0);return 'test';}
+function demo(d){if(d.demo_value!==undefined&&d.demo_value!==null&&d.demo_value!=='')return String(d.demo_value);if(d.type==='select')return String(d.options?.[0]?.value??'');if(d.type==='boolean')return 'false';if(d.type==='number')return String(Number.isFinite(Number(d.min))?d.min:0);return 'test';}
 const index=read('protocols/index.json');assert.strictEqual(index.protocol_count, 377);assert.strictEqual(index.protocols.length, 377);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size, 377);
 const protocols=index.protocols.map(entry=>({entry,data:read(entry.path)}));
 const gu=protocols.filter(x=>groups(x.data).includes('Genitourinary'));

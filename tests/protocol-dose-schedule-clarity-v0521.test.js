@@ -53,9 +53,9 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.22 adds seven structured schedules; three existing schedules are corrected.
 // v0.84.23 adds four structured schedules; two IV platinum/etoposide schedules are reconciled.
 // v0.84.24 adds five targeted lung schedules and the missing Lonsurf phase.
-assert.strictEqual(usefulCoverage, 164);
-assert.strictEqual(scheduleCoverage, 164);
-assert.strictEqual(doseLevelCoverage, 53);
+assert.strictEqual(usefulCoverage, 169);
+assert.strictEqual(scheduleCoverage, 169);
+assert.strictEqual(doseLevelCoverage, 56);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');

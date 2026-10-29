@@ -26741,6 +26741,1753 @@ const definitions={
         "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
       }
     ]
+  },
+  "00340": {
+    "stages": [
+      "Before starting",
+      "First 3 months",
+      "After month 3",
+      "Benefit review",
+      "Hold / change / stop"
+    ],
+    "lanes": [
+      {
+        "label": "Daily ceritinib",
+        "cells": [
+          "Confirm ALK, previous crizotinib and prescription",
+          "Daily with food; no planned rest week",
+          "Continue authorised daily schedule",
+          "Assess benefit and tolerability",
+          "Written instructions for any change"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00340",
+          "smpc"
+        ],
+        "note": "Relative milestones; the clinician confirms appointments and any restart."
+      },
+      {
+        "label": "Liver tests",
+        "cells": [
+          "ALT, AST and bilirubin",
+          "Every 2 weeks",
+          "Monthly; sooner if abnormal",
+          "Continue tests and symptom review",
+          "Check recovery before any restart"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00340",
+          "smpc"
+        ],
+        "note": "Relative milestones; the clinician confirms appointments and any restart."
+      },
+      {
+        "label": "Blood count, kidneys and glucose",
+        "cells": [
+          "FBC, renal profile and fasting glucose",
+          "Every 4 weeks; glucose sooner if needed",
+          "Every 4 weeks and when indicated",
+          "Review diabetes, symptoms and medicines",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00340",
+          "smpc"
+        ],
+        "note": "Relative milestones; the clinician confirms appointments and any restart."
+      },
+      {
+        "label": "Heart and pancreatic checks",
+        "cells": [
+          "ECG, pulse/BP, lipase and amylase",
+          "ECG after 1 month; other checks as needed",
+          "ECG/electrolytes and pancreatic enzymes as indicated",
+          "Review pulse/BP and symptoms",
+          "Investigate fainting or abdominal pain"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00340",
+          "smpc"
+        ],
+        "note": "Relative milestones; the clinician confirms appointments and any restart."
+      },
+      {
+        "label": "Symptoms, interactions and supply",
+        "cells": [
+          "Review medicines, food and contact plan",
+          "Report breathing/GI symptoms promptly",
+          "Check adherence, prescriptions and supply",
+          "Scans and disease assessment per consultant",
+          "Confirm follow-up and who authorises restart"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00340",
+          "smpc"
+        ],
+        "note": "Relative milestones; the clinician confirms appointments and any restart."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Safe start",
+        "when": "Before first dose",
+        "why": "Correct biomarker, treatment line and safety context matter.",
+        "clinical": "Validated ALK, prior crizotinib, organ function and baseline cardiac/metabolic checks; resolve NCCP hepatic conflict.",
+        "action": "Confirm dose, food instructions, support medicines and contacts.",
+        "source_ids": [
+          "00340",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Early liver surveillance",
+        "when": "Every 2 weeks for 3 months",
+        "why": "Liver injury may occur without early symptoms.",
+        "clinical": "ALT/AST/bilirubin; more often for abnormalities.",
+        "action": "Confirm test bookings and result reviewer.",
+        "source_ids": [
+          "00340",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Regular clinical checks",
+        "when": "Throughout daily treatment",
+        "why": "Continuous tablets still need continuing review.",
+        "clinical": "Every-4-week blood count, renal and fasting glucose; ECG after 1 month then indicated; pulse/BP and pancreatic tests as indicated.",
+        "action": "Review symptoms, interactions, intake, supply and scans.",
+        "source_ids": [
+          "00340",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Dose held or treatment stopped",
+        "when": "Toxicity, progression or changed priorities",
+        "why": "Restart criteria differ by toxicity and food schedule.",
+        "clinical": "Specific source recovery criteria, current dose and concomitant drugs; no multiplied reductions.",
+        "action": "Prescriber gives a new written plan and follow-up.",
+        "source_ids": [
+          "00340",
+          "smpc"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "NCCP v4 p2 excludes moderate or severe hepatic impairment, while p3 Table 2 permits Child–Pugh A/B without adjustment and C at 67% of original dose. Current EMA SmPC also permits moderate impairment and a one-third reduction for severe impairment. This internal NCCP conflict requires Consultant/pharmacy resolution; no automatic hepatic dose is calculated.",
+      "NCCP v4 p3 expects no renal adjustment even below CrCl 30 mL/min or on haemodialysis. EMA SmPC 4.2 cautions that severe impairment has no clinical experience; severe renal impairment/dialysis require individual specialist review.",
+      "NCCP 00340a is post-crizotinib ALK-positive advanced NSCLC. The EMA licence also includes first-line disease; that does not expand this NCCP suite or establish reimbursement.",
+      "The standard current schedule is 450 mg once daily with food. Historical 750 mg fasting trial results cannot be presented as trials of the current fed schedule. Only a clinician-directed inability-to-eat switch uses the specific alternate schedule; patients must not alternate fed and fasted dosing.",
+      "NCCP v4 Table 3 does not specify a CTCAE edition. Preserve clinically confirmed grades without labelling them CTCAE v5. The source glucose threshold is strictly >250 mg/dL, not a rounded 13.9 mmol/L threshold.",
+      "Adults with ALK-positive advanced non-small-cell lung cancer previously treated with crizotinib: NCCP 00340a. This suite does not turn the broader first-line licence into an NCCP indication or funding approval. Confirm your treatment setting with the team.",
+      "ASCEND-5 enrolled patients after both platinum chemotherapy and crizotinib, not every modern ALK inhibitor sequence. It used ceritinib 750 mg fasting; the current NCCP regimen is 450 mg with food.",
+      "ASCEND-5 primary PFS analysis had median follow-up 16.5 months; OS at that analysis was immature/confounded by crossover and did not establish an OS advantage.",
+      "ASCEND-8 was an open-label phase I dose/food optimisation study; primary efficacy analysis included 198 treatment-naive ALK-IHC-positive participants. Its response rates are not a post-crizotinib outcome estimate or proof of equivalence.",
+      "No cross-trial ranking of contemporary ALK therapies or individual survival prediction.",
+      "Independent consultant, pharmacy and patient/PPI review remains pending."
+    ],
+    "code": "00340",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Ceritinib monotherapy: treatment and checks",
+    "setting": "ALK-positive advanced NSCLC · after crizotinib",
+    "summary": "The usual starting dose is 450 mg once daily with food, every day without a planned rest week. Follow your own prescription. Treatment continues while it helps and side effects remain acceptable; there is no fixed course length.",
+    "sources": [
+      {
+        "id": "00340",
+        "title": "NCCP 00340 v4 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6917/340_Ceritinib_monotherapy.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Zykadia product information, retrieved 29 October 2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/zykadia-epar-product-information_en.pdf"
+      },
+      {
+        "id": "classification",
+        "title": "NCCP SACT Antiemetic Guidance V6 (2025), Tables 5 and 8",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP supportive antiemetics for NCIS Medical Oncology; check local policy",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "ascend5",
+        "title": "ASCEND-5: post-chemotherapy/crizotinib phase III trial, Shaw 2017",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28602779/"
+      },
+      {
+        "id": "ascend8pk",
+        "title": "ASCEND-8: pharmacokinetic and food-effect study, Cho 2017",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28729021/"
+      },
+      {
+        "id": "ascend8",
+        "title": "ASCEND-8: primary efficacy and safety analysis, Cho 2019",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30851442/"
+      }
+    ]
+  },
+  "00232:lung": {
+    "stages": [
+      "Before starting",
+      "Early treatment",
+      "Ongoing treatment",
+      "Dose change / pause",
+      "Next decision"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment plan",
+        "cells": [
+          "Confirm lung monotherapy plan and current dose",
+          "Days 1 and 8 each 21-day cycle",
+          "Continue while helpful and tolerated",
+          "Review dose and recovery before restart",
+          "Agree continuation / next treatment"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00232"
+        ],
+        "note": "30 mg/m² on Days 1 and 8 every 21 days. Consultant may consider 25 mg/m² for poor marrow reserve; the dose is individualised after toxicity. Repeated 21-day cycles until progression/unacceptable toxicity; team review determines continuation."
+      },
+      {
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "Baseline blood and organ tests",
+          "Day 1 and Day 8 blood counts",
+          "Counts before every dose; organ tests each cycle",
+          "Review recovery and current dose",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00232",
+          "smpc"
+        ],
+        "note": "Check blood count, kidney and liver function before each cycle, and blood counts on the day of every administration including Day 8. Review neuropathy, bowel symptoms and infection each cycle; abnormal results may postpone or change treatment."
+      },
+      {
+        "label": "Symptoms / medicines",
+        "cells": [
+          "Bowel / nerve / infection review",
+          "Report early symptoms and support problems",
+          "Review all medicines and side effects",
+          "Do not restart or escalate yourself",
+          "Agree continuation and response assessment"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00232",
+          "smpc"
+        ],
+        "note": "Check blood count, kidney and liver function before each cycle, and blood counts on the day of every administration including Day 8. Review neuropathy, bowel symptoms and infection each cycle; abnormal results may postpone or change treatment."
+      },
+      {
+        "label": "Special schedule check",
+        "cells": [
+          "Confirm Day 1 and Day 8 visits",
+          "Check Day 8 clearance",
+          "Continue 21-day pattern",
+          "Keep previous dose / nadir history",
+          "Personal plan; no booked dates implied"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00232",
+          "smpc"
+        ],
+        "note": "Check blood count, kidney and liver function before each cycle, and blood counts on the day of every administration including Day 8. Review neuropathy, bowel symptoms and infection each cycle; abnormal results may postpone or change treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and dose review",
+        "when": "Before every administration",
+        "why": "Check blood count, kidney and liver function before each cycle, and blood counts on the day of every administration including Day 8. Review neuropathy, bowel symptoms and infection each cycle; abnormal results may postpone or change treatment.",
+        "clinical": "Review blood counts on the day of every administration; review renal/liver function at each cycle and symptoms each contact.",
+        "action": "The treating team confirms results, dose and suitability; this map does not authorise treatment.",
+        "source_ids": [
+          "00232",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Support and symptoms",
+        "when": "Throughout treatment, including days at home",
+        "why": "Use the treating unit’s 24-hour emergency number and local fever threshold. Contact immediately for fever/chills, sudden illness, breathlessness/chest pain, uncontrolled vomiting, severe abdominal pain/obstruction symptoms, bleeding or severe allergy. Do not wait until the next visit.",
+        "clinical": "Individual antiemetic plan differs by route; list routine and rescue medicines separately. Discuss constipation prevention, hydration/diet where appropriate and prescribed laxatives; regular opioid use increases the need for a bowel plan. No routine steroid premedication, G-CSF, antibacterial, antiviral or PJP prophylaxis is mandated by these NCCP monotherapy documents. Consider additional prevention based on individual risk/local policy; do not create a generic automatic prescription. Gastric protection is a consideration for high gastrointestinal-bleed risk, not a universal drug. Confirm strong CYP3A4 inhibitors/inducers, P-gp modulators, phenytoin, itraconazole, warfarin and live vaccines. Yellow fever vaccine is contraindicated. Avoid grapefruit per NCCP; do not self-start supplements.",
+        "action": "Keep a written medicine plan and urgent-contact route.",
+        "source_ids": [
+          "00232",
+          "oral-antiemetic",
+          "ncis"
+        ]
+      },
+      {
+        "title": "Response and continuation",
+        "when": "At agreed clinical review points",
+        "why": "Vinorelbine chemotherapy can help control non-small-cell lung cancer and its symptoms. The team weighs possible benefit against side effects, previous treatments and your priorities, and reviews whether to continue.",
+        "clinical": "Confirm the NSCLC monotherapy indication and source-specific dose/route.",
+        "action": "Confirm the current plan with the team.",
+        "source_ids": [
+          "00232",
+          "trial"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "For IV use only; intrathecal administration may be fatal. Oral and IV vinorelbine are not interchangeable mg-for-mg. Stop infusion and tell staff immediately about pain, burning, swelling or leakage at the IV site; extravasation can damage tissue.",
+      "NCCP ANC exclusion<1.5 versus table 100%at≥1/75%at 0.5–0.99; platelet 75–99 table reduction versus current Navelbine<100 delay. Clinical/pharmacy reconciliation required; software must not clear these conflicts.",
+      "Small historical older-adult population and early closure; no extrapolation to adjuvant or platinum-combination treatment, younger populations or oral schedules. Trial cycle cap is not the NCCP stopping rule."
+    ],
+    "code": "00232",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Vinorelbine IV · non-small-cell lung cancer: treatment and checks",
+    "setting": "Non-small-cell lung cancer · IV monotherapy",
+    "summary": "30 mg/m² on Days 1 and 8 every 21 days. Consultant may consider 25 mg/m² for poor marrow reserve; the dose is individualised after toxicity. Repeated 21-day cycles until progression/unacceptable toxicity; team review determines continuation.",
+    "sources": [
+      {
+        "id": "00232",
+        "title": "NCCP 00232 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "HPRA Navelbine IV SmPC, 8 January 2024",
+        "url": "https://assets.hpra.ie/products/Human/26035/Licence_PA0329-011-003_08012024110935.pdf"
+      },
+      {
+        "id": "oral-antiemetic",
+        "title": "NCCP antiemetic guidance v6",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic medicines v8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "ELVIS Group, JNCI 1999: IV vinorelbine versus supportive care in older adults with advanced NSCLC",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9890172/"
+      }
+    ]
+  },
+  "00259:lung": {
+    "stages": [
+      "Before starting",
+      "Early treatment",
+      "Ongoing treatment",
+      "Dose change / pause",
+      "Next decision"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment plan",
+        "cells": [
+          "Confirm lung monotherapy plan and current dose",
+          "Weekly doses 1–3; review before dose 4",
+          "Continue while helpful and tolerated",
+          "Review dose and recovery before restart",
+          "Agree continuation / next treatment"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00259"
+        ],
+        "note": "ONCE WEEKLY. First 3 administrations 60 mg/m², total maximum 120 mg. From administration 4, 80 mg/m² (maximum 160 mg) only after the team reviews nadirs and toxicity. 60 or 50 mg/m²/lower may be needed. Continue weekly while helpful and tolerated; no fixed total number of weeks."
+      },
+      {
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "Baseline blood and organ tests",
+          "Counts before every weekly dose",
+          "Weekly treatment review",
+          "Review recovery and current dose",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00259",
+          "smpc"
+        ],
+        "note": "Blood counts are checked on the day of each weekly dose. Kidney and liver tests follow the weekly regimen and prescribed plan. The team reviews the lowest counts after earlier doses before any increase, alongside bowel, nerve, infection and medicine checks."
+      },
+      {
+        "label": "Symptoms / medicines",
+        "cells": [
+          "Bowel / nerve / infection review",
+          "Report early symptoms and support problems",
+          "Review all medicines and side effects",
+          "Do not restart or escalate yourself",
+          "Agree continuation and response assessment"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00259",
+          "smpc"
+        ],
+        "note": "Blood counts are checked on the day of each weekly dose. Kidney and liver tests follow the weekly regimen and prescribed plan. The team reviews the lowest counts after earlier doses before any increase, alongside bowel, nerve, infection and medicine checks."
+      },
+      {
+        "label": "Special schedule check",
+        "cells": [
+          "Confirm weekly capsule plan",
+          "Review nadirs after doses 1–3",
+          "Dose increases only after team review",
+          "Keep previous dose / nadir history",
+          "Personal plan; no booked dates implied"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00259",
+          "smpc"
+        ],
+        "note": "Blood counts are checked on the day of each weekly dose. Kidney and liver tests follow the weekly regimen and prescribed plan. The team reviews the lowest counts after earlier doses before any increase, alongside bowel, nerve, infection and medicine checks."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and dose review",
+        "when": "Before every administration",
+        "why": "Blood counts are checked on the day of each weekly dose. Kidney and liver tests follow the weekly regimen and prescribed plan. The team reviews the lowest counts after earlier doses before any increase, alongside bowel, nerve, infection and medicine checks.",
+        "clinical": "Review blood counts on the day of every administration; review renal/liver function at each cycle and symptoms each contact.",
+        "action": "The treating team confirms results, dose and suitability; this map does not authorise treatment.",
+        "source_ids": [
+          "00259",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Support and symptoms",
+        "when": "Throughout treatment, including days at home",
+        "why": "Use the treating unit’s 24-hour emergency number and local fever threshold. Contact immediately for fever/chills, sudden illness, breathlessness/chest pain, uncontrolled vomiting, severe abdominal pain/obstruction symptoms, bleeding or severe allergy. Do not wait until the next visit.",
+        "clinical": "Individual antiemetic plan differs by route; list routine and rescue medicines separately. Discuss constipation prevention, hydration/diet where appropriate and prescribed laxatives; regular opioid use increases the need for a bowel plan. No routine steroid premedication, G-CSF, antibacterial, antiviral or PJP prophylaxis is mandated by these NCCP monotherapy documents. Consider additional prevention based on individual risk/local policy; do not create a generic automatic prescription. Gastric protection is a consideration for high gastrointestinal-bleed risk, not a universal drug. Confirm strong CYP3A4 inhibitors/inducers, P-gp modulators, phenytoin, itraconazole, warfarin and live vaccines. Yellow fever vaccine is contraindicated. Avoid grapefruit per NCCP; do not self-start supplements.",
+        "action": "Keep a written medicine plan and urgent-contact route.",
+        "source_ids": [
+          "00259",
+          "oral-antiemetic",
+          "ncis"
+        ]
+      },
+      {
+        "title": "Response and continuation",
+        "when": "At agreed clinical review points",
+        "why": "Vinorelbine chemotherapy can help control non-small-cell lung cancer and its symptoms. The team weighs possible benefit against side effects, previous treatments and your priorities, and reviews whether to continue.",
+        "clinical": "Confirm the NSCLC monotherapy indication and source-specific dose/route.",
+        "action": "Confirm the current plan with the team.",
+        "source_ids": [
+          "00259",
+          "trial"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Oral 60/80 mg/m² and IV 25/30 mg/m² have pharmacokinetic equivalence references, but never convertmg-for-mg or swap routes yourself. Dose rules and schedules differ.",
+      "NCCP p 2 contains eleven BSA bands for 60 and 80 mg/m², with caps 120/160 mg. The 50 mg/m² hepatic/toxicity target has no matching column; pharmacy calculation/rounding is needed.",
+      "Small older-adult, treatment-naive population; no randomised comparison, no proof of equivalence to IV vinorelbine or superiority over modern options. Do not borrow ELVIS IV survival effects."
+    ],
+    "code": "00259",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Vinorelbine capsules · non-small-cell lung cancer: treatment and checks",
+    "setting": "Non-small-cell lung cancer · weekly oral monotherapy",
+    "summary": "ONCE WEEKLY. First 3 administrations 60 mg/m², total maximum 120 mg. From administration 4, 80 mg/m² (maximum 160 mg) only after the team reviews nadirs and toxicity. 60 or 50 mg/m²/lower may be needed. Continue weekly while helpful and tolerated; no fixed total number of weeks.",
+    "sources": [
+      {
+        "id": "00259",
+        "title": "NCCP 00259 v6 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6363/259_Vinorelbine_Oral.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "HPRA Vinorelbine Accord soft capsules SmPC, 9 April 2025",
+        "url": "https://assets.hpra.ie/products/Human/38141/Licence_PA2315-253-001_09042025122220.pdf"
+      },
+      {
+        "id": "oral-antiemetic",
+        "title": "NCCP antiemetic guidance v6",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic medicines v8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Gridelli et al., European Journal of Cancer 2004: weekly oral vinorelbine in older adults with advanced NSCLC",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15519515/"
+      },
+      {
+        "id": "oral-pooled",
+        "title": "Chouaid et al., 2025 pooled individual data from weekly oral vinorelbine arms",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40116568/"
+      },
+      {
+        "id": "oral-pooled-correction",
+        "title": "2026 correction to pooled oral vinorelbine analysis: denominator and event-estimate footnotes",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13089921/"
+      }
+    ]
+  },
+  "00215:lung": {
+    "stages": [
+      "Before starting",
+      "First infusion",
+      "Later cycles",
+      "Between visits",
+      "Pause or change"
+    ],
+    "lanes": [
+      {
+        "label": "Bevacizumab treatment",
+        "cells": [
+          "Confirm platinum or EGFR/erlotinib pathway",
+          "Day 1 bevacizumab after checks",
+          "Every 21 days; review selected partner",
+          "Partner has separate schedule",
+          "Consultant review before restart or phase change"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00215"
+        ],
+        "note": "Bevacizumab 15 mg/kg is infused on Day 1 every 21 days. With platinum chemotherapy, the combined phase lasts up to six cycles, then bevacizumab may continue alone. With erlotinib, the combination continues while helpful and tolerated. Progression or unacceptable toxicity can stop either plan earlier; no fixed overall lung-treatment duration is promised."
+      },
+      {
+        "label": "Platinum or erlotinib phase",
+        "cells": [
+          "Select one source pathway",
+          "Begin separately assessed partner",
+          "Platinum: up to six combined cycles",
+          "Then bevacizumab alone if appropriate; erlotinib has no automatic switch",
+          "Review benefit, toxicity and complete plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00215"
+        ],
+        "note": "Bevacizumab 15 mg/kg is infused on Day 1 every 21 days. With platinum chemotherapy, the combined phase lasts up to six cycles, then bevacizumab may continue alone. With erlotinib, the combination continues while helpful and tolerated. Progression or unacceptable toxicity can stop either plan earlier; no fixed overall lung-treatment duration is promised."
+      },
+      {
+        "label": "Blood count / kidney / liver",
+        "cells": [
+          "Baseline tests",
+          "Review results",
+          "Before each cycle",
+          "Extra tests if needed",
+          "Review abnormalities and partner treatment"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00215"
+        ],
+        "note": "These are relative planning stages, not booked appointments or equal time intervals. Extra blood-pressure, urine, heart or anticoagulation checks depend on individual risk and results."
+      },
+      {
+        "label": "Blood pressure",
+        "cells": [
+          "Measure and control BP",
+          "Before and after treatment",
+          "Before and after each treatment",
+          "More often if raised or symptomatic",
+          "Review control before restarting"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00215"
+        ],
+        "note": "These are relative planning stages, not booked appointments or equal time intervals. Extra blood-pressure, urine, heart or anticoagulation checks depend on individual risk and results."
+      },
+      {
+        "label": "Urine protein",
+        "cells": [
+          "Baseline urine test",
+          "Review urine result",
+          "Before each cycle",
+          "24-hour collection if indicated",
+          "Recheck protein before agreed restart"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00215"
+        ],
+        "note": "These are relative planning stages, not booked appointments or equal time intervals. Extra blood-pressure, urine, heart or anticoagulation checks depend on individual risk and results."
+      },
+      {
+        "label": "Heart / anticoagulation",
+        "cells": [
+          "Heart history; ECHO if risk; INR if indicated",
+          "Review symptoms and medicines",
+          "Warfarin INR before cycles once stable",
+          "INR weekly until stable; report symptoms",
+          "Individual cardiac and anticoagulant review"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00215"
+        ],
+        "note": "These are relative planning stages, not booked appointments or equal time intervals. Extra blood-pressure, urine, heart or anticoagulation checks depend on individual risk and results."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm treatment scope",
+        "when": "Before starting and whenever the partner changes",
+        "why": "NCCP 00215f: first-line unresectable advanced, recurrent or metastatic non-squamous NSCLC with platinum-based chemotherapy. NCCP 00215g: the corresponding first-line EGFR-activating-mutation setting with erlotinib. This is the bevacizumab component; every partner needs its own prescription, assessment and consent.",
+        "clinical": "Platinum has up to six combined cycles before bevacizumab continuation. Erlotinib is not governed by this six-cycle cap.",
+        "action": "Confirm indication, partner, phase and separate assessment.",
+        "source_ids": [
+          "00215"
+        ]
+      },
+      {
+        "title": "Blood pressure and proteinuria",
+        "when": "Baseline, each cycle and extra checks when indicated",
+        "why": "These effects can be silent, so attend planned tests even when well.",
+        "clinical": "Apply BP persistence/control and quantified 24-hour protein rules; distinguish g/L from g/24 h.",
+        "action": "Agree who books, reviews and acts on each test.",
+        "source_ids": [
+          "00215"
+        ]
+      },
+      {
+        "title": "Procedures and urgent symptoms",
+        "when": "Throughout treatment and treatment breaks",
+        "why": "Seek urgent help for sudden severe abdominal pain, significant bleeding or coughing blood, chest pain, breathlessness, a swollen painful leg, a severe headache, confusion, seizures, a change in vision, or a rapidly painful/red spreading wound. Follow the chemotherapy emergency plan for fever or feeling acutely unwell.",
+        "clinical": "Surgery and wound-healing criteria can override routine cycle timing; no automatic restart from the calendar.",
+        "action": "Contact the team before procedures or for urgent symptoms.",
+        "source_ids": [
+          "00215",
+          "smpc"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This is a shared bevacizumab component protocol; companion chemotherapy or other SACT is not assessed by these rules.",
+      "NCCP 00215 v7 states renal/hepatic impairment has not been studied and supplies no validated adjustment. Review initial organ eligibility and clinical suitability with the consultant; do not import 00212 v7 organ-function permission.",
+      "NCCP BP notation >150/100 and >200/110 does not explicitly state how to combine isolated systolic and diastolic abnormalities. A clinician confirms uncontrolled/severe BP; no invented binary calculation is used.",
+      "Grade 3 hypertension requires persistence before source discontinuation applies. A new grade 3 event alone is not encoded as a permanent-stop criterion.",
+      "NCCP grades in the bevacizumab toxicity table do not identify a CTCAE edition. Existing interface CTCAE v5 descriptions are orientation aids; source grading must be confirmed.",
+      "Normal proteinuria results do not clear unassessed blood pressure, surgical, bleeding or partner-treatment domains.",
+      "NCCP 00215 v7 retains initial numeric blood-count and organ eligibility. These are not a cycle-by-cycle bevacizumab dose-modification algorithm.",
+      "Relative educational stages only; no patient-entered dates.",
+      "The ovarian 15-month/22-cycle cap does not apply to lung treatment.",
+      "ECOG 4599 and JO25567 evidence belongs to different selected populations and partners."
+    ],
+    "code": "00215",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Bevacizumab 15 mg/kg · lung treatment component: treatment and checks",
+    "setting": "First-line non-squamous NSCLC · platinum or EGFR/erlotinib context",
+    "summary": "Bevacizumab 15 mg/kg is infused on Day 1 every 21 days. With platinum chemotherapy, the combined phase lasts up to six cycles, then bevacizumab may continue alone. With erlotinib, the combination continues while helpful and tolerated. Progression or unacceptable toxicity can stop either plan earlier; no fixed overall lung-treatment duration is promised.",
+    "sources": [
+      {
+        "id": "00215",
+        "title": "NCCP 00215 v7 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6940/00215_Bevacizumab_15.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Avastin product information · current snapshot",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "e4599",
+        "title": "Sandler et al., NEJM 2006: ECOG 4599 carboplatin/paclitaxel with or without bevacizumab",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17167137/"
+      },
+      {
+        "id": "jo25567",
+        "title": "Yamamoto et al., Lung Cancer 2021: JO25567 updated PFS and final OS",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33279874/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP antiemetic classification v6",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ]
+  },
+  "00203:lung": {
+    "stages": [
+      "Before starting",
+      "Early treatment",
+      "Ongoing treatment",
+      "Pause / dose change",
+      "Completion / next decision"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment plan",
+        "cells": [
+          "Confirm indication and prescription",
+          "Day 1 every 21 days",
+          "Maximum six cycles for NSCLC",
+          "Clinician review before restart",
+          "Agree the next plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00203"
+        ],
+        "note": "Docetaxel 75 mg/m² is infused on Day 1 every 21 days. For this NSCLC indication, the NCCP plan has a maximum of six cycles; treatment stops earlier for progression or unacceptable side effects. Your team confirms your prescribed dose and course."
+      },
+      {
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "Baseline FBC, kidney and liver tests",
+          "Before each 21-day cycle",
+          "Repeat before each planned dose",
+          "Check recovery before restarting",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00203",
+          "smpc"
+        ],
+        "note": "Relative stages explain the order of care; they are not equally spaced appointments. FBC, kidney and liver profile at baseline and before every 21-day cycle; review symptoms, neuropathy, fluid retention and the steroid plan. Confirm remaining cycles against the six-cycle NSCLC maximum."
+      },
+      {
+        "label": "Symptoms / premedication",
+        "cells": [
+          "Review symptoms, medicines and reaction history",
+          "Check steroid doses, swelling and neuropathy",
+          "Review before every treatment",
+          "Record worst and current symptoms; clinician confirms changes",
+          "Review persistent symptoms and recovery"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00203",
+          "smpc"
+        ],
+        "note": "Relative stages explain the order of care; they are not equally spaced appointments. FBC, kidney and liver profile at baseline and before every 21-day cycle; review symptoms, neuropathy, fluid retention and the steroid plan. Confirm remaining cycles against the six-cycle NSCLC maximum."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Assess history and symptoms",
+          "Infusion observations and symptom review",
+          "Extra tests if symptoms or risk require",
+          "Urgent assessment for chest pain, fainting or new breathlessness",
+          "Agree follow-up for unresolved symptoms"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00203",
+          "smpc"
+        ],
+        "note": "Relative stages explain the order of care; they are not equally spaced appointments. FBC, kidney and liver profile at baseline and before every 21-day cycle; review symptoms, neuropathy, fluid retention and the steroid plan. Confirm remaining cycles against the six-cycle NSCLC maximum."
+      },
+      {
+        "label": "Cancer / course",
+        "cells": [
+          "Confirm 00203a NSCLC after prior chemotherapy",
+          "Agree response review and actual appointment plan",
+          "Up to six cycles; stop earlier if needed",
+          "Reassess benefit, toxicity and priorities",
+          "Agree next treatment or supportive-care plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00203",
+          "smpc"
+        ],
+        "note": "Relative stages explain the order of care; they are not equally spaced appointments. FBC, kidney and liver profile at baseline and before every 21-day cycle; review symptoms, neuropathy, fluid retention and the steroid plan. Confirm remaining cycles against the six-cycle NSCLC maximum."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Safety review",
+        "when": "Before each 21-day cycle",
+        "why": "FBC, kidney and liver profile at baseline and before every 21-day cycle; review symptoms, neuropathy, fluid retention and the steroid plan. Confirm remaining cycles against the six-cycle NSCLC maximum.",
+        "clinical": "Use the current source-specific assessment; this map does not authorise a dose.",
+        "action": "The team reviews results, current symptoms and the prescription.",
+        "source_ids": [
+          "00203",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Benefit and treatment choice",
+        "when": "At consultant-agreed response reviews",
+        "why": "A historical randomised trial found that docetaxel 75 mg/m² every three weeks prolonged survival compared with supportive care alone in selected people whose NSCLC had progressed after platinum chemotherapy. Modern previous treatment and available alternatives differ, so the trial cannot predict an individual outcome.",
+        "clinical": "TAX317 was a historical randomised study after platinum chemotherapy; it predates current targeted therapy and immunotherapy.",
+        "action": "Discuss continuing, changing or stopping treatment according to benefit, toxicity and priorities.",
+        "source_ids": [
+          "00203",
+          "trial"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "TAX317 was a historical randomised study after platinum chemotherapy; it predates current targeted therapy and immunotherapy.",
+      "The 75 mg/m² cohort followed an initial 100 mg/m² cohort; preserve the dose-specific comparison and do not combine them as one 75 mg/m² estimate.",
+      "NCCP limits this NSCLC course to six cycles. Trial results are population averages, not an individual survival prediction.",
+      "TAX320 compared docetaxel with vinorelbine/ifosfamide; its overall survival comparison did not reach statistical significance. Do not imply all comparators showed the same result."
+    ],
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "code": "00203",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "title": "Docetaxel 75 mg/m² · previously treated NSCLC: treatment and checks",
+    "setting": "Lung · previously treated advanced NSCLC",
+    "summary": "Docetaxel 75 mg/m² is infused on Day 1 every 21 days. For this NSCLC indication, the NCCP plan has a maximum of six cycles; treatment stops earlier for progression or unacceptable side effects. Your team confirms your prescribed dose and course.",
+    "sources": [
+      {
+        "id": "00203",
+        "title": "NCCP 00203 v7 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6543/203_DOCEtaxel_75-21day.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Taxotere product information; retrieved 29 October 2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Shepherd et al., TAX317, JCO 2000; previously treated NSCLC",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10811675/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS medical-oncology antiemetics V8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "tax320",
+        "title": "Fossella et al., TAX320, JCO 2000",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10856094/"
+      }
+    ]
+  },
+  "00226:lung": {
+    "stages": [
+      "Before starting",
+      "Early treatment",
+      "Ongoing treatment",
+      "Pause / dose change",
+      "Completion / next decision"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment plan",
+        "cells": [
+          "Confirm indication and prescription",
+          "Days 1/8/15/22 every 28 days",
+          "Confirm Day 22 or consultant-selected omission",
+          "Clinician review before restart",
+          "Agree the next plan"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00226"
+        ],
+        "note": "Paclitaxel 80 mg/m² is infused on Days 1, 8, 15 and 22 of a 28-day cycle. The consultant may instead prescribe Days 1, 8 and 15. Each planned weekly dose needs review. Continue while helping and tolerated; NCCP does not set a fixed cycle cap."
+      },
+      {
+        "label": "Blood / kidney / liver",
+        "cells": [
+          "Baseline FBC, kidney and liver tests",
+          "Before each weekly dose",
+          "Repeat before each planned dose",
+          "Check recovery before restarting",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00226",
+          "smpc"
+        ],
+        "note": "Relative stages explain the order of care; they are not equally spaced appointments. FBC, kidney and liver profile at baseline and before each treatment; NCCP also explicitly lists Day 8 FBC. Check neuropathy, daily function, infection and previous infusion reactions before every dose. Confirm whether Day 22 is prescribed."
+      },
+      {
+        "label": "Symptoms / premedication",
+        "cells": [
+          "Review symptoms, medicines and reaction history",
+          "Check premedication, neuropathy and function",
+          "Review before every treatment",
+          "Record worst and current symptoms; clinician confirms changes",
+          "Review persistent symptoms and recovery"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00226",
+          "smpc"
+        ],
+        "note": "Relative stages explain the order of care; they are not equally spaced appointments. FBC, kidney and liver profile at baseline and before each treatment; NCCP also explicitly lists Day 8 FBC. Check neuropathy, daily function, infection and previous infusion reactions before every dose. Confirm whether Day 22 is prescribed."
+      },
+      {
+        "label": "Heart / breathing",
+        "cells": [
+          "Assess history and symptoms",
+          "Infusion observations and symptom review",
+          "Extra tests if symptoms or risk require",
+          "Urgent assessment for chest pain, fainting or new breathlessness",
+          "Agree follow-up for unresolved symptoms"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00226",
+          "smpc"
+        ],
+        "note": "Relative stages explain the order of care; they are not equally spaced appointments. FBC, kidney and liver profile at baseline and before each treatment; NCCP also explicitly lists Day 8 FBC. Check neuropathy, daily function, infection and previous infusion reactions before every dose. Confirm whether Day 22 is prescribed."
+      },
+      {
+        "label": "Cancer / course",
+        "cells": [
+          "Confirm 00226d SCLC and off-label consent",
+          "Agree response review and actual appointment plan",
+          "Continue while beneficial and tolerated",
+          "Reassess benefit, toxicity and priorities",
+          "Agree next treatment or supportive-care plan"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00226",
+          "smpc"
+        ],
+        "note": "Relative stages explain the order of care; they are not equally spaced appointments. FBC, kidney and liver profile at baseline and before each treatment; NCCP also explicitly lists Day 8 FBC. Check neuropathy, daily function, infection and previous infusion reactions before every dose. Confirm whether Day 22 is prescribed."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Safety review",
+        "when": "Before each weekly treatment",
+        "why": "FBC, kidney and liver profile at baseline and before each treatment; NCCP also explicitly lists Day 8 FBC. Check neuropathy, daily function, infection and previous infusion reactions before every dose. Confirm whether Day 22 is prescribed.",
+        "clinical": "Use the current source-specific assessment; this map does not authorise a dose.",
+        "action": "The team reviews results, current symptoms and the prescription.",
+        "source_ids": [
+          "00226",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Benefit and treatment choice",
+        "when": "At consultant-agreed response reviews",
+        "why": "A small uncontrolled study found some tumour responses to weekly paclitaxel in previously treated SCLC. The study used six weekly doses followed by two weeks without treatment, which differs from this NCCP schedule. It cannot establish a survival advantage over other treatment or supportive care.",
+        "clinical": "Yamamoto 2006 enrolled 22 patients, with 21 eligible; it was a small single-arm phase II study without a control group.",
+        "action": "Discuss continuing, changing or stopping treatment according to benefit, toxicity and priorities.",
+        "source_ids": [
+          "00226",
+          "trial"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Yamamoto 2006 enrolled 22 patients, with 21 eligible; it was a small single-arm phase II study without a control group.",
+      "The trial schedule was 80 mg/m² weekly for six weeks of an eight-week cycle, not the NCCP Day 1/8/15/22 28-day schedule or its three-of-four-week alternative.",
+      "Five partial responses were observed: three of 11 sensitive and two of 10 refractory cases. These counts are not a comparative efficacy estimate.",
+      "The study cannot establish a survival benefit, modern treatment ranking or the expected response probability for the current NCCP schedule.",
+      "NCCP explicitly flags 00226d as off-label; publication and NCCP listing do not create an Irish product licence."
+    ],
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "code": "00226",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "title": "Weekly paclitaxel · relapsed or refractory SCLC: treatment and checks",
+    "setting": "Lung · relapsed / refractory SCLC",
+    "summary": "Paclitaxel 80 mg/m² is infused on Days 1, 8, 15 and 22 of a 28-day cycle. The consultant may instead prescribe Days 1, 8 and 15. Each planned weekly dose needs review. Continue while helping and tolerated; NCCP does not set a fixed cycle cap.",
+    "sources": [
+      {
+        "id": "00226",
+        "title": "NCCP 00226 v9 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6562/226_V9_Paclitaxel_80.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "HPRA conventional paclitaxel SmPC; 9 January 2026",
+        "url": "https://assets.hpra.ie/products/Human/27560/Licence_PA2315-115-001_09012026104101.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Yamamoto et al., Anticancer Research 2006; relapsed / refractory SCLC",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16739353/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS medical-oncology antiemetics V8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00823": {
+    "stages": [
+      "Before the first dose",
+      "Starting daily treatment",
+      "Ongoing reviews",
+      "Benefit or toxicity review",
+      "Change or stopping"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "cells": [
+          "Confirm prescription",
+          "Daily tepotinib with food",
+          "Continue authorised daily dose",
+          "Discuss benefit and side effects",
+          "Team authorises change or stopping"
+        ],
+        "source_ids": [
+          "00823",
+          "smpc"
+        ],
+        "note": "No planned rest week or fixed number of cycles."
+      },
+      {
+        "label": "Cancer and eligibility",
+        "kind": "monitoring",
+        "cells": [
+          "MET test and previous treatment",
+          "Confirm prescription",
+          "Scans under the Consultant plan",
+          "Review response and symptoms",
+          "Agree the next plan"
+        ],
+        "source_ids": [
+          "00823",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal time periods or booked appointments. NCCP does not specify a universal number of weeks between these checks; your team agrees the schedule."
+      },
+      {
+        "label": "Blood and organ function",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, electrolytes, kidney and liver tests",
+          "Review results and early symptoms",
+          "Repeat regular tests",
+          "Extra tests for abnormalities",
+          "Follow unresolved effects"
+        ],
+        "source_ids": [
+          "00823",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal time periods or booked appointments. NCCP does not specify a universal number of weeks between these checks; your team agrees the schedule."
+      },
+      {
+        "label": "Heart",
+        "kind": "monitoring",
+        "cells": [
+          "ECG when indicated",
+          "Check risk and interacting medicines",
+          "ECG/electrolytes when indicated",
+          "Assess fainting or palpitations urgently",
+          "Confirm the follow-up plan"
+        ],
+        "source_ids": [
+          "00823",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal time periods or booked appointments. NCCP does not specify a universal number of weeks between these checks; your team agrees the schedule."
+      },
+      {
+        "label": "Symptoms and practical support",
+        "kind": "monitoring",
+        "cells": [
+          "Discuss lungs, swelling and bowel plan",
+          "Take with food; check supply",
+          "Review symptoms, weight and adherence",
+          "Authorised hold or dose decision",
+          "Continue contact advice and contraception"
+        ],
+        "source_ids": [
+          "00823",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal time periods or booked appointments. NCCP does not specify a universal number of weeks between these checks; your team agrees the schedule."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm eligibility",
+        "when": "Before the first dose",
+        "why": "Treatment depends on a specific tumour alteration and previous treatment.",
+        "clinical": "Confirm validated METex14 result, prior immunotherapy/platinum, no EGFR/ALK alteration, ECOG and CNS status.",
+        "action": "Document the NCCP 00823a indication and agreed prescription.",
+        "source_ids": [
+          "00823"
+        ]
+      },
+      {
+        "title": "Keep tests and symptoms connected",
+        "when": "At scheduled reviews and between visits",
+        "why": "Blood tests can change before symptoms and symptoms can occur between appointments.",
+        "clinical": "Regular FBC, electrolytes, renal/liver tests; ECG and additional tests as indicated. Assess oedema and creatinine rises.",
+        "action": "Confirm who orders tests and reviews results; give an urgent contact plan.",
+        "source_ids": [
+          "00823",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Possible ILD or liver injury",
+        "when": "At any time",
+        "why": "Suspected lung inflammation and significant liver abnormalities can require an immediate hold.",
+        "clinical": "Separate suspected from confirmed ILD; retain all liver qualifiers before assigning permanent discontinuation.",
+        "action": "Urgent clinical assessment and an authorised treatment decision.",
+        "source_ids": [
+          "00823",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Benefit or toxicity changes",
+        "when": "At treatment reviews",
+        "why": "There is no fixed chemotherapy course length.",
+        "clinical": "Continue while benefit is observed; review the 225 mg option or interruption according to the source and other limitations.",
+        "action": "Agree continuation, an authorised hold/restart, or the next treatment plan.",
+        "source_ids": [
+          "00823",
+          "smpc"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "NCCP 00823a covers tepotinib on its own for adults with advanced non-small cell lung cancer carrying a confirmed MET exon 14 skipping change, after immunotherapy and/or platinum chemotherapy. It is not a first-line or adjuvant treatment guide.",
+      "Relative stages, not equal time periods or booked appointments. NCCP does not specify a universal number of weeks between these checks; your team agrees the schedule.",
+      "Avoid pregnancy during treatment. Effective contraception is needed during treatment and for at least one week after the last dose; women using hormonal contraception should also use a barrier method. Men with a partner who could become pregnant should use barrier contraception for the same period. Do not breastfeed during treatment or for at least one week afterwards. Human fertility effects are not known; discuss fertility before starting."
+    ],
+    "code": "00823",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Tepotinib monotherapy: treatment and checks",
+    "setting": "Advanced MET exon 14 skipping NSCLC · after prior systemic therapy",
+    "summary": "The usual starting dose is 450 mg once daily: two 225 mg tablets taken together with food. Treatment is continuous, without a planned rest week, while it is helping. Follow your prescribed dose; the team may use one 225 mg tablet or pause treatment for side effects.",
+    "sources": [
+      {
+        "id": "00823",
+        "title": "NCCP 00823 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6868/823_V2_Tepotinib_Therapy.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Tepmetko product information, updated 08/10/2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/tepmetko-epar-product-information_en.pdf"
+      },
+      {
+        "id": "vision",
+        "title": "VISION long-term follow-up, Mazieres et al., JAMA Oncology 2023",
+        "url": "https://jamanetwork.com/journals/jamaoncology/fullarticle/2805800"
+      },
+      {
+        "id": "vision-2025",
+        "title": "VISION treatment sequencing: ≥3-year follow-up, ESMO 2025 abstract 1995P",
+        "url": "https://www.annalsofoncology.org/article/S0923-7534(25)03539-2/fulltext"
+      },
+      {
+        "id": "vision-2026",
+        "title": "VISION sustained-response subset, ASCO 2026 abstract 8612",
+        "url": "https://ascopubs.org/doi/10.1200/JCO.2026.44.16_suppl.8612"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP SACT Antiemetic Guidance V6 (2025), oral therapy Table 5",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS supportive antiemetics V8: parenteral guidance",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00702": {
+    "stages": [
+      "Before treatment",
+      "First month",
+      "Ongoing daily treatment",
+      "Benefit / toxicity review",
+      "Hold or change"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "cells": [
+          "Confirm ROS1 or NTRK setting and prescription",
+          "Daily capsules without a rest week",
+          "Continue prescribed dose if authorised",
+          "Review benefit and tolerability",
+          "Team authorises hold, restart, switch or stop"
+        ],
+        "source_ids": [
+          "00702",
+          "smpc"
+        ],
+        "note": "Relative stages; daily capsules continue without a planned rest week."
+      },
+      {
+        "label": "Blood tests",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney/liver tests and uric acid",
+          "Repeat at agreed reviews",
+          "Continue regular testing",
+          "Extra tests for symptoms/abnormal results",
+          "Follow recovery and unresolved effects"
+        ],
+        "source_ids": [
+          "00702",
+          "smpc"
+        ],
+        "note": "Relative stages; daily capsules continue without a planned rest week."
+      },
+      {
+        "label": "Heart checks",
+        "kind": "monitoring",
+        "cells": [
+          "ECG/electrolytes; LVEF if symptoms/risk",
+          "ECG/electrolytes after one month",
+          "Further checks periodically as indicated",
+          "Assess new breathlessness/swelling/fainting",
+          "Confirm recovery before restarting"
+        ],
+        "source_ids": [
+          "00702",
+          "smpc"
+        ],
+        "note": "Relative stages; daily capsules continue without a planned rest week."
+      },
+      {
+        "label": "Symptoms and supply",
+        "kind": "monitoring",
+        "cells": [
+          "Cognition, vision, neuropathy and medicine list",
+          "Review symptoms, adherence and supply",
+          "Report thinking/memory, visual or bone changes",
+          "Review interactions and practical support",
+          "Continue contact and reproductive precautions"
+        ],
+        "source_ids": [
+          "00702",
+          "smpc"
+        ],
+        "note": "Relative stages; daily capsules continue without a planned rest week."
+      },
+      {
+        "label": "Cancer assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Validated fusion, stage and prior therapy",
+          "Clinical review",
+          "Scans at Consultant-directed intervals",
+          "Discuss response/progression and preferences",
+          "Agree next treatment or follow-up"
+        ],
+        "source_ids": [
+          "00702",
+          "smpc"
+        ],
+        "note": "Relative stages; daily capsules continue without a planned rest week."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm the setting",
+        "when": "Before starting",
+        "why": "The fusion and previous inhibitor change eligibility.",
+        "clinical": "This adult suite covers entrectinib alone for ROS1-positive advanced NSCLC before any ROS1 inhibitor (00702a), or a separate NTRK gene-fusion solid-tumour indication with no previous NTRK inhibitor and no satisfactory treatment options (00702b). Molecular tests and Irish access criteria must be confirmed. The adult 600 mg schedule does not apply to children.",
+        "action": "Confirm validated testing, MAP approval, prescription and baseline checks.",
+        "source_ids": [
+          "00702",
+          "smpc",
+          "map"
+        ]
+      },
+      {
+        "title": "One-month heart review",
+        "when": "After one month",
+        "why": "QT and electrolytes can change without symptoms.",
+        "clinical": "ECG and electrolytes after one month; then periodic checks as indicated.",
+        "action": "Agree who books the ECG/blood tests and reviews the results.",
+        "source_ids": [
+          "00702",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Ongoing review",
+        "when": "During daily therapy",
+        "why": "Benefit, symptoms and organ function can change.",
+        "clinical": "During treatment: repeat blood count, kidney/liver tests and uric acid at agreed reviews. Repeat ECG/electrolytes after one month, then periodically as indicated. Assess thinking/memory, heart symptoms, vision and bone pain; scans follow the Consultant plan.",
+        "action": "Keep the medicine list current and report symptoms between visits.",
+        "source_ids": [
+          "00702",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Hold or change",
+        "when": "When toxicity/progression requires",
+        "why": "Recovery and restart differ by adverse effect.",
+        "clinical": "NCCP event-specific recovery and dose reductions; no stacked adjustments.",
+        "action": "Follow the written clinician plan; continue follow-up and contraception advice.",
+        "source_ids": [
+          "00702",
+          "smpc"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This adult suite covers entrectinib alone for ROS1-positive advanced NSCLC before any ROS1 inhibitor (00702a), or a separate NTRK gene-fusion solid-tumour indication with no previous NTRK inhibitor and no satisfactory treatment options (00702b). Molecular tests and Irish access criteria must be confirmed. The adult 600 mg schedule does not apply to children.",
+      "The usual adult starting dose is 600 mg by mouth once daily, every day without a planned rest week. Use your prescribed dose. Treatment continues while helping and side effects remain acceptable; there is no fixed number of cycles.",
+      "No fixed three-month cardiac imaging schedule: LVEF is conditional on symptoms/risk. ECG/electrolytes after one month is explicit."
+    ],
+    "code": "00702",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Entrectinib monotherapy · adult: treatment and checks",
+    "setting": "ROS1-positive advanced NSCLC or separate eligible NTRK fusion-positive tumour",
+    "summary": "The usual adult starting dose is 600 mg by mouth once daily, every day without a planned rest week. Use your prescribed dose. Treatment continues while helping and side effects remain acceptable; there is no fixed number of cycles.",
+    "sources": [
+      {
+        "id": "00702",
+        "title": "NCCP 00702 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6770/702_V2_Entrectinib_monotherapy.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Rozlytrek product information · updated 27 March 2025",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/rozlytrek-epar-product-information_en.pdf"
+      },
+      {
+        "id": "ros1-trial",
+        "title": "Fan et al. 2024 · ROS1 integrated analysis",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11733145/"
+      },
+      {
+        "id": "ntrk-trial",
+        "title": "Demetri et al. 2022 · adult NTRK integrated analysis",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9365368/"
+      },
+      {
+        "id": "ntrk-lung-trial",
+        "title": "Cho et al. 2024 · NTRK-positive NSCLC analysis",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38171156/"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetics V8 · parenteral scope",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "oral-antiemetic",
+        "title": "NCCP SACT antiemetic guidance V6 · oral therapy",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "map",
+        "title": "HSE managed access protocols · ROS1 and NTRK",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/medicines-management-programme-mmp/managed-access-protocols/"
+      }
+    ]
+  },
+  "00221": {
+    "stages": [
+      "Before the first dose",
+      "Early treatment review",
+      "Ongoing daily treatment",
+      "Benefit / toxicity review",
+      "Treatment change or completion"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "cells": [
+          "Confirm indication and prescribed dose",
+          "Daily afatinib; no rest week",
+          "Continue the prescribed dose",
+          "Review benefit, harms and dose",
+          "Agree the next treatment or follow-up"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00221",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "Blood count, kidney and liver profile",
+          "Monthly tests; extra checks if unwell",
+          "Continue monthly tests",
+          "Investigate abnormal results or dehydration",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00221",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      },
+      {
+        "label": "Heart and eyes",
+        "cells": [
+          "Heart-pumping test if indicated; eye history",
+          "Report eye symptoms promptly",
+          "Heart tests if clinically indicated",
+          "Cardiac/ophthalmology review if symptoms",
+          "Agree follow-up for unresolved problems"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00221",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "cells": [
+          "Check symptoms, medicines and contact plan",
+          "Report early bowel/skin symptoms",
+          "Review adherence, supply and interactions",
+          "Confirm recovery before any restart",
+          "Continue advice for unresolved symptoms"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00221",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      },
+      {
+        "label": "Cancer assessment",
+        "cells": [
+          "Confirm mutation, stage and previous treatment",
+          "Clinical review",
+          "Scans per Consultant plan",
+          "Discuss response or progression",
+          "Agree follow-up or next treatment"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00221",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm eligibility and the prescription",
+        "when": "Before the first dose",
+        "why": "The mutation and treatment setting determine applicability.",
+        "clinical": "NCCP 00221a covers adults with locally advanced or metastatic NSCLC with an activating EGFR mutation who have not received an EGFR TKI. The separate licensed squamous-cancer indication after platinum treatment is not included in this NCCP regimen or its evidence card.",
+        "action": "Document exact indication, dose and initial investigations.",
+        "source_ids": [
+          "00221"
+        ]
+      },
+      {
+        "title": "Early bowel and skin review",
+        "when": "From the first dose and early reviews",
+        "why": "Early support can prevent dehydration and uncontrolled skin toxicity.",
+        "clinical": "Grade 2 diarrhoea >48 hours or rash >7 days, intolerable grade 2, or grade ≥3: hold until grade 0/1, then discuss a 10 mg reduction.",
+        "action": "Record grade, duration, supportive treatment and recovery; apply medicine-specific thresholds.",
+        "source_ids": [
+          "00221",
+          "smpc"
+        ]
+      },
+      {
+        "title": "New respiratory symptoms",
+        "when": "At any time",
+        "why": "Possible ILD requires urgent investigation.",
+        "clinical": "Hold suspected ILD; permanently stop confirmed disease. A grade alone does not confirm causality.",
+        "action": "Arrange urgent assessment and an authorised medicine plan.",
+        "source_ids": [
+          "00221",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Benefit and next-plan review",
+        "when": "At planned cancer assessments or significant toxicity",
+        "why": "Continuous treatment is not an unlimited automatic prescription.",
+        "clinical": "Continue only while benefit and tolerability remain acceptable.",
+        "action": "Agree continuation, hold, restart, change or follow-up.",
+        "source_ids": [
+          "00221"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "NCCP CrCl-based no-adjustment-expected at <15/dialysis vs EMA indexed-eGFR <15/dialysis treatment not recommended.",
+      "NCCP Child–Pugh C no adjustment expected vs EMA not recommended.",
+      "NCCP and EMA do not specify CTCAE edition in the afatinib dose table.",
+      "Avoid pregnancy. Women who could become pregnant need adequate contraception during treatment and for at least 1 month after the final dose. Do not breastfeed during treatment. Discuss fertility and future pregnancy plans before starting."
+    ],
+    "code": "00221",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Afatinib monotherapy: treatment and checks",
+    "setting": "EGFR-mutated advanced NSCLC · EGFR-TKI-naïve",
+    "summary": "The usual starting dose is 40 mg by mouth once daily, continuously without a planned rest week. Use the dose on your prescription. Treatment continues while it helps and side effects remain acceptable; any dose change is agreed with your team.",
+    "sources": [
+      {
+        "id": "00221",
+        "title": "NCCP 00221 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6936/221_Afatinib.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Giotrif product information (updated 11 May 2026)",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/giotrif-epar-product-information_en.pdf"
+      },
+      {
+        "id": "oral-antiemetic",
+        "title": "NCCP SACT antiemetic guidance V6 (2025), oral tables",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetic medicines V8 (2025); parenteral scope",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "lux3-pfs",
+        "title": "LUX-Lung 3 primary PFS: Sequist et al., JCO 2013",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23816960/"
+      },
+      {
+        "id": "lux3-os",
+        "title": "LUX-Lung 3/6 mature OS: Yang et al., Lancet Oncology 2015",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25589191/"
+      },
+      {
+        "id": "lux7-os",
+        "title": "LUX-Lung 7 mature OS: Paz-Ares et al., Annals of Oncology 2017",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28426106/"
+      }
+    ]
+  },
+  "00565": {
+    "stages": [
+      "Before the first dose",
+      "Early treatment review",
+      "Ongoing daily treatment",
+      "Benefit / toxicity review",
+      "Treatment change or completion"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "cells": [
+          "Confirm indication and prescribed dose",
+          "Daily dacomitinib; no rest week",
+          "Continue the prescribed dose",
+          "Review benefit, harms and dose",
+          "Agree the next treatment or follow-up"
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "00565",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      },
+      {
+        "label": "Blood tests",
+        "cells": [
+          "Blood count, kidney, liver and bone profile",
+          "Repeat at locally agreed reviews",
+          "Continue regular tests",
+          "Extra tests for dehydration or abnormalities",
+          "Follow unresolved abnormalities"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00565",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      },
+      {
+        "label": "Early bowel and skin review",
+        "cells": [
+          "Arrange symptom medicines and skin plan",
+          "Diarrhoea can start in the first 2 weeks",
+          "Report symptoms before the next visit",
+          "Team checks duration, grade and recovery",
+          "Continue support if symptoms persist"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00565",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "cells": [
+          "Check symptoms, medicines and contact plan",
+          "Report early bowel/skin symptoms",
+          "Review adherence, supply and interactions",
+          "Confirm recovery before any restart",
+          "Continue advice for unresolved symptoms"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00565",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      },
+      {
+        "label": "Cancer assessment",
+        "cells": [
+          "Confirm mutation, stage and previous treatment",
+          "Clinical review",
+          "Scans per Consultant plan",
+          "Discuss response or progression",
+          "Agree follow-up or next treatment"
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "00565",
+          "smpc"
+        ],
+        "note": "Relative stages, not equal lengths of time or booked appointments. Daily tablets continue between reviews unless the team tells you to hold. Confirm who arranges and reviews every test."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm eligibility and the prescription",
+        "when": "Before the first dose",
+        "why": "The mutation and treatment setting determine applicability.",
+        "clinical": "NCCP 00565a covers first-line treatment of adults with locally advanced or metastatic NSCLC with an activating EGFR mutation. This is daily dacomitinib alone; it is not an adjuvant regimen or a chemotherapy combination.",
+        "action": "Document exact indication, dose and initial investigations.",
+        "source_ids": [
+          "00565"
+        ]
+      },
+      {
+        "title": "Early bowel and skin review",
+        "when": "From the first dose and early reviews",
+        "why": "Early support can prevent dehydration and uncontrolled skin toxicity.",
+        "clinical": "Grade 2 diarrhoea persisting 24 hours despite treatment or skin toxicity persisting 72 hours despite treatment requires a hold. After recovery to grade ≤1, same versus reduced dose is a Consultant choice.",
+        "action": "Record grade, duration, supportive treatment and recovery; apply medicine-specific thresholds.",
+        "source_ids": [
+          "00565",
+          "smpc"
+        ]
+      },
+      {
+        "title": "New respiratory symptoms",
+        "when": "At any time",
+        "why": "Possible ILD requires urgent investigation.",
+        "clinical": "Hold suspected ILD; permanently stop confirmed disease. A grade alone does not confirm causality.",
+        "action": "Arrange urgent assessment and an authorised medicine plan.",
+        "source_ids": [
+          "00565",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Benefit and next-plan review",
+        "when": "At planned cancer assessments or significant toxicity",
+        "why": "Continuous treatment is not an unlimited automatic prescription.",
+        "clinical": "Continue only while benefit and tolerability remain acceptable.",
+        "action": "Agree continuation, hold, restart, change or follow-up.",
+        "source_ids": [
+          "00565"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "H2-receptor antagonist timing: NCCP ≥6 hours before/10 hours after vs EMA 2 hours before/≥10 hours after. Requires pharmacy reconciliation.",
+      "NCCP v3 published review date 23 June 2026 has passed; retrieved current linked source remains v3, not a claim of independent reapproval.",
+      "Avoid pregnancy. Women who could become pregnant need adequate contraception during treatment and for at least 17 days after the final dose. Do not breastfeed during treatment. Discuss fertility and future pregnancy plans before starting."
+    ],
+    "code": "00565",
+    "release": "0.84.25",
+    "checked": "2026-10-29",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Dacomitinib monotherapy: treatment and checks",
+    "setting": "EGFR-mutated advanced NSCLC · first-line monotherapy",
+    "summary": "The usual starting dose is 45 mg by mouth once daily, continuously without a planned rest week. Use the dose on your prescription; some patients start lower because of liver function. Treatment continues while it helps and side effects remain acceptable.",
+    "sources": [
+      {
+        "id": "00565",
+        "title": "NCCP 00565 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6894/565_V3_Dacomitinib.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Vizimpro product information (updated 17 December 2024)",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/vizimpro-epar-product-information_en.pdf"
+      },
+      {
+        "id": "oral-antiemetic",
+        "title": "NCCP SACT antiemetic guidance V6 (2025), oral tables",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP NCIS antiemetic medicines V8 (2025); parenteral scope",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "archer-pfs",
+        "title": "ARCHER 1050 primary PFS: Wu et al., Lancet Oncology 2017",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28958502/"
+      },
+      {
+        "id": "archer-os",
+        "title": "ARCHER 1050 extended OS: Mok et al., Targeted Oncology 2021",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33331989/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

@@ -19,7 +19,7 @@ for(const c of codes){
  assert(!json('data/breast-library-contexts-v0837.json').regimens[c],c+' must not enter breast indication selector');
 }
 const inventory=json('validation/targeted-lung-v08424/retrospective-inventory.json');assert.equal(inventory.authored_suites,129);assert.equal(inventory.reviewed_cumulative,129);assert.equal(inventory.remaining_review_queue,0);assert.equal(protocols.length,377);assert(read('index.html').includes('Feasibility evaluation build — not for routine clinical use'));
-assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,129);
+assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,134);
 const hashes=json('validation/targeted-lung-v08424/retrospective-hashes.json');for(const [f,h] of Object.entries(hashes.files))assert.equal(digest(f),h.after,f);
 const base=json('validation/targeted-lung-v08424/baseline-hashes.json');for(const [f,h] of Object.entries(base.files)){if(!f.startsWith('tools/')&&!hashes.files[f])assert.equal(digest(f),h,'Outside-scope bundle changed '+f)}
 const pdf=json('validation/targeted-lung-v08424/pdf-validation.json');assert.equal(pdf.documents,49+codes.reduce((n,c)=>n+support[c].length,0));assert.equal(json('validation/targeted-lung-v08424/qr-validation.json').length,28);
@@ -33,7 +33,7 @@ for(const id of ['osimertinib','alectinib','brigatinib','lorlatinib','crizotinib
  assert(consent[id]&&consent[id].risks.length>=3,id+' needs medicine-specific consent risks');
  assert(consent[id].source_basis);assert(/pending|draft/i.test(consent[id].review_status));
 }
-assert.equal(R.codes.length,129);
+assert.equal(R.codes.length,134);
 assert(R.definitionFor('00831').contactCard);
 assert.deepEqual(fs.readFileSync(root+'/patient/00831/contact-card.pdf'),fs.readFileSync(root+'/patient/00831/sactcard.pdf'));
 for(const c of idx.new_codes){

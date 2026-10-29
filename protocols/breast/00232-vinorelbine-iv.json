@@ -12,7 +12,7 @@
     "icd10": "C50",
     "source_document_pages": 4,
     "source_url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf",
-    "sactcheck_encoding_version": "0.84.20",
+    "sactcheck_encoding_version": "0.84.25",
     "treatment_setting": [
       "metastatic"
     ],
@@ -29,7 +29,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08425_independent_review_pending"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -53,7 +53,7 @@
     ],
     "tumour_group": "Breast",
     "gynaecology_subgroup": "ovarian_later_line",
-    "source_checked_date": "2026-10-25",
+    "source_checked_date": "2026-10-29",
     "treatment_context": [
       "gynaecology",
       "ovarian_later_line"
@@ -81,31 +81,35 @@
       "audit_release": "0.84.20",
       "audit_date": "2026-10-25",
       "scope_note": "NCCP and explicitly identified HPRA supplements reconciled. Clinical consultant/pharmacy approval and clinical-use authorisation remain outstanding.",
-      "reconciled_release": "0.84.20",
-      "reconciled_date": "2026-10-25"
+      "reconciled_release": "0.84.25",
+      "reconciled_date": "2026-10-29"
     },
     "canonical_protocol_id": "nccp-00232-v5",
-    "source_version_verified_date": "2026-10-25",
+    "source_version_verified_date": "2026-10-29",
     "source_version_verified": true,
-    "full_suite_release": "0.84.20",
+    "full_suite_release": "0.84.25",
     "assessment_model": "route_specific_vinorelbine",
     "source_pdf_sha256": "2b0ec0725059395abb45d0288118f5a82d7e7b5026401db48dd5233b8b57a704",
     "source_version_date": "2025-11-11",
     "review_date": "2030-11-11",
     "source_supplements": [
       {
-        "title": "HPRA Navelbine IV SmPC, 8 January 2024",
+        "label": "HPRA Navelbine IV SmPC, 8 January 2024",
         "url": "https://assets.hpra.ie/products/Human/26035/Licence_PA0329-011-003_08012024110935.pdf",
-        "checked": "2026-10-25"
-      },
-      {
-        "title": "NCCP antiemetic classification v6",
-        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-        "checked": "2026-10-25"
+        "basis": "Audited product information supplement; NCCP differences remain explicit"
       }
     ],
     "schedule_summary": "30 mg/m² onDays 1 and 8 every 21 days. Consultant may consider 25 mg/m² for poor marrow reserve; the dose is individualised after toxicity. Repeated 21-day cycles until progression/unacceptable toxicity; team review determines continuation.",
-    "source_schedule_interval_label": "Every 21 days"
+    "source_schedule_interval_label": "Every 21 days",
+    "source_text_snapshot_sha256": "8b910196291b9bc78f2b9b7f520494ab9a83a65a403b1487ad77ca65de1129d4",
+    "source_retrieval_method": "Fresh official PDF retrieval, layout text extraction and visual table inspection; source version unchanged",
+    "context_audit_release": "0.84.25",
+    "context_audit_scope": "Lung suite added; existing breast patient materials preserved; canonical dosing shared and regression checked",
+    "indication_mapping_correction": "Explicit breast and lung source codes restored while retaining legacy context IDs. Ovarian code corrected from 00232a to 00232c.",
+    "patient_suite_contexts": [
+      "breast",
+      "lung"
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -490,6 +494,32 @@
       "required": false,
       "input_role": "decision",
       "demo_value": false
+    },
+    "indication_id": {
+      "label": "Selected NCCP tumour indication",
+      "type": "select",
+      "required": false,
+      "input_role": "context",
+      "ui_section": "treatment_context",
+      "demo_value": "",
+      "options": [
+        {
+          "value": "00232-breast",
+          "label": "00232a · Advanced breast cancer."
+        },
+        {
+          "value": "00232-lung",
+          "label": "00232b · Non-small-cell lung cancer (NSCLC)."
+        },
+        {
+          "value": "00232-gyn",
+          "label": "00232c · Platinum-refractory advanced ovarian carcinoma."
+        },
+        {
+          "value": "other",
+          "label": "Other or unresolved indication"
+        }
+      ]
     }
   },
   "required_inputs": [],
@@ -1380,6 +1410,30 @@
           "version": "2024-01-08",
           "checked_date": "2026-10-25"
         }
+      },
+      {
+        "rule_id": "INDICATION_SCOPE_REVIEW",
+        "field": "indication_id",
+        "operator": "==",
+        "value": "other",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vinorelbine"
+          ],
+          "recommendation": "Selected indication is outside or unresolved against this NCCP monotherapy protocol. Confirm source indication, treatment setting and complete regimen; do not substitute a platinum combination or adjuvant course.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "explanation": "Selected indication is outside or unresolved against this NCCP monotherapy protocol. Confirm source indication, treatment setting and complete regimen; do not substitute a platinum combination or adjuvant course.",
+        "source": {
+          "document": "NCCP 00232 v5",
+          "url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf",
+          "page": 1,
+          "version": "5",
+          "checked_date": "2026-10-29"
+        }
       }
     ]
   },
@@ -1399,24 +1453,51 @@
     "bowel_plan": "Prevent constipation with diet and laxatives as needed; regular laxatives when opioids are co-prescribed, with monitoring. Suspected ileus needs urgent assessment.",
     "renal_note": "No routine adjustment, including no adjustment expected for haemodialysis.",
     "monitoring_note": "NCCP FBC, renal and liver tests and neuropathy before each cycle. HPRA supplement adds blood counts on the day of every new administration, including Day 8.",
-    "phase_specific_plan": "patient/00232/supportive-care.html",
+    "phase_specific_plan": "patient/00232/scope.html?asset=supportive-care-selector",
     "source_url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf"
   },
   "indications": [
     {
+      "indication_id": "00232-breast",
+      "code": "00232a",
+      "description": "Advanced breast cancer.",
+      "tumour_groups": [
+        "Breast"
+      ],
+      "source": {
+        "document": "NCCP 00232 v5",
+        "url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf",
+        "page": 1,
+        "checked": "2026-10-29"
+      }
+    },
+    {
       "indication_id": "00232-lung",
-      "description": "Non-small-cell lung cancer.",
+      "code": "00232b",
+      "description": "Non-small-cell lung cancer (NSCLC).",
       "tumour_groups": [
         "Lung"
-      ]
+      ],
+      "source": {
+        "document": "NCCP 00232 v5",
+        "url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf",
+        "page": 1,
+        "checked": "2026-10-29"
+      }
     },
     {
       "indication_id": "00232-gyn",
-      "code": "00232a",
+      "code": "00232c",
       "description": "Platinum-refractory advanced ovarian carcinoma.",
       "tumour_groups": [
         "Gynaecology"
-      ]
+      ],
+      "source": {
+        "document": "NCCP 00232 v5",
+        "url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf",
+        "page": 1,
+        "checked": "2026-10-29"
+      }
     }
   ],
   "treatment_phases": [

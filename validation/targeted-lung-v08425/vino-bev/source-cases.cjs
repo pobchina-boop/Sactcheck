@@ -1,0 +1,53 @@
+'use strict';
+const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),cp=require('child_process');
+const H=__dirname,R=path.resolve(H,'../../..'),integrated=process.argv.includes('--integrated'),mode=integrated?'integrated':'proposed',E=require(R+'/js/assessment-engine'),D=require(R+'/js/protocol-dose-schedule'),V=require(R+'/js/protocol-validator');
+const paths={'00232':'breast/00232-vinorelbine-iv.json','00259':'breast/00259-vinorelbine-oral.json','00215':'shared/00215-bevacizumab-15mgkg.json'};
+const P=Object.fromEntries(Object.entries(paths).map(([c,p])=>[c,JSON.parse(fs.readFileSync(integrated?R+'/protocols/'+p:H+'/proposed/'+path.basename(p)))])),A=JSON.parse(fs.readFileSync(H+'/authoring.json')).regimens,rows=[];
+const clinical=r=>r.findings.filter(f=>!f.domainAssessment&&!/^PARTIAL_/.test(f.ruleId||''));
+function check(c,name,fn){try{fn();rows.push({code:c,name,pass:true});}catch(e){rows.push({code:c,name,pass:false,error:e.message});}}
+function run(c,name,input,fn){check(c,name,()=>{const r=E.assess(P[c],input),m=D.buildModificationModel(P[c],r);assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);assert.notEqual(r.actionType,'proceed');fn(r,m,clinical(r));});}
+const has=(id,type)=>(r,m,f)=>assert(f.some(q=>q.ruleId===id&&(!type||q.actionType===type)),`Expected ${id}/${type}: ${f.map(q=>q.ruleId)}`);
+const absent=(...ids)=>(r,m,f)=>assert(!f.some(q=>ids.includes(q.ruleId)),`Unexpected ${ids}`);
+for(const c of Object.keys(P)){
+ run(c,'Blank assessment cannot clear treatment',{},r=>assert.equal(r.actionType,'incomplete'));
+ for(const k of Object.keys(P[c].input_definitions))for(const val of [null,''])run(c,'Omitted '+k+' '+String(val),{[k]:val},(r,m,f)=>assert.equal(f.length,0));
+ check(c,'Source and governance identity',()=>{assert(V.validate(P[c],{strict:true}).valid);assert.equal(P[c].metadata.context_audit_release,'0.84.25');assert.equal(P[c].metadata.source_checked_date,'2026-10-29');assert.equal(P[c].metadata.source_pdf_sha256.length,64);for(const sec of ['validation','encoding_maturity'])for(const k of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(P[c].metadata[sec][k],false);assert.deepEqual(P[c].required_inputs,[]);});
+ check(c,'Lung authoring complete and exact references resolve',()=>{const a=A[c],p=a.patient;for(const k of ['patient','clinical','evidence','journey','selector','support_plans','route','risk','protocol_metadata'])assert(Object.hasOwn(a,k));assert.equal(p.context_id,'lung');assert.equal(p.suite_release,'0.84.25');assert.deepEqual(p.evidence.metrics,[]);assert(!a.selector.include_in_breast_selector);assert(a.selector.include_in_lung_selector);assert(p.anatomy.every(q=>q.length===6));assert(a.journey.lanes.every(q=>q.cells.length===a.journey.stages.length));assert(p.monitoring_schedule.rows.every(q=>q.cells.length===p.monitoring_schedule.columns.length));const ids=new Set(p.sources.map(q=>q.id));function walk(o){if(Array.isArray(o))return o.forEach(walk);if(!o||typeof o!=='object')return;for(const [k,v]of Object.entries(o)){if(k==='source_ids'||k.endsWith('_source_ids'))v.forEach(id=>assert(ids.has(id),id));else walk(v);}}walk(p);walk(a.journey);});
+ check(c,'No substituted breast efficacy',()=>{const t=JSON.stringify(A[c]);assert(!/GEICAM|Freyer|E2100|NORBREAST/.test(t));assert(!/HER2-negative metastatic breast/.test(t));});
+ check(c,'Canonical legacy dose rules preserved exactly',()=>{const base=JSON.parse(fs.readFileSync(H+'/baseline-canonical.json')).regimens[c];for(const old of base.rule_engine.rules){const now=P[c].rule_engine.rules.find(q=>q.rule_id===old.rule_id);assert.deepEqual(now,old,old.rule_id);}assert.deepEqual(P[c].treatment_phases,base.treatment_phases);assert.equal(P[c].protocol_id,base.protocol_id);});
+}
+for(const c of ['00232','00259']){
+ check(c,'All exact source indication codes and legacy aliases',()=>{const ids=P[c].indications;assert.equal(ids.find(q=>q.indication_id===c+'-breast').code,c+'a');assert.equal(ids.find(q=>q.indication_id===c+'-lung').code,c+'b');if(c==='00232')assert.equal(ids.find(q=>q.indication_id==='00232-gyn').code,'00232c');});
+ for(const ctx of [c+'-breast',c+'-lung',...(c==='00232'?['00232-gyn']:[])]){
+  run(c,'Context alone no invented clearance '+ctx,{indication_id:ctx},absent('INDICATION_SCOPE_REVIEW'));
+  for(const anc of [.499,.5,.99,.995,1,1.499,1.5])run(c,'ANC source threshold survives '+ctx+' '+anc,{indication_id:ctx,anc},anc<1.5?has(c==='00232'?'ANC_EXCLUSION':'ANC_DELAY'):absent(c==='00232'?'ANC_EXCLUSION':'ANC_DELAY'));
+  for(const platelets of [74.99,75,99,99.5,100])run(c,'Platelet source threshold survives '+ctx+' '+platelets,{indication_id:ctx,platelets},platelets<100?has(c==='00232'?(platelets<75?'PLT_EXCLUSION':'PLT_SMPC_CONFLICT'):'PLT_DELAY'):absent(c==='00232'?'PLT_SMPC_CONFLICT':'PLT_DELAY'));
+  for(const field of ['new_unexplained_dyspnoea','suspected_ileus','current_febrile_neutropenia'])run(c,'Independent urgent signal in '+ctx+' '+field,{indication_id:ctx,[field]:true},has({'new_unexplained_dyspnoea':'PULMONARY','suspected_ileus':'ILEUS','current_febrile_neutropenia':'CURRENT_FN'}[field],'withhold'));
+ }
+ run(c,'Unmapped indication needs specialist review',{indication_id:'other'},has('INDICATION_SCOPE_REVIEW','consultant_review'));
+ run(c,'Indication true cannot erase scope rejection',{indication_id:'other',indication_eligible:true},has('INDICATION_SCOPE_REVIEW','consultant_review'));
+ run(c,'Known lung context cannot erase failed eligibility',{indication_id:c+'-lung',indication_eligible:false},has('INDICATION_REVIEW','consultant_review'));
+}
+check('00232','IV evidence matches schedule but not fixed duration',()=>{const a=A['00232'];assert.equal(a.evidence.trial,'ELVIS');assert.equal(a.evidence.endpoints[0].intervention_value,28);assert.equal(a.evidence.endpoints[0].comparator_value,21);assert(/six cycles/i.test(a.evidence.applicability));assert(/until.*progression/i.test(a.evidence.applicability));assert.equal(a.patient.cycle_days,21);assert.deepEqual(P['00232'].treatment_phases[0].administration[0].days,[1,8]);assert(/Day 8/.test(a.patient.monitoring_summary));});
+check('00259','Oral evidence no IV survival borrowing',()=>{const a=A['00259'];assert(/Single-arm/.test(a.evidence.comparison));assert.equal(a.evidence.endpoints[0].endpoint,'ORR');assert(/6 of 56/.test(a.evidence.endpoints[0].result_text));assert.equal(a.patient.cycle_days,7);assert.equal(a.risk.level,'oral_moderate_high');assert.equal(a.support_plans[0].medicines.length,1);assert(/once weekly|ONCE WEEKLY/i.test(a.patient.schedule_summary));assert(/vomit|vomited/i.test(a.patient.administration_text));});
+for(const ctx of ['metastatic_breast','nonsquamous_nsclc_platinum','egfr_mutant_nsclc_erlotinib']){
+ for(const n of [1.999,2,2.001,4,4.001])run('00215','24-hour protein '+ctx+' '+n,{indication_id:ctx,urine_protein_g_24h:n},n>4?has('PROTEIN_OVER_4','discontinue'):n>2?has('PROTEIN_2_TO_4','withhold'):has('PROTEIN_LE2','proceed_with_caution'));
+ run('00215','Lung/breast cannot inherit ovarian cap '+ctx,{indication_id:ctx,cycle_number:23,ovarian_months_on_treatment:16},absent('OVARIAN_CYCLE_LIMIT','OVARIAN_DURATION_LIMIT','OVARIAN_CYCLE1'));
+ run('00215','Lung/breast bleeding independent '+ctx,{indication_id:ctx,recent_haemoptysis_over_2_5_ml:true},has('RECENT_HAEMOPTYSIS','contraindicated'));
+ run('00215','Partner review retained '+ctx,{indication_id:ctx,treatment_context:'combination',partner_sact_assessed_separately:false},(r,m,f)=>assert(f.some(q=>/partner/i.test(q.action?.recommendation||''))));
+}
+for(const ctx of ['nonsquamous_nsclc_platinum','egfr_mutant_nsclc_erlotinib']){
+ run('00215','Squamous exclusion '+ctx,{indication_id:ctx,nsclc_nonsquamous:false},has('NSCLC_HISTOLOGY','consultant_review'));
+ run('00215','First-line context '+ctx,{indication_id:ctx,first_line_metastatic:false},has('FIRST_LINE_SCOPE','consultant_review'));
+}
+run('00215','EGFR mandatory in erlotinib context',{indication_id:'egfr_mutant_nsclc_erlotinib',egfr_activating_mutation:false},has('NSCLC_EGFR','consultant_review'));
+run('00215','No EGFR condition imposed on platinum context',{indication_id:'nonsquamous_nsclc_platinum',egfr_activating_mutation:false},absent('NSCLC_EGFR'));
+run('00215','No lung histology test imposed on breast',{indication_id:'metastatic_breast',nsclc_nonsquamous:false},absent('NSCLC_HISTOLOGY'));
+check('00215','Unspecified NCCP grading is not labelled CTCAE v5',()=>{for(const k of ['hypertension_grade','fistula_grade','thromboembolic_event_grade','haemorrhage_grade']){const d=P['00215'].input_definitions[k];assert(!d.ctcae_version);assert(d.grading_source_url);assert(/edition/.test(d.source_grading_note));}});
+check('00215','Bevacizumab component and two pathways explicit',()=>{const a=A['00215'];assert.equal(a.patient.agents.length,1);assert.equal(a.patient.agents[0].id,'bevacizumab');assert(/up to six cycles/.test(a.patient.schedule_summary));assert(/erlotinib/i.test(a.patient.schedule_summary));assert(/no automatic six-cycle switch/.test(JSON.stringify(a.patient)));assert.equal(a.support_plans[0].medicines.length,0);assert(/partner/.test(a.support_plans[0].additional_support.join(' ')));assert.equal(a.evidence.endpoints.length,3);assert(/No statistically significant/.test(a.evidence.endpoints[2].interpretation));});
+// Re-run the previously source-reconciled canonical breast dose boundary cases against each proposal.
+const regressions=[];
+for(const file of ['vinorelbine-regression.cjs','bevacizumab-regression.cjs']){
+ const result=cp.spawnSync(process.execPath,[path.join(H,file),...(integrated?['--integrated']:[])],{cwd:R,encoding:'utf8'});const prefix=file.replace('.cjs','');const report=JSON.parse(fs.readFileSync(path.join(H,prefix+'-'+mode+'-results.json')));regressions.push({file,total:report.total,passed:report.passed,failed:report.failed});check('all','Preserved source regression '+file,()=>assert.equal(result.status,0,result.stdout+result.stderr));
+}
+const failed=rows.filter(q=>!q.pass),report={release:'0.84.25',checked:'2026-10-29',mode,clinical_use_authorised:false,new_context_cases:rows.length,new_context_passed:rows.length-failed.length,total:rows.length+regressions.reduce((n,q)=>n+q.total,0),passed:rows.length-failed.length+regressions.reduce((n,q)=>n+q.passed,0),failed:failed.length+regressions.reduce((n,q)=>n+q.failed,0),regressions,cases:rows};fs.writeFileSync(path.join(H,integrated?'integrated-results.json':'source-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({total:report.total,passed:report.passed,failed:report.failed,failures:failed},null,2));if(report.failed)process.exitCode=1;

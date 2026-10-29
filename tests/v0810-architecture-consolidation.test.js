@@ -14,7 +14,7 @@ assert.strictEqual(app.validation_module_release,'0.68.0');
 
 const registry=require('../js/patient-asset-registry-v0810.js');
 assert.strictEqual(registry.release,pkg.version);
-assert.strictEqual(registry.codes.length,129);
+assert.strictEqual(registry.codes.length,134);
 assert.strictEqual(registry.publicUrl('00568','portal'),'https://sactcheck.com/patient/00568/');
 assert.strictEqual(registry.publicUrl('00568','guide'),'https://sactcheck.com/patient/00568/guide.pdf');
 assert.strictEqual(registry.publicUrl('00568','passport'),'https://sactcheck.com/patient/00568/passport.pdf');

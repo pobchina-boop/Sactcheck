@@ -4,7 +4,7 @@ const assert=require('assert'),fs=require('fs'),path=require('path'),vm=require(
 const root=path.resolve(__dirname,'..');
 function read(f){return JSON.parse(fs.readFileSync(path.join(root,f),'utf8'));}
 function groups(d){const m=d.metadata||{},o=[];if(typeof m.tumour_group==='string')o.push(m.tumour_group);for(const v of m.tumour_groups||[])if(!o.includes(v))o.push(v);return o;}
-function demo(d){if(d.demo_value!==undefined&&d.demo_value!==null)return d.demo_value;if(d.type==='select')return d.options?.[0]?.value??'';if(d.type==='boolean')return false;if(d.type==='number')return Number.isFinite(Number(d.min))?Number(d.min):0;return 'test';}
+function demo(d){if(d.demo_value!==undefined&&d.demo_value!==null&&d.demo_value!=='')return d.demo_value;if(d.type==='select')return d.options?.[0]?.value??'';if(d.type==='boolean')return false;if(d.type==='number')return Number.isFinite(Number(d.min))?Number(d.min):0;return 'test';}
 const index=read('protocols/index.json');assert.strictEqual(index.protocol_count,377);assert.strictEqual(index.protocols.length,377);assert.strictEqual(new Set(index.protocols.map(x=>x.id)).size,377);
 const all=index.protocols.map(entry=>({entry,data:read(entry.path)}));
 const net=all.filter(x=>groups(x.data).includes('Neuroendocrine'));const ta=all.filter(x=>groups(x.data).includes('Tumour Agnostic Therapy'));

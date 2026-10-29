@@ -45,7 +45,7 @@ function definitionEntries(protocol) {
 }
 
 function demoValue(definition) {
-  if (definition.demo_value !== undefined && definition.demo_value !== null) return String(definition.demo_value);
+  if (definition.demo_value !== undefined && definition.demo_value !== null && definition.demo_value !== '') return String(definition.demo_value);
   if (definition.type === 'select') return String(definition.options?.[0]?.value ?? '');
   if (definition.type === 'boolean') return 'false';
   if (definition.type === 'number') return String(definition.min !== undefined && Number(definition.min) > 0 ? definition.min : 0);
@@ -93,7 +93,7 @@ for (const { file, data } of prostate) {
     }
     if (!olaparibReference && (definition.ctcae_version || /(?:^|_)grade(?:$|_)/i.test(field))) {
       assert.strictEqual(definition.type, 'select', `${code}/${field} CTCAE input must be a selector.`);
-      assert.strictEqual(definition.ctcae_version, '5.0', `${code}/${field} lacks CTCAE v5.0 metadata.`);
+      if(code==='00203'){assert(!definition.ctcae_version);assert(definition.grading_source_label&&definition.source_grading_note);assert.equal(definition.grading_source_url,data.metadata.source_url);}else assert.strictEqual(definition.ctcae_version, '5.0', `${code}/${field} lacks CTCAE v5.0 metadata.`);
       assert(definition.assessment_guidance, `${code}/${field} lacks practical grading guidance.`);
       const options = definition.options || [];
       if(code==='00588'&&field==='febrile_neutropenia_grade')assert.deepStrictEqual(options.map(x=>Number(x.value)),[0,3,4], 'CTCAE v5 febrile neutropenia has no grades 1 or 2');

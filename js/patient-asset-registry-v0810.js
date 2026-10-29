@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.24';
-  const CONTENT_RELEASE='0.84.24';
+  const RELEASE='0.84.25';
+  const CONTENT_RELEASE='0.84.25';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00734':{"title": "weekly carboplatin AUC 2 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -66,6 +66,11 @@
     '00562':{"title": "Brigatinib Therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00570':{"title": "Lorlatinib therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00243':{"title": "Crizotinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00340':{"title": "Ceritinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00823':{"title": "Tepotinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00702':{"title": "Entrectinib monotherapy · adult", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00221':{"title": "Afatinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00565':{"title": "Dacomitinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00790':{"title": "TRAIN-2 with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00789':{"title": "TCHP with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00785':{"title": "Phesgo maintenance", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -149,6 +154,14 @@
     '00857':{title:"Pembrolizumab + carboplatin/paclitaxel \u2192 AC",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true}
   });
   const CODES=Object.freeze(Object.keys(DEFINITIONS));
+  const CONTEXT_CODES=Object.freeze(['00203','00226','00232','00259','00215']);
+  const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
+
+  function contextFor(value,explicit=''){
+    if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
+    const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
+    return ['lung','breast'].includes(selected)?selected:'';
+  }
 
   function text(v){return String(v??'').trim();}
   function normaliseCode(value){
@@ -164,8 +177,14 @@
     return code&&DEFINITIONS[code]?Object.freeze({code,...DEFINITIONS[code]}):null;
   }
   function hasDedicated(value){return Boolean(definitionFor(value));}
-  function relativePath(value,asset='portal'){
+  function relativePath(value,asset='portal',context=''){
     const def=definitionFor(value); if(!def) return null;
+    if(CONTEXT_CODES.includes(def.code)){
+      const selected=contextFor(value,context);
+      if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
+      if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
+      return `patient/${def.code}/${selected==='lung'?'lung/':''}${CONTEXT_ASSETS[asset]}`;
+    }
     if(def.scopeGuard) return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
     if(asset==='supportive-care-selector') return def.phaseSupport?`patient/${def.code}/supportive-care.html`:null;
     if(asset==='longitudinal') return def.longitudinal?`patient/${def.code}/treatment-journey.html`:null;
@@ -190,6 +209,7 @@
   }
   function compatibilityUrl(value,asset='portal'){
     const def=definitionFor(value); if(!def) return null;
+    if(CONTEXT_CODES.includes(def.code))return publicUrl(value,asset);
     if(def.scopeGuard) return publicUrl(value,asset);
     const suffix=asset==='guide'?'guide.pdf':asset==='passport'?'passport.pdf':asset==='contact-card'&&def.contactCard?'contact-card.pdf':asset==='sact-card'&&def.sactCard?'sactcard.pdf':'';
     return new URL(`docs/patient/${def.code}/${suffix}`,PUBLIC_ORIGIN).href;
@@ -238,7 +258,7 @@
     publicOrigin:PUBLIC_ORIGIN,
     codes:CODES,
     definitions:DEFINITIONS,
-    normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,
+    normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,contextFor,contextCodes:CONTEXT_CODES,
     publicUrl,runtimeUrl,compatibilityUrl,fallbackUrl,publicPortalUrl,
     guideUrl,passportUrl,sactCardUrl,openPortal,openGuide,openPassport,openSactCard
   });

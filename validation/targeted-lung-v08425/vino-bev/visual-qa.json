@@ -1,0 +1,80 @@
+{
+  "release": "0.84.25",
+  "checked": "2026-10-29",
+  "status": "pass",
+  "scope": [
+    "00232/lung",
+    "00259/lung",
+    "00215/lung"
+  ],
+  "pdf_count": 24,
+  "page_count": 45,
+  "method": "Rendered every original PDF page with pdftoppm at 125 dpi; viewed all 12 contact sheets (45 pages), then full-resolution concern pages. After root fixes, regenerated four affected PDFs (10 pages), viewed all 10 pages in contact sheets and full-resolution guide page 1 / journey page 3. Read HTML/CSS to trace the original hidden paragraphs. No shared content edited. All remaining 20 PDF files were also re-rendered because their binary hashes changed: 34 pages were pixel-identical to the original visual review, and the one changed bevacizumab anatomy page was inspected at full resolution. Contact sheets regenerated to match final files.",
+  "manifest": "visual-qa-manifest.json",
+  "issues": [
+    {
+      "id": "VINORELBINE_GUIDE_ANATOMY_OVERLAP",
+      "status": "resolved_verified",
+      "severity": "release_blocker",
+      "files": [
+        "patient/00232/lung/guide.pdf",
+        "patient/00259/lung/guide.pdf"
+      ],
+      "pages": [
+        1
+      ],
+      "finding": "Anatomy cards 1 and 2 have fixed heights shorter than their paragraphs. Their final lines extend beneath the following row; the end of the card 2 ileus / do not simply take extra laxatives message is covered. Confirmed on full-resolution renders.",
+      "suggested_fix": "Shorten the card summaries while retaining complete guidance elsewhere, or reflow/increase card height without shrinking below readable size. Regenerate both PDFs and visually review page 1.",
+      "resolution": "Shortened anatomy card 1/2 summaries now fit fully inside both guide cards with readable text; urgent infection and bowel obstruction/laxative actions remain visible. Connector lines are visible above the anatomical image and reach the corresponding numbered markers. Both two-page guides rechecked in full."
+    },
+    {
+      "id": "CONTEXT_JOURNEY_HIDDEN_EXPLANATIONS",
+      "status": "resolved_verified",
+      "severity": "release_blocker",
+      "files": [
+        "patient/00259/lung/treatment-journey.pdf",
+        "patient/00215/lung/treatment-journey.pdf"
+      ],
+      "pages": [
+        3
+      ],
+      "finding": "What each check is for cards print only titles, timing and source links. All why and Ask / act paragraphs exist in HTML but are hidden from the PDF by inherited endocrine print CSS.",
+      "cause": "assets/patient/endocrine-v0842.css:16 .endocrine-suite.suite-journey .journey-milestone>div p:not(.journey-sources){display:none}",
+      "suggested_fix": "Scoped v25 print override to restore explanatory paragraphs; regenerate both PDFs and review pagination and page 3.",
+      "resolution": "All three milestone why and Ask / act paragraphs are now visibly printed in both journey PDFs. Both monitoring tables remain present on pages 1 and 2; page 3 fits without overlap/clipping. Both three-page journeys rechecked in full."
+    }
+  ],
+  "other_observations": [
+    "All 24 PDFs use the intended lung context and route in visible titles and instructions.",
+    "IV vinorelbine remains Days 1 and 8 every 21 days, oral vinorelbine remains once weekly with conditional escalation after the first 3 administrations.",
+    "Bevacizumab remains a 15 mg/kg lung component; platinum up-to-six-cycle combination and erlotinib continuation pathways remain distinct.",
+    "No inherited breast efficacy claims, ovarian 15-month cap, wrong partner prescription or automatic restart instruction noted.",
+    "Consent, logistics, passport, supportive-care and pocket-card pages show no visible overlap or clipping in this review.",
+    "Final review passes for all 24 PDF files / 45 pages. All current file hashes match the final manifest; no open visual defects remain. This is visual/software QA, not independent clinical approval."
+  ],
+  "independent_clinical_review": false,
+  "consultant_reviewed": false,
+  "oncology_pharmacy_reviewed": false,
+  "clinical_use_authorised": false,
+  "recheck": {
+    "date": "2026-10-29",
+    "pdf_count": 4,
+    "page_count": 10,
+    "affected_files": [
+      "patient/00232/lung/guide.pdf",
+      "patient/00259/lung/guide.pdf",
+      "patient/00259/lung/treatment-journey.pdf",
+      "patient/00215/lung/treatment-journey.pdf"
+    ],
+    "manifest_matches_current_files": true,
+    "remaining_visual_defects": [],
+    "additional_render_check": {
+      "pdf_count": 20,
+      "pages": 35,
+      "pixel_identical_pages": 34,
+      "changed_pages": 1,
+      "changed_page": "patient/00215/lung/guide.pdf page 1",
+      "result": "Rechecked the changed bevacizumab anatomy page at full resolution; all six connectors visible to corresponding markers, no clipping or overlap."
+    }
+  }
+}
