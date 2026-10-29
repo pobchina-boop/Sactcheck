@@ -72,6 +72,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00243": "oral_moderate_high", // v0.84.24: NCCP 00243 v7, oral crizotinib risk
+    "00382": "oral_moderate_high", // v0.84.24: NCCP 00382 v4, oral trifluridine/tipiracil risk
     "00319": "high", // v0.84.23: carboplatin AUC5, oral etoposide does not remove Day 1 high risk
     "00318": "high", // v0.84.22 carboplatin AUC5
     "00207": "low",
@@ -114,6 +116,8 @@ for (const record of index.protocols || []) {
   if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
   else if (baseline) {
     const correctionByPath = {
+      "lung/00243-crizotinib-monotherapy.json": "oral_moderate_high",
+      "gastrointestinal/00382-trifluridine-tipiracil.json": "oral_moderate_high",
       "lung/00319-carboplatin-and-oral-etoposide-therapy-21-day.json": "high",
       "lung/00318-pemetrexed-and-carboplatin-therapy.json": "high",
       "gastrointestinal/00732-cetuximab-therapy-14-days.json": "low",

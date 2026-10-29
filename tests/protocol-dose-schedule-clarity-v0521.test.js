@@ -52,9 +52,10 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.19 adds structured talazoparib and neratinib schedules; combination schedules are corrected in place.
 // v0.84.22 adds seven structured schedules; three existing schedules are corrected.
 // v0.84.23 adds four structured schedules; two IV platinum/etoposide schedules are reconciled.
-assert.strictEqual(usefulCoverage, 159);
-assert.strictEqual(scheduleCoverage, 158);
-assert.strictEqual(doseLevelCoverage, 50);
+// v0.84.24 adds five targeted lung schedules and the missing Lonsurf phase.
+assert.strictEqual(usefulCoverage, 164);
+assert.strictEqual(scheduleCoverage, 164);
+assert.strictEqual(doseLevelCoverage, 53);
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');

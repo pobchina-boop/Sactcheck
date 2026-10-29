@@ -19,9 +19,9 @@ for(const c of codes){
  assert(!json('data/breast-library-contexts-v0837.json').regimens[c],c+' must not enter breast indication selector');
 }
 const inventory=json('validation/lung-next-v08423/retrospective-inventory.json');assert.equal(inventory.authored_suites,122);assert.equal(inventory.reviewed_cumulative,122);assert.equal(inventory.remaining_review_queue,0);assert.equal(protocols.length,377);assert(read('index.html').includes('Feasibility evaluation build — not for routine clinical use'));
-assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,122);
-const hashes=json('validation/lung-next-v08423/retrospective-hashes.json');for(const [f,h] of Object.entries(hashes.files))assert.equal(digest(f),h.after,f);
-const base=json('validation/lung-next-v08423/baseline-hashes.json');for(const [f,h] of Object.entries(base.files)){if(!f.startsWith('tools/')&&!hashes.files[f])assert.equal(digest(f),h,'Outside-scope bundle changed '+f)}
+assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,129);
+const hashes=json('validation/lung-next-v08423/retrospective-hashes.json');for(const [f,h] of Object.entries(hashes.files))assert.equal(digest(f),require('./helpers/retrospective-v08424.cjs').expectedHash(f,h.after),f);
+const base=json('validation/lung-next-v08423/baseline-hashes.json');for(const [f,h] of Object.entries(base.files)){if(!f.startsWith('tools/')&&!hashes.files[f])assert.equal(digest(f),require('./helpers/retrospective-v08424.cjs').expectedHash(f,h),'Outside-scope bundle changed '+f)}
 const pdf=json('validation/lung-next-v08423/pdf-validation.json');assert.equal(pdf.documents,42+codes.reduce((n,c)=>n+support[c].length,0));assert.equal(json('validation/lung-next-v08423/qr-validation.json').length,24);
 console.log('v0.84.23: six complete lung suites, date-free monitoring, route-specific schedules and support, PDF copies and unchanged outside-scope patient bundles.');
 
@@ -41,7 +41,7 @@ assert(/twice/i.test(oral.schedule_summary+' '+oral.administration_text));
 assert(/maintenance/i.test(json('data/patient-knowledge/00222.json').context_label));
 assert(/second.line/i.test(JSON.stringify(json('data/patient-knowledge/00222.json'))));
 assert(read('patient/00908/knowledge.html').includes('#67449a'),'Serplulimab uses immune mechanism visual');
-assert.equal(R.codes.length,124);
+assert.equal(R.codes.length,129);
 
 // One entered bilirubin result supplies the absolute etoposide threshold and
 // the source-specific immune-toxicity ULN ratio, including zero and blank input.

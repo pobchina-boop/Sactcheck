@@ -159,7 +159,7 @@
       const pieces = [
         context.intent_label,
         context.duration?.label,
-        Metadata.formatInterval(context.cycle_length_days)
+        context.source_schedule_interval_label || Metadata.formatInterval(context.cycle_length_days)
       ].filter(Boolean);
       return pieces.length ? pieces.join(" · ") : null;
     }).filter(Boolean);

@@ -645,6 +645,7 @@
 
   function apply(protocol){
     const code=codeOf(protocol);
+    if(code==="00382" && protocol.metadata?.full_suite_release==="0.84.24") return protocol;
     if(code==="00382") return reconcileLonsurf(protocol);
     if(code==="00525") return reconcileRibociclib(protocol,"metastatic");
     if(code==="00892") return reconcileRibociclib(protocol,"adjuvant");

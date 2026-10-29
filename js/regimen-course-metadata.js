@@ -327,6 +327,7 @@
     const duration = durationFromStructuredObject(context) || durationFromText(context?.duration_text || context?.durationText || "");
     const intent = normaliseIntent(context?.intent || context?.treatment_intent || context?.treatmentIntent);
     const cycleLengthDays = cycleLengthFromObject(context);
+    const sourceScheduleLabel = cleanText(context?.source_schedule_interval_label);
     const explicitUnresolved = asArray(context?.requires_review || context?.unresolved).map(cleanText).filter(Boolean);
     return {
       id: cleanText(context?.id || context?.context_id || context?.indication_id || fallbackId),
@@ -334,12 +335,13 @@
       intent,
       intent_label: intentLabel(context?.intent_label || context?.intentLabel || intent),
       cycle_length_days: cycleLengthDays,
+      source_schedule_interval_label: sourceScheduleLabel || null,
       duration,
       provenance: cleanText(context?.provenance || context?.source) || "canonical",
       unresolved: unique([
         ...explicitUnresolved,
         ...(intent ? [] : ["intent"]),
-        ...(cycleLengthDays ? [] : ["cycle_length"]),
+        ...(cycleLengthDays || sourceScheduleLabel ? [] : ["cycle_length"]),
         ...(duration ? [] : ["duration"])
       ])
     };
@@ -434,7 +436,7 @@
   function summarise(protocol) {
     const contexts = deriveContexts(protocol);
     const intentValues = contexts.map(context => context.intent_label || null);
-    const intervalValues = contexts.map(context => cleanText(protocol?.metadata?.source_schedule_interval_label) || formatInterval(context.cycle_length_days) || null);
+    const intervalValues = contexts.map(context => cleanText(context.source_schedule_interval_label || protocol?.metadata?.source_schedule_interval_label) || formatInterval(context.cycle_length_days) || null);
     const durationValues = contexts.map(context => context.duration?.label || null);
     const intents = unique(intentValues);
     const intervals = unique(intervalValues);
@@ -483,6 +485,7 @@
         if (context.intent) output.intent = context.intent;
         if (context.intent_label) output.intent_label = context.intent_label;
         if (context.cycle_length_days) output.cycle_length_days = context.cycle_length_days;
+        if (context.source_schedule_interval_label) output.source_schedule_interval_label = context.source_schedule_interval_label;
         if (context.duration) {
           output.duration_type = context.duration.type;
           if (context.duration.planned_cycles) output.planned_cycles = context.duration.planned_cycles;

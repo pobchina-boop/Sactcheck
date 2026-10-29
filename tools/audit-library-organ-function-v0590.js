@@ -40,6 +40,7 @@ const records = files(protocolRoot).filter(file => !file.includes(`${path.sep}_t
   const m = protocol.metadata || {};
   const code = String(m.nccp_regimen_code || '');
   const rec = m.organ_function_reconciliation || null;
+  const migration24=m.sactcheck_encoding_version==='0.84.24'&&require('../validation/targeted-lung-v08424/organ-function-migrations.json').records[code];
   const inScope = reconciledCodes.has(code);
   const inputs = organInputs(protocol);
   const rules = organRules(protocol);
@@ -49,11 +50,11 @@ const records = files(protocolRoot).filter(file => !file.includes(`${path.sep}_t
   const superseded = v0836 || (['00586','00623'].includes(code) && ['0.83.4','0.84.21'].includes(m.validation?.audit_release)) || (code === '00225' && ['0.83.5','0.84.21'].includes(m.validation?.audit_release));
   if (inScope) {
     if (!rec) issues.push('missing_reconciliation_metadata');
-    if (rec?.release !== (code === '00205' ? '0.84.1' : '0.59.0')) issues.push('wrong_reconciliation_release');
+    if (rec?.release !== (migration24&&code==='00243'?'0.84.24':code === '00205' ? '0.84.1' : '0.59.0')) issues.push('wrong_reconciliation_release');
     if (rec?.source_reconciled !== true) issues.push('source_reconciled_not_true');
-    if (m.encoding_maturity?.level !== (v08422 ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding')) issues.push('wrong_encoding_maturity');
-    if (m.validation?.rule_level_source_reconciliation_status !== (v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590')) issues.push('wrong_validation_status');
-    if (rec?.resolution === 'structured_rules' && (v08422 ? !(code === '00222' ? ['PEMETREXED_CRCL_LT45','SEVERE_HEPATIC_IMPAIRMENT'] : ['PEMETREXED_CRCL_LT45','CARBO_GFR_20_OR_LESS','CARBO_GFR_20_30','SEVERE_HEPATIC_IMPAIRMENT']).every(id=>protocol.rule_engine.rules.some(r=>r.rule_id===id && r.source?.url===m.source_url)) : superseded ? !(v0836 ? (['00207','00732'].includes(code)?['ORGAN_REVIEW']:['00213','00330','00331'].includes(code)?['RENAL_IRI','BILI_CI']:['FU_HEPATIC_CI','FU_HEPATIC_EQUALITY']) : ['RENAL_LT30','HEPATOTOXICITY']).every(id => protocol.rule_engine.rules.some(r=>r.rule_id===id && r.source?.url===m.source_url && r.source?.page)) : !rules.some(id => String(id).startsWith('OF590_')))) issues.push('structured_resolution_without_v0590_rule');
+    if (m.encoding_maturity?.level !== (v08422||migration24 ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding')) issues.push('wrong_encoding_maturity');
+    if (m.validation?.rule_level_source_reconciliation_status !== (migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590')) issues.push('wrong_validation_status');
+    if (rec?.resolution === 'structured_rules' && (migration24 ? !migration24.required_rules.every(id=>protocol.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page)) : v08422 ? !(code === '00222' ? ['PEMETREXED_CRCL_LT45','SEVERE_HEPATIC_IMPAIRMENT'] : ['PEMETREXED_CRCL_LT45','CARBO_GFR_20_OR_LESS','CARBO_GFR_20_30','SEVERE_HEPATIC_IMPAIRMENT']).every(id=>protocol.rule_engine.rules.some(r=>r.rule_id===id && r.source?.url===m.source_url)) : superseded ? !(v0836 ? (['00207','00732'].includes(code)?['ORGAN_REVIEW']:['00213','00330','00331'].includes(code)?['RENAL_IRI','BILI_CI']:['FU_HEPATIC_CI','FU_HEPATIC_EQUALITY']) : ['RENAL_LT30','HEPATOTOXICITY']).every(id => protocol.rule_engine.rules.some(r=>r.rule_id===id && r.source?.url===m.source_url && r.source?.page)) : !rules.some(id => String(id).startsWith('OF590_')))) issues.push('structured_resolution_without_v0590_rule');
     if (rec?.resolution === 'source_reviewed_no_prescriptive_adjustment' && rules.some(id => String(id).startsWith('OF590_'))) issues.push('no_prescriptive_resolution_with_artificial_rule');
     if (!['structured_rules', 'source_reviewed_no_prescriptive_adjustment'].includes(rec?.resolution)) issues.push('invalid_resolution');
   }
@@ -66,10 +67,11 @@ const records = files(protocolRoot).filter(file => !file.includes(`${path.sep}_t
     in_v0590_scope: inScope,
     encoding_maturity: m.encoding_maturity?.level || 'not_formally_audited',
     resolution: rec?.resolution || '',
+    ...(migration24 ? {superseded_by_release:'0.84.24',replacement_evidence:'validation/targeted-lung-v08424/'+migration24.group+'/AUDIT.md'} : {}),
     ...(v08422 ? {superseded_by_release:m.sactcheck_encoding_version,replacement_evidence:code==='00222'?'validation/lung-next-v08423/pem-mono/AUDIT.md':'validation/lung-core-v08422/pem-platinum/AUDIT.md'} : {}),
     ...(code === '00205' ? {reconciled_by_release:'0.84.1',replacement_evidence:'validation/advanced-breast-v0841/pld-audit.json'} : {}),
     ...(superseded ? {superseded_by_release:m.validation.audit_release,replacement_evidence:v0836?'validation/colorectal-v0836/source-map.json':code==='00225'?'validation/colorectal-v0835/source-map.json':'validation/colorectal-v0834/source-map.json'} : {}),
-    source_url: (superseded ? m.source_url : rec?.source_url) || m.source_url || '',
+    source_url: (superseded||migration24 ? m.source_url : rec?.source_url) || m.source_url || '',
     organ_inputs: inputs,
     organ_rules: rules,
     issues,
