@@ -45,10 +45,10 @@ for(const profile of ['female','male']){
  Lab.selectProfile(profile);const uln=Lab.read().altUln;
  for(const [value,hit] of [[3*uln-0.00001,false],[3*uln,false],[3*uln+0.00001,true]]){
   const n=Lab.calculate('alt_ast_uln_multiple',{alt:value});assert.equal(n.ratio,value/uln);
-  const result=Engine.assess(p,{alt_ast_uln_multiple:n.ratio});assert.equal(result.findings.some(f=>(f.ruleId||f.id)==='ICI_HEPATITIS_WITHHOLD'),hit);
+  const result=Engine.assess(p,{immune_hepatitis_attribution:'confirmed_immune',alt_ast_uln_multiple:n.ratio});assert.equal(result.findings.some(f=>(f.ruleId||f.id)==='ICI_HEPATITIS_WITHHOLD'),hit);
  }
  for(const [value,hit] of [[29.99999,false],[30,false],[30.00001,true]]){
-  const result=Engine.assess(p,{bilirubin_uln_multiple:Lab.calculate('bilirubin_uln_multiple',{bilirubin:value}).ratio});assert.equal(result.findings.some(f=>(f.ruleId||f.id)==='ICI_BILI_WITHHOLD'),hit);
+  const result=Engine.assess(p,{immune_hepatitis_attribution:'confirmed_immune',bilirubin_uln_multiple:Lab.calculate('bilirubin_uln_multiple',{bilirubin:value}).ratio});assert.equal(result.findings.some(f=>(f.ruleId||f.id)==='ICI_BILI_WITHHOLD'),hit);
  }
 }
 // Exercise production form collection with profile changes, ALP, disabled/blank and invalid input.

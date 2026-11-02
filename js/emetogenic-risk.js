@@ -76,7 +76,10 @@
     const supportive = protocol.supportive_care || {};
     const record = mapping.protocols?.[codeFor(protocol)] || {};
     const baseLevel = normaliseLevel(supportive.emetogenic_risk || metadata.emetogenic_risk || record.level);
-    const phase = baseLevel === "phase_dependent" ? resolvePhase(record, supportive, options.treatmentPhase || options.profileId) : {};
+    let selectedPhase=options.treatmentPhase || options.profileId;
+    const dayProfiles=supportive.phase_day_profiles?.[selectedPhase];
+    if(dayProfiles)selectedPhase=dayProfiles[String(options.treatmentDay)] || '__unresolved_treatment_day';
+    const phase = baseLevel === "phase_dependent" ? resolvePhase(record, supportive, selectedPhase) : {};
     const level = phase.phaseResolved ? normaliseLevel(phase.level) : baseLevel;
     const levelDefinition = mapping.levels?.[level] || mapping.levels?.[baseLevel] || {};
     const scriptId = phase.phaseResolved

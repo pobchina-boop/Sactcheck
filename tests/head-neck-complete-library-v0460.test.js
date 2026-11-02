@@ -28,7 +28,7 @@ for(const {entry,data} of hn){
  assert(Object.keys(defs).length>0,`${code} inputs`);assert(rs.length>0,`${code} rules`);
  for(const [id,d] of Object.entries(defs)){assert.strictEqual(d.required,false,`${code}/${id} required`);assert.notStrictEqual(d.demo_value,undefined,`${code}/${id} demo`);}
  const card=m.regimen_card;assert(card&&Array.isArray(card.contexts)&&card.contexts.length,`${code} card contexts`);contexts+=card.contexts.length;
- assert(card.contexts.some(c=>c.id===`${code}-head-neck`&&Number(c.cycle_length_days)>0),`${code} Head and Neck card context`);
+ assert(card.contexts.some(c=>c.id===(['00483','00484'].includes(code)?`${code}-source-${code==='00483'?'d':'e'}`:`${code}-head-neck`)&&Number(c.cycle_length_days)>0),`${code} Head and Neck card context`);
  assert(sidecar.protocols.find(x=>x.id===data.protocol_id),`${code} sidecar`);
  if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/head-neck/'),`${code} new file path`);assert.strictEqual(m.sactcheck_encoding_version,'0.46.0',`${code} encoding version`);}
 }

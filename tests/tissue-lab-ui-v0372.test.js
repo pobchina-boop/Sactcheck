@@ -63,16 +63,16 @@ Lab.reset();
 // unchanged; only the clinician-facing input is converted from actual results.
 const p568 = JSON.parse(fs.readFileSync(path.join(root, 'protocols/lung/00568-pembrolizumab-pemetrexed-and-carboplatin-auc5-therapy.json'), 'utf8'));
 let lftInputs = { alt_ast_uln_multiple: Lab.calculate('alt_ast_uln_multiple', { alt:102, ast:126 }).ratio };
-let lftResult = Engine.assess(p568, lftInputs);
+let lftResult = Engine.assess(p568, {...lftInputs,immune_hepatitis_attribution:"confirmed_immune"});
 assert(!lftResult.findings.some(item => (item.ruleId || item.id) === 'ICI_HEPATITIS_WITHHOLD'), 'Exactly 3 ×ULN must not cross the >3 threshold.');
 lftInputs = { alt_ast_uln_multiple: Lab.calculate('alt_ast_uln_multiple', { alt:102.34, ast:126 }).ratio };
-lftResult = Engine.assess(p568, lftInputs);
+lftResult = Engine.assess(p568, {...lftInputs,immune_hepatitis_attribution:"confirmed_immune"});
 assert(lftResult.findings.some(item => (item.ruleId || item.id) === 'ICI_HEPATITIS_WITHHOLD'), 'ALT >3 ×ULN must trigger the existing withholding rule.');
 lftInputs = { bilirubin_uln_multiple: Lab.calculate('bilirubin_uln_multiple', { bilirubin:30 }).ratio };
-lftResult = Engine.assess(p568, lftInputs);
+lftResult = Engine.assess(p568, {...lftInputs,immune_hepatitis_attribution:"confirmed_immune"});
 assert(!lftResult.findings.some(item => (item.ruleId || item.id) === 'ICI_BILI_WITHHOLD'), 'Exactly 1.5 ×ULN bilirubin must not cross the >1.5 threshold.');
 lftInputs = { bilirubin_uln_multiple: Lab.calculate('bilirubin_uln_multiple', { bilirubin:30.2 }).ratio };
-lftResult = Engine.assess(p568, lftInputs);
+lftResult = Engine.assess(p568, {...lftInputs,immune_hepatitis_attribution:"confirmed_immune"});
 assert(lftResult.findings.some(item => (item.ruleId || item.id) === 'ICI_BILI_WITHHOLD'), 'Bilirubin >1.5 ×ULN must trigger the existing withholding rule.');
 
 const mappedFieldPatterns = /^(bilirubin_ratio_uln|bilirubin_uln_multiple|bilirubin_uln|alt_uln_multiple|ast_uln_multiple|ast_uln|alt_ast_uln_multiple|alt_ast_ratio_uln|ast_alt_uln|transaminases_uln_multiple|alt_ratio_uln)$/;

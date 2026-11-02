@@ -14,10 +14,12 @@ const required=[
   "data/app-release.json","data/protected-patient-assets-v0810.json",
   "assets/patient/anatomy-hcc-v0762.png","assets/patient/toxicity-icons.svg","assets/patient/hcc-bodymap-v0763.css","assets/patient/hcc-connectors-v0763.js"
 ];
-for(const code of codes){
+for(const canonicalCode of codes){
+ required.push(`patient/${canonicalCode}/index.html`,`docs/patient/${canonicalCode}/index.html`);
+ for(const code of registry.bundleRoutes(canonicalCode)){
   for(const f of ["index.html","guide.html","guide.pdf","passport.pdf"]) required.push(`patient/${code}/${f}`);
   for(const f of ["index.html","guide.html","guide.pdf","passport.pdf"]) required.push(`docs/patient/${code}/${f}`);
-}
+}}
 required.push("patient/00831/contact-card.pdf","docs/patient/00831/contact-card.pdf");
 required.push("patient/00568/sactcard.html","patient/00568/sactcard.pdf","docs/patient/00568/sactcard.html","docs/patient/00568/sactcard.pdf");
 required.push("patient/00568/passport.html","docs/patient/00568/passport.html");
@@ -65,7 +67,7 @@ if(fs.existsSync(indexPath)){
   const ordered=["runtime-performance-v0810.js","patient-asset-registry-v0810.js","patient-support-v0750.js","regimen-workflow-engine-v0750.js","sactcheck-interface-v0750.js","ui-stability-v0810.js","antiemetic-print-v0810.js","protocol-loader.js"];
   let last=-1;for(const token of ordered){const pos=html.indexOf(token);if(pos<0)problems.push(`bootstrap missing ${token}`);else if(pos<last)problems.push(`bootstrap order invalid at ${token}`);last=Math.max(last,pos);}
 }
-for(const code of codes){
+for(const code of codes.flatMap(c=>registry.bundleRoutes(c))){
   const canonical=path.join(site,"patient",code);
   const compat=path.join(site,"docs","patient",code);
   const htmlPath=path.join(canonical,"index.html");
@@ -79,7 +81,7 @@ for(const code of codes){
   for(const file of ["guide.pdf","passport.pdf",...(code==="00568"?["sactcard.pdf"]:[])]){
     const a=path.join(canonical,file),b=path.join(compat,file);
     if(fs.existsSync(a)&&fs.existsSync(b)&&sha(a)!==sha(b)) problems.push(`compatibility ${file} drift for ${code}`);
-    const fixture=protectedManifest.assets?.[code]?.[file];
+    const fixture=protectedManifest.assets?.[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')];
     if(fs.existsSync(a)&&fixture&&sha(a)!==fixture.sha256) problems.push(`protected canonical ${code}/${file} changed without fixture update`);
   }
 }

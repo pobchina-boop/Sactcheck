@@ -14,7 +14,7 @@ assert.strictEqual(app.validation_module_release,'0.68.0');
 
 const registry=require('../js/patient-asset-registry-v0810.js');
 assert.strictEqual(registry.release,pkg.version);
-assert.strictEqual(registry.codes.length,139);
+assert.strictEqual(registry.codes.length,144);
 assert.strictEqual(registry.publicUrl('00568','portal'),'https://sactcheck.com/patient/00568/');
 assert.strictEqual(registry.publicUrl('00568','guide'),'https://sactcheck.com/patient/00568/guide.pdf');
 assert.strictEqual(registry.publicUrl('00568','passport'),'https://sactcheck.com/patient/00568/passport.pdf');
@@ -66,11 +66,11 @@ assert.ok(anti.includes('stopImmediatePropagation'),'traffic light action must o
 
 const protectedManifest=json('data/protected-patient-assets-v0810.json');
 assert.deepStrictEqual(Object.keys(protectedManifest.assets).sort(),registry.codes.slice().sort());
-for(const code of registry.codes){
+for(const code of registry.codes.flatMap(c=>registry.bundleRoutes(c))){
   for(const file of ['index.html','guide.pdf','passport.pdf']){
     const rel=`patient/${code}/${file}`;
     assert.ok(fs.existsSync(path.join(root,rel)),`${rel} missing`);
-    const expected=protectedManifest.assets[code][file];
+    const expected=protectedManifest.assets[code.split('/')[0]][[...code.split('/').slice(1),file].join('/')];
     assert.strictEqual(sha(rel),expected.sha256,`${rel} changed without updating the protected-asset manifest`);
     assert.strictEqual(fs.statSync(path.join(root,rel)).size,expected.bytes,`${rel} size drift`);
   }

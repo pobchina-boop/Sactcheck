@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.26';
-  const CONTENT_RELEASE='0.84.26';
+  const RELEASE='0.84.27';
+  const CONTENT_RELEASE='0.84.27';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00734':{"title": "weekly carboplatin AUC 2 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -76,6 +76,11 @@
     '00593':{"title": "Atezolizumab 1680 mg · every 4 weeks · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
     '00219':{"title": "Erlotinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00220':{"title": "Gefitinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00483':{"title": "Nivolumab · every 2 weeks · previously treated NSCLC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00484':{"title": "Nivolumab · every 4 weeks · previously treated NSCLC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00712':{"title": "Nivolumab, ipilimumab, paclitaxel and carboplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00792':{"title": "Nivolumab and ipilimumab for pleural mesothelioma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00849':{"title": "Nivolumab and selected platinum chemotherapy before surgery", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Choose the prescribed neoadjuvant chemotherapy backbone", "contextOnly": true, "patientContexts": ["backbone_00304", "backbone_00310", "backbone_00281", "backbone_00318", "backbone_00317"]},
     '00790':{"title": "TRAIN-2 with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00789':{"title": "TCHP with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00785':{"title": "Phesgo maintenance", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -181,6 +186,12 @@
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
     return code&&DEFINITIONS[code]?Object.freeze({code,...DEFINITIONS[code]}):null;
   }
+  function bundleRoutes(value){
+    const d=definitionFor(value);if(!d)return [];
+    if(!d.contextOnly)return [d.code];
+    if(!Array.isArray(d.patientContexts)||!d.patientContexts.length||d.patientContexts.some(s=>!/^backbone_[0-9]{5}$/.test(s)))throw new Error('Invalid patient context routes');
+    return d.patientContexts.map(s=>d.code+'/'+s);
+  }
   function hasDedicated(value){return Boolean(definitionFor(value));}
   function relativePath(value,asset='portal',context=''){
     const def=definitionFor(value); if(!def) return null;
@@ -263,7 +274,7 @@
     publicOrigin:PUBLIC_ORIGIN,
     codes:CODES,
     definitions:DEFINITIONS,
-    normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,contextFor,contextCodes:CONTEXT_CODES,
+    bundleRoutes,normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,contextFor,contextCodes:CONTEXT_CODES,
     publicUrl,runtimeUrl,compatibilityUrl,fallbackUrl,publicPortalUrl,
     guideUrl,passportUrl,sactCardUrl,openPortal,openGuide,openPassport,openSactCard
   });
