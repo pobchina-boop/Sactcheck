@@ -27,7 +27,7 @@ for (const [relative, code] of expected) {
   assert.ok(validation.valid, `${code} should validate: ${Validator.formatIssues(validation).join("; ")}`);
   assert.strictEqual(protocol.metadata.nccp_regimen_code, code);
   assert.strictEqual(protocol.metadata.migration.mode, "live_json");
-  assert.ok(protocol.metadata.source_url.startsWith("https://healthservice.hse.ie/"), `${code} requires an official HSE source link`);
+  assert.ok(/^https:\/\/(healthservice\.hse\.ie|assets\.hse\.ie)\//.test(protocol.metadata.source_url), `${code} requires an official HSE source link`);
   assert.ok(protocol.rule_engine.rules.length >= 12, `${code} requires a substantive rule set`);
   assert.ok(index.protocols.some(item => item.id === protocol.protocol_id && item.mode === "live_json"), `${code} should be published in the index`);
   protocols[code] = protocol;
@@ -96,11 +96,11 @@ assert.strictEqual(result.actionType, "delay", "00281 Day 1 ANC exactly 1.0 shou
 result = assess("00281", { treatment_day: "day8", anc: 0.8 });
 assert.strictEqual(result.actionType, "dose_reduce", "00281 Day 8 ANC 0.5–1.0 should give 75% gemcitabine");
 result = assess("00281", { crcl_ml_min: 50 });
-assert.strictEqual(result.actionType, "dose_reduce", "00281 CrCl 45–59 should reduce cisplatin to 75%");
+assert.strictEqual(result.actionType, "consultant_review", "00281 CrCl 45–59 requires reconciliation of baseline exclusion and on-treatment 75% dose row");
 result = assess("00281", { crcl_ml_min: 40 });
 assert.strictEqual(result.actionType, "consultant_review", "00281 CrCl <45 should prompt carboplatin/clinical-decision review");
 result = assess("00281", { neuropathy_grade: 2 });
-assert.strictEqual(result.actionType, "withhold_then_reduce", "00281 grade ≥2 neuropathy should modify cisplatin after recovery");
+assert.strictEqual(result.actionType, "withhold", "00281 grade ≥2 neuropathy requires withholding and review; do not pre-authorise restart");
 result = assess("00281", { pneumonitis_grade: 2 });
 assert.strictEqual(result.actionType, "discontinue", "00281 grade ≥2 pneumonitis should discontinue gemcitabine");
 
@@ -130,7 +130,7 @@ for (const code of Object.keys(protocols)) {
     // evaluating the legacy demo does not itself establish treatment suitability.
     assert.strictEqual(result.actionType, "partial_context_required");
     assert.notStrictEqual(result.actionType, "proceed");
-  } else assert.strictEqual(result.actionType, "proceed", `${code} demonstration values should produce a proceed output`);
+  } else if(["00304","00310","00281"].includes(code)){assert(!["proceed","proceed_with_caution"].includes(result.actionType),code+" demo must not establish missing source context");} else assert.strictEqual(result.actionType, "proceed", `${code} demonstration values should produce a proceed output`);
 }
 
 const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");

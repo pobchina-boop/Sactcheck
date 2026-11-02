@@ -77,6 +77,8 @@
     const record = mapping.protocols?.[codeFor(protocol)] || {};
     const baseLevel = normaliseLevel(supportive.emetogenic_risk || metadata.emetogenic_risk || record.level);
     let selectedPhase=options.treatmentPhase || options.profileId;
+    const directDays=supportive.treatment_day_profiles;
+    if(directDays)selectedPhase=Object.prototype.hasOwnProperty.call(directDays,String(options.treatmentDay))?directDays[String(options.treatmentDay)]:'__unresolved_treatment_day';
     const dayProfiles=supportive.phase_day_profiles?.[selectedPhase];
     if(dayProfiles)selectedPhase=dayProfiles[String(options.treatmentDay)] || '__unresolved_treatment_day';
     const phase = baseLevel === "phase_dependent" ? resolvePhase(record, supportive, selectedPhase) : {};

@@ -19,9 +19,9 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.40.0",
+    "sactcheck_encoding_version": "0.84.28",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-07-20",
+    "source_checked_date": "2026-11-02",
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
     "treatment_class": [
@@ -42,10 +42,11 @@
     "validation": {
       "official_catalogue_and_source_link_checked": true,
       "software_tests_completed": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_v08428_independent_review_pending",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true
     },
     "source_title_exact": "CARBOplatin AUC 6 and PACLitaxel 200 mg/m² Therapy",
     "display_title_normalised": true,
@@ -64,17 +65,22 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source reconciled · independent clinical/pharmacy review pending",
+      "source_reconciled": true,
+      "reconciled_release": "0.84.28",
+      "reconciled_date": "2026-11-02",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "clinical_use_authorised": false
     },
-    "canonical_protocol_id": "nccp-00304-v8"
+    "canonical_protocol_id": "nccp-00304-v8",
+    "source_retrieval_method": "Fresh official PDF downloaded with download=1 query; text extracted and dose tables visually inspected",
+    "source_pdf_sha256": "619ce5a947d0977d3db8f834471a81dd3571eca63b8d5f6243b573ac64f715a7",
+    "source_text_snapshot_sha256": "f981e1e2f2fced9985768989d17b3511cf0efb35c9b0021c58f0c0f0347e30f6",
+    "full_suite_release": "0.84.28",
+    "schedule_summary": "Both medicines on Day 1, repeated every 21 days for four planned cycles, unless cancer progresses or side effects require a change. This standalone plan does not include nivolumab or radiotherapy.",
+    "source_supplements": []
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -107,7 +113,12 @@
     {
       "phase_id": "21_day_cycle",
       "cycle_length_days": 21,
-      "cycles": [],
+      "cycles": [
+        1,
+        2,
+        3,
+        4
+      ],
       "administration": [
         {
           "day": 1,
@@ -128,9 +139,11 @@
             "value": 6,
             "unit": "AUC"
           },
-          "route": "IV infusion"
+          "route": "IV infusion",
+          "duration_minutes": 30
         }
-      ]
+      ],
+      "notes": "Standalone00304a/b: four21-day cycles.00304c uses the separate00849 combination and maximumthreecycles; not this four-cycle course."
     }
   ],
   "input_definitions": {
@@ -153,7 +166,7 @@
         }
       ],
       "ui_section": "treatment_context",
-      "demo_value": "adjuvant_nsclc",
+      "demo_value": "",
       "always_show": true,
       "input_role": "context"
     },
@@ -163,12 +176,16 @@
       "required": false,
       "options": [
         {
+          "value": "baseline",
+          "label": "Before first treatment"
+        },
+        {
           "value": "pre_treatment",
-          "label": "Pre-treatment assessment"
+          "label": "During treatment"
         }
       ],
       "ui_section": "treatment_context",
-      "demo_value": "pre_treatment",
+      "demo_value": "",
       "always_show": true,
       "input_role": "context"
     },
@@ -179,7 +196,7 @@
       "min": 1,
       "max": 100,
       "step": 1,
-      "demo_value": 1,
+      "demo_value": "",
       "ui_section": "treatment_context",
       "always_show": true,
       "input_role": "decision"
@@ -188,7 +205,7 @@
       "label": "Relevant drug hypersensitivity",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
+      "demo_value": "",
       "ui_section": "clinical",
       "input_role": "decision"
     },
@@ -196,7 +213,7 @@
       "label": "Pregnant or breastfeeding",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
+      "demo_value": "",
       "ui_section": "clinical",
       "input_role": "decision"
     },
@@ -204,7 +221,7 @@
       "label": "Active clinically significant infection",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
+      "demo_value": "",
       "ui_section": "clinical",
       "input_role": "decision"
     },
@@ -215,7 +232,7 @@
       "min": 0,
       "max": 50,
       "step": 0.01,
-      "demo_value": 2,
+      "demo_value": "",
       "ui_section": "labs",
       "unit": "×10⁹/L",
       "input_role": "decision"
@@ -227,7 +244,7 @@
       "min": 0,
       "max": 2000,
       "step": 1,
-      "demo_value": 200,
+      "demo_value": "",
       "ui_section": "labs",
       "unit": "×10⁹/L",
       "input_role": "decision"
@@ -236,7 +253,7 @@
       "label": "Febrile neutropenia",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
+      "demo_value": "",
       "ui_section": "clinical",
       "input_role": "decision"
     },
@@ -247,7 +264,7 @@
       "min": 0,
       "max": 250,
       "step": 1,
-      "demo_value": 90,
+      "demo_value": "",
       "ui_section": "labs",
       "unit": "mL/min",
       "renal_input": {
@@ -265,7 +282,7 @@
       "min": 0,
       "max": 50,
       "step": 0.01,
-      "demo_value": 1,
+      "demo_value": "",
       "ui_section": "labs",
       "unit": "× ULN",
       "input_role": "decision"
@@ -277,7 +294,7 @@
       "min": 0,
       "max": 20,
       "step": 0.01,
-      "demo_value": 1,
+      "demo_value": "",
       "ui_section": "labs",
       "unit": "× ULN",
       "input_role": "decision"
@@ -318,29 +335,26 @@
           "description": "Life-threatening neurological consequences; urgent intervention required."
         }
       ],
-      "demo_value": 0,
+      "demo_value": "",
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
       "ctcae_category": "neuropathy",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Assess sensory and/or motor symptoms and their effect on instrumental versus self-care activities of daily living. Distinguish transient cold sensitivity from persistent functional neuropathy.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_label": "NCCP toxicity grades; edition unspecified in regimen",
+      "source_grading_note": "Use clinical grading review; this source does not specify a CTCAE edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf"
     },
     "neuropathy_persistent": {
       "label": "Grade 2 neuropathy persists after initial reduction",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
+      "demo_value": "",
       "ui_section": "clinical",
-      "visible_when": {
-        "field": "neuropathy_grade",
-        "operator": "==",
-        "value": 2
-      },
       "input_role": "decision"
     },
     "mucositis_grade": {
-      "label": "Mucositis / stomatitis grade",
+      "label": "Highest mucositis grade in this episode",
       "type": "select",
       "required": false,
       "options": [
@@ -375,13 +389,15 @@
           "description": "Life-threatening consequences; urgent intervention required."
         }
       ],
-      "demo_value": 0,
+      "demo_value": "",
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
       "ctcae_category": "mucositis",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_label": "NCCP toxicity grades; edition unspecified in regimen",
+      "source_grading_note": "Use clinical grading review; this source does not specify a CTCAE edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf"
     },
     "mucositis_occurrence": {
       "label": "Mucositis occurrence",
@@ -405,12 +421,21 @@
           "label": "Fourth or later occurrence"
         }
       ],
-      "demo_value": 1,
+      "demo_value": "",
       "ui_section": "clinical",
       "visible_when": {
-        "field": "mucositis_grade",
-        "operator": ">=",
-        "value": 2
+        "any": [
+          {
+            "field": "mucositis_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "current_mucositis_grade",
+            "operator": ">=",
+            "value": 2
+          }
+        ]
       },
       "input_role": "decision"
     },
@@ -418,9 +443,113 @@
       "label": "Severe paclitaxel hypersensitivity reaction",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
+      "demo_value": "",
       "ui_section": "clinical",
       "input_role": "decision"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "off_label_consent_confirmed": {
+      "label": "Off-label indication discussed and local approval/consent confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "ui_section": "clinical",
+      "input_role": "decision"
+    },
+    "baseline_anc": {
+      "label": "Baseline ANC before starting",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "ui_section": "labs",
+      "input_role": "decision",
+      "min": 0,
+      "max": 50,
+      "unit": "×10⁹/L",
+      "step": 0.01
+    },
+    "renal_measurement_current": {
+      "label": "Renal measurement and creatinine timing verified for carboplatin",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "ui_section": "clinical",
+      "input_role": "decision"
+    },
+    "current_mucositis_grade": {
+      "label": "Current mucositis grade at assessment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": "",
+      "ui_section": "clinical",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP toxicity grades; edition unspecified in regimen",
+      "source_grading_note": "Use clinical grading review; this source does not specify a CTCAE edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf"
     }
   },
   "required_inputs": [],
@@ -456,11 +585,12 @@
             "carboplatin",
             "paclitaxel"
           ],
-          "recommendation": "Do not administer this regimen; obtain consultant review."
+          "recommendation": "Do not administer before consultant review. Prior mild carboplatin allergy may exceptionally be considered for a controlled desensitisation pathway with immunology advice; this tool does not authorise rechallenge."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 3
         },
         "explanation": "Relevant hypersensitivity is an exclusion."
       },
@@ -478,8 +608,9 @@
           "recommendation": "Do not administer without urgent consultant review."
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 3
         },
         "explanation": "Pregnancy or breastfeeding requires urgent specialist review."
       },
@@ -497,10 +628,12 @@
           "recommendation": "Withhold treatment and assess/treat the infection."
         },
         "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "basis": "Conservative clinical safety overlay; not a separately enumerated NCCP00304 exclusion"
         },
-        "explanation": "Clinically significant infection requires review."
+        "explanation": "Clinically significant infection requires safety review; this is an explicitly labelled local safety overlay."
       },
       {
         "rule_id": "ANC_0_5_TO_LT1",
@@ -525,8 +658,9 @@
           "recommendation": "Delay treatment until count recovery."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "ANC 0.5 to <1.0 requires delay."
       },
@@ -544,8 +678,9 @@
           "recommendation": "Delay until recovery and consider reducing both carboplatin and paclitaxel by 25% for subsequent cycles."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "Severe neutropenia requires delay and reduction review."
       },
@@ -563,8 +698,9 @@
           "recommendation": "Delay until recovery and consider reducing both drugs by 25% for subsequent cycles."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "Febrile neutropenia requires delay and reduction review."
       },
@@ -591,8 +727,9 @@
           "recommendation": "Delay treatment until platelet recovery."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "Platelets 50 to <100 require delay."
       },
@@ -610,8 +747,9 @@
           "recommendation": "Delay until recovery and consider reducing both drugs by 25% for subsequent cycles."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "Severe thrombocytopenia requires delay and reduction review."
       },
@@ -628,8 +766,9 @@
           "recommendation": "Do not administer carboplatin at GFR ≤20 mL/min."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "Carboplatin is not administered at GFR ≤20."
       },
@@ -655,8 +794,9 @@
           "recommendation": "Use carboplatin with extreme caution at GFR 20–30 mL/min."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "Severe renal impairment requires specialist review."
       },
@@ -670,8 +810,8 @@
           },
           {
             "field": "bilirubin_uln_multiple",
-            "operator": ">",
-            "value": 1.25
+            "operator": ">=",
+            "value": 1.26
           },
           {
             "field": "bilirubin_uln_multiple",
@@ -684,11 +824,13 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Administer paclitaxel at 75% of the original dose."
+          "recommendation": "Administer paclitaxel at 75% of the original dose. This is a percentage of the original dose; reconcile previous reductions and do not automatically re-escalate.",
+          "block_numeric_dose": true
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "Moderate bilirubin elevation requires 75% paclitaxel."
       },
@@ -702,8 +844,8 @@
           },
           {
             "field": "bilirubin_uln_multiple",
-            "operator": ">",
-            "value": 2
+            "operator": ">=",
+            "value": 2.01
           },
           {
             "field": "bilirubin_uln_multiple",
@@ -716,11 +858,13 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Administer paclitaxel at 50% of the original dose."
+          "recommendation": "Administer paclitaxel at 50% of the original dose. This is a percentage of the original dose; reconcile previous reductions and do not automatically re-escalate.",
+          "block_numeric_dose": true
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "Greater bilirubin elevation requires 50% paclitaxel."
       },
@@ -746,8 +890,9 @@
           "recommendation": "Do not administer paclitaxel at these hepatic values."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
         },
         "explanation": "Severe hepatic impairment is contraindicated."
       },
@@ -770,11 +915,13 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Reduce paclitaxel by 25%."
+          "recommendation": "Reduce paclitaxel by 25%. Consultant must reconcile the original and actual dose and concurrent toxicity reductions.",
+          "block_numeric_dose": true
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
         },
         "explanation": "Grade 2 neuropathy requires paclitaxel reduction."
       },
@@ -797,11 +944,13 @@
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Reduce paclitaxel by 50% because grade 2 neuropathy persists."
+          "recommendation": "Reduce paclitaxel by 50% because grade 2 neuropathy persists. Consultant must reconcile the original and actual dose and concurrent toxicity reductions.",
+          "block_numeric_dose": true
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
         },
         "explanation": "Persistent grade 2 neuropathy requires a larger reduction."
       },
@@ -818,8 +967,9 @@
           "recommendation": "Omit paclitaxel for grade ≥3 neuropathy."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
         },
         "explanation": "Grade ≥3 neuropathy requires paclitaxel omission."
       },
@@ -843,11 +993,13 @@
             "carboplatin",
             "paclitaxel"
           ],
-          "recommendation": "Delay until toxicity resolves to grade ≤1, then reduce both drugs by 25%."
+          "recommendation": "Delay until toxicity resolves to grade ≤1, then reduce both drugs by 25%. Confirm current recovery and actual dose history; do not automatically calculate a restart dose.",
+          "block_numeric_dose": true
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
         },
         "explanation": "Second grade 2 mucositis occurrence requires reduction."
       },
@@ -871,11 +1023,13 @@
             "carboplatin",
             "paclitaxel"
           ],
-          "recommendation": "Delay until toxicity resolves to grade ≤1, then reduce both drugs by 50%."
+          "recommendation": "Delay until toxicity resolves to grade ≤1, then reduce both drugs by 50%. Confirm current recovery and actual dose history; do not automatically calculate a restart dose.",
+          "block_numeric_dose": true
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
         },
         "explanation": "Third grade 2 mucositis occurrence requires reduction."
       },
@@ -902,8 +1056,9 @@
           "recommendation": "Omit carboplatin and paclitaxel after a fourth grade 2 mucositis occurrence."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
         },
         "explanation": "Repeated grade 2 mucositis requires omission."
       },
@@ -927,11 +1082,13 @@
             "carboplatin",
             "paclitaxel"
           ],
-          "recommendation": "Delay until toxicity resolves to grade ≤1, then reduce both drugs by 50%."
+          "recommendation": "Delay until toxicity resolves to grade ≤1, then reduce both drugs by 50%. Confirm current recovery and actual dose history; do not automatically calculate a restart dose.",
+          "block_numeric_dose": true
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
         },
         "explanation": "First grade ≥3 mucositis requires 50% reduction."
       },
@@ -958,8 +1115,9 @@
           "recommendation": "Omit carboplatin and paclitaxel after recurrent grade ≥3 mucositis."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
         },
         "explanation": "Recurrent grade ≥3 mucositis requires omission."
       },
@@ -969,33 +1127,585 @@
         "operator": "==",
         "value": true,
         "action": {
-          "type": "discontinue",
+          "type": "permanently_discontinue",
           "components": [
             "paclitaxel"
           ],
-          "recommendation": "Discontinue paclitaxel and manage the reaction urgently according to local policy."
+          "recommendation": "Stop paclitaxel immediately, treat the severe reaction and do not rechallenge with paclitaxel; consultant review of alternatives."
         },
         "source": {
-          "page": 6,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 6
         },
         "explanation": "Severe hypersensitivity requires discontinuation."
       },
       {
-        "rule_id": "PROCEED_IF_NO_RESTRICTIVE_RULE",
-        "field": "cycle_number",
-        "operator": ">=",
-        "value": 1,
+        "rule_id": "BASELINE_ANC_EXCLUSION",
+        "when": {
+          "any": [
+            {
+              "field": "baseline_anc",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "all": [
+                {
+                  "field": "assessment_type",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "proceed",
-          "components": [],
-          "recommendation": "No restrictive encoded rule was triggered by the entered assessment data."
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Baseline ANC below1.5 is an exclusion; distinguish this from the subsequent-cycle table."
         },
+        "explanation": "Baseline ANC below1.5 is an exclusion; distinguish this from the subsequent-cycle table.",
         "source": {
-          "page": 1,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "BASELINE_STAGE_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "anc",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "assessment_type",
+              "operator": "missing"
+            }
+          ]
         },
-        "explanation": "Fallback proceed finding; any restrictive matched rule takes precedence."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Clarify whether this is baseline: starting ANC must be at least1.5; ongoing thresholds differ.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Clarify whether this is baseline: starting ANC must be at least1.5; ongoing thresholds differ.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "ECOG_ADJUVANT",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "adjuvant_nsclc"
+            },
+            {
+              "field": "ecog",
+              "operator": ">",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Adjuvant source population is ECOG0–1; review fitness and indication.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Adjuvant source population is ECOG0–1; review fitness and indication.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "ECOG_ADVANCED",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "advanced_nsclc"
+            },
+            {
+              "field": "ecog",
+              "operator": ">",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Advanced source population is ECOG0–2; review fitness and indication.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Advanced source population is ECOG0–2; review fitness and indication.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "ECOG_UNKNOWN_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "ecog",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "field": "indication_id",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Confirm indication before interpreting performance status; adjuvant and advanced limits differ.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Confirm indication before interpreting performance status; adjuvant and advanced limits differ.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "OFF_LABEL_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "off_label_consent_confirmed",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "any": [
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "adjuvant_nsclc"
+                },
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "advanced_nsclc"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Standalone00304a/b indications are off-label in Ireland; confirm local approval and informed consent.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Standalone00304a/b indications are off-label in Ireland; confirm local approval and informed consent.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 8
+        }
+      },
+      {
+        "rule_id": "NEOADJUVANT_COMPANION_REQUIRED",
+        "when": {
+          "field": "indication_id",
+          "operator": "==",
+          "value": "neoadjuvant_nsclc_nivolumab"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Use NCCP00849 with the selected00304 backbone for the complete nivolumab combination, eligibility and three-cycle maximum. This standalone assessment cannot assess nivolumab.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Use NCCP00849 with the selected00304 backbone for the complete nivolumab combination, eligibility and three-cycle maximum. This standalone assessment cannot assess nivolumab.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "STANDALONE_CYCLE_LIMIT",
+        "when": {
+          "all": [
+            {
+              "field": "cycle_number",
+              "operator": ">",
+              "value": 4
+            },
+            {
+              "any": [
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "adjuvant_nsclc"
+                },
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "advanced_nsclc"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "The source standalone course is four21-day cycles; reconcile any proposed additional treatment.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source standalone course is four21-day cycles; reconcile any proposed additional treatment.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "RENAL_RISK_LT60",
+        "when": {
+          "field": "gfr_ml_min",
+          "operator": "<",
+          "value": 60
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Renal impairment below60mL/min increases myelosuppression risk; independently verify Calvert dosing and monitoring. GFR≤20 prohibition remains controlling.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Renal impairment below60mL/min increases myelosuppression risk; independently verify Calvert dosing and monitoring. GFR≤20 prohibition remains controlling.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "GFR_CAP",
+        "when": {
+          "field": "gfr_ml_min",
+          "operator": ">",
+          "value": 125
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Do not use GFR above125mL/min in the source Calvert calculation; verify measurement and dosing with pharmacy.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Do not use GFR above125mL/min in the source Calvert calculation; verify measurement and dosing with pharmacy.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "RENAL_MEASUREMENT_REVIEW",
+        "when": {
+          "field": "renal_measurement_current",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "recommendation": "Verify creatinine within48hours when using an estimating formula; after isotopeGFR reassess if creatinine exceeds110% of its original value. No automatic dose based on a stale measurement.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Verify creatinine within48hours when using an estimating formula; after isotopeGFR reassess if creatinine exceeds110% of its original value. No automatic dose based on a stale measurement.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HEPATIC_GAP_1.25",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.25
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<",
+              "value": 1.26
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Bilirubin falls between the printed source bands. Do not round or infer a definitive dose; obtain specialist review.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Bilirubin falls between the printed source bands. Do not round or infer a definitive dose; obtain specialist review.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HEPATIC_GAP_2",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<",
+              "value": 2.01
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Bilirubin falls between the printed source bands. Do not round or infer a definitive dose; obtain specialist review.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Bilirubin falls between the printed source bands. Do not round or infer a definitive dose; obtain specialist review.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HEPATIC_CONTEXT_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.25
+            },
+            {
+              "field": "transaminases_uln_multiple",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Transaminase context is missing for this hepatic dose band. Do not infer a dose from bilirubin alone.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Transaminase context is missing for this hepatic dose band. Do not infer a dose from bilirubin alone.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "NEUROPATHY_G2_MISSING_HISTORY",
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "neuropathy_persistent",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "recommendation": "Grade2 neuropathy requires reduction; establish whether it persists after an initial reduction before selecting the source25% or50% instruction.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Grade2 neuropathy requires reduction; establish whether it persists after an initial reduction before selecting the source25% or50% instruction.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_G2_FIRST",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Delay until current mucositis has resolved to grade≤1; first grade2 episode does not require dose reduction under this table. Confirm recovery before restart.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Delay until current mucositis has resolved to grade≤1; first grade2 episode does not require dose reduction under this table. Confirm recovery before restart.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "MUCOSITIS_UNKNOWN_OCCURRENCE",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Hold and establish current recovery and occurrence number before interpreting the mucositis dose table.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Hold and establish current recovery and occurrence number before interpreting the mucositis dose table.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "CURRENT_MUCOSITIS_HOLD",
+        "when": {
+          "field": "current_mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "recommendation": "Current grade≥2 mucositis requires delay until≤grade1 even if historical grade was entered differently; reconcile the episode before restart.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Current grade≥2 mucositis requires delay until≤grade1 even if historical grade was entered differently; reconcile the episode before restart.",
+        "source": {
+          "document": "NCCP 00304 v8",
+          "url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+          "page": 5
+        }
       }
     ]
   },
@@ -1005,14 +1715,17 @@
   },
   "supportive_care": {
     "emetogenic_risk": "high",
-    "script_id": "nccp-parenteral-high",
+    "script_id": "nccp-v8-carboplatin-v08420",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Carboplatin AUC 6; NCCP V6 classifies AUC >=4 as high and AUC <4 as moderate.",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
+    "mapping_basis": "CarboplatinAUC 6 high-risk antiemetic pathway; reconcile paclitaxel premedication steroids.",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk",
+    "summary": "High-risk carboplatin antiemetics plus paclitaxel allergy premedication; reconcile dexamethasone/aprepitant into one prescription.",
+    "phase_specific_plan": "patient/00304/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf"
   }
 }

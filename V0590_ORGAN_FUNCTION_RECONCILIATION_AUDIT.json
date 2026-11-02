@@ -2200,7 +2200,7 @@
       "path": "protocols/lung/00281-gemcitabine-cisplatin.json",
       "title": "Gemcitabine 1250 mg/m² and Cisplatin 75 mg/m² Therapy — 21 day",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "",
       "source_url": "https://healthservice.hse.ie/documents/6926/281_V7_GemCis75.pdf",
       "organ_inputs": [
@@ -2213,7 +2213,10 @@
         "CISPLATIN_CRCL_45_TO_59",
         "CISPLATIN_CRCL_LT45",
         "GEMCITABINE_CRCL_LT30",
-        "GEMCITABINE_BILIRUBIN_27_PLUS"
+        "GEMCITABINE_BILIRUBIN_27_PLUS",
+        "BASELINE_CISPLATIN_RENAL_EXCLUSION",
+        "CISPLATIN_RENAL_BOUNDARY_GAP",
+        "GEMCITABINE_RENAL_BOUNDARY_GAP"
       ],
       "issues": []
     },
@@ -2444,14 +2447,15 @@
       "path": "protocols/lung/00304-carboplatin-paclitaxel.json",
       "title": "Carboplatin AUC 6 and Paclitaxel 200 mg/m² Therapy",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "",
       "source_url": "https://healthservice.hse.ie/documents/6924/304_V8_CARBOplatinAUC_6_PACLitaxel_200.pdf",
       "organ_inputs": [
         "pregnancy_or_breastfeeding",
         "gfr_ml_min",
         "transaminases_uln_multiple",
-        "bilirubin_uln_multiple"
+        "bilirubin_uln_multiple",
+        "renal_measurement_current"
       ],
       "organ_rules": [
         "PREGNANCY_LACTATION",
@@ -2459,7 +2463,13 @@
         "CARBOPLATIN_GFR_20_TO_30",
         "PACLITAXEL_HEPATIC_75",
         "PACLITAXEL_HEPATIC_50",
-        "PACLITAXEL_HEPATIC_CONTRAINDICATED"
+        "PACLITAXEL_HEPATIC_CONTRAINDICATED",
+        "RENAL_RISK_LT60",
+        "GFR_CAP",
+        "RENAL_MEASUREMENT_REVIEW",
+        "HEPATIC_GAP_1.25",
+        "HEPATIC_GAP_2",
+        "HEPATIC_CONTEXT_MISSING"
       ],
       "issues": []
     },
@@ -2536,21 +2546,27 @@
       "path": "protocols/lung/00310-gemcitabine-carboplatin.json",
       "title": "Gemcitabine 1000 mg/m² and Carboplatin AUC 5 Therapy — 21 day",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "",
-      "source_url": "https://healthservice.hse.ie/documents/6713/310_v7_GemCARBOAUC_5.pdf",
+      "source_url": "https://assets.hse.ie/media/documents/310_GemCARBOAUC_5.pdf",
       "organ_inputs": [
         "pregnancy_or_breastfeeding",
         "gfr_ml_min",
         "bilirubin_micromol_l",
-        "haemodialysis"
+        "haemodialysis",
+        "creatinine_within48h",
+        "isotope_creatinine_percent_baseline"
       ],
       "organ_rules": [
         "PREGNANCY_LACTATION",
         "CARBOPLATIN_GFR_20_OR_LESS",
         "CARBOPLATIN_GFR_20_TO_30",
         "GEMCITABINE_BILIRUBIN_27_PLUS",
-        "HAEMODIALYSIS_TIMING"
+        "HAEMODIALYSIS_TIMING",
+        "CARBOPLATIN_GFR_CAP",
+        "CARBOPLATIN_MYELORISK",
+        "CALCULATED_GFR_STALE",
+        "ISOTOPE_GFR_REASSESS"
       ],
       "issues": []
     },
@@ -2762,7 +2778,7 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "structured_rules",
-      "superseded_by_release": "0.84.22",
+      "superseded_by_release": "0.84.28",
       "replacement_evidence": "validation/lung-core-v08422/pem-platinum/AUDIT.md",
       "source_url": "https://healthservice.hse.ie/documents/6921/318_V6_PEMEtrexed_and_CARBOplatin.pdf",
       "organ_inputs": [
@@ -3303,23 +3319,29 @@
       "path": "protocols/lung/00339-vinorelbine-days-1-8-15-and-cisplatin-day-1-21-day.json",
       "title": "Vinorelbine Days 1, 8, 15 and Cisplatin Day 1 – 21 day",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "",
       "source_url": "https://healthservice.hse.ie/documents/6918/339_Vin_30CIS_80.pdf",
       "organ_inputs": [
         "breastfeeding",
-        "cisplatin_renal_band",
         "bilirubin_uln_multiple",
-        "alt_ast_uln_multiple"
+        "alt_ast_uln_multiple",
+        "crcl_ml_min",
+        "cisplatin_renal_band",
+        "preexisting_renal_impairment",
+        "severe_infection_within_2weeks",
+        "dialysis"
       ],
       "organ_rules": [
         "PREGNANCY_BREASTFEEDING",
-        "CISPLATIN_RENAL_45_59",
-        "CISPLATIN_RENAL_LT45",
-        "CISPLATIN_RENAL_LT30",
-        "CISPLATIN_DIALYSIS",
-        "VIN_BILI_1_5_3",
-        "VIN_BILI_GT3"
+        "LEGACY_RENAL",
+        "BASELINE_RENAL_EXCLUSION",
+        "CIS_RENAL_45_59",
+        "CIS_RENAL_LT45",
+        "CIS_RENAL_GAP",
+        "CIS_RENAL_CONTEXT",
+        "DIALYSIS_REVIEW",
+        "VIN_HEPATIC_REVIEW"
       ],
       "issues": []
     },
@@ -3388,23 +3410,32 @@
       "path": "protocols/lung/00343-vinorelbine-and-cisplatin-therapy-28-day.json",
       "title": "Vinorelbine and Cisplatin Therapy – 28 day",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "",
       "source_url": "https://healthservice.hse.ie/documents/6916/343_V7_Vin25Cis50.pdf",
       "organ_inputs": [
         "breastfeeding",
-        "cisplatin_renal_band",
         "bilirubin_uln_multiple",
-        "alt_ast_uln_multiple"
+        "alt_ast_uln_multiple",
+        "crcl_ml_min",
+        "cisplatin_renal_band",
+        "preexisting_renal_impairment",
+        "severe_infection_within_2weeks",
+        "dialysis",
+        "hepatic_impairment_category"
       ],
       "organ_rules": [
         "PREGNANCY_BREASTFEEDING",
-        "CISPLATIN_RENAL_45_59",
-        "CISPLATIN_RENAL_LT45",
-        "CISPLATIN_RENAL_LT30",
-        "CISPLATIN_DIALYSIS",
-        "VIN_BILI_1_5_3",
-        "VIN_BILI_GT3"
+        "LEGACY_RENAL",
+        "BASELINE_RENAL_EXCLUSION",
+        "CIS_RENAL_50_59",
+        "CIS_RENAL_40_49",
+        "CIS_RENAL_LT40",
+        "CIS_RENAL_LT40_CONTEXT",
+        "CIS_RENAL_CONTEXT",
+        "CIS_RENAL_GAP",
+        "DIALYSIS_REVIEW",
+        "VIN_HEPATIC_SEVERE"
       ],
       "issues": []
     },
@@ -7471,7 +7502,7 @@
       "path": "protocols/breast/00621-paclitaxel-weekly-3-of-4.json",
       "title": "Paclitaxel 80 mg/m² Days 1, 8 and 15 – 28 day",
       "in_v0590_scope": false,
-      "encoding_maturity": "source_reconciled_rule_encoding",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "",
       "source_url": "https://healthservice.hse.ie/documents/6854/621_V3_Paclitaxel_80_zanF78k.pdf",
       "organ_inputs": [

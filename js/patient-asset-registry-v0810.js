@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.27';
-  const CONTENT_RELEASE='0.84.27';
+  const RELEASE='0.84.28';
+  const CONTENT_RELEASE='0.84.28';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00734':{"title": "weekly carboplatin AUC 2 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -81,6 +81,11 @@
     '00712':{"title": "Nivolumab, ipilimumab, paclitaxel and carboplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00792':{"title": "Nivolumab and ipilimumab for pleural mesothelioma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00849':{"title": "Nivolumab and selected platinum chemotherapy before surgery", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Choose the prescribed neoadjuvant chemotherapy backbone", "contextOnly": true, "patientContexts": ["backbone_00304", "backbone_00310", "backbone_00281", "backbone_00318", "backbone_00317"]},
+    '00281':{"title": "Gemcitabine and cisplatin · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00310':{"title": "Gemcitabine and carboplatin · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00339':{"title": "Vinorelbine and cisplatin · 21-day cycle", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00343':{"title": "Vinorelbine and cisplatin · 28-day cycle", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00304':{"title": "Carboplatin and paclitaxel · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00790':{"title": "TRAIN-2 with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00789':{"title": "TCHP with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00785':{"title": "Phesgo maintenance", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -164,7 +169,7 @@
     '00857':{title:"Pembrolizumab + carboplatin/paclitaxel \u2192 AC",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true}
   });
   const CODES=Object.freeze(Object.keys(DEFINITIONS));
-  const CONTEXT_CODES=Object.freeze(['00203','00226','00232','00259','00215']);
+  const CONTEXT_CODES=Object.freeze(['00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
 
   function contextFor(value,explicit=''){

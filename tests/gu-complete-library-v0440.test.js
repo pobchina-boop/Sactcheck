@@ -24,7 +24,7 @@ for(const {entry,data} of gu){
  const m=data.metadata||{},code=String(m.nccp_regimen_code).padStart(5,'0');
  assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} status`);
  assert.strictEqual(m.partial_assessment_supported,true,`${code} partial assessment`);
- assert(/^https:\/\/(healthservice\.hse\.ie\/documents\/|www\.hse\.ie\/)/.test(m.source_url||''),`${code} official PDF`);
+ assert(/^https:\/\/(healthservice\.hse\.ie\/documents\/|assets\.hse\.ie\/media\/documents\/|www\.hse\.ie\/)/.test(m.source_url||''),`${code} official PDF`);
  assert(Array.isArray(data.required_inputs)&&data.required_inputs.length===0,`${code} required_inputs`);
  assert(Array.isArray(m.genitourinary_subgroups)&&m.genitourinary_subgroups.length,`${code} subgroup`);
  assert(risk.protocols[code],`${code} supportive care`);

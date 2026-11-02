@@ -33,7 +33,7 @@ for (const item of register.records) {
   const migration26=m.sactcheck_encoding_version==='0.84.26'&&require('../validation/lung-next-v08426/organ-function-migrations.json').records[item.nccp_code];
   const migration25=m.sactcheck_encoding_version==='0.84.25'&&require('../validation/targeted-lung-v08425/organ-function-migrations.json').records[item.nccp_code];
   const migration24=m.sactcheck_encoding_version==='0.84.24'&&migrations24[item.nccp_code];
-  const v08422 = (item.nccp_code === '00318' && m.sactcheck_encoding_version === '0.84.22') || (item.nccp_code === '00222' && m.sactcheck_encoding_version === '0.84.23');
+  const v08422 = (item.nccp_code === '00318' && ['0.84.22','0.84.28'].includes(m.sactcheck_encoding_version)) || (item.nccp_code === '00222' && m.sactcheck_encoding_version === '0.84.23');
   const v0836 = m.validation?.audit_release === '0.83.6';
   const superseded = (['00207','00447','00448','00732','00328','00585','00330','00331','00692','00733','00210','00213','00586','00623','00225'].includes(item.nccp_code) && m.validation?.audit_release === '0.84.21') || v0836 || (['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4') || (item.nccp_code === '00225' && m.validation?.audit_release === '0.83.5');
   assert(rec, `${item.nccp_code}: missing organ-function reconciliation metadata`);
@@ -44,7 +44,7 @@ for (const item of register.records) {
   assert.strictEqual(rec.oncology_pharmacy_reviewed, false);
   assert.strictEqual(rec.clinical_use_authorised, false);
   assert.strictEqual(m.encoding_maturity.level, (v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
-  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, m.sactcheck_encoding_version==='0.84.28'?'source_reconciled_v08428_independent_review_pending':migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
   for (const [field, def] of Object.entries(p.input_definitions || {})) {
     if (/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label || ''}`)) {
       assert.strictEqual(def.required, false, `${item.nccp_code}/${field} must remain optional for independent partial assessment`);
