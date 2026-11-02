@@ -3,8 +3,10 @@
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const context=process.env.SACT_SUITE_CONTEXT||'';
+const v29Contexts=['schedule_7d','schedule_3d','schedule_21d'];
+if(v29Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').some(c=>c!=='00388'))throw new Error('Oral etoposide context escaped00388');
 const v27Contexts=['backbone_00304','backbone_00310','backbone_00281','backbone_00318','backbone_00317'];
-if(context && context!=='lung'&&!v27Contexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
+if(context && context!=='lung'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
 const codes=(process.env.SACT_SUITE_CODES||'').split(',').filter(Boolean);
 if(v27Contexts.includes(context)&&codes.some(c=>c!=='00849'))throw new Error('Neoadjuvant backbone context escaped00849');
 if(context&&!codes.length)throw new Error('A context build requires an explicit SACT_SUITE_CODES scope');
@@ -14,7 +16,7 @@ function readPath(p){const m=p.match(/^data\/patient-knowledge\/(\d{5})\.json$/)
 function output(file,html){
  const relative=path.isAbsolute(file)?path.relative(root,file):file;
  const patient=relative.match(/^patient\/(\d{5})\/(.+)$/);
- if(patient&&!html.includes('class="ps-body')&&['0.84.25','0.84.26','0.84.27','0.84.28'].includes(profile(patient[1]).suite_release)){
+ if(patient&&!html.includes('class="ps-body')&&['0.84.25','0.84.26','0.84.27','0.84.28','0.84.29'].includes(profile(patient[1]).suite_release)){
   html=html.replace('</head>','<link rel="stylesheet" href="../../assets/patient/lung-suite-v08425.css"></head>');
   html=html.replace('<body class="','<body class="suite-v08425 ').replace('<body>','<body class="suite-v08425">');
   if(['00823','00702','00221','00565','00340','00219','00220'].includes(patient[1]))html=html.replace('class="suite-v08425 ','class="suite-v08425 new-targeted-v08425 ');
@@ -34,8 +36,11 @@ function output(file,html){
 function phases(defaultData){
  if(!context)return defaultData;
  const d=JSON.parse(fs.readFileSync(path.join(root,context==='lung'?'data/phase-support-contexts-v08425.json':'data/phase-support-contexts-v08427.json'),'utf8'));
+ const current=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08429.json'),'utf8'));
+ for(const [c,plans]of Object.entries(current.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const additions=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08428.json'),'utf8'));
  for(const [c,plans]of Object.entries(additions.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
+ for(const [c,plans]of Object.entries(current.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  return {...defaultData,regimens:Object.fromEntries(codes.map(c=>[c,d.regimens[c][context]]))};
 }
 if(context){

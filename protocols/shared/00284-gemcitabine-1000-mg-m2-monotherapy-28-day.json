@@ -8,16 +8,18 @@
     "nccp_version": "5",
     "title": "Gemcitabine 1000 mg/m² Monotherapy – 28 day",
     "short_title": "Gemcitabine 1000 mg/m² Monotherapy – 28 day",
-    "indication": "Adjuvant pancreatic adenocarcinoma.",
+    "indication": "Adjuvant pancreatic adenocarcinoma OR elderly/ECOG2 locally advanced/metastatic NSCLC; choose the exact setting.",
     "source_url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 5,
+    "sactcheck_encoding_version": "0.84.29",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "pancreatic",
     "treatment_context": [
       "gastrointestinal",
-      "pancreatic"
+      "pancreatic",
+      "lung",
+      "nsclc"
     ],
     "treatment_class": [
       "cytotoxic_chemotherapy"
@@ -44,7 +46,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08429_independent_review_pending"
     },
     "tumour_groups": [
       "Gastrointestinal",
@@ -65,12 +67,14 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "source_reconciled_rule_encoding",
+      "level": "source_reconciled_pending_independent_review",
       "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.84.29",
+      "reconciled_date": "2026-11-02"
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -90,25 +94,44 @@
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00284-v5"
+    "canonical_protocol_id": "nccp-00284-v5",
+    "source_checked_date": "2026-11-02",
+    "full_suite_release": "0.84.29",
+    "source_retrieval_method": "Fresh official NCCP PDF downloaded with download=1; text extracted; key dose tables visually inspected.",
+    "source_pdf_sha256": "48d6aa4e9f4a64c93acaa75b053006465ca3b9660b1a91a55db6632ded45ec15",
+    "source_text_snapshot_sha256": "6c3aaa3f2e5223e923fc022fea4cc727d26264b1271183f168c24ce1f706a599",
+    "dose_schedule_context_input": "indication_id",
+    "schedule_summary": "Gemcitabine is given on Days 1, 8 and 15. Week 4 has no planned dose. Each cycle lasts 28 days. For lung cancer there is no fixed six-cycle limit in this source: continue only while the team considers treatment helpful and tolerable.",
+    "patient_scope": "Lung00284b guide only; separate adjuvant pancreatic course",
+    "source_schedule_interval_label": "Every 28 days",
+    "source_supplements": [
+      {
+        "label": "Gemcitabine product information",
+        "url": "https://www.medicines.org.uk/emc/product/3119/smpc",
+        "basis": "Audited companion regimen or product information; NCCP differences remain explicit"
+      }
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
     "disclaimer": "Decision-support encoding derived from NCCP 00284 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
-    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending.",
+    "clinical_use_authorised": false
   },
   "indications": [
     {
       "indication_id": "00284a",
-      "description": "Adjuvant pancreatic adenocarcinoma.",
+      "code": "00284a",
+      "description": "Adjuvant pancreatic adenocarcinoma after complete macroscopic resection.",
       "tumour_groups": [
         "Gastrointestinal"
       ]
     },
     {
-      "indication_id": "00284-lung",
-      "description": "Locally advanced or metastatic NSCLC in older patients or patients with ECOG 2.",
+      "indication_id": "00284b",
+      "code": "00284b",
+      "description": "Locally advanced or metastatic NSCLC in elderly patients or patients with ECOG 2.",
       "tumour_groups": [
         "Lung"
       ]
@@ -116,7 +139,7 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Gemcitabine 1000 mg/m² Monotherapy – 28 day",
+    "schedule_summary": "Gemcitabine1000mg/m² IV Days1,8,15 every28days; pancreatic adjuvant6cycles, lung until progression/unacceptable toxicity.",
     "drugs": [
       "gemcitabine"
     ]
@@ -126,6 +149,9 @@
       "label": "ECOG performance status",
       "type": "select",
       "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
       "options": [
         {
           "value": 0,
@@ -147,109 +173,128 @@
           "value": 4,
           "label": "4"
         }
-      ],
-      "demo_value": 0,
-      "input_role": "decision"
+      ]
     },
     "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
+      "label": "Known hypersensitivity to treatment component",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
     },
     "pregnancy": {
-      "label": "Pregnant",
+      "label": "Pregnant or pregnancy suspected",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "febrile_or_active_infection": {
+      "label": "Fever or current infection",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
     },
     "anc_x10e9_l": {
       "label": "Absolute neutrophil count",
       "type": "number",
       "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "labs",
       "min": 0,
-      "step": 0.1,
-      "demo_value": 2,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
+      "max": 10000,
+      "step": 0.01,
+      "unit": "x10^9/L"
     },
     "platelets_x10e9_l": {
       "label": "Platelet count",
       "type": "number",
       "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "labs",
       "min": 0,
-      "step": 1,
-      "demo_value": 150,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
+      "max": 10000,
+      "step": 0.01,
+      "unit": "x10^9/L"
     },
-    "febrile_or_active_infection": {
-      "label": "Fever, febrile neutropenia or active infection requiring treatment",
-      "type": "boolean",
+    "cycle_number": {
+      "label": "Current treatment cycle",
+      "type": "number",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "min": 0,
+      "max": 10000,
+      "step": 1
     },
-    "other_nonhaem_toxicity_grade": {
-      "label": "Worst relevant non-haematological toxicity",
+    "indication_id": {
+      "label": "NCCP treatment setting",
       "type": "select",
       "required": false,
+      "demo_value": "",
+      "input_role": "context",
+      "ui_section": "treatment_context",
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No other non-haematological adverse event."
+          "value": "00284b",
+          "label": "00284b: elderly or ECOG 2 locally advanced/metastatic NSCLC"
         },
         {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
+          "value": "00284a",
+          "label": "00284a: adjuvant pancreatic adenocarcinoma"
         },
         {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
+          "value": "other",
+          "label": "Other / unresolved"
         }
       ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event and use its toxicity-specific CTCAE definition; assess symptoms, intervention and functional impact before selecting the grade.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "always_show": true
+    },
+    "assessment_stage": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "context",
+      "ui_section": "treatment_context",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first treatment"
+        },
+        {
+          "value": "on_treatment",
+          "label": "On treatment"
+        }
+      ],
+      "always_show": true
     },
     "treatment_day": {
       "label": "Treatment day",
       "type": "select",
       "required": false,
+      "demo_value": "",
+      "input_role": "context",
+      "ui_section": "treatment_context",
       "options": [
         {
           "value": "day1",
-          "label": "Day 1 / start of cycle"
+          "label": "Day 1"
         },
         {
           "value": "day8",
@@ -260,57 +305,194 @@
           "label": "Day 15"
         }
       ],
-      "demo_value": "day1",
-      "input_role": "context"
+      "always_show": true
     },
-    "gemcitabine_renal_band": {
-      "label": "Renal function for gemcitabine",
-      "type": "select",
+    "creatinine_uln_multiple": {
+      "label": "Creatinine / local ULN",
+      "type": "number",
       "required": false,
-      "options": [
-        {
-          "value": "ge30",
-          "label": "CrCl ≥30 mL/min",
-          "decision_value": "ge30"
-        },
-        {
-          "value": "lt30",
-          "label": "CrCl <30 mL/min",
-          "decision_value": "lt30"
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis",
-          "decision_value": "dialysis"
-        }
-      ],
-      "demo_value": "ge30",
+      "demo_value": "",
+      "input_role": "decision",
       "ui_section": "labs",
-      "always_show": true,
+      "min": 0,
+      "max": 10000,
+      "step": 0.01
+    },
+    "alt_ast_uln_multiple": {
+      "label": "Highest AST or ALT / corresponding ULN",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "labs",
+      "min": 0,
+      "max": 10000,
+      "step": 0.01
+    },
+    "crcl_ml_min": {
+      "label": "Verified creatinine clearance (mL/min)",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "labs",
+      "min": 0,
+      "max": 10000,
+      "step": 0.01,
       "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "reason": "Preserve source gap at exactly30",
+        "source_url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf"
+      }
     },
-    "gemcitabine_bilirubin_band": {
-      "label": "Bilirubin for gemcitabine",
+    "bilirubin_micromol_l": {
+      "label": "Bilirubin (micromol/L)",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "labs",
+      "min": 0,
+      "max": 10000,
+      "step": 0.01
+    },
+    "other_nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity (excluding nausea/vomiting)",
       "type": "select",
       "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
       "options": [
         {
-          "value": "lt27",
-          "label": "<27 µmol/L"
+          "value": 0,
+          "label": "0",
+          "description": "No toxicity reported"
         },
         {
-          "value": "ge27",
-          "label": "≥27 µmol/L"
+          "value": 1,
+          "label": "1",
+          "description": "Documented grade 1; confirm using the locally agreed clinical grading reference."
+        },
+        {
+          "value": 2,
+          "label": "2",
+          "description": "Documented grade 2; confirm using the locally agreed clinical grading reference."
+        },
+        {
+          "value": 3,
+          "label": "3",
+          "description": "Documented grade 3; confirm using the locally agreed clinical grading reference."
+        },
+        {
+          "value": 4,
+          "label": "4",
+          "description": "Documented grade 4; confirm using the locally agreed clinical grading reference."
         }
       ],
-      "demo_value": "lt27",
-      "ui_section": "labs",
-      "always_show": true,
-      "input_role": "decision"
+      "grading_source_label": "NCCP 00284 toxicity dose-modification table",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+      "source_grading_note": "NCCP 00284 dose-modification table uses toxicity grades but does not provide a complete grading table. Confirm the documented clinical grade with the treating team; do not infer a grade from this selector.",
+      "assessment_guidance": "NCCP 00284 dose-modification table uses toxicity grades but does not provide a complete grading table. Confirm the documented clinical grade with the treating team; do not infer a grade from this selector."
+    },
+    "prior_haematologic_event": {
+      "label": "Previous cycle event",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "anc_lt05_gt5d",
+          "label": "ANC <0.5 for >5 days"
+        },
+        {
+          "value": "anc_lt01_gt3d",
+          "label": "ANC <0.1 for >3 days"
+        },
+        {
+          "value": "febrile_neutropenia",
+          "label": "Febrile neutropenia"
+        },
+        {
+          "value": "platelets_lt25",
+          "label": "Platelets <25"
+        },
+        {
+          "value": "delay_gt1week",
+          "label": "Toxicity delay >1 week"
+        }
+      ]
+    },
+    "restart_after_omission": {
+      "label": "Restart of an omitted within-cycle dose being considered",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "drug_pneumonitis_suspected": {
+      "label": "Gemcitabine pneumonitis suspected",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "scar_suspected": {
+      "label": "Suspected severe cutaneous adverse reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "scar_confirmed": {
+      "label": "Confirmed severe cutaneous adverse reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "hus_suspected": {
+      "label": "Suspected haemolytic uraemic syndrome",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "pres_suspected": {
+      "label": "Suspected posterior reversible encephalopathy syndrome",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "concurrent_radiotherapy": {
+      "label": "Radiotherapy planned concurrently or within7days",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "resection_status_confirmed": {
+      "label": "For adjuvant pancreas: complete macroscopic resection confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
     }
   },
   "required_inputs": [],
@@ -345,277 +527,988 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
+        "rule_id": "ECOG_OUTSIDE_SOURCE_RANGE",
         "when": {
           "field": "ecog",
           "operator": ">",
           "value": 2
         },
+        "priority": 8,
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "gemcitabine"
           ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "recommendation": "Review clinical fitness: the source eligibility range is ECOG 0-2.",
+          "message": "Review clinical fitness: the source eligibility range is ECOG 0-2.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Review clinical fitness: the source eligibility range is ECOG 0-2.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
       },
       {
-        "id": "HYPERSENSITIVITY_EXCLUSION",
-        "priority": 10,
+        "rule_id": "HYPERSENSITIVITY",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
           "value": true
         },
+        "priority": 10,
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "gemcitabine"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "recommendation": "Do not administer gemcitabine with known hypersensitivity.",
+          "message": "Do not administer gemcitabine with known hypersensitivity.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Do not administer gemcitabine with known hypersensitivity.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
       },
       {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "BREASTFEEDING",
         "when": {
-          "any": [
-            {
-              "field": "pregnancy",
-              "operator": "==",
-              "value": true
-            },
-            {
-              "field": "breastfeeding",
-              "operator": "==",
-              "value": true
-            }
-          ]
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
-      },
-      {
-        "id": "ANC_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "PLATELETS_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "FEVER_OR_ACTIVE_INFECTION",
-        "priority": 10,
-        "when": {
-          "field": "febrile_or_active_infection",
+          "field": "breastfeeding",
           "operator": "==",
           "value": true
         },
+        "priority": 10,
         "action": {
-          "type": "withhold",
+          "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "gemcitabine"
           ],
-          "message": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
+          "recommendation": "Breastfeeding is an NCCP exclusion; urgent specialist review is required.",
+          "message": "Breastfeeding is an NCCP exclusion; urgent specialist review is required.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Breastfeeding is an NCCP exclusion; urgent specialist review is required.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
       },
       {
-        "id": "SEVERE_OTHER_TOXICITY",
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
         "priority": 8,
-        "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-      },
-      {
-        "id": "GEMCITABINE_ANC_LT05",
-        "priority": 9,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 0.5
-        },
-        "action": {
-          "type": "omit",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC <0.5 ×10⁹/L triggers omission/withholding of the within-cycle gemcitabine dose."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC <0.5 ×10⁹/L triggers omission/withholding of the within-cycle gemcitabine dose."
-      },
-      {
-        "id": "GEMCITABINE_PLATELETS_LT50",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 50
-        },
-        "action": {
-          "type": "omit",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets <50 ×10⁹/L trigger omission/withholding of the within-cycle gemcitabine dose."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets <50 ×10⁹/L trigger omission/withholding of the within-cycle gemcitabine dose."
-      },
-      {
-        "id": "OF590_00284_GEM_RENAL_LT30",
-        "priority": 20,
-        "when": {
-          "field": "gemcitabine_renal_band",
-          "operator": "in",
-          "value": [
-            "lt30",
-            "dialysis"
-          ]
-        },
         "action": {
           "type": "consultant_review",
           "components": [
             "gemcitabine"
           ],
-          "message": "CrCl <30 mL/min or dialysis: consider a gemcitabine dose reduction and agree the starting dose with the Consultant and oncology pharmacy.",
-          "recommendation": "CrCl <30 mL/min or dialysis: consider a gemcitabine dose reduction and agree the starting dose with the Consultant and oncology pharmacy."
+          "recommendation": "Do not administer pending specialist pregnancy assessment; discuss maternal and fetal risks.",
+          "message": "Do not administer pending specialist pregnancy assessment; discuss maternal and fetal risks.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Do not administer pending specialist pregnancy assessment; discuss maternal and fetal risks.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "CrCl <30 mL/min or dialysis: consider a gemcitabine dose reduction and agree the starting dose with the Consultant and oncology pharmacy."
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
       },
       {
-        "id": "OF590_00284_GEM_BILI_GE27",
-        "priority": 20,
+        "rule_id": "FEVER_OR_INFECTION",
         "when": {
-          "field": "gemcitabine_bilirubin_band",
+          "field": "febrile_or_active_infection",
           "operator": "==",
-          "value": "ge27"
+          "value": true
         },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Urgent clinical assessment of fever/infection is required before treatment.",
+          "message": "Urgent clinical assessment of fever/infection is required before treatment.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Urgent clinical assessment of fever/infection is required before treatment.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "INDICATION_UNRESOLVED",
+        "when": {
+          "field": "indication_id",
+          "operator": "==",
+          "value": "other"
+        },
+        "priority": 8,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Confirm one of the source indications. The patient guide in this release covers lung cancer only.",
+          "message": "Confirm one of the source indications. The patient guide in this release covers lung cancer only.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm one of the source indications. The patient guide in this release covers lung cancer only.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "PANCREAS_SEPARATE_CONTEXT",
+        "when": {
+          "field": "indication_id",
+          "operator": "==",
+          "value": "00284a"
+        },
+        "priority": 8,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Pancreatic adjuvant treatment has a six-cycle plan after macroscopic complete resection. Do not use the lung patient guide or indefinite lung stopping rule.",
+          "message": "Pancreatic adjuvant treatment has a six-cycle plan after macroscopic complete resection. Do not use the lung patient guide or indefinite lung stopping rule.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Pancreatic adjuvant treatment has a six-cycle plan after macroscopic complete resection. Do not use the lung patient guide or indefinite lung stopping rule.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "PANCREAS_RESECTION_UNRESOLVED",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00284a"
+            },
+            {
+              "field": "resection_status_confirmed",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Confirm the macroscopic complete resection requirement before adjuvant pancreatic treatment.",
+          "message": "Confirm the macroscopic complete resection requirement before adjuvant pancreatic treatment.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm the macroscopic complete resection requirement before adjuvant pancreatic treatment.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "PANCREAS_CYCLE_LIMIT",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00284a"
+            },
+            {
+              "field": "cycle_number",
+              "operator": ">",
+              "value": 6
+            }
+          ]
+        },
+        "priority": 8,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "The adjuvant pancreatic source specifies six cycles. Reassess any plan beyond six.",
+          "message": "The adjuvant pancreatic source specifies six cycles. Reassess any plan beyond six.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The adjuvant pancreatic source specifies six cycles. Reassess any plan beyond six.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "BASELINE_COUNTS",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Initiation requires ANC>1.5 and platelets>100; these are not the within-cycle thresholds.",
+          "message": "Initiation requires ANC>1.5 and platelets>100; these are not the within-cycle thresholds.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Initiation requires ANC>1.5 and platelets>100; these are not the within-cycle thresholds.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "BASELINE_ORGAN_FUNCTION",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "creatinine_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                },
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Baseline eligibility requires creatinine≤1.5xULN and transaminases≤3xULN; reconcile eligibility with any dose-modification proposal.",
+          "message": "Baseline eligibility requires creatinine≤1.5xULN and transaminases≤3xULN; reconcile eligibility with any dose-modification proposal.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Baseline eligibility requires creatinine≤1.5xULN and transaminases≤3xULN; reconcile eligibility with any dose-modification proposal.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 1,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "DAY_REQUIRED",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "exists"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "exists"
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 8,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Select Day1,8 or15 before applying count thresholds.",
+          "message": "Select Day1,8 or15 before applying count thresholds.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Select Day1,8 or15 before applying count thresholds.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 2,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "DAY1_COUNTS",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<=",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "New-cycle NCCP threshold is ANC>1 and platelets>100.",
+          "message": "New-cycle NCCP threshold is ANC>1 and platelets>100.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "New-cycle NCCP threshold is ANC>1 and platelets>100.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 2,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "DAY1_SMPC_CONFLICT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "NCCP subsequent-cycle table allows ANC>1, while product information requires at least1.5 at cycle initiation. Do not automatically clear this conflict; consultant/pharmacy reconciliation required.",
+          "message": "NCCP subsequent-cycle table allows ANC>1, while product information requires at least1.5 at cycle initiation. Do not automatically clear this conflict; consultant/pharmacy reconciliation required.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "NCCP subsequent-cycle table allows ANC>1, while product information requires at least1.5 at cycle initiation. Do not automatically clear this conflict; consultant/pharmacy reconciliation required.",
+        "source": {
+          "document": "Manufacturer product information; explicit source reconciliation",
+          "url": "https://www.medicines.org.uk/emc/product/3119/smpc",
+          "page": "4.2",
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "WITHIN_CYCLE_OMIT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "in",
+              "value": [
+                "day8",
+                "day15"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 10,
+        "action": {
+          "type": "omit",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Omit the within-cycle dose; source restart requires ANC>0.5 AND platelets>50.",
+          "message": "Omit the within-cycle dose; source restart requires ANC>0.5 AND platelets>50.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Omit the within-cycle dose; source restart requires ANC>0.5 AND platelets>50.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 2,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "WITHIN_CYCLE_75",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "in",
+              "value": [
+                "day8",
+                "day15"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 0.5
+                    },
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": "<=",
+                      "value": 1
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 50
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": "<=",
+                      "value": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 8,
         "action": {
           "type": "dose_reduce",
           "components": [
             "gemcitabine"
           ],
-          "message": "Bilirubin ≥27 µmol/L: start gemcitabine at 800 mg/m² and escalate only if tolerated.",
-          "recommendation": "Bilirubin ≥27 µmol/L: start gemcitabine at 800 mg/m² and escalate only if tolerated."
+          "recommendation": "Source within-cycle row recommends75%; any simultaneous omission criterion takes precedence. Confirm both counts and prior dose.",
+          "message": "Source within-cycle row recommends75%; any simultaneous omission criterion takes precedence. Confirm both counts and prior dose.",
+          "show_in_dose_actions": true
         },
+        "explanation": "Source within-cycle row recommends75%; any simultaneous omission criterion takes precedence. Confirm both counts and prior dose.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 2,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "RESTART_COUNTS",
+        "when": {
+          "all": [
+            {
+              "field": "restart_after_omission",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<=",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<=",
+                  "value": 50
+                }
+              ]
+            }
+          ]
         },
-        "explanation": "Bilirubin ≥27 µmol/L: start gemcitabine at 800 mg/m² and escalate only if tolerated."
+        "priority": 10,
+        "action": {
+          "type": "omit",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Do not restart an omitted dose until ANC>0.5 and platelets>50; equality does not meet restart wording.",
+          "message": "Do not restart an omitted dose until ANC>0.5 and platelets>50; equality does not meet restart wording.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Do not restart an omitted dose until ANC>0.5 and platelets>50; equality does not meet restart wording.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 2,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "PRIOR_EVENT_75",
+        "when": {
+          "field": "prior_haematologic_event",
+          "operator": "in",
+          "value": [
+            "anc_lt05_gt5d",
+            "anc_lt01_gt3d",
+            "febrile_neutropenia",
+            "platelets_lt25",
+            "delay_gt1week"
+          ]
+        },
+        "priority": 8,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "For later cycles use75% of the ORIGINAL cycle-initiation dose after the selected severe event, after recovery and consultant confirmation.",
+          "message": "For later cycles use75% of the ORIGINAL cycle-initiation dose after the selected severe event, after recovery and consultant confirmation.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "For later cycles use75% of the ORIGINAL cycle-initiation dose after the selected severe event, after recovery and consultant confirmation.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 2,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "RENAL_LT30",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 30
+        },
+        "priority": 8,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Consider a gemcitabine reduction below30mL/min; the source supplies no fixed reduced dose.",
+          "message": "Consider a gemcitabine reduction below30mL/min; the source supplies no fixed reduced dose.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Consider a gemcitabine reduction below30mL/min; the source supplies no fixed reduced dose.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 2,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "RENAL_EXACT30_GAP",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": 30
+        },
+        "priority": 8,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "The source lists >30 and <30. Exactly30 is unassigned; do not round into a dose band.",
+          "message": "The source lists >30 and <30. Exactly30 is unassigned; do not round into a dose band.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The source lists >30 and <30. Exactly30 is unassigned; do not round into a dose band.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 2,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "BILIRUBIN_GE27",
+        "when": {
+          "field": "bilirubin_micromol_l",
+          "operator": ">=",
+          "value": 27
+        },
+        "priority": 8,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Source starting recommendation is800mg/m² when bilirubin≥27micromol/L; increase only if tolerated and prescribed.",
+          "message": "Source starting recommendation is800mg/m² when bilirubin≥27micromol/L; increase only if tolerated and prescribed.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Source starting recommendation is800mg/m² when bilirubin≥27micromol/L; increase only if tolerated and prescribed.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 2,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "NONHAEM_AMBIGUOUS",
+        "when": {
+          "field": "other_nonhaem_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Severe nonhaematological toxicity excluding nausea/vomiting: hold and obtain consultant review. NCCP v5 prints >3 and >4, while product information addresses Grade3/4. The tool does not silently convert these symbols or mandate an automatic50% reduction/permanent stop.",
+          "message": "Severe nonhaematological toxicity excluding nausea/vomiting: hold and obtain consultant review. NCCP v5 prints >3 and >4, while product information addresses Grade3/4. The tool does not silently convert these symbols or mandate an automatic50% reduction/permanent stop.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe nonhaematological toxicity excluding nausea/vomiting: hold and obtain consultant review. NCCP v5 prints >3 and >4, while product information addresses Grade3/4. The tool does not silently convert these symbols or mandate an automatic50% reduction/permanent stop.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 3,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "PNEUMONITIS",
+        "when": {
+          "field": "drug_pneumonitis_suspected",
+          "operator": "==",
+          "value": true
+        },
+        "priority": 10,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Stop gemcitabine when drug-induced pneumonitis is suspected; urgently investigate alternative causes.",
+          "message": "Stop gemcitabine when drug-induced pneumonitis is suspected; urgently investigate alternative causes.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Stop gemcitabine when drug-induced pneumonitis is suspected; urgently investigate alternative causes.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 3,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "SCAR_CONFIRMED",
+        "when": {
+          "field": "scar_confirmed",
+          "operator": "==",
+          "value": true
+        },
+        "priority": 10,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Discontinue gemcitabine for confirmed severe cutaneous adverse reaction.",
+          "message": "Discontinue gemcitabine for confirmed severe cutaneous adverse reaction.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Discontinue gemcitabine for confirmed severe cutaneous adverse reaction.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 3,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "SCAR_SUSPECTED",
+        "when": {
+          "field": "scar_suspected",
+          "operator": "==",
+          "value": true
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Stop dosing pending urgent assessment of suspected severe skin reaction.",
+          "message": "Stop dosing pending urgent assessment of suspected severe skin reaction.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Stop dosing pending urgent assessment of suspected severe skin reaction.",
+        "source": {
+          "document": "NCCP 00284 v5",
+          "url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+          "page": 3,
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "HUS",
+        "when": {
+          "field": "hus_suspected",
+          "operator": "==",
+          "value": true
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Stop gemcitabine and urgently assess suspected haemolytic uraemic syndrome.",
+          "message": "Stop gemcitabine and urgently assess suspected haemolytic uraemic syndrome.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Stop gemcitabine and urgently assess suspected haemolytic uraemic syndrome.",
+        "source": {
+          "document": "Manufacturer product information; explicit source reconciliation",
+          "url": "https://www.medicines.org.uk/emc/product/3119/smpc",
+          "page": "4.4",
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "PRES",
+        "when": {
+          "field": "pres_suspected",
+          "operator": "==",
+          "value": true
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Urgently stop and assess suspected posterior reversible encephalopathy syndrome.",
+          "message": "Urgently stop and assess suspected posterior reversible encephalopathy syndrome.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Urgently stop and assess suspected posterior reversible encephalopathy syndrome.",
+        "source": {
+          "document": "Manufacturer product information; explicit source reconciliation",
+          "url": "https://www.medicines.org.uk/emc/product/3119/smpc",
+          "page": "4.4",
+          "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "RADIOTHERAPY",
+        "when": {
+          "field": "concurrent_radiotherapy",
+          "operator": "==",
+          "value": true
+        },
+        "priority": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Do not combine with radiotherapy casually: concurrent or≤7day timing requires specialist risk and protocol review.",
+          "message": "Do not combine with radiotherapy casually: concurrent or≤7day timing requires specialist risk and protocol review.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Do not combine with radiotherapy casually: concurrent or≤7day timing requires specialist risk and protocol review.",
+        "source": {
+          "document": "Manufacturer product information; explicit source reconciliation",
+          "url": "https://www.medicines.org.uk/emc/product/3119/smpc",
+          "page": "4.4",
+          "checked_date": "2026-11-02"
+        }
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and organ function appropriate for the selected treatment"
+    "Exact indication; ECOG0-2. Baseline ANC>1.5 and platelets>100; creatinine≤1.5ULN, transaminases≤3ULN.",
+    "Macroscopic complete resection belongs to the adjuvant pancreatic pathway; do not impose it on advanced NSCLC."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source"
+    "Gemcitabine hypersensitivity",
+    "Breastfeeding; pregnancy requires specialist risk assessment"
   ],
   "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Treatment-specific toxicity monitoring before each administration/cycle"
+    "Baseline FBC, renal and liver profile; audiometry and creatinine clearance if clinically indicated.",
+    "FBC before every dose; renal/liver profile before each cycle.",
+    "Response imaging, tumour markers where useful and post-treatment follow-up follow the consultant plan; no universal interval specified."
   ],
   "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
+    "Day1, within-cycle and baseline count thresholds differ. Prior severe marrow events use75% original cycle-initiation dose after review.",
+    "CrCl exactly30 is an unassigned source boundary. Bilirubin≥27:800mg/m², increase if tolerated.",
+    "Printed >3/>4 nonhaem rows conflict with usual Grade3/4 product guidance: hold severe toxicity and resolve with consultant; no inferred numeric reduction or permanent stop."
   ],
   "supportive_care": {
     "emetogenic_risk": "low",
     "script_id": "nccp-parenteral-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
+    "mapping_basis": "Single-agent gemcitabine low risk on each treatment day; no platinum prophylaxis.",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
+    "phase_specific_plan": "patient/00284/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "00284a",
+      "label": "00284a: adjuvant pancreas — six-cycle plan",
+      "indication_ids": [
+        "00284a"
+      ],
+      "alternative_group": "indication",
+      "cycle_length_days": 28,
+      "cycles": 6,
+      "active_drugs": [
+        "gemcitabine"
+      ],
+      "duration_text": "Six 28-day cycles, or earlier disease progression or unacceptable toxicity.",
+      "schedule_summary": "Gemcitabine 1000 mg/m² IV on Days 1, 8 and 15. This finite plan applies to the pancreatic adjuvant indication only.",
+      "administration": [
+        {
+          "drug": "gemcitabine",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m2"
+          },
+          "days": [
+            1,
+            8,
+            15
+          ],
+          "route": "IV",
+          "order": 1,
+          "notes": "Infuse in 250 mL sodium chloride 0.9% over 30 minutes on each treatment day. No dose on the other days. Starting dose may be reduced by the prescriber."
+        }
+      ]
+    },
+    {
+      "phase_id": "00284b",
+      "label": "00284b: advanced NSCLC — no fixed cycle total",
+      "indication_ids": [
+        "00284b"
+      ],
+      "alternative_group": "indication",
+      "cycle_length_days": 28,
+      "cycles": null,
+      "active_drugs": [
+        "gemcitabine"
+      ],
+      "duration_text": "Repeat every 28 days until disease progression or unacceptable toxicity; no source-fixed total number of cycles.",
+      "schedule_summary": "Gemcitabine 1000 mg/m² IV on Days 1, 8 and 15. Do not apply the pancreatic six-cycle limit to this lung indication.",
+      "administration": [
+        {
+          "drug": "gemcitabine",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m2"
+          },
+          "days": [
+            1,
+            8,
+            15
+          ],
+          "route": "IV",
+          "order": 1,
+          "notes": "Infuse in 250 mL sodium chloride 0.9% over 30 minutes on each treatment day. No dose on the other days. Starting dose may be reduced by the prescriber."
+        }
+      ]
+    }
+  ]
 }

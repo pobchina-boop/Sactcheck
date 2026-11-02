@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.28';
-  const CONTENT_RELEASE='0.84.28';
+  const RELEASE='0.84.29';
+  const CONTENT_RELEASE='0.84.29';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00734':{"title": "weekly carboplatin AUC 2 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -86,6 +86,11 @@
     '00339':{"title": "Vinorelbine and cisplatin · 21-day cycle", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00343':{"title": "Vinorelbine and cisplatin · 28-day cycle", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00304':{"title": "Carboplatin and paclitaxel · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00311':{"title": "Topotecan by infusion · small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00587':{"title": "Topotecan capsules · small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00388':{"title": "Oral etoposide · small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["schedule_7d", "schedule_3d", "schedule_21d"], "scopeGuard": true, "scope": "Choose the prescribed oral etoposide schedule"},
+    '00284':{"title": "Gemcitabine alone · non-small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00614':{"title": "Carboplatin and vinorelbine · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00790':{"title": "TRAIN-2 with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00789':{"title": "TCHP with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00785':{"title": "Phesgo maintenance", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -194,7 +199,7 @@
   function bundleRoutes(value){
     const d=definitionFor(value);if(!d)return [];
     if(!d.contextOnly)return [d.code];
-    if(!Array.isArray(d.patientContexts)||!d.patientContexts.length||d.patientContexts.some(s=>!/^backbone_[0-9]{5}$/.test(s)))throw new Error('Invalid patient context routes');
+    if(!Array.isArray(d.patientContexts)||!d.patientContexts.length||d.patientContexts.some(s=>!(d.code==='00388'?/^schedule_(7d|3d|21d)$/:/^backbone_[0-9]{5}$/).test(s)))throw new Error('Invalid patient context routes');
     return d.patientContexts.map(s=>d.code+'/'+s);
   }
   function hasDedicated(value){return Boolean(definitionFor(value));}

@@ -411,8 +411,8 @@
     history.replaceState(null, "", "#jsonAssessmentScreen");
   }
 
-  function renderSupportiveRisk(protocol, treatmentPhase, treatmentDay) {
-    const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId, treatmentPhase, treatmentDay, tumourGroup: activeTumourGroup }) || {
+  function renderSupportiveRisk(protocol, treatmentPhase, treatmentDay, treatmentRoute) {
+    const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId, treatmentPhase, treatmentDay, treatmentRoute, tumourGroup: activeTumourGroup }) || {
       level: "pending",
       label: "Supportive-care mapping requires review",
       className: "emetogenic-pending",
@@ -904,7 +904,7 @@
   function updateConditionalInputs() {
     if (!activeProtocol) return;
     const rawInputs = collectRawInputs(true);
-    renderSupportiveRisk(activeProtocol, rawInputs.treatment_phase, rawInputs.treatment_day);
+    renderSupportiveRisk(activeProtocol, rawInputs.treatment_phase, rawInputs.treatment_day, rawInputs.vinorelbine_route);
     const definitions = presentationInputDefinitions(activeProtocol, activeProfileId, rawInputs);
 
     definitions.forEach(definition => {

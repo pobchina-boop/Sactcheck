@@ -19,10 +19,10 @@ for(const code of codes){
   for(const f of ['index.html','guide.html','guide.pdf','passport.pdf']) assert.ok(fs.existsSync(path.join(d,f)),`patient/${code}/${f} missing`);
   const html=fs.readFileSync(path.join(d,'index.html'),'utf8');
   assert.ok(html.includes('anatomy-hcc-v0762.png'),`patient/${code} lost approved anatomy visual`);
-  assert.ok(html.includes('hcc-visual-stage'),`patient/${code} lost rich anatomy layout`);
+  assert.ok((code==='00222'?html.includes('class="pt-map"')&&html.includes('numbered symptom locations'):html.includes('hcc-visual-stage')),`patient/${code} lost rich anatomy layout`);
   assert.ok(html.includes(`https://sactcheck.com/patient/${code}/`),`patient/${code} canonical route missing`);
   assert.ok(fs.statSync(path.join(d,'guide.pdf')).size>500000,`patient/${code}/guide.pdf lost embedded anatomy artwork`);
-  if(['00209','00568','00619','00222'].includes(code)){const v=JSON.parse(fs.readFileSync(path.join(root,code==='00568'?'validation/lung-nivolumab-v08427/pdf-validation.json':code==='00222'?'validation/lung-next-v08423/pdf-validation.json':'validation/breast-completion-v08421/pdf-validation.json'),'utf8')).checks.find(x=>x.code===code&&x.document==='passport');assert.equal(v.pages,5);assert.equal(v.sha256,sha(path.join(d,'passport.pdf')));assert(v.bounds_pass&&v.compatibility_identical);}else assert.ok(fs.statSync(path.join(d,'passport.pdf')).size>30000,`patient/${code}/passport.pdf appears downgraded`);
+  if(['00209','00568','00619','00222'].includes(code)){const v=JSON.parse(fs.readFileSync(path.join(root,code==='00568'?'validation/lung-nivolumab-v08427/pdf-validation.json':code==='00222'?'validation/lung-cytotoxic-v08429/pdf-validation.json':'validation/breast-completion-v08421/pdf-validation.json'),'utf8')).checks.find(x=>x.code===code&&x.document==='passport');assert.equal(v.pages,5);assert.equal(v.sha256,sha(path.join(d,'passport.pdf')));assert(v.bounds_pass&&v.compatibility_identical);}else assert.ok(fs.statSync(path.join(d,'passport.pdf')).size>30000,`patient/${code}/passport.pdf appears downgraded`);
   const compat=path.join(root,'docs','patient',code);
   assert.ok(fs.readFileSync(path.join(compat,'index.html'),'utf8').includes(`https://sactcheck.com/patient/${code}/`),`compatibility route ${code} must redirect to canonical portal`);
   assert.strictEqual(sha(path.join(d,'guide.pdf')),sha(path.join(compat,'guide.pdf')),`compatibility guide PDF drift for ${code}`);

@@ -30,10 +30,11 @@ for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
   const rec = m.organ_function_reconciliation;
+  const migration29=m.sactcheck_encoding_version==='0.84.29'&&require('../validation/lung-cytotoxic-v08429/organ-function-migrations.json').records[item.nccp_code];
   const migration26=m.sactcheck_encoding_version==='0.84.26'&&require('../validation/lung-next-v08426/organ-function-migrations.json').records[item.nccp_code];
-  const migration25=m.sactcheck_encoding_version==='0.84.25'&&require('../validation/targeted-lung-v08425/organ-function-migrations.json').records[item.nccp_code];
+  const migration25=['0.84.25','0.84.29'].includes(m.sactcheck_encoding_version)&&require('../validation/targeted-lung-v08425/organ-function-migrations.json').records[item.nccp_code];
   const migration24=m.sactcheck_encoding_version==='0.84.24'&&migrations24[item.nccp_code];
-  const v08422 = (item.nccp_code === '00318' && ['0.84.22','0.84.28'].includes(m.sactcheck_encoding_version)) || (item.nccp_code === '00222' && m.sactcheck_encoding_version === '0.84.23');
+  const v08422 = (item.nccp_code === '00318' && ['0.84.22','0.84.28'].includes(m.sactcheck_encoding_version)) || (item.nccp_code === '00222' && ['0.84.23','0.84.29'].includes(m.sactcheck_encoding_version));
   const v0836 = m.validation?.audit_release === '0.83.6';
   const superseded = (['00207','00447','00448','00732','00328','00585','00330','00331','00692','00733','00210','00213','00586','00623','00225'].includes(item.nccp_code) && m.validation?.audit_release === '0.84.21') || v0836 || (['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4') || (item.nccp_code === '00225' && m.validation?.audit_release === '0.83.5');
   assert(rec, `${item.nccp_code}: missing organ-function reconciliation metadata`);
@@ -43,8 +44,8 @@ for (const item of register.records) {
   assert.strictEqual(rec.consultant_reviewed, false);
   assert.strictEqual(rec.oncology_pharmacy_reviewed, false);
   assert.strictEqual(rec.clinical_use_authorised, false);
-  assert.strictEqual(m.encoding_maturity.level, (v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
-  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, m.sactcheck_encoding_version==='0.84.28'?'source_reconciled_v08428_independent_review_pending':migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
+  assert.strictEqual(m.encoding_maturity.level, (migration29||v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, m.sactcheck_encoding_version==='0.84.29'?'source_reconciled_v08429_independent_review_pending':m.sactcheck_encoding_version==='0.84.28'?'source_reconciled_v08428_independent_review_pending':migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
   for (const [field, def] of Object.entries(p.input_definitions || {})) {
     if (/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label || ''}`)) {
       assert.strictEqual(def.required, false, `${item.nccp_code}/${field} must remain optional for independent partial assessment`);
@@ -52,7 +53,8 @@ for (const item of register.records) {
     }
   }
   const releaseRules = (p.rule_engine?.rules || []).filter(r => String(r.id || r.rule_id || '').startsWith('OF590_'));
-  if(migration26){assert.equal(rec.reconciled_release,'0.84.26');assert.equal(rec.resolution,migration26.resolution);for(const id of migration26.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page));assert(fs.existsSync(path.join(root,'validation/lung-next-v08426',migration26.group,'source-cases.cjs')));}
+  if(migration29){for(const id of migration29.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url===m.source_url&&r.source?.page));assert(fs.existsSync(path.join(root,'validation/lung-cytotoxic-v08429',migration29.group,'source-cases.cjs')));}
+  else if(migration26){assert.equal(rec.reconciled_release,'0.84.26');assert.equal(rec.resolution,migration26.resolution);for(const id of migration26.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page));assert(fs.existsSync(path.join(root,'validation/lung-next-v08426',migration26.group,'source-cases.cjs')));}
   else if(migration25){assert.equal(rec.resolution,migration25.resolution);for(const id of migration25.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url&&r.source?.page),item.nccp_code+': missing audited v25 rule '+id);assert(fs.existsSync(path.join(root,'validation/targeted-lung-v08425',migration25.group,'source-cases.cjs')));}
   else if (rec.resolution === 'structured_rules') {
     if(migration24){
@@ -120,7 +122,7 @@ for (const p of allProtocols) {
     );
   }
 }
-assert.strictEqual(triggerableRuleCount, 229, 'All 229 retained v0.59.0 rules remain executable; two ceritinib rules are replaced by four source-conflict review rules verified by v0.84.25 cases; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
+assert.strictEqual(triggerableRuleCount, 223, 'Six legacy gemcitabine/topotecan rules are superseded by source-specific v29 cases. All 223 retained v0.59.0 rules remain executable; two ceritinib rules are replaced by four source-conflict review rules verified by v0.84.25 cases; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
 
 // Sentinel source pathways and single-value partial assessments.
 let result = assess('00205', { pld_bilirubin_band: '51_86' });
@@ -132,15 +134,15 @@ assert.strictEqual(result.actionType, 'dose_reduce');
 result = assess('00460', { fluorouracil_bilirubin_umol_l: 90 });
 assert.strictEqual(result.actionType, 'contraindicated');
 
-result = assess('00284', { gemcitabine_bilirubin_band: 'ge27' });
+result = assess('00284', { bilirubin_micromol_l: 27 });
 assert.strictEqual(result.actionType, 'dose_reduce');
 
 result = assess('00311', { topotecan_renal_band: '20_39' });
 assert.strictEqual(result.actionType, 'dose_reduce');
 result = assess('00311', { topotecan_bilirubin_band: 'gt171' });
-assert.strictEqual(result.actionType, 'contraindicated');
+assert.strictEqual(result.actionType, 'consultant_review'); // Source says not recommended; do not invent a formal contraindication.
 
-result = assess('00587', { topotecan_oral_renal_band: '30_49' });
+result = assess('00587', { topotecan_oral_renal_band: '30_49', current_topotecan_dose_mg_m2: 2.3 });
 assert.strictEqual(result.actionType, 'dose_reduce');
 
 result = assess('00642', { lutathera_renal_band: 'lt30' });
@@ -168,6 +170,6 @@ const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_R
 assert.strictEqual(audit.summary.protocols_in_reconciliation_scope, 74);
 assert.strictEqual(audit.summary.remaining_partial_rule_encoding_records, 0);
 assert.strictEqual(audit.summary.records_with_audit_issues, 0);
-assert.strictEqual(audit.summary.total_v0590_rules, 229);
+assert.strictEqual(audit.summary.total_v0590_rules, 223);
 
 console.log('v0.59.0 library-wide organ-function reconciliation tests passed.');

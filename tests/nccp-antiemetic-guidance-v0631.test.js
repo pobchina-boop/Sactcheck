@@ -16,6 +16,7 @@ const classificationBaseline = readJson("V0630_EMETOGENIC_CLASSIFICATION_SNAPSHO
 const clinicalCoreBaseline = readJson("V0630_CLINICAL_CORE_HASHES.json");
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
 const familyPhases = {
+  '00319':{day1:'high','oral-days2-3':'low'},'00614':{day1:'high',day8_iv:'minimal',day8_oral:'oral_moderate_high'},
   '00281':{day1:'high',day8:'low'},'00310':{day1:'high',day8:'low'},
   '00339':{cisplatin_day:'high',vinorelbine_day:'minimal'},'00343':{cisplatin_day:'high',vinorelbine_day:'minimal'},
   '00712':{induction:'high',maintenance_day1:'low',maintenance_day22:'minimal'},
@@ -97,6 +98,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
     "00446": "moderate", // v0.83.3: NCCP 00446 v7b p6
     "00945": "low",
     "00431": "low",
+    "00319": "phase_dependent", // v29: day1 carboplatin versus oral etoposide days2–3
+    "00614": "phase_dependent", // v29: treatment day and prescribed vinorelbine route
     "00340": "oral_moderate_high" // NCCP00340 v4 p6; source-derived v0.84.25 audit
   };
   for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
@@ -208,11 +211,11 @@ if (fs.existsSync(localDir)) {
     assert.strictEqual(risk.get(protocol).subsequentDays, null);
     for (const [phase, level] of Object.entries(phases)) {
       const day=Object.keys(protocol.supportive_care.treatment_day_profiles||{}).find(k=>protocol.supportive_care.treatment_day_profiles[k]===phase);
-      const selected=risk.get(protocol,{treatmentPhase:phase,...(day?{treatmentDay:day}:{}),...(code==='00849'?{treatmentDay:1}:{})});
+      const selected=risk.get(protocol,{treatmentPhase:phase,...(day?{treatmentDay:day}:{}),...(code==='00849'?{treatmentDay:1}:{}),...(code==='00614'?{treatmentDay:phase==='day1'?'day1':'day8',treatmentRoute:phase==='day8_oral'?'oral':'iv'}:{})});
       assert.strictEqual(selected.level,level,code+'/'+phase);
       const migrated=['00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
       const v17Scripts={high:'nccp-v8-ac-v08417',low:'nccp-v8-paclitaxel-v08417',minimal:'nccp-v8-trastuzumab-v08417'};
-      const expectedScript=['00281','00310','00339','00343'].includes(code)?({high:code==='00310'?'nccp-v8-carboplatin-v08420':'nccp-v8-high-v08420',low:'nccp-parenteral-low',minimal:'nccp-parenteral-minimal'})[level]:code==='00849'?(phase.endsWith('_day8')?'nccp-parenteral-low':['backbone_00304','backbone_00310','backbone_00318'].includes(phase)?'nccp-v8-carboplatin-v08420':'nccp-v8-high-v08420'):['00712','00792'].includes(code)?(phase==='induction'?'nccp-v8-carboplatin-v08420':level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-low'):['00689','00908'].includes(code)?(phase==='induction'?'nccp-v8-carboplatin-v08420':code==='00689'?'nccp-parenteral-minimal':'nccp-minimal-no-routine-prophylaxis'):['00569','00579','00713','00714'].includes(code)?(level==='minimal'?'nccp-minimal-no-routine-prophylaxis':phase==='induction'&&['00579','00713'].includes(code)?'nccp-v8-carboplatin-v08420':'nccp-parenteral-'+level):code==='00568'?(phase==='induction'?'nccp-v8-carboplatin-v08420':'nccp-parenteral-low'):['00688','00738','00485'].includes(code)?({high:'nccp-v8-ac-v08417',low:'nccp-v8-low-v08418',minimal:'nccp-minimal-no-routine-prophylaxis'})[level]:['00260','00278','00432','00316','00433','00745','00512','00815'].includes(code) ? v17Scripts[level] : migrated ? (['high','variable'].includes(level)?null:level==='minimal'?'nccp-minimal-no-routine-prophylaxis':level==='oral_moderate_high'?'nccp-oral-moderate-high':'nccp-parenteral-'+level) : ['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level;
+      const expectedScript=code==='00319'?(phase==='day1'?'nccp-v8-carboplatin-v08420':'nccp-oral-minimal-low'):code==='00614'?({day1:'nccp-v8-carboplatin-v08420',day8_iv:'nccp-minimal-no-routine',day8_oral:'nccp-oral-vinorelbine-v08420'})[phase]:['00281','00310','00339','00343'].includes(code)?({high:code==='00310'?'nccp-v8-carboplatin-v08420':'nccp-v8-high-v08420',low:'nccp-parenteral-low',minimal:'nccp-parenteral-minimal'})[level]:code==='00849'?(phase.endsWith('_day8')?'nccp-parenteral-low':['backbone_00304','backbone_00310','backbone_00318'].includes(phase)?'nccp-v8-carboplatin-v08420':'nccp-v8-high-v08420'):['00712','00792'].includes(code)?(phase==='induction'?'nccp-v8-carboplatin-v08420':level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-low'):['00689','00908'].includes(code)?(phase==='induction'?'nccp-v8-carboplatin-v08420':code==='00689'?'nccp-parenteral-minimal':'nccp-minimal-no-routine-prophylaxis'):['00569','00579','00713','00714'].includes(code)?(level==='minimal'?'nccp-minimal-no-routine-prophylaxis':phase==='induction'&&['00579','00713'].includes(code)?'nccp-v8-carboplatin-v08420':'nccp-parenteral-'+level):code==='00568'?(phase==='induction'?'nccp-v8-carboplatin-v08420':'nccp-parenteral-low'):['00688','00738','00485'].includes(code)?({high:'nccp-v8-ac-v08417',low:'nccp-v8-low-v08418',minimal:'nccp-minimal-no-routine-prophylaxis'})[level]:['00260','00278','00432','00316','00433','00745','00512','00815'].includes(code) ? v17Scripts[level] : migrated ? (['high','variable'].includes(level)?null:level==='minimal'?'nccp-minimal-no-routine-prophylaxis':level==='oral_moderate_high'?'nccp-oral-moderate-high':'nccp-parenteral-'+level) : ['00858','00860','00861'].includes(code)&&level==='minimal'?'nccp-minimal-no-routine-prophylaxis':'nccp-parenteral-'+level;
       assert.strictEqual(selected.scriptId,expectedScript,code+'/'+phase+' must use the source-specific support pathway');
     }
     for (const [alias,phase] of Object.entries(protocol.supportive_care.phase_aliases || {})) assert.strictEqual(risk.get(protocol,{treatmentPhase:alias}).level,phases[phase]);

@@ -13,10 +13,11 @@ run('Blank remains incomplete',{},r=>assert.equal(r.actionType,'incomplete'));
 for(const field of Object.keys(p.input_definitions))run('Missing single input remains unassessed: '+field,{[field]:''},r=>assert.equal(clinical(r).length,0));
 for(const n of [0,.499])run('ANC below0.5 '+n,{anc_x10e9_l:n},(r,m)=>{has('ANC_LT0_5','delay')(r);assert(m.rows.every(z=>!z.quantified));});
 for(const n of [.5,.501,.999])run('ANC0.5to<1 '+n,{anc_x10e9_l:n},has('ANC_0_5_TO_LT1','delay'));
-for(const n of [1,1.001,2,10])run('ANC visually verified ≥1 adequate in entered domain '+n,{anc_x10e9_l:n},absent('ANC_LT0_5','ANC_0_5_TO_LT1'));
+for(const n of [1,1.001,2,10])run('ANC at or above1 is not in the below1 delay bands '+n,{anc_x10e9_l:n},absent('ANC_LT0_5','ANC_0_5_TO_LT1'));
 for(const [n,id]of [[0,'PLATELETS_LT50'],[49.999,'PLATELETS_LT50'],[50,'PLATELETS_50_TO_LT75_GAP'],[74.999,'PLATELETS_50_TO_LT75_GAP'],[75,'PLATELETS_75_TO_LT100'],[99.999,'PLATELETS_75_TO_LT100']])run('Platelet threshold '+n,{platelets_x10e9_l:n},has(id));
-for(const n of [100,100.001,150])run('Platelet visually verified ≥100 '+n,{platelets_x10e9_l:n},absent('PLATELETS_LT50','PLATELETS_50_TO_LT75_GAP','PLATELETS_75_TO_LT100'));
-run('Counts at source full-dose thresholds no global clearance',{anc_x10e9_l:1,platelets_x10e9_l:100},r=>assert.equal(clinical(r).length,0));
+for(const n of [100,100.001,150])run('Platelet at or above100 is outside below100 bands '+n,{platelets_x10e9_l:n},absent('PLATELETS_LT50','PLATELETS_50_TO_LT75_GAP','PLATELETS_75_TO_LT100'));
+// v29 reinspection corrected the earlier inclusive reading: the source prints >1 and >100.
+run('Exact count thresholds require review in current source encoding',{anc_x10e9_l:1,platelets_x10e9_l:100},r=>{if(integrated){has('ANC_EXACT1_GAP','consultant_review')(r);has('PLATELETS_EXACT100_GAP','consultant_review')(r);}else assert.equal(clinical(r).length,0);});
 run('Platelet source gap cannot hide severe ANC',{anc_x10e9_l:.2,platelets_x10e9_l:60},r=>{has('ANC_LT0_5','delay')(r);has('PLATELETS_50_TO_LT75_GAP','consultant_review')(r);});
 for(const n of [0,19.999,20])run('Carbo GFR≤20 '+n,{gfr_crcl_ml_min:n},has('CARBO_GFR_20_OR_LESS','contraindicated'));
 for(const n of [20.001,29.999,30])run('Carbo >20to≤30 '+n,{gfr_crcl_ml_min:n},r=>{has('CARBO_GFR_20_30','consultant_review')(r);absent('CARBO_GFR_20_OR_LESS')(r);});

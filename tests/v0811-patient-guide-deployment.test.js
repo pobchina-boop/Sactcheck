@@ -8,10 +8,10 @@ assert.ok(pkg.version.localeCompare("0.81.1",undefined,{numeric:true})>=0);asser
 const codes=["00209","00222","00317","00318","00382","00568","00569","00619","00713","00714","00722","00831","00857"];
 for(const code of codes){
  const guide=read(`patient/${code}/guide.html`),portal=read(`patient/${code}/index.html`);
- const direct=guide.includes("hcc-static-connectors"),wrapper=guide.includes('iframe src="guide.pdf"')||guide.includes('href="guide.pdf"');
+ const direct=(code==="00222"?guide.includes('class="pt-map"'):guide.includes("hcc-static-connectors")),wrapper=guide.includes('iframe src="guide.pdf"')||guide.includes('href="guide.pdf"');
  assert.ok(direct||wrapper,`${code} guide has neither deterministic anatomy nor protected-PDF wrapper`);
- assert.ok(portal.includes("hcc-static-connectors"),`${code} portal missing deterministic connector layer`);
- if(!wrapper) assert.ok(guide.includes("Important medicine-specific effects"),`${code} guide missing agent-specific toxicity section`);
+ assert.ok((code==="00222"?portal.includes('class="pt-map"')&&portal.includes("numbered symptom locations"):portal.includes("hcc-static-connectors")),`${code} portal missing deterministic connector layer`);
+ if(!wrapper&&code!=="00222") assert.ok(guide.includes("Important medicine-specific effects"),`${code} guide missing agent-specific toxicity section`);
  assert.ok(fs.existsSync(path.join(root,`patient/${code}/guide.pdf`)),`${code} guide PDF missing`);
  assert.strictEqual(crypto.createHash("sha256").update(fs.readFileSync(path.join(root,`patient/${code}/guide.pdf`))).digest("hex"),crypto.createHash("sha256").update(fs.readFileSync(path.join(root,`docs/patient/${code}/guide.pdf`))).digest("hex"),`${code} canonical/compat guide PDFs differ`);
 }

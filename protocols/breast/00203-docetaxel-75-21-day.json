@@ -15,7 +15,7 @@
     ],
     "source_document_pages": 5,
     "source_url": "https://healthservice.hse.ie/documents/6543/203_DOCEtaxel_75-21day.pdf",
-    "sactcheck_encoding_version": "0.84.25",
+    "sactcheck_encoding_version": "0.84.29",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "treatment_setting": [
@@ -53,7 +53,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_v08425_independent_review_pending"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08429_independent_review_pending"
     },
     "tumour_groups": [
       "Breast",
@@ -76,7 +76,7 @@
     "display_title_normalisation_version": "0.41.1",
     "tumour_group": "Breast",
     "gynaecology_subgroup": "ovarian_later_line",
-    "source_checked_date": "2026-10-29",
+    "source_checked_date": "2026-11-02",
     "genitourinary_subgroups": [
       "prostate"
     ],
@@ -115,8 +115,8 @@
       "level": "source_reconciled_pending_independent_review",
       "label": "Source reconciled · independent clinical/pharmacy review pending",
       "source_reconciled": true,
-      "reconciled_release": "0.84.25",
-      "reconciled_date": "2026-10-29",
+      "reconciled_release": "0.84.29",
+      "reconciled_date": "2026-11-02",
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
@@ -153,10 +153,10 @@
     },
     "support_source_page": 0,
     "schedule_summary": "Docetaxel 75 mg/m² by IV infusion on Day 1 every 21 days. For the source breast indication, continue until progression or unacceptable toxicity; the team reviews benefit and tolerability. The six-cycle source maximum applies to NSCLC.",
-    "full_suite_release": "0.84.25",
+    "full_suite_release": "0.84.29",
     "source_pdf_sha256": "421aa0604e15c5b837831ffd1008eff80a2ef8d897edb2914c8c2dbf331cbdaf",
     "source_text_snapshot_sha256": "35451eaa72b068b221357735cfcbcca3a23a0d9e2111adca6568c0ccc538a363",
-    "source_retrieval_method": "Fresh official PDF download; source dose tables visually inspected",
+    "source_retrieval_method": "Fresh official HSE assets PDF download with web corroboration; dose tables visually inspected",
     "source_conflicts": [
       "NCCP v7 hepatic table (Giraud-based) differs from Taxotere SmPC hepatic advice. Existing NCCP overlap/gap review remains; no automatic dose is inferred from a mixed pattern.",
       "Taxotere SmPC advises no use unless strictly indicated with bilirubin above ULN, or marked combined transaminase/ALP elevation. Discuss the exact product and NCCP table with pharmacy."
@@ -179,11 +179,12 @@
     "contextual_suite_release": "0.84.25",
     "source_supplements": [
       {
-        "label": "EMA Taxotere product information; retrieved 29 October 2026",
+        "label": "EMA Taxotere product information; retrieved 2 November 2026",
         "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
-        "basis": "Audited product information supplement; NCCP differences remain explicit"
+        "basis": "Audited companion regimen or product information; NCCP differences remain explicit"
       }
-    ]
+    ],
+    "source_retrieved_date": "2026-11-02"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
@@ -628,6 +629,33 @@
       "required": false,
       "demo_value": "",
       "input_role": "decision"
+    },
+    "new_or_worsening_pulmonary_symptoms": {
+      "label": "New or worsening pulmonary symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "always_show": true,
+      "assessment_guidance": "Assess new cough, breathlessness or hypoxia. This flags symptoms for diagnosis; it does not establish docetaxel-induced lung disease."
+    },
+    "suspected_serious_bowel_toxicity": {
+      "label": "Suspected serious bowel toxicity / enterocolitis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "always_show": true,
+      "assessment_guidance": "Clinically assess significant abdominal pain, fever, diarrhoea or other concerning gastrointestinal symptoms. Neutropenic enterocolitis can occur at any cycle; no automatic diagnosis is made."
+    },
+    "suspected_severe_cutaneous_reaction": {
+      "label": "Suspected SJS / TEN / AGEP or other severe cutaneous reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "always_show": true,
+      "assessment_guidance": "Record clinical suspicion of a serious skin reaction, distinct from the ordinary graded skin-toxicity dose table. Confirm diagnosis and specialist plan."
     }
   },
   "required_inputs": [],
@@ -1504,6 +1532,75 @@
           "url": "https://healthservice.hse.ie/documents/6543/203_DOCEtaxel_75-21day.pdf",
           "page": 3
         }
+      },
+      {
+        "rule_id": "DOC_PULMONARY_HOLD",
+        "when": {
+          "field": "new_or_worsening_pulmonary_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Interrupt docetaxel pending prompt investigation of new or worsening pulmonary symptoms. Consider infection, progression, embolism and treatment-related lung disease; review the benefit of resuming after a diagnosis is available.",
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt docetaxel pending prompt investigation of new or worsening pulmonary symptoms. Consider infection, progression, embolism and treatment-related lung disease; review the benefit of resuming after a diagnosis is available.",
+        "source": {
+          "document": "EMA TAXOTERE product information; supplemental safety assessment",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
+          "page": 8,
+          "section": "4.4 Respiratory disorders"
+        }
+      },
+      {
+        "rule_id": "DOC_BOWEL_URGENT_REVIEW",
+        "when": {
+          "field": "suspected_serious_bowel_toxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Withhold further docetaxel pending urgent clinical assessment of suspected serious bowel toxicity. Enterocolitis can progress rapidly. This is a safety reconciliation action, not a source numeric dose-reduction rule.",
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Withhold further docetaxel pending urgent clinical assessment of suspected serious bowel toxicity. Enterocolitis can progress rapidly. This is a safety reconciliation action, not a source numeric dose-reduction rule.",
+        "source": {
+          "document": "EMA TAXOTERE product information; supplemental safety assessment",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Gastrointestinal reactions; safety synthesis also supported by NCCP00203 p4"
+        }
+      },
+      {
+        "rule_id": "DOC_SCAR_URGENT_REVIEW",
+        "when": {
+          "field": "suspected_severe_cutaneous_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Hold further treatment for urgent specialist assessment. If signs suggest SJS, TEN or AGEP, the product information says to consider discontinuation; do not automatically resume at 60 mg/m² using the ordinary grade-3 skin row.",
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Hold further treatment for urgent specialist assessment. If signs suggest SJS, TEN or AGEP, the product information says to consider discontinuation; do not automatically resume at 60 mg/m² using the ordinary grade-3 skin row.",
+        "source": {
+          "document": "EMA TAXOTERE product information; supplemental safety assessment",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
+          "page": 8,
+          "section": "4.4 Cutaneous reactions; hold is a safety reconciliation pending the product-information discontinuation decision"
+        }
       }
     ]
   },
@@ -1537,7 +1634,7 @@
     "script_id": "nccp-parenteral-low",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
-    "phase_specific_plan": "patient/00203/scope.html?asset=supportive-care-selector"
+    "phase_specific_plan": "patient/00203/supportive-care.html"
   },
   "indications": [
     {

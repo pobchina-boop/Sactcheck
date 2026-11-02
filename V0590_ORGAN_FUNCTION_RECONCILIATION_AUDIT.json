@@ -8,7 +8,7 @@
     "source_reviewed_no_prescriptive_adjustment_records": 4,
     "remaining_partial_rule_encoding_records": 0,
     "records_with_audit_issues": 0,
-    "total_v0590_rules": 229,
+    "total_v0590_rules": 223,
     "note": "The v0.59.0 scope is the 74 records marked partial by v0.58.1. A source-reviewed no-prescriptive-adjustment resolution intentionally avoids introducing an unsupported cutoff. Independent Consultant and oncology-pharmacy validation remains pending."
   },
   "records": [
@@ -811,7 +811,7 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "structured_rules",
-      "superseded_by_release": "0.84.23",
+      "superseded_by_release": "0.84.29",
       "replacement_evidence": "validation/lung-next-v08423/pem-mono/AUDIT.md",
       "source_url": "https://healthservice.hse.ie/documents/6935/222_V5_PEMEtrexed_Monotherapy_.pdf",
       "organ_inputs": [
@@ -2268,18 +2268,22 @@
       "path": "protocols/shared/00284-gemcitabine-1000-mg-m2-monotherapy-28-day.json",
       "title": "Gemcitabine 1000 mg/m² Monotherapy – 28 day",
       "in_v0590_scope": true,
-      "encoding_maturity": "source_reconciled_rule_encoding",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "structured_rules",
       "source_url": "https://healthservice.hse.ie/documents/6699/284_v5_Gemcitabine_Monotherapy_28_day.pdf",
       "organ_inputs": [
         "breastfeeding",
-        "gemcitabine_renal_band",
-        "gemcitabine_bilirubin_band"
+        "creatinine_uln_multiple",
+        "alt_ast_uln_multiple",
+        "crcl_ml_min",
+        "bilirubin_micromol_l"
       ],
       "organ_rules": [
-        "PREGNANCY_OR_BREASTFEEDING",
-        "OF590_00284_GEM_RENAL_LT30",
-        "OF590_00284_GEM_BILI_GE27"
+        "BREASTFEEDING",
+        "BASELINE_ORGAN_FUNCTION",
+        "RENAL_LT30",
+        "RENAL_EXACT30_GAP",
+        "BILIRUBIN_GE27"
       ],
       "issues": []
     },
@@ -2576,22 +2580,24 @@
       "path": "protocols/shared/00311-topotecan-monotherapy-5-day.json",
       "title": "Topotecan Monotherapy – 5 day",
       "in_v0590_scope": true,
-      "encoding_maturity": "source_reconciled_rule_encoding",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "structured_rules",
       "source_url": "https://healthservice.hse.ie/documents/6714/311_v4_Topotecan_Monotherapy_5day.pdf",
       "organ_inputs": [
         "breastfeeding",
         "topotecan_renal_band",
-        "topotecan_bilirubin_band"
+        "topotecan_bilirubin_band",
+        "topotecan_crcl_ml_min",
+        "severe_neutropenia_7days",
+        "bilirubin_micromol_l"
       ],
       "organ_rules": [
-        "PREGNANCY_BREASTFEEDING",
-        "TOPO_RENAL_20_39",
-        "TOPO_RENAL_LT20",
-        "TOPO_DIALYSIS",
+        "BREASTFEEDING",
+        "TOPO_IV_RENAL_20_39",
+        "TOPO_IV_RENAL_GAP",
+        "TOPO_IV_RENAL_LT20",
         "OF590_00311_TOPO_IV_20_39",
-        "OF590_00311_TOPO_IV_LT20",
-        "OF590_00311_TOPO_IV_BILI_GT171"
+        "TOPO_IV_BILI_GT171"
       ],
       "issues": []
     },
@@ -4099,20 +4105,25 @@
       "path": "protocols/lung/00388-oral-etoposide-therapy.json",
       "title": "Oral Etoposide Therapy",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "",
-      "source_url": "https://healthservice.hse.ie/documents/6911/388_V3_Oral_Etoposide.pdf",
+      "source_url": "https://healthservice.hse.ie/documents/6911/388_oral_etoposide_.pdf",
       "organ_inputs": [
         "breastfeeding",
         "etoposide_renal_band",
-        "bilirubin_uln_multiple"
+        "bilirubin_uln_multiple",
+        "etoposide_crcl_ml_min",
+        "bilirubin_micromol_l",
+        "ast_u_l"
       ],
       "organ_rules": [
-        "PREGNANCY_BREASTFEEDING",
-        "ETOP_RENAL_15_49",
+        "BREASTFEEDING",
+        "ETOP_RENAL_15_TO50",
         "ETOP_RENAL_LT15",
-        "ETOP_DIALYSIS",
-        "ETOP_BILI_HIGH"
+        "ETOP_RENAL_LEGACY",
+        "ETOP_HEPATIC_50",
+        "ETOP_HEPATIC_HIGH",
+        "ETOP_RATIO_NEEDS_ABSOLUTE"
       ],
       "issues": []
     },
@@ -7003,23 +7014,26 @@
       "path": "protocols/lung/00587-topotecan-oral-monotherapy.json",
       "title": "Topotecan Oral Monotherapy",
       "in_v0590_scope": true,
-      "encoding_maturity": "source_reconciled_rule_encoding",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "structured_rules",
       "source_url": "https://healthservice.hse.ie/documents/6886/587_V2_Topotecan_PO.pdf",
       "organ_inputs": [
         "breastfeeding",
         "topotecan_renal_band",
         "topotecan_oral_renal_band",
-        "hepatic_impairment_evidence"
+        "hepatic_impairment_evidence",
+        "topotecan_crcl_ml_min",
+        "severe_neutropenia_7days",
+        "absorption_problem"
       ],
       "organ_rules": [
-        "PREGNANCY_BREASTFEEDING",
-        "TOPO_RENAL_20_39",
-        "TOPO_RENAL_LT20",
-        "TOPO_DIALYSIS",
-        "OF590_00587_TOPO_ORAL_30_49",
-        "OF590_00587_TOPO_ORAL_LT30",
-        "OF590_00587_TOPO_ORAL_HEPATIC"
+        "BREASTFEEDING",
+        "TOPO_ORAL_RENAL_30_49",
+        "TOPO_ORAL_RENAL_GAP",
+        "TOPO_ORAL_RENAL_LT30",
+        "ORAL_LEGACY_IV_BAND",
+        "OF590_00587_TOPO_ORAL_HEPATIC",
+        "TOPO_ORAL_RENAL_DOSE_CONTEXT"
       ],
       "issues": []
     },
@@ -7395,21 +7409,25 @@
       "path": "protocols/lung/00614-carboplatin-and-vinorelbine-therapy-21-day.json",
       "title": "Carboplatin and Vinorelbine Therapy – 21 day",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "",
       "source_url": "https://healthservice.hse.ie/documents/6884/614_V4_Carboplatin_Vinorelbine.pdf",
       "organ_inputs": [
         "breastfeeding",
+        "calculated_gfr_creatinine_stale",
         "gfr_crcl_ml_min",
-        "bilirubin_uln_multiple",
-        "alt_ast_uln_multiple"
+        "isotope_creatinine_percent",
+        "hepatic_impairment"
       ],
       "organ_rules": [
-        "PREGNANCY_BREASTFEEDING",
+        "BREASTFEEDING",
         "CARBO_GFR_20_OR_LESS",
-        "CARBO_GFR_20_30",
-        "VIN_BILI_1_5_3",
-        "VIN_BILI_GT3"
+        "CARBO_MARROW_RISK",
+        "CARBO_GFR_CAP",
+        "CARBO_STALE_CREATININE",
+        "CARBO_ISOTOPE_RECHECK",
+        "VIN_HEPATIC_SEVERE",
+        "VIN_HEPATIC_UNRESOLVED"
       ],
       "issues": []
     },

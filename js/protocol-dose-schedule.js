@@ -709,17 +709,22 @@
     if (!result || !Array.isArray(result.findings)) return { rows: [], labTriggered: false, title: "" };
     // Explicit treatment-phase IDs select the correct reference dose when a
     // medicine changes frequency between combination and continuation.
-    const phaseId = result.inputs?.treatment_phase;
+    const contextInput=protocol.metadata?.dose_schedule_context_input;
+    const phaseId = result.inputs?.[contextInput || 'treatment_phase'];
     const variant = protocol.metadata?.dose_schedule_variants?.[phaseId]?.[result.inputs?.[protocol.metadata?.dose_schedule_variant_input || 'trastuzumab_schedule']];
     const currentPhase = model.allPhases.find(p => p.id === (variant || phaseId));
     if (currentPhase) model = {...model, allPhases:[currentPhase,...model.allPhases.filter(p=>p!==currentPhase)]};
+    const unresolvedSchedule=Boolean(contextInput&&!currentPhase);
     const actions = [];
     result.findings
       .filter(finding => !finding.domainAssessment && !["proceed", "proceed_with_caution", "partial_context_required"].includes(String(finding.actionType || "")))
       .forEach(finding => {
         expandComponents(finding, model).forEach(component => {
           const interpreted = interpretFindingForComponent(finding, component, model, result);
-          if (interpreted) actions.push(interpreted);
+          if (interpreted) {
+            if(unresolvedSchedule){interpreted.protocolDose='Confirm the prescribed schedule before interpreting a dose';interpreted.startingDose='';interpreted.quantified=false;}
+            actions.push(interpreted);
+          }
         });
       });
 
@@ -797,7 +802,7 @@
       panel.classList.add("hidden");
       return;
     }
-    const phase = activeModel.phases[selectedPhaseIndex] || activeModel.phases[0] || null;
+    const phase = selectedPhaseIndex<0 ? null : activeModel.phases[selectedPhaseIndex] || activeModel.phases[0] || null;
     const days = phase ? allDays(phase) : [];
     if (selectedDay !== "all" && !days.includes(selectedDay)) selectedDay = "all";
     const course = phase ? courseText(phase) : "";
@@ -815,7 +820,7 @@
       <p class="dose-schedule-boundary">Protocol doses and actions only. No BSA, weight-based or patient-specific final dose is calculated.</p>
 
       ${(activeModel.phases.length > 1 || days.length > 1) ? `<div class="dose-schedule-controls">
-        ${activeModel.phases.length > 1 ? `<div><label for="jsonDosePhase">Treatment phase</label><select id="jsonDosePhase">${activeModel.phases.map((item, index) => `<option value="${index}"${index === selectedPhaseIndex ? " selected" : ""}>${escapeHtml(item.label)}</option>`).join("")}</select></div>` : ""}
+        ${activeModel.phases.length > 1 ? `<div><label for="jsonDosePhase">${activeProtocol.metadata?.dose_schedule_context_input?"Prescribed schedule alternative":"Treatment phase"}</label><select id="jsonDosePhase">${activeProtocol.metadata?.dose_schedule_context_input?`<option value="-1"${selectedPhaseIndex<0?" selected":""}>Choose the prescribed schedule</option>`:""}${activeModel.phases.map((item, index) => `<option value="${index}"${index === selectedPhaseIndex ? " selected" : ""}>${escapeHtml(item.label)}</option>`).join("")}</select></div>` : ""}
         ${days.length > 1 ? `<div><label for="jsonDoseDay">Show treatment day</label><select id="jsonDoseDay"><option value="all">All scheduled days</option>${days.map(day => `<option value="${escapeHtml(day)}"${day === selectedDay ? " selected" : ""}>${escapeHtml(/^\d+$/.test(day) ? `Day ${day}` : day)}</option>`).join("")}</select></div>` : ""}
       </div>` : ""}
 
@@ -825,6 +830,7 @@
         ${activeModel.phases.length > 1 ? `<span><strong>Phase:</strong> ${escapeHtml(phase.label)}</span>` : ""}
       </div>` : ""}
 
+      ${!phase&&activeProtocol.metadata?.dose_schedule_context_input?'<p class="dose-schedule-summary">Select the prescribed alternative. These schedules are not consecutive treatment phases.</p>':""}
       ${phase?.summary ? `<p class="dose-schedule-summary">${escapeHtml(phase.summary)}</p>` : ""}
       ${!hasStructuredSchedule && hasAssessmentDoseAction ? `<p class="dose-schedule-summary">A structured regimen schedule is not yet available in SACTCheck for this protocol. The applicable encoded protocol dose action is shown below.</p>` : ""}
       ${renderScheduleTable(phase)}
@@ -861,7 +867,7 @@
     if (!activeProtocol) return;
     activeModel = buildModel(activeProtocol);
     activeModificationModel = buildModificationModel(activeProtocol, activeAssessment, activeModel);
-    selectedPhaseIndex = 0;
+    selectedPhaseIndex = activeProtocol?.metadata?.dose_schedule_context_input ? activeModel.phases.findIndex(p=>p.id===activeAssessment?.inputs?.[activeProtocol.metadata.dose_schedule_context_input]) : 0;
     selectedDay = "all";
     selectedLevel = "0";
     const panel = typeof document !== "undefined" ? document.getElementById("jsonDoseSchedulePanel") : null;
@@ -880,7 +886,7 @@
     activeModel = buildModel(protocol || {});
     activeAssessment = null;
     activeModificationModel = { rows: [], labTriggered: false, title: "" };
-    selectedPhaseIndex = 0;
+    selectedPhaseIndex = activeProtocol?.metadata?.dose_schedule_context_input ? activeModel.phases.findIndex(p=>p.id===activeAssessment?.inputs?.[activeProtocol.metadata.dose_schedule_context_input]) : 0;
     selectedDay = "all";
     selectedLevel = "0";
     close();
