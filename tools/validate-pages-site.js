@@ -74,7 +74,7 @@ for(const code of codes.flatMap(c=>registry.bundleRoutes(c))){
   if(fs.existsSync(htmlPath)){
     const html=fs.readFileSync(htmlPath,"utf8");
     if(!html.includes(`https://sactcheck.com/patient/${code}/`)) problems.push(`patient/${code} does not identify canonical public destination`);
-    if(!html.includes("anatomy-hcc-v0762.png")||!(html.includes("hcc-visual-stage")||(html.includes("patient-pack-v08429.css")&&html.includes('class="pt-map"')&&html.includes("numbered symptom locations")))) problems.push(`patient/${code} lost protected anatomy format`);
+    if(!html.includes("anatomy-hcc-v0762.png")||!(html.includes("hcc-visual-stage")||((html.includes("patient-pack-v08429.css")||html.includes("patient-pack-v08430.css"))&&html.includes('class="pt-map"')&&html.includes("numbered symptom locations")))) problems.push(`patient/${code} lost protected anatomy format`);
   }
   const compatIndex=path.join(compat,"index.html");
   if(fs.existsSync(compatIndex)&&!fs.readFileSync(compatIndex,"utf8").includes(`https://sactcheck.com/patient/${code}/`)) problems.push(`docs/patient/${code} does not redirect to canonical portal`);

@@ -820,7 +820,7 @@
       <p class="dose-schedule-boundary">Protocol doses and actions only. No BSA, weight-based or patient-specific final dose is calculated.</p>
 
       ${(activeModel.phases.length > 1 || days.length > 1) ? `<div class="dose-schedule-controls">
-        ${activeModel.phases.length > 1 ? `<div><label for="jsonDosePhase">${activeProtocol.metadata?.dose_schedule_context_input?"Prescribed schedule alternative":"Treatment phase"}</label><select id="jsonDosePhase">${activeProtocol.metadata?.dose_schedule_context_input?`<option value="-1"${selectedPhaseIndex<0?" selected":""}>Choose the prescribed schedule</option>`:""}${activeModel.phases.map((item, index) => `<option value="${index}"${index === selectedPhaseIndex ? " selected" : ""}>${escapeHtml(item.label)}</option>`).join("")}</select></div>` : ""}
+        ${activeModel.phases.length > 1 ? `<div><label for="jsonDosePhase">${activeProtocol.metadata?.dose_schedule_context_kind==="phase"?"Current prescribed treatment phase":activeProtocol.metadata?.dose_schedule_context_input?"Prescribed schedule alternative":"Treatment phase"}</label><select id="jsonDosePhase">${activeProtocol.metadata?.dose_schedule_context_input?`<option value="-1"${selectedPhaseIndex<0?" selected":""}>Choose the prescribed schedule</option>`:""}${activeModel.phases.map((item, index) => `<option value="${index}"${index === selectedPhaseIndex ? " selected" : ""}>${escapeHtml(item.label)}</option>`).join("")}</select></div>` : ""}
         ${days.length > 1 ? `<div><label for="jsonDoseDay">Show treatment day</label><select id="jsonDoseDay"><option value="all">All scheduled days</option>${days.map(day => `<option value="${escapeHtml(day)}"${day === selectedDay ? " selected" : ""}>${escapeHtml(/^\d+$/.test(day) ? `Day ${day}` : day)}</option>`).join("")}</select></div>` : ""}
       </div>` : ""}
 
@@ -830,7 +830,7 @@
         ${activeModel.phases.length > 1 ? `<span><strong>Phase:</strong> ${escapeHtml(phase.label)}</span>` : ""}
       </div>` : ""}
 
-      ${!phase&&activeProtocol.metadata?.dose_schedule_context_input?'<p class="dose-schedule-summary">Select the prescribed alternative. These schedules are not consecutive treatment phases.</p>':""}
+      ${!phase&&activeProtocol.metadata?.dose_schedule_context_input?`<p class="dose-schedule-summary">${activeProtocol.metadata?.dose_schedule_context_kind==="phase"?"Choose the current prescribed phase. Moving to continuation requires the treating team's decision.":"Select the prescribed alternative. These schedules are not consecutive treatment phases."}</p>`:""}
       ${phase?.summary ? `<p class="dose-schedule-summary">${escapeHtml(phase.summary)}</p>` : ""}
       ${!hasStructuredSchedule && hasAssessmentDoseAction ? `<p class="dose-schedule-summary">A structured regimen schedule is not yet available in SACTCheck for this protocol. The applicable encoded protocol dose action is shown below.</p>` : ""}
       ${renderScheduleTable(phase)}

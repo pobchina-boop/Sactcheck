@@ -220,6 +220,33 @@
       "status": "national_guidance_link",
       "summary": "Day 1: aprepitant 125 mg, ondansetron 16 mg and dexamethasone 12 mg orally. Dedicated carboplatin row; no routine olanzapine.",
       "subsequent_days": "Days 2–3 aprepitant 80 mg daily; Days 2–4 dexamethasone 8 mg daily. NCIS lists metoclopramide 10 mg three times daily on subsequent days without an end day or PRN qualifier: prescriber/pharmacy must specify duration and suitability."
+    },
+    "nccp-minimal-no-routine": {
+      "label": "NCCP NCIS v8 minimal risk guidance",
+      "risk_level": "minimal",
+      "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+      "source_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+      "status": "national_guidance_link",
+      "summary": "No routine chemotherapy antiemetic prophylaxis for the minimal-risk component; reconcile any continuing delayed-emesis plan.",
+      "subsequent_days": "Follow any separately prescribed delayed-emesis course; do not repeat an entire earlier-day plan."
+    },
+    "nccp-parenteral-minimal": {
+      "label": "NCCP NCIS v8 minimal risk guidance",
+      "risk_level": "minimal",
+      "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+      "source_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+      "status": "national_guidance_link",
+      "summary": "No routine chemotherapy antiemetic prophylaxis for the minimal-risk component; reconcile any continuing delayed-emesis plan.",
+      "subsequent_days": "Follow any separately prescribed delayed-emesis course; do not repeat an entire earlier-day plan."
+    },
+    "nccp-v8-high-v08420": {
+      "label": "NCCP NCIS v8 high risk guidance",
+      "risk_level": "high",
+      "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+      "source_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+      "status": "national_guidance_link",
+      "summary": "NCCP NCIS v8 high-risk non-AC row. Use the source-reviewed treatment-day supportive-care plan; reconcile multiday treatment, steroid exposure and interactions.",
+      "subsequent_days": "Use the reviewed regimen-specific multiday and subsequent-day prescription. The prescriber confirms rescue medicine duration."
     }
   },
   "breakthrough": {
@@ -1790,20 +1817,9 @@
       "mapping_confidence": "high"
     },
     "00309": {
-      "level": "phase_dependent",
-      "script_id": "nccp-parenteral-moderate",
-      "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
-      "mapping_confidence": "high",
-      "phase_profiles": {
-        "systemic_treatment_day": {
-          "level": "moderate",
-          "script_id": "nccp-parenteral-moderate"
-        },
-        "radiotherapy_only_day": {
-          "level": "minimal",
-          "script_id": "nccp-minimal-no-routine-prophylaxis"
-        }
-      }
+      "level": "moderate",
+      "script_id": "nccp-v8-moderate-v08418",
+      "mapping_basis": "CarboplatinAUC2 moderate risk; paclitaxel premedication is separate and varies by week."
     },
     "00655": {
       "level": "minimal",
@@ -1870,10 +1886,23 @@
       }
     },
     "00372": {
-      "level": "low",
-      "script_id": "nccp-parenteral-low",
-      "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
-      "mapping_confidence": "high"
+      "level": "phase_dependent",
+      "script_id": null,
+      "mapping_basis": "Docetaxel infusion is low risk; oral nintedanib is minimal-to-low. Docetaxel steroid premedication must be reconciled with any antiemetic steroid.",
+      "phase_profiles": {
+        "combination": {
+          "level": "low",
+          "script_id": "nccp-parenteral-low"
+        },
+        "continuation": {
+          "level": "oral_minimal_low",
+          "script_id": "nccp-oral-minimal-low"
+        },
+        "combination_oral": {
+          "level": "oral_minimal_low",
+          "script_id": "nccp-oral-minimal-low"
+        }
+      }
     },
     "00388": {
       "level": "low",
@@ -1915,17 +1944,20 @@
     },
     "00561": {
       "level": "phase_dependent",
-      "script_id": "nccp-parenteral-moderate",
-      "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
-      "mapping_confidence": "high",
+      "script_id": null,
+      "mapping_basis": "Days1/8 Carboplatin moderate (AUC3, not AUC≥4) risk; Days2–5 etoposide low risk. Multiday/delayed-emesis plans require a reconciled prescription.",
       "phase_profiles": {
-        "carboplatin_etoposide_day": {
+        "day1": {
           "level": "moderate",
-          "script_id": "nccp-parenteral-moderate"
+          "script_id": "nccp-v8-moderate-v08418"
         },
-        "etoposide_or_radiotherapy_only_day": {
+        "etoposide_day": {
           "level": "low",
-          "script_id": "nccp-parenteral-low"
+          "script_id": "nccp-v8-low-v08418"
+        },
+        "day8": {
+          "level": "moderate",
+          "script_id": "nccp-v8-moderate-v08418"
         }
       }
     },
@@ -1949,17 +1981,20 @@
     },
     "00456": {
       "level": "phase_dependent",
-      "script_id": "nccp-parenteral-moderate",
-      "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
-      "mapping_confidence": "high",
+      "script_id": null,
+      "mapping_basis": "Days1/8 Cisplatin high risk; Days2–5 etoposide low risk. Multiday/delayed-emesis plans require a reconciled prescription.",
       "phase_profiles": {
-        "cisplatin_etoposide_day": {
+        "day1": {
           "level": "high",
           "script_id": "nccp-parenteral-high"
         },
-        "etoposide_or_radiotherapy_only_day": {
-          "level": "moderate",
-          "script_id": "nccp-parenteral-moderate"
+        "etoposide_day": {
+          "level": "low",
+          "script_id": "nccp-v8-low-v08418"
+        },
+        "day8": {
+          "level": "high",
+          "script_id": "nccp-parenteral-high"
         }
       }
     },
@@ -2363,9 +2398,8 @@
     },
     "00214": {
       "level": "minimal",
-      "script_id": "nccp-minimal-no-routine-prophylaxis",
-      "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
-      "mapping_confidence": "high"
+      "script_id": "nccp-minimal-no-routine",
+      "mapping_basis": "Bevacizumab component only: minimal emetogenic risk. Any chemotherapy partner needs its own risk assessment and prescription."
     },
     "00558": {
       "level": "minimal",
@@ -2388,9 +2422,34 @@
     },
     "00279": {
       "level": "phase_dependent",
-      "script_id": "nccp-parenteral-moderate",
-      "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
-      "mapping_confidence": "high"
+      "script_id": null,
+      "mapping_basis": "Select actual platinum, route and day; multiday support must be reconciled.",
+      "phase_profiles": {
+        "cis_day1": {
+          "level": "high",
+          "script_id": "nccp-v8-high-v08420"
+        },
+        "days23": {
+          "level": "phase_dependent",
+          "script_id": null
+        },
+        "carboplatin_substitution": {
+          "level": "high",
+          "script_id": "nccp-v8-carboplatin-v08420"
+        },
+        "iv_only": {
+          "level": "low",
+          "script_id": "nccp-parenteral-low"
+        },
+        "oral_only": {
+          "level": "oral_minimal_low",
+          "script_id": "nccp-oral-minimal-low"
+        },
+        "split_platinum": {
+          "level": "high",
+          "script_id": "nccp-v8-high-v08420"
+        }
+      }
     },
     "00551": {
       "level": "minimal",
@@ -3132,6 +3191,6 @@
     }
   },
   "guidance_link_release": "0.63.1",
-  "content_update_release": "0.84.29",
+  "content_update_release": "0.84.30",
   "classification_corrections_release": "0.83.5"
 }

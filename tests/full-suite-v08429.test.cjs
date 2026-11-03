@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p
 const scope=json('validation/lung-cytotoxic-v08429/scope.json'),idx=json('data/lung-cytotoxic-v08429-source-index.json'),kb=json('data/regimen-knowledge-base-v08429-addendum.json'),author=json('data/lung-cytotoxic-v08429-authoring.json').regimens;
 const Engine=require('../js/assessment-engine'),Registry=require('../js/patient-asset-registry-v0810'),Journey=require('../js/treatment-journey-v0837'),Dose=require('../js/protocol-dose-schedule'),Evidence=require('../js/treatment-evidence-v08413');
 const entries=json('protocols/index.json').protocols,protocol=c=>json(entries.find(x=>x.path.includes('/'+c+'-')).path);
-assert.equal(scope.new_codes.length,5);assert.equal(scope.retrospective_codes.length,5);assert.equal(idx.codes.length,10);assert.equal(kb.regimen_profiles.length,10);assert.equal(Registry.codes.length,154);
+assert.equal(scope.new_codes.length,5);assert.equal(scope.retrospective_codes.length,5);assert.equal(idx.codes.length,10);assert.equal(kb.regimen_profiles.length,10);assert.equal(Registry.codes.length,160);
 const routes=[];
 for(const c of idx.codes){
  const p=protocol(c),x=author[c],k=kb.regimen_profiles.find(x=>x.protocol_id===p.protocol_id);
@@ -56,7 +56,8 @@ assert.equal(Registry.relativePath('00388','guide'),'patient/00388/scope.html?as
 for(const slug of ['schedule_7d','schedule_3d','schedule_21d'])assert(read('patient/00388/scope.html').includes(slug+'/'));
 assert(!fs.existsSync(root+'/patient/00388/guide.pdf'),'No all-schedules combined guide');
 const base=json('validation/lung-cytotoxic-v08429/baseline-hashes.json');
-for(const [file,h]of Object.entries(base.files)){if(!/^(patient|docs\/patient|data\/patient-knowledge|data\/patient-knowledge-contexts)\//.test(file))continue;assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex'),require('./helpers/retrospective-v08429.cjs').expectedHash(file,h),file);}
+const exclusions=json('validation/lung-completion-v08430/historical-baseline-exclusions.json').files,committed30=json('validation/lung-completion-v08430/baseline-hashes.json').files;
+for(const [file,h]of Object.entries(base.files)){if(exclusions[file]){assert.equal(exclusions[file],h);assert(!Object.hasOwn(committed30,file));assert(fs.existsSync(path.join(root,path.dirname(file),'guide.pdf')));continue;}if(!/^(patient|docs\/patient|data\/patient-knowledge|data\/patient-knowledge-contexts)\//.test(file))continue;assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex'),require('./helpers/retrospective-v08429.cjs').expectedHash(file,h),file);}
 const ctx={fetch:async()=>({ok:true,json:async()=>json('data/emetogenic-risk-map.json')}),console};vm.runInNewContext(read('js/emetogenic-risk.js'),ctx);
 (async()=>{
  await ctx.SACTCheckEmetogenicRisk.load('data/emetogenic-risk-map.json');const r=ctx.SACTCheckEmetogenicRisk,p=protocol('00614');

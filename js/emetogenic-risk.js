@@ -81,6 +81,8 @@
     if(directDays)selectedPhase=Object.prototype.hasOwnProperty.call(directDays,String(options.treatmentDay))?directDays[String(options.treatmentDay)]:'__unresolved_treatment_day';
     const dayProfiles=supportive.phase_day_profiles?.[selectedPhase];
     if(dayProfiles)selectedPhase=dayProfiles[String(options.treatmentDay)] || '__unresolved_treatment_day';
+    const scheduleDays=supportive.schedule_day_profiles;
+    if(scheduleDays)selectedPhase=scheduleDays[String(options.treatmentSchedule)]?.[String(options.treatmentDay)] || '__unresolved_schedule_or_day';
     const routeDays=supportive.treatment_day_route_profiles;
     if(routeDays)selectedPhase=routeDays[String(options.treatmentDay)]?.[String(options.treatmentRoute)] || '__unresolved_day_or_route';
     const phase = baseLevel === "phase_dependent" ? resolvePhase(record, supportive, selectedPhase) : {};

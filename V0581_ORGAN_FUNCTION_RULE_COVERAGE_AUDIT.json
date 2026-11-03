@@ -764,7 +764,7 @@
       "protocol_id": "nccp-00214-v8",
       "path": "protocols/shared/00214-bevacizumab-7-5-mg-kg-21-days.json",
       "title": "Bevacizumab 7.5 mg/kg – 21 days",
-      "encoding_maturity": "source_reconciled_rule_encoding",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -774,12 +774,31 @@
         "hepatic": true
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "renal_or_hepatic_clinical_concern",
+          "high_risk_history",
+          "egfr_antibody_with_chemo",
+          "creatinine_uln"
+        ],
+        "hepatic": [
+          "renal_or_hepatic_clinical_concern",
+          "bilirubin",
+          "ast_uln",
+          "alp_uln"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ],
+        "hepatic": [
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
+        ]
       },
       "mismatches": []
     },
@@ -2882,10 +2901,10 @@
       "protocol_id": "nccp-00279-v7",
       "path": "protocols/shared/00279-cisplatin-75-mg-m2-etoposide-100-mg-m2-and-radiotherapy-21-day.json",
       "title": "Cisplatin 75 mg/m², Etoposide 100 mg/m² and Radiotherapy – 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "claims": {
-        "renal": true,
-        "hepatic": true
+        "renal": false,
+        "hepatic": false
       },
       "monitoring_mentions": {
         "renal": true,
@@ -2893,25 +2912,31 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_renal_band",
-          "etoposide_renal_band"
+          "crcl_ml_min",
+          "haemodialysis",
+          "carboplatin_renal_plan_confirmed"
         ],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "severe_hepatic_impairment",
+          "bilirubin_micromol_l"
         ]
       },
       "rules": {
         "renal": [
-          "CISPLATIN_RENAL_45_59",
-          "CISPLATIN_RENAL_LT45",
-          "CISPLATIN_RENAL_LT30",
-          "CISPLATIN_DIALYSIS",
-          "ETOP_RENAL_15_49",
-          "ETOP_RENAL_LT15",
-          "ETOP_DIALYSIS"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ],
         "hepatic": [
-          "ETOP_BILI_HIGH"
+          "(unnamed)",
+          "(unnamed)"
         ]
       },
       "mismatches": []
@@ -3442,10 +3467,10 @@
       "protocol_id": "nccp-00309-v6",
       "path": "protocols/lung/00309-weekly-carboplatin-auc2-and-paclitaxel-50-mg-m2-with-radiotherapy.json",
       "title": "Weekly Carboplatin AUC2 and Paclitaxel 50 mg/m² with Radiotherapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "claims": {
-        "renal": true,
-        "hepatic": true
+        "renal": false,
+        "hepatic": false
       },
       "monitoring_mentions": {
         "renal": true,
@@ -3453,20 +3478,36 @@
       },
       "inputs": {
         "renal": [
-          "gfr_crcl_ml_min"
+          "cisplatin_unsuitable",
+          "calculated_gfr_creatinine_stale",
+          "haemodialysis",
+          "renal_estimate_unreliable",
+          "gfr_crcl_ml_min",
+          "isotope_creatinine_percent"
         ],
         "hepatic": [
-          "bilirubin_uln_multiple",
-          "alt_ast_uln_multiple"
+          "severe_hepatic_impairment",
+          "alt_uln_multiple",
+          "bilirubin_uln_multiple"
         ]
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_20_OR_LESS",
-          "CARBO_GFR_20_30"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ],
         "hepatic": [
-          "PACLITAXEL_BILI_GT3"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ]
       },
       "mismatches": []
@@ -4961,8 +5002,8 @@
       "code": "00372",
       "protocol_id": "nccp-00372-v6",
       "path": "protocols/lung/00372-nintedanib-therapy-with-docetaxel.json",
-      "title": "Nintedanib Therapy with Docetaxel",
-      "encoding_maturity": "source_reconciled_rule_encoding",
+      "title": "Nintedanib with docetaxel, then eligible nintedanib continuation",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4973,28 +5014,33 @@
       },
       "inputs": {
         "renal": [
-          "nintedanib_renal_band"
+          "crcl_ml_min",
+          "renal_deterioration"
         ],
         "hepatic": [
-          "bilirubin_uln_multiple",
-          "alt_ast_uln_multiple",
+          "severe_liver_impairment",
           "nintedanib_child_pugh",
+          "ast_uln_multiple",
+          "alt_uln_multiple",
+          "bilirubin_uln_multiple",
           "alp_uln_multiple",
-          "docetaxel_hepatic_band"
+          "alternative_liver_cause_established"
         ]
       },
       "rules": {
         "renal": [
-          "OF590_00372_NINT_RENAL"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ],
         "hepatic": [
-          "DOCETAXEL_BILI_HIGH",
-          "NINT_LFT_3",
-          "OF590_00372_NINT_HEP",
-          "OF590_00372_NINT_LFT_STOP",
-          "OF590_00372_NINT_LFT_HOLD",
-          "OF590_00372_DOC_HEP_75",
-          "OF590_00372_DOC_HEP_STOP"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ]
       },
       "mismatches": []
@@ -6824,10 +6870,10 @@
       "protocol_id": "nccp-00456-v4",
       "path": "protocols/lung/00456-cisplatin-50-mg-m2-etoposide-50-mg-m2-and-thoracic-radiotherapy-28-day.json",
       "title": "Cisplatin 50 mg/m², Etoposide 50 mg/m² and Thoracic Radiotherapy – 28 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "claims": {
-        "renal": true,
-        "hepatic": true
+        "renal": false,
+        "hepatic": false
       },
       "monitoring_mentions": {
         "renal": true,
@@ -6835,25 +6881,32 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_renal_band",
-          "etoposide_renal_band"
+          "haemodialysis",
+          "crcl_ml_min",
+          "pre_existing_renal_impairment"
         ],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_micromol_l",
+          "severe_liver_impairment"
         ]
       },
       "rules": {
         "renal": [
-          "CISPLATIN_RENAL_45_59",
-          "CISPLATIN_RENAL_LT45",
-          "CISPLATIN_RENAL_LT30",
-          "CISPLATIN_DIALYSIS",
-          "ETOP_RENAL_15_49",
-          "ETOP_RENAL_LT15",
-          "ETOP_DIALYSIS"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ],
         "hepatic": [
-          "ETOP_BILI_HIGH"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ]
       },
       "mismatches": []
@@ -8719,13 +8772,13 @@
     },
     {
       "code": "00561",
-      "protocol_id": "nccp-00561-v4",
+      "protocol_id": "nccp-00561-v5",
       "path": "protocols/lung/00561-carboplatin-auc3-etoposide-50-mg-m2-and-thoracic-radiotherapy-28-day.json",
       "title": "Carboplatin AUC3, Etoposide 50 mg/m² and Thoracic Radiotherapy – 28 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "claims": {
-        "renal": true,
-        "hepatic": true
+        "renal": false,
+        "hepatic": false
       },
       "monitoring_mentions": {
         "renal": true,
@@ -8733,23 +8786,33 @@
       },
       "inputs": {
         "renal": [
+          "haemodialysis",
           "gfr_crcl_ml_min",
-          "etoposide_renal_band"
+          "renal_method",
+          "creatinine_age_hours",
+          "isotope_creatinine_percent"
         ],
         "hepatic": [
-          "bilirubin_uln_multiple"
+          "bilirubin_micromol_l",
+          "ast_u_l"
         ]
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_20_OR_LESS",
-          "CARBO_GFR_20_30",
-          "ETOP_RENAL_15_49",
-          "ETOP_RENAL_LT15",
-          "ETOP_DIALYSIS"
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)",
+          "(unnamed)"
         ],
         "hepatic": [
-          "ETOP_BILI_HIGH"
+          "(unnamed)",
+          "(unnamed)"
         ]
       },
       "mismatches": []

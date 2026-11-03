@@ -153,6 +153,14 @@ def readable(v):
  if isinstance(v,list):return [readable(x) for x in v]
  if isinstance(v,dict):return {k:v2 if k in ['id','code','protocol_id','source_ids','timeline_source_ids','support_source_ids','urgent_source_ids','script_id','schedule_kind','service_kind','source_url','url'] else readable(v2) for k,v2 in v.items()}
  return v
+# v30 provenance correction: each treatment retains its own primary trial.
+for _c,_trial in [('00284','ricci-2000'),('00614','obrien-2004')]:
+ _x=OUT[_c];_sources=[z for z in _x['patient']['sources'] if z['url']!='https://pubmed.ncbi.nlm.nih.gov/12928123/']
+ for _z in _sources:
+  if _z['id']=='trial':_z['id']=_trial
+ _sources.append(dict(id='ncis',title='NCCP Antiemetic Medicines for inclusion in NCIS (Medical Oncology) v8',url='https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf'))
+ _x['patient']['sources']=_sources;_x['patient']['evidence']['source_ids']=[_trial]
+ _x['clinical']['rationale']['sources']=[z for z in _x['clinical']['rationale']['sources'] if z['url']!='https://pubmed.ncbi.nlm.nih.gov/12928123/']
 OUT=readable(OUT)
 (B/'authoring.json').write_text(json.dumps(dict(release=V,source_checked=DATE,regimens=OUT),ensure_ascii=False,indent=2)+'\n')
 print('Four service records, including2lungcontexts')
