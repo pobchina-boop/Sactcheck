@@ -19280,6 +19280,15 @@ const definitions={
     ]
   },
   "00586": {
+    "code": "00586",
+    "title": "Capecitabine + rectal radiotherapy: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced rectal cancer with concurrent radiotherapy",
+    "summary": "Take capecitabine twice daily on Days 1–5 of each 7-day cycle with radiotherapy, for a maximum of 5–6 cycles. Days 6–7 are not routine tablet days. Follow the team’s written instructions if radiotherapy or tablets are interrupted.",
     "stages": [
       "Before starting",
       "First treatment",
@@ -19289,22 +19298,8 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment",
-        "cells": [
-          "Confirm exact indication and planned course",
-          "Start the source-specific schedule",
-          "Continue the active phase as prescribed",
-          "Confirm hold, restart, maintenance or completion",
-          "Agree follow-up and next decision"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00586"
-        ],
-        "note": "Take capecitabine twice daily on Days 1–5 of each 7-day cycle with radiotherapy, for a maximum of 5–6 cycles. Days 6–7 are not routine tablet days. Follow the team’s written instructions if radiotherapy or tablets are interrupted."
-      },
-      {
         "label": "Bloods and symptoms",
+        "kind": "monitoring",
         "cells": [
           "DPD, blood count, kidney/liver; agree RT and tablet plan",
           "Confirm tablet days and meal instructions",
@@ -19312,14 +19307,14 @@ const definitions={
           "Do not restart or make up tablets without team advice",
           "Radiation/surgical review and management of persistent effects"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00586"
         ],
-        "note": "Follow the regimen-specific due window and local booking plan."
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       },
       {
         "label": "Treatment review",
+        "kind": "monitoring",
         "cells": [
           "Confirm exact cancer setting and biomarkers",
           "Explain expected benefit and how it will be assessed",
@@ -19327,14 +19322,14 @@ const definitions={
           "Review response, tolerability and active medicines",
           "Agree the next treatment or surveillance plan"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00586"
         ],
-        "note": "Follow the regimen-specific due window and local booking plan."
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       },
       {
         "label": "Tablets and radiation",
+        "kind": "monitoring",
         "cells": [
           "Coordinate prescription, radiation bookings and transport",
           "Twice-daily tablets on Days 1–5",
@@ -19342,49 +19337,27 @@ const definitions={
           "Coordinate any tablet or radiation interruption",
           "Completion does not mean all side effects end immediately"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00586"
         ],
-        "note": "Follow the regimen-specific due window and local booking plan."
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       }
     ],
     "milestones": [
       {
-        "title": "Before starting",
-        "when": "Before first dose",
-        "why": "Confirm suitability and baseline safety",
-        "clinical": "FBC, renal and liver profile; DPD test before capecitabine. Complete DPD deficiency excludes treatment; partial deficiency needs specialist dosing. Confirm locally advanced rectal indication, ECOG 0–1, pregnancy/lactation exclusion, oral adherence, interacting medicines and radiation plan. Renal impairment can make uracil results difficult to interpret; consider genotype confirmation.",
-        "action": "Confirm results, prescriptions and responsible teams.",
-        "source_ids": [
-          "00586"
-        ]
-      },
-      {
-        "title": "Whole-course and completion review",
-        "when": "At phase change or completion",
-        "why": "Some checks and support continue after a drug stops",
-        "clinical": "Keep reviewing bowel, bladder, skin, fatigue and nutrition effects during and after the course. Late effects and surgical assessment follow the radiation/colorectal team plan. Do not automatically extend tablets to make up missed radiation days or continue beyond the planned course.",
-        "action": "Provide the ongoing monitoring and urgent-contact plan.",
+        "title": "Confirm your personal plan",
+        "when": "Before starting",
+        "why": "Capecitabine tablets help pelvic radiotherapy work against locally advanced rectal cancer. Your team explains how this course fits with surgery and any other chemotherapy.",
+        "clinical": "Take capecitabine twice daily on Days 1–5 of each 7-day cycle with radiotherapy, for a maximum of 5–6 cycles. Days 6–7 are not routine tablet days. Follow the team’s written instructions if radiotherapy or tablets are interrupted.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
         "source_ids": [
           "00586"
         ]
       }
     ],
     "clinical_notes": [
-      "The oral dose is twice daily on five days each week, not seven continuous treatment days.",
-      "Trials reflect complete rectal-cancer programmes including radiation and surgery; they do not isolate a survival gain caused by this tablet course.",
-      "Severe early toxicity, chest pain, dehydration or diarrhoea requires prompt assessment and the prescribed stop-and-call instructions."
+      "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
     ],
-    "code": "00586",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Capecitabine + rectal radiotherapy: treatment and checks",
-    "setting": "Locally advanced rectal cancer with concurrent radiotherapy",
-    "summary": "Take capecitabine twice daily on Days 1–5 of each 7-day cycle with radiotherapy, for a maximum of 5–6 cycles. Days 6–7 are not routine tablet days. Follow the team’s written instructions if radiotherapy or tablets are interrupted.",
     "sources": [
       {
         "id": "00586",
@@ -21110,6 +21083,15 @@ const definitions={
     ]
   },
   "00209": {
+    "code": "00209",
+    "title": "Modified FOLFOX-6: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Gastrointestinal cancers",
+    "summary": "Day 1: oxaliplatin, folinic acid and fluorouracil, followed by a 46-hour fluorouracil pump. A cycle lasts 14 days.",
     "stages": [
       "Before starting",
       "Each treatment cycle",
@@ -21119,22 +21101,8 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment plan",
-        "kind": "treatment",
-        "cells": [
-          "Confirm indication, medicines and duration",
-          "Give the agreed cycle only after review",
-          "Follow pump / tablet and symptom instructions",
-          "Continue, modify or stop after consultant review",
-          "Agree recovery and follow-up"
-        ],
-        "source_ids": [
-          "00209"
-        ],
-        "note": "Day 1: oxaliplatin, folinic acid and fluorouracil, followed by a 46-hour fluorouracil pump. A cycle lasts 14 days."
-      },
-      {
         "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline bloods; DPD before fluoropyrimidine",
           "Repeat before each cycle",
@@ -21142,7 +21110,6 @@ const definitions={
           "Results and recovery guide any delay or dose change",
           "Follow unresolved abnormalities"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00209"
         ],
@@ -21150,6 +21117,7 @@ const definitions={
       },
       {
         "label": "Symptoms and function",
+        "kind": "monitoring",
         "cells": [
           "Document existing symptoms and usual activity",
           "Review worst symptoms since the last treatment",
@@ -21157,7 +21125,6 @@ const definitions={
           "Balance benefit, side effects and priorities",
           "Agree recovery care and ongoing support"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00209"
         ],
@@ -21165,6 +21132,7 @@ const definitions={
       },
       {
         "label": "Neuropathy / cold sensitivity",
+        "kind": "monitoring",
         "cells": [
           "Record existing nerve symptoms",
           "Check persistence and effect on daily tasks",
@@ -21172,7 +21140,6 @@ const definitions={
           "Consultant reviews the oxaliplatin component separately",
           "Nerve symptoms can continue after treatment; arrange review"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00209"
         ],
@@ -21180,6 +21147,7 @@ const definitions={
       },
       {
         "label": "Heart checks",
+        "kind": "monitoring",
         "cells": [
           "Review cardiac history; ECG when cardiac function is compromised or clinical findings warrant it. No automatic serial echocardiogram schedule is specified for this regimen.",
           "Ask about new chest pain or breathlessness",
@@ -21187,7 +21155,6 @@ const definitions={
           "Repeat heart tests if clinically indicated",
           "Follow any heart problem; no fixed echo series"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00209"
         ],
@@ -21195,6 +21162,7 @@ const definitions={
       },
       {
         "label": "Response / scans",
+        "kind": "monitoring",
         "cells": [
           "Confirm cancer setting, disease assessment and intended duration",
           "Review clinical benefit and symptoms",
@@ -21202,7 +21170,6 @@ const definitions={
           "Consultant-directed scans and response assessment",
           "Agree follow-up, completion or another treatment"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00209"
         ],
@@ -21211,39 +21178,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Confirm the treatment aim",
+        "title": "Confirm your personal plan",
         "when": "Before starting",
         "why": "Modified FOLFOX-6 combines oxaliplatin, folinic acid and fluorouracil. It can be used after colon-cancer surgery or to treat advanced colorectal, stomach or gastro-oesophageal-junction cancer. The aim and duration depend on the indication; ask which applies to you.",
-        "clinical": "Modified FOLFOX-6 combines oxaliplatin with folinic-acid-modulated fluorouracil. The shared NCCP protocol covers adjuvant colon cancer, metastatic colorectal cancer and advanced or metastatic gastric or gastro-oesophageal-junction adenocarcinoma; the exact indication should therefore be confirmed before interpreting the page.",
-        "action": "Confirm the exact indication and intended duration.",
-        "source_ids": [
-          "00209"
-        ]
-      },
-      {
-        "title": "Review before continuing",
-        "when": "At each clinical decision point",
-        "why": "Results, symptoms and benefit can change the plan.",
-        "clinical": "Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed. Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment.",
-        "action": "Agree who reviews results and communicates the next step.",
+        "clinical": "Day 1: oxaliplatin, folinic acid and fluorouracil, followed by a 46-hour fluorouracil pump. A cycle lasts 14 days.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
         "source_ids": [
           "00209"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed.",
-      "Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment."
+      "The columns show the order of care, not equal lengths of time. Confirm who books each check, who reviews it and whom to call if it is missing."
     ],
-    "code": "00209",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Modified FOLFOX-6: treatment and checks",
-    "setting": "Gastrointestinal cancers",
-    "summary": "Day 1: oxaliplatin, folinic acid and fluorouracil, followed by a 46-hour fluorouracil pump. A cycle lasts 14 days.",
     "sources": [
       {
         "id": "00209",
@@ -21619,6 +21566,15 @@ const definitions={
     ]
   },
   "00227": {
+    "code": "00227",
+    "title": "FOLFIRI: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced gastrointestinal cancers",
+    "summary": "Day 1: irinotecan, folinic acid and fluorouracil, then a 46-hour fluorouracil pump. A cycle lasts 14 days; your team confirms the next treatment.",
     "stages": [
       "Before starting",
       "Each treatment cycle",
@@ -21628,22 +21584,8 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment plan",
-        "kind": "treatment",
-        "cells": [
-          "Confirm indication, medicines and duration",
-          "Give the agreed cycle only after review",
-          "Follow pump / tablet and symptom instructions",
-          "Continue, modify or stop after consultant review",
-          "Agree recovery and follow-up"
-        ],
-        "source_ids": [
-          "00227"
-        ],
-        "note": "Day 1: irinotecan, folinic acid and fluorouracil, then a 46-hour fluorouracil pump. A cycle lasts 14 days; your team confirms the next treatment."
-      },
-      {
         "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline bloods; DPD before fluoropyrimidine",
           "Repeat before each cycle",
@@ -21651,7 +21593,6 @@ const definitions={
           "Results and recovery guide any delay or dose change",
           "Follow unresolved abnormalities"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00227"
         ],
@@ -21659,6 +21600,7 @@ const definitions={
       },
       {
         "label": "Symptoms and function",
+        "kind": "monitoring",
         "cells": [
           "Document existing symptoms and usual activity",
           "Review worst symptoms since the last treatment",
@@ -21666,7 +21608,6 @@ const definitions={
           "Balance benefit, side effects and priorities",
           "Agree recovery care and ongoing support"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00227"
         ],
@@ -21674,6 +21615,7 @@ const definitions={
       },
       {
         "label": "Heart checks",
+        "kind": "monitoring",
         "cells": [
           "Review cardiac history; ECG when cardiac function is compromised or clinical findings warrant it. No automatic serial echocardiogram schedule is specified for this regimen.",
           "Ask about new chest pain or breathlessness",
@@ -21681,7 +21623,6 @@ const definitions={
           "Repeat heart tests if clinically indicated",
           "Follow any heart problem; no fixed echo series"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00227"
         ],
@@ -21689,6 +21630,7 @@ const definitions={
       },
       {
         "label": "Response / scans",
+        "kind": "monitoring",
         "cells": [
           "Confirm cancer setting, disease assessment and intended duration",
           "Review clinical benefit and symptoms",
@@ -21696,7 +21638,6 @@ const definitions={
           "Consultant response review after two cycles; NCCP says stop if no response",
           "Agree follow-up, completion or another treatment"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00227"
         ],
@@ -21705,40 +21646,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Confirm the treatment aim",
+        "title": "Confirm your personal plan",
         "when": "Before starting",
         "why": "FOLFIRI combines irinotecan, folinic acid and fluorouracil. NCCP 00227 covers advanced colorectal cancer, metastatic oesophageal cancer and second-line advanced pancreatic cancer. Your team confirms your indication and treatment aim.",
-        "clinical": "FOLFIRI combines irinotecan with folinic-acid-modulated fluorouracil. The shared NCCP protocol covers advanced colorectal cancer, metastatic oesophageal carcinoma and second-line locally advanced or metastatic pancreatic carcinoma; the indication must therefore be confirmed before interpreting the evidence and treatment plan.",
-        "action": "Confirm the exact indication and intended duration.",
-        "source_ids": [
-          "00227"
-        ]
-      },
-      {
-        "title": "Review before continuing",
-        "when": "At each clinical decision point",
-        "why": "Results, symptoms and benefit can change the plan.",
-        "clinical": "NCCP00227 states to discontinue if there is no response after two cycles: arrange consultant assessment at that point; do not silently continue an unreviewed course. Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed. Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment.",
-        "action": "Agree who reviews results and communicates the next step.",
+        "clinical": "Day 1: irinotecan, folinic acid and fluorouracil, then a 46-hour fluorouracil pump. A cycle lasts 14 days; your team confirms the next treatment.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
         "source_ids": [
           "00227"
         ]
       }
     ],
     "clinical_notes": [
-      "NCCP00227 states to discontinue if there is no response after two cycles: arrange consultant assessment at that point; do not silently continue an unreviewed course.",
-      "Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed.",
-      "Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment."
+      "The columns show the order of care, not equal lengths of time. Confirm who books each check, who reviews it and whom to call if it is missing."
     ],
-    "code": "00227",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "FOLFIRI: treatment and checks",
-    "setting": "Advanced gastrointestinal cancers",
-    "summary": "Day 1: irinotecan, folinic acid and fluorouracil, then a 46-hour fluorouracil pump. A cycle lasts 14 days; your team confirms the next treatment.",
     "sources": [
       {
         "id": "00227",
@@ -21783,6 +21703,15 @@ const definitions={
     ]
   },
   "00321": {
+    "code": "00321",
+    "title": "CAPOX / XELOX: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Gastrointestinal cancers",
+    "summary": "Oxaliplatin on Day 1; capecitabine twice daily on Days 1–14, followed by Days 15–21 without capecitabine. Follow your individual prescription.",
     "stages": [
       "Before starting",
       "Each treatment cycle",
@@ -21792,22 +21721,8 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment plan",
-        "kind": "treatment",
-        "cells": [
-          "Confirm indication, medicines and duration",
-          "Give the agreed cycle only after review",
-          "Follow pump / tablet and symptom instructions",
-          "Continue, modify or stop after consultant review",
-          "Agree recovery and follow-up"
-        ],
-        "source_ids": [
-          "00321"
-        ],
-        "note": "Oxaliplatin on Day 1; capecitabine twice daily on Days 1–14, followed by Days 15–21 without capecitabine. Follow your individual prescription."
-      },
-      {
         "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline bloods; DPD before fluoropyrimidine",
           "Repeat before each cycle",
@@ -21815,7 +21730,6 @@ const definitions={
           "Results and recovery guide any delay or dose change",
           "Follow unresolved abnormalities"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00321"
         ],
@@ -21823,6 +21737,7 @@ const definitions={
       },
       {
         "label": "Symptoms and function",
+        "kind": "monitoring",
         "cells": [
           "Document existing symptoms and usual activity",
           "Review worst symptoms since the last treatment",
@@ -21830,7 +21745,6 @@ const definitions={
           "Balance benefit, side effects and priorities",
           "Agree recovery care and ongoing support"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00321"
         ],
@@ -21838,6 +21752,7 @@ const definitions={
       },
       {
         "label": "Tablets / hands and feet",
+        "kind": "monitoring",
         "cells": [
           "Confirm written dose, tablet supply and hold instructions",
           "Review adherence, mouth, bowel and skin symptoms",
@@ -21845,7 +21760,6 @@ const definitions={
           "Do not restart held tablets or replace missed doses without advice",
           "Return unused tablets as instructed; follow persistent symptoms"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00321"
         ],
@@ -21853,6 +21767,7 @@ const definitions={
       },
       {
         "label": "Neuropathy / cold sensitivity",
+        "kind": "monitoring",
         "cells": [
           "Record existing nerve symptoms",
           "Check persistence and effect on daily tasks",
@@ -21860,7 +21775,6 @@ const definitions={
           "Consultant reviews the oxaliplatin component separately",
           "Nerve symptoms can continue after treatment; arrange review"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00321"
         ],
@@ -21868,6 +21782,7 @@ const definitions={
       },
       {
         "label": "Heart checks",
+        "kind": "monitoring",
         "cells": [
           "Review cardiac history; ECG when cardiac function is compromised or clinical findings warrant it. No automatic serial echocardiogram schedule is specified for this regimen.",
           "Ask about new chest pain or breathlessness",
@@ -21875,7 +21790,6 @@ const definitions={
           "Repeat heart tests if clinically indicated",
           "Follow any heart problem; no fixed echo series"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00321"
         ],
@@ -21883,6 +21797,7 @@ const definitions={
       },
       {
         "label": "Response / scans",
+        "kind": "monitoring",
         "cells": [
           "Confirm cancer setting, disease assessment and intended duration",
           "Review clinical benefit and symptoms",
@@ -21890,7 +21805,21 @@ const definitions={
           "Consultant-directed scans and response assessment",
           "Agree follow-up, completion or another treatment"
         ],
+        "source_ids": [
+          "00321"
+        ],
+        "note": "The columns show the order of care, not equal lengths of time. Confirm who books each check, who reviews it and whom to call if it is missing."
+      },
+      {
+        "label": "INR if taking warfarin",
         "kind": "monitoring",
+        "cells": [
+          "Check anticoagulant and baseline INR",
+          "If taking warfarin: baseline and regular INR monitoring as clinically indicated.",
+          "Report bleeding or bruising",
+          "Adjust warfarin only as prescribed",
+          "Continue the agreed anticoagulation plan"
+        ],
         "source_ids": [
           "00321"
         ],
@@ -21899,39 +21828,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Confirm the treatment aim",
+        "title": "Confirm your personal plan",
         "when": "Before starting",
         "why": "CAPOX, also called XELOX, combines capecitabine tablets with oxaliplatin infusion. This NCCP protocol covers adjuvant stage III colon cancer, advanced colorectal cancer and adjuvant gastric cancer after D2 surgery. Confirm the treatment aim and duration for your indication.",
-        "clinical": "XELOX/CAPOX combines oral capecitabine with day-1 oxaliplatin. The shared NCCP protocol covers adjuvant stage III colon cancer, advanced or metastatic colorectal cancer, and adjuvant stage II/III gastric adenocarcinoma after D2 gastrectomy. The selected disease context determines intent, duration and the most applicable evidence.",
-        "action": "Confirm the exact indication and intended duration.",
-        "source_ids": [
-          "00321"
-        ]
-      },
-      {
-        "title": "Review before continuing",
-        "when": "At each clinical decision point",
-        "why": "Results, symptoms and benefit can change the plan.",
-        "clinical": "Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed. Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment.",
-        "action": "Agree who reviews results and communicates the next step.",
+        "clinical": "Oxaliplatin on Day 1; capecitabine twice daily on Days 1–14, followed by Days 15–21 without capecitabine. Follow your individual prescription.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
         "source_ids": [
           "00321"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed.",
-      "Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment."
+      "The columns show the order of care, not equal lengths of time. Confirm who books each check, who reviews it and whom to call if it is missing."
     ],
-    "code": "00321",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "CAPOX / XELOX: treatment and checks",
-    "setting": "Gastrointestinal cancers",
-    "summary": "Oxaliplatin on Day 1; capecitabine twice daily on Days 1–14, followed by Days 15–21 without capecitabine. Follow your individual prescription.",
     "sources": [
       {
         "id": "00321",
@@ -22339,6 +22248,15 @@ const definitions={
     ]
   },
   "00623": {
+    "code": "00623",
+    "title": "Bevacizumab + capecitabine: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced colorectal cancer",
+    "summary": "Bevacizumab infusion on Day 1; capecitabine twice daily on Days 1–14, then no capecitabine on Days 15–21. Follow your individual prescription.",
     "stages": [
       "Before starting",
       "Each treatment cycle",
@@ -22348,22 +22266,8 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment plan",
-        "kind": "treatment",
-        "cells": [
-          "Confirm indication, medicines and duration",
-          "Give the agreed cycle only after review",
-          "Follow pump / tablet and symptom instructions",
-          "Continue, modify or stop after consultant review",
-          "Agree recovery and follow-up"
-        ],
-        "source_ids": [
-          "00623"
-        ],
-        "note": "Bevacizumab infusion on Day 1; capecitabine twice daily on Days 1–14, then no capecitabine on Days 15–21. Follow your individual prescription."
-      },
-      {
         "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline bloods; DPD before fluoropyrimidine",
           "Repeat before each cycle",
@@ -22371,7 +22275,6 @@ const definitions={
           "Results and recovery guide any delay or dose change",
           "Follow unresolved abnormalities"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00623"
         ],
@@ -22379,6 +22282,7 @@ const definitions={
       },
       {
         "label": "Symptoms and function",
+        "kind": "monitoring",
         "cells": [
           "Document existing symptoms and usual activity",
           "Review worst symptoms since the last treatment",
@@ -22386,7 +22290,6 @@ const definitions={
           "Balance benefit, side effects and priorities",
           "Agree recovery care and ongoing support"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00623"
         ],
@@ -22394,6 +22297,7 @@ const definitions={
       },
       {
         "label": "Blood pressure / urine / wounds",
+        "kind": "monitoring",
         "cells": [
           "BP, urine protein and wound/procedure review",
           "BP before and after treatment; urine protein",
@@ -22401,7 +22305,6 @@ const definitions={
           "Additional urine tests and specialist review if abnormal",
           "Confirm wound-healing and procedure plan"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00623"
         ],
@@ -22409,6 +22312,7 @@ const definitions={
       },
       {
         "label": "Tablets / hands and feet",
+        "kind": "monitoring",
         "cells": [
           "Confirm written dose, tablet supply and hold instructions",
           "Review adherence, mouth, bowel and skin symptoms",
@@ -22416,7 +22320,6 @@ const definitions={
           "Do not restart held tablets or replace missed doses without advice",
           "Return unused tablets as instructed; follow persistent symptoms"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00623"
         ],
@@ -22424,6 +22327,7 @@ const definitions={
       },
       {
         "label": "Heart checks",
+        "kind": "monitoring",
         "cells": [
           "Cardiac history and examination; consider an echocardiogram after chest-wall radiotherapy or prior anthracycline. Further tests depend on symptoms and the clinical plan.",
           "Ask about new chest pain or breathlessness",
@@ -22431,7 +22335,6 @@ const definitions={
           "Repeat heart tests if clinically indicated",
           "Follow any heart problem; no fixed echo series"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00623"
         ],
@@ -22439,6 +22342,7 @@ const definitions={
       },
       {
         "label": "Response / scans",
+        "kind": "monitoring",
         "cells": [
           "Confirm cancer setting, disease assessment and intended duration",
           "Review clinical benefit and symptoms",
@@ -22446,7 +22350,21 @@ const definitions={
           "Consultant-directed scans and response assessment",
           "Agree follow-up, completion or another treatment"
         ],
+        "source_ids": [
+          "00623"
+        ],
+        "note": "The columns show the order of care, not equal lengths of time. Confirm who books each check, who reviews it and whom to call if it is missing."
+      },
+      {
+        "label": "INR if taking warfarin",
         "kind": "monitoring",
+        "cells": [
+          "Check anticoagulant and baseline INR",
+          "If taking warfarin: INR weekly until the warfarin dose is stable, then before each cycle.",
+          "Report bleeding or bruising",
+          "Adjust warfarin only as prescribed",
+          "Continue the agreed anticoagulation plan"
+        ],
         "source_ids": [
           "00623"
         ],
@@ -22455,40 +22373,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Confirm the treatment aim",
+        "title": "Confirm your personal plan",
         "when": "Before starting",
         "why": "This combination treats metastatic or unresectable colorectal cancer when an irinotecan- or oxaliplatin-based combination is unsuitable. Its aims may include cancer control, symptom relief and longer survival.",
-        "clinical": "This combination treats metastatic or unresectable colorectal cancer when an irinotecan- or oxaliplatin-based combination is unsuitable. Its aims may include cancer control, symptom relief and longer survival.",
-        "action": "Confirm the exact indication and intended duration.",
-        "source_ids": [
-          "00623"
-        ]
-      },
-      {
-        "title": "Review before continuing",
-        "when": "At each clinical decision point",
-        "why": "Results, symptoms and benefit can change the plan.",
-        "clinical": "Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed. Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment. Agree perioperative bevacizumab holds and restart with the consultant; wound healing and the actual procedure govern timing.",
-        "action": "Agree who reviews results and communicates the next step.",
+        "clinical": "Bevacizumab infusion on Day 1; capecitabine twice daily on Days 1–14, then no capecitabine on Days 15–21. Follow your individual prescription.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
         "source_ids": [
           "00623"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed.",
-      "Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment.",
-      "Agree perioperative bevacizumab holds and restart with the consultant; wound healing and the actual procedure govern timing."
+      "The columns show the order of care, not equal lengths of time. Confirm who books each check, who reviews it and whom to call if it is missing."
     ],
-    "code": "00623",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Bevacizumab + capecitabine: treatment and checks",
-    "setting": "Advanced colorectal cancer",
-    "summary": "Bevacizumab infusion on Day 1; capecitabine twice daily on Days 1–14, then no capecitabine on Days 15–21. Follow your individual prescription.",
     "sources": [
       {
         "id": "00623",
@@ -33931,6 +33828,511 @@ const definitions={
         "id": "trial",
         "title": "LUME-Lung 1 primary publication",
         "url": "https://pubmed.ncbi.nlm.nih.gov/24411639/"
+      }
+    ]
+  },
+  "00660": {
+    "code": "00660",
+    "title": "Fluorouracil + folinic acid every 14 days: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adjuvant or advanced colorectal cancer",
+    "summary": "Day 1: folinic acid and fluorouracil injection, followed by a 46-hour fluorouracil pump. Repeat every 14 days. Adjuvant treatment: up to 12 cycles; advanced treatment: continue only while appropriate.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline tests and DPD status",
+          "Before each 14-day cycle",
+          "Extra tests if unwell or dehydrated",
+          "Results guide any delay or change",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00660"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Review medicines, cardiac history and usual function",
+          "Review bowel, mouth, skin and infection symptoms",
+          "Use urgent contact plan",
+          "Confirm recovery and next dose",
+          "Agree recovery care"
+        ],
+        "source_ids": [
+          "00660"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm disease assessment",
+          "According to individual plan",
+          "New symptoms may bring review forward",
+          "Consultant-directed response assessment",
+          "Individual follow-up"
+        ],
+        "source_ids": [
+          "00660"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Heart",
+        "kind": "monitoring",
+        "cells": [
+          "ECG if compromised cardiac function",
+          "Report chest symptoms",
+          "Chest pain: urgent assessment",
+          "Further tests if indicated",
+          "Follow any cardiac problem"
+        ],
+        "source_ids": [
+          "00660"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm your personal plan",
+        "when": "Before starting",
+        "why": "Treatment after colorectal cancer surgery can reduce recurrence risk. For advanced cancer, treatment aims to control the disease. Your team confirms which aim applies.",
+        "clinical": "Day 1: folinic acid and fluorouracil injection, followed by a 46-hour fluorouracil pump. Repeat every 14 days. Adjuvant treatment: up to 12 cycles; advanced treatment: continue only while appropriate.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
+        "source_ids": [
+          "00660"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+    ],
+    "sources": [
+      {
+        "id": "00660",
+        "title": "NCCP 00660 v2b official regimen",
+        "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance V8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00421": {
+    "code": "00421",
+    "title": "Continuous fluorouracil + radiotherapy: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced rectal cancer",
+    "summary": "Fluorouracil runs continuously through a pump, seven days a week, during a six-week radiotherapy course. The pump is changed every seven days. Radiotherapy has its own appointment calendar.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline tests and DPD status",
+          "Weekly throughout treatment",
+          "Extra tests if unwell or dehydrated",
+          "Results guide any delay or change",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00421"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Review medicines, cardiac history and usual function",
+          "Review bowel, mouth, skin and infection symptoms",
+          "Use urgent contact plan",
+          "Confirm recovery and next dose",
+          "Agree recovery care"
+        ],
+        "source_ids": [
+          "00421"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm disease assessment",
+          "According to individual plan",
+          "New symptoms may bring review forward",
+          "Consultant-directed response assessment",
+          "Individual follow-up"
+        ],
+        "source_ids": [
+          "00421"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Radiotherapy / pump",
+        "kind": "monitoring",
+        "cells": [
+          "Radiation planning; line and pump training",
+          "Weekly bloods and pump changes; separate radiation visits",
+          "Report bowel, bladder, skin or line problems",
+          "Assess nutrition and hydration",
+          "Radiation/colorectal team decides response assessment and next steps"
+        ],
+        "source_ids": [
+          "00421"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm your personal plan",
+        "when": "Before starting",
+        "why": "Continuous fluorouracil helps radiotherapy treat locally advanced rectal cancer. Your team explains how this fits with surgery and other treatment.",
+        "clinical": "Fluorouracil runs continuously through a pump, seven days a week, during a six-week radiotherapy course. The pump is changed every seven days. Radiotherapy has its own appointment calendar.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
+        "source_ids": [
+          "00421"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+    ],
+    "sources": [
+      {
+        "id": "00421",
+        "title": "NCCP 00421 v6 official regimen",
+        "url": "https://healthservice.hse.ie/documents/6460/421_5-Fluorouracil_and_RT.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance V8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00427": {
+    "code": "00427",
+    "title": "Roswell Park modified fluorouracil + folinic acid: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adjuvant or metastatic colorectal cancer",
+    "summary": "Fluorouracil and folinic acid are given once weekly for six weeks, then two weeks off: Days 1, 8, 15, 22, 29 and 36 of a 56-day cycle. Adjuvant treatment is three cycles (24 weeks). A four-dose/six-week variant requires a separate consultant plan.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline tests and DPD status",
+          "Before every weekly treatment",
+          "Extra tests if unwell or dehydrated",
+          "Results guide any delay or change",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00427"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Review medicines, cardiac history and usual function",
+          "Review bowel, mouth, skin and infection symptoms",
+          "Use urgent contact plan",
+          "Confirm recovery and next dose",
+          "Agree recovery care"
+        ],
+        "source_ids": [
+          "00427"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm disease assessment",
+          "According to individual plan",
+          "New symptoms may bring review forward",
+          "Consultant-directed response assessment",
+          "Individual follow-up"
+        ],
+        "source_ids": [
+          "00427"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm your personal plan",
+        "when": "Before starting",
+        "why": "Fluorouracil with folinic acid can reduce recurrence risk after surgery or help control metastatic colorectal cancer. Confirm your treatment aim and planned duration.",
+        "clinical": "Fluorouracil and folinic acid are given once weekly for six weeks, then two weeks off: Days 1, 8, 15, 22, 29 and 36 of a 56-day cycle. Adjuvant treatment is three cycles (24 weeks). A four-dose/six-week variant requires a separate consultant plan.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
+        "source_ids": [
+          "00427"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+    ],
+    "sources": [
+      {
+        "id": "00427",
+        "title": "NCCP 00427 v6 official regimen",
+        "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance V8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00428": {
+    "code": "00428",
+    "title": "QUASAR modified weekly fluorouracil + folinic acid: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adjuvant or metastatic colorectal cancer",
+    "summary": "Folinic acid and fluorouracil injections are given once each week. The adjuvant course is 30 weeks; metastatic treatment continues only while appropriate. This weekly schedule has no planned two-week rest block.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline tests and DPD status",
+          "Before every weekly treatment",
+          "Extra tests if unwell or dehydrated",
+          "Results guide any delay or change",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00428"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Review medicines, cardiac history and usual function",
+          "Review bowel, mouth, skin and infection symptoms",
+          "Use urgent contact plan",
+          "Confirm recovery and next dose",
+          "Agree recovery care"
+        ],
+        "source_ids": [
+          "00428"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm disease assessment",
+          "According to individual plan",
+          "New symptoms may bring review forward",
+          "Consultant-directed response assessment",
+          "Individual follow-up"
+        ],
+        "source_ids": [
+          "00428"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm your personal plan",
+        "when": "Before starting",
+        "why": "Weekly fluorouracil with folinic acid can reduce recurrence risk after surgery or help control metastatic colorectal cancer. Your team confirms the intended benefit.",
+        "clinical": "Folinic acid and fluorouracil injections are given once each week. The adjuvant course is 30 weeks; metastatic treatment continues only while appropriate. This weekly schedule has no planned two-week rest block.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
+        "source_ids": [
+          "00428"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+    ],
+    "sources": [
+      {
+        "id": "00428",
+        "title": "NCCP 00428 v6 official regimen",
+        "url": "https://healthservice.hse.ie/documents/6467/428_QUASAR_Modified_5FU_and_Folinic_Acid.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance V8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00486": {
+    "code": "00486",
+    "title": "FLOX: fluorouracil, folinic acid and oxaliplatin: treatment and checks",
+    "release": "0.84.32",
+    "checked": "2026-11-04",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adjuvant stage II or III colon cancer after resection",
+    "summary": "Fluorouracil and folinic acid on Days 1, 8, 15, 22, 29 and 36; oxaliplatin also on Days 1, 15 and 29. Two weeks off follow. Three 56-day cycles make a planned 24-week course.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline tests and DPD status",
+          "Before each weekly treatment",
+          "Extra tests if unwell or dehydrated",
+          "Results guide any delay or change",
+          "Follow unresolved abnormalities"
+        ],
+        "source_ids": [
+          "00486"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Review medicines, cardiac history and usual function",
+          "Review bowel, mouth, skin and infection symptoms",
+          "Use urgent contact plan",
+          "Confirm recovery and next dose",
+          "Agree recovery care"
+        ],
+        "source_ids": [
+          "00486"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Scans / tumour markers",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm disease assessment",
+          "According to individual plan",
+          "New symptoms may bring review forward",
+          "Consultant-directed response assessment",
+          "Individual follow-up"
+        ],
+        "source_ids": [
+          "00486"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      },
+      {
+        "label": "Nerves / heart",
+        "kind": "monitoring",
+        "cells": [
+          "Record neuropathy; ECG if compromised cardiac function",
+          "Report persistent neuropathy before doses; formal neuropathy review every 2 cycles",
+          "New chest pain or breathlessness: urgent assessment",
+          "ECG as clinically indicated",
+          "Nerve symptoms can persist after treatment"
+        ],
+        "source_ids": [
+          "00486"
+        ],
+        "note": "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Confirm your personal plan",
+        "when": "Before starting",
+        "why": "FLOX is given after surgery for selected stage II or III colon cancer to reduce the chance of recurrence. It combines weekly fluorouracil/folinic acid with oxaliplatin on alternate treatment weeks.",
+        "clinical": "Fluorouracil and folinic acid on Days 1, 8, 15, 22, 29 and 36; oxaliplatin also on Days 1, 15 and 29. Two weeks off follow. Three 56-day cycles make a planned 24-week course.",
+        "action": "Agree medicines, treatment days, duration and monitoring.",
+        "source_ids": [
+          "00486"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Required safety blood tests are separate from the individually prescribed scan or tumour-marker plan."
+    ],
+    "sources": [
+      {
+        "id": "00486",
+        "title": "NCCP 00486 v8 official regimen",
+        "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance V8",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
       }
     ]
   }

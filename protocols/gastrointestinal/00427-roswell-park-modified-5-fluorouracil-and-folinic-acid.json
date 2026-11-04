@@ -11,8 +11,8 @@
     "short_title": "Roswell Park Modified 5-Fluorouracil and Folinic Acid",
     "indication": "Adjuvant or metastatic colorectal cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 7,
+    "sactcheck_encoding_version": "0.84.32",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -44,7 +44,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08432_independent_review_pending"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -65,7 +65,9 @@
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.84.32",
+      "reconciled_date": "2026-11-04"
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -81,11 +83,19 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending.",
+      "reconciled_release": "0.84.32"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00427-v6"
+    "canonical_protocol_id": "nccp-00427-v6",
+    "source_pdf_sha256": "b2e9c2debec72814d33e23af4f0f727a9f8630375cb902e8ac1334f4bffde4bb",
+    "source_text_snapshot_sha256": "d287b0c149a9e33c76803f60e0b3c90a51f04a46baddf216acf9ac787be128f9",
+    "full_suite_release": "0.84.32",
+    "source_checked_date": "2026-11-04",
+    "clinical_audit_release": "0.84.32",
+    "schedule_summary": "Fluorouracil and folinic acid are given once weekly for six weeks, then two weeks off: Days 1, 8, 15, 22, 29 and 36 of a 56-day cycle. Adjuvant treatment is three cycles (24 weeks). A four-dose/six-week variant requires a separate consultant plan.",
+    "document_revision": "2026-11-04"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
@@ -101,10 +111,10 @@
   ],
   "treatment": {
     "cycle_length_days": 56,
-    "schedule_summary": "Roswell Park Modified 5-Fluorouracil and Folinic Acid",
+    "schedule_summary": "Fluorouracil and folinic acid are given once weekly for six weeks, then two weeks off: Days 1, 8, 15, 22, 29 and 36 of a 56-day cycle. Adjuvant treatment is three cycles (24 weeks). A four-dose/six-week variant requires a separate consultant plan.",
     "drugs": [
-      "folinic acid",
-      "5-fluorouracil"
+      "Folinic acid",
+      "Fluorouracil"
     ]
   },
   "input_definitions": {
@@ -404,6 +414,267 @@
       "ui_section": "labs",
       "always_show": true,
       "input_role": "decision"
+    },
+    "prior_febrile_neutropenia": {
+      "label": "Febrile neutropenia in previous treatment interval",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "diarrhoea_worst_grade": {
+      "label": "Worst diarrhoea grade in this episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": "",
+      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "input_role": "decision"
+    },
+    "diarrhoea_occurrence": {
+      "label": "Occurrence of this diarrhoea severity",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "mucositis_worst_grade": {
+      "label": "Worst mucositis grade in this episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": "",
+      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "input_role": "decision"
+    },
+    "mucositis_occurrence": {
+      "label": "Occurrence of this mucositis severity",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "hand_foot_grade": {
+      "label": "Current hand-foot syndrome grade",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "ctcae_version": "5.0",
+      "ctcae_category": "ppe",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess painful erythema, swelling, hyperkeratosis, peeling or blistering of palms/soles and the effect on instrumental or self-care activities.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No palmar–plantar erythrodysesthesia."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Minimal skin changes or dermatitis, such as erythema, oedema or hyperkeratosis, without pain."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Painful skin changes, including peeling, blisters, bleeding, fissures, oedema or hyperkeratosis; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe painful skin changes; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 is not defined under the CTCAE palmar–plantar erythrodysesthesia term; use another term for life-threatening complications."
+        }
+      ],
+      "input_role": "decision"
+    },
+    "hand_foot_worst_grade": {
+      "label": "Worst hand foot grade in this episode",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "ctcae_version": "5.0",
+      "ctcae_category": "ppe",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess painful erythema, swelling, hyperkeratosis, peeling or blistering of palms/soles and the effect on instrumental or self-care activities.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No palmar–plantar erythrodysesthesia."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Minimal skin changes or dermatitis, such as erythema, oedema or hyperkeratosis, without pain."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Painful skin changes, including peeling, blisters, bleeding, fissures, oedema or hyperkeratosis; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe painful skin changes; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 is not defined under the CTCAE palmar–plantar erythrodysesthesia term; use another term for life-threatening complications."
+        }
+      ],
+      "input_role": "decision"
+    },
+    "hand_foot_occurrence": {
+      "label": "Occurrence of this hand foot severity",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "recent_or_concomitant_brivudine": {
+      "label": "Recent/concomitant brivudine, sorivudine or analogue",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
@@ -536,14 +807,14 @@
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
-          "value": 75
+          "value": 100
         },
         "action": {
           "type": "withhold",
           "components": [
             "whole_regimen"
           ],
-          "message": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
+          "message": "Platelets <100 ×10⁹/L: delay until recovery (source haematological table)."
         },
         "source": {
           "document": "Official NCCP regimen; component-specific decision pathway",
@@ -657,48 +928,6 @@
         "explanation": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
       },
       {
-        "id": "DIARRHOEA_GRADE_2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
-      },
-      {
-        "id": "MUCOSITIS_GRADE_2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
-      },
-      {
         "id": "OF590_00427_5FU_RENAL_SEVERE",
         "priority": 20,
         "when": {
@@ -715,8 +944,9 @@
           "recommendation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00427 v6",
+          "page": "renal/hepatic dose-modification section",
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
         },
         "explanation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
       },
@@ -737,8 +967,9 @@
           "recommendation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00427 v6",
+          "page": "renal/hepatic dose-modification section",
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
         },
         "explanation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
       },
@@ -759,8 +990,9 @@
           "recommendation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00427 v6",
+          "page": "renal/hepatic dose-modification section",
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
         },
         "explanation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
       },
@@ -781,32 +1013,1206 @@
           "recommendation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00427 v6",
+          "page": "renal/hepatic dose-modification section",
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
         },
         "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
       },
       {
-        "id": "OF590_00427_5FU_HEP_SEV",
-        "priority": 20,
+        "id": "SEVERE_COUNTS_REDUCTION_REVIEW",
+        "priority": 30,
+        "when": {
+          "any": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Delay until recovery; consider a 25% reduction of fluorouracil for subsequent treatment. Confirm the consultant decision; do not automatically calculate a dose.",
+          "recommendation": "Delay until recovery; consider a 25% reduction of fluorouracil for subsequent treatment. Confirm the consultant decision; do not automatically calculate a dose."
+        },
+        "explanation": "Delay until recovery; consider a 25% reduction of fluorouracil for subsequent treatment. Confirm the consultant decision; do not automatically calculate a dose.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "PREVIOUS_FN_REVIEW",
+        "priority": 30,
+        "when": {
+          "field": "prior_febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Review prior febrile neutropenia and recovery. Source advises considering 25% reduction of fluorouracil.",
+          "recommendation": "Review prior febrile neutropenia and recovery. Source advises considering 25% reduction of fluorouracil."
+        },
+        "explanation": "Review prior febrile neutropenia and recovery. Source advises considering 25% reduction of fluorouracil.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "SEVERE_LIVER_EXCLUSION_CONFLICT",
+        "priority": 30,
         "when": {
           "field": "fluorouracil_hepatic_impairment",
           "operator": "==",
           "value": "severe"
         },
         "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Severe liver impairment is excluded on page 2, although the dose table lists a half-dose option. Do not automatically prescribe 50%; consultant/pharmacy must resolve this source conflict.",
+          "recommendation": "Severe liver impairment is excluded on page 2, although the dose table lists a half-dose option. Do not automatically prescribe 50%; consultant/pharmacy must resolve this source conflict."
+        },
+        "explanation": "Severe liver impairment is excluded on page 2, although the dose table lists a half-dose option. Do not automatically prescribe 50%; consultant/pharmacy must resolve this source conflict.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_GRADE_2_PLUS",
+        "priority": 30,
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Delay diarrhoea grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+          "recommendation": "Delay diarrhoea grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment."
+        },
+        "explanation": "Delay diarrhoea grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G2_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU."
+        },
+        "explanation": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G2_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
           "type": "dose_reduce",
           "components": [
             "fluorouracil"
           ],
-          "message": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated.",
-          "recommendation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
+          "message": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 75
+            }
+          }
         },
+        "explanation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G2_O3",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
         },
-        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G2_O4",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G3_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G3_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G4_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G4_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_GRADE_2_PLUS",
+        "priority": 30,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Delay mucositis grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+          "recommendation": "Delay mucositis grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment."
+        },
+        "explanation": "Delay mucositis grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G2_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU."
+        },
+        "explanation": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G2_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G2_O3",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G2_O4",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G3_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G3_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G4_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G4_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HFS_GRADE_2_PLUS",
+        "priority": 30,
+        "when": {
+          "field": "hand_foot_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Delay hand foot grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+          "recommendation": "Delay hand foot grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment."
+        },
+        "explanation": "Delay hand foot grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HFS_G2_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU."
+        },
+        "explanation": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HFS_G2_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HFS_G2_O3",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HFS_G2_O4",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HFS_G3_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HFS_G3_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HFS_G4_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HFS_G4_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "HEPATIC_EXACT_BOUNDARY",
+        "priority": 30,
+        "when": {
+          "any": [
+            {
+              "field": "fluorouracil_bilirubin_umol_l",
+              "operator": "==",
+              "value": 85
+            },
+            {
+              "field": "fluorouracil_ast_u_l",
+              "operator": "==",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Exactly bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < and > source table. Consultant/pharmacy review; no automatic full dose.",
+          "recommendation": "Exactly bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < and > source table. Consultant/pharmacy review; no automatic full dose."
+        },
+        "explanation": "Exactly bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < and > source table. Consultant/pharmacy review; no automatic full dose.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
+      },
+      {
+        "id": "BRIVUDINE_INTERACTION",
+        "priority": 30,
+        "when": {
+          "field": "recent_or_concomitant_brivudine",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Do not combine fluorouracil with brivudine/sorivudine or analogues. Verify the required washout in current product information with pharmacy.",
+          "recommendation": "Do not combine fluorouracil with brivudine/sorivudine or analogues. Verify the required washout in current product information with pharmacy."
+        },
+        "explanation": "Do not combine fluorouracil with brivudine/sorivudine or analogues. Verify the required washout in current product information with pharmacy.",
+        "source": {
+          "document": "NCCP 00427 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+        }
       }
     ]
   },
@@ -828,13 +2234,65 @@
   "supportive_care": {
     "emetogenic_risk": "low",
     "script_id": "nccp-parenteral-low",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "mapping_source": "NCCP NCIS Medical Oncology Antiemetic Guidance V8",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf",
+    "mapping_basis": "NCCP 00427 source-specific emetogenic risk; reviewed 2026-11-04",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
+    "phase_specific_plan": "patient/00427/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6466/427_Roswell_Park_Modified.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "main_cycle",
+      "label": "Source reference schedule",
+      "cycle_length_days": 56,
+      "administration": [
+        {
+          "drug": "folinic_acid",
+          "days": [
+            1,
+            8,
+            15,
+            22,
+            29,
+            36
+          ],
+          "dose": {
+            "value": 50,
+            "unit": "mg"
+          },
+          "route": "IV",
+          "notes": "Flat dose IV bolus before fluorouracil"
+        },
+        {
+          "drug": "fluorouracil",
+          "days": [
+            1,
+            8,
+            15,
+            22,
+            29,
+            36
+          ],
+          "dose": {
+            "value": 500,
+            "unit": "mg/m²"
+          },
+          "route": "IV",
+          "notes": "IV bolus; do not make up missed doses"
+        }
+      ],
+      "notes": "Fluorouracil and folinic acid are given once weekly for six weeks, then two weeks off: Days 1, 8, 15, 22, 29 and 36 of a 56-day cycle. Adjuvant treatment is three cycles (24 weeks). A four-dose/six-week variant requires a separate consultant plan. Consultant-selected alternative: four weekly doses followed by two weeks off; confirm the prescribed variant before use.",
+      "active_drugs": [
+        "folinic_acid",
+        "fluorouracil"
+      ],
+      "schedule_summary": "Fluorouracil and folinic acid are given once weekly for six weeks, then two weeks off: Days 1, 8, 15, 22, 29 and 36 of a 56-day cycle. Adjuvant treatment is three cycles (24 weeks). A four-dose/six-week variant requires a separate consultant plan. Consultant-selected alternative: four weekly doses followed by two weeks off; confirm the prescribed variant before use.",
+      "duration_text": "Fluorouracil and folinic acid are given once weekly for six weeks, then two weeks off: Days 1, 8, 15, 22, 29 and 36 of a 56-day cycle. Adjuvant treatment is three cycles (24 weeks). A four-dose/six-week variant requires a separate consultant plan. Consultant-selected alternative: four weekly doses followed by two weeks off; confirm the prescribed variant before use."
+    }
+  ]
 }

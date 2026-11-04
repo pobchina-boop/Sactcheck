@@ -11,7 +11,7 @@ assert.equal(validation.valid, true, Validator.formatIssues(validation).join('\n
 function assess(overrides = {}) {
   const defs = Engine.getInputDefinitions(protocol, 'default');
   const inputs = Object.fromEntries(defs.map(d => [d.id, d.demo_value]));
-  return Engine.assess(protocol, { ...inputs, ...overrides }, { profileId: 'default' });
+  return Engine.assess(protocol, { ...inputs, renal_impairment_present:false, ...overrides }, { profileId: 'default' });
 }
 
 let result = assess();

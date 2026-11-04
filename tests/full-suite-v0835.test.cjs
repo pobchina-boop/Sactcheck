@@ -17,7 +17,7 @@ for(const code of ['00225','00447','00448']){
  const kb=json('data/regimen-knowledge-base-v0835-addendum.json');assert(kb.regimen_profiles.some(x=>x.protocol_id===p.protocol_id&&x.administration&&x.supportive_care));assert(kb.evidence_records.some(x=>x.protocol_id===p.protocol_id));
 }
 for(const c of ['00586','00655']){const html=relationship.renderForCode(c);assert(html.includes('tr-grid'));assert(!/<input|<select/.test(html));assert(json('data/regimen-knowledge-base-v0835-addendum.json').regimen_profiles.some(p=>p.treatment_relationship_code===c));}
-for(const name of ['index','knowledge','consent','treatment-timeline'])assert(read(`patient/00586/${name}.html`).includes(relationship.renderForCode('00586')));
+assert(read('patient/00586/index.html').includes('knowledge.html'));for(const name of ['knowledge','consent','treatment-timeline'])assert(read(`patient/00586/${name}.html`).includes(relationship.renderForCode('00586')));
 assert(fs.existsSync(path.join(root,'assets/patient/durvalumab-00655-qr.png')));
 assert(read('js/patient-support-v0750.js').includes('SACTCheckTreatmentRelationship?.renderForCode'));assert(read('js/regimen-knowledge-base.js').includes('v0835-addendum'));assert(read('index.html').includes('js/treatment-relationship-v0835.js'));
 for(const f of ['tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-panitumumab-support-v0835.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});

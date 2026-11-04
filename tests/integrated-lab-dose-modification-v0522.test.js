@@ -75,7 +75,7 @@ modification = Dose.buildModificationModel(ac, result, acModel);
 assert(modification.rows.every(row => row.protocolDose === 'No dose now'));
 
 const folfox = require(path.join(root, 'protocols/gastrointestinal/00209-modified-folfox6.json'));
-result = Engine.assess(folfox, { neuropathy_grade: 2 }, {});
+result = Engine.assess(folfox, { neuropathy_grade: 2, current_oxaliplatin_dose_level:0 }, {});
 modification = Dose.buildModificationModel(folfox, result, Dose.buildModel(folfox));
 assert.strictEqual(modification.rows[0].component, 'Oxaliplatin');
 assert.strictEqual(modification.rows[0].actionLabel, 'Dose level -1');

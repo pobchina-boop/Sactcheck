@@ -6,6 +6,8 @@ const E=require('../js/assessment-engine'),D=require('../js/protocol-dose-schedu
 const root=path.resolve(__dirname,'..'),results=[];
 const protocols=Object.fromEntries(['00227','00449','00446'].map(c=>[c,require('../protocols/gastrointestinal/'+fs.readdirSync(path.join(root,'protocols/gastrointestinal')).find(f=>f.startsWith(c)))]));
 function check(code,name,inputs,expected,verify=()=>{}){
+ // Historical numeric expectations explicitly start at level 0; v32 separately tests missing/reduced history.
+ if(code==='00227'&&/Recovered|Competing/.test(name))inputs={current_irinotecan_dose_level:0,current_fluorouracil_bolus_dose_level:0,current_fluorouracil_infusion_dose_level:0,...inputs};
  const p=protocols[code],r=E.assess(p,inputs),d=D.buildModificationModel(p,r);
  assert.equal(r.actionType,expected,`${code}: ${name}`);assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);verify(r,d);
  results.push({code,case:name,inputs,expected,actual:r.actionType,partial:r.partialAssessment,findings:r.findings.filter(f=>!f.domainAssessment).map(f=>({id:f.ruleId,action:f.actionType,source:f.sourceText,explanation:f.explanation})),componentActions:d.rows.map(x=>({component:x.component,action:x.actionLabel,dose:x.protocolDose})),pass:true});return {r,d};

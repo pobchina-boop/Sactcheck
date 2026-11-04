@@ -11,8 +11,8 @@
     "short_title": "FLOX Therapy",
     "indication": "Adjuvant stage II or III colon cancer after complete resection.",
     "source_url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 7,
+    "sactcheck_encoding_version": "0.84.32",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -47,7 +47,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08432_independent_review_pending"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -68,7 +68,9 @@
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.84.32",
+      "reconciled_date": "2026-11-04"
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -85,11 +87,19 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending.",
+      "reconciled_release": "0.84.32"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00486-v8"
+    "canonical_protocol_id": "nccp-00486-v8",
+    "source_pdf_sha256": "dbef2feedd66f7700c0b41617568e15d6824819a3c44fac4b79595b8423cf8fd",
+    "source_text_snapshot_sha256": "4151ec8e59e37b34c64af1c670d5b22259221bac14290e69a0e2e040db79f11f",
+    "full_suite_release": "0.84.32",
+    "source_checked_date": "2026-11-04",
+    "clinical_audit_release": "0.84.32",
+    "schedule_summary": "Fluorouracil and folinic acid on Days 1, 8, 15, 22, 29 and 36; oxaliplatin also on Days 1, 15 and 29. Two weeks off follow. Three 56-day cycles make a planned 24-week course.",
+    "document_revision": "2026-11-04"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
@@ -105,11 +115,11 @@
   ],
   "treatment": {
     "cycle_length_days": 56,
-    "schedule_summary": "FLOX Therapy",
+    "schedule_summary": "Fluorouracil and folinic acid on Days 1, 8, 15, 22, 29 and 36; oxaliplatin also on Days 1, 15 and 29. Two weeks off follow. Three 56-day cycles make a planned 24-week course.",
     "drugs": [
-      "oxaliplatin",
-      "folinic acid",
-      "5-fluorouracil"
+      "Oxaliplatin",
+      "Folinic acid",
+      "Fluorouracil"
     ]
   },
   "input_definitions": {
@@ -393,22 +403,27 @@
       "required": false,
       "options": [
         {
-          "value": "ge30",
-          "label": "CrCl ≥30 mL/min",
-          "decision_value": "ge30"
+          "value": "gt30",
+          "label": "CrCl >30 mL/min"
+        },
+        {
+          "value": "eq30",
+          "label": "CrCl exactly 30 mL/min"
         },
         {
           "value": "lt30",
-          "label": "CrCl <30 mL/min",
-          "decision_value": "lt30"
+          "label": "CrCl <30 mL/min"
         },
         {
           "value": "dialysis",
-          "label": "Dialysis",
-          "decision_value": "dialysis"
+          "label": "Haemodialysis"
+        },
+        {
+          "value": "ge30",
+          "label": "Legacy ≥30 band — re-enter exact current CrCl band; consultant review"
         }
       ],
-      "demo_value": "ge30",
+      "demo_value": "",
       "ui_section": "labs",
       "always_show": true,
       "renal_input": {
@@ -482,6 +497,309 @@
       "ui_section": "labs",
       "always_show": true,
       "input_role": "decision"
+    },
+    "prior_febrile_neutropenia": {
+      "label": "Febrile neutropenia in previous treatment interval",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "neuropathy_persistent": {
+      "label": "Grade 2 neuropathy persists at start of cycle",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "diarrhoea_worst_grade": {
+      "label": "Worst diarrhoea grade in this episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No increase above the patient's usual stool frequency or ostomy output."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": "",
+      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "input_role": "decision"
+    },
+    "diarrhoea_occurrence": {
+      "label": "Occurrence of this diarrhoea severity",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "mucositis_worst_grade": {
+      "label": "Worst mucositis grade in this episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No toxicity",
+          "ctcae_grade": 0,
+          "description": "No oral mucositis."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Mild",
+          "ctcae_grade": 1,
+          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Moderate",
+          "ctcae_grade": 2,
+          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Severe",
+          "ctcae_grade": 3,
+          "description": "Severe pain that interferes with oral intake."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Life-threatening",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": "",
+      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "input_role": "decision"
+    },
+    "mucositis_occurrence": {
+      "label": "Occurrence of this mucositis severity",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "hand_foot_grade": {
+      "label": "Current hand-foot syndrome grade",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "ctcae_version": "5.0",
+      "ctcae_category": "ppe",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess painful erythema, swelling, hyperkeratosis, peeling or blistering of palms/soles and the effect on instrumental or self-care activities.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No palmar–plantar erythrodysesthesia."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Minimal skin changes or dermatitis, such as erythema, oedema or hyperkeratosis, without pain."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Painful skin changes, including peeling, blisters, bleeding, fissures, oedema or hyperkeratosis; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe painful skin changes; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 is not defined under the CTCAE palmar–plantar erythrodysesthesia term; use another term for life-threatening complications."
+        }
+      ],
+      "input_role": "decision"
+    },
+    "hand_foot_worst_grade": {
+      "label": "Worst hand foot grade in this episode",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "ctcae_version": "5.0",
+      "ctcae_category": "ppe",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess painful erythema, swelling, hyperkeratosis, peeling or blistering of palms/soles and the effect on instrumental or self-care activities.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No palmar–plantar erythrodysesthesia."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Minimal skin changes or dermatitis, such as erythema, oedema or hyperkeratosis, without pain."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Painful skin changes, including peeling, blisters, bleeding, fissures, oedema or hyperkeratosis; limits instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe painful skin changes; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Grade 4 is not defined under the CTCAE palmar–plantar erythrodysesthesia term; use another term for life-threatening complications."
+        }
+      ],
+      "input_role": "decision"
+    },
+    "hand_foot_occurrence": {
+      "label": "Occurrence of this hand foot severity",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "recent_or_concomitant_brivudine": {
+      "label": "Recent/concomitant brivudine, sorivudine or analogue",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "treatment_day": {
+      "label": "Treatment day within 56-day FLOX cycle",
+      "type": "select",
+      "required": false,
+      "input_role": "context",
+      "always_show": true,
+      "ui_section": "treatment_context",
+      "demo_value": "",
+      "options": [
+        {
+          "value": "1",
+          "label": "Day 1"
+        },
+        {
+          "value": "8",
+          "label": "Day 8"
+        },
+        {
+          "value": "15",
+          "label": "Day 15"
+        },
+        {
+          "value": "22",
+          "label": "Day 22"
+        },
+        {
+          "value": "29",
+          "label": "Day 29"
+        },
+        {
+          "value": "36",
+          "label": "Day 36"
+        }
+      ]
     }
   },
   "required_inputs": [],
@@ -556,36 +874,6 @@
           "page": "dose-modification section"
         },
         "explanation": "Known hypersensitivity to a regimen component is an exclusion."
-      },
-      {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
-        "priority": 10,
-        "when": {
-          "any": [
-            {
-              "field": "pregnancy",
-              "operator": "==",
-              "value": true
-            },
-            {
-              "field": "breastfeeding",
-              "operator": "==",
-              "value": true
-            }
-          ]
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
       },
       {
         "id": "ANC_BELOW_SAFE_TREATMENT_RANGE",
@@ -735,187 +1023,6 @@
         "explanation": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
       },
       {
-        "id": "DIARRHOEA_GRADE_2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
-      },
-      {
-        "id": "MUCOSITIS_GRADE_2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
-      },
-      {
-        "id": "OXALIPLATIN_NEUROPATHY_G2",
-        "priority": 8,
-        "when": {
-          "field": "neuropathy_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Persistent grade 2 or worse neuropathy requires oxaliplatin-specific interruption/reduction review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Persistent grade 2 or worse neuropathy requires oxaliplatin-specific interruption/reduction review."
-      },
-      {
-        "id": "OXALIPLATIN_SEVERE_RENAL",
-        "priority": 8,
-        "when": {
-          "field": "oxaliplatin_renal_band",
-          "operator": "==",
-          "value": "lt30"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "CrCl <30 mL/min requires protocol-specific oxaliplatin dose review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "CrCl <30 mL/min requires protocol-specific oxaliplatin dose review."
-      },
-      {
-        "id": "OXALIPLATIN_DIALYSIS",
-        "priority": 9,
-        "when": {
-          "field": "oxaliplatin_renal_band",
-          "operator": "==",
-          "value": "dialysis"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Haemodialysis requires specialist pharmacy and Consultant dosing review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Haemodialysis requires specialist pharmacy and Consultant dosing review."
-      },
-      {
-        "id": "OF590_00486_OXALI_LT30",
-        "priority": 20,
-        "when": {
-          "field": "oxaliplatin_renal_band",
-          "operator": "==",
-          "value": "lt30"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "oxaliplatin"
-          ],
-          "message": "CrCl <30 mL/min: consider 50% of the original oxaliplatin dose.",
-          "recommendation": "CrCl <30 mL/min: consider 50% of the original oxaliplatin dose.",
-          "component_changes": {
-            "oxaliplatin": {
-              "dose_percent_of_original": 50
-            }
-          }
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "CrCl <30 mL/min: consider 50% of the original oxaliplatin dose."
-      },
-      {
-        "id": "OF590_00486_OXALI_DIALYSIS",
-        "priority": 20,
-        "when": {
-          "field": "oxaliplatin_renal_band",
-          "operator": "==",
-          "value": "dialysis"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "oxaliplatin"
-          ],
-          "message": "Dialysis: consider 50% oxaliplatin with dialysis timing directed by the Consultant and oncology pharmacy.",
-          "recommendation": "Dialysis: consider 50% oxaliplatin with dialysis timing directed by the Consultant and oncology pharmacy.",
-          "component_changes": {
-            "oxaliplatin": {
-              "dose_percent_of_original": 50
-            }
-          }
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Dialysis: consider 50% oxaliplatin with dialysis timing directed by the Consultant and oncology pharmacy."
-      },
-      {
-        "id": "OF590_00486_5FU_RENAL_SEVERE",
-        "priority": 20,
-        "when": {
-          "field": "fluorouracil_renal_impairment",
-          "operator": "==",
-          "value": "severe"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability.",
-          "recommendation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
-      },
-      {
         "id": "OF590_00486_5FU_BILI_GT85",
         "priority": 20,
         "when": {
@@ -932,8 +1039,9 @@
           "recommendation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00486 v8",
+          "page": "renal/hepatic dose-modification section",
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
         },
         "explanation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
       },
@@ -954,8 +1062,9 @@
           "recommendation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00486 v8",
+          "page": "renal/hepatic dose-modification section",
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
         },
         "explanation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
       },
@@ -976,8 +1085,9 @@
           "recommendation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00486 v8",
+          "page": "renal/hepatic dose-modification section",
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
         },
         "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
       },
@@ -998,10 +1108,1482 @@
           "recommendation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00486 v8",
+          "page": "renal/hepatic dose-modification section",
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
         },
         "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
+      },
+      {
+        "id": "SEVERE_COUNTS_REDUCTION_REVIEW",
+        "priority": 30,
+        "when": {
+          "any": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "Delay until recovery; consider a 25% reduction of fluorouracil and oxaliplatin for subsequent treatment. Confirm the consultant decision; do not automatically calculate a dose.",
+          "recommendation": "Delay until recovery; consider a 25% reduction of fluorouracil and oxaliplatin for subsequent treatment. Confirm the consultant decision; do not automatically calculate a dose."
+        },
+        "explanation": "Delay until recovery; consider a 25% reduction of fluorouracil and oxaliplatin for subsequent treatment. Confirm the consultant decision; do not automatically calculate a dose.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "PREVIOUS_FN_REVIEW",
+        "priority": 30,
+        "when": {
+          "field": "prior_febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "Review prior febrile neutropenia and recovery. Source advises considering 25% reduction of fluorouracil and oxaliplatin.",
+          "recommendation": "Review prior febrile neutropenia and recovery. Source advises considering 25% reduction of fluorouracil and oxaliplatin."
+        },
+        "explanation": "Review prior febrile neutropenia and recovery. Source advises considering 25% reduction of fluorouracil and oxaliplatin.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "PLATELETS_75_TO_100_CHOICE",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Default table delays below 100; footnote permits clinician choice to proceed at 75-100. Confirm explicit decision; no automatic clearance.",
+          "recommendation": "Default table delays below 100; footnote permits clinician choice to proceed at 75-100. Confirm explicit decision; no automatic clearance."
+        },
+        "explanation": "Default table delays below 100; footnote permits clinician choice to proceed at 75-100. Confirm explicit decision; no automatic clearance.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "OXALI_RENAL_EXACT30",
+        "priority": 30,
+        "when": {
+          "field": "oxaliplatin_renal_band",
+          "operator": "==",
+          "value": "eq30"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Source uses >30 and <30 mL/min; exactly 30 is unassigned. Resolve with consultant/pharmacy without rounding.",
+          "recommendation": "Source uses >30 and <30 mL/min; exactly 30 is unassigned. Resolve with consultant/pharmacy without rounding."
+        },
+        "explanation": "Source uses >30 and <30 mL/min; exactly 30 is unassigned. Resolve with consultant/pharmacy without rounding.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "OXALI_RENAL_LT30",
+        "priority": 30,
+        "when": {
+          "field": "oxaliplatin_renal_band",
+          "operator": "==",
+          "value": "lt30"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "CrCl <30: consider 50% of original oxaliplatin dose; requires consultant/pharmacy choice.",
+          "recommendation": "CrCl <30: consider 50% of original oxaliplatin dose; requires consultant/pharmacy choice."
+        },
+        "explanation": "CrCl <30: consider 50% of original oxaliplatin dose; requires consultant/pharmacy choice.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "OXALI_RENAL_DIALYSIS",
+        "priority": 30,
+        "when": {
+          "field": "oxaliplatin_renal_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Haemodialysis: consider 50% oxaliplatin with haemodialysis within 1.5 hours after administration. Confirm specialist prescription and timing.",
+          "recommendation": "Haemodialysis: consider 50% oxaliplatin with haemodialysis within 1.5 hours after administration. Confirm specialist prescription and timing."
+        },
+        "explanation": "Haemodialysis: consider 50% oxaliplatin with haemodialysis within 1.5 hours after administration. Confirm specialist prescription and timing.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "OXALI_RENAL_LEGACY_BAND",
+        "priority": 30,
+        "when": {
+          "field": "oxaliplatin_renal_band",
+          "operator": "==",
+          "value": "ge30"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Previously saved ≥30 renal band cannot distinguish exactly 30. Re-enter the source-specific renal category.",
+          "recommendation": "Previously saved ≥30 renal band cannot distinguish exactly 30. Re-enter the source-specific renal category."
+        },
+        "explanation": "Previously saved ≥30 renal band cannot distinguish exactly 30. Re-enter the source-specific renal category.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "FIVEFU_RENAL_SOURCE",
+        "priority": 30,
+        "when": {
+          "field": "fluorouracil_renal_impairment",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "FLOX v8 expects no 5-FU renal dose adjustment, including haemodialysis. Assess other risks and reliability of uracil DPD phenotyping; oxaliplatin has separate rules.",
+          "recommendation": "FLOX v8 expects no 5-FU renal dose adjustment, including haemodialysis. Assess other risks and reliability of uracil DPD phenotyping; oxaliplatin has separate rules."
+        },
+        "explanation": "FLOX v8 expects no 5-FU renal dose adjustment, including haemodialysis. Assess other risks and reliability of uracil DPD phenotyping; oxaliplatin has separate rules.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "NEUROPATHY_G2",
+        "priority": 30,
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Grade 2 at cycle start: assess persistence; source advises reducing oxaliplatin by 25% if persistent and considering omission. Do not change other drugs on this basis.",
+          "recommendation": "Grade 2 at cycle start: assess persistence; source advises reducing oxaliplatin by 25% if persistent and considering omission. Do not change other drugs on this basis."
+        },
+        "explanation": "Grade 2 at cycle start: assess persistence; source advises reducing oxaliplatin by 25% if persistent and considering omission. Do not change other drugs on this basis.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "NEUROPATHY_G3_4",
+        "priority": 30,
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Discontinue oxaliplatin for grade 3-4 neuropathy. This is not an instruction to discontinue all components.",
+          "recommendation": "Discontinue oxaliplatin for grade 3-4 neuropathy. This is not an instruction to discontinue all components."
+        },
+        "explanation": "Discontinue oxaliplatin for grade 3-4 neuropathy. This is not an instruction to discontinue all components.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "BREASTFEEDING_EXCLUSION",
+        "priority": 30,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Breastfeeding is an NCCP exclusion.",
+          "recommendation": "Breastfeeding is an NCCP exclusion."
+        },
+        "explanation": "Breastfeeding is an NCCP exclusion.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "PREGNANCY_REVIEW",
+        "priority": 30,
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Pregnancy requires urgent oncology/obstetric and pharmacy assessment before chemotherapy. This safety review is not an additional NCCP-listed exclusion.",
+          "recommendation": "Pregnancy requires urgent oncology/obstetric and pharmacy assessment before chemotherapy. This safety review is not an additional NCCP-listed exclusion."
+        },
+        "explanation": "Pregnancy requires urgent oncology/obstetric and pharmacy assessment before chemotherapy. This safety review is not an additional NCCP-listed exclusion.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_GRADE_2_PLUS",
+        "priority": 30,
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Delay diarrhoea grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+          "recommendation": "Delay diarrhoea grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment."
+        },
+        "explanation": "Delay diarrhoea grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G2_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, maintain dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, maintain dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU."
+        },
+        "explanation": "After recovery to grade ≤1, maintain dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G2_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 75
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G2_O3",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G2_O4",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            },
+            "oxaliplatin": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G3_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G3_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            },
+            "oxaliplatin": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G4_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_G4_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            },
+            "oxaliplatin": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_GRADE_2_PLUS",
+        "priority": 30,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Delay mucositis grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+          "recommendation": "Delay mucositis grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment."
+        },
+        "explanation": "Delay mucositis grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G2_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, maintain dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, maintain dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU."
+        },
+        "explanation": "After recovery to grade ≤1, maintain dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G2_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 75
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G2_O3",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G2_O4",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            },
+            "oxaliplatin": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G3_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G3_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            },
+            "oxaliplatin": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G4_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            },
+            "oxaliplatin": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "MUCOSITIS_G4_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil",
+            "oxaliplatin"
+          ],
+          "message": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            },
+            "oxaliplatin": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil and oxaliplatin. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HFS_GRADE_2_PLUS",
+        "priority": 30,
+        "when": {
+          "field": "hand_foot_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Delay hand foot grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+          "recommendation": "Delay hand foot grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment."
+        },
+        "explanation": "Delay hand foot grade ≥2 until grade ≤1; then use worst grade and occurrence to determine subsequent treatment.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HFS_G2_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU."
+        },
+        "explanation": "After recovery to grade ≤1, maintain dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HFS_G2_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 75
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 75% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HFS_G2_O3",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HFS_G2_O4",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HFS_G3_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HFS_G3_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HFS_G4_O1",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "dose_percent_of_original": 50
+            }
+          }
+        },
+        "explanation": "After recovery to grade ≤1, use 50% of the source reference dose for fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HFS_G4_O2",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "hand_foot_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "hand_foot_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "hand_foot_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "recommendation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+          "component_changes": {
+            "fluorouracil": {
+              "omit": true
+            }
+          }
+        },
+        "explanation": "Omit fluorouracil. Confirm prior reductions and prescription; do not re-escalate a previously reduced dose. Folinic acid is held/omitted with 5-FU.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "HEPATIC_EXACT_BOUNDARY",
+        "priority": 30,
+        "when": {
+          "any": [
+            {
+              "field": "fluorouracil_bilirubin_umol_l",
+              "operator": "==",
+              "value": 85
+            },
+            {
+              "field": "fluorouracil_ast_u_l",
+              "operator": "==",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Exactly bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < and > source table. Consultant/pharmacy review; no automatic full dose.",
+          "recommendation": "Exactly bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < and > source table. Consultant/pharmacy review; no automatic full dose."
+        },
+        "explanation": "Exactly bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < and > source table. Consultant/pharmacy review; no automatic full dose.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
+      },
+      {
+        "id": "BRIVUDINE_INTERACTION",
+        "priority": 30,
+        "when": {
+          "field": "recent_or_concomitant_brivudine",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Do not combine fluorouracil with brivudine/sorivudine or analogues. Verify the required washout in current product information with pharmacy.",
+          "recommendation": "Do not combine fluorouracil with brivudine/sorivudine or analogues. Verify the required washout in current product information with pharmacy."
+        },
+        "explanation": "Do not combine fluorouracil with brivudine/sorivudine or analogues. Verify the required washout in current product information with pharmacy.",
+        "source": {
+          "document": "NCCP 00486 v8",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf"
+        }
       }
     ]
   },
@@ -1021,15 +2603,101 @@
     "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
   ],
   "supportive_care": {
-    "emetogenic_risk": "moderate",
-    "script_id": "nccp-parenteral-moderate",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "emetogenic_risk": "phase_dependent",
+    "script_id": null,
+    "mapping_source": "NCCP NCIS Medical Oncology Antiemetic Guidance V8",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf",
+    "mapping_basis": "NCCP 00486 source-specific emetogenic risk; reviewed 2026-11-04",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP guidance: select the FLOX treatment day",
+    "phase_specific_plan": "patient/00486/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6501/486_v8_FLOX.pdf",
+    "phase_profiles": {
+      "oxaliplatin_days": {
+        "level": "moderate",
+        "script_id": "nccp-parenteral-moderate"
+      },
+      "fluorouracil": {
+        "level": "low",
+        "script_id": "nccp-parenteral-low"
+      }
+    },
+    "treatment_day_profiles": {
+      "1": "oxaliplatin_days",
+      "8": "fluorouracil",
+      "15": "oxaliplatin_days",
+      "22": "fluorouracil",
+      "29": "oxaliplatin_days",
+      "36": "fluorouracil"
+    }
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "main_cycle",
+      "label": "Source reference schedule",
+      "cycle_length_days": 56,
+      "administration": [
+        {
+          "drug": "oxaliplatin",
+          "days": [
+            1,
+            15,
+            29
+          ],
+          "dose": {
+            "value": 85,
+            "unit": "mg/m²"
+          },
+          "route": "IV",
+          "notes": "Over 2 hours in glucose 5%; never saline"
+        },
+        {
+          "drug": "folinic_acid",
+          "days": [
+            1,
+            8,
+            15,
+            22,
+            29,
+            36
+          ],
+          "dose": {
+            "value": 500,
+            "unit": "mg/m²"
+          },
+          "route": "IV",
+          "notes": "Over 2 hours"
+        },
+        {
+          "drug": "fluorouracil",
+          "days": [
+            1,
+            8,
+            15,
+            22,
+            29,
+            36
+          ],
+          "dose": {
+            "value": 500,
+            "unit": "mg/m²"
+          },
+          "route": "IV",
+          "notes": "IV bolus one hour after folinic acid starts"
+        }
+      ],
+      "notes": "Fluorouracil and folinic acid on Days 1, 8, 15, 22, 29 and 36; oxaliplatin also on Days 1, 15 and 29. Two weeks off follow. Three 56-day cycles make a planned 24-week course.",
+      "active_drugs": [
+        "oxaliplatin",
+        "folinic_acid",
+        "fluorouracil"
+      ],
+      "schedule_summary": "Fluorouracil and folinic acid on Days 1, 8, 15, 22, 29 and 36; oxaliplatin also on Days 1, 15 and 29. Two weeks off follow. Three 56-day cycles make a planned 24-week course.",
+      "duration_text": "Fluorouracil and folinic acid on Days 1, 8, 15, 22, 29 and 36; oxaliplatin also on Days 1, 15 and 29. Two weeks off follow. Three 56-day cycles make a planned 24-week course.",
+      "planned_cycles": 3
+    }
+  ]
 }

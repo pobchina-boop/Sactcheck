@@ -9,7 +9,7 @@ for(const code of ['00209','00321','00226']){
  assert.equal((chart.match(/class="wiki-cycle-day"/g)||[]).length,d.cycle_days*(d.phase_cycles?.length||1));
  for(const file of ['index.html','knowledge.html']){
   const html=read(`patient/${code}/${file}`);
-  assert(html.includes(chart),`${code}/${file} must use the same complete graph`);
+  assert((file==='index.html'&&d.patient_layout_release==='0.84.32'?html.includes('knowledge.html#cycle'):html.includes(chart)),`${code}/${file} must use the same complete graph`);
   assert.doesNotMatch(html,/<input|<select|id="pk-start"|class="pk-controls"|Select a day to explore/);
   assert(html.includes('id="cycle"'));
  }

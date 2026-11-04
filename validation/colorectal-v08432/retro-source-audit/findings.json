@@ -1,0 +1,196 @@
+{
+  "release": "0.84.32",
+  "checked": "2026-11-04",
+  "scope": "Targeted retrospective source/version, threshold, schedule, monitoring, supportive-care and patient-content audit; not independent clinical validation. No shared implementation files edited.",
+  "catalogue_url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/gastro-intestinal-sact-regimens/",
+  "sources": {
+    "00209": {
+      "version": "10a",
+      "url": "https://healthservice.hse.ie/documents/6549/209_v10a_FOLFOX_6_Modified.pdf",
+      "pdf_sha256": "9c8f1df50a6fb8917708659c8411e466532f23ef22402d56a52aff018a2cb1f7",
+      "same_as_previous_pdf": true,
+      "retrieval": "Official catalogue link checked with web; binary downloaded using Mozilla user-agent; pdftotext -layout extracted.",
+      "source_pages": 9,
+      "version_changed": false
+    },
+    "00321": {
+      "version": "9",
+      "url": "https://healthservice.hse.ie/documents/6719/321_v9_XELOX_.pdf",
+      "pdf_sha256": "6327c7a55b9f18d56135c0171cff6fcb1ae52349b08090f604f08dd952caee95",
+      "same_as_previous_pdf": true,
+      "retrieval": "Official catalogue link checked with web; binary downloaded using Mozilla user-agent; pdftotext -layout extracted.",
+      "source_pages": 7,
+      "version_changed": false
+    },
+    "00227": {
+      "version": "9",
+      "url": "https://healthservice.hse.ie/documents/6563/227_v9_FOLFIRI.pdf",
+      "pdf_sha256": "f67a9bbad41cceaa16e7f3514ab70a2629f8dea92c3c9fbbbca489a1e2b02f79",
+      "same_as_previous_pdf": true,
+      "retrieval": "Official catalogue link checked with web; binary downloaded using Mozilla user-agent; pdftotext -layout extracted.",
+      "source_pages": 8,
+      "version_changed": false
+    },
+    "00586": {
+      "version": "3",
+      "url": "https://healthservice.hse.ie/documents/6396/586_v3_Capecitabine_825_and_RT.pdf",
+      "pdf_sha256": "ae2a837159de89a46f55c6183364bdf9793d7967583c65b272d744e5ca14831b",
+      "same_as_previous_pdf": true,
+      "retrieval": "Official catalogue link checked with web; binary downloaded using Mozilla user-agent; pdftotext -layout extracted.",
+      "source_pages": 6,
+      "version_changed": false
+    },
+    "00623": {
+      "version": "3a",
+      "url": "https://healthservice.hse.ie/documents/6686/623_v3a_Bevacizumab_Capecitabine.pdf",
+      "pdf_sha256": "a3f883276df9a04f9952fe7b45c9d4896325ca189ee1d2ab3d242b8de48fdb64",
+      "same_as_previous_pdf": true,
+      "retrieval": "Official catalogue link checked with web; binary downloaded using Mozilla user-agent; pdftotext -layout extracted.",
+      "source_pages": 11,
+      "version_changed": false
+    }
+  },
+  "findings": [
+    {
+      "code": "00209",
+      "id": "PARTIAL_INPUT_HOLD_GUARDS",
+      "priority": "high",
+      "source_location": "p4 Table2; p5-6 adverse-event tables",
+      "detail": "Low ANC/platelet and current diarrhoea/stomatitis hold rules require delay duration. Pure rule-engine evaluation of isolated ANC0.9, platelets60, diarrhoea grade2 or stomatitis grade2 produces consultant_review with no matching findings, so the source-specific hold instruction is missing. This is not a claim that the UI clears treatment.",
+      "recommendation": "Make hold condition independent of duration. Keep duration-specific stop rules at higher priority; say confirm delay duration before restarting.",
+      "boundary_tests": [
+        "ANC1.49 hold without delay;1.5 no low-ANC hold",
+        "Platelets74.9 hold without delay;75 no low-platelet hold",
+        "Current diarrhoea2 hold without duration;stomatitis2 hold without duration",
+        "Low counts with delay4 stop;diarrhoea4wk stop;stomatitis2wk stop"
+      ]
+    },
+    {
+      "code": "00321",
+      "id": "PARTIAL_INPUT_HOLD_GUARDS",
+      "priority": "high",
+      "source_location": "p3 Table2; p4 Table4; p5 Table6",
+      "detail": "Low day1 counts and current diarrhoea/stomatitis/HFS hold rules require optional delay duration. Isolated ANC0.9, platelets60, diarrhoea2, stomatitis2 or HFS2 yield no finding.",
+      "recommendation": "Make immediate hold independent of duration, while retaining stop rules at two weeks. Preserve baseline ANC1.5/platelets100 versus subsequent-cycle ANC1.2/platelets75 distinctions.",
+      "boundary_tests": [
+        "BaselineANC1.49 with assessment_type baseline hold",
+        "Day1ANC1.19 hold without delay;1.2 no low-ANC hold",
+        "Platelets74.9 hold;75 no low-platelet hold",
+        "Current grade2 diarrhoea/stomatitis/HFS hold without duration",
+        "Persistent after2weeks stop"
+      ]
+    },
+    {
+      "code": "00321",
+      "id": "RENAL_DECIMAL_BOUNDARY",
+      "priority": "medium",
+      "source_location": "p4 Table3",
+      "detail": "Capecitabine table states30-50=>75%,51-80=>no adjustment; existing encoding has no explicit pathway for unrounded50<CrCl<51.",
+      "recommendation": "Add consultant review for this source-table gap, do not round to infer a dose. This parallels the existing00586/00623 boundary guards.",
+      "boundary_tests": [
+        "CrCl30 and50 ->75%",
+        "CrCl50.5 ->review",
+        "CrCl51 no reduction",
+        "CrCl29.9 ->not recommended"
+      ]
+    },
+    {
+      "code": "00321",
+      "id": "CONDITIONAL_INR_PATIENT_MONITORING",
+      "priority": "medium",
+      "source_location": "p2 TESTS",
+      "detail": "Patient knowledge/monitoring has no warfarin/INR mention although source requires baseline and regular INR when on warfarin, as clinically indicated.",
+      "recommendation": "Add conditional INR to monitoring and medication review; do not imply all patients need INR.",
+      "boundary_tests": []
+    },
+    {
+      "code": "00623",
+      "id": "WARFARIN_MONITORING_CADENCE",
+      "priority": "medium",
+      "source_location": "p3 TESTS",
+      "detail": "Patient chapter only says warfarin can need closer INR checks, and monitoring grid lacks the explicit source cadence.",
+      "recommendation": "Add if taking warfarin: weekly INR until stable warfarin dose established, then before each cycle. Preserve existing BP before and post-treatment and urine protein monitoring.",
+      "boundary_tests": []
+    },
+    {
+      "code": "00209",
+      "id": "ICE_PRECAUTION",
+      "priority": "low",
+      "source_location": "p2 administration footnote",
+      "detail": "Patient materials give general cold precautions but omit explicit avoidance of ice chips during bolus fluorouracil in the oxaliplatin-containing schedule.",
+      "recommendation": "Add no ice chips with this regimen; retain clinically assessed breathing symptoms rather than automatically labelling them cold dysaesthesia.",
+      "boundary_tests": []
+    },
+    {
+      "code": "00227",
+      "id": "SOURCE_CONFLICT_RETAIN",
+      "priority": "retain",
+      "source_location": "p2 exclusions; p3 Table2; p4 Table3",
+      "detail": "Existing exact hepatic boundary review at bilirubin85/AST180 and ANC recovery after>2wk review are appropriate. Source ANC table itself says hold maximum2wk but discontinue after4wk. Source excludes impaired renal function yet Table3 provides CrCl>=10 no adjustment and<10 dose range.",
+      "recommendation": "Keep source conflicts visible; do not collapse2wk/4wk into single threshold or auto-select dose from50-66%. Consider explicit renal source-conflict review if not surfaced elsewhere.",
+      "boundary_tests": []
+    },
+    {
+      "code": "00227",
+      "id": "DIARRHOEA_RECOVERY_CONFLICT",
+      "priority": "medium",
+      "source_location": "p3 DOSE MODIFICATIONS; p4 Table4",
+      "detail": "Source narrative says treatment-related diarrhoea fully resolved before irinotecan, while Table4 permits resumption below grade2. Existing generic proceed condition accepts current grade1.",
+      "recommendation": "Add review at grade1 diarrhoea to expose narrative/table ambiguity, particularly before restart. Do not claim grade1 alone proves irinotecan readiness.",
+      "boundary_tests": [
+        "diarrhoea_current_grade1 ->source-conflict review",
+        "grade2 ->hold",
+        "persistentgrade2after2wk ->stop"
+      ]
+    },
+    {
+      "code": "00586",
+      "id": "SCHEDULE_RECONFIRMED",
+      "priority": "retain",
+      "source_location": "p1 treatment;p2 tests;p3 renal",
+      "detail": "Correct existing schedule is capecitabine825mg/m2 twice daily Days1-5 in7-day cycles with RT, maximum5-6cycles. Weekly cycle bloods are source-based. Existing renal50-51gap guard and graded recurrent toxicity logic are present.",
+      "recommendation": "Retain this distinct regimen; do not change to7days continuous tablets or importCAPOX14day course. New patient summary should distinguish radiation appointments from tablet days and retain prescribed duration.",
+      "boundary_tests": []
+    },
+    {
+      "code": "00623",
+      "id": "RENAL_CONFLICT_RECONFIRMED",
+      "priority": "retain",
+      "source_location": "p4 Table2; p2-4 capecitabine instructions",
+      "detail": "Current source gives capecitabine100% forCrCl>=30, while supplementary capecitabine SmPC1250mg/m2 dosing distinguishes30-50. Existing RENAL_SOURCE_CONFLICT/RENAL_GAP correctly avoid automatic normal dose. Within-cycleANC<1/platelets<75 differs from subsequent recoveryANC>=1.5.",
+      "recommendation": "Preserve source-conflict review and within-cycle versus subsequent-dose logic; do not inheritCAPOX renal dose silently.",
+      "boundary_tests": []
+    }
+  ],
+  "supportive_care_confirmations": {
+    "00209": "Moderate-risk oxaliplatin; low-risk5FU; source forbids ice chips with oxaliplatin. Existing moderate antiemetic plan present.",
+    "00321": "Moderate-risk oxaliplatin; oral minimal-low capecitabine. Existing separate capecitabine loperamide4mg then2mg after loose stool,max16mg/day matches source.",
+    "00227": "Prophylactic atropine250micrograms SC unless contraindicated/glaucoma; delayed diarrhoea loperamide4mg then2mg q2h,continue12h after last liquid stool,max48h high-dose. Existing support preserves distinction from capecitabine rescue.",
+    "00586": "Oral low-minimal; no routine premedication; loperamide rescue per source. Radiation dose/fractions require personal radiation plan.",
+    "00623": "No routine bevacizumab premedication unless prior hypersensitivity; BP/proteinuria/wounds distinct from nausea plan. Existing oral low-minimal support retained."
+  },
+  "evidence_content_review": {
+    "00209": "Existing patient evidence correctly qualifies MOSAIC as FOLFOX4 rather than directly measured mFOLFOX6 effect; no numeric patient benefit claim.",
+    "00321": "Existing patient evidence limits NO16968 to postoperative stageIII colon; does not extrapolate to metastatic/gastric contexts.",
+    "00227": "Existing sequence trial summary separates colorectal results from oesophageal/pancreatic indications.",
+    "00586": "Existing rectal chemoradiation summary includes whole treatment programme including surgery.",
+    "00623": "Existing AVEX explanation acknowledges older unsuitable-for-doublet population and different starting capecitabine dose; no extra-lifespan promise."
+  },
+  "visual_source_review": {
+    "00209": [
+      4
+    ],
+    "00321": [
+      4
+    ],
+    "00227": [
+      3
+    ],
+    "00586": [
+      3
+    ],
+    "00623": [
+      4
+    ]
+  }
+}

@@ -16,6 +16,7 @@ const classificationBaseline = readJson("V0630_EMETOGENIC_CLASSIFICATION_SNAPSHO
 const clinicalCoreBaseline = readJson("V0630_CLINICAL_CORE_HASHES.json");
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
 const familyPhases = {
+ '00486':{oxaliplatin_days:'moderate',fluorouracil:'low'},
  '00279':{cis_day1:'high',days23:'phase_dependent',carboplatin_substitution:'high',iv_only:'low',oral_only:'oral_minimal_low',split_platinum:'high'},
  '00456':{day1:'high',etoposide_day:'low',day8:'high'},'00561':{day1:'moderate',etoposide_day:'low',day8:'moderate'},
  '00372':{combination:'low',continuation:'oral_minimal_low',combination_oral:'oral_minimal_low'},
@@ -107,7 +108,7 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
     "00340": "oral_moderate_high" // NCCP00340 v4 p6; source-derived v0.84.25 audit
   };
   for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
-    const migratedMap = ['00279','00456','00561','00372','00281','00310','00339','00343','00712','00792','00849','00689','00908','00569','00579','00713','00714','00568','00688','00738','00485','00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
+    const migratedMap = ['00486','00279','00456','00561','00372','00281','00310','00339','00343','00712','00792','00849','00689','00908','00569','00579','00713','00714','00568','00688','00738','00485','00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
     const expected = migratedMap ? 'phase_dependent' : allowedCorrections[code] || baseline.level;
     if(migratedMap) assert.deepStrictEqual(currentMapLevels[code].phase_levels,familyPhases[code],code+' source-reconciled phase risks');
     assert.strictEqual(currentMapLevels[code]?.level, expected, `${code} emetogenic classification differs from the retained baseline or approved v0.64.0 correction`);
@@ -152,7 +153,7 @@ for (const record of index.protocols || []) {
     const expectedRisk = pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
       ? correctionByPath[relative]
       : (baseline.emetogenic_risk ?? null);
-    const auditedPhases = familyPhases[md.nccp_regimen_code];
+    const auditedPhases = md.nccp_regimen_code==='00486'?{oxaliplatin_days:'moderate',fluorouracil:'low'}:familyPhases[md.nccp_regimen_code];
     assert.strictEqual(sc.emetogenic_risk ?? null, auditedPhases ? 'phase_dependent' : expectedRisk, `${relative} emetogenic risk changed outside approved source reconciliation`);
     const phaseLevels = Object.fromEntries(Object.entries(sc.phase_profiles || {}).map(([k, v]) => [k, v?.emetogenic_risk ?? v?.level]));
     assert.deepStrictEqual(phaseLevels, md.nccp_regimen_code==='00309'?{}:['00377','00378','00381','00430','00749'].includes(md.nccp_regimen_code)?{combination:md.nccp_regimen_code==='00377'?'oral_moderate_high':md.nccp_regimen_code==='00749'?'low':'moderate'}:auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);

@@ -26,7 +26,7 @@
       "clinical_use_authorised": false,
       "software_tests_completed": true,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08432_independent_review_pending"
     },
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
@@ -35,7 +35,7 @@
       "combination_sact"
     ],
     "cytotoxic": true,
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.84.32",
     "catalog": {
       "enabled": true
     },
@@ -63,17 +63,26 @@
     "encoding_maturity": {
       "level": "legacy_encoded_pending_source_fidelity_review",
       "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "audit_release": "0.68.0",
       "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative.",
+      "reconciled_release": "0.84.32",
+      "reconciled_date": "2026-11-04"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00660-v2b"
+    "canonical_protocol_id": "nccp-00660-v2b",
+    "source_pdf_sha256": "2abf2617e33cd489332a9f9c86ecd3f6b269119c9aa10505974e17d4f95d44b0",
+    "source_text_snapshot_sha256": "64ae578832daed2d34d707da7054e8b1cb36e55db568b5d93eae827ebab47782",
+    "full_suite_release": "0.84.32",
+    "source_checked_date": "2026-11-04",
+    "clinical_audit_release": "0.84.32",
+    "schedule_summary": "Day 1: folinic acid and fluorouracil injection, followed by a 46-hour fluorouracil pump. Repeat every 14 days. Adjuvant treatment: up to 12 cycles; advanced treatment: continue only while appropriate.",
+    "document_revision": "2026-11-04"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -176,7 +185,8 @@
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "Complete DPD deficiency contraindicates fluorouracil."
       },
@@ -194,7 +204,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "Partial DPD deficiency requires dose individualisation."
       },
@@ -212,7 +223,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "ANC <1.0 requires hold."
       },
@@ -239,7 +251,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "ANC remains <1.0 after 2 weeks."
       },
@@ -257,7 +270,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "Platelets <75 require hold."
       },
@@ -272,7 +286,7 @@
           {
             "field": "toxicity_delay_weeks",
             "operator": ">=",
-            "value": 2
+            "value": 4
           }
         ],
         "action": {
@@ -284,47 +298,53 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
-        "explanation": "Platelets remain <75 after 2 weeks."
+        "explanation": "Platelets remain <75 at the four-week review; source says discontinue after 4 weeks."
       },
       {
         "rule_id": "LOW_NADIR_ANC",
-        "field": "lowest_anc_during_delay_x10e9_l",
-        "operator": "<",
-        "value": 1,
         "action": {
           "type": "dose_reduce",
           "components": [
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce fluorouracil by one dose level after recovery."
+          "recommendation": "Reduce fluorouracil by one dose level after recovery. Confirm each current component dose level. Further reduction below level -2 means discontinue; do not re-escalate a previously reduced dose.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
-        "explanation": "Low delayed-week ANC triggers one-level reduction."
-      },
-      {
-        "rule_id": "LOW_NADIR_PLT",
-        "field": "lowest_platelets_during_delay_x10e9_l",
-        "operator": "<",
-        "value": 50,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce fluorouracil by one dose level after recovery."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Low platelet nadir triggers reduction."
+        "explanation": "Low delayed-week ANC triggers one-level reduction.",
+        "when": {
+          "all": [
+            {
+              "field": "lowest_anc_during_delay_x10e9_l",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            }
+          ]
+        }
       },
       {
         "rule_id": "DIARRHOEA_HOLD",
@@ -340,28 +360,53 @@
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "Current grade ≥2 diarrhoea requires hold."
       },
       {
         "rule_id": "DIARRHOEA_G3_4",
-        "field": "diarrhoea_highest_grade",
-        "operator": ">=",
-        "value": 3,
         "action": {
           "type": "dose_reduce",
           "components": [
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce fluorouracil by one dose level."
+          "recommendation": "Reduce fluorouracil by one dose level. Confirm each current component dose level. Further reduction below level -2 means discontinue; do not re-escalate a previously reduced dose.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
-        "explanation": "Grade 3–4 diarrhoea triggers reduction."
+        "explanation": "Grade 3–4 diarrhoea triggers reduction.",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_current_grade",
+              "operator": "<",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "STOMATITIS_HOLD",
@@ -377,28 +422,10 @@
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "Current grade ≥2 stomatitis requires hold."
-      },
-      {
-        "rule_id": "STOMATITIS_G3_4",
-        "field": "stomatitis_highest_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce fluorouracil by one dose level."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade 3–4 stomatitis triggers reduction."
       },
       {
         "rule_id": "HEPATIC_MODERATE",
@@ -414,7 +441,8 @@
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "Moderate hepatic impairment."
       },
@@ -432,7 +460,8 @@
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "Severe hepatic impairment."
       },
@@ -479,9 +508,515 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00660 v2b",
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
         },
         "explanation": "Entered values meet encoded parameters."
+      },
+      {
+        "id": "ECOG_REVIEW",
+        "priority": 30,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "ECOG outside the source 0-2 eligibility range; consultant review.",
+          "recommendation": "ECOG outside the source 0-2 eligibility range; consultant review."
+        },
+        "explanation": "ECOG outside the source 0-2 eligibility range; consultant review.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "CARDIAC_RISK_REVIEW",
+        "priority": 30,
+        "when": {
+          "field": "cardiac_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Recent MI, uncontrolled angina, hypertension, arrhythmia or CHF requires review; ECG if compromised cardiac function.",
+          "recommendation": "Recent MI, uncontrolled angina, hypertension, arrhythmia or CHF requires review; ECG if compromised cardiac function."
+        },
+        "explanation": "Recent MI, uncontrolled angina, hypertension, arrhythmia or CHF requires review; ECG if compromised cardiac function.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "BASELINE_BOWEL_REVIEW",
+        "priority": 30,
+        "when": {
+          "field": "baseline_loose_bm_gt3",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Baseline >3 loose bowel movements/day without stoma is a source caution; assess before treatment.",
+          "recommendation": "Baseline >3 loose bowel movements/day without stoma is a source caution; assess before treatment."
+        },
+        "explanation": "Baseline >3 loose bowel movements/day without stoma is a source caution; assess before treatment.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "EXCLUDE_HYPERSENSITIVITY",
+        "priority": 30,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "NCCP exclusion: hypersensitivity. Do not administer pending specialist assessment.",
+          "recommendation": "NCCP exclusion: hypersensitivity. Do not administer pending specialist assessment."
+        },
+        "explanation": "NCCP exclusion: hypersensitivity. Do not administer pending specialist assessment.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "EXCLUDE_PREGNANCY",
+        "priority": 30,
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "NCCP exclusion: pregnancy. Do not administer pending specialist assessment.",
+          "recommendation": "NCCP exclusion: pregnancy. Do not administer pending specialist assessment."
+        },
+        "explanation": "NCCP exclusion: pregnancy. Do not administer pending specialist assessment.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "EXCLUDE_BREASTFEEDING",
+        "priority": 30,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "NCCP exclusion: breastfeeding. Do not administer pending specialist assessment.",
+          "recommendation": "NCCP exclusion: breastfeeding. Do not administer pending specialist assessment."
+        },
+        "explanation": "NCCP exclusion: breastfeeding. Do not administer pending specialist assessment.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "DPD_UNKNOWN",
+        "priority": 30,
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "unknown"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Verify DPD testing before first fluorouracil; an unknown result cannot be assumed normal.",
+          "recommendation": "Verify DPD testing before first fluorouracil; an unknown result cannot be assumed normal."
+        },
+        "explanation": "Verify DPD testing before first fluorouracil; an unknown result cannot be assumed normal.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "PLT_DELAY_SOURCE_GAP",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Platelet table specifies recovery within 2 weeks but discontinuation after 4 weeks. Resolve the intervening interval with the consultant; do not infer restart from recovered platelets alone.",
+          "recommendation": "Platelet table specifies recovery within 2 weeks but discontinuation after 4 weeks. Resolve the intervening interval with the consultant; do not infer restart from recovered platelets alone."
+        },
+        "explanation": "Platelet table specifies recovery within 2 weeks but discontinuation after 4 weeks. Resolve the intervening interval with the consultant; do not infer restart from recovered platelets alone.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "PLT_NADIR_MAINTAIN",
+        "priority": 30,
+        "when": {
+          "field": "lowest_platelets_during_delay_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "message": "All platelet-nadir bands in Table 2 maintain the 5-FU dose level. Hold while current platelets <75; confirm recovery and delay duration. No platelet-only automatic reduction.",
+          "recommendation": "All platelet-nadir bands in Table 2 maintain the 5-FU dose level. Hold while current platelets <75; confirm recovery and delay duration. No platelet-only automatic reduction."
+        },
+        "explanation": "All platelet-nadir bands in Table 2 maintain the 5-FU dose level. Hold while current platelets <75; confirm recovery and delay duration. No platelet-only automatic reduction.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "STOMATITIS_G3",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "stomatitis_current_grade",
+              "operator": "<",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "message": "After recovery below grade 2, reduce both 5-FU components by 1 dose level(s). Folinic acid stays 400 mg/m²; omit/delay with bolus 5-FU. Confirm each current component dose level. Further reduction below level -2 means discontinue; do not re-escalate a previously reduced dose.",
+          "recommendation": "After recovery below grade 2, reduce both 5-FU components by 1 dose level(s). Folinic acid stays 400 mg/m²; omit/delay with bolus 5-FU. Confirm each current component dose level. Further reduction below level -2 means discontinue; do not re-escalate a previously reduced dose.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
+        },
+        "explanation": "After recovery below grade 2, reduce both 5-FU components by 1 dose level(s). Folinic acid stays 400 mg/m²; omit/delay with bolus 5-FU.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "STOMATITIS_G4",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "stomatitis_current_grade",
+              "operator": "<",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "message": "After recovery below grade 2, reduce both 5-FU components by 2 dose level(s). Folinic acid stays 400 mg/m²; omit/delay with bolus 5-FU. Confirm each current component dose level. Further reduction below level -2 means discontinue; do not re-escalate a previously reduced dose.",
+          "recommendation": "After recovery below grade 2, reduce both 5-FU components by 2 dose level(s). Folinic acid stays 400 mg/m²; omit/delay with bolus 5-FU. Confirm each current component dose level. Further reduction below level -2 means discontinue; do not re-escalate a previously reduced dose.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            }
+          }
+        },
+        "explanation": "After recovery below grade 2, reduce both 5-FU components by 2 dose level(s). Folinic acid stays 400 mg/m²; omit/delay with bolus 5-FU.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "DIARRHOEA_PERSISTENT",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_current_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Grade 2 or worse diarrhoea persists at the two-week review: source discontinuation pathway.",
+          "recommendation": "Grade 2 or worse diarrhoea persists at the two-week review: source discontinuation pathway."
+        },
+        "explanation": "Grade 2 or worse diarrhoea persists at the two-week review: source discontinuation pathway.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "STOMATITIS_PERSISTENT",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_current_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Grade 2 or worse stomatitis persists at the two-week review: source discontinuation pathway.",
+          "recommendation": "Grade 2 or worse stomatitis persists at the two-week review: source discontinuation pathway."
+        },
+        "explanation": "Grade 2 or worse stomatitis persists at the two-week review: source discontinuation pathway.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "PRIOR_FEBRILE_NEUTROPENIA",
+        "priority": 30,
+        "when": {
+          "field": "grade4_neutropenia_with_grade2_fever",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "message": "Prior grade 4 neutropenia with ≥grade 2 fever requires one-level 5-FU reduction after recovery. Confirm current counts, resolution of infection and current dose levels; this does not authorise treatment during fever.",
+          "recommendation": "Prior grade 4 neutropenia with ≥grade 2 fever requires one-level 5-FU reduction after recovery. Confirm current counts, resolution of infection and current dose levels; this does not authorise treatment during fever."
+        },
+        "explanation": "Prior grade 4 neutropenia with ≥grade 2 fever requires one-level 5-FU reduction after recovery. Confirm current counts, resolution of infection and current dose levels; this does not authorise treatment during fever.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "RENAL_SEVERE",
+        "priority": 30,
+        "when": {
+          "field": "fluorouracil_renal_impairment",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Severe renal impairment: consider 5-FU reduction. Uracil-based DPD phenotyping may be unreliable; consider genotype.",
+          "recommendation": "Severe renal impairment: consider 5-FU reduction. Uracil-based DPD phenotyping may be unreliable; consider genotype."
+        },
+        "explanation": "Severe renal impairment: consider 5-FU reduction. Uracil-based DPD phenotyping may be unreliable; consider genotype.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "HEPATIC_ABSOLUTE",
+        "priority": 30,
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 85
+            },
+            {
+              "field": "ast_u_l",
+              "operator": ">",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "5-FU contraindicated in source table when bilirubin >85 µmol/L or AST >180 U/L.",
+          "recommendation": "5-FU contraindicated in source table when bilirubin >85 µmol/L or AST >180 U/L."
+        },
+        "explanation": "5-FU contraindicated in source table when bilirubin >85 µmol/L or AST >180 U/L.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "HEPATIC_EXACT_BOUNDARY",
+        "priority": 30,
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "==",
+              "value": 85
+            },
+            {
+              "field": "ast_u_l",
+              "operator": "==",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Exactly bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < and > source table. Consultant/pharmacy review; no automatic full dose.",
+          "recommendation": "Exactly bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < and > source table. Consultant/pharmacy review; no automatic full dose."
+        },
+        "explanation": "Exactly bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < and > source table. Consultant/pharmacy review; no automatic full dose.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
+      },
+      {
+        "id": "BRIVUDINE_INTERACTION",
+        "priority": 30,
+        "when": {
+          "field": "recent_or_concomitant_brivudine",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Do not combine fluorouracil with brivudine/sorivudine or analogues. Verify the required washout in current product information with pharmacy.",
+          "recommendation": "Do not combine fluorouracil with brivudine/sorivudine or analogues. Verify the required washout in current product information with pharmacy."
+        },
+        "explanation": "Do not combine fluorouracil with brivudine/sorivudine or analogues. Verify the required washout in current product information with pharmacy.",
+        "source": {
+          "document": "NCCP 00660 v2b",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+        }
       }
     ]
   },
@@ -518,28 +1053,28 @@
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "pregnancy": {
       "label": "Pregnancy",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "recent_or_concomitant_brivudine": {
       "label": "Recent Or Concomitant Brivudine",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "dpd_status": {
       "label": "DPD status",
@@ -591,7 +1126,7 @@
       "type": "number",
       "required": false,
       "min": 0,
-      "max": 4,
+      "max": 12,
       "step": 1,
       "demo_value": 0,
       "input_role": "decision"
@@ -621,7 +1156,7 @@
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "crcl_ml_min": {
       "label": "Creatinine clearance (mL/min)",
@@ -662,7 +1197,7 @@
       "max": 1000,
       "step": 1,
       "demo_value": 12,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "ast_u_l": {
       "label": "AST (U/L)",
@@ -672,7 +1207,7 @@
       "max": 5000,
       "step": 1,
       "demo_value": 25,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "diarrhoea_current_grade": {
       "label": "Current diarrhoea grade",
@@ -845,18 +1380,134 @@
         }
       ],
       "input_role": "decision"
+    },
+    "fluorouracil_renal_impairment": {
+      "label": "Clinical renal impairment (5-FU)",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none_mild_moderate",
+          "label": "None, mild or moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ]
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "cardiac_risk": {
+      "label": "Recent MI or uncontrolled cardiac disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "baseline_loose_bm_gt3": {
+      "label": "Baseline >3 loose stools/day, without a stoma",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "current_fluorouracil_bolus_level": {
+      "label": "Current 5-FU bolus dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": "",
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0 — starting dose"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "help_text": "Required before calculating a further reduction. Check the last administered component dose; never assume the starting level."
+    },
+    "current_fluorouracil_infusion_level": {
+      "label": "Current 5-FU 46-hour infusion dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": "",
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0 — starting dose"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "help_text": "Required before calculating a further reduction. Check the last administered component dose; never assume the starting level."
     }
   },
   "supportive_care": {
     "emetogenic_risk": "low",
     "script_id": "nccp-parenteral-low",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Highest active parenteral component is low emetogenic risk in NCCP V6 Table 7.",
+    "mapping_source": "NCCP NCIS Medical Oncology Antiemetic Guidance V8",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf",
+    "mapping_basis": "NCCP 00660 source-specific emetogenic risk; reviewed 2026-11-04",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
+    "phase_specific_plan": "patient/00660/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6679/660_v2b_5FU_Folinic_acid.pdf"
+  },
+  "treatment": {
+    "cycle_length_days": 14,
+    "schedule_summary": "Day 1: folinic acid and fluorouracil injection, followed by a 46-hour fluorouracil pump. Repeat every 14 days. Adjuvant treatment: up to 12 cycles; advanced treatment: continue only while appropriate.",
+    "drugs": [
+      "Folinic acid",
+      "Fluorouracil"
+    ]
   }
 }
