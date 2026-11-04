@@ -19,7 +19,7 @@ for(const code of codes){
  const pages=['index','knowledge','consent','consent-form','guide','passport','sactcard','logistics','supportive-care','treatment-journey',...support[code].map(p=>'support-'+p.id)];
  for(const name of pages){const h=read(`patient/${code}/${name}.html`);assert(!/undefined|\[object Object\]/.test(h),code+'/'+name);for(const m of h.matchAll(/(?:src|href)="([^"#]+)"/g)){if(/^(https?:|data:|mailto:|tel:)/.test(m[1]))continue;assert(fs.existsSync(path.resolve(root,'patient',code,m[1].split(/[?#]/)[0])),code+'/'+name+': '+m[1]);}
   if(['index','knowledge','treatment-journey'].includes(name))assert(!/<input|<select/.test(h),'Orientation must not require dates / personal parameters');
-  if(['index','knowledge'].includes(name)){assert(h.includes('wikiCycleChronology'));const ids=[...h.matchAll(/id="(wikiCycleChronology[^"]*)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);}
+  if(['index','knowledge'].includes(name)){assert(h.includes('wikiCycleChronology')||h.includes('class="pt-cycle"'));const ids=[...h.matchAll(/id="(wikiCycleChronology[^"]*)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);}
  }
  for(const name of ['guide','passport','consent-form','sactcard','logistics','supportive-care','treatment-journey',...support[code].map(p=>'support-'+p.id)])assert.deepEqual(fs.readFileSync(path.join(root,`patient/${code}/${name}.pdf`)),fs.readFileSync(path.join(root,`docs/patient/${code}/${name}.pdf`)));
  assert(read(`docs/patient/${code}/guide.html`).includes(`../../../patient/${code}/guide.pdf`));

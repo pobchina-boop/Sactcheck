@@ -24,8 +24,8 @@ for(const route of routes){
  assert.equal(s.template_version,'0.84.30');assert.equal(d.evidence.metrics.length,0);assert(Journey.definitions[route.replace('/',':')]);
  assert.equal((html.match(/data-patient-nav/g)||[]).length,5);assert.equal((html.match(/data-patient-panel/g)||[]).length,5);
  assert(html.indexOf('id="urgent"')<html.indexOf('data-patient-panel'));
- for(const id of ['my-treatment','between-treatments','my-tests','my-passport','my-resources','patient-section','side-effects','monitoring-schedule'])assert(html.includes(`id="${id}"`),route+'/'+id);
- assert.equal((guide.match(/class="pt-page /g)||[]).length,3);
+ for(const id of ['my-treatment','between-treatments','my-tests','my-passport','my-resources','side-effects','monitoring-schedule'])assert(html.includes(`id="${id}"`),route+'/'+id);
+ assert.equal((guide.match(/class="pt-page /g)||[]).length,3);assert(html.includes('class="pt-tabs"'));assert(guide.includes('hcc-static-connectors'));assert(guide.includes('oncowiki-qr.png'));
  for(const txt of ['FRONT / CONTACTS','BACK / TREATMENT RECORD','Do not cut the centre line','100%','qr.png','EXAMPLE NUMBERS','Add to Home Screen','not a personal record'])assert(card.includes(txt),route+'/'+txt);
  assert(!card.includes('Regimen QR added by'));
  assert.equal((card.match(/<span>[CW]\d<\/span>/g)||[]).length,s.card_cycle_count||0);

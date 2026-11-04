@@ -7,7 +7,8 @@ for(const m of ["passport.html","sactcard.html"]) assert(portal.includes(m),`por
 const passport=fs.readFileSync(path.join(root,"patient/00568/passport.html"),"utf8");
 for(const m of ["Breathing / cough","Fever, shivers","not a validated questionnaire or a formal CTCAE grading tool","Induction cycle","Maintenance cycle"]) assert(passport.includes(m),`passport missing ${m}`);
 assert(!passport.includes("Hormones / brain</td><td>C1"),"passport reverted to organ-first cycle grading");
-const card=fs.readFileSync(path.join(root,"patient/00568/sactcard.html"),"utf8");for(const m of ["suite-stamps","carboplatin stops","Insert numbers here"])assert(card.includes(m),`SACTCard missing ${m}`);
+const card=fs.readFileSync(path.join(root,"patient/00568/sactcard.html"),"utf8");for(const m of ["pt-record","EXAMPLE NUMBERS","oncowiki-qr.png"])assert(card.includes(m),`SACTCard missing ${m}`);
+assert(portal.includes("carboplatin")&&/maintenance/i.test(portal),"Phase changes remain in the companion");
 for(const f of ["passport.pdf","sactcard.pdf"]){const a=path.join(root,"patient/00568",f),b=path.join(root,"docs/patient/00568",f);assert(fs.existsSync(a)&&fs.existsSync(b),`${f} missing`);assert.strictEqual(crypto.createHash("sha256").update(fs.readFileSync(a)).digest("hex"),crypto.createHash("sha256").update(fs.readFileSync(b)).digest("hex"),`${f} compatibility drift`);}
 console.log("v0.81.4 patient-first passport and SACTCard integration checks passed.");
 

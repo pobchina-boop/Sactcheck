@@ -78,7 +78,7 @@ assert.ok(printable.includes('Chest pain, palpitations'));
 assert.equal((printable.match(/<article class=\"hcc-organ-card /g)||[]).length,9);
 assert.ok(printable.includes('data-hcc-pin="bowel"'));
 assert.ok(printable.includes('BEVACIZUMAB · VESSELS / HEALING'));
-assert.ok(printable.includes('hcc-connectors-v0763.js'));
+assert.ok(printable.includes('hcc-connectors-v08431.js'));
 assert.ok(printable.includes('Jaw-bone damage (osteonecrosis of the jaw)'));
 assert.ok(printable.includes('Rare brain condition (PRES)'));
 assert.ok(printable.includes('https://sactcheck.com/patient/00831/'));

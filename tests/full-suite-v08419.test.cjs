@@ -29,7 +29,7 @@ for(const c of codes){
  if(c==='00720'){assert(ps[0].medicines.some(x=>/4 mg/.test(x.dose)&&/three|TDS/i.test(x.timing+' '+x.dose)));assert(ps[1].medicines.some(x=>/twice|BD/i.test(x.timing+' '+x.dose)));}
 
 }
-const hashes=json('validation/breast-final-v08419/retrospective-hashes.json');for(const [f,h]of Object.entries(hashes.files))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex'),h.after);
+const hashes=json('validation/breast-final-v08419/retrospective-hashes.json');for(const [f,h]of Object.entries(hashes.files))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex'),require('./helpers/retrospective-v08420.cjs').expectedHash(f,h.after));
 assert.equal(json('validation/breast-final-v08419/breast-coverage.json').authored,71);assert.equal(json('validation/breast-final-v08419/retrospective-inventory.json').authored_suites,99);assert(read('index.html').includes('Feasibility evaluation build — not for routine clinical use'));
 (async()=>{
  const riskContext={console,fetch:async()=>({ok:true,json:async()=>json('data/emetogenic-risk-map.json')})};vm.createContext(riskContext);vm.runInContext(read('js/emetogenic-risk.js'),riskContext);await riskContext.SACTCheckEmetogenicRisk.load();

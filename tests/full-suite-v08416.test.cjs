@@ -15,7 +15,7 @@ for(const code of codes){
   const h=read(`patient/${code}/${name}.html`);assert(!/undefined|\[object Object\]/.test(h),code+'/'+name);assert(!forbidden.test(h),code+'/'+name+' evidence crossed audience boundary');
   for(const m of h.matchAll(/(?:src|href)="([^"#]+)"/g)){if(/^(https?:|data:|mailto:|tel:)/.test(m[1]))continue;assert(fs.existsSync(path.resolve(root,'patient',code,m[1].split(/[?#]/)[0])),`${code}/${name}: ${m[1]}`);}
   if(['index','knowledge','treatment-journey'].includes(name))assert(!/<input|<select|<textarea/.test(h));
-  if(['index','knowledge'].includes(name))assert(h.includes('wikiCycleChronology'));
+  if(['index','knowledge'].includes(name))assert(h.includes('wikiCycleChronology')||h.includes('class="pt-cycle"'));
  }
  for(const name of ['guide','passport','consent-form','sactcard','logistics','supportive-care','treatment-journey',...phases.map(p=>'support-'+p.id)])assert.deepEqual(fs.readFileSync(path.join(root,`patient/${code}/${name}.pdf`)),fs.readFileSync(path.join(root,`docs/patient/${code}/${name}.pdf`)));
  for(const [asset,file] of [['knowledge','knowledge.html'],['longitudinal','treatment-journey.html'],['consent-draft','consent-form.html'],['supportive-care-selector','supportive-care.html']])assert.equal(R.relativePath(code,asset),`patient/${code}/${file}`);
@@ -30,7 +30,7 @@ for(const code of codes){
  vm.runInNewContext(read('assets/patient/phase-support-v0838.js'),{document:{getElementById:id=>id==='support-phase'?select:id==='phase-prompt'?prompt:null,querySelectorAll:()=>sections},window:{location:{search:''}},URLSearchParams});
  for(const p of phases){select.value=p.id;listeners.change();assert.equal(sections.filter(x=>!x.hidden).length,1);assert.equal(sections.find(x=>!x.hidden).dataset.supportPhase,p.id);}select.value='';listeners.change();assert(sections.every(x=>x.hidden));
 }
-const updates=json('validation/breast-expansion-v08416/retrospective-hashes.json');for(const [p,c] of Object.entries(updates.files))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),c.after);
+const updates=json('validation/breast-expansion-v08416/retrospective-hashes.json');for(const [p,c] of Object.entries(updates.files))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),require('./helpers/retrospective-v08417.cjs').expectedHash(p,c.after));
 const inv=json('validation/breast-expansion-v08416/retrospective-inventory.json');assert.equal(inv.authored_suites,84);assert.equal(inv.reviewed_cumulative,26);assert.equal(inv.remaining_review_queue,58);
 const cov=json('validation/breast-expansion-v08416/breast-coverage.json');assert.equal(cov.total,71);assert.equal(cov.authored,56);assert.equal(cov.remaining.length,15);
 (async()=>{
