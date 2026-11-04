@@ -1,7 +1,6 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
-const presentation=require('./patient-presentation-v08431.cjs');
 const suiteContext=require('./patient-suite-context-v08425.cjs');
 const chronology=require('./cycle-chronology.cjs');
 const monitoring=require('./monitoring-schedule-v0838.cjs');
@@ -11,7 +10,7 @@ const logistics=require('./treatment-logistics-v0834.cjs');
 const relationship=require('../js/treatment-relationship-v0835.js');
 writeOutput(path.join(root,'assets/patient/cycle-chronology-v0831.css'),chronology.stylesheet);
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function writeOutput(file,content){content=presentation.wiki(file,content);const out=suiteContext.output(file,content);file=out.file;content=out.html;fs.mkdirSync(path.dirname(file),{recursive:true});if(process.argv.includes('--check'))assert.equal(fs.readFileSync(file,'utf8'),content,`Generated patient page is stale: ${file}`);else fs.writeFileSync(file,content);}
+function writeOutput(file,content){const out=suiteContext.output(file,content);file=out.file;content=out.html;fs.mkdirSync(path.dirname(file),{recursive:true});if(process.argv.includes('--check'))assert.equal(fs.readFileSync(file,'utf8'),content,`Generated patient page is stale: ${file}`);else fs.writeFileSync(file,content);}
 const profiles=fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(n=>n.endsWith('.json'));
 const index=JSON.parse(fs.readFileSync(path.join(root,'protocols/index.json')));
 const catalogue=Array.isArray(index)?index:(index.protocols||index.regimens||[]);
@@ -46,7 +45,7 @@ function contents(d){const content=`<aside class="pk-contents"><div><div class="
 
 for(const file of profiles){
   if(suiteContext.context&&!suiteContext.codes.includes(file.replace('.json','')))continue;
-  const d=presentation.legacyProfile(suiteContext.profile(file.replace('.json','')));
+  const d=suiteContext.profile(file.replace('.json',''));
  if(d.patient_context_selector&&!suiteContext.context)continue;
   if(process.env.SACT_SUITE_CODES&&!process.env.SACT_SUITE_CODES.split(',').includes(d.code))continue;
   if(d.service_kind==='targeted'&&d.patient_summary?.template_version!=='0.84.30'){fs.mkdirSync(path.join(root,'patient',d.code),{recursive:true});require('./targeted-patient-suite-v0849.cjs').buildKnowledge(d,writeOutput);continue;}

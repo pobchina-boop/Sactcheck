@@ -1138,7 +1138,7 @@ const definitions={
         "cells": [
           "FBC, renal, liver baseline",
           "Review results before AC",
-          "FBC, kidney and liver tests before each cycle; team confirms checks before weekly paclitaxel doses",
+          "FBC / renal / liver each cycle; weekly taxane checks",
           "Confirm recovery before restart / transition",
           "Investigate persistent problems"
         ],
@@ -5697,8 +5697,8 @@ const definitions={
         "cells": [
           "Adjuvant: surgery already completed",
           "No automatic operation during cycles",
-          "Review postoperative recovery and symptoms",
-          "Surgery was completed before this adjuvant regimen",
+          "Review response / surgical plan",
+          "Surgery after neoadjuvant therapy, if applicable",
           "Pathology and recovery guide next steps"
         ],
         "kind": "local",
@@ -5726,8 +5726,8 @@ const definitions={
         "label": "Blood tests",
         "cells": [
           "FBC, kidney and liver profile",
-          "Repeat as clinically indicated; confirm the unit’s pre-treatment test plan",
-          "Review testing needs at treatment changes",
+          "Review before chemotherapy cycles",
+          "Check again at any phase change",
           "Follow active medicines and abnormalities",
           "Follow unresolved abnormalities"
         ],
@@ -5773,8 +5773,8 @@ const definitions={
         "cells": [
           "Record baseline extent as appropriate",
           "Clinical response / symptoms review",
-          "Review new symptoms; this TC regimen is adjuvant",
-          "Arrange radiotherapy or further treatment if indicated",
+          "If before surgery: plan response review",
+          "Arrange selected surgery / next treatment",
           "Planned breast imaging; no routine CT/PET"
         ],
         "kind": "monitoring",
@@ -5819,12 +5819,12 @@ const definitions={
       {
         "title": "Before first dose",
         "when": "Baseline",
-        "why": "Baseline blood count, kidney and liver tests. The team arranges repeat testing as clinically indicated and confirms which results are needed before treatment.",
+        "why": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle.",
         "action": "Confirm tests and consent before prescribing.",
         "source_ids": [
           "00250"
         ],
-        "clinical": "Baseline blood count, kidney and liver tests. The team arranges repeat testing as clinically indicated and confirms which results are needed before treatment."
+        "clinical": "Baseline FBC, kidney and liver tests; repeat before each chemotherapy cycle."
       },
       {
         "title": "Heart-monitoring plan",
