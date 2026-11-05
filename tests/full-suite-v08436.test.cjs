@@ -32,5 +32,7 @@ for(const code of ['00555','00783'])assert.match(read('patient/'+code+'/port-pum
 const folfiri=json('data/patient-knowledge/00227.json').anatomy;
 assert.equal(new Set(folfiri.map(x=>x[0])).size,folfiri.length);assert.equal(new Set(folfiri.map(x=>x.slice(4).join(','))).size,folfiri.length);
 assert.doesNotMatch(json('data/patient-knowledge/00586.json').patient_summary.card_schedule,/or tabl$/);
-assert.equal(require('../js/patient-asset-registry-v0810.js').codes.length,174,'No unrelated registry expansion');
+const allCodes=require('../js/patient-asset-registry-v0810.js').codes;
+assert.equal(allCodes.filter(c=>!['00320','00327','00505','00642'].includes(c)).length,174,'Retain all 174 pre-NET registry entries');
+assert.deepEqual(allCodes.filter(c=>['00320','00327','00505','00642'].includes(c)).sort(),['00320','00327','00505','00642'],'Only four approved NET additions');
 console.log('v0.84.36 all 41 colorectal contexts: identity, source freshness, full reference anatomy, required assets, mirrors and targeted consistency repairs pass.');

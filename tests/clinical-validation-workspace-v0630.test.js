@@ -16,7 +16,10 @@ const protocolIndex = JSON.parse(fs.readFileSync(path.join(root, "protocols", "i
 assert.ok(pkg.version.localeCompare("0.63.0", undefined, { numeric: true }) >= 0, "package version must be at least 0.63.0");
 assert.strictEqual(register.protocol_count, protocolIndex.protocols.filter(item => item.enabled !== false).length, "validation register must include every enabled protocol");
 assert.strictEqual(register.protocol_count, 377, "expected enabled protocol count must remain 377");
-assert.strictEqual(register.tissue_context_count, 456, "shared protocols must create separate tissue review contexts");
+assert.strictEqual(register.tissue_context_count, 457, "shared protocols must create separate tissue review contexts");
+// v0.84.37 includes CAPTEM under both GI and its source-specific pancreatic NET context.
+const captem = register.protocols.find(item => item.path.includes('/00505-'));
+assert.deepStrictEqual([...captem.tumour_groups].sort(), ['Gastrointestinal','Neuroendocrine']);
 assert.ok(register.protocols.every(item => item.protocol_id && item.path && item.tumour_groups.length), "every validation record must have protocol identity, path and tissue context");
 assert.ok(register.protocols.every(item => typeof item.rule_count === "number" && typeof item.input_count === "number"), "register must expose encoded rule and input counts");
 assert.ok(register.protocols.some(item => item.tumour_groups.length > 1), "register must retain shared tissue protocols");

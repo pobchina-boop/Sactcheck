@@ -41,7 +41,7 @@ There are **362 unique Solid Tumour protocol files**. Five shared protocols are 
 | Lung | 59 |
 | Lymphoma | 4 |
 | Neuro-oncology | 10 |
-| Neuroendocrine | 3 |
+| Neuroendocrine | 4 |
 | Sarcoma | 25 |
 | Skin/Melanoma | 16 |
 | Tumour Agnostic Therapy | 2 |
@@ -111,8 +111,8 @@ All 362 indexed solid tumour protocols now use the platform policy that every en
 
 These are not automated release failures, because older NCCP documents do not use a uniform publication/review header and many encodings pre-date the structured metadata model. They remain an explicit manual source-review queue.
 
-- Missing stored publication date: **248** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545, 00659 … plus 228 more)
-- Missing stored review or last-reviewed date: **220** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00545, 00659, 00720, 00736, 00743, 00745 … plus 200 more)
+- Missing stored publication date: **247** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545, 00659 … plus 227 more)
+- Missing stored review or last-reviewed date: **216** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00545, 00659, 00720, 00736, 00743, 00745 … plus 196 more)
 - Source document not explicitly marked as manually checked: **123** (00212, 00205, 00256, 00897, 00926, 00104, 00282, 00326, 00333, 00337, 00338, 00453, 00518, 00564, 00583, 00602, 00622, 00628, 00759, 00807 … plus 103 more)
 
 ## Clinical boundary

@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f
 const scope=json('validation/colorectal-v08433/scope.json'),idx=json('protocols/index.json').protocols,codes=[...scope.new_codes,...scope.retrospective_codes];
 const E=require('../js/assessment-engine'),D=require('../js/protocol-dose-schedule'),Registry=require('../js/patient-asset-registry-v0810'),Evidence=require('../js/treatment-evidence-v08413');
 const kb=json('data/regimen-knowledge-base-v08433-addendum.json').regimen_profiles,proto=c=>json(idx.find(x=>x.path.includes('/'+c+'-')).path);
-assert.equal(Registry.codes.length,174);assert(Registry.codes.includes('00244'),'Audited v34 regorafenib accounts for the added patient registry entry');assert.equal(codes.length,10);assert.equal(kb.length,10);
+require('./helpers/net-suite-registration-v08437.cjs').registry(Registry.codes);assert(Registry.codes.includes('00244'),'Audited v34 regorafenib accounts for the added patient registry entry');assert.equal(codes.length,10);assert.equal(kb.length,10);
 const expectedDays={'00555':14,'00783':14,'00691':14,'00238':14,'00791':14};
 // One visible absolute bilirubin result supplies both source-specific representations.
 // Reuse the established laboratory adapter; never change clinical rule units.

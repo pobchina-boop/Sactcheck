@@ -78,7 +78,16 @@ assert.ok(ui.includes("Open NCCP emetogenic classification source"));
 for (const [id, script] of Object.entries(riskMap.scripts || {})) {
   assert.ok(/^https:\/\//.test(script.url || ""), `${id} must use a national NCCP web link`);
   assert.ok(!/CUH/i.test(script.label || ""), `${id} must not expose a CUH antiemetic label`);
-  assert.strictEqual(script.status, "national_guidance_link", `${id} must be marked as national guidance`);
+  if (['nccp-captem-v08437','nccp-prrt-v08437'].includes(id)) {
+    const code=id==='nccp-captem-v08437'?'00505':'00642';
+    const protocol=JSON.parse(fs.readFileSync(path.join(root,index.protocols.find(p=>p.path.includes('/'+code+'-')).path),'utf8'));
+    require('../tools/neuroendocrine-organ-migration-v08437.cjs').validate(code,protocol);
+    assert.strictEqual(script.status,'source_mapped_pending_local_oncology_pharmacy_validation');
+    assert.strictEqual(script.url,MED);assert.strictEqual(script.source_url,protocol.metadata.source_url);
+    assert.strictEqual(protocol.supportive_care.script_id,id);
+    assert.strictEqual(protocol.supportive_care.supportive_medications_label,script.label);
+    assert.strictEqual(riskMap.protocols[code].level,script.risk_level);
+  } else assert.strictEqual(script.status, "national_guidance_link", `${id} must be marked as national guidance`);
 }
 
 const currentMapLevels = Object.fromEntries(Object.entries(riskMap.protocols || {}).map(([code, rec]) => [code, {
@@ -89,6 +98,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00505":"oral_moderate_high", // v37: NCCP00505 temozolomide Days10–14, exact source/hash checked above.
+    "00642":"moderate", // v37: PRRT-specific amino-acid/5-HT3 plan, not a generic steroid script.
     "00555":"high", "00783":"high", "00238":"moderate", "00791":"low",
     "00309":"moderate",
     "00243": "oral_moderate_high", // v0.84.24: NCCP 00243 v7, oral crizotinib risk
@@ -153,6 +164,8 @@ for (const record of index.protocols || []) {
   if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
   else if (baseline) {
     const correctionByPath = {
+      "gastrointestinal/00505-capecitabine-and-temozolomide-therapy.json":"oral_moderate_high",
+      "gastrointestinal/00642-lutetium-177-oxodotreotide-lutathera-therapy.json":"moderate",
       "gastrointestinal/00555-folfoxiri.json":"high",
       "gastrointestinal/00783-bevacizumab-5-mg-kg-and-folfoxiri-therapy-14-day.json":"high",
       "gastrointestinal/00238-aflibercept-folfiri.json":"moderate",

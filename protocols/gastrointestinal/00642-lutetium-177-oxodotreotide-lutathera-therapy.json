@@ -11,8 +11,8 @@
     "short_title": "Lutetium-177 Oxodotreotide (Lutathera) Therapy",
     "indication": "Unresectable or metastatic progressive, well-differentiated, somatostatin-receptor-positive gastroenteropancreatic neuroendocrine tumours in adults.",
     "source_url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 7,
+    "sactcheck_encoding_version": "0.84.37",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "neuroendocrine",
@@ -48,9 +48,15 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08437_independent_review_pending",
+      "status": "current_nccp_ema_source_audited_pending_independent_clinical_pharmacy_review",
+      "source_checked_date": "2026-11-05",
+      "source_verified": true,
+      "source_audit_path": "validation/neuroendocrine-v08437/prrt-source-audit",
+      "source_sha256": "5bd719000d115b1d962daca516b9736b7d43974f1c69d5a0fc76853a3ab7c6aa",
+      "audit_release": "0.84.37"
     },
-    "source_checked_date": "2026-07-26",
+    "source_checked_date": "2026-11-05",
     "tumour_groups": [
       "Gastrointestinal",
       "Neuroendocrine"
@@ -106,30 +112,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "source_reconciled_rule_encoding",
-      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Current-source PRRT assessment encoding; specialist administration and independent clinical/pharmacy validation required",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
     },
     "organ_function_reconciliation": {
-      "release": "0.59.0",
-      "checked_date": "2026-08-05",
+      "release": "0.84.37",
+      "checked_date": "2026-11-05",
       "source_url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
       "source_version": "2",
       "components": [
         "lutetium_177_oxodotreotide"
       ],
-      "resolution": "structured_rules",
+      "resolution": "source_specific_rules_with_explicit_specialist_conflicts",
       "partial_assessment_supported": true,
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
+      "note": "Current NCCP v2 and EMA 14 August 2026 reconciled; exact renal measurements and derived relative change, distinct baseline hepatic review and on-treatment hold. Independent review pending."
     },
-    "canonical_protocol_id": "nccp-00642-v2"
+    "canonical_protocol_id": "nccp-00642-v2",
+    "encoding_version": "0.84.37",
+    "clinical_audit_release": "0.84.37",
+    "review_date": "2030-05-27",
+    "source_pdf_sha256": "5bd719000d115b1d962daca516b9736b7d43974f1c69d5a0fc76853a3ab7c6aa",
+    "schedule_summary": "Four specialist PRRT infusions of 7,400 MBq IV, normally eight weeks apart. Antiemetic precedes four-hour renal-protective amino acids; SSA timing and radiation discharge are service-prescribed. Toxicity may require reduced activity, delay or stopping."
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
@@ -155,141 +166,439 @@
     ],
     "planned_cycles": 4,
     "duration_type": "fixed_cycles",
-    "duration_text": "4 infusions every 8 weeks; interval may extend up to 16 weeks for dose-modifying toxicity"
+    "duration_text": "4 infusions every 8 weeks; interval may extend up to 16 weeks for dose-modifying toxicity",
+    "components": [
+      {
+        "drug": "lutetium_177_oxodotreotide",
+        "dose": "7400 MBq",
+        "route": "IV infusion",
+        "day": 1,
+        "note": "Over approximately 30–40 minutes; every 56 days for four administrations. Renal-protective amino-acid infusion begins 30 minutes before PRRT and runs for four hours. Reference schedule only; activity, interval changes and administration require the authorised PRRT service.",
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "1"
+        }
+      }
+    ]
   },
   "input_definitions": {
-    "ecog": {
-      "label": "ECOG performance status",
+    "prrt_assessment_stage": {
+      "label": "PRRT assessment stage",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": 0,
-          "label": "0"
+          "value": "baseline",
+          "label": "Before first infusion"
         },
         {
-          "value": 1,
-          "label": "1"
-        },
-        {
-          "value": 2,
-          "label": "2"
-        },
-        {
-          "value": 3,
-          "label": "3"
-        },
-        {
-          "value": 4,
-          "label": "4"
+          "value": "on_treatment",
+          "label": "During PRRT / before a later infusion"
         }
       ],
-      "demo_value": 0,
-      "input_role": "decision"
+      "ui_section": "treatment_context",
+      "always_show": true,
+      "demo_value": "baseline"
+    },
+    "age_years": {
+      "label": "Age (years)",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "step": 1,
+      "min": 0,
+      "demo_value": 1
+    },
+    "net_grade": {
+      "label": "NET differentiation / grade",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "well_differentiated_g1_g2",
+          "label": "Well differentiated G1 or G2"
+        },
+        {
+          "value": "other",
+          "label": "G3, poorly differentiated or another diagnosis"
+        },
+        {
+          "value": "unknown",
+          "label": "Not confirmed"
+        }
+      ],
+      "demo_value": "well_differentiated_g1_g2"
+    },
+    "gep_net": {
+      "label": "Gastroenteropancreatic NET confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "progressive_unresectable_or_metastatic": {
+      "label": "Progressive unresectable or metastatic disease confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "progressed_on_standard_octreotide": {
+      "label": "Progression on standard octreotide confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "curative_surgery_candidate": {
+      "label": "Candidate for curative surgery",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "specialist_mdm_and_licensed_service_plan": {
+      "label": "NET specialist / MDM and authorised PRRT service plan confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     },
     "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
+      "label": "Known hypersensitivity to Lutathera or excipients",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "pregnancy": {
-      "label": "Pregnant",
+      "label": "Pregnant or pregnancy suspected",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "renal_band": {
-      "label": "Renal function",
+    "pregnancy_excluded_if_relevant": {
+      "label": "Pregnancy excluded by appropriate test where relevant",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_marrow_rt_over_25_percent": {
+      "label": "Previous external beam radiation involving more than 25% of marrow",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "nyha_iii_iv_heart_failure": {
+      "label": "NYHA III or IV heart failure",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "other_organ_function_concern": {
+      "label": "Other renal, hepatic, cardiac or marrow eligibility concern",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "sstr_imaging": {
+      "label": "Somatostatin-receptor imaging",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": "ge50",
-          "label": "eGFR/CrCl ≥50 mL/min",
-          "decision_value": "ge50"
+          "value": "uptake_at_least_liver",
+          "label": "Tumour receptor uptake at least normal liver uptake"
         },
         {
-          "value": "30_49",
-          "label": "30–49 mL/min",
-          "decision_value": "30_49"
+          "value": "negative_or_mixed",
+          "label": "Receptor-negative or mixed visceral lesions"
+        },
+        {
+          "value": "unconfirmed",
+          "label": "Imaging / adequate uptake not confirmed"
+        }
+      ],
+      "demo_value": "uptake_at_least_liver"
+    },
+    "fixed_long_acting_ssa_weeks": {
+      "label": "Weeks on fixed-dose long-acting SSA before PRRT eligibility assessment",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "weeks",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "max": 4,
+      "step": 1,
+      "min": 0,
+      "demo_value": 1
+    },
+    "crcl_ml_min": {
+      "label": "Current creatinine clearance (Cockcroft–Gault, actual body weight)",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "mL/min",
+      "demo_value": 80,
+      "help": "Use the source-specified Cockcroft–Gault creatinine clearance with actual body weight; do not substitute indexed eGFR.",
+      "min": 0,
+      "step": 0.01
+    },
+    "baseline_crcl_ml_min": {
+      "label": "Pretreatment baseline creatinine clearance (same method)",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "mL/min",
+      "min": 0.01,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "creatinine_umol_l": {
+      "label": "Current serum creatinine",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "µmol/L",
+      "min": 0.01,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "baseline_creatinine_umol_l": {
+      "label": "Pretreatment baseline serum creatinine",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "µmol/L",
+      "min": 0.01,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "prrt_crcl_ratio": {
+      "label": "Current / baseline creatinine clearance",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "derived_value": {
+        "operation": "ratio",
+        "fields": [
+          "crcl_ml_min",
+          "baseline_crcl_ml_min"
+        ]
+      },
+      "help": "Calculated from direct measurements; a supplied ratio is never trusted.",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "visible_when": {
+        "all": [
+          {
+            "field": "prrt_assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "prrt_assessment_stage",
+            "operator": "==",
+            "value": "on_treatment"
+          }
+        ]
+      }
+    },
+    "prrt_creatinine_ratio": {
+      "label": "Current / baseline serum creatinine",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "derived_value": {
+        "operation": "ratio",
+        "fields": [
+          "creatinine_umol_l",
+          "baseline_creatinine_umol_l"
+        ]
+      },
+      "help": "Calculated from direct measurements; a supplied ratio is never trusted.",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "visible_when": {
+        "all": [
+          {
+            "field": "prrt_assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "prrt_assessment_stage",
+            "operator": "==",
+            "value": "on_treatment"
+          }
+        ]
+      }
+    },
+    "lutathera_renal_band": {
+      "label": "Legacy Lutathera renal category (use exact CrCl when available)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "ge40",
+          "label": "CrCl ≥40 mL/min"
+        },
+        {
+          "value": "30_39",
+          "label": "CrCl 30 to <40 mL/min"
         },
         {
           "value": "lt30",
-          "label": "<30 mL/min",
-          "decision_value": "lt30"
+          "label": "CrCl <30 mL/min"
         },
         {
           "value": "dialysis",
-          "label": "Dialysis",
-          "decision_value": "dialysis"
+          "label": "Dialysis"
         }
       ],
-      "demo_value": "ge50",
       "renal_input": {
         "mode": "protocol_specific_band",
         "exact_value_required": false
       },
-      "input_role": "decision"
+      "visible_when": {
+        "all": [
+          {
+            "field": "prrt_assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "prrt_assessment_stage",
+            "operator": "==",
+            "value": "on_treatment"
+          }
+        ]
+      },
+      "demo_value": "ge40"
+    },
+    "lutathera_renal_toxicity": {
+      "label": "Clinician-confirmed treatment-emergent renal toxicity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     },
     "haemoglobin_g_dl": {
       "label": "Haemoglobin",
       "type": "number",
       "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 12,
+      "input_role": "decision",
       "unit": "g/dL",
-      "input_role": "decision"
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
     },
-    "lutathera_renal_band": {
-      "label": "Renal function for lutetium-177 oxodotreotide",
-      "type": "select",
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
       "required": false,
-      "options": [
-        {
-          "value": "ge40",
-          "label": "CrCl ≥40 mL/min",
-          "decision_value": "ge40"
-        },
-        {
-          "value": "30_39",
-          "label": "CrCl 30–39 mL/min",
-          "decision_value": "30_39"
-        },
-        {
-          "value": "lt30",
-          "label": "CrCl <30 mL/min",
-          "decision_value": "lt30"
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis",
-          "decision_value": "dialysis"
-        }
-      ],
-      "demo_value": "ge40",
-      "ui_section": "labs",
-      "always_show": true,
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "anc_x10e9_l": {
+      "label": "Absolute neutrophil count",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "leucocytes_x10e9_l": {
+      "label": "Total white cell count",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "×10⁹/L",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "life_threatening_anaemia": {
+      "label": "Life-threatening anaemia",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "isolated_lymphopenia": {
+      "label": "Low total white cells / other haematological toxicity is solely lymphopenia",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bilirubin_ratio_uln": {
+      "label": "Bilirubin / laboratory upper limit of normal",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "×ULN",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "albumin_g_l": {
+      "label": "Albumin",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "g/L",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "inr": {
+      "label": "INR",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "ratio",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
     },
     "lutathera_hepatic_band": {
-      "label": "Hepatic function for lutetium-177 oxodotreotide",
+      "label": "Legacy Lutathera hepatic category",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": "none_mild_moderate",
@@ -297,31 +606,372 @@
         },
         {
           "value": "severe",
-          "label": "Bilirubin >3 ×ULN / severe impairment"
+          "label": "Severe / bilirubin >3×ULN"
         }
       ],
-      "demo_value": "none_mild_moderate",
-      "ui_section": "labs",
-      "always_show": true,
-      "input_role": "decision"
-    },
-    "lutathera_renal_toxicity": {
-      "label": "Treatment-emergent renal toxicity: CrCl <40, creatinine +40%, or CrCl decrease 40%",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
-      "always_show": true,
-      "input_role": "decision"
+      "visible_when": {
+        "all": [
+          {
+            "field": "prrt_assessment_stage",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "prrt_assessment_stage",
+            "operator": "==",
+            "value": "on_treatment"
+          }
+        ]
+      },
+      "demo_value": "none_mild_moderate"
     },
     "lutathera_hepatic_toxicity": {
-      "label": "Treatment-emergent severe hepatic toxicity (bilirubin >3 ×ULN or albumin <30 g/L with INR >1.5)",
+      "label": "Clinician-confirmed treatment-emergent hepatic toxicity",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "ui_section": "clinical",
-      "always_show": true,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "other_toxicity_grade": {
+      "label": "Other CTCAE adverse reaction grade (exclude the separately entered renal/hepatic/count pathways)",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "max": 4,
+      "step": 1,
+      "min": 0,
+      "demo_value": 1
+    },
+    "weeks_since_last_prrt": {
+      "label": "Elapsed weeks since the last PRRT infusion (total dosing interval, not additional delay)",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "weeks",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "prrt_previous_activity_mbq": {
+      "label": "Activity actually administered at the previous infusion",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "MBq",
+      "help": "Enter the documented activity. Standard source levels are 7,400 and 3,700 MBq; any other prior level requires specialist reconciliation.",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "prrt_reduced_infusion_tolerated": {
+      "label": "After a 3,700 MBq infusion, no qualifying dose-modifying toxicity recurred",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "platelet_toxicity_episode_count": {
+      "label": "Number of qualifying grade 2–4 thrombocytopenia episodes",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "step": 1,
+      "help": "0 means none. Include a prior episode even if current measurements have recovered.",
+      "min": 0,
+      "demo_value": 1
+    },
+    "platelet_toxicity_recovery": {
+      "label": "Recovery from grade 2–4 thrombocytopenia",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "active",
+          "label": "Still above the source recovery threshold"
+        },
+        {
+          "value": "recovered",
+          "label": "Recovery threshold confirmed by specialist"
+        }
+      ],
+      "visible_when": {
+        "field": "platelet_toxicity_episode_count",
+        "operator": ">=",
+        "value": 1
+      },
+      "help": "Platelets: grade 0–1; anaemia/neutropenia/other: grade 0–2; renal/hepatic: resolution or return to baseline.",
+      "demo_value": "active"
+    },
+    "anaemia_toxicity_episode_count": {
+      "label": "Number of qualifying grade 3–4 anaemia episodes",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "step": 1,
+      "help": "0 means none. Include a prior episode even if current measurements have recovered.",
+      "min": 0,
+      "demo_value": 1
+    },
+    "anaemia_toxicity_recovery": {
+      "label": "Recovery from grade 3–4 anaemia",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "active",
+          "label": "Still above the source recovery threshold"
+        },
+        {
+          "value": "recovered",
+          "label": "Recovery threshold confirmed by specialist"
+        }
+      ],
+      "visible_when": {
+        "field": "anaemia_toxicity_episode_count",
+        "operator": ">=",
+        "value": 1
+      },
+      "help": "Platelets: grade 0–1; anaemia/neutropenia/other: grade 0–2; renal/hepatic: resolution or return to baseline.",
+      "demo_value": "active"
+    },
+    "neutrophil_toxicity_episode_count": {
+      "label": "Number of qualifying grade 3–4 neutropenia episodes",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "step": 1,
+      "help": "0 means none. Include a prior episode even if current measurements have recovered.",
+      "min": 0,
+      "demo_value": 1
+    },
+    "neutrophil_toxicity_recovery": {
+      "label": "Recovery from grade 3–4 neutropenia",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "active",
+          "label": "Still above the source recovery threshold"
+        },
+        {
+          "value": "recovered",
+          "label": "Recovery threshold confirmed by specialist"
+        }
+      ],
+      "visible_when": {
+        "field": "neutrophil_toxicity_episode_count",
+        "operator": ">=",
+        "value": 1
+      },
+      "help": "Platelets: grade 0–1; anaemia/neutropenia/other: grade 0–2; renal/hepatic: resolution or return to baseline.",
+      "demo_value": "active"
+    },
+    "renal_toxicity_episode_count": {
+      "label": "Number of qualifying renal toxicity episodes",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "step": 1,
+      "help": "0 means none. Include a prior episode even if current measurements have recovered.",
+      "min": 0,
+      "demo_value": 1
+    },
+    "renal_toxicity_recovery": {
+      "label": "Recovery from renal toxicity",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "active",
+          "label": "Still above the source recovery threshold"
+        },
+        {
+          "value": "recovered",
+          "label": "Recovery threshold confirmed by specialist"
+        }
+      ],
+      "visible_when": {
+        "field": "renal_toxicity_episode_count",
+        "operator": ">=",
+        "value": 1
+      },
+      "help": "Platelets: grade 0–1; anaemia/neutropenia/other: grade 0–2; renal/hepatic: resolution or return to baseline.",
+      "demo_value": "active"
+    },
+    "hepatic_toxicity_episode_count": {
+      "label": "Number of qualifying hepatotoxicity episodes",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "step": 1,
+      "help": "0 means none. Include a prior episode even if current measurements have recovered.",
+      "min": 0,
+      "demo_value": 1
+    },
+    "hepatic_toxicity_recovery": {
+      "label": "Recovery from hepatotoxicity",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "active",
+          "label": "Still above the source recovery threshold"
+        },
+        {
+          "value": "recovered",
+          "label": "Recovery threshold confirmed by specialist"
+        }
+      ],
+      "visible_when": {
+        "field": "hepatic_toxicity_episode_count",
+        "operator": ">=",
+        "value": 1
+      },
+      "help": "Platelets: grade 0–1; anaemia/neutropenia/other: grade 0–2; renal/hepatic: resolution or return to baseline.",
+      "demo_value": "active"
+    },
+    "other_toxicity_episode_count": {
+      "label": "Number of qualifying other grade 3–4 toxicity, excluding isolated lymphopenia episodes",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "step": 1,
+      "help": "0 means none. Include a prior episode even if current measurements have recovered.",
+      "min": 0,
+      "demo_value": 1
+    },
+    "other_toxicity_recovery": {
+      "label": "Recovery from other grade 3–4 toxicity, excluding isolated lymphopenia",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "active",
+          "label": "Still above the source recovery threshold"
+        },
+        {
+          "value": "recovered",
+          "label": "Recovery threshold confirmed by specialist"
+        }
+      ],
+      "visible_when": {
+        "field": "other_toxicity_episode_count",
+        "operator": ">=",
+        "value": 1
+      },
+      "help": "Platelets: grade 0–1; anaemia/neutropenia/other: grade 0–2; renal/hepatic: resolution or return to baseline.",
+      "demo_value": "active"
+    },
+    "amino_acid_protection_confirmed": {
+      "label": "Four-hour renal-protective lysine/arginine infusion confirmed (starts 30 min before PRRT)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "antiemetic_timing_confirmed": {
+      "label": "5-HT3 antiemetic at least 30 min before amino acids confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "potassium_checked_and_corrected": {
+      "label": "Serum potassium checked before amino acids and any hyperkalaemia corrected",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "radiation_discharge_plan_confirmed": {
+      "label": "Individual radiation-protection and discharge plan confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "carcinoid_crisis_risk": {
+      "label": "Functioning NET / high burden / poorly controlled syndrome raising crisis risk",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_hormonal_crisis": {
+      "label": "Suspected neuroendocrine hormonal crisis now",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_infusion_hypersensitivity": {
+      "label": "Serious hypersensitivity during infusion",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "repeated_high_dose_glucocorticoids": {
+      "label": "Repeated high-dose or chronic glucocorticoid exposure",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "intercurrent_illness_increasing_risk": {
+      "label": "Intercurrent illness increasing PRRT risk",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recent_major_surgery": {
+      "label": "Recent major surgery",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "days_since_long_acting_ssa": {
+      "label": "Days since last long-acting somatostatin analogue",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "days",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "hours_since_short_acting_ssa": {
+      "label": "Hours since last short-acting somatostatin analogue",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "hours",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
+    },
+    "weeks_since_major_surgery": {
+      "label": "Weeks since major surgery",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "unit": "weeks",
+      "visible_when": {
+        "field": "recent_major_surgery",
+        "operator": "==",
+        "value": true
+      },
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1
     }
   },
   "required_inputs": [],
@@ -356,8 +1006,192 @@
     ],
     "rules": [
       {
+        "id": "PRRT_AGE",
+        "priority": 20,
+        "when": {
+          "field": "age_years",
+          "operator": "<",
+          "value": 18
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "The NCCP adult pathway requires age at least 18 years; do not apply it automatically to a paediatric patient.",
+          "recommendation": "The NCCP adult pathway requires age at least 18 years; do not apply it automatically to a paediatric patient."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "1"
+        },
+        "explanation": "The NCCP adult pathway requires age at least 18 years; do not apply it automatically to a paediatric patient."
+      },
+      {
+        "id": "PRRT_GRADE",
+        "priority": 20,
+        "when": {
+          "field": "net_grade",
+          "operator": "!=",
+          "value": "well_differentiated_g1_g2"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "This NCCP indication is well-differentiated G1/G2 disease; other or unconfirmed histology requires a separately justified specialist pathway.",
+          "recommendation": "This NCCP indication is well-differentiated G1/G2 disease; other or unconfirmed histology requires a separately justified specialist pathway."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "1"
+        },
+        "explanation": "This NCCP indication is well-differentiated G1/G2 disease; other or unconfirmed histology requires a separately justified specialist pathway."
+      },
+      {
+        "id": "PRRT_ELIGIBILITY_GEP_NET",
+        "priority": 20,
+        "when": {
+          "field": "gep_net",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Required NCCP eligibility/service criterion not confirmed: Gastroenteropancreatic NET confirmed. Confirm with the NET specialist before treatment.",
+          "recommendation": "Required NCCP eligibility/service criterion not confirmed: Gastroenteropancreatic NET confirmed. Confirm with the NET specialist before treatment."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "1–2"
+        },
+        "explanation": "Required NCCP eligibility/service criterion not confirmed: Gastroenteropancreatic NET confirmed. Confirm with the NET specialist before treatment."
+      },
+      {
+        "id": "PRRT_ELIGIBILITY_PROGRESSIVE_UNRESECTABLE_OR_METASTATIC",
+        "priority": 20,
+        "when": {
+          "field": "progressive_unresectable_or_metastatic",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Required NCCP eligibility/service criterion not confirmed: Progressive unresectable or metastatic disease confirmed. Confirm with the NET specialist before treatment.",
+          "recommendation": "Required NCCP eligibility/service criterion not confirmed: Progressive unresectable or metastatic disease confirmed. Confirm with the NET specialist before treatment."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "1–2"
+        },
+        "explanation": "Required NCCP eligibility/service criterion not confirmed: Progressive unresectable or metastatic disease confirmed. Confirm with the NET specialist before treatment."
+      },
+      {
+        "id": "PRRT_ELIGIBILITY_PROGRESSED_ON_STANDARD_OCTREOTIDE",
+        "priority": 20,
+        "when": {
+          "field": "progressed_on_standard_octreotide",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Required NCCP eligibility/service criterion not confirmed: Progression on standard octreotide confirmed. Confirm with the NET specialist before treatment.",
+          "recommendation": "Required NCCP eligibility/service criterion not confirmed: Progression on standard octreotide confirmed. Confirm with the NET specialist before treatment."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "1–2"
+        },
+        "explanation": "Required NCCP eligibility/service criterion not confirmed: Progression on standard octreotide confirmed. Confirm with the NET specialist before treatment."
+      },
+      {
+        "id": "PRRT_ELIGIBILITY_SPECIALIST_MDM_AND_LICENSED_SERVICE_PLAN",
+        "priority": 20,
+        "when": {
+          "field": "specialist_mdm_and_licensed_service_plan",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Required NCCP eligibility/service criterion not confirmed: NET specialist / MDM and authorised PRRT service plan confirmed. Confirm with the NET specialist before treatment.",
+          "recommendation": "Required NCCP eligibility/service criterion not confirmed: NET specialist / MDM and authorised PRRT service plan confirmed. Confirm with the NET specialist before treatment."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "1–2"
+        },
+        "explanation": "Required NCCP eligibility/service criterion not confirmed: NET specialist / MDM and authorised PRRT service plan confirmed. Confirm with the NET specialist before treatment."
+      },
+      {
+        "id": "PRRT_SSTR",
+        "priority": 20,
+        "when": {
+          "field": "sstr_imaging",
+          "operator": "!=",
+          "value": "uptake_at_least_liver"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Confirm receptor-positive tumour imaging with uptake at least normal liver. Receptor-negative or mixed visceral lesions are not a routine Lutathera pathway.",
+          "recommendation": "Confirm receptor-positive tumour imaging with uptake at least normal liver. Receptor-negative or mixed visceral lesions are not a routine Lutathera pathway."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "2,7"
+        },
+        "explanation": "Confirm receptor-positive tumour imaging with uptake at least normal liver. Receptor-negative or mixed visceral lesions are not a routine Lutathera pathway."
+      },
+      {
+        "id": "PRRT_SSA_PRETREATMENT",
+        "priority": 20,
+        "when": {
+          "field": "fixed_long_acting_ssa_weeks",
+          "operator": "<",
+          "value": 12
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "NCCP eligibility specifies at least 12 weeks of fixed-dose long-acting SSA treatment before PRRT.",
+          "recommendation": "NCCP eligibility specifies at least 12 weeks of fixed-dose long-acting SSA treatment before PRRT."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "1"
+        },
+        "explanation": "NCCP eligibility specifies at least 12 weeks of fixed-dose long-acting SSA treatment before PRRT."
+      },
+      {
         "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
+        "priority": 20,
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -366,19 +1200,21 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "lutetium_177_oxodotreotide"
           ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "message": "NCCP eligibility specifies ECOG 0–2.",
+          "recommendation": "NCCP eligibility specifies ECOG 0–2."
         },
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
         },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+        "explanation": "NCCP eligibility specifies ECOG 0–2."
       },
       {
-        "id": "HYPERSENSITIVITY_EXCLUSION",
-        "priority": 10,
+        "id": "PRRT_EXCLUSION_HYPERSENSITIVITY",
+        "priority": 20,
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -387,201 +1223,389 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "lutetium_177_oxodotreotide"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "message": "Do not administer within this pathway: Known hypersensitivity to Lutathera or excipients. Confirm the appropriate alternative with the specialist.",
+          "recommendation": "Do not administer within this pathway: Known hypersensitivity to Lutathera or excipients. Confirm the appropriate alternative with the specialist."
         },
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
         },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+        "explanation": "Do not administer within this pathway: Known hypersensitivity to Lutathera or excipients. Confirm the appropriate alternative with the specialist."
       },
       {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
-        "priority": 10,
+        "id": "PRRT_EXCLUSION_PREGNANCY",
+        "priority": 20,
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Do not administer within this pathway: Pregnant or pregnancy suspected. Confirm the appropriate alternative with the specialist.",
+          "recommendation": "Do not administer within this pathway: Pregnant or pregnancy suspected. Confirm the appropriate alternative with the specialist."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
+        },
+        "explanation": "Do not administer within this pathway: Pregnant or pregnancy suspected. Confirm the appropriate alternative with the specialist."
+      },
+      {
+        "id": "PRRT_EXCLUSION_BREASTFEEDING",
+        "priority": 20,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Do not administer within this pathway: Breastfeeding. Confirm the appropriate alternative with the specialist.",
+          "recommendation": "Do not administer within this pathway: Breastfeeding. Confirm the appropriate alternative with the specialist."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
+        },
+        "explanation": "Do not administer within this pathway: Breastfeeding. Confirm the appropriate alternative with the specialist."
+      },
+      {
+        "id": "PRRT_EXCLUSION_CURATIVE_SURGERY_CANDIDATE",
+        "priority": 20,
+        "when": {
+          "field": "curative_surgery_candidate",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Do not administer within this pathway: Candidate for curative surgery. Confirm the appropriate alternative with the specialist.",
+          "recommendation": "Do not administer within this pathway: Candidate for curative surgery. Confirm the appropriate alternative with the specialist."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
+        },
+        "explanation": "Do not administer within this pathway: Candidate for curative surgery. Confirm the appropriate alternative with the specialist."
+      },
+      {
+        "id": "PRRT_PREGNANCY_NOT_EXCLUDED",
+        "priority": 20,
+        "when": {
+          "field": "pregnancy_excluded_if_relevant",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Where pregnancy is possible, it must be excluded using an appropriate validated test before Lutathera.",
+          "recommendation": "Where pregnancy is possible, it must be excluded using an appropriate validated test before Lutathera."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "7,12"
+        },
+        "explanation": "Where pregnancy is possible, it must be excluded using an appropriate validated test before Lutathera."
+      },
+      {
+        "id": "PRRT_CAUTION_PRIOR_MARROW_RT_OVER_25_PERCENT",
+        "priority": 20,
+        "when": {
+          "field": "prior_marrow_rt_over_25_percent",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Specialist benefit–risk review and monitoring required: Previous external beam radiation involving more than 25% of marrow. Consider amino-acid volume load in severe heart failure.",
+          "recommendation": "Specialist benefit–risk review and monitoring required: Previous external beam radiation involving more than 25% of marrow. Consider amino-acid volume load in severe heart failure."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
+        },
+        "explanation": "Specialist benefit–risk review and monitoring required: Previous external beam radiation involving more than 25% of marrow. Consider amino-acid volume load in severe heart failure."
+      },
+      {
+        "id": "PRRT_CAUTION_NYHA_III_IV_HEART_FAILURE",
+        "priority": 20,
+        "when": {
+          "field": "nyha_iii_iv_heart_failure",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Specialist benefit–risk review and monitoring required: NYHA III or IV heart failure. Consider amino-acid volume load in severe heart failure.",
+          "recommendation": "Specialist benefit–risk review and monitoring required: NYHA III or IV heart failure. Consider amino-acid volume load in severe heart failure."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
+        },
+        "explanation": "Specialist benefit–risk review and monitoring required: NYHA III or IV heart failure. Consider amino-acid volume load in severe heart failure."
+      },
+      {
+        "id": "PRRT_CAUTION_OTHER_ORGAN_FUNCTION_CONCERN",
+        "priority": 20,
+        "when": {
+          "field": "other_organ_function_concern",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Specialist benefit–risk review and monitoring required: Other renal, hepatic, cardiac or marrow eligibility concern. Consider amino-acid volume load in severe heart failure.",
+          "recommendation": "Specialist benefit–risk review and monitoring required: Other renal, hepatic, cardiac or marrow eligibility concern. Consider amino-acid volume load in severe heart failure."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
+        },
+        "explanation": "Specialist benefit–risk review and monitoring required: Other renal, hepatic, cardiac or marrow eligibility concern. Consider amino-acid volume load in severe heart failure."
+      },
+      {
+        "id": "PRRT_RENAL_LT30",
+        "priority": 20,
         "when": {
           "any": [
             {
-              "field": "pregnancy",
-              "operator": "==",
-              "value": true
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 30
             },
             {
-              "field": "breastfeeding",
+              "field": "lutathera_renal_band",
               "operator": "==",
-              "value": true
+              "value": "lt30"
             }
           ]
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "lutetium_177_oxodotreotide"
           ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "message": "CrCl below 30 mL/min is a formal contraindication; do not administer.",
+          "recommendation": "CrCl below 30 mL/min is a formal contraindication; do not administer."
         },
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2,4"
         },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+        "explanation": "CrCl below 30 mL/min is a formal contraindication; do not administer."
       },
       {
-        "id": "LUTATHERA_RENAL_30_49",
-        "priority": 5,
+        "id": "PRRT_DIALYSIS_REVIEW",
+        "priority": 20,
         "when": {
-          "field": "renal_band",
-          "operator": "==",
-          "value": "30_49"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Moderate renal impairment requires specialist review and enhanced monitoring."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Moderate renal impairment requires specialist review and enhanced monitoring."
-      },
-      {
-        "id": "LUTATHERA_RENAL_LT30",
-        "priority": 5,
-        "when": {
-          "field": "renal_band",
-          "operator": "==",
-          "value": "lt30"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Severe renal impairment is outside the encoded treatment range."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Severe renal impairment is outside the encoded treatment range."
-      },
-      {
-        "id": "LUTATHERA_DIALYSIS",
-        "priority": 5,
-        "when": {
-          "field": "renal_band",
+          "field": "lutathera_renal_band",
           "operator": "==",
           "value": "dialysis"
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "lutetium_177_oxodotreotide"
           ],
-          "message": "Dialysis requires specialist radionuclide-therapy review and is outside the routine pathway."
+          "message": "End-stage renal disease / dialysis has not been studied in the routine source pathway. No automatic dose; specialist radionuclide and renal review is required. CrCl below 30 mL/min is contraindicated.",
+          "recommendation": "End-stage renal disease / dialysis has not been studied in the routine source pathway. No automatic dose; specialist radionuclide and renal review is required. CrCl below 30 mL/min is contraindicated."
         },
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4"
         },
-        "explanation": "Dialysis requires specialist radionuclide-therapy review and is outside the routine pathway."
+        "explanation": "End-stage renal disease / dialysis has not been studied in the routine source pathway. No automatic dose; specialist radionuclide and renal review is required. CrCl below 30 mL/min is contraindicated."
       },
       {
-        "id": "LUTATHERA_LOW_HB",
-        "priority": 5,
-        "when": {
-          "field": "haemoglobin_g_dl",
-          "operator": "<",
-          "value": 8
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Severe anaemia requires withholding and haematological review before radionuclide therapy."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Severe anaemia requires withholding and haematological review before radionuclide therapy."
-      },
-      {
-        "id": "OF590_00642_LUTA_LT30",
+        "id": "PRRT_BASELINE_RENAL_30_39",
         "priority": 20,
         "when": {
-          "field": "lutathera_renal_band",
-          "operator": "in",
-          "value": [
-            "lt30",
-            "dialysis"
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": ">=",
+                      "value": 30
+                    },
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": "<",
+                      "value": 40
+                    }
+                  ]
+                },
+                {
+                  "field": "lutathera_renal_band",
+                  "operator": "==",
+                  "value": "30_39"
+                }
+              ]
+            }
           ]
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "lutetium_177_oxodotreotide"
-          ],
-          "message": "CrCl <30 mL/min: lutetium-177 oxodotreotide is contraindicated; baseline CrCl <40 mL/min is not routinely recommended.",
-          "recommendation": "CrCl <30 mL/min: lutetium-177 oxodotreotide is contraindicated; baseline CrCl <40 mL/min is not routinely recommended."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "CrCl <30 mL/min: lutetium-177 oxodotreotide is contraindicated; baseline CrCl <40 mL/min is not routinely recommended."
-      },
-      {
-        "id": "OF590_00642_LUTA_30_39",
-        "priority": 20,
-        "when": {
-          "field": "lutathera_renal_band",
-          "operator": "==",
-          "value": "30_39"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "lutetium_177_oxodotreotide"
-          ],
-          "message": "Baseline CrCl 30–39 mL/min: treatment is not recommended in the routine source pathway.",
-          "recommendation": "Baseline CrCl 30–39 mL/min: treatment is not recommended in the routine source pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Baseline CrCl 30–39 mL/min: treatment is not recommended in the routine source pathway."
-      },
-      {
-        "id": "OF590_00642_LUTA_HEP_SEV",
-        "priority": 20,
-        "when": {
-          "field": "lutathera_hepatic_band",
-          "operator": "==",
-          "value": "severe"
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "lutetium_177_oxodotreotide"
           ],
-          "message": "Severe hepatic impairment: treat only after careful specialist benefit–risk review.",
-          "recommendation": "Severe hepatic impairment: treat only after careful specialist benefit–risk review."
+          "message": "Baseline CrCl 30 to below 40 mL/min: treatment is not recommended. This is distinct from the formal below-30 contraindication; do not infer a reduced initial activity.",
+          "recommendation": "Baseline CrCl 30 to below 40 mL/min: treatment is not recommended. This is distinct from the formal below-30 contraindication; do not infer a reduced initial activity."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4"
         },
-        "explanation": "Severe hepatic impairment: treat only after careful specialist benefit–risk review."
+        "explanation": "Baseline CrCl 30 to below 40 mL/min: treatment is not recommended. This is distinct from the formal below-30 contraindication; do not infer a reduced initial activity."
       },
       {
-        "id": "OF590_00642_LUTA_RENAL_TOX",
+        "id": "PRRT_RENAL_STAGE_UNKNOWN",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": ">=",
+                      "value": 30
+                    },
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": "<",
+                      "value": 40
+                    }
+                  ]
+                },
+                {
+                  "field": "lutathera_renal_band",
+                  "operator": "==",
+                  "value": "30_39"
+                }
+              ]
+            },
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "CrCl 30 to below 40 requires assessment stage: baseline treatment is not recommended; treatment-emergent renal toxicity requires withholding. Do not automatically treat.",
+          "recommendation": "CrCl 30 to below 40 requires assessment stage: baseline treatment is not recommended; treatment-emergent renal toxicity requires withholding. Do not automatically treat."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4–5"
+        },
+        "explanation": "CrCl 30 to below 40 requires assessment stage: baseline treatment is not recommended; treatment-emergent renal toxicity requires withholding. Do not automatically treat."
+      },
+      {
+        "id": "PRRT_RENAL_TOXICITY_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "on_treatment"
+            },
+            {
+              "any": [
+                {
+                  "field": "lutathera_renal_band",
+                  "operator": "in",
+                  "value": [
+                    "30_39",
+                    "lt30"
+                  ]
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 40
+                },
+                {
+                  "field": "prrt_creatinine_ratio",
+                  "operator": ">=",
+                  "value": 1.4
+                },
+                {
+                  "field": "prrt_crcl_ratio",
+                  "operator": "<=",
+                  "value": 0.6
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Treatment-emergent renal toxicity: CrCl <40, serum creatinine rise at least 40%, or CrCl fall at least 40% from baseline. Withhold until resolution or return to baseline; use the specialist recovery/recurrence pathway.",
+          "recommendation": "Treatment-emergent renal toxicity: CrCl <40, serum creatinine rise at least 40%, or CrCl fall at least 40% from baseline. Withhold until resolution or return to baseline; use the specialist recovery/recurrence pathway."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Treatment-emergent renal toxicity: CrCl <40, serum creatinine rise at least 40%, or CrCl fall at least 40% from baseline. Withhold until resolution or return to baseline; use the specialist recovery/recurrence pathway."
+      },
+      {
+        "id": "PRRT_RENAL_CONFIRMED_HOLD",
         "priority": 20,
         "when": {
           "field": "lutathera_renal_toxicity",
@@ -593,17 +1617,341 @@
           "components": [
             "lutetium_177_oxodotreotide"
           ],
-          "message": "Treatment-emergent renal toxicity: withhold; if recovery occurs, resume at the reduced 3,700 MBq level, and discontinue for recurrence or prolonged non-recovery.",
-          "recommendation": "Treatment-emergent renal toxicity: withhold; if recovery occurs, resume at the reduced 3,700 MBq level, and discontinue for recurrence or prolonged non-recovery."
+          "message": "Clinician-confirmed renal toxicity: withhold until resolution or return to baseline; assess episode history and elapsed dosing interval before considering reduced activity.",
+          "recommendation": "Clinician-confirmed renal toxicity: withhold until resolution or return to baseline; assess episode history and elapsed dosing interval before considering reduced activity."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
         },
-        "explanation": "Treatment-emergent renal toxicity: withhold; if recovery occurs, resume at the reduced 3,700 MBq level, and discontinue for recurrence or prolonged non-recovery."
+        "explanation": "Clinician-confirmed renal toxicity: withhold until resolution or return to baseline; assess episode history and elapsed dosing interval before considering reduced activity."
       },
       {
-        "id": "OF590_00642_LUTA_HEP_TOX",
+        "id": "PRRT_RENAL_RELATIVE_STAGE_UNKNOWN",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "prrt_creatinine_ratio",
+                  "operator": ">=",
+                  "value": 1.4
+                },
+                {
+                  "field": "prrt_crcl_ratio",
+                  "operator": "<=",
+                  "value": 0.6
+                }
+              ]
+            },
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "A relative renal toxicity threshold is reached. Confirm pretreatment baseline and treatment stage; a normal absolute CrCl alone does not establish renal recovery.",
+          "recommendation": "A relative renal toxicity threshold is reached. Confirm pretreatment baseline and treatment stage; a normal absolute CrCl alone does not establish renal recovery."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "A relative renal toxicity threshold is reached. Confirm pretreatment baseline and treatment stage; a normal absolute CrCl alone does not establish renal recovery."
+      },
+      {
+        "id": "PRRT_HB_HOLD",
+        "priority": 20,
+        "when": {
+          "any": [
+            {
+              "field": "haemoglobin_g_dl",
+              "operator": "<",
+              "value": 8
+            },
+            {
+              "field": "life_threatening_anaemia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Withhold PRRT for Hb <8 g/dL or life-threatening anaemia. Confirm severity, recovery, prior episode and treatment timing with the specialist before any resumption.",
+          "recommendation": "Withhold PRRT for Hb <8 g/dL or life-threatening anaemia. Confirm severity, recovery, prior episode and treatment timing with the specialist before any resumption."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4"
+        },
+        "explanation": "Withhold PRRT for Hb <8 g/dL or life-threatening anaemia. Confirm severity, recovery, prior episode and treatment timing with the specialist before any resumption."
+      },
+      {
+        "id": "PRRT_PLATELETS_HOLD",
+        "priority": 20,
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Withhold PRRT for platelets <75 ×10⁹/L. Confirm severity, recovery, prior episode and treatment timing with the specialist before any resumption.",
+          "recommendation": "Withhold PRRT for platelets <75 ×10⁹/L. Confirm severity, recovery, prior episode and treatment timing with the specialist before any resumption."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3"
+        },
+        "explanation": "Withhold PRRT for platelets <75 ×10⁹/L. Confirm severity, recovery, prior episode and treatment timing with the specialist before any resumption."
+      },
+      {
+        "id": "PRRT_ANC_HOLD",
+        "priority": 20,
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Withhold PRRT for ANC <1 ×10⁹/L. Confirm severity, recovery, prior episode and treatment timing with the specialist before any resumption.",
+          "recommendation": "Withhold PRRT for ANC <1 ×10⁹/L. Confirm severity, recovery, prior episode and treatment timing with the specialist before any resumption."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3–4; EMA p4"
+        },
+        "explanation": "Withhold PRRT for ANC <1 ×10⁹/L. Confirm severity, recovery, prior episode and treatment timing with the specialist before any resumption."
+      },
+      {
+        "id": "PRRT_PLATELET_75_BOUNDARY",
+        "priority": 20,
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "==",
+          "value": 75
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "At platelets exactly 75 ×10⁹/L, NCCP Table 3 prints grade 2 as 50–75 while the caution and EMA use <75. Confirm grading with the specialist; no automatic treatment or restart.",
+          "recommendation": "At platelets exactly 75 ×10⁹/L, NCCP Table 3 prints grade 2 as 50–75 while the caution and EMA use <75. Confirm grading with the specialist; no automatic treatment or restart.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2–3; EMA p4"
+        },
+        "explanation": "At platelets exactly 75 ×10⁹/L, NCCP Table 3 prints grade 2 as 50–75 while the caution and EMA use <75. Confirm grading with the specialist; no automatic treatment or restart."
+      },
+      {
+        "id": "PRRT_WBC_LOW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "leucocytes_x10e9_l",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "isolated_lymphopenia",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Leucocytes <2 ×10⁹/L not solely due to lymphopenia: treatment is not recommended without specialist review; inspect differential and marrow reserve.",
+          "recommendation": "Leucocytes <2 ×10⁹/L not solely due to lymphopenia: treatment is not recommended without specialist review; inspect differential and marrow reserve."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
+        },
+        "explanation": "Leucocytes <2 ×10⁹/L not solely due to lymphopenia: treatment is not recommended without specialist review; inspect differential and marrow reserve."
+      },
+      {
+        "id": "PRRT_WBC_CAUSE_UNKNOWN",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "leucocytes_x10e9_l",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "isolated_lymphopenia",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Leucocytes <2 ×10⁹/L: establish whether this is isolated lymphopenia. The exception cannot be assumed from an absent differential.",
+          "recommendation": "Leucocytes <2 ×10⁹/L: establish whether this is isolated lymphopenia. The exception cannot be assumed from an absent differential."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "2"
+        },
+        "explanation": "Leucocytes <2 ×10⁹/L: establish whether this is isolated lymphopenia. The exception cannot be assumed from an absent differential."
+      },
+      {
+        "id": "PRRT_BASELINE_HEPATIC_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "bilirubin_ratio_uln",
+                  "operator": ">",
+                  "value": 3
+                },
+                {
+                  "all": [
+                    {
+                      "field": "albumin_g_l",
+                      "operator": "<",
+                      "value": 30
+                    },
+                    {
+                      "field": "inr",
+                      "operator": ">",
+                      "value": 1.5
+                    }
+                  ]
+                },
+                {
+                  "field": "lutathera_hepatic_band",
+                  "operator": "==",
+                  "value": "severe"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "prrt_assessment_stage",
+                  "operator": "==",
+                  "value": "baseline"
+                },
+                {
+                  "field": "prrt_assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Bilirubin >3×ULN or albumin <30 g/L together with INR >1.5 requires careful baseline benefit–risk review. Confirm baseline versus treatment-emergent abnormality; no automatic starting-dose reduction.",
+          "recommendation": "Bilirubin >3×ULN or albumin <30 g/L together with INR >1.5 requires careful baseline benefit–risk review. Confirm baseline versus treatment-emergent abnormality; no automatic starting-dose reduction."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4–5"
+        },
+        "explanation": "Bilirubin >3×ULN or albumin <30 g/L together with INR >1.5 requires careful baseline benefit–risk review. Confirm baseline versus treatment-emergent abnormality; no automatic starting-dose reduction."
+      },
+      {
+        "id": "PRRT_HEPATIC_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "on_treatment"
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_ratio_uln",
+                  "operator": ">",
+                  "value": 3
+                },
+                {
+                  "all": [
+                    {
+                      "field": "albumin_g_l",
+                      "operator": "<",
+                      "value": 30
+                    },
+                    {
+                      "field": "inr",
+                      "operator": ">",
+                      "value": 1.5
+                    }
+                  ]
+                },
+                {
+                  "field": "lutathera_hepatic_band",
+                  "operator": "==",
+                  "value": "severe"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Treatment-emergent hepatotoxicity at the source thresholds: withhold until resolution or return to baseline; assess reduced-activity, recurrence and interval criteria.",
+          "recommendation": "Treatment-emergent hepatotoxicity at the source thresholds: withhold until resolution or return to baseline; assess reduced-activity, recurrence and interval criteria."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Treatment-emergent hepatotoxicity at the source thresholds: withhold until resolution or return to baseline; assess reduced-activity, recurrence and interval criteria."
+      },
+      {
+        "id": "PRRT_HEPATIC_CONFIRMED_HOLD",
         "priority": 20,
         "when": {
           "field": "lutathera_hepatic_toxicity",
@@ -615,42 +1963,1812 @@
           "components": [
             "lutetium_177_oxodotreotide"
           ],
-          "message": "Severe treatment-emergent hepatic toxicity: withhold and use the source reduce/discontinue pathway.",
-          "recommendation": "Severe treatment-emergent hepatic toxicity: withhold and use the source reduce/discontinue pathway."
+          "message": "Confirmed treatment-emergent hepatotoxicity requires withholding and specialist recovery/recurrence review.",
+          "recommendation": "Confirmed treatment-emergent hepatotoxicity requires withholding and specialist recovery/recurrence review."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
         },
-        "explanation": "Severe treatment-emergent hepatic toxicity: withhold and use the source reduce/discontinue pathway."
+        "explanation": "Confirmed treatment-emergent hepatotoxicity requires withholding and specialist recovery/recurrence review."
+      },
+      {
+        "id": "PRRT_OTHER_G34_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "isolated_lymphopenia",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Other grade 3/4 adverse reaction: withhold until grade 0–2; assess episode history and timing. Isolated lymphopenia is excluded from this automatic dose-modification pathway.",
+          "recommendation": "Other grade 3/4 adverse reaction: withhold until grade 0–2; assess episode history and timing. Isolated lymphopenia is excluded from this automatic dose-modification pathway."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Other grade 3/4 adverse reaction: withhold until grade 0–2; assess episode history and timing. Isolated lymphopenia is excluded from this automatic dose-modification pathway."
+      },
+      {
+        "id": "PRRT_OTHER_LYMPHOPENIA_CONTEXT",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "isolated_lymphopenia",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "For other grade 3/4 toxicity confirm it is not solely lymphopenia before applying the PRRT interruption pathway.",
+          "recommendation": "For other grade 3/4 toxicity confirm it is not solely lymphopenia before applying the PRRT interruption pathway."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5; EMA p5"
+        },
+        "explanation": "For other grade 3/4 toxicity confirm it is not solely lymphopenia before applying the PRRT interruption pathway."
+      },
+      {
+        "id": "PRRT_PLATELET_RECURRENCE",
+        "priority": 20,
+        "when": {
+          "field": "platelet_toxicity_episode_count",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Recurrent grade 2–4 thrombocytopenia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered.",
+          "recommendation": "Recurrent grade 2–4 thrombocytopenia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3"
+        },
+        "explanation": "Recurrent grade 2–4 thrombocytopenia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+      },
+      {
+        "id": "PRRT_PLATELET_UNRECOVERED",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "platelet_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "platelet_toxicity_recovery",
+              "operator": "==",
+              "value": "active"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying grade 2–4 thrombocytopenia has not recovered. Withhold; do not infer recovery from an absent current result.",
+          "recommendation": "Qualifying grade 2–4 thrombocytopenia has not recovered. Withhold; do not infer recovery from an absent current result."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3"
+        },
+        "explanation": "Qualifying grade 2–4 thrombocytopenia has not recovered. Withhold; do not infer recovery from an absent current result."
+      },
+      {
+        "id": "PRRT_PLATELET_LATE_INTERVAL",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "platelet_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": ">",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying grade 2–4 thrombocytopenia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit.",
+          "recommendation": "Qualifying grade 2–4 thrombocytopenia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "4–5"
+        },
+        "explanation": "Qualifying grade 2–4 thrombocytopenia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+      },
+      {
+        "id": "PRRT_PLATELET_16_WEEK_BOUNDARY",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "platelet_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "==",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "recommendation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3"
+        },
+        "explanation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay."
+      },
+      {
+        "id": "PRRT_PLATELET_REDUCED_RESTART_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "on_treatment"
+            },
+            {
+              "field": "platelet_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "platelet_toxicity_recovery",
+              "operator": "==",
+              "value": "recovered"
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "<",
+              "value": 16
+            },
+            {
+              "field": "prrt_previous_activity_mbq",
+              "operator": "==",
+              "value": 7400
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "After recovery from a first grade 2–4 thrombocytopenia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "recommendation": "After recovery from a first grade 2–4 thrombocytopenia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3"
+        },
+        "explanation": "After recovery from a first grade 2–4 thrombocytopenia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction."
+      },
+      {
+        "id": "PRRT_PLATELET_RECOVERY_CONTEXT",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "platelet_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "platelet_toxicity_recovery",
+                  "operator": "missing"
+                },
+                {
+                  "field": "weeks_since_last_prrt",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_previous_activity_mbq",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Before resuming after grade 2–4 thrombocytopenia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "recommendation": "Before resuming after grade 2–4 thrombocytopenia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3"
+        },
+        "explanation": "Before resuming after grade 2–4 thrombocytopenia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose."
+      },
+      {
+        "id": "PRRT_ANAEMIA_RECURRENCE",
+        "priority": 20,
+        "when": {
+          "field": "anaemia_toxicity_episode_count",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Recurrent grade 3–4 anaemia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered.",
+          "recommendation": "Recurrent grade 3–4 anaemia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4"
+        },
+        "explanation": "Recurrent grade 3–4 anaemia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+      },
+      {
+        "id": "PRRT_ANAEMIA_UNRECOVERED",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "anaemia_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "anaemia_toxicity_recovery",
+              "operator": "==",
+              "value": "active"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying grade 3–4 anaemia has not recovered. Withhold; do not infer recovery from an absent current result.",
+          "recommendation": "Qualifying grade 3–4 anaemia has not recovered. Withhold; do not infer recovery from an absent current result."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4"
+        },
+        "explanation": "Qualifying grade 3–4 anaemia has not recovered. Withhold; do not infer recovery from an absent current result."
+      },
+      {
+        "id": "PRRT_ANAEMIA_LATE_INTERVAL",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "anaemia_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": ">",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying grade 3–4 anaemia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit.",
+          "recommendation": "Qualifying grade 3–4 anaemia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "4–5"
+        },
+        "explanation": "Qualifying grade 3–4 anaemia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+      },
+      {
+        "id": "PRRT_ANAEMIA_16_WEEK_BOUNDARY",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "anaemia_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "==",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "recommendation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4"
+        },
+        "explanation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay."
+      },
+      {
+        "id": "PRRT_ANAEMIA_REDUCED_RESTART_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "on_treatment"
+            },
+            {
+              "field": "anaemia_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "anaemia_toxicity_recovery",
+              "operator": "==",
+              "value": "recovered"
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "<",
+              "value": 16
+            },
+            {
+              "field": "prrt_previous_activity_mbq",
+              "operator": "==",
+              "value": 7400
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "After recovery from a first grade 3–4 anaemia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "recommendation": "After recovery from a first grade 3–4 anaemia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4"
+        },
+        "explanation": "After recovery from a first grade 3–4 anaemia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction."
+      },
+      {
+        "id": "PRRT_ANAEMIA_RECOVERY_CONTEXT",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "anaemia_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "anaemia_toxicity_recovery",
+                  "operator": "missing"
+                },
+                {
+                  "field": "weeks_since_last_prrt",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_previous_activity_mbq",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Before resuming after grade 3–4 anaemia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "recommendation": "Before resuming after grade 3–4 anaemia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "4"
+        },
+        "explanation": "Before resuming after grade 3–4 anaemia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose."
+      },
+      {
+        "id": "PRRT_NEUTROPHIL_RECURRENCE",
+        "priority": 20,
+        "when": {
+          "field": "neutrophil_toxicity_episode_count",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Recurrent grade 3–4 neutropenia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered.",
+          "recommendation": "Recurrent grade 3–4 neutropenia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3–4"
+        },
+        "explanation": "Recurrent grade 3–4 neutropenia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+      },
+      {
+        "id": "PRRT_NEUTROPHIL_UNRECOVERED",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "neutrophil_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "neutrophil_toxicity_recovery",
+              "operator": "==",
+              "value": "active"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying grade 3–4 neutropenia has not recovered. Withhold; do not infer recovery from an absent current result.",
+          "recommendation": "Qualifying grade 3–4 neutropenia has not recovered. Withhold; do not infer recovery from an absent current result."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3–4"
+        },
+        "explanation": "Qualifying grade 3–4 neutropenia has not recovered. Withhold; do not infer recovery from an absent current result."
+      },
+      {
+        "id": "PRRT_NEUTROPHIL_LATE_INTERVAL",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "neutrophil_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": ">",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying grade 3–4 neutropenia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit.",
+          "recommendation": "Qualifying grade 3–4 neutropenia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "4–5"
+        },
+        "explanation": "Qualifying grade 3–4 neutropenia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+      },
+      {
+        "id": "PRRT_NEUTROPHIL_16_WEEK_BOUNDARY",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "neutrophil_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "==",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "recommendation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3–4"
+        },
+        "explanation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay."
+      },
+      {
+        "id": "PRRT_NEUTROPHIL_REDUCED_RESTART_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "on_treatment"
+            },
+            {
+              "field": "neutrophil_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "neutrophil_toxicity_recovery",
+              "operator": "==",
+              "value": "recovered"
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "<",
+              "value": 16
+            },
+            {
+              "field": "prrt_previous_activity_mbq",
+              "operator": "==",
+              "value": 7400
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "After recovery from a first grade 3–4 neutropenia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "recommendation": "After recovery from a first grade 3–4 neutropenia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3–4"
+        },
+        "explanation": "After recovery from a first grade 3–4 neutropenia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction."
+      },
+      {
+        "id": "PRRT_NEUTROPHIL_RECOVERY_CONTEXT",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "neutrophil_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "neutrophil_toxicity_recovery",
+                  "operator": "missing"
+                },
+                {
+                  "field": "weeks_since_last_prrt",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_previous_activity_mbq",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Before resuming after grade 3–4 neutropenia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "recommendation": "Before resuming after grade 3–4 neutropenia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3–4"
+        },
+        "explanation": "Before resuming after grade 3–4 neutropenia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose."
+      },
+      {
+        "id": "PRRT_RENAL_RECURRENCE",
+        "priority": 20,
+        "when": {
+          "field": "renal_toxicity_episode_count",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Recurrent renal toxicity: permanently discontinue Lutathera according to the source, even if the current measurement has recovered.",
+          "recommendation": "Recurrent renal toxicity: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Recurrent renal toxicity: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+      },
+      {
+        "id": "PRRT_RENAL_UNRECOVERED",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "renal_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "renal_toxicity_recovery",
+              "operator": "==",
+              "value": "active"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying renal toxicity has not recovered. Withhold; do not infer recovery from an absent current result.",
+          "recommendation": "Qualifying renal toxicity has not recovered. Withhold; do not infer recovery from an absent current result."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Qualifying renal toxicity has not recovered. Withhold; do not infer recovery from an absent current result."
+      },
+      {
+        "id": "PRRT_RENAL_LATE_INTERVAL",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "renal_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": ">",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying renal toxicity requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit.",
+          "recommendation": "Qualifying renal toxicity requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "4–5"
+        },
+        "explanation": "Qualifying renal toxicity requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+      },
+      {
+        "id": "PRRT_RENAL_16_WEEK_BOUNDARY",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "renal_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "==",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "recommendation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay."
+      },
+      {
+        "id": "PRRT_RENAL_REDUCED_RESTART_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "on_treatment"
+            },
+            {
+              "field": "renal_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "renal_toxicity_recovery",
+              "operator": "==",
+              "value": "recovered"
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "<",
+              "value": 16
+            },
+            {
+              "field": "prrt_previous_activity_mbq",
+              "operator": "==",
+              "value": 7400
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "After recovery from a first renal toxicity episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "recommendation": "After recovery from a first renal toxicity episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "After recovery from a first renal toxicity episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction."
+      },
+      {
+        "id": "PRRT_RENAL_RECOVERY_CONTEXT",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "renal_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "renal_toxicity_recovery",
+                  "operator": "missing"
+                },
+                {
+                  "field": "weeks_since_last_prrt",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_previous_activity_mbq",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Before resuming after renal toxicity, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "recommendation": "Before resuming after renal toxicity, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Before resuming after renal toxicity, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose."
+      },
+      {
+        "id": "PRRT_HEPATIC_RECURRENCE",
+        "priority": 20,
+        "when": {
+          "field": "hepatic_toxicity_episode_count",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Recurrent hepatotoxicity: permanently discontinue Lutathera according to the source, even if the current measurement has recovered.",
+          "recommendation": "Recurrent hepatotoxicity: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Recurrent hepatotoxicity: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+      },
+      {
+        "id": "PRRT_HEPATIC_UNRECOVERED",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "hepatic_toxicity_recovery",
+              "operator": "==",
+              "value": "active"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying hepatotoxicity has not recovered. Withhold; do not infer recovery from an absent current result.",
+          "recommendation": "Qualifying hepatotoxicity has not recovered. Withhold; do not infer recovery from an absent current result."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Qualifying hepatotoxicity has not recovered. Withhold; do not infer recovery from an absent current result."
+      },
+      {
+        "id": "PRRT_HEPATIC_LATE_INTERVAL",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": ">",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying hepatotoxicity requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit.",
+          "recommendation": "Qualifying hepatotoxicity requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "4–5"
+        },
+        "explanation": "Qualifying hepatotoxicity requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+      },
+      {
+        "id": "PRRT_HEPATIC_16_WEEK_BOUNDARY",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "==",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "recommendation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay."
+      },
+      {
+        "id": "PRRT_HEPATIC_REDUCED_RESTART_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "on_treatment"
+            },
+            {
+              "field": "hepatic_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "hepatic_toxicity_recovery",
+              "operator": "==",
+              "value": "recovered"
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "<",
+              "value": 16
+            },
+            {
+              "field": "prrt_previous_activity_mbq",
+              "operator": "==",
+              "value": 7400
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "After recovery from a first hepatotoxicity episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "recommendation": "After recovery from a first hepatotoxicity episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "After recovery from a first hepatotoxicity episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction."
+      },
+      {
+        "id": "PRRT_HEPATIC_RECOVERY_CONTEXT",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "hepatic_toxicity_recovery",
+                  "operator": "missing"
+                },
+                {
+                  "field": "weeks_since_last_prrt",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_previous_activity_mbq",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Before resuming after hepatotoxicity, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "recommendation": "Before resuming after hepatotoxicity, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Before resuming after hepatotoxicity, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose."
+      },
+      {
+        "id": "PRRT_OTHER_RECURRENCE",
+        "priority": 20,
+        "when": {
+          "field": "other_toxicity_episode_count",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Recurrent other grade 3–4 toxicity, excluding isolated lymphopenia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered.",
+          "recommendation": "Recurrent other grade 3–4 toxicity, excluding isolated lymphopenia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Recurrent other grade 3–4 toxicity, excluding isolated lymphopenia: permanently discontinue Lutathera according to the source, even if the current measurement has recovered."
+      },
+      {
+        "id": "PRRT_OTHER_UNRECOVERED",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "other_toxicity_recovery",
+              "operator": "==",
+              "value": "active"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying other grade 3–4 toxicity, excluding isolated lymphopenia has not recovered. Withhold; do not infer recovery from an absent current result.",
+          "recommendation": "Qualifying other grade 3–4 toxicity, excluding isolated lymphopenia has not recovered. Withhold; do not infer recovery from an absent current result."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Qualifying other grade 3–4 toxicity, excluding isolated lymphopenia has not recovered. Withhold; do not infer recovery from an absent current result."
+      },
+      {
+        "id": "PRRT_OTHER_LATE_INTERVAL",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": ">",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Qualifying other grade 3–4 toxicity, excluding isolated lymphopenia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit.",
+          "recommendation": "Qualifying other grade 3–4 toxicity, excluding isolated lymphopenia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "4–5"
+        },
+        "explanation": "Qualifying other grade 3–4 toxicity, excluding isolated lymphopenia requiring a dosing interval beyond 16 weeks: permanently discontinue (EMA). NCCP tables use “treatment delay of 16 weeks or longer”; do not restart beyond this limit."
+      },
+      {
+        "id": "PRRT_OTHER_16_WEEK_BOUNDARY",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_episode_count",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "==",
+              "value": 16
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "recommendation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Exactly 16 weeks since the last infusion: NCCP tables say stop for a treatment delay ≥16 weeks, but its schedule permits an interval up to 16 weeks and EMA says beyond 16 weeks. Withhold automatic restart pending specialist reconciliation of interval versus delay."
+      },
+      {
+        "id": "PRRT_OTHER_REDUCED_RESTART_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "on_treatment"
+            },
+            {
+              "field": "other_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "other_toxicity_recovery",
+              "operator": "==",
+              "value": "recovered"
+            },
+            {
+              "field": "weeks_since_last_prrt",
+              "operator": "<",
+              "value": 16
+            },
+            {
+              "field": "prrt_previous_activity_mbq",
+              "operator": "==",
+              "value": 7400
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "After recovery from a first other grade 3–4 toxicity, excluding isolated lymphopenia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "recommendation": "After recovery from a first other grade 3–4 toxicity, excluding isolated lymphopenia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "After recovery from a first other grade 3–4 toxicity, excluding isolated lymphopenia episode, the source restart level is 3,700 MBq. The authorised PRRT specialist must confirm current labs, all concurrent toxicities, activity history and timing; this is not an administration instruction."
+      },
+      {
+        "id": "PRRT_OTHER_RECOVERY_CONTEXT",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "other_toxicity_episode_count",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "other_toxicity_recovery",
+                  "operator": "missing"
+                },
+                {
+                  "field": "weeks_since_last_prrt",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_previous_activity_mbq",
+                  "operator": "missing"
+                },
+                {
+                  "field": "prrt_assessment_stage",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Before resuming after other grade 3–4 toxicity, excluding isolated lymphopenia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "recommendation": "Before resuming after other grade 3–4 toxicity, excluding isolated lymphopenia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "5"
+        },
+        "explanation": "Before resuming after other grade 3–4 toxicity, excluding isolated lymphopenia, record recovery, total interval since last infusion, documented prior activity and treatment stage. Unknown data cannot authorise a reduced dose."
+      },
+      {
+        "id": "PRRT_REESCALATION_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_assessment_stage",
+              "operator": "==",
+              "value": "on_treatment"
+            },
+            {
+              "field": "prrt_previous_activity_mbq",
+              "operator": "==",
+              "value": 3700
+            },
+            {
+              "field": "prrt_reduced_infusion_tolerated",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "The source permits the following infusion to return to 7,400 MBq only if the reduced infusion caused no qualifying toxicity. Confirm all toxicity domains, recovery and the allowed interval with the PRRT specialist; no automatic re-escalation.",
+          "recommendation": "The source permits the following infusion to return to 7,400 MBq only if the reduced infusion caused no qualifying toxicity. Confirm all toxicity domains, recovery and the allowed interval with the PRRT specialist; no automatic re-escalation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3–5"
+        },
+        "explanation": "The source permits the following infusion to return to 7,400 MBq only if the reduced infusion caused no qualifying toxicity. Confirm all toxicity domains, recovery and the allowed interval with the PRRT specialist; no automatic re-escalation."
+      },
+      {
+        "id": "PRRT_PRIOR_ACTIVITY_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prrt_previous_activity_mbq",
+              "operator": "exists"
+            },
+            {
+              "field": "prrt_previous_activity_mbq",
+              "operator": "not_in",
+              "value": [
+                3700,
+                7400
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "The documented previous activity differs from the two source levels (7,400 and 3,700 MBq). Reconcile actual administered activity and specialist plan; do not calculate a new activity automatically.",
+          "recommendation": "The documented previous activity differs from the two source levels (7,400 and 3,700 MBq). Reconcile actual administered activity and specialist plan; do not calculate a new activity automatically.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "3–5"
+        },
+        "explanation": "The documented previous activity differs from the two source levels (7,400 and 3,700 MBq). Reconcile actual administered activity and specialist plan; do not calculate a new activity automatically."
+      },
+      {
+        "id": "PRRT_SUPPORT_AMINO_ACID_PROTECTION_CONFIRMED",
+        "priority": 20,
+        "when": {
+          "field": "amino_acid_protection_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Do not proceed until the authorised service has resolved: Four-hour renal-protective lysine/arginine infusion confirmed (starts 30 min before PRRT). Amino-acid protection must not be reduced when PRRT activity is reduced.",
+          "recommendation": "Do not proceed until the authorised service has resolved: Four-hour renal-protective lysine/arginine infusion confirmed (starts 30 min before PRRT). Amino-acid protection must not be reduced when PRRT activity is reduced."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "3,7,11"
+        },
+        "explanation": "Do not proceed until the authorised service has resolved: Four-hour renal-protective lysine/arginine infusion confirmed (starts 30 min before PRRT). Amino-acid protection must not be reduced when PRRT activity is reduced."
+      },
+      {
+        "id": "PRRT_SUPPORT_ANTIEMETIC_TIMING_CONFIRMED",
+        "priority": 20,
+        "when": {
+          "field": "antiemetic_timing_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Do not proceed until the authorised service has resolved: 5-HT3 antiemetic at least 30 min before amino acids confirmed. Amino-acid protection must not be reduced when PRRT activity is reduced.",
+          "recommendation": "Do not proceed until the authorised service has resolved: 5-HT3 antiemetic at least 30 min before amino acids confirmed. Amino-acid protection must not be reduced when PRRT activity is reduced."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "3,7,11"
+        },
+        "explanation": "Do not proceed until the authorised service has resolved: 5-HT3 antiemetic at least 30 min before amino acids confirmed. Amino-acid protection must not be reduced when PRRT activity is reduced."
+      },
+      {
+        "id": "PRRT_SUPPORT_POTASSIUM_CHECKED_AND_CORRECTED",
+        "priority": 20,
+        "when": {
+          "field": "potassium_checked_and_corrected",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Do not proceed until the authorised service has resolved: Serum potassium checked before amino acids and any hyperkalaemia corrected. Amino-acid protection must not be reduced when PRRT activity is reduced.",
+          "recommendation": "Do not proceed until the authorised service has resolved: Serum potassium checked before amino acids and any hyperkalaemia corrected. Amino-acid protection must not be reduced when PRRT activity is reduced."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "3,7,11"
+        },
+        "explanation": "Do not proceed until the authorised service has resolved: Serum potassium checked before amino acids and any hyperkalaemia corrected. Amino-acid protection must not be reduced when PRRT activity is reduced."
+      },
+      {
+        "id": "PRRT_RADIATION_PLAN",
+        "priority": 20,
+        "when": {
+          "field": "radiation_discharge_plan_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "An individual radiation-protection, contact, toilet/waste, travel and discharge plan is required from the licensed service. General advice does not determine safe discharge.",
+          "recommendation": "An individual radiation-protection, contact, toilet/waste, travel and discharge plan is required from the licensed service. General advice does not determine safe discharge."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "9; patient leaflet48–49"
+        },
+        "explanation": "An individual radiation-protection, contact, toilet/waste, travel and discharge plan is required from the licensed service. General advice does not determine safe discharge."
+      },
+      {
+        "id": "PRRT_LONG_SSA_TIMING",
+        "priority": 20,
+        "when": {
+          "field": "days_since_long_acting_ssa",
+          "operator": "<",
+          "value": 30
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Long-acting SSA within 30 days before PRRT may reduce receptor targeting. Withhold automatic administration and obtain the NET/PRRT service plan; do not leave carcinoid symptoms unmanaged.",
+          "recommendation": "Long-acting SSA within 30 days before PRRT may reduce receptor targeting. Withhold automatic administration and obtain the NET/PRRT service plan; do not leave carcinoid symptoms unmanaged."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "6"
+        },
+        "explanation": "Long-acting SSA within 30 days before PRRT may reduce receptor targeting. Withhold automatic administration and obtain the NET/PRRT service plan; do not leave carcinoid symptoms unmanaged."
+      },
+      {
+        "id": "PRRT_SHORT_SSA_TIMING",
+        "priority": 20,
+        "when": {
+          "field": "hours_since_short_acting_ssa",
+          "operator": "<",
+          "value": 24
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Short-acting SSA within 24 hours before PRRT requires specialist timing review. Do not automatically administer PRRT or stop necessary symptom control without a service plan.",
+          "recommendation": "Short-acting SSA within 24 hours before PRRT requires specialist timing review. Do not automatically administer PRRT or stop necessary symptom control without a service plan."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "6"
+        },
+        "explanation": "Short-acting SSA within 24 hours before PRRT requires specialist timing review. Do not automatically administer PRRT or stop necessary symptom control without a service plan."
+      },
+      {
+        "id": "PRRT_CRISIS_RISK",
+        "priority": 20,
+        "when": {
+          "field": "carcinoid_crisis_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Functioning NETs, high burden or poor syndrome control increase hormonal-crisis risk. Confirm prevention/rescue and whether overnight observation is appropriate.",
+          "recommendation": "Functioning NETs, high burden or poor syndrome control increase hormonal-crisis risk. Confirm prevention/rescue and whether overnight observation is appropriate."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "7; EMA p9"
+        },
+        "explanation": "Functioning NETs, high burden or poor syndrome control increase hormonal-crisis risk. Confirm prevention/rescue and whether overnight observation is appropriate."
+      },
+      {
+        "id": "PRRT_CRISIS_EMERGENCY",
+        "priority": 20,
+        "when": {
+          "field": "suspected_hormonal_crisis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Suspected hormonal/carcinoid crisis: urgent clinical management under the service emergency protocol. This assessment does not calculate crisis medicines.",
+          "recommendation": "Suspected hormonal/carcinoid crisis: urgent clinical management under the service emergency protocol. This assessment does not calculate crisis medicines."
+        },
+        "source": {
+          "document": "NCCP 00642 v2, 27 May 2025",
+          "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+          "page": "7; EMA p9"
+        },
+        "explanation": "Suspected hormonal/carcinoid crisis: urgent clinical management under the service emergency protocol. This assessment does not calculate crisis medicines."
+      },
+      {
+        "id": "PRRT_SEVERE_INFUSION_REACTION",
+        "priority": 20,
+        "when": {
+          "field": "severe_infusion_hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Stop the ongoing Lutathera infusion immediately and institute urgent hypersensitivity management; specialist review is required before any further exposure.",
+          "recommendation": "Stop the ongoing Lutathera infusion immediately and institute urgent hypersensitivity management; specialist review is required before any further exposure."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "8"
+        },
+        "explanation": "Stop the ongoing Lutathera infusion immediately and institute urgent hypersensitivity management; specialist review is required before any further exposure."
+      },
+      {
+        "id": "PRRT_STEROID_INTERACTION",
+        "priority": 20,
+        "when": {
+          "field": "repeated_high_dose_glucocorticoids",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Repeated high-dose glucocorticoids can reduce SSTR2 expression. Review receptor uptake and necessity. Corticosteroids are not first-line preventive antiemetics; any rescue dose and timing require the specialist plan.",
+          "recommendation": "Repeated high-dose glucocorticoids can reduce SSTR2 expression. Review receptor uptake and necessity. Corticosteroids are not first-line preventive antiemetics; any rescue dose and timing require the specialist plan."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "12"
+        },
+        "explanation": "Repeated high-dose glucocorticoids can reduce SSTR2 expression. Review receptor uptake and necessity. Corticosteroids are not first-line preventive antiemetics; any rescue dose and timing require the specialist plan."
+      },
+      {
+        "id": "PRRT_INTERCURRENT_ILLNESS",
+        "priority": 20,
+        "when": {
+          "field": "intercurrent_illness_increasing_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Resolve or stabilise an intercurrent illness that increases PRRT risk before resuming. Confirm with the specialist.",
+          "recommendation": "Resolve or stabilise an intercurrent illness that increases PRRT risk before resuming. Confirm with the specialist."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "5"
+        },
+        "explanation": "Resolve or stabilise an intercurrent illness that increases PRRT risk before resuming. Confirm with the specialist."
+      },
+      {
+        "id": "PRRT_MAJOR_SURGERY_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "recent_major_surgery",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "weeks_since_major_surgery",
+              "operator": "<",
+              "value": 12
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "The EMA SmPC requires PRRT to be withheld for 12 weeks after major surgery; confirm healing and specialist reassessment.",
+          "recommendation": "The EMA SmPC requires PRRT to be withheld for 12 weeks after major surgery; confirm healing and specialist reassessment."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "5"
+        },
+        "explanation": "The EMA SmPC requires PRRT to be withheld for 12 weeks after major surgery; confirm healing and specialist reassessment."
+      },
+      {
+        "id": "PRRT_MAJOR_SURGERY_UNKNOWN",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "recent_major_surgery",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "weeks_since_major_surgery",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lutetium_177_oxodotreotide"
+          ],
+          "message": "Record time since major surgery: EMA requires a 12-week postoperative interruption.",
+          "recommendation": "Record time since major surgery: EMA requires a 12-week postoperative interruption."
+        },
+        "source": {
+          "document": "EMA Lutathera product information, updated 14 August 2026",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf",
+          "page": "5"
+        },
+        "explanation": "Record time since major surgery: EMA requires a 12-week postoperative interruption."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and organ function appropriate for the selected treatment"
+    "Adults with progressive unresectable/metastatic well-differentiated G1/G2 SSTR-positive GEP-NET; receptor imaging uptake at least normal liver (EMA).",
+    "NCCP specifies progression on standard octreotide and at least 12 weeks on fixed-dose long-acting SSA.",
+    "ECOG 0–2; adequate renal, hepatic, marrow and cardiac function; individual NET MDM/specialist plan and licensed PRRT service."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source"
+    "Known hypersensitivity to Lutathera or excipients.",
+    "Curative-surgery candidates are outside this NCCP indication.",
+    "CrCl below 30 mL/min is contraindicated; baseline CrCl 30 to below 40 is not recommended, a distinct category.",
+    "Established/suspected pregnancy or pregnancy not excluded where relevant; breastfeeding must be stopped according to specialist advice."
   ],
   "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Treatment-specific toxicity monitoring before each administration/cycle"
+    "Baseline FBC, renal and liver profile, cardiac ECHO or MUGA, and pregnancy test where relevant (NCCP p3).",
+    "FBC, renal and liver tests at least once 2–4 weeks before each infusion AND shortly before administration; every two weeks between infusions (NCCP p3).",
+    "After the final infusion: FBC/renal/liver tests every four weeks for at least three months, then every three months for the following year (NCCP p3). EMA specifies every six months thereafter; the Irish regimen is more intensive and is retained.",
+    "Serum creatinine and Cockcroft–Gault CrCl at baseline, during treatment and for at least the first year afterwards. Include albumin and INR for the hepatic criterion.",
+    "Potassium before each amino-acid infusion; correct hyperkalaemia and repeat before infusion if previously clinically significant. Monitor vital signs; ECG before discharge where indicated by the hyperkalaemia pathway (EMA p11).",
+    "Disease imaging and tumour markers are directed by the consultant treatment plan; no universal fixed scan or marker timetable is assumed.",
+    "Monitor delayed marrow effects including MDS/acute leukaemia and renal injury; source follow-up is not ended when the four-cycle wallet is complete."
   ],
   "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
+    "Structured rules assess indication, source-specific renal/hepatic/marrow thresholds, relative renal change, recovery, recurrence and timing. All PRRT administration and activity changes remain specialist decisions.",
+    "First qualifying toxicity: withhold to the source recovery threshold; source resumption level is 3,700 MBq. If that reduced infusion does not produce qualifying toxicity, a subsequent infusion may return to 7,400 MBq. No numerical activity is automatically authorised.",
+    "Recurrent qualifying toxicity permanently stops treatment. A toxicity-related interval beyond 16 weeks stops treatment under EMA. At exactly 16 weeks, NCCP wording (delay ≥16 weeks) conflicts with its own schedule and EMA (interval beyond 16 weeks); specialist reconciliation is explicitly required.",
+    "Platelets exactly 75 ×10⁹/L have a printed NCCP Table 3 versus caution/EMA boundary conflict. The tool requests review instead of inferring grade/restart. ANC <1 ×10⁹/L follows the continuous EMA band, avoiding the NCCP printed 0.99-to-1.0 gap.",
+    "The generic eGFR/CrCl 30–49 band has been removed; use actual-body-weight Cockcroft–Gault values. Missing baseline measurements never imply no relative renal change."
   ],
   "supportive_care": {
-    "emetogenic_risk": "minimal",
-    "script_id": "nccp-minimal-no-routine-prophylaxis",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "emetogenic_risk": "moderate",
+    "script_id": "nccp-prrt-v08437",
+    "mapping_source": "NCCP 00642 v2 pp5–7; EMA Lutathera SmPC 4.2/4.4/4.5 (14 August 2026)",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf",
+    "mapping_basis": "PRRT-specific antiemetic and renal-protection pathway. Do not use a generic dexamethasone-containing moderate-risk prescription.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
+    "supportive_medications_label": "PRRT-specific antiemetic and amino-acid protection plan",
+    "specialist_plan_required": true,
+    "regimen_specific_instructions": [
+      "5-HT3 antagonist at least 30 minutes before amino-acid infusion; additional antiemetics per solution/service. Corticosteroids are not first-line preventive antiemetics.",
+      "L-lysine/L-arginine renal protection IV over four hours beginning 30 minutes before PRRT. Do not reduce amino-acid dose when PRRT activity is reduced.",
+      "Standard preferred solution: L-lysine HCl 25 g plus L-arginine HCl 25 g in 1 L; prescribed/prepared by the authorised service. Check potassium and fluid/heart-failure risks.",
+      "Long-acting SSA should be avoided in the preceding 30 days; short-acting SSA until 24 hours before only. NCCP permits long-acting SSA 24 hours after, or the same evening after day-case PRRT; follow the written service plan.",
+      "Repeated high-dose glucocorticoids may downregulate SSTR2. EMA rescue antiemetic steroid is not given before PRRT or within one hour after infusion ends.",
+      "Carcinoid/hormonal crisis prevention and emergency treatment, hydration, radiation protection and discharge restrictions follow the licensed service plan."
+    ]
   }
 }

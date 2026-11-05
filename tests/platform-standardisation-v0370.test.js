@@ -4,6 +4,7 @@ const assert = require('assert');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
+const NET37Inputs = require('./helpers/neuroendocrine-inputs-v08437.cjs');
 const protocolRoot = path.join(root, 'protocols');
 const validSections = new Set([
   'haem_plasma_cell_disorders',
@@ -115,6 +116,7 @@ for (const { file, data } of protocols) {
   const metadata = data.metadata || {};
   const id = data.protocol_id;
   const code = String(metadata.nccp_regimen_code);
+  NET37Inputs.validateProtocol(data);
   const normalisedTitle = String(metadata.title || '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, ' ')
@@ -179,7 +181,8 @@ for (const { file, data } of protocols) {
   const definitions = data.input_definitions || {};
   const rules = data.rule_engine?.rules || [];
   for (const [field, def] of Object.entries(definitions)) {
-    if (trueGradeField(field, def)) {
+    const sourceGrade = NET37Inputs.sourceGrade(data, field, def);
+    if (!sourceGrade && trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
@@ -200,7 +203,9 @@ for (const { file, data } of protocols) {
       const lungV29Source=metadata.sactcheck_encoding_version==='0.84.29'&&['00284','00311','00587','00388','00614','00319','00232','00259','00203','00222'].includes(code);
       const lungV28Source=metadata.sactcheck_encoding_version==='0.84.28'&&['00281','00310','00304','00339','00343','00317','00318','00271','00280','00621'].includes(code);
       const lungV27Source=metadata.sactcheck_encoding_version==='0.84.27'&&['00483','00484','00712','00792','00849','00713','00714','00568','00569','00579'].includes(code);
-      if(code==='00216') {
+      if(code==='00505') {
+        require('./helpers/captem-grading-v08437.cjs').check(data,field,def);
+      }else if(code==='00216') {
         require('./helpers/capecitabine-grading-v08436.cjs').check(data,field,def);
       }else if(code==='00692') {
         require('./helpers/folfox4-grading-v08436.cjs').check(data,field,def);
@@ -240,7 +245,8 @@ for (const { file, data } of protocols) {
       if(!antibodyV34Source && !oralV34Source && !pldSource && !newSourceGrade && !lungSource && !targetedV24Source && !targetedV25Source && !lungV26Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
-      const sourceHfs = (code==='00890' && field==='ppes_grade') || (oralV34Source&&code==='00244'&&field==='hfsr_grade') || (['00555','00783','00691'].includes(code)&&['hand_foot_grade','hand_foot_worst_grade'].includes(field)) || (['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field)) || (code === '00217' && field === 'hand_foot_grade');
+      const net37Hfs = NET37Inputs.handFoot(data, field, def);
+      const sourceHfs = net37Hfs || (code==='00890' && field==='ppes_grade') || (oralV34Source&&code==='00244'&&field==='hfsr_grade') || (['00555','00783','00691'].includes(code)&&['hand_foot_grade','hand_foot_worst_grade'].includes(field)) || (['00216','00586','00623','00505'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field)) || (code === '00217' && field === 'hand_foot_grade');
       const sourceNausea = code === '00794' && field === 'nausea_grade';
       const expectedGrades = code==='00702'&&field==='hyperuricaemia_grade' ? [0,1,3,4] : code==='00947' && field.endsWith('_event_peak_grade') ? [2,3,4] : sourceNausea ? [0,1,2,3] : ['00322','00588'].includes(code) && field === 'febrile_neutropenia_grade' ? [0,3,4] : sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
       if (everolimusSource) {
@@ -255,7 +261,7 @@ for (const { file, data } of protocols) {
       const guide = ctcae.guide({ ...def, id: field });
       assert(guide && guide.grades.length >= expectedGrades.length, `${code}/${field} has no rendered CTCAE grade guide`);
       guide.grades.forEach(item => assert(item.description, `${code}/${field} Grade ${item.grade} has no explanation`));
-      if((code==='00216'&&require('./helpers/capecitabine-grading-v08436.cjs').sourceFields.has(field))||code==='00692'||antibodyV34Source||oralV34Source||lungSource||targetedV24Source||targetedV25Source)assert(guide.sourceSpecific, 'Source-specific grading must override generic descriptors');
+      if((code==='00505'&&require('./helpers/captem-grading-v08437.cjs').sourceFields.has(field))||(code==='00216'&&require('./helpers/capecitabine-grading-v08436.cjs').sourceFields.has(field))||code==='00692'||antibodyV34Source||oralV34Source||lungSource||targetedV24Source||targetedV25Source)assert(guide.sourceSpecific, 'Source-specific grading must override generic descriptors');
       const fieldText = `${field} ${def.label || ''}`.toLowerCase();
       if(!antibodyV34Source&&!oralV34Source&&!lungSource&&!targetedV24Source && !targetedV25Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source){
       if (/non[-_ ]?ha?em|non[-_ ]?hemat|non[-_ ]?haemat/.test(fieldText)) {
@@ -278,6 +284,7 @@ for (const { file, data } of protocols) {
 
     // These fields qualify the age/reuse of a GFR estimate; they are not GFR measurements.
     if(['00310','00849','00430','00251','00261','00318','00579','00713','00689','00908','00271','00280','00319'].includes(code) && ['isotope_creatinine_percent_baseline','creatinine_sample_age_hours','creatinine_age_hours','creatinine_percent_of_isotope_baseline','creatinine_percent_reference','serum_creatinine_percent_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
+    if (NET37Inputs.numericRenal(data, field, def)) continue;
     const renalText = `${field} ${def?.label || ''}`.toLowerCase();
     if (!/crcl|creatinine clearance|\bgfr\b|egfr/.test(renalText)) continue;
     if (!['number', 'select'].includes(def.type)) continue;

@@ -35861,6 +35861,554 @@ const definitions={
         "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
       }
     ]
+  },
+  "00320:neuroendocrine": {
+    "code": "00320",
+    "title": "Everolimus · neuroendocrine tumours: treatment and checks",
+    "release": "0.84.37",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Progressive unresectable or metastatic pancreatic NET, or well-differentiated G1/G2 nonfunctional gastrointestinal NET under NCCP 00320b/c.",
+    "summary": "Take the prescribed everolimus dose once daily every day, at the same time and consistently with or without food. There is no planned tablet-free week.",
+    "stages": [
+      "Before starting",
+      "Treatment / reviews",
+      "Between visits",
+      "Response review",
+      "After a pause or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, renal/liver tests, BUN and urine protein",
+          "FBC, kidneys and liver every 4 weeks",
+          "Earlier assessment if unwell, dehydrated or less urine",
+          "Review abnormalities before continuing",
+          "Follow unresolved effects"
+        ],
+        "source_ids": [
+          "00320"
+        ],
+        "note": "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+      },
+      {
+        "label": "Glucose / blood fats",
+        "kind": "monitoring",
+        "cells": [
+          "Fasting glucose, cholesterol and triglycerides",
+          "Lipids regularly; fasting glucose as clinically indicated",
+          "Report thirst, frequent urine or marked fatigue",
+          "Review treatment for diabetes or lipid changes",
+          "Individual follow-up"
+        ],
+        "source_ids": [
+          "00320"
+        ],
+        "note": "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+      },
+      {
+        "label": "Infection / mouth / lungs",
+        "kind": "monitoring",
+        "cells": [
+          "Review active infection; hepatitis B surface antigen and core antibody",
+          "Ask about ulcers, cough, breathlessness, infection and rash",
+          "New breathing or infection symptoms need prompt contact",
+          "Assess lung inflammation versus infection",
+          "Follow symptoms after a hold or stopping"
+        ],
+        "source_ids": [
+          "00320"
+        ],
+        "note": "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+      },
+      {
+        "label": "NET response / hormone plan",
+        "kind": "monitoring",
+        "cells": [
+          "Document tumour site, grade, symptoms and baseline assessment",
+          "Scans / markers only as individually scheduled",
+          "Track symptoms and separate hormone medicines",
+          "Review benefit, burden and personal goals",
+          "Agree next treatment and follow-up"
+        ],
+        "source_ids": [
+          "00320"
+        ],
+        "note": "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Daily everolimus",
+        "when": "Continuous",
+        "why": "Everolimus is a daily targeted tablet used to help control particular advanced NETs. It aims to slow growth; the team balances disease control, side effects and your priorities. This NET guide does not cover the separate kidney-cancer indication.",
+        "clinical": "Continue daily only while the team confirms benefit and tolerability. Blood reviews do not create a planned tablet break.",
+        "action": "Confirm the current prescription, tests and support medicines.",
+        "source_ids": [
+          "00320"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+    ],
+    "sources": [
+      {
+        "id": "00320",
+        "title": "NCCP 00320 v6 · current Irish regimen",
+        "url": "https://healthservice.hse.ie/documents/6718/320_Everolimus.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/afinitor-epar-product-information_en.pdf"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Neuroendocrine Tumors, 2026 · education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/neuroendocrine-patient.pdf"
+      },
+      {
+        "id": "nci-net",
+        "title": "NCI PDQ: gastrointestinal NETs · selected marker background",
+        "url": "https://www.cancer.gov/types/gi-neuroendocrine-tumors/hp/gi-neuroendocrine-treatment-pdq"
+      },
+      {
+        "id": "nci-pnet",
+        "title": "NCI PDQ: pancreatic NETs · hormone and digestive background",
+        "url": "https://www.cancer.gov/types/pancreatic/hp/pnet-treatment-pdq"
+      },
+      {
+        "id": "radiant3",
+        "title": "RADIANT-3 primary pancreatic NET report",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21306238/"
+      },
+      {
+        "id": "radiant3-os",
+        "title": "RADIANT-3 final overall-survival analysis",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27621394/"
+      },
+      {
+        "id": "radiant4",
+        "title": "RADIANT-4 nonfunctional GI/lung NET trial",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26703889/"
+      }
+    ]
+  },
+  "00327": {
+    "code": "00327",
+    "title": "Sunitinib 37.5 mg · pancreatic NET: treatment and checks",
+    "release": "0.84.37",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Progressive unresectable or metastatic well-differentiated pancreatic neuroendocrine tumour under NCCP 00327a.",
+    "summary": "Take the prescribed sunitinib dose once daily continuously, at the same time, consistently with or without food. The 28-day cycle is a review period, with no planned capsule-free week.",
+    "stages": [
+      "Before starting",
+      "Treatment / reviews",
+      "Between visits",
+      "Response review",
+      "After a pause or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline tests",
+          "Before each 28-day cycle",
+          "Earlier tests if symptoms or dehydration",
+          "Review results before prescribing",
+          "Follow persistent abnormalities"
+        ],
+        "source_ids": [
+          "00327"
+        ],
+        "note": "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+      },
+      {
+        "label": "Blood pressure / heart",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline BP; cardiac assessment and echo/MUGA if indicated",
+          "BP at every attendance; heart tests if indicated",
+          "Report chest pain, breathlessness or swelling",
+          "Agree management of BP or heart changes",
+          "Individual follow-up"
+        ],
+        "source_ids": [
+          "00327"
+        ],
+        "note": "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+      },
+      {
+        "label": "Thyroid / urine / glucose",
+        "kind": "monitoring",
+        "cells": [
+          "Thyroid tests; baseline urine assessment; glucose review",
+          "Thyroid every 12 weeks; urine/glucose as clinically indicated",
+          "Report cold intolerance, marked fatigue or low-glucose symptoms",
+          "Review medicine effects and diabetes treatment",
+          "Follow unresolved changes"
+        ],
+        "source_ids": [
+          "00327"
+        ],
+        "note": "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+      },
+      {
+        "label": "NET response",
+        "kind": "monitoring",
+        "cells": [
+          "Record symptoms, disease and personal goals",
+          "Consultant-directed imaging / markers",
+          "Track symptoms and adherence",
+          "Assess benefit and treatment burden",
+          "Plan next treatment or surveillance"
+        ],
+        "source_ids": [
+          "00327"
+        ],
+        "note": "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Continuous daily sunitinib",
+        "when": "28-day review",
+        "why": "Sunitinib is a daily targeted capsule used to help control a pancreatic NET that cannot be removed or has spread and is progressing. The team reviews control, side effects and your priorities.",
+        "clinical": "This is the 37.5 mg continuous pNET schedule, not a four-weeks-on/two-weeks-off schedule. Continue only as authorised by the team.",
+        "action": "Confirm the current prescription, tests and support medicines.",
+        "source_ids": [
+          "00327"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Your team books and reviews each test. Response scans and hormone or tumour markers follow an individual plan; they are not automatically required at every medicine review."
+    ],
+    "sources": [
+      {
+        "id": "00327",
+        "title": "NCCP 00327 v5 · current Irish regimen",
+        "url": "https://healthservice.hse.ie/documents/6919/327_V5_SUNitinib_37.5mg.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/sutent-epar-product-information_en.pdf"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Neuroendocrine Tumors, 2026 · education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/neuroendocrine-patient.pdf"
+      },
+      {
+        "id": "nci-net",
+        "title": "NCI PDQ: gastrointestinal NETs · selected marker background",
+        "url": "https://www.cancer.gov/types/gi-neuroendocrine-tumors/hp/gi-neuroendocrine-treatment-pdq"
+      },
+      {
+        "id": "nci-pnet",
+        "title": "NCI PDQ: pancreatic NETs · hormone and digestive background",
+        "url": "https://www.cancer.gov/types/pancreatic/hp/pnet-treatment-pdq"
+      },
+      {
+        "id": "trial",
+        "title": "Raymond et al. phase III sunitinib pancreatic NET trial",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21306237/"
+      }
+    ]
+  },
+  "00505": {
+    "code": "00505",
+    "title": "Capecitabine + temozolomide (CAPTEM): treatment and checks",
+    "release": "0.84.37",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced or metastatic pancreatic neuroendocrine tumour under NCCP 00505a.",
+    "summary": "Each cycle lasts 28 days: capecitabine twice daily on Days 1–14; add temozolomide once daily on Days 10–14; take neither anticancer medicine on Days 15–28. NCCP plans six cycles unless progression or unacceptable toxicity changes the plan.",
+    "stages": [
+      "Before starting",
+      "Treatment / reviews",
+      "Between visits",
+      "Response review",
+      "After a pause or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, renal and liver profile",
+          "Before each cycle; liver tests also after each cycle",
+          "Earlier assessment for infection, bleeding, dehydration or symptoms",
+          "Review recovery before another cycle",
+          "Liver effects may arise weeks after the final dose"
+        ],
+        "source_ids": [
+          "00505"
+        ],
+        "note": "Six cycles are planned in NCCP; the team may change or stop treatment for progression or toxicity. Do not substitute a fixed scan/marker timetable from another NET treatment."
+      },
+      {
+        "label": "DPD / hepatitis B / INR",
+        "kind": "monitoring",
+        "cells": [
+          "DPD before capecitabine unless already tested; hepatitis B surface antigen and core antibody",
+          "INR if indicated, especially with warfarin",
+          "Watch for unusually severe early toxicity",
+          "Specialist review of any DPD-related risk or interacting medicine",
+          "Follow specialist and anticoagulation plans"
+        ],
+        "source_ids": [
+          "00505"
+        ],
+        "note": "Six cycles are planned in NCCP; the team may change or stop treatment for progression or toxicity. Do not substitute a fixed scan/marker timetable from another NET treatment."
+      },
+      {
+        "label": "Symptoms / oral medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Record usual bowel pattern, intake, mouth, skin and activity",
+          "Review adherence, worst symptoms and any doses held",
+          "Nausea plan on D10–14; symptom calls on all days",
+          "Confirm both prescriptions and the next start date",
+          "Follow persistent symptoms and return unused medicine"
+        ],
+        "source_ids": [
+          "00505"
+        ],
+        "note": "Six cycles are planned in NCCP; the team may change or stop treatment for progression or toxicity. Do not substitute a fixed scan/marker timetable from another NET treatment."
+      },
+      {
+        "label": "NET response / duration",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm pancreatic NET, goal and six-cycle plan",
+          "Scans / hormone markers according to the consultant plan",
+          "Track symptoms; report change without waiting for imaging",
+          "Balance response, toxicity and patient goals",
+          "Discuss follow-up or next treatment after the intended course"
+        ],
+        "source_ids": [
+          "00505"
+        ],
+        "note": "Six cycles are planned in NCCP; the team may change or stop treatment for progression or toxicity. Do not substitute a fixed scan/marker timetable from another NET treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "CAPTEM · six planned 28-day cycles",
+        "when": "Different tablet days",
+        "why": "CAPTEM combines two oral chemotherapy medicines to help control an advanced pancreatic NET. The team discusses the intended benefit, side effects and alternatives. NCCP identifies this pancreatic NET use as outside the medicines’ licences, requiring the local consent process.",
+        "clinical": "Each cycle lasts 28 days: capecitabine twice daily on Days 1–14; add temozolomide once daily on Days 10–14; take neither anticancer medicine on Days 15–28. NCCP plans six cycles unless progression or unacceptable toxicity changes the plan.",
+        "action": "Confirm the current prescription, tests and support medicines.",
+        "source_ids": [
+          "00505"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Six cycles are planned in NCCP; the team may change or stop treatment for progression or toxicity. Do not substitute a fixed scan/marker timetable from another NET treatment."
+    ],
+    "sources": [
+      {
+        "id": "00505",
+        "title": "NCCP 00505 v5 · current Irish CAPTEM regimen",
+        "url": "https://healthservice.hse.ie/documents/6609/505_v5_Capecitabine_and_temozolomide__zFX2DSB.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Xeloda product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/xeloda-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-pil",
+        "title": "EMA Temodal product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Neuroendocrine Tumors, 2026 · education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/neuroendocrine-patient.pdf"
+      },
+      {
+        "id": "nci-net",
+        "title": "NCI PDQ: gastrointestinal NETs · selected marker background",
+        "url": "https://www.cancer.gov/types/gi-neuroendocrine-tumors/hp/gi-neuroendocrine-treatment-pdq"
+      },
+      {
+        "id": "nci-pnet",
+        "title": "NCI PDQ: pancreatic NETs · hormone and digestive background",
+        "url": "https://www.cancer.gov/types/pancreatic/hp/pnet-treatment-pdq"
+      },
+      {
+        "id": "e2211",
+        "title": "ECOG-ACRIN E2211 randomised CAPTEM study",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36260828/"
+      }
+    ]
+  },
+  "00642": {
+    "code": "00642",
+    "title": "Lutetium-177 oxodotreotide (Lutathera / PRRT): treatment and checks",
+    "release": "0.84.37",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Progressive, unresectable or metastatic, well-differentiated G1/G2 somatostatin-receptor-positive gastroenteropancreatic NET under NCCP 00642a.",
+    "summary": "Four administrations are planned, usually eight weeks apart. Lutathera is infused over about 30–40 minutes, with a four-hour kidney-protective amino-acid infusion and anti-sickness treatment. The visit is much longer than the Lutathera infusion; an overnight stay may be needed.",
+    "stages": [
+      "Before the course",
+      "Before each administration",
+      "Between administrations",
+      "After the final dose",
+      "NET response / safety plan"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline tests",
+          "Once 2–4 weeks beforehand AND shortly before infusion",
+          "Every 2 weeks",
+          "Every 4 weeks for at least 3 months, then every 3 months for the following year",
+          "Additional tests or longer follow-up if abnormal"
+        ],
+        "source_ids": [
+          "00642"
+        ],
+        "note": "This is the NCCP blood-test sequence with EMA potassium safety and the Irish PRRT service pathway. The post-infusion radiation-assessment scan is different from a response scan. The service confirms bookings, exact dates and any additional follow-up."
+      },
+      {
+        "label": "Potassium / renal clearance",
+        "kind": "monitoring",
+        "cells": [
+          "Assess renal function and electrolyte risks",
+          "Potassium before amino acids; renal function and suitability reviewed",
+          "Renal checks during therapy; earlier assessment if ill",
+          "Renal monitoring for at least the first year",
+          "Fluid and electrolyte plan individualised"
+        ],
+        "source_ids": [
+          "00642"
+        ],
+        "note": "This is the NCCP blood-test sequence with EMA potassium safety and the Irish PRRT service pathway. The post-infusion radiation-assessment scan is different from a response scan. The service confirms bookings, exact dates and any additional follow-up."
+      },
+      {
+        "label": "Heart / pregnancy / hormones",
+        "kind": "monitoring",
+        "cells": [
+          "ECHO or MUGA; pregnancy testing where applicable; hormone plan",
+          "Review symptoms and any pregnancy possibility; SSA plan confirmed",
+          "Report hormone symptoms, especially during first 48 hours",
+          "Follow hormone symptoms and contraception plan",
+          "Additional heart tests if clinically indicated"
+        ],
+        "source_ids": [
+          "00642"
+        ],
+        "note": "This is the NCCP blood-test sequence with EMA potassium safety and the Irish PRRT service pathway. The post-infusion radiation-assessment scan is different from a response scan. The service confirms bookings, exact dates and any additional follow-up."
+      },
+      {
+        "label": "Imaging / clinic",
+        "kind": "monitoring",
+        "cells": [
+          "SSTR-positive disease and baseline assessment",
+          "Specialist clearance for each treatment",
+          "PRRT clinic review; special scan(s) after each infusion for radiation assessment",
+          "Response and follow-up imaging as agreed",
+          "No universal mandatory tumour-marker or response PET interval"
+        ],
+        "source_ids": [
+          "00642"
+        ],
+        "note": "This is the NCCP blood-test sequence with EMA potassium safety and the Irish PRRT service pathway. The post-infusion radiation-assessment scan is different from a response scan. The service confirms bookings, exact dates and any additional follow-up."
+      },
+      {
+        "label": "Radiation precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Discuss household, travel, work and care needs",
+          "Receive written instructions for this administration",
+          "Observe each restriction until its own end date",
+          "Keep discharge information and tell other treating teams",
+          "Medical physicist confirms personal restrictions"
+        ],
+        "source_ids": [
+          "00642"
+        ],
+        "note": "This is the NCCP blood-test sequence with EMA potassium safety and the Irish PRRT service pathway. The post-infusion radiation-assessment scan is different from a response scan. The service confirms bookings, exact dates and any additional follow-up."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Four planned PRRT administrations",
+        "when": "T1–T4",
+        "why": "PRRT carries radiation to somatostatin receptors on NET cells to help control disease that cannot be removed or has spread. A specialist NET and nuclear-medicine team checks receptor imaging, organ function and your priorities before recommending it.",
+        "clinical": "Usually eight weeks between administrations, with blood tests every two weeks and a PRRT clinic review. The service confirms each date and any delay.",
+        "action": "Confirm the current prescription, tests and support medicines.",
+        "source_ids": [
+          "00642"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This is the NCCP blood-test sequence with EMA potassium safety and the Irish PRRT service pathway. The post-infusion radiation-assessment scan is different from a response scan. The service confirms bookings, exact dates and any additional follow-up."
+    ],
+    "sources": [
+      {
+        "id": "00642",
+        "title": "NCCP 00642 v2 · current Irish Lutathera regimen",
+        "url": "https://healthservice.hse.ie/documents/6683/642_v2_Lutetium_Lu177_oxodotretide.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Lutathera product information and patient leaflet · updated 14 August 2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/lutathera-epar-product-information_en.pdf"
+      },
+      {
+        "id": "hse-prrt",
+        "title": "HSE / Irish PRRT service: introductory patient information",
+        "url": "https://assets.hse.ie/media/documents/Neuroendocrine_PRRT_Patient_Information_Leaflet_short.docx"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Neuroendocrine Tumors, 2026 · education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/neuroendocrine-patient.pdf"
+      },
+      {
+        "id": "nci-net",
+        "title": "NCI PDQ: gastrointestinal NETs · selected marker background",
+        "url": "https://www.cancer.gov/types/gi-neuroendocrine-tumors/hp/gi-neuroendocrine-treatment-pdq"
+      },
+      {
+        "id": "nci-pnet",
+        "title": "NCI PDQ: pancreatic NETs · hormone and digestive background",
+        "url": "https://www.cancer.gov/types/pancreatic/hp/pnet-treatment-pdq"
+      },
+      {
+        "id": "netter1",
+        "title": "NETTER-1 final overall-survival and long-term safety report",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34793718/"
+      },
+      {
+        "id": "hse-prrt-long",
+        "title": "HSE / Irish PRRT service: detailed patient information",
+        "url": "https://assets.hse.ie/media/documents/Neuroendocrine_PRRT_Patient_Information_Leaflet_long.docx"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

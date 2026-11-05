@@ -18,7 +18,7 @@ for(const route of scope.presentation_routes){
   assert.equal(registry.relativePath(code,'guide','gastrointestinal'),'patient/'+route+'/guide.pdf');assert.equal(registry.relativePath(code,'guide','colorectal'),'patient/'+route+'/guide.pdf');assert.match(registry.relativePath(code,'guide','ovary'),/scope.html/);assert.match(d.context_label,/colorectal|bowel/i);assert.doesNotMatch(d.schedule_summary,/platinum|NSCLC/i);
  }
 }
-assert.equal(registry.codes.length,174);
+require('./helpers/net-suite-registration-v08437.cjs').registry(registry.codes);
 for(const code of ['00551','00890','00900'])assert(registry.codes.includes(code));
 for(const code of ['00455','00558']){
  assert.equal(registry.relativePath(code,'guide','lung'),'patient/'+code+'/guide.pdf');

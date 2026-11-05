@@ -1,0 +1,101 @@
+{
+  "release": "0.84.37",
+  "protocol": "00320",
+  "protocol_sha256": "5b0ef5bf0efad071f149d4d64d51a87eaeb63c972be36ecca616921982cad26a",
+  "before_sha256": "bcf318b705d6178ba688599c266f3bb11db4e8e17194882f60a22925783af2bd",
+  "before_rule_count": 11,
+  "after_rule_count": 90,
+  "source_document_count": 2,
+  "catalogue_count": 1,
+  "case_total": 568,
+  "case_passed": 568,
+  "case_failed": 0,
+  "before_case_passed": 172,
+  "before_case_failed": 396,
+  "all_rules_exercised": true,
+  "findings": [
+    {
+      "id": "EV01",
+      "domain": "Blood counts/FN",
+      "before": "No ANC, platelet, nadir, fever or FN pathway.",
+      "after": "Baseline review separated from treatment toxicity. Current ANC<1 or platelets<75 holds; same-episode severity determines same-dose versus5mg after recovery. Grade3FN requiresANC\u22651.25 AND no fever; grade4stops even after recovery.",
+      "source": "NCCPp2Table1;EMA p4Table1",
+      "tests": "Counts, nadirs, FN3/FN4, omitted recovery, prior-dose matrices."
+    },
+    {
+      "id": "EV02",
+      "domain": "Stomatitis",
+      "before": "All grade\u22652 merely held. No permanent stop or recurrence/restart.",
+      "after": "Grade4stop; grade2/3hold; recovered firstG2same actual dose; secondG2/G3 source5mg with safeguards. Third/later recurrence remains review.",
+      "source": "NCCPp3Table3",
+      "tests": "Currentgrades0\u20134, peak/occurrence matrix, missing/invalid history."
+    },
+    {
+      "id": "EV03",
+      "domain": "Pneumonitis",
+      "before": "All grade\u22652 unconditionally held; no four-week rule/G4stop.",
+      "after": "Preserves consider interruption forG2; four-weekG2failure stops; G3hold until\u22641 with discretionary restart; recurrentG3considerstop; G4stop. A priorG3 partly improving toG2 cannot accidentally useG2 four-weekstop.",
+      "source": "NCCPp3Table3;pp4\u20135complications",
+      "tests": "3.99/4/4.01weeks, delayed/timely/missing recovery, recurrentG3, historicalG4."
+    },
+    {
+      "id": "EV04",
+      "domain": "Other non-haematological toxicity",
+      "before": "Genericgrade\u22653hold; noG2tolerability/recurrence orG4stop.",
+      "after": "First tolerableG2 noadjustment; intolerable/recurrentG2hold; secondG2recovery5mg; G3hold/considerrestart; recurrentG3considerstop; G4stop. PartialG3\u2192G2improvement remainshold.",
+      "source": "NCCPp3Table3",
+      "tests": "Tolerability\u00d7occurrence, recovery, historical/current grades, contradictions."
+    },
+    {
+      "id": "EV05",
+      "domain": "Glucose/lipids",
+      "before": "No metabolic rule.",
+      "after": "Separate clinician-graded hyperglycaemia and dyslipidaemia; G2noadjustment/G3hold/G4stop. No fabricated biochemical or recovery cutoff; an explicit consultant recovery decision precedes a guarded5mg target.",
+      "source": "NCCPp3Table3;EMAp4Table1",
+      "tests": "Both domains0\u20134, previousgrade3/4, approved/absent/false recovery, activeG3 despiteapproval."
+    },
+    {
+      "id": "EV06",
+      "domain": "Renal/hepatic and unsupported LFT cutoff",
+      "before": "Unattributed ALT/AST>5 and bilirubin>3 holds; hepatic75/50/25% without context could increase an already reduced dose.",
+      "after": "Unsupported standalone LFT rules removed; values retained as context. Explicit routine renal no-adjustment and AKI review. ChildPughA/B/C standard-dose targets7.5/5/2.5mg require baseline or actual previous dose; classC benefit-risk approval enforced.",
+      "source": "NCCPp3Table2;EMA pp5,6,8sections4.2/4.4",
+      "tests": "A/B/C\u00d7timing\u00d7previousdose; C missing/falseapproval; ALT/bili3/5boundaries; renal/AKI."
+    },
+    {
+      "id": "EV07",
+      "domain": "Combined-dose and history safety",
+      "before": "No guards against re-escalation, missing episode history or concurrent hepatic/toxicity changes.",
+      "after": "Numeric recovery requires prior dose\u22655mg, no hepatic impairment and restart timing. Hepatic/toxicity combinations and interactions suppress numeric component output. Same-dose/discretionary restart is manual. Currentgrade>sameepisodepeak triggersreview without hiding urgentholds/stops.",
+      "source": "EMA p8section4.4 evidencegap; NCCP consultantmodification requirement",
+      "tests": "All8fixed5mg routes\u00d7dose/history/context; concurrentholds/stops;20contradictioncases; invalid inputs."
+    },
+    {
+      "id": "EV08",
+      "domain": "Source version, schedule and clinical scope",
+      "before": "Version6 metadata but old organ-only source note, generic schedule and unspecified routine monitoring.",
+      "after": "FreshNCCPv6hash/date and EMA snapshot attributed separately; continuous10mg standard, no tablet-free28-daycycle; q4weekroutinebloods; individual imaging/markers; all3indicationrecordsretained. CTCAEv5 orientation is not mislabeled asNCCP grading; EMA table actuallyusesv3.0.",
+      "source": "NCCPpp1\u20132,6;EMA p4Table1footnote",
+      "tests": "Indication equality, schedule/monitoring/provenance/governance invariants."
+    },
+    {
+      "id": "EV09",
+      "domain": "Infection/support/interaction precautions",
+      "before": "No explicit infection/HBV/lung/AKI/interaction safeguards.",
+      "after": "Unresolvedpreexistinginfectionhold; activeinfection/feverreview; invasive systemicfungalstop(EMA); HBV/lung/perioperative/radiation/interactionreview. No mandatory universal antiemetics, steroids orPJPprophylaxis invented.",
+      "source": "NCCPpp4\u20135;EMA pp5\u201310sections4.4\u20134.5",
+      "tests": "Independent findings and strongest-action component suppression."
+    }
+  ],
+  "limitations": [
+    "These are source-concordance/software tests, not independent clinical or oncology-pharmacy sign-off.",
+    "EMA section10 revision date is blank: exact current retrieval/hash retained; no invented edition date.",
+    "NCCP printed decimal blood-count bands clarified from EMA continuous inequalities; this secondary-source use is explicit.",
+    "No validated automatic conversion betweenCTCAEv5orientation andEMA CTCAEv3.0 source grades.",
+    "NCCP supplies no metabolic recovery cutoff; discretionary decisions and combined hepatic/toxicity adjustments remain specialist review.",
+    "General package/browser/PDF/regression checks are owned by release integration; this report does not assert deployment."
+  ],
+  "clinical_use_authorised": false,
+  "consultant_reviewed": false,
+  "oncology_pharmacy_reviewed": false
+}

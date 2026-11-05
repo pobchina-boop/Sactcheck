@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p
 const scope=json('validation/lung-cytotoxic-v08429/scope.json'),idx=json('data/lung-cytotoxic-v08429-source-index.json'),kb=json('data/regimen-knowledge-base-v08429-addendum.json'),author=json('data/lung-cytotoxic-v08429-authoring.json').regimens;
 const Engine=require('../js/assessment-engine'),Registry=require('../js/patient-asset-registry-v0810'),Journey=require('../js/treatment-journey-v0837'),Dose=require('../js/protocol-dose-schedule'),Evidence=require('../js/treatment-evidence-v08413');
 const entries=json('protocols/index.json').protocols,protocol=c=>json(entries.find(x=>x.path.includes('/'+c+'-')).path);
-assert.equal(scope.new_codes.length,5);assert.equal(scope.retrospective_codes.length,5);assert.equal(idx.codes.length,10);assert.equal(kb.regimen_profiles.length,10);assert.equal(Registry.codes.length,174);assert(Registry.codes.includes('00244'),'Audited v34 regorafenib accounts for the added patient registry entry');
+assert.equal(scope.new_codes.length,5);assert.equal(scope.retrospective_codes.length,5);assert.equal(idx.codes.length,10);assert.equal(kb.regimen_profiles.length,10);require('./helpers/net-suite-registration-v08437.cjs').registry(Registry.codes);assert(Registry.codes.includes('00244'),'Audited v34 regorafenib accounts for the added patient registry entry');
 const routes=[];
 for(const c of idx.codes){
  const p=protocol(c),x=author[c],k=kb.regimen_profiles.find(x=>x.protocol_id===p.protocol_id);

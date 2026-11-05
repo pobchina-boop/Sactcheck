@@ -6,10 +6,10 @@
  * rule conditions or clinical recommendations.
  */
 (function (root, factory) {
-  const api = factory();
+  const api = factory(root.SACTCheckCTCAE || (typeof require === "function" ? require("./ctcae-descriptors.js") : null));
   if (typeof module === "object" && module.exports) module.exports = api;
   root.SACTCheckToxicityAttribution = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function () {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (CTCAE) {
   "use strict";
 
   const VERSION = "0.51.0";
@@ -44,6 +44,7 @@
   }
 
   function isToxicityDefinition(id, definition) {
+    if (CTCAE?.isDiseaseContextDefinition({ ...definition, id })) return false;
     const text = [id, definition?.label, definition?.ctcae_term, definition?.assessment_guidance].filter(Boolean).join(" ");
     return TOXICITY_PATTERN.test(text);
   }

@@ -1,0 +1,31 @@
+# NCCP 00505 CAPTEM source audit — v0.84.37
+
+The current official oral SACT catalogue links to NCCP 00505 version 5, amended 11 November 2025, review date 11 November 2030. Its seven-page PDF was freshly downloaded on 5 November 2026. The catalogue URL changed from document 6509 to document 6609, but both PDFs are byte-identical (SHA-256 `b990c71f88fc2762210f47aeaf0709deca48e8559d263eaf110048d5cb3ce827`). Page 3's table layout was visually checked. This is the pancreatic NET combination source, not capecitabine monotherapy 00216.
+
+## Findings and resulting behaviour
+
+- The previous 18-rule encoding accepted ECOG 2 without the required source-range review. Version 5 specifies ECOG 0–1. Dacarbazine hypersensitivity, severe unexpected fluoropyrimidine reactions and recent/concomitant brivudine now have explicit pathways.
+- Baseline capecitabine counts (ANC <1.5 or platelets <100: NCCP caution), unscheduled within-cycle counts (ANC <1 or platelets <75: interrupt capecitabine), and subsequent-dose combination recovery (ANC ≥1.5 AND platelets ≥75) are distinct. The supplementary EMA baseline “do not treat” position is declared rather than silently substituted.
+- Table 1's four recurrence bands now cover both drugs. The worst documented ANC/platelet episode determines the band. Current counts and historical nadirs are separate; missing timing, either nadir, recurrence or either component's prior dose remains unresolved. Severe first-event “discontinue OR delay then 50%” is a consultant choice; repeated severe events discontinue. Literal rounded source intervals leave narrow decimal gaps, which receive review rather than automatic rounding.
+- Table 1 does not expressly state the percentage-dose denominator, unlike Table 3. Its 100/75/50% targets remain clearly stated specialist-review findings without an automatically calculated restart dose. This also prevents unsupported re-escalation when the two drugs have different previous reductions.
+- Tables 3 and 4 apply to capecitabine, not automatically to temozolomide. Current grade ≥2 interrupts capecitabine; recurrence and worst episode grade determine later reduction or permanent discontinuation. Quantified 75%/50% restart targets require documented recovery and a previous dose at least as high. Percentages are of the documented starting dose and are not multiplied together. The first grade-2 100% row and grade-4 exceptional restart stay under review.
+- Source-specific diarrhoea descriptions and the nocturnal-stool overlap are retained. The hand-foot table has its own descriptions and does not quantify the reduction after recovered grade 3. A generic CTCAE version is not represented as identical to the NCCP grading source.
+- Renal Table 2 gives 75% of original capecitabine dose at CrCl 30–50. This regimen starts capecitabine at 750 mg/m² twice daily; supplementary Xeloda renal examples concern 1250/1000 mg/m² starts. The difference and previous reductions require reconciliation, not an automatic additional 25% cut. CrCl <30/dialysis restricts capecitabine; temozolomide's <36/dialysis “no adjustment expected” remains component-specific caution.
+- Severe hepatic impairment is an exclusion on page 1 despite Table 2's no-routine-adjustment wording. That tension is explicit. Capecitabine treatment-related bilirubin >3×ULN or ALT/AST >2.5×ULN causes a hold, while baseline/non-drug-related abnormalities go to attribution review. One recovered measurement cannot clear another still-abnormal measurement.
+- Temozolomide liver testing after EVERY cycle, delayed hepatic injury, baseline HBV tests, antiviral/local policy review and PJP vigilance are carried through the protocol. Universal prophylaxis for 42-day temozolomide/radiotherapy is not transferred to five-day CAPTEM. Interaction review remains an explicit manual domain, not a claimed complete drug-interaction screen.
+- The old whole-regimen parenteral-low antiemetic mapping was wrong. Capecitabine is oral minimal–low; temozolomide is oral moderate–high on Days 10–14. The protocol points to the release's phase-specific CAPTEM supportive script. The informational phase-overrides field is not claimed to dynamically change the shared risk runtime.
+- The clinical schedule is now explicit: capecitabine 750 mg/m² twice daily Days 1–14, temozolomide 200 mg/m² once daily Days 10–14, neither on Days 15–28, planned six 28-day cycles unless progression/unacceptable toxicity. Food and fasting instructions remain separate.
+
+## Verification
+
+`node validation/neuroendocrine-v08437/captem-source-audit/source-cases.cjs`
+
+653 independently stated cases pass against the real assessment and dose-rendering engines. All 86 rules are exercised; 46 optional inputs pass protocol validation without warnings. The same case set on the preserved prior protocol passes 293 and fails 360. These failures include absent paths, metadata, grading provenance and renderer protections; they are not 360 distinct clinical defects.
+
+A real-engine test exposed that a review message containing “75%” could be parsed into a numeric capecitabine dose despite a review label. Every review action now explicitly sets specialist-only dose calculation and blocks numeric dose output. Competing-domain tests verify that holds, contraindications, discontinuation or unresolved renal context suppress a numerical capecitabine restart.
+
+`source-criteria-matrix.json` maps 26 source criteria; `rule-source-matrix.json` links every rule to its page/table and records case exercise. `sources.json`, `audit-summary.json` and the preserved baseline document the evidence and hashes. `legacy-organ-rule-migration.json` explicitly maps the five replaced organ-function rule IDs.
+
+## Limits
+
+Independent consultant and oncology-pharmacy approval is pending; clinical use is not authorised by these software checks. Official NCCP source download and retention succeeded. Initial browser retrieval of current supplementary EMA Xeloda and Temozolomide Accord product information succeeded, but direct local downloads and later requests returned HTTP 429, so no fresh local EMA hash is claimed. Source-directed specialist decisions remain manual. Parent release validation covers the shared site, support registry, patient material, PDFs/QRs and full regression suite.

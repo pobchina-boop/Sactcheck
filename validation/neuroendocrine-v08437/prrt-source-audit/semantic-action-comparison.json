@@ -1,0 +1,315 @@
+{
+  "kind": "Action-level comparison independent of rule identifiers",
+  "total": 24,
+  "before_matching": 3,
+  "after_matching": 24,
+  "cases": [
+    {
+      "name": "Exact CrCl below30",
+      "input": {
+        "crcl_ml_min": 29.99
+      },
+      "source": "NCCPp4",
+      "expected": "contraindicated",
+      "previous_action": "incomplete",
+      "current_action": "contraindicated",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Legacy CrCl30–39 is not a formal contraindication",
+      "input": {
+        "prrt_assessment_stage": "baseline",
+        "lutathera_renal_band": "30_39"
+      },
+      "source": "NCCPp4",
+      "expected": "consultant_review",
+      "previous_action": "contraindicated",
+      "current_action": "consultant_review",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "CrCl30–39 at baseline",
+      "input": {
+        "prrt_assessment_stage": "baseline",
+        "crcl_ml_min": 35
+      },
+      "source": "NCCPp4",
+      "expected": "consultant_review",
+      "previous_action": "incomplete",
+      "current_action": "consultant_review",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "CrCl30–39 during treatment",
+      "input": {
+        "prrt_assessment_stage": "on_treatment",
+        "crcl_ml_min": 35
+      },
+      "source": "NCCPp5",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Creatinine rises40% despite CrCl80",
+      "input": {
+        "prrt_assessment_stage": "on_treatment",
+        "baseline_creatinine_umol_l": 100,
+        "creatinine_umol_l": 140,
+        "crcl_ml_min": 80
+      },
+      "source": "NCCPp5",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "CrCl falls40% but remains60",
+      "input": {
+        "prrt_assessment_stage": "on_treatment",
+        "baseline_crcl_ml_min": 100,
+        "crcl_ml_min": 60
+      },
+      "source": "NCCPp5",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Platelets50",
+      "input": {
+        "platelets_x10e9_l": 50
+      },
+      "source": "NCCPp3",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Platelets exactly75 source disagreement",
+      "input": {
+        "platelets_x10e9_l": 75
+      },
+      "source": "NCCPp3/EMAp4",
+      "expected": "consultant_review",
+      "previous_action": "incomplete",
+      "current_action": "consultant_review",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "ANC0.8",
+      "input": {
+        "anc_x10e9_l": 0.8
+      },
+      "source": "NCCPpp3–4",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Hb7.9 retained hold",
+      "input": {
+        "haemoglobin_g_dl": 7.9
+      },
+      "source": "NCCPp4",
+      "expected": "withhold",
+      "previous_action": "withhold",
+      "current_action": "withhold",
+      "before_matches": true,
+      "after_matches": true
+    },
+    {
+      "name": "Baseline bilirubin3.1",
+      "input": {
+        "prrt_assessment_stage": "baseline",
+        "bilirubin_ratio_uln": 3.1
+      },
+      "source": "NCCPpp4–5",
+      "expected": "consultant_review",
+      "previous_action": "incomplete",
+      "current_action": "consultant_review",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "On-treatment bilirubin3.1",
+      "input": {
+        "prrt_assessment_stage": "on_treatment",
+        "bilirubin_ratio_uln": 3.1
+      },
+      "source": "NCCPp5",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Albumin29 AND INR1.6",
+      "input": {
+        "prrt_assessment_stage": "on_treatment",
+        "albumin_g_l": 29,
+        "inr": 1.6
+      },
+      "source": "NCCPp5",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Recurrent renal toxicity despite recovery",
+      "input": {
+        "renal_toxicity_episode_count": 2,
+        "renal_toxicity_recovery": "recovered",
+        "crcl_ml_min": 80
+      },
+      "source": "NCCPp5",
+      "expected": "permanently_discontinue",
+      "previous_action": "incomplete",
+      "current_action": "permanently_discontinue",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Recurrent platelet event despite current count150",
+      "input": {
+        "platelet_toxicity_episode_count": 2,
+        "platelet_toxicity_recovery": "recovered",
+        "platelets_x10e9_l": 150
+      },
+      "source": "NCCPp3",
+      "expected": "permanently_discontinue",
+      "previous_action": "incomplete",
+      "current_action": "permanently_discontinue",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Toxicity interval beyond16weeks",
+      "input": {
+        "anaemia_toxicity_episode_count": 1,
+        "weeks_since_last_prrt": 16.01
+      },
+      "source": "EMAp4",
+      "expected": "permanently_discontinue",
+      "previous_action": "incomplete",
+      "current_action": "permanently_discontinue",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Exactly16weeks conflict",
+      "input": {
+        "anaemia_toxicity_episode_count": 1,
+        "weeks_since_last_prrt": 16
+      },
+      "source": "NCCPp4/EMAp4",
+      "expected": "consultant_review",
+      "previous_action": "incomplete",
+      "current_action": "consultant_review",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Long-acting SSA29days",
+      "input": {
+        "days_since_long_acting_ssa": 29
+      },
+      "source": "NCCPp6",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Short-acting SSA23hours",
+      "input": {
+        "hours_since_short_acting_ssa": 23
+      },
+      "source": "NCCPp6",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Amino-acid protection not confirmed",
+      "input": {
+        "amino_acid_protection_confirmed": false
+      },
+      "source": "NCCPp6",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Potassium not checked/corrected",
+      "input": {
+        "potassium_checked_and_corrected": false
+      },
+      "source": "EMAp11",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Major surgery11weeks",
+      "input": {
+        "recent_major_surgery": true,
+        "weeks_since_major_surgery": 11
+      },
+      "source": "EMAp5",
+      "expected": "withhold",
+      "previous_action": "incomplete",
+      "current_action": "withhold",
+      "before_matches": false,
+      "after_matches": true
+    },
+    {
+      "name": "Legacy severe hepatic category retained",
+      "input": {
+        "lutathera_hepatic_band": "severe"
+      },
+      "source": "NCCPp4",
+      "expected": "consultant_review",
+      "previous_action": "consultant_review",
+      "current_action": "consultant_review",
+      "before_matches": true,
+      "after_matches": true
+    },
+    {
+      "name": "Legacy contraindicated renal category retained",
+      "input": {
+        "lutathera_renal_band": "lt30"
+      },
+      "source": "NCCPp4",
+      "expected": "contraindicated",
+      "previous_action": "contraindicated",
+      "current_action": "contraindicated",
+      "before_matches": true,
+      "after_matches": true
+    }
+  ]
+}

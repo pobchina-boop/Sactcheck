@@ -524,7 +524,8 @@
   ]);
 
   function isTreatmentContext(definition) {
-    return definition.ui_section === "treatment_context" || TREATMENT_CONTEXT_FIELDS.has(definition.id);
+    return definition.ui_section === "treatment_context" || TREATMENT_CONTEXT_FIELDS.has(definition.id)
+      || Boolean(root.SACTCheckCTCAE?.isDiseaseContextDefinition(definition));
   }
 
   function isImmunotherapyBlood(definition) {
@@ -624,7 +625,7 @@
   }
 
   function isCtcaeToxicity(definition) {
-    if (!definition || isEcogDefinition(definition) || laboratoryDomain(definition) !== null) return false;
+    if (!definition || isTreatmentContext(definition) || isEcogDefinition(definition) || laboratoryDomain(definition) !== null) return false;
     if (root.SACTCheckCTCAE?.guide(definition)) return true;
     const text = definitionSearchText(definition);
     return Boolean(definition.ctcae_version || definition.ctcae_category || definition.assessment_guidance && /grade|activities of daily living|toxicit/i.test(definition.assessment_guidance) || /(?:toxicity|neuropathy|diarrhoea|diarrhea|mucositis|stomatitis|rash|hand[ -]?foot|pneumonitis|colitis|hepatitis|nephritis|arthralgia|myalgia|fatigue|nausea|vomiting).*grade|grade.*(?:toxicity|neuropathy|diarrhoea|diarrhea|mucositis|stomatitis|rash|hand[ -]?foot)/i.test(text));
@@ -1442,6 +1443,8 @@
   root.SACTCheckAssessmentFieldClassification = Object.freeze({
     version: "0.59.0",
     laboratoryDomain,
+    isTreatmentContext,
+    isCtcaeToxicity,
     isEcogDefinition,
     isExplicitNonLaboratoryCriterion,
     ecogOptionLabel,

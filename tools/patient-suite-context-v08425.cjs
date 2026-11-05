@@ -8,8 +8,9 @@ if(v30Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').
 const v29Contexts=['schedule_7d','schedule_3d','schedule_21d'];
 if(v29Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').some(c=>c!=='00388'))throw new Error('Oral etoposide context escaped00388');
 const v27Contexts=['backbone_00304','backbone_00310','backbone_00281','backbone_00318','backbone_00317'];
-if(context && context!=='lung'&&context!=='colorectal'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
+if(context && context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
 const codes=(process.env.SACT_SUITE_CODES||'').split(',').filter(Boolean);
+if(context==='neuroendocrine'&&codes.some(c=>c!=='00320'))throw new Error('NET context escaped shared everolimus00320');
 if(v27Contexts.includes(context)&&codes.some(c=>c!=='00849'))throw new Error('Neoadjuvant backbone context escaped00849');
 if(context==='colorectal'&&codes.some(c=>!['00212','00214','00215','00455','00558'].includes(c)))throw new Error('Colorectal context escaped selected bevacizumab protocols');
 if(context&&!codes.length)throw new Error('A context build requires an explicit SACT_SUITE_CODES scope');
@@ -50,6 +51,8 @@ function phases(defaultData){
  for(const [c,plans]of Object.entries(crc.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const crc35=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08435.json'),'utf8'));
  for(const [c,plans]of Object.entries(crc35.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
+ const net=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08437.json'),'utf8'));
+ for(const [c,plans]of Object.entries(net.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  return {...defaultData,regimens:Object.fromEntries(codes.map(c=>[c,d.regimens[c][context]]))};
 }
 if(context){

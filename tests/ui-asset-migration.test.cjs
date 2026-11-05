@@ -137,9 +137,10 @@ test('v34 manifest proves before/after bytes and covers the complete affected as
  const added=cp.execFileSync('git',['ls-files','--others','--exclude-standard','-z','--',...domains],{cwd:root}).toString().split('\0').filter(Boolean);
  const v35=require('./helpers/retrospective-v08435.cjs'),nextRecord=JSON.parse(fs.readFileSync(v35.RECORD,'utf8'));v35.createMigration(nextRecord);
  const v36=require('./helpers/retrospective-v08436.cjs'),latestRecord=JSON.parse(fs.readFileSync(v36.RECORD,'utf8'));v36.createMigration(latestRecord);
+ const v37=require('./helpers/retrospective-v08437.cjs'),netRecord=JSON.parse(fs.readFileSync(v37.RECORD,'utf8'));v37.createMigration(netRecord);
  const combined=[...new Set([...changed,...added])].sort();
- for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file)||v36.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
- assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files),...Object.keys(latestRecord.files)])].sort(),combined,'All explicit migrations must cover every changed patient/clinical asset');
+ for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file)||v36.approvedPath(file)||v37.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
+ assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files),...Object.keys(latestRecord.files),...Object.keys(netRecord.files)])].sort(),combined,'All explicit migrations must cover every changed patient/clinical asset');
  const actual=combined.filter(f=>Object.hasOwn(migrationRecord.files,f));
  assert.deepEqual(Object.keys(migrationRecord.files).sort(),actual,'Every changed or new clinical/patient asset must be explicitly reviewed');
  for(const [file,entry] of Object.entries(migrationRecord.files)){
@@ -168,9 +169,29 @@ test('v36 corrections prove exact v35 Git provenance, bounded scope and final by
   assert(m.approvedPath(file));
   const old=cp.spawnSync('git',['show',m.BASE_COMMIT+':'+file],{cwd:root,maxBuffer:64*1024*1024});
   if(entry.before===null)assert.notEqual(old.status,0,file+' must be new');else {assert.equal(old.status,0);assert.equal(sha(old.stdout),entry.before,file+' v35 baseline');}
-  assert.equal(sha(fs.readFileSync(path.join(root,file))),entry.after,file+' reviewed v36 bytes');
+  assert.equal(sha(fs.readFileSync(path.join(root,file))),require('./helpers/retrospective-v08437.cjs').expectedHash(file,entry.after),file+' reviewed v36 bytes');
  }
  for(const bad of ['patient/00558/guide.pdf','patient/00555/unreviewed.js','protocols/gastrointestinal/00209-folfox6.json','data/patient-knowledge/00558.json','patient/../../guide.pdf'])assert.throws(()=>m.createMigration({...record,files:{[bad]:{before,after}}}),/Unapproved/);
  const file='patient/00216/guide.pdf',migrate=m.createMigration({...record,files:{[file]:{before,after}}});
+ assert.equal(migrate(file,before),after);assert.equal(migrate(file,after),after);assert.throws(()=>migrate(file,sha('Unreviewed source')),/Unexpected/);
+});
+
+
+test('v37 additions prove the prepared v36 baseline and bounded NET scope',()=>{
+ const m=require('./helpers/retrospective-v08437.cjs'),record=JSON.parse(fs.readFileSync(m.RECORD,'utf8'));m.createMigration(record);
+ const v36=JSON.parse(fs.readFileSync(path.join(root,'validation/colorectal-v08436/retrospective-hashes.json'),'utf8'));
+ for(const[file,entry]of Object.entries(record.files)){
+  assert(m.approvedPath(file));
+  const earlier=v36.files[file];
+  if(earlier)assert.equal(entry.before,earlier.after,file+' prepared v36 bytes');
+  else {
+   const old=cp.spawnSync('git',['show',m.BASE_COMMIT+':'+file],{cwd:root,maxBuffer:64*1024*1024});
+   if(entry.before===null)assert.notEqual(old.status,0,file+' must be new');
+   else {assert.equal(old.status,0);assert.equal(sha(old.stdout),entry.before,file+' unchanged since verified main');}
+  }
+  assert.equal(sha(fs.readFileSync(path.join(root,file))),entry.after,file+' reviewed v37 bytes');
+ }
+ for(const bad of ['patient/00320/guide.pdf','patient/00320/renal/guide.pdf','patient/00642/unreviewed.js','protocols/gastrointestinal/00209-folfox6.json','data/patient-knowledge/00216.json','patient/../../guide.pdf'])assert.throws(()=>m.createMigration({...record,files:{[bad]:{before,after}}}),/Unapproved/);
+ const file='patient/00642/guide.pdf',migrate=m.createMigration({...record,files:{[file]:{before,after}}});
  assert.equal(migrate(file,before),after);assert.equal(migrate(file,after),after);assert.throws(()=>migrate(file,sha('Unreviewed source')),/Unexpected/);
 });

@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.36';
-  const CONTENT_RELEASE='0.84.36';
+  const RELEASE='0.84.37';
+  const CONTENT_RELEASE='0.84.37';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00320':{"title": "Everolimus · neuroendocrine tumour context", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["neuroendocrine"], "scopeGuard": true, "scope": "NET patient suite only; kidney-cancer indication requires separate matching information"},
+    '00327':{"title": "Sunitinib · pancreatic neuroendocrine tumours", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00505':{"title": "CAPTEM · capecitabine and temozolomide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00642':{"title": "Lutathera · peptide receptor radionuclide therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+
     '00734':{"title": "weekly carboplatin AUC 2 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00348':{"title": "carboplatin AUC 6 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00861':{"title": "Pembrolizumab 400 mg + weekly carboplatin AUC 1.5 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -195,13 +200,14 @@
   });
   const CODES=Object.freeze(Object.keys(DEFINITIONS));
   const COLORECTAL_CONTEXTS=Object.freeze({'00455':{lung:'',colorectal:'colorectal/'},'00558':{lung:'',colorectal:'colorectal/'},'00212':{breast:'',colorectal:'colorectal/'},'00214':{lung:'',colorectal:'colorectal/'},'00215':{breast:'',lung:'lung/',colorectal:'colorectal/'}});
-  const CONTEXT_CODES=Object.freeze(['00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const CONTEXT_CODES=Object.freeze(['00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
 
   function contextFor(value,explicit=''){
     if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
     const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    if(code==='00320')return selected==='neuroendocrine'?'neuroendocrine':'';
     const normalized=selected==='gastrointestinal'?'colorectal':selected;
     if(COLORECTAL_CONTEXTS[code])return Object.hasOwn(COLORECTAL_CONTEXTS[code],normalized)?normalized:'';
     return ['lung','breast'].includes(selected)?selected:'';
@@ -223,7 +229,7 @@
   function bundleRoutes(value){
     const d=definitionFor(value);if(!d)return [];
     if(!d.contextOnly)return [d.code];
-    if(!Array.isArray(d.patientContexts)||!d.patientContexts.length||d.patientContexts.some(s=>!(d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00388'?/^schedule_(7d|3d|21d)$/:/^backbone_[0-9]{5}$/).test(s)))throw new Error('Invalid patient context routes');
+    if(!Array.isArray(d.patientContexts)||!d.patientContexts.length||d.patientContexts.some(s=>!(d.code==='00320'?/^neuroendocrine$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00388'?/^schedule_(7d|3d|21d)$/:/^backbone_[0-9]{5}$/).test(s)))throw new Error('Invalid patient context routes');
     return d.patientContexts.map(s=>d.code+'/'+s);
   }
   function hasDedicated(value){return Boolean(definitionFor(value));}
@@ -233,7 +239,7 @@
       const selected=contextFor(value,context);
       if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
       if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
-      return `patient/${def.code}/${COLORECTAL_CONTEXTS[def.code]?COLORECTAL_CONTEXTS[def.code][selected]:(selected==='lung'?'lung/':'')}${CONTEXT_ASSETS[asset]}`;
+      return `patient/${def.code}/${def.code==='00320'?'neuroendocrine/':COLORECTAL_CONTEXTS[def.code]?COLORECTAL_CONTEXTS[def.code][selected]:(selected==='lung'?'lung/':'')}${CONTEXT_ASSETS[asset]}`;
     }
     if(def.scopeGuard) return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
     if(asset==='supportive-care-selector') return def.phaseSupport?`patient/${def.code}/supportive-care.html`:null;

@@ -519,6 +519,18 @@
     return /(^|[_\s])ecog(?:$|[_\s])/.test(text) || /\bperformance status\b/.test(text);
   }
 
+  function isDiseaseContextDefinition(definition) {
+    const id = String(definition?.id || "").toLowerCase();
+    const label = String(definition?.label || "").toLowerCase();
+    // Pathological tumour grade and the grade named in an indication describe
+    // the disease, not an adverse event. Do not exclude broad "disease grade"
+    // text: pneumonitis/interstitial lung disease remains a genuine toxicity.
+    return definition?.grading_domain === "disease"
+      || /^(?:indication(?:_(?:id|code|context))?|net_grade|tumou?r_grade|histologic(?:al)?_grade|disease_grade|tumou?r_differentiation|histologic(?:al)?_differentiation)$/.test(id)
+      || /^(?:tumou?r|histologic(?:al)?|cancer|net)\s+(?:grade|differentiation)(?:\s*\/\s*grade)?$/.test(label.trim())
+      || /^(?:selected\s+)?(?:nccp\s+)?(?:treatment\s+)?indication$/.test(label.trim());
+  }
+
   function categoryFor(definition) {
     if (definition?.ctcae_category && SETS[definition.ctcae_category]) return definition.ctcae_category;
     const text = normalise(definition);
@@ -608,7 +620,7 @@
 
   function descriptor(definition, option) {
     const eventCount = !/grade|ctcae/.test(definition?.id || "") && /occurrence|episodes?|event[_ ]?number|reduction[_ ]?count|number of reductions/.test(normalise(definition));
-    if (isEcogDefinition(definition) || eventCount) return "";
+    if (isEcogDefinition(definition) || isDiseaseContextDefinition(definition) || eventCount) return "";
     if (option?.description) return String(option.description);
     // A numeric schedule day or event count is not a toxicity severity grade.
     if (!/grade|ctcae/.test(normalise(definition)) && !definition?.ctcae_category && !sourceSpecific(definition) && option?.ctcae_grade == null && !/grade/i.test(option?.label || "")) return "";
@@ -621,7 +633,7 @@
 
   function optionLabel(definition, option) {
     const base = option?.label ?? option?.value ?? "";
-    if (isEcogDefinition(definition)) return String(base);
+    if (isEcogDefinition(definition) || isDiseaseContextDefinition(definition)) return String(base);
     const description = descriptor(definition, option);
     if (!description || String(base).includes("—")) return String(base);
     return `${base} — ${description}`;
@@ -768,7 +780,7 @@
   }
 
   function guide(definition) {
-    if (isEcogDefinition(definition)) return null;
+    if (isEcogDefinition(definition) || isDiseaseContextDefinition(definition)) return null;
     const category = categoryFor(definition);
     const hasCtcae = sourceSpecific(definition) || definition?.ctcae_version || /grade|ctcae/i.test(normalise(definition)) || supportsHaematologyGuide(definition, category);
     if (!hasCtcae) return null;
@@ -799,7 +811,7 @@
   }
 
 
-  root.SACTCheckCTCAE = Object.freeze({
+  const api = Object.freeze({
     version: "0.48.4 / controlled CTCAE v6.0 haematology education",
     sourceUrl: SOURCE_URL_V6,
     sourceUrlV5: SOURCE_URL_V5,
@@ -807,10 +819,13 @@
     generic: GENERIC,
     sets: SETS,
     guidance: DEFAULT_GUIDANCE,
+    isDiseaseContextDefinition,
     categoryFor,
     descriptor,
     optionLabel,
     gradeForValue,
     guide
   });
+  root.SACTCheckCTCAE = api;
+  if (typeof module === "object" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);
