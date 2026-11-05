@@ -12,7 +12,7 @@
     "indication": "Advanced colorectal cancer after failure of 5-fluorouracil-containing therapy.",
     "source_url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
     "source_document_pages": 5,
-    "sactcheck_encoding_version": "0.84.21",
+    "sactcheck_encoding_version": "0.84.33",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -46,8 +46,9 @@
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
-      "audit_release": "0.83.6",
-      "software_validation_record": "validation/colorectal-v0836/VALIDATION.md"
+      "audit_release": "0.84.33",
+      "software_validation_record": "validation/colorectal-v08433/retro-source-audit/AUDIT.md",
+      "audit_date": "2026-11-04"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -69,11 +70,11 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.83.6",
-      "audit_date": "2026-10-17",
-      "scope_note": "NCCP web-rendered tables checked; source ambiguities exposed. Binary PDF retrieval failed. Reconfirm latest source before clinical adoption.",
-      "reconciled_release": "0.84.21",
-      "reconciled_date": "2026-10-25"
+      "audit_release": "0.84.33",
+      "audit_date": "2026-11-04",
+      "scope_note": "Official current NCCP binary PDF and dose/hold/recovery/monitoring rules re-audited. Source ambiguities remain explicit; independent consultant, oncology-pharmacy and patient/PPI review remain pending.",
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04"
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -89,23 +90,25 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending.",
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04"
     },
-    "catalogue_source_checked_date": "2026-07-29",
+    "catalogue_source_checked_date": "2026-11-04",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00213-v7",
-    "source_checked_date": "2026-10-25",
-    "full_suite_release": "0.84.21",
+    "source_checked_date": "2026-11-04",
+    "full_suite_release": "0.84.33",
     "schedule_summary": "Irinotecan on Day 1 every 21 days while beneficial and tolerable. There is no home chemotherapy pump. Blood counts are checked weekly, including between infusion visits.",
     "source_pdf_sha256": "a60784ed0207921b0f5b3bfb5f964084224f3107d76ed438231723a431a2e3b8",
     "source_binary_retrieved": true,
     "retrospective_service_audit": {
-      "release": "0.84.21",
-      "checked": "2026-10-25",
-      "scope": "Current binary source retrieval and service content reconciliation; existing source-mapped rule engine retained.",
-      "clinical_use_authorised": false,
+      "release": "0.84.33",
+      "checked": "2026-11-04",
+      "scope": "Current binary source, clinical thresholds, recovery windows, component dose history and patient monitoring; see audit record.",
       "consultant_reviewed": false,
-      "oncology_pharmacy_reviewed": false
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
     }
   },
   "clinical_governance": {
@@ -942,6 +945,11 @@
               "field": "haemodialysis",
               "operator": "==",
               "value": true
+            },
+            {
+              "field": "severe_renal_impairment",
+              "operator": "==",
+              "value": true
             }
           ]
         },
@@ -950,16 +958,20 @@
           "components": [
             "irinotecan"
           ],
-          "recommendation": "NCCP gives no routine irinotecan renal reduction but cautions that evidence is limited. Review clinical suitability; do not borrow the <10 mL/min dose range from other regimens.",
+          "recommendation": "Source conflict: page 1 lists impaired renal function as an exclusion, while page 2 table 2 states no routine dose reduction but cautions that evidence is absent. Obtain a consultant/pharmacy suitability decision; do not give routine clearance or borrow a numeric renal dose from another regimen.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "NCCP gives no routine irinotecan renal reduction but cautions that evidence is limited. Review clinical suitability; do not borrow the <10 mL/min dose range from other regimens.",
+        "explanation": "Source conflict: page 1 lists impaired renal function as an exclusion, while page 2 table 2 states no routine dose reduction but cautions that evidence is absent. Obtain a consultant/pharmacy suitability decision; do not give routine clearance or borrow a numeric renal dose from another regimen.",
         "source": {
           "document": "NCCP 00213 v7",
           "page": 2,
           "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
-          "table": 2
+          "table": 2,
+          "pages": [
+            1,
+            2
+          ]
         }
       },
       {
@@ -988,7 +1000,7 @@
           "components": [
             "irinotecan"
           ],
-          "recommendation": "Source monotherapy starting dose is 200 mg/m² in the >1.5–3 ×ULN bilirubin band. Confirm performance status, coagulation and weekly FBC monitoring; lower boundary is assigned to ≤1.5 band.",
+          "recommendation": "The source monotherapy starting dose is 200 mg/m² for bilirubin above 1.5 and up to 3 × ULN. Confirm performance status, coagulation and weekly FBC monitoring. Exactly 1.5 × ULN is handled separately because the printed bands overlap.",
           "show_in_dose_actions": true,
           "component_changes": {
             "irinotecan": {
@@ -996,7 +1008,7 @@
             }
           }
         },
-        "explanation": "Source monotherapy starting dose is 200 mg/m² in the >1.5–3 ×ULN bilirubin band. Confirm performance status, coagulation and weekly FBC monitoring; lower boundary is assigned to ≤1.5 band.",
+        "explanation": "The source monotherapy starting dose is 200 mg/m² for bilirubin above 1.5 and up to 3 × ULN. Confirm performance status, coagulation and weekly FBC monitoring. Exactly 1.5 × ULN is handled separately because the printed bands overlap.",
         "source": {
           "document": "NCCP 00213 v7",
           "page": 2,
@@ -1053,20 +1065,29 @@
       {
         "rule_id": "NONHAEM_REDUCTION",
         "when": {
-          "field": "worst_other_nonhaem_grade",
-          "operator": ">=",
-          "value": 3
+          "any": [
+            {
+              "field": "worst_other_nonhaem_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "irinotecan"
           ],
-          "recommendation": "After recovery to grade ≤1 and fully resolved diarrhoea, consider a 15–20% irinotecan reduction. No single percentage is selected automatically.",
+          "recommendation": "Previous grade 3 or worse non-haematological toxicity, including diarrhoea: after recovery of all adverse events to grade ≤1 and fully resolved diarrhoea, consider a 15–20% irinotecan reduction based on the worst prior event. No single percentage or current-dose calculation is selected automatically.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "After recovery to grade ≤1 and fully resolved diarrhoea, consider a 15–20% irinotecan reduction. No single percentage is selected automatically.",
+        "explanation": "Previous grade 3 or worse non-haematological toxicity, including diarrhoea: after recovery of all adverse events to grade ≤1 and fully resolved diarrhoea, consider a 15–20% irinotecan reduction based on the worst prior event. No single percentage or current-dose calculation is selected automatically.",
         "source": {
           "document": "NCCP 00213 v7",
           "page": 3,
@@ -1112,6 +1133,31 @@
           "page": 3,
           "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
           "table": 3
+        }
+      },
+      {
+        "rule_id": "BILI_EXACT_1_5_SOURCE_OVERLAP",
+        "when": {
+          "field": "bilirubin_uln_multiple",
+          "operator": "==",
+          "value": 1.5
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "The source starting-dose table prints both ≤1.5 × ULN (350 mg/m²) and 1.5–3 × ULN (200 mg/m²). At exactly 1.5 × ULN, confirm the intended band with the consultant/pharmacist; no dose is selected automatically.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source starting-dose table prints both ≤1.5 × ULN (350 mg/m²) and 1.5–3 × ULN (200 mg/m²). At exactly 1.5 × ULN, confirm the intended band with the consultant/pharmacist; no dose is selected automatically.",
+        "source": {
+          "document": "NCCP 00213 v7",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6553/00213_Irinotecan_Monotherapy.pdf",
+          "checked_date": "2026-11-04",
+          "table": 2
         }
       }
     ]

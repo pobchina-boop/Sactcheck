@@ -8,6 +8,8 @@ const protocols=Object.fromEntries(['00227','00449','00446'].map(c=>[c,require('
 function check(code,name,inputs,expected,verify=()=>{}){
  // Historical numeric expectations explicitly start at level 0; v32 separately tests missing/reduced history.
  if(code==='00227'&&/Recovered|Competing/.test(name))inputs={current_irinotecan_dose_level:0,current_fluorouracil_bolus_dose_level:0,current_fluorouracil_infusion_dose_level:0,...inputs};
+ if(['00446','00449'].includes(code)&&/hepatic impairment/.test(name))inputs={assessment_type:'baseline',...inputs};
+ if(['00446','00449'].includes(code)&&/Recovered|Competing/.test(name))inputs={anc_x10e9_l:1.5,platelets_x10e9_l:75,diarrhoea_current_grade:0,diarrhoea_duration_weeks:0,[code==='00446'?'delay_weeks':'toxicity_delay_weeks']:0,...Object.fromEntries(Object.keys(protocols[code].input_definitions).filter(k=>/^current_.*_level$/.test(k)).map(k=>[k,0])),...inputs};
  const p=protocols[code],r=E.assess(p,inputs),d=D.buildModificationModel(p,r);
  assert.equal(r.actionType,expected,`${code}: ${name}`);assert.deepEqual(r.errors,[]);assert.deepEqual(r.invalid,[]);verify(r,d);
  results.push({code,case:name,inputs,expected,actual:r.actionType,partial:r.partialAssessment,findings:r.findings.filter(f=>!f.domainAssessment).map(f=>({id:f.ruleId,action:f.actionType,source:f.sourceText,explanation:f.explanation})),componentActions:d.rows.map(x=>({component:x.component,action:x.actionLabel,dose:x.protocolDose})),pass:true});return {r,d};

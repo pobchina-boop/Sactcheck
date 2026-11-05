@@ -11,8 +11,8 @@
     "short_title": "Bevacizumab 5 mg/kg, 5-Fluorouracil and Folinic Acid Therapy – 14 day",
     "indication": "Metastatic colorectal cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 9,
+    "sactcheck_encoding_version": "0.84.33",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -48,9 +48,10 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08433_independent_review_pending",
+      "automated_shadow_tests_completed": true
     },
-    "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
+    "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
       "checked_date": "2026-07-29",
@@ -69,7 +70,10 @@
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04",
+      "scope_note": "Current official NCCP source reconciled in v0.84.33; independent consultant and oncology-pharmacy validation remain pending."
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -86,16 +90,28 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending.",
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00791-v2"
+    "canonical_protocol_id": "nccp-00791-v2",
+    "full_suite_release": "0.84.33",
+    "clinical_audit_release": "0.84.33",
+    "source_checked_date": "2026-11-04",
+    "document_revision": "2026-11-04",
+    "source_pdf_sha256": "349d4ba26b2851888ab666be51a2ac56f9a820158d7d0239cf480f7ffbe1b169",
+    "source_text_snapshot_sha256": "63c18cb32fbca5ae6208ac73cc3181e1eab2a6a901c99f3a7f30a421f559de25",
+    "schedule_summary": "Day 1: bevacizumab and folinic acid, then fluorouracil bolus and a 46-hour fluorouracil pump. Repeat every 14 days while treatment is helping and remains tolerable. This regimen does not include oxaliplatin or irinotecan.",
+    "licensing_note": "NCCP 00791 v 2 pp 8–9: unlicensed bevacizumab regimen in Ireland; patient information/consent and local Drugs and Therapeutics governance required. Rapid infusion is separately unlicensed.",
+    "published_date": "2024-09-10",
+    "review_date": "2030-11-18"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00791 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "disclaimer": "JSON assessment encoding derived from NCCP 00791 version 2. Confirm the current official NCCP PDF and use independent clinical judgement. Independent clinical and oncology-pharmacy validation remain pending.",
     "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
   },
   "indications": [
@@ -106,7 +122,7 @@
   ],
   "treatment": {
     "cycle_length_days": 14,
-    "schedule_summary": "Bevacizumab 5 mg/kg, 5-Fluorouracil and Folinic Acid Therapy – 14 day",
+    "schedule_summary": "Day 1: bevacizumab and folinic acid, then fluorouracil bolus and a 46-hour fluorouracil pump. Repeat every 14 days while treatment is helping and remains tolerable. This regimen does not include oxaliplatin or irinotecan.",
     "drugs": [
       "bevacizumab",
       "folinic acid",
@@ -118,6 +134,8 @@
       "label": "ECOG performance status",
       "type": "select",
       "required": false,
+      "demo_value": "",
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -139,9 +157,7 @@
           "value": 4,
           "label": "4"
         }
-      ],
-      "demo_value": 0,
-      "input_role": "decision"
+      ]
     },
     "hypersensitivity": {
       "label": "Known hypersensitivity to a regimen component",
@@ -260,90 +276,86 @@
       "input_role": "decision"
     },
     "diarrhoea_grade": {
-      "label": "Diarrhoea grade",
+      "label": "Current diarrhoea grade (confirm against NCCP Table 6)",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No increase above the patient's usual stool frequency or ostomy output."
+          "label": "Grade 0",
+          "description": "No diarrhoea above usual baseline."
         },
         {
           "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Increase of fewer than 4 stools per day above baseline, or mild increase in ostomy output."
+          "label": "Grade 1",
+          "description": "Increase of 2–3 stools/day or mild increase in loose watery colostomy output."
         },
         {
           "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Increase of 4–6 stools per day above baseline, or moderate increase in ostomy output; limits instrumental activities of daily living."
+          "label": "Grade 2",
+          "description": "Increase of 4–6 stools, nocturnal stools or mild increase in loose watery colostomy output."
         },
         {
           "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Increase of 7 or more stools per day above baseline, incontinence, hospital care indicated, or severe ostomy-output increase; limits self-care activities of daily living."
+          "label": "Grade 3",
+          "description": "Increase of 7–9 stools/day, incontinence, malabsorption or severe increase in loose watery colostomy output."
         },
         {
           "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "label": "Grade 4",
+          "description": "Increase of 10 or more stools/day, grossly bloody colostomy output, or loose watery output requiring parenteral support; dehydration."
         }
       ],
       "demo_value": 0,
-      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone.",
-      "ctcae_version": "5.0",
+      "assessment_guidance": "Grade using increase in stools over baseline, ostomy output, need for hospitalisation and impact on self-care; do not grade from the word “diarrhoea” alone. NCCP 00791 Table 6 prints older symptom-based grades that are not identical to CTCAE 5.0. Confirm the source-table grade before selecting a dose-level change; a CTCAE grade alone must not silently substitute for the source criteria. NCCP 00791 Table 6 prints older symptom-based grades that are not identical to CTCAE 5.0. Confirm the source-table grade before selecting a dose-level change; a CTCAE grade alone must not silently substitute for the source criteria. NCCP 00791 Table 6 prints older symptom-based grades that are not identical to CTCAE 5.0. Confirm the source-table grade before selecting a dose-level change; a CTCAE grade alone must not silently substitute for the source criteria.",
+      "ctcae_version": "NCCP source table 6",
       "ctcae_category": "diarrhoea",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+      "grading_source_label": "NCCP 00791 v2 / Table 6",
+      "source_grading_note": "The source prints symptom-based grades that differ from modern CTCAE 5.0. Use the printed NCCP criteria for these dose decisions; do not silently translate grade numbers. Grade 0 is added only to represent no current toxicity."
     },
     "mucositis_grade": {
-      "label": "Oral mucositis/stomatitis grade",
+      "label": "Current stomatitis grade (confirm against NCCP Table 6)",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No oral mucositis."
+          "label": "Grade 0",
+          "description": "No stomatitis."
         },
         {
           "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+          "label": "Grade 1",
+          "description": "Painless ulcers, erythema or mild soreness."
         },
         {
           "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Moderate pain or ulceration that does not interfere with oral intake; modified diet indicated."
+          "label": "Grade 2",
+          "description": "Painful erythema, oedema or ulcers, but able to eat."
         },
         {
           "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Severe pain that interferes with oral intake."
+          "label": "Grade 3",
+          "description": "Painful erythema, oedema or ulcers and unable to eat."
         },
         {
           "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "label": "Grade 4",
+          "description": "As grade 3 but mucosal necrosis and/or enteral support; dehydration."
         }
       ],
       "demo_value": 0,
-      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible.",
-      "ctcae_version": "5.0",
+      "assessment_guidance": "Assess pain, ulceration and whether oral intake is preserved, modified or impossible. NCCP 00791 Table 6 prints older symptom-based grades that are not identical to CTCAE 5.0. Confirm the source-table grade before selecting a dose-level change; a CTCAE grade alone must not silently substitute for the source criteria. NCCP 00791 Table 6 prints older symptom-based grades that are not identical to CTCAE 5.0. Confirm the source-table grade before selecting a dose-level change; a CTCAE grade alone must not silently substitute for the source criteria. NCCP 00791 Table 6 prints older symptom-based grades that are not identical to CTCAE 5.0. Confirm the source-table grade before selecting a dose-level change; a CTCAE grade alone must not silently substitute for the source criteria.",
+      "ctcae_version": "NCCP source table 6",
       "ctcae_category": "mucositis",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+      "grading_source_label": "NCCP 00791 v2 / Table 6",
+      "source_grading_note": "The source prints symptom-based grades that differ from modern CTCAE 5.0. Use the printed NCCP criteria for these dose decisions; do not silently translate grade numbers. Grade 0 is added only to represent no current toxicity."
     },
     "systolic_bp_mmhg": {
       "label": "Systolic blood pressure",
@@ -430,23 +442,33 @@
       "input_role": "decision"
     },
     "fluorouracil_renal_impairment": {
-      "label": "Renal impairment for fluorouracil",
+      "label": "Clinical renal impairment",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": "none_mild_moderate",
-          "label": "None, mild or moderate"
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
         },
         {
           "value": "severe",
-          "label": "Severe renal impairment"
+          "label": "Severe"
+        },
+        {
+          "value": "none_mild_moderate",
+          "label": "Legacy combined band — distinguish none from impairment"
         }
       ],
-      "demo_value": "none_mild_moderate",
-      "ui_section": "labs",
-      "always_show": true,
-      "input_role": "decision"
+      "demo_value": ""
     },
     "fluorouracil_bilirubin_umol_l": {
       "label": "Bilirubin for fluorouracil",
@@ -458,7 +480,8 @@
       "ui_section": "labs",
       "always_show": true,
       "unit": "µmol/L",
-      "input_role": "decision"
+      "input_role": "context",
+      "assessment_guidance": "NCCP 00791 v 2 uses hepatic impairment severity, not the absolute bilirubin 85/AST 180 thresholds of other fluorouracil protocols. Assess severity clinically; these values alone do not select a numeric dose."
     },
     "fluorouracil_ast_u_l": {
       "label": "AST for fluorouracil",
@@ -470,30 +493,456 @@
       "ui_section": "labs",
       "always_show": true,
       "unit": "U/L",
-      "input_role": "decision"
+      "input_role": "context",
+      "assessment_guidance": "NCCP 00791 v 2 uses hepatic impairment severity, not the absolute bilirubin 85/AST 180 thresholds of other fluorouracil protocols. Assess severity clinically; these values alone do not select a numeric dose."
     },
     "fluorouracil_hepatic_impairment": {
-      "label": "Clinical hepatic impairment for fluorouracil",
+      "label": "Clinical hepatic impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": ""
+    },
+    "assessment_type": {
+      "label": "Assessment type",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "none",
-          "label": "No clinically significant impairment"
+          "value": "current",
+          "label": "Current pre-treatment assessment"
         },
         {
-          "value": "moderate",
-          "label": "Moderate impairment"
-        },
-        {
-          "value": "severe",
-          "label": "Severe impairment"
+          "value": "baseline",
+          "label": "Baseline / cycle 1 assessment"
         }
       ],
-      "demo_value": "none",
-      "ui_section": "labs",
-      "always_show": true,
+      "demo_value": "current",
       "input_role": "decision"
+    },
+    "toxicity_delay_weeks": {
+      "label": "Current delay (weeks)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "demo_value": 0,
+      "input_role": "decision"
+    },
+    "lowest_anc_during_delay_x10e9_l": {
+      "label": "Lowest ANC during delayed weeks",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 50,
+      "step": 0.1,
+      "demo_value": 2,
+      "input_role": "decision"
+    },
+    "lowest_platelets_during_delay_x10e9_l": {
+      "label": "Lowest platelets during delayed weeks",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 2000,
+      "step": 1,
+      "demo_value": 180,
+      "input_role": "decision"
+    },
+    "grade4_neutropenia_with_grade2_fever": {
+      "label": "Grade 4 neutropenia with ≥grade 2 fever",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "current_fluorouracil_bolus_level": {
+      "label": "Current 5-FU bolus dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": "",
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0 — starting dose"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "help_text": "Required before calculating a further reduction. Check the last administered component dose; never assume the starting level."
+    },
+    "current_fluorouracil_infusion_level": {
+      "label": "Current 5-FU 46-hour infusion dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "always_show": true,
+      "demo_value": "",
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0 — starting dose"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "help_text": "Required before calculating a further reduction. Check the last administered component dose; never assume the starting level."
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "febrile_neutropenia_recovered": {
+      "label": "Previous febrile neutropenia/infection clinically recovered",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "diarrhoea_highest_grade": {
+      "label": "Highest diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "demo_value": 0,
+      "ctcae_version": "NCCP source table 6",
+      "ctcae_category": "diarrhoea",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Count stools per day above the patient's baseline, assess ostomy output, continence, hydration, fever, abdominal pain, haemodynamic compromise and whether hospital care is indicated. NCCP 00791 Table 6 prints older symptom-based grades that are not identical to CTCAE 5.0. Confirm the source-table grade before selecting a dose-level change; a CTCAE grade alone must not silently substitute for the source criteria.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No diarrhoea above usual baseline."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Increase of 2–3 stools/day or mild increase in loose watery colostomy output."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Increase of 4–6 stools, nocturnal stools or mild increase in loose watery colostomy output."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Increase of 7–9 stools/day, incontinence, malabsorption or severe increase in loose watery colostomy output."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Increase of 10 or more stools/day, grossly bloody colostomy output, or loose watery output requiring parenteral support; dehydration."
+        }
+      ],
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+      "grading_source_label": "NCCP 00791 v2 / Table 6",
+      "source_grading_note": "The source prints symptom-based grades that differ from modern CTCAE 5.0. Use the printed NCCP criteria for these dose decisions; do not silently translate grade numbers. Grade 0 is added only to represent no current toxicity."
+    },
+    "stomatitis_highest_grade": {
+      "label": "Highest stomatitis grade",
+      "type": "select",
+      "required": false,
+      "demo_value": 0,
+      "ctcae_version": "NCCP source table 6",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Inspect the oral cavity and assess pain, ulceration, diet modification and whether oral intake is impaired. NCCP 00791 Table 6 prints older symptom-based grades that are not identical to CTCAE 5.0. Confirm the source-table grade before selecting a dose-level change; a CTCAE grade alone must not silently substitute for the source criteria.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No stomatitis."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Painless ulcers, erythema or mild soreness."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Painful erythema, oedema or ulcers, but able to eat."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Painful erythema, oedema or ulcers and unable to eat."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "As grade 3 but mucosal necrosis and/or enteral support; dehydration."
+        }
+      ],
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+      "grading_source_label": "NCCP 00791 v2 / Table 6",
+      "source_grading_note": "The source prints symptom-based grades that differ from modern CTCAE 5.0. Use the printed NCCP criteria for these dose decisions; do not silently translate grade numbers. Grade 0 is added only to represent no current toxicity."
+    },
+    "source_toxicity_grade_confirmed": {
+      "label": "Current and highest GI-toxicity grades reconciled to NCCP Table 6",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false,
+      "help_text": "NCCP Table 6 diarrhoea: grade 3 7–9 extra stools/day/incontinence/malabsorption or severe watery colostomy output; grade 4 ≥10, gross blood or parenteral support/dehydration. Stomatitis grade 3 unable to eat; grade 4 mucosal necrosis/enteral support/dehydration. Clinical assessment is required where modern CTCAE differs."
+    },
+    "nonstandard_fluorouracil_dose": {
+      "label": "Current 5-FU dose is outside listed NCCP dose levels",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "proteinuria_g_24h": {
+      "label": "24-hour urine total protein (g/24 hours)",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "demo_value": ""
+    },
+    "urine_protein_dipstick": {
+      "label": "Urine protein dipstick",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "negative",
+          "label": "Negative"
+        },
+        {
+          "value": "1+",
+          "label": "1+"
+        },
+        {
+          "value": "2+",
+          "label": "2+"
+        },
+        {
+          "value": "3+",
+          "label": "3+"
+        },
+        {
+          "value": "4+",
+          "label": "4+"
+        }
+      ],
+      "demo_value": ""
+    },
+    "urine_protein_g_l": {
+      "label": "Laboratory urine protein concentration (g/L)",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "demo_value": ""
+    },
+    "uncontrolled_or_symptomatic_hypertension": {
+      "label": "Uncontrolled or symptomatic hypertension on day 1",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bp_sustained_on_antihypertensives": {
+      "label": "BP elevation is sustained while taking antihypertensive medication",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hypertension_grade": {
+      "label": "Clinically assessed hypertension grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No hypertension."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Systolic 120–139 or diastolic 80–89 mmHg; follow CTCAE adult criteria."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Systolic 140–159 or diastolic 90–99 mmHg; intervention/medication change indicated; assess persistence and symptoms."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Systolic≥160 or diastolic≥100 mmHg; medical intervention and more than one drug or more intensive therapy indicated."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences, e.g. malignant hypertension, neurological deficit or hypertensive crisis; urgent intervention indicated."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "hypertension",
+      "assessment_guidance": "Use repeated blood pressure readings, symptoms and medication history. NCCP Table 5 separately defines uncontrolled initiation BP as sustained >150/100 mmHg despite antihypertensive treatment; enter that clinical judgement separately. Grade 4 or persistent grade 3 requires discontinuation.",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "persistent_grade3_hypertension": {
+      "label": "Persisting grade 3 hypertension",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "gi_perforation": {
+      "label": "Gastrointestinal perforation",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "te_or_grade4_fistula": {
+      "label": "Tracheoesophageal fistula or any grade 4 fistula",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "grade4_thromboembolism": {
+      "label": "Grade 4 thromboembolic event",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "haemorrhage_grade": {
+      "label": "Haemorrhage grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No bleeding."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild; intervention not indicated, using the site-specific CTCAE haemorrhage definition."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; medical intervention indicated; apply the site-specific haemorrhage definition."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe; transfusion, invasive intervention or hospital care indicated as defined for the bleeding site."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention indicated."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "haemorrhage",
+      "assessment_guidance": "Use the site-specific haemorrhage term and document intervention, transfusion, admission and haemodynamic effects. NCCP Table 5 stops bevacizumab for grade 3 or worse bleeding.",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf"
+    },
+    "cardiac_or_vascular_risk": {
+      "label": "Source cardiovascular, thrombotic, bleeding or fistula/perforation risk factor",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_anthracycline_or_chest_radiotherapy": {
+      "label": "Prior anthracycline treatment or chest-wall radiotherapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "baseline_loose_bm_gt3": {
+      "label": "Baseline >3 loose bowel movements daily without stoma",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "previous_pelvic_radiotherapy": {
+      "label": "Previous pelvic radiotherapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "unlicensed_regimen_consent_confirmed": {
+      "label": "Unlicensed bevacizumab regimen information and local consent/governance confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -508,7 +957,7 @@
   },
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
-    "missing_data_policy": "report_unassessed_coverage_gap",
+    "missing_data_policy": "Do not infer missing clinical values, recovery, recurrence or current component doses. Independently actionable abnormal values trigger their pathway without requiring unrelated inputs.",
     "actions_ranked_most_to_least_restrictive": [
       "permanently_discontinue",
       "contraindicated",
@@ -528,29 +977,7 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
-        "when": {
-          "field": "ecog",
-          "operator": ">",
-          "value": 2
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
-      },
-      {
-        "id": "HYPERSENSITIVITY_EXCLUSION",
-        "priority": 10,
+        "rule_id": "EXCLUDE_HYPERSENSITIVITY",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -561,47 +988,532 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "recommendation": "NCCP exclusion: hypersensitivity. Do not administer; specialist assessment required."
         },
+        "explanation": "NCCP exclusion: hypersensitivity. Do not administer; specialist assessment required.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
       },
       {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "EXCLUDE_PREGNANCY",
         "when": {
-          "any": [
-            {
-              "field": "pregnancy",
-              "operator": "==",
-              "value": true
-            },
-            {
-              "field": "breastfeeding",
-              "operator": "==",
-              "value": true
-            }
-          ]
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "contraindicated",
           "components": [
             "whole_regimen"
           ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "recommendation": "NCCP exclusion: pregnancy. Do not administer; specialist assessment required."
         },
+        "explanation": "NCCP exclusion: pregnancy. Do not administer; specialist assessment required.",
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
       },
       {
-        "id": "ANC_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
+        "rule_id": "EXCLUDE_BREASTFEEDING",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "NCCP exclusion: breastfeeding. Do not administer; specialist assessment required."
+        },
+        "explanation": "NCCP exclusion: breastfeeding. Do not administer; specialist assessment required.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "ECOG_REVIEW",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "ECOG outside source eligibility 0–2; consultant review before treatment.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "ECOG outside source eligibility 0–2; consultant review before treatment.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_COMPLETE",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "complete"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Complete DPD deficiency: do not administer fluorouracil; folinic acid is not given without its associated fluorouracil."
+        },
+        "explanation": "Complete DPD deficiency: do not administer fluorouracil; folinic acid is not given without its associated fluorouracil.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_PARTIAL",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "partial"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Partial DPD deficiency: individualise a reduced starting fluorouracil dose. No universal percentage is specified; careful monitoring and consultant-directed titration are required.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Partial DPD deficiency: individualise a reduced starting fluorouracil dose. No universal percentage is specified; careful monitoring and consultant-directed titration are required.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_UNKNOWN",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "unknown"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Confirm DPD testing before first fluorouracil treatment. A missing result must not be assumed normal.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm DPD testing before first fluorouracil treatment. A missing result must not be assumed normal.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_BASELINE_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "dpd_status",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Before first fluorouracil treatment verify documented DPD testing; the omitted result has not been assessed.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Before first fluorouracil treatment verify documented DPD testing; the omitted result has not been assessed.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_SEVERE",
+        "when": {
+          "field": "fluorouracil_hepatic_impairment",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Severe hepatic impairment: fluorouracil is not recommended in Table 3. Withhold and review the treatment plan with consultant/pharmacy; no automatic half-dose alternative."
+        },
+        "explanation": "Severe hepatic impairment: fluorouracil is not recommended in Table 3. Withhold and review the treatment plan with consultant/pharmacy; no automatic half-dose alternative.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_COMBINED_OR_UNKNOWN",
+        "when": {
+          "all": [
+            {
+              "field": "fluorouracil_hepatic_impairment",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "fluorouracil_renal_impairment",
+                  "operator": "missing"
+                },
+                {
+                  "field": "fluorouracil_renal_impairment",
+                  "operator": "in",
+                  "value": [
+                    "mild",
+                    "moderate",
+                    "severe",
+                    "none_mild_moderate"
+                  ]
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "The no-adjustment hepatic band applies to mild/moderate impairment WITHOUT renal impairment. Confirm renal status; concurrent renal/hepatic dysfunction is not specified by this table and requires individual review.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "The no-adjustment hepatic band applies to mild/moderate impairment WITHOUT renal impairment. Confirm renal status; concurrent renal/hepatic dysfunction is not specified by this table and requires individual review.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_MILD_MODERATE",
+        "when": {
+          "all": [
+            {
+              "field": "fluorouracil_hepatic_impairment",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate"
+              ]
+            },
+            {
+              "field": "fluorouracil_renal_impairment",
+              "operator": "==",
+              "value": "none"
+            },
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing"
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Mild/moderate hepatic impairment without renal impairment: no need for fluorouracil dose adjustment is expected in Table 3. Reconcile any prior toxicity reductions; this is domain information, not whole-regimen clearance.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Mild/moderate hepatic impairment without renal impairment: no need for fluorouracil dose adjustment is expected in Table 3. Reconcile any prior toxicity reductions; this is domain information, not whole-regimen clearance.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "RENAL_NO_ADJUSTMENT",
+        "when": {
+          "any": [
+            {
+              "field": "fluorouracil_renal_impairment",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate",
+                "severe"
+              ]
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Table 3 expects no renal/haemodialysis dose adjustment for bevacizumab or fluorouracil. This does not clear combined hepatic impairment or toxicity. With moderate/severe renal impairment, interpret uracil-based DPD phenotyping cautiously and consider genotype.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Table 3 expects no renal/haemodialysis dose adjustment for bevacizumab or fluorouracil. This does not clear combined hepatic impairment or toxicity. With moderate/severe renal impairment, interpret uracil-based DPD phenotyping cautiously and consider genotype.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "HEPATIC_LABS_CONTEXT",
+        "when": {
+          "any": [
+            {
+              "field": "fluorouracil_bilirubin_umol_l",
+              "operator": ">",
+              "value": 85
+            },
+            {
+              "field": "fluorouracil_ast_u_l",
+              "operator": ">",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Abnormal liver results require clinical assessment of hepatic severity. NCCP 00791 v 2 does not use the bilirubin 85/AST 180 contraindication cutoffs from other fluorouracil regimens; no dose is calculated from these values alone.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Abnormal liver results require clinical assessment of hepatic severity. NCCP 00791 v 2 does not use the bilirubin 85/AST 180 contraindication cutoffs from other fluorouracil regimens; no dose is calculated from these values alone.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "CAUTION_CARDIAC_OR_VASCULAR_RISK",
+        "when": {
+          "field": "cardiac_or_vascular_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Source caution: Source cardiovascular, thrombotic, bleeding or fistula/perforation risk factor. Confirm suitability and monitoring; consider ECHO with prior anthracycline/chest-wall radiation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Source caution: Source cardiovascular, thrombotic, bleeding or fistula/perforation risk factor. Confirm suitability and monitoring; consider ECHO with prior anthracycline/chest-wall radiation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "CAUTION_PRIOR_ANTHRACYCLINE_OR_CHEST_RADIOTHERAPY",
+        "when": {
+          "field": "prior_anthracycline_or_chest_radiotherapy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Source caution: Prior anthracycline treatment or chest-wall radiotherapy. Confirm suitability and monitoring; consider ECHO with prior anthracycline/chest-wall radiation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Source caution: Prior anthracycline treatment or chest-wall radiotherapy. Confirm suitability and monitoring; consider ECHO with prior anthracycline/chest-wall radiation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "CAUTION_BASELINE_LOOSE_BM_GT3",
+        "when": {
+          "field": "baseline_loose_bm_gt3",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Source caution: Baseline >3 loose bowel movements daily without stoma. Confirm suitability and monitoring; consider ECHO with prior anthracycline/chest-wall radiation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Source caution: Baseline >3 loose bowel movements daily without stoma. Confirm suitability and monitoring; consider ECHO with prior anthracycline/chest-wall radiation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "CAUTION_PREVIOUS_PELVIC_RADIOTHERAPY",
+        "when": {
+          "field": "previous_pelvic_radiotherapy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Source caution: Previous pelvic radiotherapy. Confirm suitability and monitoring; consider ECHO with prior anthracycline/chest-wall radiation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Source caution: Previous pelvic radiotherapy. Confirm suitability and monitoring; consider ECHO with prior anthracycline/chest-wall radiation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "UNLICENSED_CONSENT_BASELINE",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "unlicensed_regimen_consent_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "unlicensed_regimen_consent_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "NCCP identifies this as an unlicensed bevacizumab regimen in Ireland. Inform and consent the patient and confirm local hospital/Drugs and Therapeutics governance before initiation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "NCCP identifies this as an unlicensed bevacizumab regimen in Ireland. Inform and consent the patient and confirm local hospital/Drugs and Therapeutics governance before initiation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 8,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "ANC_DAY1_HOLD",
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
@@ -610,19 +1522,55 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "message": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
+          "recommendation": "Hold treatment for ANC <1.0; check FBC weekly up to 2 times. Restart only after recovery ≥1 within 2 weeks and review the lowest delayed-week ANC. Reassess the overall combination."
         },
+        "explanation": "Hold treatment for ANC <1.0; check FBC weekly up to 2 times. Restart only after recovery ≥1 within 2 weeks and review the lowest delayed-week ANC. Reassess the overall combination.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "PLATELETS_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
+        "rule_id": "ANC_PERSISTENT",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "ANC remains <1.0 after 2 weeks: discontinue the fluorouracil-based treatment pathway. Review the overall regimen; this does not independently assert permanent bevacizumab discontinuation."
+        },
+        "explanation": "ANC remains <1.0 after 2 weeks: discontinue the fluorouracil-based treatment pathway. Review the overall regimen; this does not independently assert permanent bevacizumab discontinuation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "PLT_DAY1_HOLD",
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
@@ -631,19 +1579,131 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "message": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
+          "recommendation": "Hold for platelets <75. Check weekly up to 2 times; source restart requires recovery ≥75 within 2 weeks. Review the overall combination."
         },
+        "explanation": "Hold for platelets <75. Check weekly up to 2 times; source restart requires recovery ≥75 within 2 weeks. Review the overall combination.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "FEVER_OR_ACTIVE_INFECTION",
-        "priority": 10,
+        "rule_id": "PLT_PERSISTENT",
+        "when": {
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 75
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Platelets remain <75 after 4 weeks: discontinue the fluorouracil-based pathway and review the overall regimen."
+        },
+        "explanation": "Platelets remain <75 after 4 weeks: discontinue the fluorouracil-based pathway and review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "PLT_DELAY_SOURCE_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<",
+              "value": 4
+            },
+            {
+              "any": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 75
+                },
+                {
+                  "field": "lowest_platelets_during_delay_x10e9_l",
+                  "operator": "<",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Table 2 allows platelet recovery within 2 weeks but specifies discontinuation after 4 weeks. The intervening interval is not an automatic restart pathway; consultant review required.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Table 2 allows platelet recovery within 2 weeks but specifies discontinuation after 4 weeks. The intervening interval is not an automatic restart pathway; consultant review required.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "PLT_NADIR_MAINTAIN",
+        "when": {
+          "field": "lowest_platelets_during_delay_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "All platelet-nadir bands, including <10, maintain fluorouracil dose level in this source. Hold until current platelets recover; confirm timing and other toxicity. Do not impose a platelet-only automatic reduction.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "All platelet-nadir bands, including <10, maintain fluorouracil dose level in this source. Hold until current platelets recover; confirm timing and other toxicity. Do not impose a platelet-only automatic reduction.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "ACTIVE_INFECTION_HOLD",
         "when": {
           "field": "febrile_or_active_infection",
           "operator": "==",
@@ -654,101 +1714,480 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
+          "recommendation": "Current fever/febrile neutropenia or clinically active infection requires assessment and recovery before treatment. A future reduced dose is not authorised during infection."
         },
+        "explanation": "Current fever/febrile neutropenia or clinically active infection requires assessment and recovery before treatment. A future reduced dose is not authorised during infection.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "SEVERE_OTHER_TOXICITY",
-        "priority": 8,
+        "rule_id": "LOW_NADIR_ANC",
         "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_during_delay_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 75
+                    }
+                  ]
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "withhold",
+          "type": "dose_reduce",
           "components": [
-            "whole_regimen"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "message": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
+          "recommendation": "After both counts recover within 2 weeks, reduce both fluorouracil components by 1 dose level for delayed-week ANC <1 (including <0.5). Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            },
+            "folinic_acid": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            }
+          }
         },
+        "explanation": "After both counts recover within 2 weeks, reduce both fluorouracil components by 1 dose level for delayed-week ANC <1 (including <0.5). Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "DPD_COMPLETE_DEFICIENCY",
-        "priority": 10,
+        "rule_id": "LOW_NADIR_ANC_HISTORY",
         "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "complete"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Complete DPD deficiency is a contraindication to fluoropyrimidine therapy."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Complete DPD deficiency is a contraindication to fluoropyrimidine therapy."
-      },
-      {
-        "id": "DPD_PARTIAL_DEFICIENCY",
-        "priority": 8,
-        "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "partial"
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "lowest_anc_during_delay_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 75
+                    }
+                  ]
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "nonstandard_fluorouracil_dose",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "message": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
+          "recommendation": "After both counts recover within 2 weeks, reduce both fluorouracil components by 1 dose level for delayed-week ANC <1 (including <0.5). Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "After both counts recover within 2 weeks, reduce both fluorouracil components by 1 dose level for delayed-week ANC <1 (including <0.5). Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "DPD_UNKNOWN",
-        "priority": 7,
+        "rule_id": "LOW_NADIR_RECOVERY_CONTEXT",
         "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "unknown"
+          "all": [
+            {
+              "field": "lowest_anc_during_delay_x10e9_l",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
           ],
-          "message": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
+          "recommendation": "Low delayed-week ANC requires one-level 5-FU reduction only after documented recovery and timing review. Current counts or delay duration are absent/outside the source restart window; no automatic reduced dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Low delayed-week ANC requires one-level 5-FU reduction only after documented recovery and timing review. Current counts or delay duration are absent/outside the source restart window; no automatic reduced dose.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
       },
       {
-        "id": "DIARRHOEA_GRADE_2_PLUS",
-        "priority": 8,
+        "rule_id": "PRIOR_FEBRILE_NEUTROPENIA",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "grade4_neutropenia_with_grade2_fever",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 75
+                    }
+                  ]
+                },
+                {
+                  "field": "febrile_neutropenia_recovered",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "febrile_or_active_infection",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "After resolution of grade 4 neutropenia with ≥grade 2 fever and recovery of both counts, reduce both fluorouracil components by 1 dose level. Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            },
+            "folinic_acid": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            }
+          }
+        },
+        "explanation": "After resolution of grade 4 neutropenia with ≥grade 2 fever and recovery of both counts, reduce both fluorouracil components by 1 dose level. Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "PRIOR_FEBRILE_NEUTROPENIA_HISTORY",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "grade4_neutropenia_with_grade2_fever",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 75
+                    }
+                  ]
+                },
+                {
+                  "field": "febrile_neutropenia_recovered",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "febrile_or_active_infection",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "nonstandard_fluorouracil_dose",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "After resolution of grade 4 neutropenia with ≥grade 2 fever and recovery of both counts, reduce both fluorouracil components by 1 dose level. Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "After resolution of grade 4 neutropenia with ≥grade 2 fever and recovery of both counts, reduce both fluorouracil components by 1 dose level. Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "FN_RECOVERY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "grade4_neutropenia_with_grade2_fever",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "febrile_neutropenia_recovered",
+                  "operator": "missing"
+                },
+                {
+                  "field": "febrile_neutropenia_recovered",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "febrile_or_active_infection",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Prior grade 4 neutropenia with ≥grade 2 fever requires one-level 5-FU reduction after recovery. Confirm infection resolution, both counts and current component levels; no dose now based on history alone.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Prior grade 4 neutropenia with ≥grade 2 fever requires one-level 5-FU reduction after recovery. Confirm infection resolution, both counts and current component levels; no dose now based on history alone.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_HOLD",
         "when": {
           "field": "diarrhoea_grade",
           "operator": ">=",
@@ -757,19 +2196,358 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
+          "recommendation": "Current diarrhoea ≥grade 2: hold treatment, weekly review up to 2 times, until below grade 2. Confirm the NCCP source-table grading."
         },
+        "explanation": "Current diarrhoea ≥grade 2: hold treatment, weekly review up to 2 times, until below grade 2. Confirm the NCCP source-table grading.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
       },
       {
-        "id": "MUCOSITIS_GRADE_2_PLUS",
-        "priority": 8,
+        "rule_id": "DIARRHOEA_PERSISTENT",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Diarrhoea remains ≥grade 2 after 2 weeks: discontinue the fluorouracil pathway and review the overall regimen."
+        },
+        "explanation": "Diarrhoea remains ≥grade 2 after 2 weeks: discontinue the fluorouracil pathway and review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_RECOVERY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "diarrhoea_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Historical diarrhoea requires current severity and recovery timing. The source restart window is within 2 weeks; do not infer recovery or a dose from the highest grade alone.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Historical diarrhoea requires current severity and recovery timing. The source restart window is within 2 weeks; do not infer recovery or a dose from the highest grade alone.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_SOURCE_GRADE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "source_toxicity_grade_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "source_toxicity_grade_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Confirm diarrhoea grading against NCCP Table 6 before a dose-level change: printed source definitions differ from modern CTCAE 5.0. No automatic translation of grade labels.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm diarrhoea grading against NCCP Table 6 before a dose-level change: printed source definitions differ from modern CTCAE 5.0. No automatic translation of grade labels.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_LOW_GRADE_MAINTAIN",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "After recovery below grade 2 within 2 weeks, historical grade 1/2 diarrhoea maintains current 5-FU dose level. Confirm timing; do not restore a previously reduced dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "After recovery below grade 2 within 2 weeks, historical grade 1/2 diarrhoea maintains current 5-FU dose level. Confirm timing; do not restore a previously reduced dose.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_G3_4",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "diarrhoea_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<=",
+                      "value": 2
+                    },
+                    {
+                      "field": "source_toxicity_grade_confirmed",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "After recovery from grade 3/4 diarrhoea, reduce both 5-FU components by 1 dose level. Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            },
+            "folinic_acid": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            }
+          }
+        },
+        "explanation": "After recovery from grade 3/4 diarrhoea, reduce both 5-FU components by 1 dose level. Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_G3_4_HISTORY",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "diarrhoea_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<=",
+                      "value": 2
+                    },
+                    {
+                      "field": "source_toxicity_grade_confirmed",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "nonstandard_fluorouracil_dose",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "After recovery from grade 3/4 diarrhoea, reduce both 5-FU components by 1 dose level. Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "After recovery from grade 3/4 diarrhoea, reduce both 5-FU components by 1 dose level. Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_HOLD",
         "when": {
           "field": "mucositis_grade",
           "operator": ">=",
@@ -778,239 +2556,1974 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
+          "recommendation": "Current stomatitis ≥grade 2: hold treatment, weekly review up to 2 times, until below grade 2. Confirm the NCCP source-table grading."
         },
+        "explanation": "Current stomatitis ≥grade 2: hold treatment, weekly review up to 2 times, until below grade 2. Confirm the NCCP source-table grading.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
       },
       {
-        "id": "UNCONTROLLED_HYPERTENSION",
-        "priority": 9,
+        "rule_id": "STOMATITIS_PERSISTENT",
         "when": {
-          "any": [
+          "all": [
             {
-              "field": "systolic_bp_mmhg",
+              "field": "mucositis_grade",
               "operator": ">=",
-              "value": 160
+              "value": 2
             },
             {
-              "field": "diastolic_bp_mmhg",
+              "field": "toxicity_delay_weeks",
               "operator": ">=",
-              "value": 100
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Stomatitis remains ≥grade 2 after 2 weeks: discontinue the fluorouracil pathway and review the overall regimen."
+        },
+        "explanation": "Stomatitis remains ≥grade 2 after 2 weeks: discontinue the fluorouracil pathway and review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_RECOVERY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "mucositis_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Historical stomatitis requires current severity and recovery timing. The source restart window is within 2 weeks; do not infer recovery or a dose from the highest grade alone.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Historical stomatitis requires current severity and recovery timing. The source restart window is within 2 weeks; do not infer recovery or a dose from the highest grade alone.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_SOURCE_GRADE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "source_toxicity_grade_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "source_toxicity_grade_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Confirm stomatitis grading against NCCP Table 6 before a dose-level change: printed source definitions differ from modern CTCAE 5.0. No automatic translation of grade labels.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm stomatitis grading against NCCP Table 6 before a dose-level change: printed source definitions differ from modern CTCAE 5.0. No automatic translation of grade labels.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_LOW_GRADE_MAINTAIN",
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "After recovery below grade 2 within 2 weeks, historical grade 1/2 stomatitis maintains current 5-FU dose level. Confirm timing; do not restore a previously reduced dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "After recovery below grade 2 within 2 weeks, historical grade 1/2 stomatitis maintains current 5-FU dose level. Confirm timing; do not restore a previously reduced dose.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_G3",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "mucositis_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<=",
+                      "value": 2
+                    },
+                    {
+                      "field": "source_toxicity_grade_confirmed",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "field": "stomatitis_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "After recovery from grade 3 stomatitis, reduce both 5-FU components by 1 dose level(s). Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            },
+            "folinic_acid": {
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            }
+          }
+        },
+        "explanation": "After recovery from grade 3 stomatitis, reduce both 5-FU components by 1 dose level(s). Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_G3_HISTORY",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "mucositis_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<=",
+                      "value": 2
+                    },
+                    {
+                      "field": "source_toxicity_grade_confirmed",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "field": "stomatitis_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "nonstandard_fluorouracil_dose",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "After recovery from grade 3 stomatitis, reduce both 5-FU components by 1 dose level(s). Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "After recovery from grade 3 stomatitis, reduce both 5-FU components by 1 dose level(s). Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_G4",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "mucositis_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<=",
+                      "value": 2
+                    },
+                    {
+                      "field": "source_toxicity_grade_confirmed",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "field": "stomatitis_highest_grade",
+                  "operator": "==",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "in",
+                  "value": [
+                    0,
+                    -1,
+                    -2
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "nonstandard_fluorouracil_dose",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "After recovery from grade 4 stomatitis, reduce both 5-FU components by 2 dose level(s). Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
+          "component_changes": {
+            "fluorouracil_bolus": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            },
+            "fluorouracil_infusion": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
+            },
+            "folinic_acid": {
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
+            }
+          }
+        },
+        "explanation": "After recovery from grade 4 stomatitis, reduce both 5-FU components by 2 dose level(s). Apply the greatest reduction per component, not the sum of overlapping triggers. Folinic acid remains 400 mg/m² at levels 0/−1/−2; delay/omit it with the 5-FU bolus. Below level−2 means discontinue.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_G4_HISTORY",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "mucositis_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<=",
+                      "value": 2
+                    },
+                    {
+                      "field": "source_toxicity_grade_confirmed",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "field": "stomatitis_highest_grade",
+                  "operator": "==",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "current_fluorouracil_bolus_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "current_fluorouracil_infusion_level",
+                  "operator": "missing"
+                },
+                {
+                  "field": "nonstandard_fluorouracil_dose",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "After recovery from grade 4 stomatitis, reduce both 5-FU components by 2 dose level(s). Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "After recovery from grade 4 stomatitis, reduce both 5-FU components by 2 dose level(s). Confirm each current component dose level; a nonstandard administered dose requires pharmacy reconciliation. No starting-level assumption or re-escalation.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "BEV_PROTEIN_GT4",
+        "when": {
+          "field": "proteinuria_g_24h",
+          "operator": ">",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "24-hour urine protein >4 g: discontinue bevacizumab. No bevacizumab dose reduction is recommended."
+        },
+        "explanation": "24-hour urine protein >4 g: discontinue bevacizumab. No bevacizumab dose reduction is recommended.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "BEV_PROTEIN_GT2_TO4",
+        "when": {
+          "all": [
+            {
+              "field": "proteinuria_g_24h",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "proteinuria_g_24h",
+              "operator": "<=",
+              "value": 4
             }
           ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "bevacizumab"
           ],
-          "message": "Withhold anti-angiogenic therapy for uncontrolled hypertension and optimise blood pressure."
+          "recommendation": "Protein >2 to 4 g/24 hours: hold bevacizumab; repeat 24-hour urine every 2 weeks and resume only when ≤2 g/24 hours."
         },
+        "explanation": "Protein >2 to 4 g/24 hours: hold bevacizumab; repeat 24-hour urine every 2 weeks and resume only when ≤2 g/24 hours.",
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Withhold anti-angiogenic therapy for uncontrolled hypertension and optimise blood pressure."
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 4
+        }
       },
       {
-        "id": "PROTEINURIA_GRADE_2_PLUS",
-        "priority": 8,
+        "rule_id": "BEV_PROTEIN_LE2",
         "when": {
-          "field": "proteinuria_grade",
-          "operator": ">=",
+          "field": "proteinuria_g_24h",
+          "operator": "<=",
           "value": 2
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "bevacizumab"
           ],
-          "message": "Clinically significant proteinuria requires withholding and quantified reassessment."
+          "recommendation": "Urine protein ≤2 g/24 hours meets this source proteinuria criterion. Other entered restrictions govern; this result alone does not establish eligibility or override grade 4 proteinuria.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Urine protein ≤2 g/24 hours meets this source proteinuria criterion. Other entered restrictions govern; this result alone does not establish eligibility or override grade 4 proteinuria.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Clinically significant proteinuria requires withholding and quantified reassessment."
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 4
+        }
       },
       {
-        "id": "MAJOR_BLEEDING_OR_THROMBOSIS",
-        "priority": 10,
+        "rule_id": "BEV_DIPSTICK4",
         "when": {
-          "field": "major_bleeding_or_recent_thrombosis",
+          "field": "urine_protein_dipstick",
+          "operator": "==",
+          "value": "4+"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Dipstick 4+ at baseline or during treatment: withhold bevacizumab and collect 24-hour urine protein."
+        },
+        "explanation": "Dipstick 4+ at baseline or during treatment: withhold bevacizumab and collect 24-hour urine protein.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "BEV_DIPSTICK2_3",
+        "when": {
+          "any": [
+            {
+              "field": "urine_protein_dipstick",
+              "operator": "in",
+              "value": [
+                "2+",
+                "3+"
+              ]
+            },
+            {
+              "field": "urine_protein_g_l",
+              "operator": ">=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Dipstick 2+/3+ or laboratory urine protein ≥1 g/L: Table 4 permits the scheduled bevacizumab dose from this domain, with 24-hour collection within 3 days before the next dose. A concurrent 4+ or 24-hour hold/stop result takes priority; concentration g/L is not g/24 hours.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Dipstick 2+/3+ or laboratory urine protein ≥1 g/L: Table 4 permits the scheduled bevacizumab dose from this domain, with 24-hour collection within 3 days before the next dose. A concurrent 4+ or 24-hour hold/stop result takes priority; concentration g/L is not g/24 hours.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "BEV_PROTEIN_G4",
+        "when": {
+          "field": "proteinuria_grade",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Grade 4 proteinuria: discontinue bevacizumab."
+        },
+        "explanation": "Grade 4 proteinuria: discontinue bevacizumab.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "BEV_HTN_DAY1",
+        "when": {
+          "field": "uncontrolled_or_symptomatic_hypertension",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "bevacizumab"
           ],
-          "message": "Major bleeding or unstable recent thrombosis requires withholding and Consultant review."
+          "recommendation": "Uncontrolled or symptomatic hypertension on day 1: withhold bevacizumab, start/adjust antihypertensive therapy and reassess control."
         },
+        "explanation": "Uncontrolled or symptomatic hypertension on day 1: withhold bevacizumab, start/adjust antihypertensive therapy and reassess control.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Major bleeding or unstable recent thrombosis requires withholding and Consultant review."
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
       },
       {
-        "id": "SURGERY_OR_UNHEALED_WOUND",
-        "priority": 9,
+        "rule_id": "BEV_BP_CONTEXT",
         "when": {
-          "field": "recent_or_planned_major_surgery",
+          "any": [
+            {
+              "field": "systolic_bp_mmhg",
+              "operator": ">",
+              "value": 150
+            },
+            {
+              "field": "diastolic_bp_mmhg",
+              "operator": ">",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Source initiating-treatment definition is sustained BP >150/100 mmHg while taking antihypertensives. A single reading or isolated threshold must not silently substitute for persistence/treatment context; assess symptoms and clinical control.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Source initiating-treatment definition is sustained BP >150/100 mmHg while taking antihypertensives. A single reading or isolated threshold must not silently substitute for persistence/treatment context; assess symptoms and clinical control.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "BEV_BP_SUSTAINED_TREATED",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "systolic_bp_mmhg",
+                  "operator": ">",
+                  "value": 150
+                },
+                {
+                  "field": "diastolic_bp_mmhg",
+                  "operator": ">",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "field": "bp_sustained_on_antihypertensives",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Sustained BP above a component of the source 150/100 threshold while on antihypertensives requires assessment of clinical control. The source does not explicitly define AND/OR logic between systolic and diastolic values; confirm uncontrolled/symptomatic hypertension, which requires holding bevacizumab. No automatic numeric threshold substitution.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Sustained BP above a component of the source 150/100 threshold while on antihypertensives requires assessment of clinical control. The source does not explicitly define AND/OR logic between systolic and diastolic values; confirm uncontrolled/symptomatic hypertension, which requires holding bevacizumab. No automatic numeric threshold substitution.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "BEV_HTN_G2_3",
+        "when": {
+          "field": "hypertension_grade",
+          "operator": "in",
+          "value": [
+            2,
+            3
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Grade 2–3 hypertension: initiate antihypertensive treatment and consider interruption of bevacizumab until controlled. Do not calculate a reduced bevacizumab dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Grade 2–3 hypertension: initiate antihypertensive treatment and consider interruption of bevacizumab until controlled. Do not calculate a reduced bevacizumab dose.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "BEV_HTN_STOP",
+        "when": {
+          "any": [
+            {
+              "field": "hypertension_grade",
+              "operator": ">=",
+              "value": 4
+            },
+            {
+              "field": "persistent_grade3_hypertension",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Grade 4 or persisting grade 3 hypertension: discontinue bevacizumab."
+        },
+        "explanation": "Grade 4 or persisting grade 3 hypertension: discontinue bevacizumab.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "BEV_STOP_GI_PERFORATION",
+        "when": {
+          "field": "gi_perforation",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "bevacizumab"
           ],
-          "message": "Anti-angiogenic therapy must be managed around major surgery and wound healing."
+          "recommendation": "Discontinue bevacizumab for Gastrointestinal perforation. The source stop is component-specific."
         },
+        "explanation": "Discontinue bevacizumab for Gastrointestinal perforation. The source stop is component-specific.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Anti-angiogenic therapy must be managed around major surgery and wound healing."
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
       },
       {
-        "id": "GI_PERFORATION_OR_FISTULA",
-        "priority": 10,
+        "rule_id": "BEV_STOP_TE_OR_GRADE4_FISTULA",
+        "when": {
+          "field": "te_or_grade4_fistula",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for Tracheoesophageal fistula or any grade 4 fistula. The source stop is component-specific."
+        },
+        "explanation": "Discontinue bevacizumab for Tracheoesophageal fistula or any grade 4 fistula. The source stop is component-specific.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "BEV_STOP_GRADE4_THROMBOEMBOLISM",
+        "when": {
+          "field": "grade4_thromboembolism",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for Grade 4 thromboembolic event. The source stop is component-specific."
+        },
+        "explanation": "Discontinue bevacizumab for Grade 4 thromboembolic event. The source stop is component-specific.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "BEV_HAEMORRHAGE_G3_4",
+        "when": {
+          "field": "haemorrhage_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Haemorrhage ≥grade 3: discontinue bevacizumab."
+        },
+        "explanation": "Haemorrhage ≥grade 3: discontinue bevacizumab.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "BEV_CONTEXT_GI_PERFORATION_OR_FISTULA",
         "when": {
           "field": "gi_perforation_or_fistula",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "bevacizumab"
           ],
-          "message": "Gastrointestinal perforation or fistula triggers permanent discontinuation of anti-VEGF therapy."
+          "recommendation": "Clarify perforation versus fistula site/grade. Perforation, TE fistula or any grade 4 fistula requires stopping bevacizumab; the broad legacy field does not establish the specific event.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Clarify perforation versus fistula site/grade. Perforation, TE fistula or any grade 4 fistula requires stopping bevacizumab; the broad legacy field does not establish the specific event.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Gastrointestinal perforation or fistula triggers permanent discontinuation of anti-VEGF therapy."
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
       },
       {
-        "id": "OF590_00791_5FU_RENAL_SEVERE",
-        "priority": 20,
+        "rule_id": "BEV_CONTEXT_MAJOR_BLEEDING_OR_RECENT_THROMBOSIS",
         "when": {
-          "field": "fluorouracil_renal_impairment",
+          "field": "major_bleeding_or_recent_thrombosis",
           "operator": "==",
-          "value": "severe"
+          "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "fluorouracil"
+            "bevacizumab"
           ],
-          "message": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability.",
-          "recommendation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
+          "recommendation": "Urgently establish bleeding grade, thrombotic type/grade and timing. Haemorrhage ≥grade 3 or grade 4 thromboembolism stops bevacizumab; a combined history field is not a permanent-stop diagnosis.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Urgently establish bleeding grade, thrombotic type/grade and timing. Haemorrhage ≥grade 3 or grade 4 thromboembolism stops bevacizumab; a combined history field is not a permanent-stop diagnosis.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Severe renal impairment: consider fluorouracil dose reduction and review DPD phenotyping reliability."
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
       },
       {
-        "id": "OF590_00791_5FU_BILI_GT85",
-        "priority": 20,
+        "rule_id": "BEV_CONTEXT_RECENT_OR_PLANNED_MAJOR_SURGERY",
         "when": {
-          "field": "fluorouracil_bilirubin_umol_l",
-          "operator": ">",
-          "value": 85
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table.",
-          "recommendation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Bilirubin >85 µmol/L: fluorouracil is contraindicated in the encoded source table."
-      },
-      {
-        "id": "OF590_00791_5FU_AST_GT180",
-        "priority": 20,
-        "when": {
-          "field": "fluorouracil_ast_u_l",
-          "operator": ">",
-          "value": 180
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table.",
-          "recommendation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "AST >180 U/L: fluorouracil is contraindicated in the encoded source table."
-      },
-      {
-        "id": "OF590_00791_5FU_HEP_MOD",
-        "priority": 20,
-        "when": {
-          "field": "fluorouracil_hepatic_impairment",
+          "field": "recent_or_planned_major_surgery",
           "operator": "==",
-          "value": "moderate"
+          "value": true
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
-            "fluorouracil"
+            "bevacizumab"
           ],
-          "message": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated.",
-          "recommendation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
+          "recommendation": "Review surgery timing and wound healing before bevacizumab against current product information and the surgical plan. The NCCP source lists relevant procedural/perforation risk; it does not prescribe a universal interval here.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Review surgery timing and wound healing before bevacizumab against current product information and the surgical plan. The NCCP source lists relevant procedural/perforation risk; it does not prescribe a universal interval here.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one-third; escalate only if tolerated."
+          "document": "NCCP 00791 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
       },
       {
-        "id": "OF590_00791_5FU_HEP_SEV",
-        "priority": 20,
+        "rule_id": "OTHER_NONHAEM_REVIEW",
         "when": {
-          "field": "fluorouracil_hepatic_impairment",
-          "operator": "==",
-          "value": "severe"
+          "field": "other_nonhaem_toxicity_grade",
+          "operator": ">=",
+          "value": 2
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
-            "fluorouracil"
+            "whole_regimen"
           ],
-          "message": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated.",
-          "recommendation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
+          "recommendation": "Identify the specific adverse event and use its NCCP pathway. This source does not provide an automatic generic percentage reduction for every non-haematological toxicity.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Identify the specific adverse event and use its NCCP pathway. This source does not provide an automatic generic percentage reduction for every non-haematological toxicity.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00791 v2",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+        }
+      },
+      {
+        "rule_id": "LOW_NADIR_ANC_EXHAUSTED_FLUOROURACIL_BOLUS",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "lowest_anc_during_delay_x10e9_l",
+                      "operator": "<",
+                      "value": 1
+                    },
+                    {
+                      "all": [
+                        {
+                          "field": "anc_x10e9_l",
+                          "operator": ">=",
+                          "value": 1
+                        },
+                        {
+                          "field": "platelets_x10e9_l",
+                          "operator": ">=",
+                          "value": 75
+                        }
+                      ]
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<=",
+                      "value": 2
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_bolus_level",
+              "operator": "<",
+              "value": -1
+            }
+          ]
         },
-        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one-half; escalate only if tolerated."
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_bolus",
+            "folinic_acid"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "LOW_NADIR_ANC_EXHAUSTED_FLUOROURACIL_INFUSION",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "lowest_anc_during_delay_x10e9_l",
+                      "operator": "<",
+                      "value": 1
+                    },
+                    {
+                      "all": [
+                        {
+                          "field": "anc_x10e9_l",
+                          "operator": ">=",
+                          "value": 1
+                        },
+                        {
+                          "field": "platelets_x10e9_l",
+                          "operator": ">=",
+                          "value": 75
+                        }
+                      ]
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": "<=",
+                      "value": 2
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_infusion_level",
+              "operator": "<",
+              "value": -1
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "PRIOR_FEBRILE_NEUTROPENIA_EXHAUSTED_FLUOROURACIL_BOLUS",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "grade4_neutropenia_with_grade2_fever",
+                      "operator": "==",
+                      "value": true
+                    },
+                    {
+                      "all": [
+                        {
+                          "field": "anc_x10e9_l",
+                          "operator": ">=",
+                          "value": 1
+                        },
+                        {
+                          "field": "platelets_x10e9_l",
+                          "operator": ">=",
+                          "value": 75
+                        }
+                      ]
+                    },
+                    {
+                      "field": "febrile_neutropenia_recovered",
+                      "operator": "==",
+                      "value": true
+                    },
+                    {
+                      "field": "febrile_or_active_infection",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_bolus_level",
+              "operator": "<",
+              "value": -1
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_bolus",
+            "folinic_acid"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "PRIOR_FEBRILE_NEUTROPENIA_EXHAUSTED_FLUOROURACIL_INFUSION",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "grade4_neutropenia_with_grade2_fever",
+                      "operator": "==",
+                      "value": true
+                    },
+                    {
+                      "all": [
+                        {
+                          "field": "anc_x10e9_l",
+                          "operator": ">=",
+                          "value": 1
+                        },
+                        {
+                          "field": "platelets_x10e9_l",
+                          "operator": ">=",
+                          "value": 75
+                        }
+                      ]
+                    },
+                    {
+                      "field": "febrile_neutropenia_recovered",
+                      "operator": "==",
+                      "value": true
+                    },
+                    {
+                      "field": "febrile_or_active_infection",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_infusion_level",
+              "operator": "<",
+              "value": -1
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_G3_4_EXHAUSTED_FLUOROURACIL_BOLUS",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "diarrhoea_grade",
+                          "operator": "<",
+                          "value": 2
+                        },
+                        {
+                          "field": "toxicity_delay_weeks",
+                          "operator": "<=",
+                          "value": 2
+                        },
+                        {
+                          "field": "source_toxicity_grade_confirmed",
+                          "operator": "==",
+                          "value": true
+                        }
+                      ]
+                    },
+                    {
+                      "field": "diarrhoea_highest_grade",
+                      "operator": ">=",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_bolus_level",
+              "operator": "<",
+              "value": -1
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_bolus",
+            "folinic_acid"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_G3_4_EXHAUSTED_FLUOROURACIL_INFUSION",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "diarrhoea_grade",
+                          "operator": "<",
+                          "value": 2
+                        },
+                        {
+                          "field": "toxicity_delay_weeks",
+                          "operator": "<=",
+                          "value": 2
+                        },
+                        {
+                          "field": "source_toxicity_grade_confirmed",
+                          "operator": "==",
+                          "value": true
+                        }
+                      ]
+                    },
+                    {
+                      "field": "diarrhoea_highest_grade",
+                      "operator": ">=",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_infusion_level",
+              "operator": "<",
+              "value": -1
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_G3_EXHAUSTED_FLUOROURACIL_BOLUS",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "mucositis_grade",
+                          "operator": "<",
+                          "value": 2
+                        },
+                        {
+                          "field": "toxicity_delay_weeks",
+                          "operator": "<=",
+                          "value": 2
+                        },
+                        {
+                          "field": "source_toxicity_grade_confirmed",
+                          "operator": "==",
+                          "value": true
+                        }
+                      ]
+                    },
+                    {
+                      "field": "stomatitis_highest_grade",
+                      "operator": "==",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_bolus_level",
+              "operator": "<",
+              "value": -1
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_bolus",
+            "folinic_acid"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_G3_EXHAUSTED_FLUOROURACIL_INFUSION",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "mucositis_grade",
+                          "operator": "<",
+                          "value": 2
+                        },
+                        {
+                          "field": "toxicity_delay_weeks",
+                          "operator": "<=",
+                          "value": 2
+                        },
+                        {
+                          "field": "source_toxicity_grade_confirmed",
+                          "operator": "==",
+                          "value": true
+                        }
+                      ]
+                    },
+                    {
+                      "field": "stomatitis_highest_grade",
+                      "operator": "==",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_infusion_level",
+              "operator": "<",
+              "value": -1
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_G4_EXHAUSTED_FLUOROURACIL_BOLUS",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "mucositis_grade",
+                          "operator": "<",
+                          "value": 2
+                        },
+                        {
+                          "field": "toxicity_delay_weeks",
+                          "operator": "<=",
+                          "value": 2
+                        },
+                        {
+                          "field": "source_toxicity_grade_confirmed",
+                          "operator": "==",
+                          "value": true
+                        }
+                      ]
+                    },
+                    {
+                      "field": "stomatitis_highest_grade",
+                      "operator": "==",
+                      "value": 4
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_bolus_level",
+              "operator": "<",
+              "value": 0
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_bolus",
+            "folinic_acid"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil bolus below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_G4_EXHAUSTED_FLUOROURACIL_INFUSION",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "mucositis_grade",
+                          "operator": "<",
+                          "value": 2
+                        },
+                        {
+                          "field": "toxicity_delay_weeks",
+                          "operator": "<=",
+                          "value": 2
+                        },
+                        {
+                          "field": "source_toxicity_grade_confirmed",
+                          "operator": "==",
+                          "value": true
+                        }
+                      ]
+                    },
+                    {
+                      "field": "stomatitis_highest_grade",
+                      "operator": "==",
+                      "value": 4
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "current_fluorouracil_bolus_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "field": "current_fluorouracil_infusion_level",
+                      "operator": "in",
+                      "value": [
+                        0,
+                        -1,
+                        -2
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "nonstandard_fluorouracil_dose",
+                          "operator": "==",
+                          "value": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_fluorouracil_infusion_level",
+              "operator": "<",
+              "value": 0
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen."
+        },
+        "explanation": "Further source dose-level reduction would take fluorouracil infusion below level −2: discontinue this component. Folinic acid is omitted if the bolus is discontinued; review the overall regimen.",
+        "source": {
+          "document": "NCCP 00791 v2",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+          "table": 6
+        }
       }
     ]
   },
@@ -1023,22 +4536,99 @@
     "Pregnancy or breastfeeding where prohibited by the current source"
   ],
   "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Treatment-specific toxicity monitoring before each administration/cycle"
+    "Baseline FBC, renal/liver profile, urine protein dipstick, BP and cardiac history/examination; DPD before first fluorouracil unless previously tested.",
+    "ECG as clinically indicated; consider ECHO with prior anthracycline treatment or chest-wall radiation.",
+    "Each cycle: FBC, renal/liver profile, urine protein dipstick. BP before each cycle AND after treatment.",
+    "On warfarin: INR weekly until dose stable, then before each cycle. Disease imaging and additional testing follow the individual treatment plan."
   ],
   "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
+    "See executable source-specific rules: fluorouracil dose levels and recovery windows are separate from bevacizumab hold/stop rules.",
+    "Bevacizumab dose reduction for adverse events is not recommended.",
+    "Mild/moderate hepatic impairment without renal impairment needs no expected fluorouracil adjustment; severe hepatic impairment is not recommended. No imported bilirubin 85/AST 180 rule."
   ],
   "supportive_care": {
     "emetogenic_risk": "low",
     "script_id": "nccp-parenteral-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf",
+    "mapping_basis": "NCCP 00791 source-specific emetic risk; checked 2026-11-04",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
+    "regimen_specific_notes": [
+      "Bevacizumab minimal and fluorouracil low emetogenic risk.",
+      "Premedication not usually required; antidiarrhoeal treatment per local policy."
+    ],
+    "phase_specific_plan": "patient/00791/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6416/791_v2_Bevacizumab_5mgkg_5FU.pdf"
+  },
+  "dose_levels": {
+    "fluorouracil_bolus": {
+      "0": 400,
+      "-1": 320,
+      "-2": 240,
+      "-3": "discontinue"
+    },
+    "fluorouracil_infusion": {
+      "0": 2400,
+      "-1": 2000,
+      "-2": 1600,
+      "-3": "discontinue"
+    },
+    "folinic_acid": {
+      "0": 400,
+      "-1": 400,
+      "-2": 400,
+      "-3": "discontinue"
+    }
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "fourteen_day_cycle",
+      "cycle_length_days": 14,
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "bevacizumab",
+          "dose": {
+            "value": 5,
+            "unit": "mg/kg"
+          },
+          "route": "IV infusion",
+          "notes": "First infusion 90 minutes; second 60 if tolerated; subsequent 30 if tolerated. Never IV push."
+        },
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "folinic_acid",
+          "dose": {
+            "value": 400,
+            "unit": "mg/m2 IV"
+          },
+          "notes": "Over 2 hours; before 5-FU. Delay/omit with the 5-FU bolus."
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "drug": "fluorouracil_bolus",
+          "dose": {
+            "value": 400,
+            "unit": "mg/m2 IV bolus"
+          }
+        },
+        {
+          "day": 1,
+          "order": 3,
+          "drug": "fluorouracil_infusion",
+          "dose": {
+            "value": 2400,
+            "unit": "mg/m2 continuous IV over 46 hours"
+          }
+        }
+      ]
+    }
+  ]
 }
