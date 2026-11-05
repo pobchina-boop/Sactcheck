@@ -23,12 +23,13 @@ for(const c of Object.keys(ps)){
  test(c,'Platelets-only hold',{platelets_x10e9_l:74.9},'withhold',capeOnly);
  for(const [f,vals] of [['anc_x10e9_l',[.49,.5,.99,1,1.49]],['platelets_x10e9_l',[24.9,25,49.9,50,74.9]]])for(const v of vals)test(c,`${f} boundary ${v}`,{[f]:v},v<(f==='anc_x10e9_l'?.5:25)?'discontinue':'withhold',capeOnly);
  // Table 1 recurrence matrix, with both recovery counts independently confirmed.
+ // v0.84.36 00216 context: original prescription, both episode nadirs and prior dose are explicit; missing-history negatives live in its independent source-cases.cjs.
  const matrix=[{field:'lowest_anc_episode',v:1.2,doses:[100,75,50,0]},{field:'lowest_anc_episode',v:.7,doses:[75,50,0,0]},{field:'lowest_platelets_episode',v:60,doses:[100,75,50,0]},{field:'lowest_platelets_episode',v:30,doses:[75,50,0,0]}];
- for(const m of matrix)for(let n=1;n<=4;n++){const pct=m.doses[n-1];test(c,`Recovered ${m.field} ${m.v}, occurrence ${n}`,{anc_x10e9_l:1.5,platelets_x10e9_l:75,[m.field]:m.v,haematology_occurrence:n},pct===0?'discontinue':pct===100?'consultant_review':'dose_reduce',pct>0&&pct<100?percent(pct):capeOnly);}
- test(c,'Missing platelet recovery prevents automatic restart dose',{anc_x10e9_l:1.5,lowest_anc_episode:.7,haematology_occurrence:1},'partial_context_required',(r,d)=>assert(!d.rows.some(x=>x.actionType==='dose_reduce')));
+ for(const m of matrix)for(let n=1;n<=4;n++){const pct=m.doses[n-1];test(c,`Recovered ${m.field} ${m.v}, occurrence ${n}`,{...(c==='00216'?{lowest_anc_episode:1.5,lowest_platelets_episode:75,capecitabine_previous_dose_percent:100}:{}),anc_x10e9_l:1.5,platelets_x10e9_l:75,[m.field]:m.v,haematology_occurrence:n},pct===0?'discontinue':pct===100?'consultant_review':'dose_reduce',pct>0&&pct<100?percent(pct):capeOnly);}
+ test(c,'Missing platelet recovery prevents automatic restart dose',{anc_x10e9_l:1.5,lowest_anc_episode:.7,haematology_occurrence:1},c==='00216'?'consultant_review':'partial_context_required',(r,d)=>assert(!d.rows.some(x=>x.actionType==='dose_reduce')));
  for(const prefix of ['diarrhoea','mucositis','other_nonhaem_toxicity']){
   const field=prefix+'_grade';test(c,`${prefix} grade 2 alone`,{[field]:2},'withhold',capeOnly);
-  for(const [grade,doses] of [[2,[100,75,50,0]],[3,[75,50,0,0]]])for(let n=1;n<=4;n++){const pct=doses[n-1];test(c,`Recovered ${prefix} grade ${grade}, occurrence ${n}`,{[field]:1,[prefix+'_highest_grade']:grade,[prefix+'_occurrence']:n},pct===0?'discontinue':pct===100?'consultant_review':'dose_reduce',pct>0&&pct<100?percent(pct):capeOnly);}
+  for(const [grade,doses] of [[2,[100,75,50,0]],[3,[75,50,0,0]]])for(let n=1;n<=4;n++){const pct=doses[n-1];test(c,`Recovered ${prefix} grade ${grade}, occurrence ${n}`,{...(c==='00216'?{capecitabine_previous_dose_percent:100}:{}),[field]:1,[prefix+'_highest_grade']:grade,[prefix+'_occurrence']:n},pct===0?'discontinue':pct===100?'consultant_review':'dose_reduce',pct>0&&pct<100?percent(pct):capeOnly);}
   test(c,`${prefix} grade 4`,{[field]:4},'discontinue',(r,d)=>{capeOnly(r,d);assert(JSON.stringify(r.findings).includes('exceptionally'));});
   test(c,`${prefix} remains active despite reduction history`,{[field]:2,[prefix+'_highest_grade']:3,[prefix+'_occurrence']:2},'withhold',(r,d)=>assert.equal(d.rows[0].protocolDose,'No dose now'));
  }
@@ -38,8 +39,8 @@ for(const c of Object.keys(ps)){
   test(c,`${f} above`,{[f]:limit+.01},'withhold',capeOnly);
   for(const v of [limit-.01,limit]){const r=E.assess(p,{[f]:v});assert(!r.findings.some(f=>f.ruleId==='HEPATOTOXICITY'));out.push({code:c,case:`${f} ${v} does not exceed threshold`,inputs:{[f]:v},expected:'No hepatotoxicity hold',actual:r.actionType,pass:true});}
  }
- test(c,'Renal band 30–50',{[renal]:'30_50'},c==='00623'?'consultant_review':'dose_reduce',c==='00623'?(r,d)=>{assert(d.rows[0].protocolDose.includes('Source discrepancy'));assert(!/Use 75%/.test(d.rows[0].actionLabel));}:percent(75));
- for(const v of [29.9,30,50,51])test(c,`Numeric CrCl ${v}`,{[renal]:v},v<30?(c==='00623'?'discontinue':'contraindicated'):v<=50?(c==='00623'?'consultant_review':'dose_reduce'):'proceed_with_caution');
+ test(c,'Renal band 30–50',{...(c==='00216'?{capecitabine_starting_dose:'1250',assessment_type:'baseline'}:{}),[renal]:'30_50'},c==='00623'?'consultant_review':'dose_reduce',c==='00623'?(r,d)=>{assert(d.rows[0].protocolDose.includes('Source discrepancy'));assert(!/Use 75%/.test(d.rows[0].actionLabel));}:percent(75));
+ for(const v of [29.9,30,50,51])test(c,`Numeric CrCl ${v}`,{...(c==='00216'?{capecitabine_starting_dose:'1250',assessment_type:'baseline'}:{}),[renal]:v},v<30?(c==='00623'?'discontinue':'contraindicated'):v<=50?(c==='00623'?'consultant_review':'dose_reduce'):'proceed_with_caution');
  test(c,'Unrounded renal boundary review',{[renal]:50.5},'consultant_review');
  test(c,'Severe hepatic SmPC exclusion',{hepatic_impairment_severity:'severe'},'contraindicated');
  test(c,'Dialysis',{[renal]:'dialysis'},c==='00623'?'consultant_review':'contraindicated',r=>{assert.equal(r.inputs.haemodialysis,true);assert(!JSON.stringify(r.displayInputs).includes('0 mL/min'));});
@@ -47,10 +48,10 @@ for(const c of Object.keys(ps)){
  test(c,'Brivudine exclusion',{recent_or_concomitant_brivudine:true},'contraindicated',capeOnly);
  test(c,'Previous severe unexpected reaction',{history_severe_unexpected_fluoropyrimidine_reaction:true},'contraindicated',capeOnly);
  test(c,'Outside ECOG source eligibility',{ecog:c==='00586'?2:3},'consultant_review');
- test(c,'Competing 75 and 50 percent choose 50',{diarrhoea_grade:1,diarrhoea_highest_grade:3,diarrhoea_occurrence:1,mucositis_grade:1,mucositis_highest_grade:3,mucositis_occurrence:2},'dose_reduce',percent(50));
+ test(c,'Competing 75 and 50 percent choose 50',{...(c==='00216'?{capecitabine_previous_dose_percent:100}:{}),diarrhoea_grade:1,diarrhoea_highest_grade:3,diarrhoea_occurrence:1,mucositis_grade:1,mucositis_highest_grade:3,mucositis_occurrence:2},'dose_reduce',percent(50));
  assert(p.rule_engine.rules.every(r=>r.source.url&&r.source.page));assert.equal(p.metadata.validation.clinical_use_authorised,false);
  assert.equal(p.supportive_care.emetogenic_risk,'oral_minimal_low');
- const result=E.assess(p,{diarrhoea_grade:1,diarrhoea_highest_grade:3,diarrhoea_occurrence:2});assert(JSON.stringify(O.buildModel({protocol:p,result})).includes('50% of documented starting dose'));
+ const result=E.assess(p,{...(c==='00216'?{capecitabine_previous_dose_percent:100}:{}),diarrhoea_grade:1,diarrhoea_highest_grade:3,diarrhoea_occurrence:2});assert(JSON.stringify(O.buildModel({protocol:p,result})).includes('50% of documented starting dose'));
 }
 for(const [v,a] of [[1.9,'proceed_with_caution'],[2,'proceed_with_caution'],[2.1,'withhold'],[4,'withhold'],[4.1,'discontinue']])test('00623',`Urine protein ${v}`,{proteinuria_g_24h:v},a,(r,d)=>assert(d.rows.every(x=>x.component==='Bevacizumab')));
 for(const [v,a] of [['0','proceed_with_caution'],['1','proceed_with_caution'],['2','proceed_with_caution'],['3','proceed_with_caution'],['4','withhold']])test('00623',`Dipstick ${v}`,{urine_protein_dipstick:v},a);

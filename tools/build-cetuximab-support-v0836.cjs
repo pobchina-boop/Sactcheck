@@ -2,6 +2,15 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),root=path.resolve(__dirname,'..'),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const style=fs.readFileSync(path.join(root,'patient/00216/supportive-care.html'),'utf8').match(/<style>([\s\S]*?)<\/style>/)[1];
 for(const code of require('../data/cetuximab-v0836-source-index.json').codes){
+ if(code==='00692'&&require(`../data/patient-knowledge/${code}.json`).suite_release==='0.84.36'){
+  const protocol=require('../protocols/gastrointestinal/00692-cetuximab-and-folfox-4-therapy.json'),phases=require('../data/phase-support-v0838.json').regimens[code];
+  assert.equal(protocol.metadata.clinical_audit_release,'0.84.36');
+  assert.deepEqual(phases.map(p=>p.id),['day1','day2','day8']);
+  for(const phase of phases){assert.equal(phase.source_checked,'2026-11-05');assert.equal(phase.source_url,protocol.metadata.source_url);}
+  // Verify or regenerate the current three-phase source; never restore the retired one-sheet output.
+  require('node:child_process').execFileSync(process.execPath,[path.join(__dirname,'build-phase-support-v0838.cjs'),...(process.argv.includes('--check')?['--check']:[])],{cwd:root,env:{...process.env,SACT_SUITE_CODES:code,SACT_SUITE_CONTEXT:''},stdio:'inherit'});
+  continue;
+ }
  if(['00732', '00585', '00733'].includes(code)&&require(`../data/patient-knowledge/${code}.json`).suite_release==='0.84.35'){
   if(!process.argv.includes('--check'))throw Error('Use build-complete-pathways.cjs for the current v0.84.35 phase support: '+code);
   const file=`patient/${code}/supportive-care.html`,record=require('../validation/colorectal-v08435/retrospective-hashes.json').files[file];

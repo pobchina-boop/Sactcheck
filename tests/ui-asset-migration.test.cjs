@@ -136,9 +136,10 @@ test('v34 manifest proves before/after bytes and covers the complete affected as
  const changed=cp.execFileSync('git',['diff','--name-only','-z',v34.BASE_COMMIT,'--',...domains],{cwd:root}).toString().split('\0').filter(Boolean);
  const added=cp.execFileSync('git',['ls-files','--others','--exclude-standard','-z','--',...domains],{cwd:root}).toString().split('\0').filter(Boolean);
  const v35=require('./helpers/retrospective-v08435.cjs'),nextRecord=JSON.parse(fs.readFileSync(v35.RECORD,'utf8'));v35.createMigration(nextRecord);
+ const v36=require('./helpers/retrospective-v08436.cjs'),latestRecord=JSON.parse(fs.readFileSync(v36.RECORD,'utf8'));v36.createMigration(latestRecord);
  const combined=[...new Set([...changed,...added])].sort();
- for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
- assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files)])].sort(),combined,'Both explicit migrations must cover every changed patient/clinical asset');
+ for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file)||v36.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
+ assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files),...Object.keys(latestRecord.files)])].sort(),combined,'All explicit migrations must cover every changed patient/clinical asset');
  const actual=combined.filter(f=>Object.hasOwn(migrationRecord.files,f));
  assert.deepEqual(Object.keys(migrationRecord.files).sort(),actual,'Every changed or new clinical/patient asset must be explicitly reviewed');
  for(const [file,entry] of Object.entries(migrationRecord.files)){
@@ -155,7 +156,21 @@ test('v35 additions have exact baseline provenance, current bytes and bounded pa
   assert(m.approvedPath(file));
   const old=cp.spawnSync('git',['show',m.BASE_COMMIT+':'+file],{cwd:root,maxBuffer:64*1024*1024});
   if(entry.before===null)assert.notEqual(old.status,0,file+' must be new');else {assert.equal(old.status,0);assert.equal(sha(old.stdout),entry.before,file+' baseline');}
-  assert.equal(sha(fs.readFileSync(path.join(root,file))),entry.after,file+' reviewed bytes');
+  assert.equal(sha(fs.readFileSync(path.join(root,file))),require('./helpers/retrospective-v08436.cjs').expectedHash(file,entry.after),file+' reviewed bytes');
  }
  assert.throws(()=>m.createMigration({...record,files:{'patient/00555/guide.pdf':{before,after}}}),/Unapproved/);
+});
+
+
+test('v36 corrections prove exact v35 Git provenance, bounded scope and final bytes',()=>{
+ const m=require('./helpers/retrospective-v08436.cjs'),record=JSON.parse(fs.readFileSync(m.RECORD,'utf8'));m.createMigration(record);
+ for(const[file,entry]of Object.entries(record.files)){
+  assert(m.approvedPath(file));
+  const old=cp.spawnSync('git',['show',m.BASE_COMMIT+':'+file],{cwd:root,maxBuffer:64*1024*1024});
+  if(entry.before===null)assert.notEqual(old.status,0,file+' must be new');else {assert.equal(old.status,0);assert.equal(sha(old.stdout),entry.before,file+' v35 baseline');}
+  assert.equal(sha(fs.readFileSync(path.join(root,file))),entry.after,file+' reviewed v36 bytes');
+ }
+ for(const bad of ['patient/00558/guide.pdf','patient/00555/unreviewed.js','protocols/gastrointestinal/00209-folfox6.json','data/patient-knowledge/00558.json','patient/../../guide.pdf'])assert.throws(()=>m.createMigration({...record,files:{[bad]:{before,after}}}),/Unapproved/);
+ const file='patient/00216/guide.pdf',migrate=m.createMigration({...record,files:{[file]:{before,after}}});
+ assert.equal(migrate(file,before),after);assert.equal(migrate(file,after),after);assert.throws(()=>migrate(file,sha('Unreviewed source')),/Unexpected/);
 });

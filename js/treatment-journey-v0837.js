@@ -20045,6 +20045,15 @@ const definitions={
     ]
   },
   "00692": {
+    "code": "00692",
+    "title": "Weekly cetuximab + FOLFOX-4: treatment and checks",
+    "release": "0.84.36",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced / metastatic colorectal cancer",
+    "summary": "Cetuximab on Day 1 and Day 8. FOLFOX4 starts on Day 1: oxaliplatin, folinic acid and fluorouracil bolus, followed by a 22-hour fluorouracil infusion. Day 2 brings another fluorouracil bolus and a second 22-hour infusion; finish around Day 3. Your team confirms the full Day 2 prescription. Repeat every 14 days while beneficial and tolerable.",
     "stages": [
       "Before starting",
       "Early treatment",
@@ -20054,22 +20063,8 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment and visits",
-        "cells": [
-          "Confirm the exact protocol and goal",
-          "Start the planned infusion schedule",
-          "Repeat only while beneficial and tolerable",
-          "Review components, toxicity and the treatment goal",
-          "Agree continuation, pause, switch or completion"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00692"
-        ],
-        "note": "Cetuximab on Day 1 and Day 8. FOLFOX4 starts on Day 1: oxaliplatin, folinic acid and fluorouracil bolus, followed by a 22-hour fluorouracil infusion. Day 2 includes folinic acid, another fluorouracil bolus and a second 22-hour infusion; finish around Day 3. Repeat every 14 days while beneficial and tolerable."
-      },
-      {
         "label": "Blood counts, kidney and liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline blood count, kidney and liver profile",
           "Review results before treatment",
@@ -20077,7 +20072,6 @@ const definitions={
           "Repeat sooner if symptoms or results need it",
           "Follow any unresolved abnormal result"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00692"
         ],
@@ -20085,6 +20079,7 @@ const definitions={
       },
       {
         "label": "Magnesium, calcium and potassium",
+        "kind": "monitoring",
         "cells": [
           "Check mineral levels before starting",
           "Repeat periodically during treatment",
@@ -20092,15 +20087,14 @@ const definitions={
           "More checks may be needed if levels fall or diarrhoea develops",
           "Monthly checks for two months after the last antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00692",
-          "smpc"
+          "00692"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Skin, nails, eyes and breathing",
+        "kind": "monitoring",
         "cells": [
           "Discuss existing skin, eye or lung problems",
           "Start the prescribed skin-care plan; report reactions early",
@@ -20108,15 +20102,14 @@ const definitions={
           "Eye pain, worsening breathing or severe rash needs prompt assessment",
           "Continue care until symptoms and mineral levels settle"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00692",
-          "smpc"
+          "00692"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Fluorouracil safety and line",
+        "kind": "monitoring",
         "cells": [
           "Confirm the DPD test and safe line/pump arrangements",
           "Check mouth, bowel and pump symptoms early",
@@ -20124,7 +20117,21 @@ const definitions={
           "Report chest pain or unexpectedly severe early side effects immediately",
           "Confirm disconnection and ongoing line care"
         ],
+        "source_ids": [
+          "00692"
+        ],
+        "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
+      },
+      {
+        "label": "Heart history and new symptoms",
         "kind": "monitoring",
+        "cells": [
+          "Review heart history; ECG if cardiac function is compromised",
+          "Report chest pain or new breathlessness immediately",
+          "Review new symptoms before further treatment",
+          "Further heart tests when clinically indicated",
+          "Follow any heart problem; no routine serial echo timetable"
+        ],
         "source_ids": [
           "00692"
         ],
@@ -20132,6 +20139,7 @@ const definitions={
       },
       {
         "label": "Nerve symptoms",
+        "kind": "monitoring",
         "cells": [
           "Record any numbness or tingling before treatment",
           "Cold sensitivity can occur early",
@@ -20139,7 +20147,6 @@ const definitions={
           "Report persistent symptoms or difficulty with daily tasks before the next dose",
           "Follow symptoms after oxaliplatin stops"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00692"
         ],
@@ -20147,6 +20154,7 @@ const definitions={
       },
       {
         "label": "Cancer response and treatment choices",
+        "kind": "monitoring",
         "cells": [
           "Record baseline disease and agree review plan",
           "Bring forward review if symptoms worsen",
@@ -20154,7 +20162,6 @@ const definitions={
           "Discuss benefit, side effects and whether the goal has changed",
           "Agree continuation, a break, another treatment or supportive care"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00692"
         ],
@@ -20163,54 +20170,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Before first treatment",
-        "when": "Before the first infusion",
-        "why": "RAS-wild-type metastatic colorectal cancer; response evidence is drawn from a first-line trial.",
-        "clinical": "Confirm diagnosis, treatment line, goal, prior treatments, performance status, consent and all medicines. Baseline FBC, renal and liver profile; assess infection, hydration, bowel symptoms and previous treatment toxicity. Document validated extended RAS wild-type status for this colorectal pathway; do not infer it from unknown or KRAS exon 2-only testing. Measure electrolytes including magnesium, calcium and potassium before treatment; correct abnormalities according to the prescription. Ask specifically about prior antibody infusion reactions, red-meat allergy, tick bites and any known cetuximab IgE findings. Document DPD assessment before the first fluorouracil dose unless already tested. Complete DPD deficiency excludes fluorouracil; partial deficiency needs a specialist dose plan. ECG if cardiac function is compromised; no universal serial echo schedule is imposed. Confirm safe central access and pump training. Record baseline peripheral neuropathy and functional impact.",
-        "action": "Confirm tests, medicines, infusion access and the written urgent contact plan.",
-        "source_ids": [
-          "00692",
-          "smpc"
-        ]
-      },
-      {
-        "title": "Each treatment decision",
-        "when": "At scheduled treatment reviews and whenever symptoms change",
-        "why": "Benefit and toxicity determine the next treatment; the reference cycle is not an automatic clearance.",
-        "clinical": "Review symptoms, infection, hydration, bowel effects, medicines and previous-cycle toxicity; verify which components are actually being administered. FBC, liver and renal profile before each cycle. Repeat magnesium, calcium and potassium periodically during EGFR-antibody therapy and more frequently when abnormal; assess skin, nail, eye and pulmonary symptoms.",
-        "action": "Report symptoms before the next dose, including at a separate antibody-only visit.",
+        "title": "A 14-day reference cycle",
+        "when": "Clinic → home → review",
+        "why": "The aim is to control advanced bowel cancer and symptoms. The team reviews how well treatment is working and whether side effects remain acceptable; there is no single fixed number of cycles for everyone.",
+        "clinical": "Cetuximab on Day 1 and Day 8. FOLFOX4 starts on Day 1: oxaliplatin, folinic acid and fluorouracil bolus, followed by a 22-hour fluorouracil infusion. Day 2 brings another fluorouracil bolus and a second 22-hour infusion; finish around Day 3. Your team confirms the full Day 2 prescription. Repeat every 14 days while beneficial and tolerable.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00692"
-        ]
-      },
-      {
-        "title": "Pause or completion",
-        "when": "When a component is held or the course ends",
-        "why": "Blood tests, line care and side-effect follow-up may continue after dosing stops.",
-        "clinical": "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles. There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions. NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment. Evaluate peripheral neuropathy every two cycles and review earlier if symptoms persist or impair function; cumulative toxicity may alter oxaliplatin independently of other components.",
-        "action": "Agree the next appointment, remaining tests and who reviews unresolved symptoms.",
-        "source_ids": [
-          "00692",
-          "smpc"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles.",
-      "There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions.",
-      "NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-      "Evaluate peripheral neuropathy every two cycles and review earlier if symptoms persist or impair function; cumulative toxicity may alter oxaliplatin independently of other components.",
-      "Direct regimen-family evidence for weekly cetuximab with FOLFOX4, in the first-line trial population."
+      "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
     ],
-    "code": "00692",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Weekly cetuximab + FOLFOX-4: treatment and checks",
-    "setting": "Advanced / metastatic colorectal cancer",
-    "summary": "Cetuximab on Day 1 and Day 8. FOLFOX4 starts on Day 1: oxaliplatin, folinic acid and fluorouracil bolus, followed by a 22-hour fluorouracil infusion. Day 2 includes folinic acid, another fluorouracil bolus and a second 22-hour infusion; finish around Day 3. Repeat every 14 days while beneficial and tolerable.",
     "sources": [
       {
         "id": "00692",
@@ -20219,8 +20191,8 @@ const definitions={
       },
       {
         "id": "hse",
-        "title": "HSE: chemotherapy side effects and urgent advice",
-        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+        "title": "HSE: if you have side effects of cancer treatment",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/"
       },
       {
         "id": "smpc",
@@ -20251,6 +20223,11 @@ const definitions={
         "id": "ncis",
         "title": "NCCP NCIS supportive antiemetic medicines V8 (2025)",
         "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "dpd-renal",
+        "title": "EMA: 5-fluorouracil DPD phenotyping and renal impairment (2024 safety communication)",
+        "url": "https://www.ema.europa.eu/en/medicines/dhpc/5-fluorouracil"
       }
     ]
   },
@@ -21082,6 +21059,15 @@ const definitions={
     ]
   },
   "00216": {
+    "code": "00216",
+    "title": "Capecitabine: treatment and checks",
+    "release": "0.84.36",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Colorectal and breast cancer",
+    "summary": "capecitabine twice daily on Days 1–14, then no capecitabine on Days 15–21. Follow your individual prescription.",
     "stages": [
       "Before starting",
       "Each treatment cycle",
@@ -21091,22 +21077,8 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment plan",
-        "kind": "treatment",
-        "cells": [
-          "Confirm indication, medicines and duration",
-          "Give the agreed cycle only after review",
-          "Follow pump / tablet and symptom instructions",
-          "Continue, modify or stop after consultant review",
-          "Agree recovery and follow-up"
-        ],
-        "source_ids": [
-          "00216"
-        ],
-        "note": "capecitabine twice daily on Days 1–14, then no capecitabine on Days 15–21. Follow your individual prescription."
-      },
-      {
         "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline bloods; DPD before fluoropyrimidine",
           "Repeat before each cycle",
@@ -21114,7 +21086,6 @@ const definitions={
           "Results and recovery guide any delay or dose change",
           "Follow unresolved abnormalities"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00216"
         ],
@@ -21122,6 +21093,7 @@ const definitions={
       },
       {
         "label": "Symptoms and function",
+        "kind": "monitoring",
         "cells": [
           "Document existing symptoms and usual activity",
           "Review worst symptoms since the last treatment",
@@ -21129,7 +21101,6 @@ const definitions={
           "Balance benefit, side effects and priorities",
           "Agree recovery care and ongoing support"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00216"
         ],
@@ -21137,6 +21108,7 @@ const definitions={
       },
       {
         "label": "Tablets / hands and feet",
+        "kind": "monitoring",
         "cells": [
           "Confirm written dose, tablet supply and hold instructions",
           "Review adherence, mouth, bowel and skin symptoms",
@@ -21144,7 +21116,6 @@ const definitions={
           "Do not restart held tablets or replace missed doses without advice",
           "Return unused tablets as instructed; follow persistent symptoms"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00216"
         ],
@@ -21152,14 +21123,14 @@ const definitions={
       },
       {
         "label": "Heart checks",
+        "kind": "monitoring",
         "cells": [
-          "Review cardiac history; ECG when cardiac function is compromised or clinical findings warrant it. No automatic serial echocardiogram schedule is specified for this regimen.",
+          "Review heart history. The team may arrange an ECG or other tests if clinically indicated; NCCP does not mandate a routine ECG or serial echocardiogram schedule.",
           "Ask about new chest pain or breathlessness",
           "Chest pain needs urgent assessment",
           "Repeat heart tests if clinically indicated",
           "Follow any heart problem; no fixed echo series"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00216"
         ],
@@ -21167,6 +21138,7 @@ const definitions={
       },
       {
         "label": "Response / scans",
+        "kind": "monitoring",
         "cells": [
           "Confirm cancer setting, disease assessment and intended duration",
           "Review clinical benefit and symptoms",
@@ -21174,7 +21146,6 @@ const definitions={
           "Consultant-directed scans and response assessment",
           "Agree follow-up, completion or another treatment"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00216"
         ],
@@ -21183,39 +21154,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Confirm the treatment aim",
-        "when": "Before starting",
+        "title": "21-day tablet cycle",
+        "when": "Oral chemotherapy",
         "why": "Capecitabine is chemotherapy taken as tablets. NCCP 00216 covers several colorectal and breast cancer settings, including treatment after surgery and treatment of advanced disease. Ask which aim and duration apply to you.",
-        "clinical": "Capecitabine is chemotherapy taken as tablets. NCCP 00216 covers several colorectal and breast cancer settings, including treatment after surgery and treatment of advanced disease. Ask which aim and duration apply to you.",
-        "action": "Confirm the exact indication and intended duration.",
-        "source_ids": [
-          "00216"
-        ]
-      },
-      {
-        "title": "Review before continuing",
-        "when": "At each clinical decision point",
-        "why": "Results, symptoms and benefit can change the plan.",
-        "clinical": "Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed. Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment.",
-        "action": "Agree who reviews results and communicates the next step.",
+        "clinical": "capecitabine twice daily on Days 1–14, then no capecitabine on Days 15–21. Follow your individual prescription.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00216"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scans follow the indication-specific consultant plan; no universal scan interval is imposed.",
-      "Review benefit, treatment burden, patient priorities and unresolved toxicity before continuing or changing treatment."
+      "The columns show the order of care, not equal lengths of time. Confirm who books each check, who reviews it and whom to call if it is missing."
     ],
-    "code": "00216",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Capecitabine: treatment and checks",
-    "setting": "Colorectal and breast cancer",
-    "summary": "capecitabine twice daily on Days 1–14, then no capecitabine on Days 15–21. Follow your individual prescription.",
     "sources": [
       {
         "id": "00216",
@@ -21229,18 +21180,23 @@ const definitions={
       },
       {
         "id": "smpc",
-        "title": "Capecitabine product information: medicines, interactions and precautions",
-        "url": "https://www.medicines.org.uk/emc/product/14545/smpc"
+        "title": "EMA: Xeloda product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/xeloda-epar-product-information_en.pdf"
       },
       {
         "id": "hse",
-        "title": "HSE: chemotherapy side effects and urgent advice",
-        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+        "title": "HSE: if you have side effects of cancer treatment",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/"
       },
       {
         "id": "trial",
         "title": "X-ACT: primary trial report",
         "url": "https://pubmed.ncbi.nlm.nih.gov/21896539/"
+      },
+      {
+        "id": "createx",
+        "title": "CREATE-X: residual invasive breast cancer after neoadjuvant chemotherapy",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28564564/"
       }
     ]
   },

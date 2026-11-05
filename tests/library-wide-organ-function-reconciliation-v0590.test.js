@@ -9,6 +9,7 @@ const pkg = require(path.join(root, 'package.json'));
 const index = require(path.join(root, 'protocols/index.json'));
 const register = require(path.join(root, 'V0590_ORGAN_FUNCTION_SOURCE_REGISTER.json'));
 const crypto = require('crypto');
+const migrations36=require('../validation/colorectal-v08436/organ-function-migrations.json').records;
 const migrations35=require('../validation/colorectal-v08435/organ-function-migrations.json').records;
 const migrations24=require('../validation/targeted-lung-v08424/organ-function-migrations.json').records;
 
@@ -28,10 +29,41 @@ function assess(code, values) {
   return Engine.assess(protocol(code), values, { profileId: 'default' });
 }
 
+// Exact v36 migration membership, current sources and retained before evidence.
+// 00216 is deliberately checked without adding it to the historical 74-record register.
+assert.deepStrictEqual(Object.keys(migrations36).sort(), ['00216','00692']);
+for (const [code, migration] of Object.entries(migrations36)) {
+  const p=protocol(code),m=p.metadata, inScope=register.records.some(r=>r.nccp_code===code);
+  assert.strictEqual(inScope,migration.in_historical_v0590_scope);
+  assert.strictEqual(m.clinical_audit_release,'0.84.36');
+  assert.strictEqual(m.validation.audit_release,'0.84.36');
+  assert.strictEqual(m.nccp_version,migration.source_version);
+  assert.strictEqual(m.source_url,migration.source_url);
+  assert.strictEqual(m.source_pdf_sha256,migration.source_sha256);
+  assert.strictEqual(m.encoding_maturity.level,migration.maturity);
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status,migration.status);
+  for(const flag of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised']){assert.strictEqual(m.validation[flag],false);assert.strictEqual(m.encoding_maturity[flag],false);}
+  for(const [field,def] of Object.entries(p.input_definitions||{}))if(/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label||''}`)){assert.strictEqual(def.required,false,code+'/'+field+' v36 partial assessment');assert.notStrictEqual(def.demo_value,undefined);}
+  for(const [file,hash] of [[migration.source_pdf,migration.source_sha256],[migration.supplementary_pdf,migration.supplementary_sha256],[migration.baseline_path,migration.baseline_sha256]])assert.strictEqual(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex'),hash,code+' retained v36 evidence');
+  const old=JSON.parse(fs.readFileSync(path.join(root,migration.baseline_path)));
+  assert.strictEqual(old.metadata.source_pdf_sha256,migration.baseline_source_sha256);
+  assert.strictEqual(migration.baseline_source_sha256,migration.source_sha256,'These two source versions are unchanged; do not silently migrate their PDF identity');
+  assert.deepStrictEqual(old.rule_engine.rules.map(r=>r.rule_id||r.id).filter(id=>id.startsWith('OF590_')),migration.replaced_legacy_rules);
+  assert.deepStrictEqual(migration.replaced_legacy_rules,[],'v36 does not remove any further historical OF590 rules');
+  assert(!p.rule_engine.rules.some(r=>String(r.rule_id||r.id).startsWith('OF590_')));
+  for(const id of migration.required_rules){const r=p.rule_engine.rules.find(r=>(r.rule_id||r.id)===id),s=migration.required_rule_sources[id];assert(r,code+' v36 organ rule '+id);assert.strictEqual(r.source.url,s.url);assert.deepStrictEqual(r.source.page,s.page);assert.strictEqual(r.source.checked_date,'2026-11-05');}
+  assert(fs.existsSync(path.join(root,migration.source_case_path)));
+  assert(fs.existsSync(path.join(root,migration.audit_path)));
+  const result=JSON.parse(fs.readFileSync(path.join(root,migration.source_result_path)));assert.strictEqual(result.failed,0);assert(result.total>0);assert.strictEqual(result.passed,result.total);
+  if(inScope){assert.strictEqual(m.organ_function_reconciliation.release,migration.reconciliation_release);assert.strictEqual(m.organ_function_reconciliation.resolution,migration.resolution);}
+  else assert.strictEqual(migration.resolution,'outside_historical_v0590_scope');
+}
+
 for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
   const rec = m.organ_function_reconciliation;
+  const migration36=m.clinical_audit_release==='0.84.36'&&migrations36[item.nccp_code];
   const migration35=m.clinical_audit_release==='0.84.35'&&migrations35[item.nccp_code];
   const migration34=m.sactcheck_encoding_version==='0.84.34'&&require('../validation/colorectal-v08434/organ-function-migrations.json').records[item.nccp_code];
   const migration33=rec?.reconciled_release==='0.84.33'&&require('../validation/colorectal-v08433/organ-function-migrations.json').records[item.nccp_code];
@@ -45,14 +77,14 @@ for (const item of register.records) {
   const v0836 = m.validation?.audit_release === '0.83.6';
   const superseded = (['00207','00447','00448','00732','00328','00585','00330','00331','00692','00733','00210','00213','00586','00623','00225'].includes(item.nccp_code) && m.validation?.audit_release === '0.84.21') || v0836 || (['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4') || (item.nccp_code === '00225' && m.validation?.audit_release === '0.83.5');
   assert(rec, `${item.nccp_code}: missing organ-function reconciliation metadata`);
-  assert.strictEqual(rec.release, migration25?migration25.release:migration24&&item.nccp_code==='00243'?'0.84.24':item.nccp_code === '00205' ? '0.84.1' : '0.59.0');
+  assert.strictEqual(rec.release, migration36?migration36.reconciliation_release:migration25?migration25.release:migration24&&item.nccp_code==='00243'?'0.84.24':item.nccp_code === '00205' ? '0.84.1' : '0.59.0');
   assert.strictEqual(rec.source_reconciled, true);
   assert.strictEqual(rec.partial_assessment_supported, true);
   assert.strictEqual(rec.consultant_reviewed, false);
   assert.strictEqual(rec.oncology_pharmacy_reviewed, false);
   assert.strictEqual(rec.clinical_use_authorised, false);
-  assert.strictEqual(m.encoding_maturity.level, migration35 ? migration35.maturity : migration34 ? migration34.maturity : (migration30||migration29||v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
-  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration35?migration35.status:migration34?migration34.status:migration33?migration33.status:migration32?'source_reconciled_v08432_independent_review_pending':migration30?'source_reconciled_v08430_independent_review_pending':m.sactcheck_encoding_version==='0.84.29'?'source_reconciled_v08429_independent_review_pending':m.sactcheck_encoding_version==='0.84.28'?'source_reconciled_v08428_independent_review_pending':migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
+  assert.strictEqual(m.encoding_maturity.level, migration36 ? migration36.maturity : migration35 ? migration35.maturity : migration34 ? migration34.maturity : (migration30||migration29||v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration36?migration36.status:migration35?migration35.status:migration34?migration34.status:migration33?migration33.status:migration32?'source_reconciled_v08432_independent_review_pending':migration30?'source_reconciled_v08430_independent_review_pending':m.sactcheck_encoding_version==='0.84.29'?'source_reconciled_v08429_independent_review_pending':m.sactcheck_encoding_version==='0.84.28'?'source_reconciled_v08428_independent_review_pending':migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
   for (const [field, def] of Object.entries(p.input_definitions || {})) {
     if (/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label || ''}`)) {
       assert.strictEqual(def.required, false, `${item.nccp_code}/${field} must remain optional for independent partial assessment`);
@@ -60,7 +92,11 @@ for (const item of register.records) {
     }
   }
   const releaseRules = (p.rule_engine?.rules || []).filter(r => String(r.id || r.rule_id || '').startsWith('OF590_'));
-  if(migration35){
+  if(migration36){
+    assert.equal(rec.resolution,migration36.resolution);
+    assert.equal(releaseRules.length,0,'v36 source audit retains no superseded historical organ rule');
+  }
+  else if(migration35){
     assert.equal(rec.resolution,migration35.resolution);
     assert.equal(m.validation.audit_release,'0.84.35');
     assert.equal(m.nccp_version,migration35.source_version);

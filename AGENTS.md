@@ -1,5 +1,11 @@
 # SACTCheck development and release workflow
 
+## Current delivery preference — manual ZIP
+
+- The user has returned to the original manual delivery workflow. Prepare and validate changes in the existing checkout, then provide a ZIP containing the update files, a copyable GitHub commit summary and description, and concise audit/review evidence.
+- Do not commit, push, merge, create a pull request, or deploy unless the user explicitly requests that action for a future task. General requests to complete a batch or update the site use manual delivery by default.
+- The publication steps below describe how to verify a separately authorized publication; they do not override this manual-delivery preference. Clearly distinguish a locally validated review package from a deployed release, and retain every blocked or unverified check.
+
 ## Repository and version
 
 - Use the existing checkout. Cloud tasks are already isolated; do not create a Git worktree unless requested.

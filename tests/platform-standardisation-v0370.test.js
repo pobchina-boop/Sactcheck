@@ -200,7 +200,11 @@ for (const { file, data } of protocols) {
       const lungV29Source=metadata.sactcheck_encoding_version==='0.84.29'&&['00284','00311','00587','00388','00614','00319','00232','00259','00203','00222'].includes(code);
       const lungV28Source=metadata.sactcheck_encoding_version==='0.84.28'&&['00281','00310','00304','00339','00343','00317','00318','00271','00280','00621'].includes(code);
       const lungV27Source=metadata.sactcheck_encoding_version==='0.84.27'&&['00483','00484','00712','00792','00849','00713','00714','00568','00569','00579'].includes(code);
-      if(retrospectiveV35Grading[code]?.fields.includes(field)) {
+      if(code==='00216') {
+        require('./helpers/capecitabine-grading-v08436.cjs').check(data,field,def);
+      }else if(code==='00692') {
+        require('./helpers/folfox4-grading-v08436.cjs').check(data,field,def);
+      }else if(retrospectiveV35Grading[code]?.fields.includes(field)) {
         assert.equal(metadata.clinical_audit_release, '0.84.35', `${code}/${field} requires its recorded source audit`);
         assert.equal(def.ctcae_version, 'NCCP source grading; edition not specified', `${code}/${field} must not invent a source edition`);
         assert.equal(def.ctcae_source_url, retrospectiveV35Grading[code].url);
@@ -251,7 +255,7 @@ for (const { file, data } of protocols) {
       const guide = ctcae.guide({ ...def, id: field });
       assert(guide && guide.grades.length >= expectedGrades.length, `${code}/${field} has no rendered CTCAE grade guide`);
       guide.grades.forEach(item => assert(item.description, `${code}/${field} Grade ${item.grade} has no explanation`));
-      if(antibodyV34Source||oralV34Source||lungSource||targetedV24Source||targetedV25Source)assert(guide.sourceSpecific, 'Source-specific grading must override generic descriptors');
+      if((code==='00216'&&require('./helpers/capecitabine-grading-v08436.cjs').sourceFields.has(field))||code==='00692'||antibodyV34Source||oralV34Source||lungSource||targetedV24Source||targetedV25Source)assert(guide.sourceSpecific, 'Source-specific grading must override generic descriptors');
       const fieldText = `${field} ${def.label || ''}`.toLowerCase();
       if(!antibodyV34Source&&!oralV34Source&&!lungSource&&!targetedV24Source && !targetedV25Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source){
       if (/non[-_ ]?ha?em|non[-_ ]?hemat|non[-_ ]?haemat/.test(fieldText)) {

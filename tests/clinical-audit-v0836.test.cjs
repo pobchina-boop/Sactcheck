@@ -8,7 +8,7 @@ for(const c of codes){
  if(['00210','00213'].includes(c))continue;
  for(const ras of ['mutant','unknown'])test(c,'RAS '+ras,{ras_status:ras},'contraindicated');
  for(const grade of [3,4])test(c,'Current severe skin '+grade,{acneiform_rash_grade:grade},'withhold');
- for(const occ of [1,2,3])for(const grade of [0,1,2])for(const delay of [1,2])test(c,`Skin recovered ${occ}/${grade}/${delay}`,{...(['00207','00328','00330','00331','00732','00585','00733'].includes(c)?{previous_cetuximab_dose_mg_m2:['00331','00732','00585','00733'].includes(c)?500:250}:{}),acneiform_rash_grade:grade,skin_occurrence:occ,skin_delay_weeks:delay,skin_failed_recovery:false},occ===1?'consultant_review':'dose_reduce',(r,d)=>{const dose=(['00207','00328','00330','00692'].includes(c)?[250,200,150]:[500,400,300])[occ-1];assert(d.rows.some(x=>x.component==='Cetuximab'&&x.protocolDose.includes(dose+' mg/')));});
+ for(const occ of [1,2,3])for(const grade of [0,1,2])for(const delay of [1,2])test(c,`Skin recovered ${occ}/${grade}/${delay}`,{...(['00207','00328','00330','00331','00732','00585','00733','00692'].includes(c)?{previous_cetuximab_dose_mg_m2:['00331','00732','00585','00733'].includes(c)?500:250}:{}),acneiform_rash_grade:grade,skin_occurrence:occ,skin_delay_weeks:delay,skin_failed_recovery:false},occ===1?'consultant_review':'dose_reduce',(r,d)=>{const dose=(['00207','00328','00330','00692'].includes(c)?[250,200,150]:[500,400,300])[occ-1];assert(d.rows.some(x=>x.component==='Cetuximab'&&x.protocolDose.includes(dose+' mg/')));});
  test(c,'Fourth severe skin episode',{skin_occurrence:4},'discontinue');test(c,'Failed skin recovery',{skin_failed_recovery:true},'discontinue');
  for(const grade of [1,2,3,4])test(c,'Infusion reaction '+grade,{infusion_reaction_grade:grade},grade<3?'consultant_review':'permanently_discontinue');
  test(c,'Early infusion overrides mild grade',{infusion_reaction_grade:1,reaction_first_15_minutes:true},'withhold');test(c,'ILD',{interstitial_lung_disease:true},'permanently_discontinue');test(c,'Respiratory symptoms',{unexplained_respiratory_symptoms:true},'withhold');test(c,'Eye symptoms',{ocular_symptoms:true},'consultant_review');test(c,'Electrolyte correction',{electrolyte_abnormality:true},'consultant_review');
@@ -27,7 +27,8 @@ for(const c of ['00328','00585','00692','00733','00210']){
  for(const nadir of [.49,.5,.99])test(c,'ANC nadir restart '+nadir,{anc_x10e9_l:1.5,platelets_x10e9_l:75,lowest_anc:nadir,delay_weeks:1,current_oxaliplatin_level:0,current_irinotecan_level:0,current_fluorouracil_bolus_level:0,current_fluorouracil_infusion_level:0},'dose_reduce',(r,d)=>{if(['00692','00733','00210'].includes(c)&&nadir<.5){assert(d.rows.some(x=>x.actionLabel==='Omit component'));assert(d.rows.some(x=>x.component==='Folinic acid'&&x.actionLabel==='Omit component'));}});
  for(const nadir of [9.99,10,49.99])test(c,'Platelet nadir restart '+nadir,{anc_x10e9_l:1.5,platelets_x10e9_l:75,lowest_platelets:nadir,delay_weeks:1},'dose_reduce');
  test(c,'Late recovered counts need review',{anc_x10e9_l:1.5,platelets_x10e9_l:75,delay_weeks:5},'consultant_review');
- test(c,'Persistent low ANC',{anc_x10e9_l:1.4,delay_weeks:4},'discontinue');
+ test(c,'Persistent low ANC',{anc_x10e9_l:1.4,delay_weeks:c==='00692'?4.01:4},'discontinue');
+ if(c==='00692')test(c,'Exact four-week count boundary remains withheld for review',{anc_x10e9_l:1.4,delay_weeks:4},'withhold',(r)=>assert(r.findings.some(x=>x.ruleId==='COUNT_FOUR_WEEK_BOUNDARY')));
 }
 for(const c of ['00328','00585']){
  test(c,'ANC interval conflict',{anc_x10e9_l:1.4,delay_weeks:3},'withhold',r=>assert(r.findings.some(f=>f.ruleId==='ANC_INTERVAL_CONFLICT')));

@@ -47,7 +47,7 @@ test('current inventory joins the indexed candidate set, declarations and actual
  const lonsurf=m.rows.find(r=>r.code==='00382');
  assert.equal(lonsurf.root_patient_profile.context_label,'Previously treated metastatic colorectal cancer');
  assert(lonsurf.selection_note.includes('Existing colorectal-specific'));
- assert(lonsurf.presentation.missing_essential_files.includes('handbook.pdf'));
+ assert.deepEqual(lonsurf.presentation.missing_essential_files,[],'Completed v34 Lonsurf context includes full handbook');assert.equal(lonsurf.presentation.file_presence_complete,true);assert.equal(i.declared_completed_count,41);assert.equal(register.independent_clinical_approval,false);
  assert(lonsurf.prior_work_evidence.some(e=>e.path==='tests/full-suite-v08424.test.cjs'&&e.present));
  assert.equal(m.rows.length,10);assert.equal(i.newly_completed_contexts,0);assert.equal(i.current_official_sources_verified,false);
  assert(m.rows.every(r=>r.stored_source.current_official_verified===false));
