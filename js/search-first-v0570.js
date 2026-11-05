@@ -72,8 +72,28 @@
   }
 
   function scrollToResults(){
-    const catalogue=document.getElementById('libraryCatalogueSection');
-    catalogue?.scrollIntoView({behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    const count=document.getElementById('catalogCount');
+    if(!count) return;
+    count.tabIndex=-1;
+    count.focus({preventScroll:true});
+    count.scrollIntoView({behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  }
+
+  function compactEvaluationNotice(){
+    const notice=document.getElementById('prototypeNotice');
+    const details=notice?.querySelector('.feasibility-details');
+    const body=details?.querySelector(':scope > div');
+    if(!body || notice.dataset.taskFirstNotice) return;
+    notice.dataset.taskFirstNotice='true';
+    // Keep the evaluation boundary visible; retain every fuller warning and the
+    // installation advice in one clearly labelled, keyboard-operable disclosure.
+    notice.querySelectorAll('.feasibility-status p').forEach(p=>body.prepend(p));
+    const mobileNote=document.getElementById('mobileOpenNote');
+    if(mobileNote){body.append(mobileNote);mobileNote.classList.add('evaluation-install-advice');}
+    details.querySelector('summary').textContent='Safety, validation and iPhone instructions';
+    let screenOpen=null;
+    window.addEventListener('beforeprint',()=>{if(screenOpen===null)screenOpen=details.open;details.open=true;});
+    window.addEventListener('afterprint',()=>{if(screenOpen!==null){details.open=screenOpen;screenOpen=null;}});
   }
 
   function focusSearch(){
@@ -247,6 +267,7 @@
     if(library&&hero&&library.firstElementChild!==hero) library.insertBefore(hero,library.firstElementChild);
 
     moveSearchIntoEngine();
+    compactEvaluationNotice();
     hideScenarioFromMainstream();
     createSupportTools();
     bindEngineFocus();

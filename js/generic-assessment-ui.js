@@ -94,19 +94,24 @@
     screen.className = "screen";
     screen.innerHTML = `
       <h1 class="assessment-heading">Treatment assessment engine</h1>
-      <div class="toolbar spread">
-        <div class="toolbar" style="margin:0">
+      <h2 class="assessment-regimen-name" id="jsonSelectedRegimen">Selected regimen</h2>
+      <p class="assessment-regimen-context" id="jsonSelectedRegimenContext"></p>
+      <div class="assessment-navigation">
           <a href="#libraryScreen" class="btn secondary" id="jsonBackLibrary" role="button">← Regimen library</a>
+        <details class="assessment-tools">
+          <summary>Regimen tools and source documents</summary>
+          <div class="toolbar" style="margin:0">
           <a class="btn secondary official-pdf-link hidden" id="jsonOfficialPdf" rel="external" referrerpolicy="no-referrer"><span aria-hidden="true">📄</span> Official NCCP PDF</a>
           <button class="btn secondary hidden" type="button" id="jsonDoseScheduleButton"><span aria-hidden="true">📅</span> Dose &amp; Schedule</button>
           <button class="btn secondary hidden" type="button" id="jsonImmuneSafetyButton"><span aria-hidden="true">◉</span> Immune safety</button>
           <button class="btn secondary hidden" type="button" id="jsonRegimenInfoButton"><span aria-hidden="true">◈</span> Regimen info</button>
           <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Supportive medicines</a>
-        </div>
+          </div>
+        </details>
         <span class="badge engine-json" hidden aria-hidden="true">Engine v${escapeHtml(Engine.version)}</span>
       </div>
 
-      <details open>
+      <details class="assessment-source-details">
         <summary>Protocol information and validation status</summary>
         <div class="details-body">
           <div class="protocol-grid">
@@ -468,6 +473,8 @@
     );
 
     document.getElementById("jsonProtocolTitle").textContent = Engine.getProtocolTitle(protocol);
+    document.getElementById("jsonSelectedRegimen").textContent = Engine.getProtocolTitle(protocol);
+    document.getElementById("jsonSelectedRegimenContext").textContent = `${Engine.getProtocolCode(protocol)}${metadata.nccp_version ? ` · version ${metadata.nccp_version}` : ""} · ${validationComplete ? "Validated" : "Independent clinical validation pending"}`;
     const aliases = root.SACTCheckDrugAliases?.forProtocol(protocol) || [];
     document.getElementById("jsonProtocolAliases").textContent = aliases.length ? aliases.join(" · ") : "None mapped";
     document.getElementById("jsonProtocolCode").textContent = `${Engine.getProtocolCode(protocol)}${metadata.nccp_version ? ` / ${metadata.nccp_version}` : ""}`;

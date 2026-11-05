@@ -14,7 +14,9 @@ function render(d){
  if(d.phase_cycles?.length)return `<div class="phase-cycle-maps">${d.phase_cycles.map((p,i)=>`<section aria-label="${esc(p.label)}"><h2>${esc(p.label)}</h2>${render({...d,...p,phase_cycles:null,chronology_id:i?`wikiCycleChronology-phase-${i+1}`:'wikiCycleChronology'})}</section>`).join('')}</div>`;
  const days=Array.from({length:d.cycle_days},(_,i)=>`<span class="wiki-cycle-day">${i+1}</span>`).join('');
  const tracks=d.timeline.map(r=>{
-  const text=r.id==='pump'?'46-hour pump':r.style==='treatment'&&r.start===r.end?(r.text||'IV'):r.text;
+  // Durations and instructions belong to the regimen (and, where present, phase).
+  // Do not substitute one pump duration for every treatment.
+  const text=r.style==='treatment'&&r.start===r.end?(r.text||'IV'):r.text;
   const label=r.id==='treatment22'?'Paclitaxel Day 22 · if prescribed':r.label;
   return `<div class="wiki-cycle-track" data-cycle-track="${esc(r.id)}"><span class="wiki-cycle-label">${esc(label)}</span><span class="wiki-cycle-band ${styles[r.style]||'variable'}${r.style==='treatment'&&r.start===r.end?' single-day':''}" style="grid-column:${r.start+1} / ${r.end+2}">${esc(text)}</span></div>`;
  }).join('');

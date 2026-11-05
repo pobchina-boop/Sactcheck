@@ -48,6 +48,9 @@
   let activeProtocol=null;
   let activeManifest=null;
   let panelRequest=0;
+  let panelOpener=null;
+  let backgroundObserver=null;
+  const backgroundInert=new Map();
 
   function asArray(value){
     if(value===undefined||value===null||value==="") return [];
@@ -497,12 +500,51 @@
       .find(card=>String(card.dataset.jsonProtocolId||"")===id)||null;
   }
 
-  function closePanel(){
+  function focusInsidePanel(overlay){
+    overlay.querySelector(".workflow-close")?.focus?.({preventScroll:true});
+  }
+
+  function makeBackgroundInert(overlay){
+    const remember=node=>{
+      if(node===overlay||node.nodeType!==1||backgroundInert.has(node)) return;
+      backgroundInert.set(node,{attribute:node.getAttribute("inert"),value:node.inert});
+      node.inert=true;
+    };
+    [...root.document.body.children].forEach(remember);
+    if(!backgroundObserver&&root.MutationObserver){
+      backgroundObserver=new root.MutationObserver(records=>{
+        records.forEach(record=>[...record.addedNodes].forEach(remember));
+      });
+      backgroundObserver.observe(root.document.body,{childList:true});
+    }
+  }
+
+  function restoreBackground(){
+    backgroundObserver?.disconnect?.();
+    backgroundObserver=null;
+    backgroundInert.forEach((previous,node)=>{
+      node.inert=previous.value;
+      if(previous.attribute===null) node.removeAttribute("inert");
+      else node.setAttribute("inert",previous.attribute);
+    });
+    backgroundInert.clear();
+  }
+
+  function panelFocusable(overlay){
+    return [...overlay.querySelectorAll('a[href],button,input,select,textarea,summary,[tabindex]')]
+      .filter(node=>node.tabIndex>=0&&!node.matches(':disabled')&&!node.closest('[inert]')&&node.getClientRects().length);
+  }
+
+  function closePanel({restoreFocus=true}={}){
     panelRequest++;
     const overlay=root?.document?.getElementById("regimenWorkflowOverlay");
     if(overlay) overlay.hidden=true;
     root.document?.body?.classList?.remove("workflow-panel-open");
+    restoreBackground();
     activeProtocol=null; activeManifest=null;
+    const opener=panelOpener;
+    panelOpener=null;
+    if(restoreFocus&&opener?.isConnected&&!opener.closest?.('[inert]')) opener.focus?.({preventScroll:true});
   }
 
   function moduleStatus(status){
@@ -534,8 +576,30 @@
         <div id="workflowPanelBody" class="workflow-panel-body"></div>
       </aside>`;
     root.document.body.appendChild(overlay);
-    overlay.querySelectorAll("[data-close-workflow]").forEach(el=>el.addEventListener("click",closePanel));
-    overlay.addEventListener("keydown",e=>{if(e.key==="Escape") closePanel();});
+    overlay.querySelectorAll("[data-close-workflow]").forEach(el=>el.addEventListener("click",()=>closePanel()));
+    overlay.addEventListener("keydown",event=>{
+      if(event.key==="Escape"&&!overlay.hidden) closePanel();
+    });
+    root.document.addEventListener("keydown",event=>{
+      if(overlay.hidden) return;
+      if(event.key==="Escape"){
+        event.preventDefault();
+        event.stopPropagation();
+        closePanel();
+      }else if(event.key==="Tab"){
+        const items=panelFocusable(overlay);
+        const first=items[0],last=items[items.length-1];
+        const current=root.document.activeElement;
+        if(!items.length){event.preventDefault();focusInsidePanel(overlay);}
+        else if(!overlay.contains(current)||(event.shiftKey?current===first:current===last)){
+          event.preventDefault();
+          (event.shiftKey?last:first).focus();
+        }
+      }
+    },true);
+    root.document.addEventListener("focusin",event=>{
+      if(!overlay.hidden&&!overlay.contains?.(event.target)) focusInsidePanel(overlay);
+    });
     return overlay;
   }
 
@@ -680,7 +744,7 @@
 
     body.querySelector("[data-workflow-assess]")?.addEventListener("click",()=>{
       const card=cardFor(activeProtocol);
-      closePanel();
+      closePanel({restoreFocus:false});
       card?.querySelector(".json-assessment-launch")?.click();
     });
     body.querySelector("[data-workflow-nccp-tracker]")?.addEventListener("click",()=>{
@@ -690,17 +754,17 @@
         return;
       }
       const sourceQuery=manifest.nccpCode||"";
-      closePanel();
+      closePanel({restoreFocus:false});
       tracker.open({sourceQuery});
     });
     body.querySelector("[data-workflow-consent]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
-      closePanel();
+      closePanel({restoreFocus:false});
       openConsentSupport(protocol);
     });
     body.querySelector("[data-workflow-knowledge]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
-      closePanel();
+      closePanel({restoreFocus:false});
       if(!openKnowledgeProfile(protocol)){
         const message="The regimen knowledge profile could not be opened. The knowledge module may still be loading, or this regimen may not yet have an expanded profile.";
         root.alert?.(message);
@@ -715,7 +779,7 @@
     });
     body.querySelector("[data-workflow-patient-guide]")?.addEventListener("click",()=>{
       const protocol=activeProtocol;
-      closePanel();
+      closePanel({restoreFocus:false});
       openPatientPipeline(protocol);
     });
     body.querySelector("[data-workflow-passport-card]")?.addEventListener("click",()=>{
@@ -730,18 +794,25 @@
     ensureCss();
     const overlay=ensurePanel();
     if(!overlay||!protocol) return;
+    const opening=overlay.hidden;
+    if(opening) panelOpener=root.document.activeElement;
     const request=++panelRequest;
     activeProtocol=protocol;
     root.__v0740ActiveProtocol=protocol; // Preserve context for workflow-linked services.
     const body=root.document.getElementById("workflowPanelBody");
-    body.innerHTML='<div class="workflow-loading">Building regimen workflow...</div>';
+    body.setAttribute?.("aria-busy","true");
+    body.innerHTML='<div class="workflow-loading"><h2 id="workflowPanelTitle">Regimen workflow</h2><p role="status">Building regimen workflow...</p></div>';
     overlay.hidden=false;
     root.document.body.classList.add("workflow-panel-open");
+    makeBackgroundInert(overlay);
+    // Keep initial focus on a stable control while the asynchronous body is replaced.
+    if(opening||!overlay.contains?.(root.document.activeElement)) focusInsidePanel(overlay);
     try{
       const manifest=await resolve(protocol,options);
       if(request!==panelRequest) return;
       activeManifest=manifest;
       renderPanel(activeManifest);
+      body.removeAttribute?.("aria-busy");
       if(options.focusSupport){
         const target=body.querySelector("#workflowSupportPhase")||body.querySelector("[data-workflow-support]");
         target?.scrollIntoView?.({block:"center"});
@@ -749,7 +820,8 @@
       }
     }catch(error){
       if(request!==panelRequest) return;
-      body.innerHTML=`<div class="workflow-error"><strong>Workflow could not be generated.</strong><p>${esc(error.message)}</p></div>`;
+      body.removeAttribute?.("aria-busy");
+      body.innerHTML=`<div class="workflow-error"><h2 id="workflowPanelTitle">Workflow could not be generated.</h2><p>${esc(error.message)}</p></div>`;
     }
   }
 
