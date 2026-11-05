@@ -25,7 +25,7 @@
       "clinical_use_authorised": false,
       "software_tests_completed": true,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_v08424_independent_review_pending",
+      "rule_level_source_reconciliation_status": "source_reconciled_v08434_independent_review_pending",
       "source_reconciled": true,
       "review_status": "Source reconciled; independent clinical and pharmacy review pending"
     },
@@ -36,7 +36,7 @@
       "oral_anticancer_therapy"
     ],
     "cytotoxic": true,
-    "sactcheck_encoding_version": "0.84.24",
+    "sactcheck_encoding_version": "0.84.34",
     "catalog": {
       "enabled": true
     },
@@ -65,25 +65,25 @@
     },
     "encoding_maturity": {
       "level": "source_reconciled_pending_independent_review",
-      "label": "Encoded protocol · full source coverage review pending",
+      "label": "Source reconciled · independent clinical and pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative.",
+      "audit_release": "0.84.34",
+      "audit_date": "2026-11-05",
+      "scope_note": "Current source-to-rule reconciliation and engine boundary cases in validation/colorectal-v08434/oral-source-audit. Retained source ambiguities and manually assessed domains are explicit. Independent clinical and pharmacy validation remains pending.",
       "review_status": "Source reconciled; independent clinical and pharmacy review pending",
-      "reconciled_release": "0.84.24",
-      "reconciled_date": "2026-10-29"
+      "reconciled_release": "0.84.34",
+      "reconciled_date": "2026-11-05"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00382-v3",
-    "source_checked_date": "2026-10-29",
-    "source_retrieval_method": "Official current NCCP PDF retrieved via the HSE index and critical tables visually checked",
+    "source_checked_date": "2026-11-05",
+    "source_retrieval_method": "Current official HSE PDF retrieved with curl; dose tables visually checked; current EMA supplement archived",
     "source_pdf_sha256": "611256878273675e3c48792e4abeed3361c80e3b501cd921e3b01cf4fd68750f",
-    "source_text_snapshot_sha256": "a13b43872f311984d60ccdb259d998f8eabd6b137845b88f79628b474c99ed5e",
+    "source_text_snapshot_sha256": "1f3d72fdb68b60e9fdf179ef5839950f61fe02f3ee307e8253c9b6f330ce738d",
     "source_pages": 6,
     "source_page_count": 6,
     "date_last_reviewed": "2026-07-01",
@@ -96,15 +96,17 @@
     "source_version_identity": "nccp-00382-v4",
     "regimen_short_name": "Trifluridine/tipiracil (Lonsurf) monotherapy",
     "indication_summary": "00382a: previously treated metastatic colorectal cancer monotherapy. The separate EMA gastric monotherapy and colorectal plus bevacizumab indications are not encoded by this NCCP regimen.",
-    "full_suite_release": "0.84.24",
+    "full_suite_release": "0.84.34",
     "schedule_summary": "Take the prescribed morning and evening tablets on Days 1–5, have no Lonsurf on Days 6–7, then take morning and evening tablets on Days 8–12. Days 13–28 are tablet-free. A new 28-day cycle starts only when the team authorises it.",
     "source_supplements": [
       {
-        "label": "EMA Lonsurf product information and patient leaflet",
+        "label": "EMA product information, current retrieved copy",
         "url": "https://www.ema.europa.eu/en/documents/product-information/lonsurf-epar-product-information_en.pdf",
-        "basis": "Audited product information supplement; NCCP differences remain explicit"
+        "retrieved_date": "2026-11-05",
+        "basis": "Explicit supplement where NCCP refers to the SmPC; no inferred NCCP threshold"
       }
-    ]
+    ],
+    "clinical_audit_release": "0.84.34"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -175,7 +177,7 @@
   },
   "rule_engine": {
     "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
-    "missing_data_policy": "All inputs optional. Missing assessment timing, nadir/delay, dose history or renal context remains unknown. Never issue general treatment clearance from isolated values.",
+    "missing_data_policy": "Do not infer missing values, recovery, recurrence, current dose, reduction history or clinical context. Entered independent stop/hold findings remain actionable. No automatic patient-specific dose is calculated from a reference dose.",
     "actions_ranked_most_to_least_restrictive": [
       "contraindicated",
       "discontinue",
@@ -1026,6 +1028,496 @@
           "document": "NCCP 00382 v4"
         },
         "explanation": "Reconcile the exact AM/PM tablet quantities and dosing/rest days. Do not replace missed, held or vomited doses; use the next scheduled prescribed dose after advice."
+      },
+      {
+        "rule_id": "EXCLUSION_SUGAR_DISORDER",
+        "field": "hereditary_sugar_disorder",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Lonsurf contains lactose: patients with these rare hereditary disorders should not take it. This does not equate ordinary lactose-related symptoms with the specified disorders.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Regimen-specific complications"
+        },
+        "explanation": "Lonsurf contains lactose: patients with these rare hereditary disorders should not take it. This does not equate ordinary lactose-related symptoms with the specified disorders."
+      },
+      {
+        "rule_id": "PRIOR_THERAPY_REVIEW",
+        "field": "prior_crc_therapy_eligibility_unmet",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Confirm previous treatment or non-candidacy for available fluoropyrimidine, oxaliplatin, irinotecan, anti-VEGF and anti-EGFR therapies for NCCP 00382a.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Indications"
+        },
+        "explanation": "Confirm previous treatment or non-candidacy for available fluoropyrimidine, oxaliplatin, irinotecan, anti-VEGF and anti-EGFR therapies for NCCP 00382a."
+      },
+      {
+        "rule_id": "NO_REESCALATION",
+        "field": "dose_reescalation_requested",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Do not increase Lonsurf after a dose reduction. Reconcile the proposed prescription with actual prior dose history before administration.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Dose modifications; Table 7 p4"
+        },
+        "explanation": "Do not increase Lonsurf after a dose reduction. Reconcile the proposed prescription with actual prior dose history before administration."
+      },
+      {
+        "rule_id": "MAX_REDUCTIONS",
+        "any": [
+          {
+            "field": "prior_dose_reductions",
+            "operator": ">",
+            "value": 3
+          },
+          {
+            "all": [
+              {
+                "field": "reduction_required_now",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "field": "prior_dose_reductions",
+                "operator": ">=",
+                "value": 3
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "A maximum of three standard reductions is permitted, with minimum 20 mg/m² twice daily. A further reduction is outside this pathway; obtain a consultant alternative/stop plan. Severe renal dosing has its separate 20→15 mg/m² pathway.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Dose modifications"
+        },
+        "explanation": "A maximum of three standard reductions is permitted, with minimum 20 mg/m² twice daily. A further reduction is outside this pathway; obtain a consultant alternative/stop plan. Severe renal dosing has its separate 20→15 mg/m² pathway."
+      },
+      {
+        "rule_id": "DOSE_HISTORY_REQUIRED",
+        "all": [
+          {
+            "field": "reduction_required_now",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "field": "current_dose_mg_m2_bd",
+                "operator": "missing"
+              },
+              {
+                "field": "prior_dose_reductions",
+                "operator": "missing"
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Confirm actual current dose, prior reductions and renal pathway before prescribing another reduction; never calculate from the original 35 mg/m² reference dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Dose modifications / Tables 3–6"
+        },
+        "explanation": "Confirm actual current dose, prior reductions and renal pathway before prescribing another reduction; never calculate from the original 35 mg/m² reference dose."
+      },
+      {
+        "rule_id": "SEVERE_RENAL_MINIMUM_STOP",
+        "field": "unable_tolerate_severe_renal_minimum",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Patients unable to tolerate 15 mg/m² twice daily in severe renal impairment should discontinue Lonsurf.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lonsurf-epar-product-information_en.pdf",
+          "document": "EMA Lonsurf product information",
+          "section": "SmPC 4.2"
+        },
+        "explanation": "Patients unable to tolerate 15 mg/m² twice daily in severe renal impairment should discontinue Lonsurf."
+      },
+      {
+        "rule_id": "SEVERE_RENAL_REDUCTION_LIMIT",
+        "all": [
+          {
+            "any": [
+              {
+                "all": [
+                  {
+                    "field": "lonsurf_crcl_ml_min",
+                    "operator": ">=",
+                    "value": 15
+                  },
+                  {
+                    "field": "lonsurf_crcl_ml_min",
+                    "operator": "<",
+                    "value": 30
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "crcl_ml_min",
+                    "operator": ">=",
+                    "value": 15
+                  },
+                  {
+                    "field": "crcl_ml_min",
+                    "operator": "<",
+                    "value": 30
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "reduction_required_now",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "current_dose_mg_m2_bd",
+            "operator": "==",
+            "value": "15"
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Already at the severe-renal minimum 15 mg/m² twice daily: do not reduce to 10 mg/m². If this minimum is not tolerated, the SmPC advises discontinuation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Table 6; EMA 4.2 p5"
+        },
+        "explanation": "Already at the severe-renal minimum 15 mg/m² twice daily: do not reduce to 10 mg/m². If this minimum is not tolerated, the SmPC advises discontinuation."
+      },
+      {
+        "rule_id": "STANDARD_DOSE_FLOOR",
+        "all": [
+          {
+            "field": "reduction_required_now",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "current_dose_mg_m2_bd",
+            "operator": "==",
+            "value": "20"
+          },
+          {
+            "any": [
+              {
+                "field": "lonsurf_crcl_ml_min",
+                "operator": ">=",
+                "value": 30
+              },
+              {
+                "field": "crcl_ml_min",
+                "operator": ">=",
+                "value": 30
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "At the standard minimum 20 mg/m² twice daily, another 5 mg/m² reduction is not authorised. The 15 mg/m² minimum belongs only to the severe-renal pathway.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Dose modifications; Tables 4 and 6"
+        },
+        "explanation": "At the standard minimum 20 mg/m² twice daily, another 5 mg/m² reduction is not authorised. The 15 mg/m² minimum belongs only to the severe-renal pathway."
+      },
+      {
+        "rule_id": "RESTART_RECOVERY_UNCONFIRMED",
+        "all": [
+          {
+            "field": "restart_after_toxicity",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "field": "toxicity_recovered_grade1_or_baseline",
+                "operator": "==",
+                "value": false
+              },
+              {
+                "field": "toxicity_recovered_grade1_or_baseline",
+                "operator": "missing"
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "After a dose-limiting event, hold until toxicity is grade 1 or baseline and the applicable blood-count recovery criteria are met. Grade 2 is not sufficient; missing recovery is not normal.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Table 3; Table 7 p4"
+        },
+        "explanation": "After a dose-limiting event, hold until toxicity is grade 1 or baseline and the applicable blood-count recovery criteria are met. Grade 2 is not sufficient; missing recovery is not normal."
+      },
+      {
+        "rule_id": "RENAL_CONTEXT_CONFLICT",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "lonsurf_crcl_ml_min",
+                "operator": ">=",
+                "value": 30
+              },
+              {
+                "field": "crcl_ml_min",
+                "operator": "<",
+                "value": 30
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "lonsurf_crcl_ml_min",
+                "operator": "<",
+                "value": 30
+              },
+              {
+                "field": "crcl_ml_min",
+                "operator": ">=",
+                "value": 30
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Exact creatinine clearance and the legacy renal-band entry disagree across the 30 mL/min treatment boundary. Reconcile the measurement/date and renal pathway; no automatic dose selection.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Table 5; input-conflict safeguard"
+        },
+        "explanation": "Exact creatinine clearance and the legacy renal-band entry disagree across the 30 mL/min treatment boundary. Reconcile the measurement/date and renal pathway; no automatic dose selection."
+      },
+      {
+        "rule_id": "ASSESSMENT_CONTEXT_CONFLICT",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "assessment_type",
+                "operator": "==",
+                "value": "on_treatment"
+              },
+              {
+                "field": "assessment_context",
+                "operator": "==",
+                "value": "start_next_cycle"
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "assessment_type",
+                "operator": "in",
+                "value": [
+                  "pre_treatment",
+                  "restart"
+                ]
+              },
+              {
+                "field": "assessment_context",
+                "operator": "==",
+                "value": "during_cycle"
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Assessment timing entries disagree. Resolve during-cycle interruption versus new-cycle/restart eligibility; the more restrictive actionable blood-count finding remains in force.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Table 2; input-conflict safeguard"
+        },
+        "explanation": "Assessment timing entries disagree. Resolve during-cycle interruption versus new-cycle/restart eligibility; the more restrictive actionable blood-count finding remains in force."
+      },
+      {
+        "rule_id": "INTERACTION_REVIEW",
+        "field": "lonsurf_interacting_medicine",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Review with oncology pharmacy. Zidovudine and other thymidine-kinase substrates may lose antiviral efficacy; transporter/OCT2/MATE1 interactions also need assessment. Do not infer a numerical Lonsurf reduction.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 8,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/lonsurf-epar-product-information_en.pdf",
+          "document": "EMA Lonsurf product information",
+          "section": "SmPC 4.5"
+        },
+        "explanation": "Review with oncology pharmacy. Zidovudine and other thymidine-kinase substrates may lose antiviral efficacy; transporter/OCT2/MATE1 interactions also need assessment. Do not infer a numerical Lonsurf reduction."
+      },
+      {
+        "rule_id": "SPECIAL_50MG_DAILY_PLAN",
+        "field": "planned_total_daily_dose_mg",
+        "operator": "==",
+        "value": 50,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "At a source-table total of 50 mg daily, give 20 mg in the morning and 30 mg in the evening (two 15 mg tablets), not 25 mg twice daily. Verify the applicable BSA/dose/renal band with pharmacy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Table 4 footnote; Table 6 p4"
+        },
+        "explanation": "At a source-table total of 50 mg daily, give 20 mg in the morning and 30 mg in the evening (two 15 mg tablets), not 25 mg twice daily. Verify the applicable BSA/dose/renal band with pharmacy."
+      },
+      {
+        "rule_id": "TABLET_PLAN_UNVERIFIED",
+        "all": [
+          {
+            "any": [
+              {
+                "field": "bsa_m2",
+                "operator": "exists"
+              },
+              {
+                "field": "planned_total_daily_dose_mg",
+                "operator": "exists"
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "planned_tablets_verified",
+                "operator": "==",
+                "value": false
+              },
+              {
+                "field": "planned_tablets_verified",
+                "operator": "missing"
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trifluridine_tipiracil"
+          ],
+          "recommendation": "Use the applicable NCCP BSA tablet table; do not substitute arithmetic rounding, exceed the 80 mg per-dose starting cap or assume identical AM/PM tablet counts. Pharmacy must confirm the complete plan.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6348/trifluridine_and_tipiracil_Lonsurf_therapy_382.pdf",
+          "document": "NCCP 00382 v4",
+          "section": "Tables 1, 4 and 6"
+        },
+        "explanation": "Use the applicable NCCP BSA tablet table; do not substitute arithmetic rounding, exceed the 80 mg per-dose starting cap or assume identical AM/PM tablet counts. Pharmacy must confirm the complete plan."
       }
     ]
   },
@@ -1430,6 +1922,99 @@
       "type": "boolean",
       "required": false,
       "demo_value": "",
+      "input_role": "decision"
+    },
+    "hereditary_sugar_disorder": {
+      "label": "Rare hereditary galactose intolerance, total lactase deficiency or glucose-galactose malabsorption",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "dose_reescalation_requested": {
+      "label": "Proposed increase after a prior Lonsurf dose reduction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "reduction_required_now": {
+      "label": "A further 5 mg/m² per-dose reduction is required",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "toxicity_recovered_grade1_or_baseline": {
+      "label": "Prior dose-limiting toxicity recovered to grade 1 or baseline",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "restart_after_toxicity": {
+      "label": "Considering restart after dose-limiting toxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "unable_tolerate_severe_renal_minimum": {
+      "label": "Unable to tolerate 15 mg/m² twice daily in severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "lonsurf_interacting_medicine": {
+      "label": "Thymidine-kinase substrate (e.g. zidovudine), nucleoside-transporter, OCT2 or MATE1 interaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "prior_crc_therapy_eligibility_unmet": {
+      "label": "Prior CRC treatment / suitability criteria not met",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "planned_tablets_verified": {
+      "label": "Oncology pharmacy has verified BSA band and morning/evening tablets",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "prior_dose_reductions": {
+      "label": "Number of previous Lonsurf dose reductions",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "input_role": "decision"
+    },
+    "bsa_m2": {
+      "label": "Body surface area (m²); source-table tablet verification only",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "min": 0.1,
+      "max": 4,
+      "step": "any",
+      "input_role": "decision"
+    },
+    "planned_total_daily_dose_mg": {
+      "label": "Planned total daily trifluridine dose (mg)",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "min": 0,
+      "max": 200,
+      "step": "any",
       "input_role": "decision"
     }
   },

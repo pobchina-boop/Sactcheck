@@ -1,0 +1,105 @@
+{
+  "checked_at": "2026-11-05T16:53:18.551273+00:00",
+  "release": "0.84.34",
+  "review_type": "Source-based full-suite consistency review; C1\u2013C4 applied to authored data, parent regenerates outputs",
+  "findings": [
+    {
+      "id": "C1",
+      "severity": "moderate",
+      "codes": [
+        "00328"
+      ],
+      "surface": "patient monitoring, treatment map and clinician KB",
+      "source": "NCCP00328 p4 Table2",
+      "finding": "Weekly FBC during a cytopenia-related treatment delay is present in the clinical protocol but absent from patient monitoring summaries and KB monitoring.",
+      "requested_fix": "Add conditional weekly blood-count monitoring while treatment is delayed for low counts; regenerate affected web/PDF/map outputs.",
+      "resolution": "Applied to scoped authored patient/KB/phase-support data; generated HTML/PDF verification pending parent regeneration."
+    },
+    {
+      "id": "C2",
+      "severity": "moderate",
+      "codes": [
+        "00328",
+        "00330",
+        "00331"
+      ],
+      "surface": "clinician KB administration / infusion workflow",
+      "source": "Current CAMPTO SmPC p2 \u00a74.2",
+      "finding": "Current KB describes order and duration but does not state irinotecan must not be administered earlier than one hour after the end of cetuximab infusion.",
+      "requested_fix": "Add explicit source-attributed interval to clinician administration instructions; patient appointment text may mention a planned interval without dosing instructions.",
+      "resolution": "Applied to scoped authored patient/KB/phase-support data; generated HTML/PDF verification pending parent regeneration."
+    },
+    {
+      "id": "C3",
+      "severity": "moderate",
+      "codes": [
+        "00328",
+        "00330",
+        "00331"
+      ],
+      "surface": "phase-specific supportive prescription",
+      "source": "NCCP00328 p7;00330 p5;00331 complications section",
+      "finding": "Atropine notes warn against glaucoma but omit the source caution in asthma.",
+      "requested_fix": "Add asthma caution and clinical review to atropine notes; retain distinction between cholinergic syndrome and delayed diarrhoea.",
+      "resolution": "Applied to scoped authored patient/KB/phase-support data; generated HTML/PDF verification pending parent regeneration."
+    },
+    {
+      "id": "C4",
+      "severity": "moderate",
+      "codes": [
+        "00328",
+        "00330",
+        "00331"
+      ],
+      "surface": "detailed patient bowel advice and distilled expectations",
+      "source": "NCCP00328 p6;00330 p5;00331 support section",
+      "finding": "Patient text asks patients to follow their written plan and seek urgent advice for severe symptoms, but does not explicitly direct starting their supplied rescue plan and electrolyte fluids at the first liquid stool.",
+      "requested_fix": "State act at the first liquid stool using the individually supplied plan and fluids; contact the team early, do not wait for severe diarrhoea. Do not turn generic numeric clinician reference into an unissued patient prescription.",
+      "resolution": "Applied to scoped authored patient/KB/phase-support data; generated HTML/PDF verification pending parent regeneration."
+    },
+    {
+      "id": "C5",
+      "severity": "minor",
+      "codes": [
+        "00328",
+        "00330",
+        "00331"
+      ],
+      "surface": "supportive-care HTML footer",
+      "source": "Current generated output consistency",
+      "finding": "Generated support pages still display SACTCheck v0.83.8 while current patient/consent pages show0.84.34.",
+      "requested_fix": "Use active release for affected output footer or explicitly identify0.83.8 as template revision so it cannot be mistaken for clinical content version."
+    }
+  ],
+  "checks_passed": [
+    "Weekly cetuximab D1/D8 for00328/00330; fortnightlycetuxD1only00331.",
+    "00328FOLFIRI46hour5FU andD3disconnection;00330/331no5FUpump.",
+    "Day1moderateantiemetic plan separatefromD8lowrisk;D8noirinotecanoratropine/noautomaticallyrepeateddelayedsteroids.",
+    "00330/331sourcechlorphenamine10mgIV+dexamethasone8mgIVpreservedwithduplicate-steroidreconciliation.",
+    "All3monthlypost-cetuxelectrolytes/Mg/Ca2monthsretained;00328DPD/conditionalECG/warfarinINRretained.",
+    "Eightanatomicalanchorsandallagent-specificconsentrisksretainedforeach.",
+    "Patienttextdoesnotinstructpatientstochoosecytotoxicrestartdose;actualdosehistoryandsourceambiguitiesremainclinicianassessment.",
+    "Consentvoluntariness,alternatives,patient-specificriskdiscussionandgovernancereviewstatementretained.",
+    "Source-basedengineboundarysuite525/525pass;ANC1.5andplatelets75restartgatesdistinctfromnadirdecisions.",
+    "CurrentPDFtextchecks:guides3pageseach,consent1pageeach;handbooks40/35/34pagesrespectively;allcontainv0.84.34andcorrectagents."
+  ],
+  "limitations": [
+    "Thisreviewdoesnotreplaceparentfinalbrowser/PDFvisual/QRandpackagechecks.",
+    "Broadall-regimenMVPconsistencyauditnotperformed.",
+    "Clinicalauthorisationandindependentspecialistreviewnotestablished."
+  ],
+  "reviewed_input_hashes": {
+    "data/patient-knowledge/00328.json": "0aadb7235296f5d8e5419092da681007daab281cc4fff9a7d31330c0199688f0",
+    "data/patient-knowledge/00330.json": "1d35e5098675e27036998978d9041838e12966f7a39564af5e40c5dc01596ef6",
+    "data/patient-knowledge/00331.json": "5f30073da9b7f884f2b5648e9780476f4556dc25a015dbb6becfa795a618698d",
+    "data/regimen-knowledge-base-v08434-addendum.json": "3bf5f5179a2dcdbf177af7e3b5369a10e2f63755aea535f869f3a8c8129d5958",
+    "data/phase-support-v0838.json": "38e6939aa10b6cff7fbb82eeae639d11b953148b649408a56cf1725380782582"
+  },
+  "corrected_input_hashes": {
+    "data/patient-knowledge/00328.json": "4d8e7f84f16946e633db89ab1a9680ee3bae4ced67de47b73a53c72429debe56",
+    "data/patient-knowledge/00330.json": "1227293cb0bd300c3ebd5fc0df51038566246c11bfdbe394f63dbcb55db17227",
+    "data/patient-knowledge/00331.json": "8a8e6265808f1a80bcb6d3ffc7eaf44959c99b922b8a205bca5b3453596ba3e6",
+    "data/regimen-knowledge-base-v08434-addendum.json": "2cb86f362c9d4ea64ba4f8b1639b568132a60b8ec3694b97e1b90d9b880144c5",
+    "data/phase-support-v0838.json": "4380342dbdd84b08a062277f2a21fcd304b256d70211e012be2aab73cf93d999"
+  }
+}

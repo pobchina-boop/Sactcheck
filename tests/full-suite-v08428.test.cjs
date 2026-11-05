@@ -3,7 +3,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
 const scope=json('validation/lung-backbones-v08428/scope.json'),idx=json('data/lung-backbones-v08428-source-index.json'),kb=json('data/regimen-knowledge-base-v08428-addendum.json'),protocols=json('protocols/index.json').protocols;
 const Engine=require('../js/assessment-engine'),Registry=require('../js/patient-asset-registry-v0810'),Journey=require('../js/treatment-journey-v0837'),Dose=require('../js/protocol-dose-schedule'),Evidence=require('../js/treatment-evidence-v08413');
-assert.equal(scope.new_codes.length,5);assert.equal(scope.retrospective_codes.length,5);assert.equal(idx.codes.length,10);assert.equal(kb.regimen_profiles.length,10);assert.equal(Registry.codes.length,170);
+assert.equal(scope.new_codes.length,5);assert.equal(scope.retrospective_codes.length,5);assert.equal(idx.codes.length,10);assert.equal(kb.regimen_profiles.length,10);assert.equal(Registry.codes.length,174);assert(Registry.codes.includes('00244'),'Audited v34 regorafenib accounts for the added patient registry entry');
 for(const code of idx.codes){
  const p=json(protocols.find(r=>r.path.includes('/'+code+'-')).path),k=kb.regimen_profiles.find(k=>k.protocol_id===p.protocol_id);
  assert.equal(p.metadata.sactcheck_encoding_version,'0.84.28');assert.equal(p.metadata.full_suite_release,'0.84.28');

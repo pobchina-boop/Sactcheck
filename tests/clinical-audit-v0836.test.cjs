@@ -8,11 +8,11 @@ for(const c of codes){
  if(['00210','00213'].includes(c))continue;
  for(const ras of ['mutant','unknown'])test(c,'RAS '+ras,{ras_status:ras},'contraindicated');
  for(const grade of [3,4])test(c,'Current severe skin '+grade,{acneiform_rash_grade:grade},'withhold');
- for(const occ of [1,2,3])for(const grade of [0,1,2])for(const delay of [1,2])test(c,`Skin recovered ${occ}/${grade}/${delay}`,{acneiform_rash_grade:grade,skin_occurrence:occ,skin_delay_weeks:delay,skin_failed_recovery:false},occ===1?'consultant_review':'dose_reduce',(r,d)=>{const dose=(['00207','00328','00330','00692'].includes(c)?[250,200,150]:[500,400,300])[occ-1];assert(d.rows.some(x=>x.component==='Cetuximab'&&x.protocolDose.includes(dose+' mg/')));});
+ for(const occ of [1,2,3])for(const grade of [0,1,2])for(const delay of [1,2])test(c,`Skin recovered ${occ}/${grade}/${delay}`,{...(['00207','00328','00330','00331','00732','00585','00733'].includes(c)?{previous_cetuximab_dose_mg_m2:['00331','00732','00585','00733'].includes(c)?500:250}:{}),acneiform_rash_grade:grade,skin_occurrence:occ,skin_delay_weeks:delay,skin_failed_recovery:false},occ===1?'consultant_review':'dose_reduce',(r,d)=>{const dose=(['00207','00328','00330','00692'].includes(c)?[250,200,150]:[500,400,300])[occ-1];assert(d.rows.some(x=>x.component==='Cetuximab'&&x.protocolDose.includes(dose+' mg/')));});
  test(c,'Fourth severe skin episode',{skin_occurrence:4},'discontinue');test(c,'Failed skin recovery',{skin_failed_recovery:true},'discontinue');
  for(const grade of [1,2,3,4])test(c,'Infusion reaction '+grade,{infusion_reaction_grade:grade},grade<3?'consultant_review':'permanently_discontinue');
  test(c,'Early infusion overrides mild grade',{infusion_reaction_grade:1,reaction_first_15_minutes:true},'withhold');test(c,'ILD',{interstitial_lung_disease:true},'permanently_discontinue');test(c,'Respiratory symptoms',{unexplained_respiratory_symptoms:true},'withhold');test(c,'Eye symptoms',{ocular_symptoms:true},'consultant_review');test(c,'Electrolyte correction',{electrolyte_abnormality:true},'consultant_review');
- const r=E.assess(ps[c],{acneiform_rash_grade:1,skin_occurrence:2});assert(!r.findings.some(f=>f.ruleId?.startsWith('SKIN_RESTART')));out.push({code:c,case:'No inferred skin recovery interval',pass:true});
+ const r=E.assess(ps[c],{acneiform_rash_grade:1,skin_occurrence:2});assert(!r.findings.some(f=>/^SKIN_RESTART_[123]$/.test(f.ruleId||'')));out.push({code:c,case:'No inferred skin recovery interval',pass:true});
 }
 for(const c of codes.filter(c=>!['00207','00732'].includes(c))){
  for(const v of [.49,.5,.99,1,1.49])test(c,'ANC '+v,{anc_x10e9_l:v},'withhold');
@@ -45,9 +45,9 @@ for(const c of ['00692','00733','00210']){
  if(['00692','00210'].includes(c)){const ads=ps[c].treatment_phases[0].administration.filter(x=>x.drug==='fluorouracil_infusion');assert.equal(ads.length,2);assert(ads.every(x=>x.dose.value===600&&x.duration==='22 hours'));}
 }
 for(const c of ['00330','00331']){
- for(const n of [.49,.5,.99])test(c,'Irinotecan pair nadir '+n,{anc_x10e9_l:1.5,platelets_x10e9_l:75,lowest_anc:n},'dose_reduce',(r,d)=>assert(d.rows.some(x=>x.protocolDose.includes(n<.5?'120':'150'))));
+ for(const n of [.49,.5,.99])test(c,'Irinotecan pair nadir '+n,{anc_x10e9_l:1.5,platelets_x10e9_l:75,lowest_anc:n,lowest_platelets:75,previous_irinotecan_dose_mg_m2:180},'dose_reduce',(r,d)=>assert(d.rows.some(x=>x.protocolDose.includes(n<.5?'120':'150'))));
  test(c,'Irinotecan renal range',{crcl_ml_min:9.99},'consultant_review',(r,d)=>assert(!d.rows.some(x=>/^\d.*mg/.test(x.protocolDose))));
- for(const g of [3,4])test(c,'Diarrhoea restart source '+g,{diarrhoea_grade:0,diarrhoea_highest_grade:g,toxicity_delay_weeks:1},'consultant_review',(r,d)=>{if(c==='00330')assert(!d.rows.some(x=>x.component==='Cetuximab'&&/^\d/.test(x.protocolDose)));else assert(d.rows.some(x=>x.component==='Cetuximab'&&x.protocolDose.includes(g===3?'400':'300')));});
+ for(const g of [3,4])test(c,'Diarrhoea restart source '+g,{diarrhoea_grade:0,diarrhoea_highest_grade:g,toxicity_delay_weeks:1,previous_irinotecan_dose_mg_m2:180,previous_cetuximab_dose_mg_m2:c==='00331'?500:250},'consultant_review',(r,d)=>{if(c==='00330')assert(!d.rows.some(x=>x.component==='Cetuximab'&&/^\d/.test(x.protocolDose)));else assert(d.rows.some(x=>x.component==='Cetuximab'&&x.protocolDose.includes(g===3?'400':'300')));});
 }
 test('00207','RAS does not exclude head/neck RT',{indication_id:'00207-head-neck',ras_status:'mutant'},'proceed_with_caution');
 test('00207','RAS requires indication context',{indication_id:null,ras_status:'mutant'},'consultant_review');

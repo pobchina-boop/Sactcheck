@@ -18544,6 +18544,15 @@ const definitions={
     ]
   },
   "00207": {
+    "code": "00207",
+    "title": "Weekly cetuximab: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Selected metastatic colorectal cancer; or locally advanced head/neck cancer with radiotherapy when platinum is unsuitable",
+    "summary": "One larger first infusion is followed by weekly infusions. Bowel-cancer treatment continues while helping and tolerated. For head-and-neck treatment, cetuximab starts one week before radiotherapy and continues until radiation treatment finishes.",
     "stages": [
       "Before starting",
       "First treatment",
@@ -18553,22 +18562,8 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment",
-        "cells": [
-          "Confirm exact indication and planned course",
-          "Start the source-specific schedule",
-          "Continue the active phase as prescribed",
-          "Confirm hold, restart, maintenance or completion",
-          "Agree follow-up and next decision"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00207"
-        ],
-        "note": "One larger first infusion is followed by weekly infusions. Bowel-cancer treatment continues while helping and tolerated. For head-and-neck treatment, cetuximab starts one week before radiotherapy and continues until radiation treatment finishes."
-      },
-      {
         "label": "Bloods and symptoms",
+        "kind": "monitoring",
         "cells": [
           "Baseline blood count, kidney and liver checks",
           "Confirm tests and prescription before the first dose",
@@ -18576,14 +18571,14 @@ const definitions={
           "Recheck after a hold or treatment change",
           "Follow unresolved effects and the agreed disease-review plan"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00207"
         ],
-        "note": "Follow the regimen-specific due window and local booking plan."
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       },
       {
         "label": "Treatment review",
+        "kind": "monitoring",
         "cells": [
           "Confirm exact cancer setting and biomarkers",
           "Explain expected benefit and how it will be assessed",
@@ -18591,14 +18586,14 @@ const definitions={
           "Review response, tolerability and active medicines",
           "Agree the next treatment or surveillance plan"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00207"
         ],
-        "note": "Follow the regimen-specific due window and local booking plan."
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       },
       {
         "label": "Electrolytes and EGFR effects",
+        "kind": "monitoring",
         "cells": [
           "Check electrolyte and skin-risk plan",
           "Skin care and prompt reaction reporting",
@@ -18606,49 +18601,27 @@ const definitions={
           "Do not stop follow-up because the infusion stops",
           "Monthly electrolytes, magnesium and calcium for two months after the last EGFR-antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00207"
         ],
-        "note": "Follow the regimen-specific due window and local booking plan."
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       }
     ],
     "milestones": [
       {
-        "title": "Before starting",
-        "when": "Before first dose",
-        "why": "Confirm suitability and baseline safety",
-        "clinical": "FBC, renal and liver profile; adequate marrow and organ function; ECOG 0–3. Confirm indication: EGFR-expressing RAS wild-type mCRC with the exact prior-treatment conditions; or locally advanced squamous head/neck cancer with RT and platinum ineligibility. Ask about previous antibody infusion reactions, red-meat allergy, tick bites and anti-cetuximab IgE results.",
-        "action": "Confirm results, prescriptions and responsible teams.",
-        "source_ids": [
-          "00207"
-        ]
-      },
-      {
-        "title": "Whole-course and completion review",
-        "when": "At phase change or completion",
-        "why": "Some checks and support continue after a drug stops",
-        "clinical": "Monthly electrolytes, magnesium and calcium for two months after the last cetuximab dose; assign responsibility before treatment ends. Response assessment follows the consultant plan; head/neck radiation follow-up is coordinated separately.",
-        "action": "Provide the ongoing monitoring and urgent-contact plan.",
+        "title": "A 7-day reference cycle",
+        "when": "Clinic → home → review",
+        "why": "For selected bowel cancer that has spread, cetuximab aims to control the cancer after previous treatments. For selected locally advanced head-and-neck cancer when platinum chemotherapy is unsuitable, it is combined with radiotherapy. Your team confirms which pathway applies.",
+        "clinical": "Cetuximab on Day 1. No home chemotherapy pump. A repeating 7-day cycle. The number of cycles depends on benefit, side effects and your treatment plan. For head-and-neck radiotherapy: start cetuximab one week before radiation, then continue weekly during radiation until it ends.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00207"
         ]
       }
     ],
     "clinical_notes": [
-      "NCCP v6 uses conjunctive colorectal prior-treatment wording; uncertain histories require consultant confirmation.",
-      "Mutant or unknown RAS excludes the colorectal indication. Severe infusion reactions and confirmed ILD require discontinuation.",
-      "Bonner compared with radiotherapy alone, not cisplatin chemoradiation, and did not specifically enrol only platinum-ineligible patients."
+      "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
     ],
-    "code": "00207",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Weekly cetuximab: treatment and checks",
-    "setting": "Selected metastatic colorectal cancer; or locally advanced head/neck cancer with radiotherapy when platinum is unsuitable",
-    "summary": "One larger first infusion is followed by weekly infusions. Bowel-cancer treatment continues while helping and tolerated. For head-and-neck treatment, cetuximab starts one week before radiotherapy and continues until radiation treatment finishes.",
     "sources": [
       {
         "id": "00207",
@@ -18698,6 +18671,15 @@ const definitions={
     ]
   },
   "00447": {
+    "code": "00447",
+    "title": "Panitumumab + modified FOLFOX-6: treatment and checks",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "First-line RAS wild-type metastatic colorectal cancer",
+    "summary": "A 14-day cycle: panitumumab, oxaliplatin, folinic acid and fluorouracil start on Day 1, followed by a fluorouracil pump lasting about 46 hours. Arrange disconnection around Day 3. Continue according to benefit and tolerance.",
     "stages": [
       "Before starting",
       "First treatment",
@@ -18707,37 +18689,23 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment",
-        "cells": [
-          "Confirm exact indication and planned course",
-          "Start the source-specific schedule",
-          "Continue the active phase as prescribed",
-          "Confirm hold, restart, maintenance or completion",
-          "Agree follow-up and next decision"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00447"
-        ],
-        "note": "A 14-day cycle: panitumumab, oxaliplatin, folinic acid and fluorouracil start on Day 1, followed by a fluorouracil pump lasting about 46 hours. Arrange disconnection around Day 3. Continue according to benefit and tolerance."
-      },
-      {
-        "label": "Bloods and symptoms",
-        "cells": [
-          "Baseline blood count, kidney and liver checks",
-          "Confirm tests and prescription before the first dose",
-          "Repeat bloods and symptom checks according to this regimen",
-          "Recheck after a hold or treatment change",
-          "Follow unresolved effects and the agreed disease-review plan"
-        ],
+        "label": "Blood count, kidney and liver",
         "kind": "monitoring",
+        "cells": [
+          "Baseline blood count, kidney and liver profile",
+          "Review results and symptoms before treatment",
+          "Blood count, kidney and liver profile before every cycle; weekly blood counts when delayed for low counts",
+          "Repeat sooner if unwell or results need follow-up",
+          "Follow unresolved abnormalities after treatment"
+        ],
         "source_ids": [
           "00447"
         ],
-        "note": "Follow the regimen-specific due window and local booking plan."
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       },
       {
         "label": "Treatment review",
+        "kind": "monitoring",
         "cells": [
           "Confirm exact cancer setting and biomarkers",
           "Explain expected benefit and how it will be assessed",
@@ -18745,14 +18713,14 @@ const definitions={
           "Review response, tolerability and active medicines",
           "Agree the next treatment or surveillance plan"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00447"
         ],
-        "note": "Follow the regimen-specific due window and local booking plan."
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       },
       {
         "label": "Electrolytes and EGFR effects",
+        "kind": "monitoring",
         "cells": [
           "Check electrolyte and skin-risk plan",
           "Skin care and prompt reaction reporting",
@@ -18760,48 +18728,57 @@ const definitions={
           "Do not stop follow-up because the infusion stops",
           "Monthly electrolytes, magnesium and calcium for two months after the last EGFR-antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00447"
         ],
-        "note": "Follow the regimen-specific due window and local booking plan."
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
+      },
+      {
+        "label": "Fluorouracil and pump safety",
+        "kind": "monitoring",
+        "cells": [
+          "DPD testing before fluorouracil unless previously tested; confirm line access",
+          "Confirm pump education and disconnection appointment",
+          "Review mouth, bowel, cardiac and pump symptoms",
+          "Unexpected severe early effects require urgent review",
+          "Continue line care until the team removes or changes the device"
+        ],
+        "source_ids": [
+          "00447"
+        ],
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
+      },
+      {
+        "label": "Nerve symptoms",
+        "kind": "monitoring",
+        "cells": [
+          "Record baseline neuropathy",
+          "Cold-triggered symptoms may start early",
+          "Review symptoms before dosing",
+          "Report persistent symptoms or impaired daily activities before the next dose",
+          "Follow symptoms after oxaliplatin stops"
+        ],
+        "source_ids": [
+          "00447"
+        ],
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       }
     ],
     "milestones": [
       {
-        "title": "Before starting",
-        "when": "Before first dose",
-        "why": "Confirm suitability and baseline safety",
-        "clinical": "Validated extended RAS wild-type result; confirm first-line metastatic indication, ECOG and organ function. FBC, renal and liver profile; DPD test before fluorouracil. Interpret uracil cautiously in renal impairment and consider genotype confirmation. Baseline electrolytes, magnesium and calcium; neuropathy, hearing/vision, skin and respiratory symptoms; access and pump assessment.",
-        "action": "Confirm results, prescriptions and responsible teams.",
-        "source_ids": [
-          "00447"
-        ]
-      },
-      {
-        "title": "Whole-course and completion review",
-        "when": "At phase change or completion",
-        "why": "Some checks and support continue after a drug stops",
-        "clinical": "Monthly electrolytes, magnesium and calcium for two months after the last panitumumab dose. Assess cumulative oxaliplatin neuropathy and cold sensitivity throughout treatment and after stopping; disease scans follow the consultant plan.",
-        "action": "Provide the ongoing monitoring and urgent-contact plan.",
+        "title": "A repeating 14-day cycle",
+        "when": "Day ward → home pump → review",
+        "why": "The aim is to control advanced bowel cancer and symptoms. Treatment continues while it is helping and side effects remain acceptable; your team reviews the plan with you.",
+        "clinical": "Day 1: panitumumab, oxaliplatin, folinic acid and fluorouracil, followed by a fluorouracil pump for about 46 hours; disconnection is arranged around Day 3. A cycle lasts 14 days. Treatment continues while it is helping and side effects remain acceptable.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00447"
         ]
       }
     ],
     "clinical_notes": [
-      "Complete DPD deficiency excludes fluorouracil; partial deficiency requires individual starting-dose advice.",
-      "PRIME used FOLFOX4, not this exact modified FOLFOX-6 schedule; do not present its effect as schedule-specific."
+      "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
     ],
-    "code": "00447",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Panitumumab + modified FOLFOX-6: treatment and checks",
-    "setting": "First-line RAS wild-type metastatic colorectal cancer",
-    "summary": "A 14-day cycle: panitumumab, oxaliplatin, folinic acid and fluorouracil start on Day 1, followed by a fluorouracil pump lasting about 46 hours. Arrange disconnection around Day 3. Continue according to benefit and tolerance.",
     "sources": [
       {
         "id": "00447",
@@ -18878,8 +18855,8 @@ const definitions={
   "00448": {
     "code": "00448",
     "title": "Panitumumab + FOLFIRI: treatment and checks",
-    "release": "0.84.33",
-    "checked": "2026-11-04",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
     "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
@@ -18894,14 +18871,14 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Bloods and symptoms",
+        "label": "Blood count, kidney and liver",
         "kind": "monitoring",
         "cells": [
-          "Baseline blood count, kidney and liver tests; DPD before fluorouracil unless already tested",
-          "Confirm tests and prescription before the first dose",
-          "Blood count, kidney and liver tests before each cycle, with symptom review",
-          "Recheck after a hold or treatment change",
-          "Follow unresolved effects and the agreed disease-review plan"
+          "Baseline blood count, kidney and liver profile",
+          "Review results and symptoms before treatment",
+          "Blood count, kidney and liver profile before every cycle; weekly blood counts when delayed for low counts",
+          "Repeat sooner if unwell or results need follow-up",
+          "Follow unresolved abnormalities after treatment"
         ],
         "source_ids": [
           "00448"
@@ -18967,15 +18944,30 @@ const definitions={
           "00448"
         ],
         "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
+      },
+      {
+        "label": "Fluorouracil and pump safety",
+        "kind": "monitoring",
+        "cells": [
+          "DPD testing before fluorouracil unless previously tested; confirm line access",
+          "Confirm pump education and disconnection appointment",
+          "Review mouth, bowel, cardiac and pump symptoms",
+          "Unexpected severe early effects require urgent review",
+          "Continue line care until the team removes or changes the device"
+        ],
+        "source_ids": [
+          "00448"
+        ],
+        "note": "Relative stages, not equally spaced dates. Agree who books each check, reviews results and gives advice if a check is missed."
       }
     ],
     "milestones": [
       {
         "title": "A repeating 14-day cycle",
         "when": "Day ward → home pump → review",
-        "why": "This combination aims to control bowel cancer that has spread and has a confirmed RAS wild-type result. The choice depends on previous treatment and your health.",
+        "why": "The aim is to control advanced bowel cancer and symptoms. Treatment continues while it is helping and side effects remain acceptable; your team reviews the plan with you.",
         "clinical": "Day 1: panitumumab, irinotecan, folinic acid and fluorouracil, followed by a fluorouracil pump for about 46 hours; disconnection is arranged around Day 3. A cycle lasts 14 days. Treatment continues while it is helping and side effects remain acceptable.",
-        "action": "Confirm the phase, prescription, tests and supportive medicines before starting.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00448"
         ]
@@ -19415,6 +19407,15 @@ const definitions={
     ]
   },
   "00328": {
+    "code": "00328",
+    "title": "Weekly cetuximab + FOLFIRI: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced / metastatic colorectal cancer",
+    "summary": "Cetuximab on Day 1 and Day 8. Day 1 FOLFIRI includes irinotecan, folinic acid and fluorouracil, followed by a 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat the reference cycle every 14 days while beneficial and tolerable.",
     "stages": [
       "Before starting",
       "Early treatment",
@@ -19424,30 +19425,15 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment and visits",
-        "cells": [
-          "Confirm the exact protocol and goal",
-          "Start the planned infusion schedule",
-          "Repeat only while beneficial and tolerable",
-          "Review components, toxicity and the treatment goal",
-          "Agree continuation, pause, switch or completion"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00328"
-        ],
-        "note": "Cetuximab on Day 1 and Day 8. Day 1 FOLFIRI includes irinotecan, folinic acid and fluorouracil, followed by a 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat the reference cycle every 14 days while beneficial and tolerable."
-      },
-      {
         "label": "Blood counts, kidney and liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline blood count, kidney and liver profile",
           "Review results before treatment",
           "Blood count, kidney and liver tests before each cycle",
           "Repeat sooner if symptoms or results need it",
-          "Follow any unresolved abnormal result"
+          "If treatment is delayed for low blood counts, repeat the blood count weekly until the team confirms recovery."
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00328"
         ],
@@ -19455,6 +19441,7 @@ const definitions={
       },
       {
         "label": "Magnesium, calcium and potassium",
+        "kind": "monitoring",
         "cells": [
           "Check mineral levels before starting",
           "Repeat periodically during treatment",
@@ -19462,15 +19449,14 @@ const definitions={
           "More checks may be needed if levels fall or diarrhoea develops",
           "Monthly checks for two months after the last antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00328",
-          "smpc"
+          "00328"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Skin, nails, eyes and breathing",
+        "kind": "monitoring",
         "cells": [
           "Discuss existing skin, eye or lung problems",
           "Start the prescribed skin-care plan; report reactions early",
@@ -19478,23 +19464,21 @@ const definitions={
           "Eye pain, worsening breathing or severe rash needs prompt assessment",
           "Continue care until symptoms and mineral levels settle"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00328",
-          "smpc"
+          "00328"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Bowel symptoms and hydration",
+        "kind": "monitoring",
         "cells": [
           "Have a written diarrhoea plan and emergency contact",
           "Tell the nurse about cramps, sweating or diarrhoea during infusion",
-          "Delayed diarrhoea can start after the first day; act using your written plan",
+          "Delayed diarrhoea can start after the first day: act at the first liquid stool using your supplied rescue plan and electrolyte fluids; contact the team early.",
           "Fever, reduced urine, severe pain or inability to drink needs urgent advice",
           "Restart decisions require recovery and team review"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00328"
         ],
@@ -19502,6 +19486,7 @@ const definitions={
       },
       {
         "label": "Fluorouracil safety and line",
+        "kind": "monitoring",
         "cells": [
           "Confirm the DPD test and safe line/pump arrangements",
           "Check mouth, bowel and pump symptoms early",
@@ -19509,7 +19494,6 @@ const definitions={
           "Report chest pain or unexpectedly severe early side effects immediately",
           "Confirm disconnection and ongoing line care"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00328"
         ],
@@ -19517,6 +19501,7 @@ const definitions={
       },
       {
         "label": "Cancer response and treatment choices",
+        "kind": "monitoring",
         "cells": [
           "Record baseline disease and agree review plan",
           "Bring forward review if symptoms worsen",
@@ -19524,7 +19509,6 @@ const definitions={
           "Discuss benefit, side effects and whether the goal has changed",
           "Agree continuation, a break, another treatment or supportive care"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00328"
         ],
@@ -19533,54 +19517,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Before first treatment",
-        "when": "Before the first infusion",
-        "why": "RAS-wild-type metastatic colorectal cancer; exact line and treatment goal are confirmed by the oncology team.",
-        "clinical": "Confirm diagnosis, treatment line, goal, prior treatments, performance status, consent and all medicines. Baseline FBC, renal and liver profile; assess infection, hydration, bowel symptoms and previous treatment toxicity. Document validated extended RAS wild-type status for this colorectal pathway; do not infer it from unknown or KRAS exon 2-only testing. Measure electrolytes including magnesium, calcium and potassium before treatment; correct abnormalities according to the prescription. Ask specifically about prior antibody infusion reactions, red-meat allergy, tick bites and any known cetuximab IgE findings. Document DPD assessment before the first fluorouracil dose unless already tested. Complete DPD deficiency excludes fluorouracil; partial deficiency needs a specialist dose plan. ECG if cardiac function is compromised; no universal serial echo schedule is imposed. Confirm safe central access and pump training. In moderate/severe renal impairment, elevated uracil can misclassify DPD phenotype; consider genotype testing as directed in the current NCCP source. Review prior severe diarrhoea, bowel disease/obstruction, bilirubin and known UGT1A1*28 status. A genotype-related starting-dose decision is individualized.",
-        "action": "Confirm tests, medicines, infusion access and the written urgent contact plan.",
-        "source_ids": [
-          "00328",
-          "smpc"
-        ]
-      },
-      {
-        "title": "Each treatment decision",
-        "when": "At scheduled treatment reviews and whenever symptoms change",
-        "why": "Benefit and toxicity determine the next treatment; the reference cycle is not an automatic clearance.",
-        "clinical": "Review symptoms, infection, hydration, bowel effects, medicines and previous-cycle toxicity; verify which components are actually being administered. FBC, liver and renal profile before each cycle. Repeat magnesium, calcium and potassium periodically during EGFR-antibody therapy and more frequently when abnormal; assess skin, nail, eye and pulmonary symptoms. Confirm recovery from delayed diarrhoea and provide the irinotecan rescue/escalation plan; acute cholinergic symptoms and delayed diarrhoea require different treatments.",
-        "action": "Report symptoms before the next dose, including at a separate antibody-only visit.",
+        "title": "A 14-day reference cycle",
+        "when": "Clinic → home → review",
+        "why": "The aim is to control advanced bowel cancer and symptoms. The team reviews how well treatment is working and whether side effects remain acceptable; there is no single fixed number of cycles for everyone.",
+        "clinical": "Cetuximab on Day 1 and Day 8. Day 1 FOLFIRI includes irinotecan, folinic acid and fluorouracil, followed by a 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat the reference cycle every 14 days while beneficial and tolerable.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00328"
-        ]
-      },
-      {
-        "title": "Pause or completion",
-        "when": "When a component is held or the course ends",
-        "why": "Blood tests, line care and side-effect follow-up may continue after dosing stops.",
-        "clinical": "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles. There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions. NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment. Check INR as clinically indicated if taking warfarin.",
-        "action": "Agree the next appointment, remaining tests and who reviews unresolved symptoms.",
-        "source_ids": [
-          "00328",
-          "smpc"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles.",
-      "There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions.",
-      "NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-      "Check INR as clinically indicated if taking warfarin.",
-      "Direct weekly-cetuximab/FOLFIRI combination evidence in the first-line trial setting."
+      "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
     ],
-    "code": "00328",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Weekly cetuximab + FOLFIRI: treatment and checks",
-    "setting": "Advanced / metastatic colorectal cancer",
-    "summary": "Cetuximab on Day 1 and Day 8. Day 1 FOLFIRI includes irinotecan, folinic acid and fluorouracil, followed by a 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat the reference cycle every 14 days while beneficial and tolerable.",
     "sources": [
       {
         "id": "00328",
@@ -19625,6 +19574,15 @@ const definitions={
     ]
   },
   "00330": {
+    "code": "00330",
+    "title": "Weekly cetuximab + irinotecan: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced / metastatic colorectal cancer",
+    "summary": "Cetuximab on Day 1 and Day 8; irinotecan on Day 1. Repeat the reference cycle every 14 days while beneficial and tolerable. There is no fluorouracil home pump.",
     "stages": [
       "Before starting",
       "Early treatment",
@@ -19634,30 +19592,15 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment and visits",
-        "cells": [
-          "Confirm the exact protocol and goal",
-          "Start the planned infusion schedule",
-          "Repeat only while beneficial and tolerable",
-          "Review components, toxicity and the treatment goal",
-          "Agree continuation, pause, switch or completion"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00330"
-        ],
-        "note": "Cetuximab on Day 1 and Day 8; irinotecan on Day 1. Repeat the reference cycle every 14 days while beneficial and tolerable. There is no fluorouracil home pump."
-      },
-      {
         "label": "Blood counts, kidney and liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline blood count, kidney and liver profile",
           "Review results before treatment",
-          "Regular blood tests; confirm the schedule with your team",
+          "Regular blood count, kidney and liver tests as arranged",
           "Repeat sooner if symptoms or results need it",
           "Follow any unresolved abnormal result"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00330"
         ],
@@ -19665,6 +19608,7 @@ const definitions={
       },
       {
         "label": "Magnesium, calcium and potassium",
+        "kind": "monitoring",
         "cells": [
           "Check mineral levels before starting",
           "Repeat periodically during treatment",
@@ -19672,15 +19616,14 @@ const definitions={
           "More checks may be needed if levels fall or diarrhoea develops",
           "Monthly checks for two months after the last antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00330",
-          "smpc"
+          "00330"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Skin, nails, eyes and breathing",
+        "kind": "monitoring",
         "cells": [
           "Discuss existing skin, eye or lung problems",
           "Start the prescribed skin-care plan; report reactions early",
@@ -19688,23 +19631,21 @@ const definitions={
           "Eye pain, worsening breathing or severe rash needs prompt assessment",
           "Continue care until symptoms and mineral levels settle"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00330",
-          "smpc"
+          "00330"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Bowel symptoms and hydration",
+        "kind": "monitoring",
         "cells": [
           "Have a written diarrhoea plan and emergency contact",
           "Tell the nurse about cramps, sweating or diarrhoea during infusion",
-          "Delayed diarrhoea can start after the first day; act using your written plan",
+          "Delayed diarrhoea can start after the first day: act at the first liquid stool using your supplied rescue plan and electrolyte fluids; contact the team early.",
           "Fever, reduced urine, severe pain or inability to drink needs urgent advice",
           "Restart decisions require recovery and team review"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00330"
         ],
@@ -19712,6 +19653,7 @@ const definitions={
       },
       {
         "label": "Cancer response and treatment choices",
+        "kind": "monitoring",
         "cells": [
           "Record baseline disease and agree review plan",
           "Bring forward review if symptoms worsen",
@@ -19719,7 +19661,6 @@ const definitions={
           "Discuss benefit, side effects and whether the goal has changed",
           "Agree continuation, a break, another treatment or supportive care"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00330"
         ],
@@ -19728,53 +19669,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Before first treatment",
-        "when": "Before the first infusion",
-        "why": "Second-line RAS-wild-type metastatic colorectal cancer after failure of, or a contraindication to, oxaliplatin-based treatment.",
-        "clinical": "Confirm diagnosis, treatment line, goal, prior treatments, performance status, consent and all medicines. Baseline FBC, renal and liver profile; assess infection, hydration, bowel symptoms and previous treatment toxicity. Document validated extended RAS wild-type status for this colorectal pathway; do not infer it from unknown or KRAS exon 2-only testing. Measure electrolytes including magnesium, calcium and potassium before treatment; correct abnormalities according to the prescription. Ask specifically about prior antibody infusion reactions, red-meat allergy, tick bites and any known cetuximab IgE findings. Review prior severe diarrhoea, bowel disease/obstruction, bilirubin and known UGT1A1*28 status. A genotype-related starting-dose decision is individualized.",
-        "action": "Confirm tests, medicines, infusion access and the written urgent contact plan.",
-        "source_ids": [
-          "00330",
-          "smpc"
-        ]
-      },
-      {
-        "title": "Each treatment decision",
-        "when": "At scheduled treatment reviews and whenever symptoms change",
-        "why": "Benefit and toxicity determine the next treatment; the reference cycle is not an automatic clearance.",
-        "clinical": "Review symptoms, infection, hydration, bowel effects, medicines and previous-cycle toxicity; verify which components are actually being administered. FBC, liver and renal profile regularly; the NCCP source does not specify a fixed interval for these tests in this regimen. Agree it locally and repeat when clinically indicated. Repeat magnesium, calcium and potassium periodically during EGFR-antibody therapy and more frequently when abnormal; assess skin, nail, eye and pulmonary symptoms. Confirm recovery from delayed diarrhoea and provide the irinotecan rescue/escalation plan; acute cholinergic symptoms and delayed diarrhoea require different treatments.",
-        "action": "Report symptoms before the next dose, including at a separate antibody-only visit.",
+        "title": "A 14-day reference cycle",
+        "when": "Clinic → home → review",
+        "why": "The aim is to control advanced bowel cancer and symptoms. The team reviews how well treatment is working and whether side effects remain acceptable; there is no single fixed number of cycles for everyone.",
+        "clinical": "Cetuximab on Day 1 and Day 8; irinotecan on Day 1. Repeat the reference cycle every 14 days while beneficial and tolerable. There is no fluorouracil home pump.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00330"
-        ]
-      },
-      {
-        "title": "Pause or completion",
-        "when": "When a component is held or the course ends",
-        "why": "Blood tests, line care and side-effect follow-up may continue after dosing stops.",
-        "clinical": "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles. There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions. NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-        "action": "Agree the next appointment, remaining tests and who reviews unresolved symptoms.",
-        "source_ids": [
-          "00330",
-          "smpc"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles.",
-      "There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions.",
-      "NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-      "Indirect schedule evidence: EPIC used irinotecan every three weeks; this NCCP regimen uses 180 mg/m² every 14 days. The cetuximab schedule is weekly in both."
+      "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
     ],
-    "code": "00330",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Weekly cetuximab + irinotecan: treatment and checks",
-    "setting": "Advanced / metastatic colorectal cancer",
-    "summary": "Cetuximab on Day 1 and Day 8; irinotecan on Day 1. Repeat the reference cycle every 14 days while beneficial and tolerable. There is no fluorouracil home pump.",
     "sources": [
       {
         "id": "00330",
@@ -19804,6 +19711,15 @@ const definitions={
     ]
   },
   "00331": {
+    "code": "00331",
+    "title": "Fortnightly cetuximab + irinotecan: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced / metastatic colorectal cancer",
+    "summary": "Cetuximab and irinotecan on Day 1, repeated every 14 days while beneficial and tolerable. There is no Day 8 cetuximab visit and no fluorouracil home pump.",
     "stages": [
       "Before starting",
       "Early treatment",
@@ -19813,30 +19729,15 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment and visits",
-        "cells": [
-          "Confirm the exact protocol and goal",
-          "Start the planned infusion schedule",
-          "Repeat only while beneficial and tolerable",
-          "Review components, toxicity and the treatment goal",
-          "Agree continuation, pause, switch or completion"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00331"
-        ],
-        "note": "Cetuximab and irinotecan on Day 1, repeated every 14 days while beneficial and tolerable. There is no Day 8 cetuximab visit and no fluorouracil home pump."
-      },
-      {
         "label": "Blood counts, kidney and liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline blood count, kidney and liver profile",
           "Review results before treatment",
-          "Regular blood tests; confirm the schedule with your team",
+          "Regular blood count, kidney and liver tests as arranged",
           "Repeat sooner if symptoms or results need it",
           "Follow any unresolved abnormal result"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00331"
         ],
@@ -19844,6 +19745,7 @@ const definitions={
       },
       {
         "label": "Magnesium, calcium and potassium",
+        "kind": "monitoring",
         "cells": [
           "Check mineral levels before starting",
           "Repeat periodically during treatment",
@@ -19851,15 +19753,14 @@ const definitions={
           "More checks may be needed if levels fall or diarrhoea develops",
           "Monthly checks for two months after the last antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00331",
-          "smpc"
+          "00331"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Skin, nails, eyes and breathing",
+        "kind": "monitoring",
         "cells": [
           "Discuss existing skin, eye or lung problems",
           "Start the prescribed skin-care plan; report reactions early",
@@ -19867,23 +19768,21 @@ const definitions={
           "Eye pain, worsening breathing or severe rash needs prompt assessment",
           "Continue care until symptoms and mineral levels settle"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00331",
-          "smpc"
+          "00331"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Bowel symptoms and hydration",
+        "kind": "monitoring",
         "cells": [
           "Have a written diarrhoea plan and emergency contact",
           "Tell the nurse about cramps, sweating or diarrhoea during infusion",
-          "Delayed diarrhoea can start after the first day; act using your written plan",
+          "Delayed diarrhoea can start after the first day: act at the first liquid stool using your supplied rescue plan and electrolyte fluids; contact the team early.",
           "Fever, reduced urine, severe pain or inability to drink needs urgent advice",
           "Restart decisions require recovery and team review"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00331"
         ],
@@ -19891,6 +19790,7 @@ const definitions={
       },
       {
         "label": "Cancer response and treatment choices",
+        "kind": "monitoring",
         "cells": [
           "Record baseline disease and agree review plan",
           "Bring forward review if symptoms worsen",
@@ -19898,7 +19798,6 @@ const definitions={
           "Discuss benefit, side effects and whether the goal has changed",
           "Agree continuation, a break, another treatment or supportive care"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00331"
         ],
@@ -19907,53 +19806,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Before first treatment",
-        "when": "Before the first infusion",
-        "why": "Second-line RAS-wild-type metastatic colorectal cancer after failure of, or a contraindication to, oxaliplatin-based treatment.",
-        "clinical": "Confirm diagnosis, treatment line, goal, prior treatments, performance status, consent and all medicines. Baseline FBC, renal and liver profile; assess infection, hydration, bowel symptoms and previous treatment toxicity. Document validated extended RAS wild-type status for this colorectal pathway; do not infer it from unknown or KRAS exon 2-only testing. Measure electrolytes including magnesium, calcium and potassium before treatment; correct abnormalities according to the prescription. Ask specifically about prior antibody infusion reactions, red-meat allergy, tick bites and any known cetuximab IgE findings. Review prior severe diarrhoea, bowel disease/obstruction, bilirubin and known UGT1A1*28 status. A genotype-related starting-dose decision is individualized.",
-        "action": "Confirm tests, medicines, infusion access and the written urgent contact plan.",
-        "source_ids": [
-          "00331",
-          "smpc"
-        ]
-      },
-      {
-        "title": "Each treatment decision",
-        "when": "At scheduled treatment reviews and whenever symptoms change",
-        "why": "Benefit and toxicity determine the next treatment; the reference cycle is not an automatic clearance.",
-        "clinical": "Review symptoms, infection, hydration, bowel effects, medicines and previous-cycle toxicity; verify which components are actually being administered. FBC, liver and renal profile regularly; the NCCP source does not specify a fixed interval for these tests in this regimen. Agree it locally and repeat when clinically indicated. Repeat magnesium, calcium and potassium periodically during EGFR-antibody therapy and more frequently when abnormal; assess skin, nail, eye and pulmonary symptoms. Confirm recovery from delayed diarrhoea and provide the irinotecan rescue/escalation plan; acute cholinergic symptoms and delayed diarrhoea require different treatments.",
-        "action": "Report symptoms before the next dose, including at a separate antibody-only visit.",
+        "title": "A 14-day reference cycle",
+        "when": "Clinic → home → review",
+        "why": "The aim is to control advanced bowel cancer and symptoms. The team reviews how well treatment is working and whether side effects remain acceptable; there is no single fixed number of cycles for everyone.",
+        "clinical": "Cetuximab and irinotecan on Day 1, repeated every 14 days while beneficial and tolerable. There is no Day 8 cetuximab visit and no fluorouracil home pump.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00331"
-        ]
-      },
-      {
-        "title": "Pause or completion",
-        "when": "When a component is held or the course ends",
-        "why": "Blood tests, line care and side-effect follow-up may continue after dosing stops.",
-        "clinical": "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles. There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions. NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-        "action": "Agree the next appointment, remaining tests and who reviews unresolved symptoms.",
-        "source_ids": [
-          "00331",
-          "smpc"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles.",
-      "There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions.",
-      "NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-      "Indirect schedule evidence: EPIC used irinotecan every three weeks; this NCCP regimen uses 180 mg/m² every 14 days. EPIC also used weekly rather than fortnightly cetuximab."
+      "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
     ],
-    "code": "00331",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Fortnightly cetuximab + irinotecan: treatment and checks",
-    "setting": "Advanced / metastatic colorectal cancer",
-    "summary": "Cetuximab and irinotecan on Day 1, repeated every 14 days while beneficial and tolerable. There is no Day 8 cetuximab visit and no fluorouracil home pump.",
     "sources": [
       {
         "id": "00331",
@@ -19983,6 +19848,15 @@ const definitions={
     ]
   },
   "00585": {
+    "code": "00585",
+    "title": "Fortnightly cetuximab + FOLFIRI: treatment and checks",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced / metastatic colorectal cancer",
+    "summary": "Cetuximab and FOLFIRI start on Day 1, followed by a 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat every 14 days while beneficial and tolerable. No weekly Day 8 cetuximab is scheduled.",
     "stages": [
       "Before starting",
       "Early treatment",
@@ -19992,30 +19866,15 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment and visits",
-        "cells": [
-          "Confirm the exact protocol and goal",
-          "Start the planned infusion schedule",
-          "Repeat only while beneficial and tolerable",
-          "Review components, toxicity and the treatment goal",
-          "Agree continuation, pause, switch or completion"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00585"
-        ],
-        "note": "Cetuximab and FOLFIRI start on Day 1, followed by a 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat every 14 days while beneficial and tolerable. No weekly Day 8 cetuximab is scheduled."
-      },
-      {
-        "label": "Blood counts, kidney and liver",
+        "label": "Blood count, kidney and liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline blood count, kidney and liver profile",
-          "Review results before treatment",
-          "Blood count, kidney and liver tests before each cycle",
-          "Repeat sooner if symptoms or results need it",
-          "Follow any unresolved abnormal result"
+          "Review results and symptoms before treatment",
+          "Blood count, kidney and liver profile before every cycle; weekly blood counts when delayed for low counts",
+          "Repeat sooner if unwell or results need follow-up",
+          "Follow unresolved abnormalities after treatment"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00585"
         ],
@@ -20023,6 +19882,7 @@ const definitions={
       },
       {
         "label": "Magnesium, calcium and potassium",
+        "kind": "monitoring",
         "cells": [
           "Check mineral levels before starting",
           "Repeat periodically during treatment",
@@ -20030,15 +19890,14 @@ const definitions={
           "More checks may be needed if levels fall or diarrhoea develops",
           "Monthly checks for two months after the last antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00585",
-          "smpc"
+          "00585"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Skin, nails, eyes and breathing",
+        "kind": "monitoring",
         "cells": [
           "Discuss existing skin, eye or lung problems",
           "Start the prescribed skin-care plan; report reactions early",
@@ -20046,15 +19905,14 @@ const definitions={
           "Eye pain, worsening breathing or severe rash needs prompt assessment",
           "Continue care until symptoms and mineral levels settle"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00585",
-          "smpc"
+          "00585"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Bowel symptoms and hydration",
+        "kind": "monitoring",
         "cells": [
           "Have a written diarrhoea plan and emergency contact",
           "Tell the nurse about cramps, sweating or diarrhoea during infusion",
@@ -20062,7 +19920,6 @@ const definitions={
           "Fever, reduced urine, severe pain or inability to drink needs urgent advice",
           "Restart decisions require recovery and team review"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00585"
         ],
@@ -20070,6 +19927,7 @@ const definitions={
       },
       {
         "label": "Fluorouracil safety and line",
+        "kind": "monitoring",
         "cells": [
           "Confirm the DPD test and safe line/pump arrangements",
           "Check mouth, bowel and pump symptoms early",
@@ -20077,7 +19935,6 @@ const definitions={
           "Report chest pain or unexpectedly severe early side effects immediately",
           "Confirm disconnection and ongoing line care"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00585"
         ],
@@ -20085,6 +19942,7 @@ const definitions={
       },
       {
         "label": "Cancer response and treatment choices",
+        "kind": "monitoring",
         "cells": [
           "Record baseline disease and agree review plan",
           "Bring forward review if symptoms worsen",
@@ -20092,7 +19950,36 @@ const definitions={
           "Discuss benefit, side effects and whether the goal has changed",
           "Agree continuation, a break, another treatment or supportive care"
         ],
+        "source_ids": [
+          "00585"
+        ],
+        "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
+      },
+      {
+        "label": "Conditional heart assessment",
         "kind": "monitoring",
+        "cells": [
+          "ECG if cardiac function is compromised",
+          "Report new chest pain or breathing change",
+          "Emergency assessment for chest pain, collapse or severe breathlessness",
+          "Additional cardiac tests when clinically indicated",
+          "Follow any identified problem; no routine fixed echo series"
+        ],
+        "source_ids": [
+          "00585"
+        ],
+        "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
+      },
+      {
+        "label": "INR if taking warfarin",
+        "kind": "monitoring",
+        "cells": [
+          "Tell the team about warfarin",
+          "Check INR as clinically indicated",
+          "Report bleeding and major changes in food intake",
+          "Warfarin doses are adjusted by the prescribing team",
+          "Continue the individually agreed anticoagulation plan"
+        ],
         "source_ids": [
           "00585"
         ],
@@ -20101,58 +19988,23 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Before first treatment",
-        "when": "Before the first infusion",
-        "why": "RAS-wild-type metastatic colorectal cancer; exact line and treatment goal are confirmed by the oncology team.",
-        "clinical": "Confirm diagnosis, treatment line, goal, prior treatments, performance status, consent and all medicines. Baseline FBC, renal and liver profile; assess infection, hydration, bowel symptoms and previous treatment toxicity. Document validated extended RAS wild-type status for this colorectal pathway; do not infer it from unknown or KRAS exon 2-only testing. Measure electrolytes including magnesium, calcium and potassium before treatment; correct abnormalities according to the prescription. Ask specifically about prior antibody infusion reactions, red-meat allergy, tick bites and any known cetuximab IgE findings. Document DPD assessment before the first fluorouracil dose unless already tested. Complete DPD deficiency excludes fluorouracil; partial deficiency needs a specialist dose plan. ECG if cardiac function is compromised; no universal serial echo schedule is imposed. Confirm safe central access and pump training. In moderate/severe renal impairment, elevated uracil can misclassify DPD phenotype; consider genotype testing as directed in the current NCCP source. Review prior severe diarrhoea, bowel disease/obstruction, bilirubin and known UGT1A1*28 status. A genotype-related starting-dose decision is individualized.",
-        "action": "Confirm tests, medicines, infusion access and the written urgent contact plan.",
-        "source_ids": [
-          "00585",
-          "smpc"
-        ]
-      },
-      {
-        "title": "Each treatment decision",
-        "when": "At scheduled treatment reviews and whenever symptoms change",
-        "why": "Benefit and toxicity determine the next treatment; the reference cycle is not an automatic clearance.",
-        "clinical": "Review symptoms, infection, hydration, bowel effects, medicines and previous-cycle toxicity; verify which components are actually being administered. FBC, liver and renal profile before each cycle. Repeat magnesium, calcium and potassium periodically during EGFR-antibody therapy and more frequently when abnormal; assess skin, nail, eye and pulmonary symptoms. Confirm recovery from delayed diarrhoea and provide the irinotecan rescue/escalation plan; acute cholinergic symptoms and delayed diarrhoea require different treatments.",
-        "action": "Report symptoms before the next dose, including at a separate antibody-only visit.",
+        "title": "A 14-day reference cycle",
+        "when": "Clinic → home → review",
+        "why": "The aim is to control advanced bowel cancer and symptoms. Treatment continues while it is helping and side effects remain acceptable; your team reviews the plan with you.",
+        "clinical": "Cetuximab and FOLFIRI start on Day 1, followed by a 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat every 14 days while beneficial and tolerable. No weekly Day 8 cetuximab is scheduled.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00585"
-        ]
-      },
-      {
-        "title": "Pause or completion",
-        "when": "When a component is held or the course ends",
-        "why": "Blood tests, line care and side-effect follow-up may continue after dosing stops.",
-        "clinical": "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles. There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions. NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment. Check INR as clinically indicated if taking warfarin.",
-        "action": "Agree the next appointment, remaining tests and who reviews unresolved symptoms.",
-        "source_ids": [
-          "00585",
-          "smpc"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles.",
-      "There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions.",
-      "NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-      "Check INR as clinically indicated if taking warfarin.",
-      "Indirect schedule evidence: CRYSTAL used weekly cetuximab; NCCP 00585 uses cetuximab every 14 days. The current SmPC permits fortnightly dosing, but these are not separately randomized 00585 survival estimates."
+      "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
     ],
-    "code": "00585",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Fortnightly cetuximab + FOLFIRI: treatment and checks",
-    "setting": "Advanced / metastatic colorectal cancer",
-    "summary": "Cetuximab and FOLFIRI start on Day 1, followed by a 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat every 14 days while beneficial and tolerable. No weekly Day 8 cetuximab is scheduled.",
     "sources": [
       {
         "id": "00585",
-        "title": "NCCP 00585 v5b · official regimen",
+        "title": "NCCP 00585 v5b · current official regimen checked 5 November 2026",
         "url": "https://healthservice.hse.ie/documents/6395/585_v5b_Cetuximab_14_days_FOLFIRI.pdf"
       },
       {
@@ -20403,6 +20255,15 @@ const definitions={
     ]
   },
   "00732": {
+    "code": "00732",
+    "title": "Cetuximab · every two weeks: treatment and checks",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced / metastatic colorectal cancer",
+    "summary": "Cetuximab on Day 1 every 14 days while beneficial and tolerable. No Day 8 cetuximab or home chemotherapy pump is scheduled.",
     "stages": [
       "Before starting",
       "Early treatment",
@@ -20412,30 +20273,15 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment and visits",
-        "cells": [
-          "Confirm the exact protocol and goal",
-          "Start the planned infusion schedule",
-          "Repeat only while beneficial and tolerable",
-          "Review components, toxicity and the treatment goal",
-          "Agree continuation, pause, switch or completion"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00732"
-        ],
-        "note": "Cetuximab on Day 1 every 14 days while beneficial and tolerable. No Day 8 cetuximab or home chemotherapy pump is scheduled."
-      },
-      {
-        "label": "Blood counts, kidney and liver",
+        "label": "Blood count, kidney and liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline blood count, kidney and liver profile",
-          "Review results before treatment",
-          "Regular blood tests; confirm the schedule with your team",
-          "Repeat sooner if symptoms or results need it",
-          "Follow any unresolved abnormal result"
+          "Review results and symptoms before treatment",
+          "Regular tests as arranged by the team",
+          "Repeat sooner if unwell or results need follow-up",
+          "Follow unresolved abnormalities after treatment"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00732"
         ],
@@ -20443,6 +20289,7 @@ const definitions={
       },
       {
         "label": "Magnesium, calcium and potassium",
+        "kind": "monitoring",
         "cells": [
           "Check mineral levels before starting",
           "Repeat periodically during treatment",
@@ -20450,15 +20297,14 @@ const definitions={
           "More checks may be needed if levels fall or diarrhoea develops",
           "Monthly checks for two months after the last antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00732",
-          "smpc"
+          "00732"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Skin, nails, eyes and breathing",
+        "kind": "monitoring",
         "cells": [
           "Discuss existing skin, eye or lung problems",
           "Start the prescribed skin-care plan; report reactions early",
@@ -20466,15 +20312,14 @@ const definitions={
           "Eye pain, worsening breathing or severe rash needs prompt assessment",
           "Continue care until symptoms and mineral levels settle"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00732",
-          "smpc"
+          "00732"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Cancer response and treatment choices",
+        "kind": "monitoring",
         "cells": [
           "Record baseline disease and agree review plan",
           "Bring forward review if symptoms worsen",
@@ -20482,7 +20327,6 @@ const definitions={
           "Discuss benefit, side effects and whether the goal has changed",
           "Agree continuation, a break, another treatment or supportive care"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00732"
         ],
@@ -20491,57 +20335,23 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Before first treatment",
-        "when": "Before the first infusion",
-        "why": "EGFR-expressing RAS-wild-type metastatic colorectal cancer meeting the NCCP monotherapy indication after oxaliplatin/irinotecan-based therapy and irinotecan intolerance.",
-        "clinical": "Confirm diagnosis, treatment line, goal, prior treatments, performance status, consent and all medicines. Baseline FBC, renal and liver profile; assess infection, hydration, bowel symptoms and previous treatment toxicity. Document validated extended RAS wild-type status for this colorectal pathway; do not infer it from unknown or KRAS exon 2-only testing. Measure electrolytes including magnesium, calcium and potassium before treatment; correct abnormalities according to the prescription. Ask specifically about prior antibody infusion reactions, red-meat allergy, tick bites and any known cetuximab IgE findings.",
-        "action": "Confirm tests, medicines, infusion access and the written urgent contact plan.",
-        "source_ids": [
-          "00732",
-          "smpc"
-        ]
-      },
-      {
-        "title": "Each treatment decision",
-        "when": "At scheduled treatment reviews and whenever symptoms change",
-        "why": "Benefit and toxicity determine the next treatment; the reference cycle is not an automatic clearance.",
-        "clinical": "Review symptoms, infection, hydration, bowel effects, medicines and previous-cycle toxicity; verify which components are actually being administered. FBC, liver and renal profile regularly; the NCCP source does not specify a fixed interval for these tests in this regimen. Agree it locally and repeat when clinically indicated. Repeat magnesium, calcium and potassium periodically during EGFR-antibody therapy and more frequently when abnormal; assess skin, nail, eye and pulmonary symptoms.",
-        "action": "Report symptoms before the next dose, including at a separate antibody-only visit.",
+        "title": "A 14-day reference cycle",
+        "when": "Clinic → home → review",
+        "why": "The aim is to control advanced bowel cancer and symptoms. Treatment continues while it is helping and side effects remain acceptable; your team reviews the plan with you.",
+        "clinical": "Cetuximab on Day 1 every 14 days while beneficial and tolerable. No Day 8 cetuximab or home chemotherapy pump is scheduled.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00732"
-        ]
-      },
-      {
-        "title": "Pause or completion",
-        "when": "When a component is held or the course ends",
-        "why": "Blood tests, line care and side-effect follow-up may continue after dosing stops.",
-        "clinical": "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles. There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions. NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-        "action": "Agree the next appointment, remaining tests and who reviews unresolved symptoms.",
-        "source_ids": [
-          "00732",
-          "smpc"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles.",
-      "There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions.",
-      "NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-      "Indirect schedule evidence: CO.17 administered cetuximab weekly; NCCP 00732 is fortnightly. Modern prescribing requires validated extended RAS wild-type status."
+      "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
     ],
-    "code": "00732",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Cetuximab · every two weeks: treatment and checks",
-    "setting": "Advanced / metastatic colorectal cancer",
-    "summary": "Cetuximab on Day 1 every 14 days while beneficial and tolerable. No Day 8 cetuximab or home chemotherapy pump is scheduled.",
     "sources": [
       {
         "id": "00732",
-        "title": "NCCP 00732 v2 · official regimen",
+        "title": "NCCP 00732 v2 · current official regimen checked 5 November 2026",
         "url": "https://healthservice.hse.ie/documents/6602/732_v2_Cetuximab_14day.pdf"
       },
       {
@@ -20567,6 +20377,15 @@ const definitions={
     ]
   },
   "00733": {
+    "code": "00733",
+    "title": "Fortnightly cetuximab + modified FOLFOX-6: treatment and checks",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced / metastatic colorectal cancer",
+    "summary": "Cetuximab and modified FOLFOX6 start on Day 1, followed by one 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat every 14 days while beneficial and tolerable. No weekly Day 8 cetuximab is scheduled.",
     "stages": [
       "Before starting",
       "Early treatment",
@@ -20576,30 +20395,15 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment and visits",
-        "cells": [
-          "Confirm the exact protocol and goal",
-          "Start the planned infusion schedule",
-          "Repeat only while beneficial and tolerable",
-          "Review components, toxicity and the treatment goal",
-          "Agree continuation, pause, switch or completion"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00733"
-        ],
-        "note": "Cetuximab and modified FOLFOX6 start on Day 1, followed by one 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat every 14 days while beneficial and tolerable. No weekly Day 8 cetuximab is scheduled."
-      },
-      {
-        "label": "Blood counts, kidney and liver",
+        "label": "Blood count, kidney and liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline blood count, kidney and liver profile",
-          "Review results before treatment",
-          "Blood count, kidney and liver tests before each cycle",
-          "Repeat sooner if symptoms or results need it",
-          "Follow any unresolved abnormal result"
+          "Review results and symptoms before treatment",
+          "Blood count, kidney and liver profile before every cycle; weekly blood counts when delayed for low counts",
+          "Repeat sooner if unwell or results need follow-up",
+          "Follow unresolved abnormalities after treatment"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00733"
         ],
@@ -20607,6 +20411,7 @@ const definitions={
       },
       {
         "label": "Magnesium, calcium and potassium",
+        "kind": "monitoring",
         "cells": [
           "Check mineral levels before starting",
           "Repeat periodically during treatment",
@@ -20614,15 +20419,14 @@ const definitions={
           "More checks may be needed if levels fall or diarrhoea develops",
           "Monthly checks for two months after the last antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00733",
-          "smpc"
+          "00733"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Skin, nails, eyes and breathing",
+        "kind": "monitoring",
         "cells": [
           "Discuss existing skin, eye or lung problems",
           "Start the prescribed skin-care plan; report reactions early",
@@ -20630,15 +20434,14 @@ const definitions={
           "Eye pain, worsening breathing or severe rash needs prompt assessment",
           "Continue care until symptoms and mineral levels settle"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00733",
-          "smpc"
+          "00733"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Fluorouracil safety and line",
+        "kind": "monitoring",
         "cells": [
           "Confirm the DPD test and safe line/pump arrangements",
           "Check mouth, bowel and pump symptoms early",
@@ -20646,7 +20449,6 @@ const definitions={
           "Report chest pain or unexpectedly severe early side effects immediately",
           "Confirm disconnection and ongoing line care"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00733"
         ],
@@ -20654,6 +20456,7 @@ const definitions={
       },
       {
         "label": "Nerve symptoms",
+        "kind": "monitoring",
         "cells": [
           "Record any numbness or tingling before treatment",
           "Cold sensitivity can occur early",
@@ -20661,7 +20464,6 @@ const definitions={
           "Report persistent symptoms or difficulty with daily tasks before the next dose",
           "Follow symptoms after oxaliplatin stops"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00733"
         ],
@@ -20669,6 +20471,7 @@ const definitions={
       },
       {
         "label": "Cancer response and treatment choices",
+        "kind": "monitoring",
         "cells": [
           "Record baseline disease and agree review plan",
           "Bring forward review if symptoms worsen",
@@ -20676,7 +20479,21 @@ const definitions={
           "Discuss benefit, side effects and whether the goal has changed",
           "Agree continuation, a break, another treatment or supportive care"
         ],
+        "source_ids": [
+          "00733"
+        ],
+        "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
+      },
+      {
+        "label": "Conditional heart assessment",
         "kind": "monitoring",
+        "cells": [
+          "ECG if cardiac function is compromised",
+          "Report new chest pain or breathing change",
+          "Emergency assessment for chest pain, collapse or severe breathlessness",
+          "Additional cardiac tests when clinically indicated",
+          "Follow any identified problem; no routine fixed echo series"
+        ],
         "source_ids": [
           "00733"
         ],
@@ -20685,58 +20502,23 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Before first treatment",
-        "when": "Before the first infusion",
-        "why": "Metastatic colorectal cancer with validated extended RAS-wild-type status. The NCCP document retains older KRAS wording; the current Erbitux SmPC requires extended RAS testing.",
-        "clinical": "Confirm diagnosis, treatment line, goal, prior treatments, performance status, consent and all medicines. Baseline FBC, renal and liver profile; assess infection, hydration, bowel symptoms and previous treatment toxicity. Document validated extended RAS wild-type status for this colorectal pathway; do not infer it from unknown or KRAS exon 2-only testing. Measure electrolytes including magnesium, calcium and potassium before treatment; correct abnormalities according to the prescription. Ask specifically about prior antibody infusion reactions, red-meat allergy, tick bites and any known cetuximab IgE findings. Document DPD assessment before the first fluorouracil dose unless already tested. Complete DPD deficiency excludes fluorouracil; partial deficiency needs a specialist dose plan. ECG if cardiac function is compromised; no universal serial echo schedule is imposed. Confirm safe central access and pump training. In moderate/severe renal impairment, elevated uracil can misclassify DPD phenotype; consider genotype testing as directed in the current NCCP source. Record baseline peripheral neuropathy and functional impact.",
-        "action": "Confirm tests, medicines, infusion access and the written urgent contact plan.",
-        "source_ids": [
-          "00733",
-          "smpc"
-        ]
-      },
-      {
-        "title": "Each treatment decision",
-        "when": "At scheduled treatment reviews and whenever symptoms change",
-        "why": "Benefit and toxicity determine the next treatment; the reference cycle is not an automatic clearance.",
-        "clinical": "Review symptoms, infection, hydration, bowel effects, medicines and previous-cycle toxicity; verify which components are actually being administered. FBC, liver and renal profile before each cycle. Repeat magnesium, calcium and potassium periodically during EGFR-antibody therapy and more frequently when abnormal; assess skin, nail, eye and pulmonary symptoms.",
-        "action": "Report symptoms before the next dose, including at a separate antibody-only visit.",
+        "title": "A 14-day reference cycle",
+        "when": "Clinic → home → review",
+        "why": "The aim is to control advanced bowel cancer and symptoms. Treatment continues while it is helping and side effects remain acceptable; your team reviews the plan with you.",
+        "clinical": "Cetuximab and modified FOLFOX6 start on Day 1, followed by one 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat every 14 days while beneficial and tolerable. No weekly Day 8 cetuximab is scheduled.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00733"
-        ]
-      },
-      {
-        "title": "Pause or completion",
-        "when": "When a component is held or the course ends",
-        "why": "Blood tests, line care and side-effect follow-up may continue after dosing stops.",
-        "clinical": "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles. There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions. NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment. Evaluate peripheral neuropathy every two cycles and review earlier if symptoms persist or impair function; cumulative toxicity may alter oxaliplatin independently of other components.",
-        "action": "Agree the next appointment, remaining tests and who reviews unresolved symptoms.",
-        "source_ids": [
-          "00733",
-          "smpc"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles.",
-      "There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions.",
-      "NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-      "Evaluate peripheral neuropathy every two cycles and review earlier if symptoms persist or impair function; cumulative toxicity may alter oxaliplatin independently of other components.",
-      "Indirect for both schedule and backbone: OPUS used weekly cetuximab with FOLFOX4, not fortnightly cetuximab with modified FOLFOX6. Do not relabel OPUS results as an exact 00733 trial."
+      "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
     ],
-    "code": "00733",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Fortnightly cetuximab + modified FOLFOX-6: treatment and checks",
-    "setting": "Advanced / metastatic colorectal cancer",
-    "summary": "Cetuximab and modified FOLFOX6 start on Day 1, followed by one 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat every 14 days while beneficial and tolerable. No weekly Day 8 cetuximab is scheduled.",
     "sources": [
       {
         "id": "00733",
-        "title": "NCCP 00733 v2a · official regimen",
+        "title": "NCCP 00733 v2a · current official regimen checked 5 November 2026",
         "url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf"
       },
       {
@@ -20777,6 +20559,15 @@ const definitions={
     ]
   },
   "00225": {
+    "code": "00225",
+    "title": "Panitumumab: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced / metastatic colorectal cancer",
+    "summary": "Panitumumab on Day 1 every 14 days while beneficial and tolerable. There is no home chemotherapy pump.",
     "stages": [
       "Before starting",
       "Early treatment",
@@ -20786,22 +20577,8 @@ const definitions={
     ],
     "lanes": [
       {
-        "label": "Treatment and visits",
-        "cells": [
-          "Confirm the exact protocol and goal",
-          "Start the planned infusion schedule",
-          "Repeat only while beneficial and tolerable",
-          "Review components, toxicity and the treatment goal",
-          "Agree continuation, pause, switch or completion"
-        ],
-        "kind": "treatment",
-        "source_ids": [
-          "00225"
-        ],
-        "note": "Panitumumab on Day 1 every 14 days while beneficial and tolerable. There is no home chemotherapy pump."
-      },
-      {
         "label": "Blood counts, kidney and liver",
+        "kind": "monitoring",
         "cells": [
           "Baseline blood count, kidney and liver profile",
           "Review results before treatment",
@@ -20809,7 +20586,6 @@ const definitions={
           "Repeat sooner if symptoms or results need it",
           "Follow any unresolved abnormal result"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00225"
         ],
@@ -20817,6 +20593,7 @@ const definitions={
       },
       {
         "label": "Magnesium, calcium and potassium",
+        "kind": "monitoring",
         "cells": [
           "Check mineral levels before starting",
           "Repeat periodically during treatment",
@@ -20824,15 +20601,14 @@ const definitions={
           "More checks may be needed if levels fall or diarrhoea develops",
           "Monthly checks for two months after the last antibody dose"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00225",
-          "smpc"
+          "00225"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Skin, nails, eyes and breathing",
+        "kind": "monitoring",
         "cells": [
           "Discuss existing skin, eye or lung problems",
           "Start the prescribed skin-care plan; report reactions early",
@@ -20840,15 +20616,14 @@ const definitions={
           "Eye pain, worsening breathing or severe rash needs prompt assessment",
           "Continue care until symptoms and mineral levels settle"
         ],
-        "kind": "monitoring",
         "source_ids": [
-          "00225",
-          "smpc"
+          "00225"
         ],
         "note": "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
       },
       {
         "label": "Cancer response and treatment choices",
+        "kind": "monitoring",
         "cells": [
           "Record baseline disease and agree review plan",
           "Bring forward review if symptoms worsen",
@@ -20856,7 +20631,6 @@ const definitions={
           "Discuss benefit, side effects and whether the goal has changed",
           "Agree continuation, a break, another treatment or supportive care"
         ],
-        "kind": "monitoring",
         "source_ids": [
           "00225"
         ],
@@ -20865,53 +20639,19 @@ const definitions={
     ],
     "milestones": [
       {
-        "title": "Before first treatment",
-        "when": "Before the first infusion",
-        "why": "Adult RAS-wild-type metastatic colorectal cancer as monotherapy after failure of fluoropyrimidine-, oxaliplatin- and irinotecan-containing chemotherapy.",
-        "clinical": "Confirm diagnosis, treatment line, goal, prior treatments, performance status, consent and all medicines. Baseline FBC, renal and liver profile; assess infection, hydration, bowel symptoms and previous treatment toxicity. Document validated extended RAS wild-type status for this colorectal pathway; do not infer it from unknown or KRAS exon 2-only testing. Measure electrolytes including magnesium, calcium and potassium before treatment; correct abnormalities according to the prescription.",
-        "action": "Confirm tests, medicines, infusion access and the written urgent contact plan.",
-        "source_ids": [
-          "00225",
-          "smpc"
-        ]
-      },
-      {
-        "title": "Each treatment decision",
-        "when": "At scheduled treatment reviews and whenever symptoms change",
-        "why": "Benefit and toxicity determine the next treatment; the reference cycle is not an automatic clearance.",
-        "clinical": "Review symptoms, infection, hydration, bowel effects, medicines and previous-cycle toxicity; verify which components are actually being administered. FBC, liver and renal profile before each treatment. Repeat magnesium, calcium and potassium periodically during EGFR-antibody therapy and more frequently when abnormal; assess skin, nail, eye and pulmonary symptoms.",
-        "action": "Report symptoms before the next dose, including at a separate antibody-only visit.",
+        "title": "A repeating 14-day cycle",
+        "when": "Infusion → home → review",
+        "why": "The aim is to control advanced bowel cancer and symptoms. The team reviews how well treatment is working and whether side effects remain acceptable; there is no single fixed number of cycles for everyone.",
+        "clinical": "Day 1: panitumumab infusion. There is no home chemotherapy pump in this regimen. A cycle lasts 14 days. Treatment continues while it is helping and side effects remain acceptable.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00225"
-        ]
-      },
-      {
-        "title": "Pause or completion",
-        "when": "When a component is held or the course ends",
-        "why": "Blood tests, line care and side-effect follow-up may continue after dosing stops.",
-        "clinical": "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles. There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions. NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-        "action": "Agree the next appointment, remaining tests and who reviews unresolved symptoms.",
-        "source_ids": [
-          "00225",
-          "smpc"
         ]
       }
     ],
     "clinical_notes": [
-      "Disease assessment and scan timing follow the supervising consultant’s treatment plan; do not hard-code a scan every fixed number of cycles.",
-      "There is no predetermined total course: review benefit, tolerability and patient priorities, and document continuation, pause, switch or stopping decisions.",
-      "NCCP post-treatment schedule: electrolytes, magnesium and calcium monthly for two months after the final antibody treatment. Panitumumab SmPC describes monitoring for up to eight weeks after completion; cetuximab SmPC specifies baseline and periodic monitoring during treatment.",
-      "Direct schedule and later-line monotherapy evidence; extended RAS subgroup qualification must remain visible. The primary KRAS exon 2 result had a different control median (7.4 months)."
+      "The columns show order, not equal periods. There is no fixed number of cycles for these plans. Agree who books each check, when results are reviewed and whom to contact if a check is missed."
     ],
-    "code": "00225",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Panitumumab: treatment and checks",
-    "setting": "Advanced / metastatic colorectal cancer",
-    "summary": "Panitumumab on Day 1 every 14 days while beneficial and tolerable. There is no home chemotherapy pump.",
     "sources": [
       {
         "id": "00225",
@@ -26323,6 +26063,15 @@ const definitions={
     ]
   },
   "00382": {
+    "code": "00382",
+    "title": "Trifluridine/tipiracil (Lonsurf) monotherapy: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Previously treated metastatic colorectal cancer",
+    "summary": "Take the prescribed morning and evening tablets on Days 1–5, have no Lonsurf on Days 6–7, then take morning and evening tablets on Days 8–12. Days 13–28 are tablet-free. A new 28-day cycle starts only when the team authorises it.",
     "stages": [
       "Before starting",
       "Days 1–5",
@@ -26331,21 +26080,6 @@ const definitions={
       "Each next cycle / stopping"
     ],
     "lanes": [
-      {
-        "label": "Treatment course",
-        "kind": "treatment",
-        "cells": [
-          "Confirm colorectal monotherapy",
-          "Twice daily after meals",
-          "Rest Days 6–7; tablets Days 8–12",
-          "No Lonsurf",
-          "Restart only after authorisation"
-        ],
-        "source_ids": [
-          "00382"
-        ],
-        "note": "Relative sequence; timing is confirmed by the team, not entered by the patient."
-      },
       {
         "label": "Blood count, kidney and liver",
         "kind": "monitoring",
@@ -26357,10 +26091,9 @@ const definitions={
           "Repeat before each cycle; follow abnormalities"
         ],
         "source_ids": [
-          "00382",
-          "smpc"
+          "00382"
         ],
-        "note": "Relative sequence; timing is confirmed by the team, not entered by the patient."
+        "note": "Baseline preparation, checks before each cycle and tests arranged because of symptoms are different. No fixed scan interval is imposed here."
       },
       {
         "label": "Urine protein",
@@ -26375,7 +26108,7 @@ const definitions={
         "source_ids": [
           "00382"
         ],
-        "note": "Relative sequence; timing is confirmed by the team, not entered by the patient."
+        "note": "Baseline preparation, checks before each cycle and tests arranged because of symptoms are different. No fixed scan interval is imposed here."
       },
       {
         "label": "Tablets, symptoms and support",
@@ -26388,10 +26121,9 @@ const definitions={
           "Reconcile dose history, recovery and support"
         ],
         "source_ids": [
-          "00382",
-          "smpc"
+          "00382"
         ],
-        "note": "Relative sequence; timing is confirmed by the team, not entered by the patient."
+        "note": "Baseline preparation, checks before each cycle and tests arranged because of symptoms are different. No fixed scan interval is imposed here."
       },
       {
         "label": "Treatment benefit",
@@ -26406,44 +26138,24 @@ const definitions={
         "source_ids": [
           "00382"
         ],
-        "note": "Relative sequence; timing is confirmed by the team, not entered by the patient."
+        "note": "Baseline preparation, checks before each cycle and tests arranged because of symptoms are different. No fixed scan interval is imposed here."
       }
     ],
     "milestones": [
       {
-        "title": "Authorise the first course",
-        "when": "Before Day 1",
-        "why": "Oral dosing errors and baseline toxicity can cause harm.",
-        "clinical": "Check eligibility, blood count, renal/liver profile, urine protein and prescription.",
-        "action": "Confirm calendar, support medicines and 24-hour number.",
-        "source_ids": [
-          "00382"
-        ]
-      },
-      {
-        "title": "Authorise every new cycle",
-        "when": "After the rest period",
-        "why": "New-cycle counts differ from dosing interruption thresholds.",
-        "clinical": "Assess recovery, prior nadir/delay and renal-specific dose history.",
-        "action": "Wait for clinical authorisation, even if tablets remain.",
+        "title": "Two five-day dosing blocks, then recovery",
+        "when": "28-day cycle",
+        "why": "This oral chemotherapy aims to control colorectal cancer that has spread after earlier treatments, or when those treatments are unsuitable. It combines two ingredients in one medicine. Your team discusses the likely benefit, uncertainty, alternatives and your priorities.",
+        "clinical": "Take the prescribed morning and evening tablets on Days 1–5, have no Lonsurf on Days 6–7, then take morning and evening tablets on Days 8–12. Days 13–28 are tablet-free. A new 28-day cycle starts only when the team authorises it.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
         "source_ids": [
           "00382"
         ]
       }
     ],
     "clinical_notes": [
-      "This guide covers Lonsurf on its own for previously treated metastatic colorectal cancer under NCCP 00382a. It does not cover gastric cancer or Lonsurf with bevacizumab. Confirm the exact regimen on your prescription.",
-      "Cycles continue while treatment is helping and side effects are acceptable. There is no fixed total number of cycles. Blood results, symptoms, scans and your preferences guide continuation, delays or stopping."
+      "Baseline preparation, checks before each cycle and tests arranged because of symptoms are different. No fixed scan interval is imposed here."
     ],
-    "code": "00382",
-    "release": "0.84.24",
-    "checked": "2026-10-29",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Trifluridine/tipiracil (Lonsurf) monotherapy: treatment and checks",
-    "setting": "Previously treated metastatic colorectal cancer",
-    "summary": "Take the prescribed morning and evening tablets on Days 1–5, have no Lonsurf on Days 6–7, then take morning and evening tablets on Days 8–12. Days 13–28 are tablet-free. A new 28-day cycle starts only when the team authorises it.",
     "sources": [
       {
         "id": "00382",
@@ -26452,7 +26164,7 @@ const definitions={
       },
       {
         "id": "smpc",
-        "title": "EMA Lonsurf product information and patient leaflet",
+        "title": "EMA Lonsurf · current product information and patient leaflet · checked 5 November 2026",
         "url": "https://www.ema.europa.eu/en/documents/product-information/lonsurf-epar-product-information_en.pdf"
       },
       {
@@ -35053,6 +34765,1144 @@ const definitions={
         "id": "trial",
         "title": "TCOG-GI0802: Sasaki et al. 2015",
         "url": "https://pubmed.ncbi.nlm.nih.gov/25937430/"
+      }
+    ]
+  },
+  "00212:colorectal": {
+    "code": "00212",
+    "title": "Bevacizumab 10 · colorectal: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic colorectal cancer · bevacizumab component with fluoropyrimidine-based chemotherapy",
+    "summary": "Bevacizumab is given by drip on Day 1 every 14 days with the prescribed fluoropyrimidine-based chemotherapy. Treatment continues while helping and tolerable; there is no fixed total number of cycles. The partner chemotherapy has its own dose days, tests and support plan.",
+    "stages": [
+      "Before treatment",
+      "Treatment / review",
+      "Between visits",
+      "Phase decision",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm colorectal indication / partner",
+          "Bevacizumab Day 1 every 14 days",
+          "Follow partner prescription",
+          "Review benefit and tolerability",
+          "Next plan agreed individually"
+        ],
+        "source_ids": [
+          "00212"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      },
+      {
+        "label": "Bloods / urine",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, kidney/liver, urine protein",
+          "Regular blood/urine checks",
+          "Quantify protein if needed",
+          "Review trends",
+          "Follow abnormalities"
+        ],
+        "source_ids": [
+          "00212"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      },
+      {
+        "label": "Blood pressure / heart",
+        "kind": "monitoring",
+        "cells": [
+          "BP and cardiac history/exam",
+          "BP before each cycle",
+          "Extra BP if raised",
+          "Review control",
+          "BP post-treatment"
+        ],
+        "source_ids": [
+          "00212"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      },
+      {
+        "label": "Scans / other tests",
+        "kind": "monitoring",
+        "cells": [
+          "Individual disease plan",
+          "No fixed scan interval",
+          "INR if warfarin",
+          "Response review",
+          "Follow-up agreed"
+        ],
+        "source_ids": [
+          "00212"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Bevacizumab with chemotherapy",
+        "when": "14-day reference cycle",
+        "why": "To help control bowel cancer that has spread, alongside the chemotherapy chosen by your oncology team.",
+        "clinical": "Bevacizumab is given by drip on Day 1 every 14 days with the prescribed fluoropyrimidine-based chemotherapy. Treatment continues while helping and tolerable; there is no fixed total number of cycles. The partner chemotherapy has its own dose days, tests and support plan.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00212"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+    ],
+    "sources": [
+      {
+        "id": "00212",
+        "title": "NCCP 00212 v7 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6552/212_Bevacizumab_10.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "Avastin current EMA product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP antiemetic classification v 6 and oral pathway",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCIS medical oncology antiemetic medicines",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "E3200: bevacizumab with FOLFOX4 after previous treatment",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17442997/"
+      }
+    ]
+  },
+  "00214:colorectal": {
+    "code": "00214",
+    "title": "Bevacizumab 7.5 · colorectal: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic colorectal cancer · bevacizumab component with fluoropyrimidine-based chemotherapy",
+    "summary": "Bevacizumab is given by drip on Day 1 every 21 days with the prescribed fluoropyrimidine-based chemotherapy. Treatment continues while helping and tolerable; there is no fixed total number of cycles. The partner chemotherapy has its own dose days, tests and support plan.",
+    "stages": [
+      "Before treatment",
+      "Treatment / review",
+      "Between visits",
+      "Phase decision",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm colorectal indication / partner",
+          "Bevacizumab Day 1 every 21 days",
+          "Follow partner prescription",
+          "Review benefit and tolerability",
+          "Next plan agreed individually"
+        ],
+        "source_ids": [
+          "00214"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      },
+      {
+        "label": "Bloods / urine",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, kidney/liver, urine protein",
+          "Regular blood/urine checks",
+          "Quantify protein if needed",
+          "Review trends",
+          "Follow abnormalities"
+        ],
+        "source_ids": [
+          "00214"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      },
+      {
+        "label": "Blood pressure / heart",
+        "kind": "monitoring",
+        "cells": [
+          "BP and cardiac history/exam",
+          "BP before each cycle",
+          "Extra BP if raised",
+          "Review control",
+          "BP post-treatment"
+        ],
+        "source_ids": [
+          "00214"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      },
+      {
+        "label": "Scans / other tests",
+        "kind": "monitoring",
+        "cells": [
+          "Individual disease plan",
+          "No fixed scan interval",
+          "INR if warfarin",
+          "Response review",
+          "Follow-up agreed"
+        ],
+        "source_ids": [
+          "00214"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Bevacizumab with chemotherapy",
+        "when": "21-day reference cycle",
+        "why": "To help control bowel cancer that has spread, alongside the chemotherapy chosen by your oncology team.",
+        "clinical": "Bevacizumab is given by drip on Day 1 every 21 days with the prescribed fluoropyrimidine-based chemotherapy. Treatment continues while helping and tolerable; there is no fixed total number of cycles. The partner chemotherapy has its own dose days, tests and support plan.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00214"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+    ],
+    "sources": [
+      {
+        "id": "00214",
+        "title": "NCCP 00214 v8 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6554/214_Bevacizumab_7.5.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "Avastin current EMA product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP antiemetic classification v 6 and oral pathway",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCIS medical oncology antiemetic medicines",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "NO16966: bevacizumab with oxaliplatin-based chemotherapy",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18421054/"
+      }
+    ]
+  },
+  "00215:colorectal": {
+    "code": "00215",
+    "title": "Bevacizumab 15 · colorectal: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic colorectal cancer · bevacizumab component with fluoropyrimidine-based chemotherapy",
+    "summary": "Bevacizumab is given by drip on Day 1 every 21 days with the prescribed fluoropyrimidine-based chemotherapy. Treatment continues while helping and tolerable; there is no fixed total number of cycles. The partner chemotherapy has its own dose days, tests and support plan.",
+    "stages": [
+      "Before treatment",
+      "Treatment / review",
+      "Between visits",
+      "Phase decision",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm colorectal indication / partner",
+          "Bevacizumab Day 1 every 21 days",
+          "Follow partner prescription",
+          "Review benefit and tolerability",
+          "Next plan agreed individually"
+        ],
+        "source_ids": [
+          "00215"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      },
+      {
+        "label": "Bloods / urine",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, kidney/liver, urine protein",
+          "Regular blood/urine checks",
+          "Quantify protein if needed",
+          "Review trends",
+          "Follow abnormalities"
+        ],
+        "source_ids": [
+          "00215"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      },
+      {
+        "label": "Blood pressure / heart",
+        "kind": "monitoring",
+        "cells": [
+          "BP and cardiac history/exam",
+          "BP before each cycle",
+          "Extra BP if raised",
+          "Review control",
+          "BP post-treatment"
+        ],
+        "source_ids": [
+          "00215"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      },
+      {
+        "label": "Scans / other tests",
+        "kind": "monitoring",
+        "cells": [
+          "Individual disease plan",
+          "No fixed scan interval",
+          "INR if warfarin",
+          "Response review",
+          "Follow-up agreed"
+        ],
+        "source_ids": [
+          "00215"
+        ],
+        "note": "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Bevacizumab with chemotherapy",
+        "when": "21-day reference cycle",
+        "why": "To help control bowel cancer that has spread, alongside the chemotherapy chosen by your oncology team.",
+        "clinical": "Bevacizumab is given by drip on Day 1 every 21 days with the prescribed fluoropyrimidine-based chemotherapy. Treatment continues while helping and tolerable; there is no fixed total number of cycles. The partner chemotherapy has its own dose days, tests and support plan.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00215"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Routine safety tests are separate from scans and tumour markers, which follow your individual plan. No universal imaging or tumour-marker interval is specified."
+    ],
+    "sources": [
+      {
+        "id": "00215",
+        "title": "NCCP 00215 v7 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6940/00215_Bevacizumab_15.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "Avastin current EMA product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "antiemetic",
+        "title": "NCCP antiemetic classification v 6 and oral pathway",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      },
+      {
+        "id": "ncis",
+        "title": "NCIS medical oncology antiemetic medicines",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00244": {
+    "code": "00244",
+    "title": "Regorafenib (Stivarga) monotherapy: treatment and checks",
+    "release": "0.84.34",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Previously treated metastatic colorectal cancer",
+    "summary": "Take the prescribed dose once daily on Days 1–21, then take no regorafenib on Days 22–28. Each cycle lasts 28 days. Take tablets at the same time after a light, low-fat meal. Start another cycle only when the team authorises it.",
+    "stages": [
+      "Before starting",
+      "First six weeks",
+      "Up to two months",
+      "Later cycles",
+      "After / stopping"
+    ],
+    "lanes": [
+      {
+        "label": "Liver blood tests",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline liver profile",
+          "Every two weeks",
+          "Every two weeks",
+          "Monthly or as clinically indicated",
+          "Follow any abnormal results until reviewed / resolved"
+        ],
+        "source_ids": [
+          "00244"
+        ],
+        "note": "Some tests are required for everyone; ECG/QT, pancreatic enzymes, INR and extra checks depend on risk, symptoms or other medicines. There is no single mandatory imaging or tumour-marker interval for all patients."
+      },
+      {
+        "label": "Blood pressure",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline; control existing hypertension",
+          "Weekly",
+          "Before each cycle after week six; extra if needed",
+          "Before each cycle or as indicated",
+          "Follow the team’s plan; do not stop BP tablets yourself"
+        ],
+        "source_ids": [
+          "00244"
+        ],
+        "note": "Some tests are required for everyone; ECG/QT, pancreatic enzymes, INR and extra checks depend on risk, symptoms or other medicines. There is no single mandatory imaging or tumour-marker interval for all patients."
+      },
+      {
+        "label": "Blood count and kidneys",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline FBC and renal profile",
+          "Regular tests as arranged",
+          "Continue scheduled monitoring",
+          "Regular tests as arranged",
+          "Review residual blood-count, fluid or kidney problems"
+        ],
+        "source_ids": [
+          "00244"
+        ],
+        "note": "Some tests are required for everyone; ECG/QT, pancreatic enzymes, INR and extra checks depend on risk, symptoms or other medicines. There is no single mandatory imaging or tumour-marker interval for all patients."
+      },
+      {
+        "label": "Thyroid and additional tests",
+        "kind": "monitoring",
+        "cells": [
+          "Thyroid function; ECG/QT if at risk; pancreatic enzymes if indicated",
+          "Thyroid / pancreas tests if indicated; ECG / heart-rate review if needed",
+          "If on warfarin: close INR checks",
+          "Further tests according to symptoms and medicines",
+          "Follow abnormalities and symptoms individually"
+        ],
+        "source_ids": [
+          "00244"
+        ],
+        "note": "Some tests are required for everyone; ECG/QT, pancreatic enzymes, INR and extra checks depend on risk, symptoms or other medicines. There is no single mandatory imaging or tumour-marker interval for all patients."
+      },
+      {
+        "label": "Symptoms and cancer response",
+        "kind": "monitoring",
+        "cells": [
+          "Agree aim, baseline symptoms and review plan",
+          "Review hands/feet, mouth, bowel, appetite, energy and wounds",
+          "Review tolerability and any interruptions",
+          "Scans / markers according to the individual cancer plan",
+          "Agree follow-up, next treatment or supportive care"
+        ],
+        "source_ids": [
+          "00244"
+        ],
+        "note": "Some tests are required for everyone; ECG/QT, pancreatic enzymes, INR and extra checks depend on risk, symptoms or other medicines. There is no single mandatory imaging or tumour-marker interval for all patients."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "21 tablet days, then seven rest days",
+        "when": "28-day cycle",
+        "why": "Regorafenib is a targeted tablet treatment for colorectal cancer that has spread, after previous treatments or when those treatments are unsuitable. The aim is to control the cancer. Your team discusses the likely benefit, side effects, alternatives and your priorities.",
+        "clinical": "Take the prescribed dose once daily on Days 1–21, then take no regorafenib on Days 22–28. Each cycle lasts 28 days. Take tablets at the same time after a light, low-fat meal. Start another cycle only when the team authorises it.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00244"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Some tests are required for everyone; ECG/QT, pancreatic enzymes, INR and extra checks depend on risk, symptoms or other medicines. There is no single mandatory imaging or tumour-marker interval for all patients."
+    ],
+    "sources": [
+      {
+        "id": "00244",
+        "title": "NCCP 00244 v5 · Regorafenib Monotherapy · revised 25 March 2025",
+        "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Stivarga · current product information and patient leaflet · checked 5 November 2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf"
+      },
+      {
+        "id": "correct",
+        "title": "Grothey et al. CORRECT · colorectal regorafenib monotherapy · Lancet 2013",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23177514/"
+      }
+    ]
+  },
+  "00455:colorectal": {
+    "code": "00455",
+    "title": "Pembrolizumab 200 mg · colorectal: treatment and checks",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "First-line metastatic MSI-H / dMMR colorectal cancer",
+    "summary": "Pembrolizumab 200 mg is given over about 30 minutes on Day 1 every 3 weeks (21 days). The visit takes longer for assessment and preparation.",
+    "stages": [
+      "Before starting",
+      "Infusion visits",
+      "Between visits",
+      "Course review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count, kidneys, liver and glucose",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline blood tests",
+          "Before every treatment cycle",
+          "Extra tests for new symptoms or abnormalities",
+          "Clinical review before restart after a hold",
+          "Follow abnormal results to resolution"
+        ],
+        "source_ids": [
+          "00455"
+        ],
+        "note": "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+      },
+      {
+        "label": "Thyroid and other hormones",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline thyroid function",
+          "Check thyroid timetable",
+          "Thyroid every 3–6 weeks; cortisol if indicated",
+          "Confirm any hormone replacement plan",
+          "Hormone treatment may continue long term"
+        ],
+        "source_ids": [
+          "00455"
+        ],
+        "note": "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+      },
+      {
+        "label": "Symptoms and immune inflammation",
+        "kind": "monitoring",
+        "cells": [
+          "Discuss autoimmune disease, infection, medicines and previous immunotherapy",
+          "Review new symptoms before infusion",
+          "Report symptoms immediately; do not wait for the next cycle",
+          "Pauses or stopping are clinician decisions",
+          "Immune effects can occur after the last dose"
+        ],
+        "source_ids": [
+          "00455"
+        ],
+        "note": "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+      },
+      {
+        "label": "Cancer response and duration",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm validated MSI-H/dMMR result and first-line setting",
+          "Agree the response assessment plan",
+          "Scans and markers as directed by the consultant",
+          "Individual review, including possible stop after sustained response at 24 months",
+          "Agree follow-up and the contact pathway"
+        ],
+        "source_ids": [
+          "00455"
+        ],
+        "note": "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Pembrolizumab every 3 weeks",
+        "when": "One immunotherapy medicine",
+        "why": "Pembrolizumab aims to control bowel cancer that has spread and has a particular DNA-repair feature, called MSI-H or dMMR. Your team discusses likely benefit, uncertainty and alternatives for you.",
+        "clinical": "Continue while treatment helps and side effects remain acceptable. At 24 months, the team may consider stopping if there is a sustained response without progression; this is an individual review, not an automatic fixed final cycle.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00455"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+    ],
+    "sources": [
+      {
+        "id": "00455",
+        "title": "NCCP 00455 v16 official regimen",
+        "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Keytruda IV product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf"
+      },
+      {
+        "id": "keynote177",
+        "title": "KEYNOTE-177 randomised first-line colorectal trial",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33264544/"
+      },
+      {
+        "id": "keynote177-final",
+        "title": "KEYNOTE-177 final analysis",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35427471/"
+      },
+      {
+        "id": "pk-bridge",
+        "title": "Pembrolizumab 400 mg six-week exposure bridging",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32305010/"
+      },
+      {
+        "id": "hse",
+        "title": "HSE treatment safety and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      }
+    ]
+  },
+  "00558:colorectal": {
+    "code": "00558",
+    "title": "Pembrolizumab 400 mg · colorectal: treatment and checks",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "First-line metastatic MSI-H / dMMR colorectal cancer",
+    "summary": "Pembrolizumab 400 mg is given over about 30 minutes on Day 1 every 6 weeks (42 days). The visit takes longer for assessment and preparation.",
+    "stages": [
+      "Before starting",
+      "Infusion visits",
+      "Between visits",
+      "Course review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count, kidneys, liver and glucose",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline blood tests",
+          "Before every treatment cycle",
+          "Extra tests for new symptoms or abnormalities",
+          "Clinical review before restart after a hold",
+          "Follow abnormal results to resolution"
+        ],
+        "source_ids": [
+          "00558"
+        ],
+        "note": "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+      },
+      {
+        "label": "Thyroid and other hormones",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline thyroid function",
+          "Check thyroid timetable",
+          "Thyroid every 3–6 weeks; cortisol if indicated",
+          "Confirm any hormone replacement plan",
+          "Hormone treatment may continue long term"
+        ],
+        "source_ids": [
+          "00558"
+        ],
+        "note": "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+      },
+      {
+        "label": "Symptoms and immune inflammation",
+        "kind": "monitoring",
+        "cells": [
+          "Discuss autoimmune disease, infection, medicines and previous immunotherapy",
+          "Review new symptoms before infusion",
+          "Report symptoms immediately; do not wait for the next cycle",
+          "Pauses or stopping are clinician decisions",
+          "Immune effects can occur after the last dose"
+        ],
+        "source_ids": [
+          "00558"
+        ],
+        "note": "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+      },
+      {
+        "label": "Cancer response and duration",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm validated MSI-H/dMMR result and first-line setting",
+          "Agree the response assessment plan",
+          "Scans and markers as directed by the consultant",
+          "Individual review, including possible stop after sustained response at 24 months",
+          "Agree follow-up and the contact pathway"
+        ],
+        "source_ids": [
+          "00558"
+        ],
+        "note": "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Pembrolizumab every 6 weeks",
+        "when": "One immunotherapy medicine",
+        "why": "Pembrolizumab aims to control bowel cancer that has spread and has a particular DNA-repair feature, called MSI-H or dMMR. Your team discusses likely benefit, uncertainty and alternatives for you.",
+        "clinical": "Continue while treatment helps and side effects remain acceptable. At 24 months, the team may consider stopping if there is a sustained response without progression; this is an individual review, not an automatic fixed final cycle.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00558"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "There is no fixed NCCP scan or tumour-marker interval in this regimen. The team individualises imaging, markers and extra tests."
+    ],
+    "sources": [
+      {
+        "id": "00558",
+        "title": "NCCP 00558 v13 official regimen",
+        "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Keytruda IV product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf"
+      },
+      {
+        "id": "keynote177",
+        "title": "KEYNOTE-177 randomised first-line colorectal trial",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33264544/"
+      },
+      {
+        "id": "keynote177-final",
+        "title": "KEYNOTE-177 final analysis",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35427471/"
+      },
+      {
+        "id": "pk-bridge",
+        "title": "Pembrolizumab 400 mg six-week exposure bridging",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32305010/"
+      },
+      {
+        "id": "hse",
+        "title": "HSE treatment safety and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      }
+    ]
+  },
+  "00551": {
+    "code": "00551",
+    "title": "Nivolumab + ipilimumab · colorectal after chemotherapy: treatment and checks",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "MSI-H/dMMR metastatic colorectal cancer after fluoropyrimidine-based combination chemotherapy",
+    "summary": "Cycles 1–4: nivolumab 3 mg/kg, then ipilimumab 1 mg/kg, on Day 1 every 21 days. The first nivolumab-only dose is due three weeks after the final combination dose, subject to clinical review. Nivolumab alone: 240 mg IV or 600 mg under the skin every two weeks, or 1200 mg under the skin every four weeks.",
+    "stages": [
+      "Before starting",
+      "Combination cycles 1–4",
+      "Transition to nivolumab alone",
+      "Maintenance",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count, kidneys, liver, glucose and thyroid",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline results",
+          "Before every cycle",
+          "Review results and symptoms before changing phase",
+          "Before every maintenance cycle",
+          "Follow persistent abnormalities"
+        ],
+        "source_ids": [
+          "00551"
+        ],
+        "note": "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+      },
+      {
+        "label": "Symptoms and other hormones",
+        "kind": "monitoring",
+        "cells": [
+          "Discuss autoimmune disease, infections, medicines and earlier immune treatment",
+          "Assess immune symptoms; cortisol if indicated",
+          "A phase change does not remove immune risks",
+          "Report symptoms immediately; extra tests as indicated",
+          "Monitoring for at least five months after the last dose"
+        ],
+        "source_ids": [
+          "00551"
+        ],
+        "note": "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+      },
+      {
+        "label": "Treatment and observation",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm MSI-H/dMMR result and correct treatment line",
+          "Nivolumab first; then ipilimumab; vital signs and post-infusion observation",
+          "First maintenance dose three weeks after final combination",
+          "Confirm selected dose, route and two-/four-week interval",
+          "Retain the immunotherapy alert card"
+        ],
+        "source_ids": [
+          "00551"
+        ],
+        "note": "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+      },
+      {
+        "label": "Scans and response",
+        "kind": "monitoring",
+        "cells": [
+          "Agree assessment plan",
+          "Scans and markers as directed",
+          "Review benefit and suitability for maintenance",
+          "Review benefit, tolerability and duration",
+          "Agree next care and follow-up"
+        ],
+        "source_ids": [
+          "00551"
+        ],
+        "note": "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Cycles 1–4: two immunotherapies",
+        "when": "Every 21 days",
+        "why": "These two immunotherapy medicines aim to control bowel cancer with a confirmed MSI-H/dMMR DNA-repair feature. This pathway follows previous fluoropyrimidine-based combination chemotherapy.",
+        "clinical": "Nivolumab 3 mg/kg followed by ipilimumab 1 mg/kg on Day 1. Both are given as infusions. The first nivolumab-only dose is due three weeks after the final combination dose, subject to clinical review.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00551"
+        ]
+      },
+      {
+        "title": "Cycle 5 onwards: nivolumab alone",
+        "when": "Team-selected maintenance schedule",
+        "why": "These two immunotherapy medicines aim to control bowel cancer with a confirmed MSI-H/dMMR DNA-repair feature. This pathway follows previous fluoropyrimidine-based combination chemotherapy.",
+        "clinical": "Nivolumab alone: 240 mg IV or 600 mg under the skin every two weeks, or 1200 mg under the skin every four weeks. Continue while helping and tolerable, until progression or unacceptable toxicity. This colorectal regimen does not set a fixed overall two-year limit.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00551"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+    ],
+    "sources": [
+      {
+        "id": "00551",
+        "title": "NCCP 00551 v7a official regimen",
+        "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Opdivo product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/opdivo-epar-product-information_en.pdf"
+      },
+      {
+        "id": "yervoy",
+        "title": "EMA Yervoy product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/yervoy-epar-product-information_en.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "CheckMate 142 four-year combination cohort follow-up",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35764271/"
+      },
+      {
+        "id": "hse",
+        "title": "HSE treatment safety and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      }
+    ]
+  },
+  "00890": {
+    "code": "00890",
+    "title": "Fruquintinib (Fruzaqla) monotherapy: treatment and checks",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic colorectal cancer after standard therapies and trifluridine/tipiracil or regorafenib",
+    "summary": "Take the prescribed fruquintinib dose once daily on Days 1–21, then take no fruquintinib on Days 22–28. Take it at about the same time each day, with or without food. Repeat only when your team authorises the next cycle.",
+    "stages": [
+      "Before starting",
+      "First month",
+      "Later cycles",
+      "A hold or procedure",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood pressure",
+        "kind": "monitoring",
+        "cells": [
+          "Control existing hypertension",
+          "Weekly blood-pressure checks",
+          "Monthly and as clinically indicated",
+          "Review control before restarting",
+          "Follow persistent hypertension as agreed"
+        ],
+        "source_ids": [
+          "00890"
+        ],
+        "note": "NCCP specifies regular blood/urine/thyroid tests but no universal frequency for each. Ask your team to write the dates. Scans and tumour markers are individualised."
+      },
+      {
+        "label": "Blood count, kidneys, liver and thyroid",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline tests",
+          "Regular tests on the team plan",
+          "Continue regular tests",
+          "Repeat abnormal tests as directed",
+          "Follow unresolved effects"
+        ],
+        "source_ids": [
+          "00890"
+        ],
+        "note": "NCCP specifies regular blood/urine/thyroid tests but no universal frequency for each. Ask your team to write the dates. Scans and tumour markers are individualised."
+      },
+      {
+        "label": "Urine protein",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline urine dipstick",
+          "Regular urine checks",
+          "Extra measurement if protein is detected",
+          "Review kidney/urine findings before restarting",
+          "Individual follow-up if abnormal"
+        ],
+        "source_ids": [
+          "00890"
+        ],
+        "note": "NCCP specifies regular blood/urine/thyroid tests but no universal frequency for each. Ask your team to write the dates. Scans and tumour markers are individualised."
+      },
+      {
+        "label": "INR if taking warfarin",
+        "kind": "monitoring",
+        "cells": [
+          "Review anticoagulation",
+          "Weekly INR until a stable dose",
+          "Then before each cycle",
+          "Additional checks when medicines or health change",
+          "Anticoagulation-team plan"
+        ],
+        "source_ids": [
+          "00890"
+        ],
+        "note": "NCCP specifies regular blood/urine/thyroid tests but no universal frequency for each. Ask your team to write the dates. Scans and tumour markers are individualised."
+      },
+      {
+        "label": "Scans and clinical review",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm previous treatments and goals",
+          "Review symptoms, skin, nutrition and adherence",
+          "Disease assessment as directed by consultant",
+          "Team authorises any restart",
+          "Agree subsequent care and contacts"
+        ],
+        "source_ids": [
+          "00890"
+        ],
+        "note": "NCCP specifies regular blood/urine/thyroid tests but no universal frequency for each. Ask your team to write the dates. Scans and tumour markers are individualised."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "21 capsule days, then seven rest days",
+        "when": "28-day cycle",
+        "why": "Fruquintinib is a targeted capsule treatment to help control bowel cancer that has spread after previous treatments. The team checks which treatments you have received, whether they remain suitable, and your priorities.",
+        "clinical": "Take the prescribed fruquintinib dose once daily on Days 1–21, then take no fruquintinib on Days 22–28. Take it at about the same time each day, with or without food. Repeat only when your team authorises the next cycle.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00890"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "NCCP specifies regular blood/urine/thyroid tests but no universal frequency for each. Ask your team to write the dates. Scans and tumour markers are individualised."
+    ],
+    "sources": [
+      {
+        "id": "00890",
+        "title": "NCCP 00890 v2a official fruquintinib regimen",
+        "url": "https://healthservice.hse.ie/documents/6648/Fruquintinib_890.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Fruzaqla product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/fruzaqla-epar-product-information_en.pdf"
+      },
+      {
+        "id": "fresco2",
+        "title": "FRESCO-2 randomised phase III trial",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37331369/"
+      },
+      {
+        "id": "hse",
+        "title": "HSE treatment safety and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
+      }
+    ]
+  },
+  "00900": {
+    "code": "00900",
+    "title": "Nivolumab + ipilimumab · first-line colorectal: treatment and checks",
+    "release": "0.84.35",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "First-line unresectable or metastatic MSI-H/dMMR colorectal cancer",
+    "summary": "Cycles 1–4: nivolumab 240 mg, then ipilimumab 1 mg/kg, on Day 1 every 21 days. The first nivolumab-only dose is due three weeks after the final combination dose, subject to clinical review. Nivolumab alone: 240 mg IV every two weeks or 480 mg IV every four weeks.",
+    "stages": [
+      "Before starting",
+      "Combination cycles 1–4",
+      "Transition to nivolumab alone",
+      "Maintenance",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count, kidneys, liver, glucose and thyroid",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline results",
+          "Before every cycle",
+          "Review results and symptoms before changing phase",
+          "Before every maintenance cycle",
+          "Follow persistent abnormalities"
+        ],
+        "source_ids": [
+          "00900"
+        ],
+        "note": "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+      },
+      {
+        "label": "Symptoms and other hormones",
+        "kind": "monitoring",
+        "cells": [
+          "Discuss autoimmune disease, infections, medicines and earlier immune treatment",
+          "Assess immune symptoms; cortisol if indicated",
+          "A phase change does not remove immune risks",
+          "Report symptoms immediately; extra tests as indicated",
+          "Monitoring for at least five months after the last dose"
+        ],
+        "source_ids": [
+          "00900"
+        ],
+        "note": "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+      },
+      {
+        "label": "Treatment and observation",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm MSI-H/dMMR result and correct treatment line",
+          "Nivolumab first; then ipilimumab; vital signs and post-infusion observation",
+          "First maintenance dose three weeks after final combination",
+          "Confirm selected dose, route and two-/four-week interval",
+          "Retain the immunotherapy alert card"
+        ],
+        "source_ids": [
+          "00900"
+        ],
+        "note": "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+      },
+      {
+        "label": "Scans and response",
+        "kind": "monitoring",
+        "cells": [
+          "Agree assessment plan",
+          "Scans and markers as directed",
+          "Review benefit and suitability for maintenance",
+          "Review benefit, tolerability and duration",
+          "Agree next care and follow-up"
+        ],
+        "source_ids": [
+          "00900"
+        ],
+        "note": "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Cycles 1–4: two immunotherapies",
+        "when": "Every 21 days",
+        "why": "These two immunotherapy medicines aim to control bowel cancer with a confirmed MSI-H/dMMR DNA-repair feature. This is a first-line treatment for unresectable or metastatic cancer.",
+        "clinical": "Nivolumab 240 mg followed by ipilimumab 1 mg/kg on Day 1. Both are given as infusions. The first nivolumab-only dose is due three weeks after the final combination dose, subject to clinical review.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00900"
+        ]
+      },
+      {
+        "title": "Cycle 5 onwards: nivolumab alone",
+        "when": "Team-selected maintenance schedule",
+        "why": "These two immunotherapy medicines aim to control bowel cancer with a confirmed MSI-H/dMMR DNA-repair feature. This is a first-line treatment for unresectable or metastatic cancer.",
+        "clinical": "Nivolumab alone: 240 mg IV every two weeks or 480 mg IV every four weeks. Continue until progression, unacceptable toxicity or 24 months, whichever comes first; the team confirms how this applies to your course.",
+        "action": "Confirm the current phase, prescription, tests and support medicines.",
+        "source_ids": [
+          "00900"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Your team books tests and reviews their results. Imaging and tumour-marker timing is individualised; no universal interval is mandated here."
+    ],
+    "sources": [
+      {
+        "id": "00900",
+        "title": "NCCP 00900 v1a official regimen",
+        "url": "https://healthservice.hse.ie/documents/6653/900_v1a_Nivolumab_240mg_ipilimumab_1mgkg_.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Opdivo product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/opdivo-epar-product-information_en.pdf"
+      },
+      {
+        "id": "yervoy",
+        "title": "EMA Yervoy product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/yervoy-epar-product-information_en.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "CheckMate 8HW randomised first-line colorectal trial",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39602630/"
+      },
+      {
+        "id": "hse",
+        "title": "HSE treatment safety and urgent advice",
+        "url": "https://www2.hse.ie/conditions/chemotherapy/side-effects/"
       }
     ]
   }

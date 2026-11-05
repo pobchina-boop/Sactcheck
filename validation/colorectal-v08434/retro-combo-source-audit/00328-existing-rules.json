@@ -1,0 +1,1825 @@
+[
+  {
+    "rule_id": "ECOG_ELIGIBILITY",
+    "when": {
+      "field": "ecog",
+      "operator": ">",
+      "value": 2
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab",
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Outside the NCCP ECOG eligibility range; review suitability.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Outside the NCCP ECOG eligibility range; review suitability.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "HYPERSENSITIVITY",
+    "when": {
+      "field": "hypersensitivity",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "cetuximab",
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Known hypersensitivity is an NCCP exclusion."
+    },
+    "explanation": "Known hypersensitivity is an NCCP exclusion.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "PREGNANCY_LACTATION",
+    "when": {
+      "any": [
+        {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        }
+      ]
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "cetuximab",
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions."
+    },
+    "explanation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "RAS_EXCLUSION",
+    "when": {
+      "field": "ras_status",
+      "operator": "in",
+      "value": [
+        "mutant",
+        "unknown"
+      ]
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Colorectal cetuximab requires validated extended RAS wild-type status. KRAS exon 2 alone is not sufficient."
+    },
+    "explanation": "Colorectal cetuximab requires validated extended RAS wild-type status. KRAS exon 2 alone is not sufficient.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "SKIN_HOLD",
+    "when": {
+      "field": "acneiform_rash_grade",
+      "operator": ">=",
+      "value": 3
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Hold cetuximab for severe skin toxicity; source allows a maximum two-week interruption and requires recovery to grade \u22642 before restart."
+    },
+    "explanation": "Hold cetuximab for severe skin toxicity; source allows a maximum two-week interruption and requires recovery to grade \u22642 before restart.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 4
+    }
+  },
+  {
+    "rule_id": "SKIN_FOURTH",
+    "when": {
+      "field": "skin_occurrence",
+      "operator": ">=",
+      "value": 4
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Discontinue cetuximab after the fourth severe skin episode."
+    },
+    "explanation": "Discontinue cetuximab after the fourth severe skin episode.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 4
+    }
+  },
+  {
+    "rule_id": "SKIN_FAILED",
+    "when": {
+      "any": [
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Discontinue / obtain urgent specialist confirmation when severe skin toxicity has not resolved within the permitted interruption; do not automatically restart."
+    },
+    "explanation": "Discontinue / obtain urgent specialist confirmation when severe skin toxicity has not resolved within the permitted interruption; do not automatically restart.",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2\u20134.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+    }
+  },
+  {
+    "rule_id": "SKIN_RESTART_1",
+    "when": {
+      "all": [
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "==",
+          "value": 1
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": ">",
+          "value": 0
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": false
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 250 mg/m\u00b2. Confirm prior individual reductions; this is not a re-loading dose.",
+      "show_in_dose_actions": true,
+      "component_changes": {
+        "cetuximab": {
+          "dose_mg_m2": 250
+        }
+      }
+    },
+    "explanation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 250 mg/m\u00b2. Confirm prior individual reductions; this is not a re-loading dose.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 4
+    }
+  },
+  {
+    "rule_id": "SKIN_RESTART_2",
+    "when": {
+      "all": [
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "==",
+          "value": 2
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": ">",
+          "value": 0
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": false
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 200 mg/m\u00b2. Confirm prior individual reductions; this is not a re-loading dose.",
+      "component_changes": {
+        "cetuximab": {
+          "dose_mg_m2": 200
+        }
+      }
+    },
+    "explanation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 200 mg/m\u00b2. Confirm prior individual reductions; this is not a re-loading dose.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 4
+    }
+  },
+  {
+    "rule_id": "SKIN_RESTART_3",
+    "when": {
+      "all": [
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "==",
+          "value": 3
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": ">",
+          "value": 0
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": false
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 150 mg/m\u00b2. Confirm prior individual reductions; this is not a re-loading dose.",
+      "component_changes": {
+        "cetuximab": {
+          "dose_mg_m2": 150
+        }
+      }
+    },
+    "explanation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 150 mg/m\u00b2. Confirm prior individual reductions; this is not a re-loading dose.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 4
+    }
+  },
+  {
+    "rule_id": "INFUSION_G1",
+    "when": {
+      "field": "infusion_reaction_grade",
+      "operator": "==",
+      "value": 1
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Slow cetuximab infusion and monitor closely; follow acute reaction policy.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Slow cetuximab infusion and monitor closely; follow acute reaction policy.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 4
+    }
+  },
+  {
+    "rule_id": "INFUSION_G2",
+    "when": {
+      "field": "infusion_reaction_grade",
+      "operator": "==",
+      "value": 2
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Slow cetuximab infusion and immediately treat symptoms; specialist assessment before continuation.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Slow cetuximab infusion and immediately treat symptoms; specialist assessment before continuation.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 4
+    }
+  },
+  {
+    "rule_id": "INFUSION_G34",
+    "when": {
+      "field": "infusion_reaction_grade",
+      "operator": ">=",
+      "value": 3
+    },
+    "action": {
+      "type": "permanently_discontinue",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Stop cetuximab immediately, treat the reaction and contraindicate further cetuximab."
+    },
+    "explanation": "Stop cetuximab immediately, treat the reaction and contraindicate further cetuximab.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 4
+    }
+  },
+  {
+    "rule_id": "FIRST_15_MINUTES",
+    "when": {
+      "field": "reaction_first_15_minutes",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Interrupt the first infusion for a reaction within 15 minutes irrespective of grade. Assess benefit/risk and IgE-related risk before any resumption."
+    },
+    "explanation": "Interrupt the first infusion for a reaction within 15 minutes irrespective of grade. Assess benefit/risk and IgE-related risk before any resumption.",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2\u20134.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+    }
+  },
+  {
+    "rule_id": "ILD",
+    "when": {
+      "field": "interstitial_lung_disease",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "permanently_discontinue",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Discontinue cetuximab for confirmed interstitial lung disease."
+    },
+    "explanation": "Discontinue cetuximab for confirmed interstitial lung disease.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 4
+    }
+  },
+  {
+    "rule_id": "RESPIRATORY",
+    "when": {
+      "field": "unexplained_respiratory_symptoms",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Interrupt implicated treatment and urgently investigate unexplained respiratory symptoms."
+    },
+    "explanation": "Interrupt implicated treatment and urgently investigate unexplained respiratory symptoms.",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2\u20134.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+    }
+  },
+  {
+    "rule_id": "EYE",
+    "when": {
+      "field": "ocular_symptoms",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Prompt ophthalmology assessment for possible keratitis; assess continuation versus interruption.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Prompt ophthalmology assessment for possible keratitis; assess continuation versus interruption.",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2\u20134.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+    }
+  },
+  {
+    "rule_id": "ELECTROLYTES",
+    "when": {
+      "field": "electrolyte_abnormality",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Correct magnesium, calcium and potassium as indicated. No numeric cetuximab hold threshold is specified; use clinical assessment.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Correct magnesium, calcium and potassium as indicated. No numeric cetuximab hold threshold is specified; use clinical assessment.",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2\u20134.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+    }
+  },
+  {
+    "rule_id": "INFECTION",
+    "when": {
+      "field": "febrile_or_active_infection",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review."
+    },
+    "explanation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 6,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "ANC_HOLD",
+    "when": {
+      "field": "anc_x10e9_l",
+      "operator": "<",
+      "value": 1.5
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Hold chemotherapy for ANC <1.5 \u00d710\u2079/L; repeat counts and assess recovery and nadir before restart."
+    },
+    "explanation": "Hold chemotherapy for ANC <1.5 \u00d710\u2079/L; repeat counts and assess recovery and nadir before restart.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "PLATELETS_HOLD",
+    "when": {
+      "field": "platelets_x10e9_l",
+      "operator": "<",
+      "value": 75
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Hold chemotherapy for platelets <75 \u00d710\u2079/L; assess recovery before restart."
+    },
+    "explanation": "Hold chemotherapy for platelets <75 \u00d710\u2079/L; assess recovery before restart.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "COUNT_STOP_anc_x10e9_l",
+    "when": {
+      "all": [
+        {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1.5
+        },
+        {
+          "field": "delay_weeks",
+          "operator": ">=",
+          "value": 4
+        }
+      ]
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review."
+    },
+    "explanation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "COUNT_STOP_platelets_x10e9_l",
+    "when": {
+      "all": [
+        {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        {
+          "field": "delay_weeks",
+          "operator": ">=",
+          "value": 2
+        }
+      ]
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review."
+    },
+    "explanation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "ANC_INTERVAL_CONFLICT",
+    "when": {
+      "all": [
+        {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1.5
+        },
+        {
+          "field": "delay_weeks",
+          "operator": ">=",
+          "value": 2
+        },
+        {
+          "field": "delay_weeks",
+          "operator": "<",
+          "value": 4
+        }
+      ]
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Source conflict: maximum ANC delay is two weeks, but the stopping clause says four weeks. Continue withholding and obtain consultant/pharmacy clarification; no automatic restart in this gap."
+    },
+    "explanation": "Source conflict: maximum ANC delay is two weeks, but the stopping clause says four weeks. Continue withholding and obtain consultant/pharmacy clarification; no automatic restart in this gap.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "ANC_G3",
+    "when": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            }
+          ]
+        },
+        {
+          "field": "delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "lowest_anc",
+          "operator": ">=",
+          "value": 0.5
+        },
+        {
+          "field": "lowest_anc",
+          "operator": "<",
+          "value": 1
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "irinotecan",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+      "component_changes": {
+        "irinotecan": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_irinotecan_level"
+        },
+        "fluorouracil_bolus": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_bolus_level"
+        },
+        "fluorouracil_infusion": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_infusion_level"
+        }
+      }
+    },
+    "explanation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "ANC_G4",
+    "when": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            }
+          ]
+        },
+        {
+          "field": "delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "lowest_anc",
+          "operator": ">=",
+          "value": 0
+        },
+        {
+          "field": "lowest_anc",
+          "operator": "<",
+          "value": 0.5
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "irinotecan",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+      "component_changes": {
+        "irinotecan": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_irinotecan_level"
+        },
+        "fluorouracil_bolus": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_bolus_level"
+        },
+        "fluorouracil_infusion": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_infusion_level"
+        }
+      }
+    },
+    "explanation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "PLT_G3",
+    "when": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            }
+          ]
+        },
+        {
+          "field": "delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "lowest_platelets",
+          "operator": ">=",
+          "value": 10
+        },
+        {
+          "field": "lowest_platelets",
+          "operator": "<",
+          "value": 50
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "irinotecan",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+      "component_changes": {
+        "irinotecan": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_irinotecan_level"
+        },
+        "fluorouracil_bolus": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_bolus_level"
+        },
+        "fluorouracil_infusion": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_infusion_level"
+        }
+      }
+    },
+    "explanation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "PLT_G4",
+    "when": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            }
+          ]
+        },
+        {
+          "field": "delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "lowest_platelets",
+          "operator": ">=",
+          "value": 0
+        },
+        {
+          "field": "lowest_platelets",
+          "operator": "<",
+          "value": 10
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "irinotecan",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+      "component_changes": {
+        "irinotecan": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_irinotecan_level"
+        },
+        "fluorouracil_bolus": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_bolus_level"
+        },
+        "fluorouracil_infusion": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_infusion_level"
+        }
+      }
+    },
+    "explanation": "After documented recovery, reduce the indicated components relative to their actual current dose levels.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "FEBRILE_NEUTROPENIA_RESTART",
+    "when": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            }
+          ]
+        },
+        {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "field": "delay_weeks",
+          "operator": "<=",
+          "value": 2
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "irinotecan",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "After recovery from grade 4 neutropenia with grade \u22652 fever, reduce irinotecan and both fluorouracil components by two dose levels.",
+      "component_changes": {
+        "irinotecan": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_irinotecan_level"
+        },
+        "fluorouracil_bolus": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_bolus_level"
+        },
+        "fluorouracil_infusion": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_infusion_level"
+        }
+      }
+    },
+    "explanation": "After recovery from grade 4 neutropenia with grade \u22652 fever, reduce irinotecan and both fluorouracil components by two dose levels.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 2
+    }
+  },
+  {
+    "rule_id": "BILI_CI",
+    "when": {
+      "field": "bilirubin_uln_multiple",
+      "operator": ">",
+      "value": 3
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "irinotecan"
+      ],
+      "recommendation": "Irinotecan is contraindicated above bilirubin 3 \u00d7ULN."
+    },
+    "explanation": "Irinotecan is contraindicated above bilirubin 3 \u00d7ULN.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 3
+    }
+  },
+  {
+    "rule_id": "BOWEL_EXCLUSION",
+    "when": {
+      "field": "bowel_obstruction_or_chronic_inflammatory_bowel_disease",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "irinotecan"
+      ],
+      "recommendation": "Bowel obstruction / chronic bowel disease is an irinotecan exclusion."
+    },
+    "explanation": "Bowel obstruction / chronic bowel disease is an irinotecan exclusion.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "MARROW_EXCLUSION",
+    "when": {
+      "field": "severe_bone_marrow_failure",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "irinotecan"
+      ],
+      "recommendation": "Severe bone marrow failure excludes irinotecan treatment."
+    },
+    "explanation": "Severe bone marrow failure excludes irinotecan treatment.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "CHOLINERGIC",
+    "when": {
+      "field": "acute_cholinergic_syndrome",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "irinotecan"
+      ],
+      "recommendation": "Immediate clinical assessment; atropine according to NCCP and local policy after checking contraindications. Distinguish this from delayed diarrhoea.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Immediate clinical assessment; atropine according to NCCP and local policy after checking contraindications. Distinguish this from delayed diarrhoea.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 6,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "UGT_REVIEW",
+    "when": {
+      "field": "ugt1a1_homozygous_28",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "irinotecan"
+      ],
+      "recommendation": "Consider reduced irinotecan starting dose and enhanced toxicity monitoring; no fixed source percentage.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Consider reduced irinotecan starting dose and enhanced toxicity monitoring; no fixed source percentage.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "DIARRHOEA_NOT_RESOLVED",
+    "when": {
+      "field": "diarrhoea_grade",
+      "operator": ">=",
+      "value": 1
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "irinotecan"
+      ],
+      "recommendation": "Treatment-related diarrhoea must be fully resolved before irinotecan; assess hydration, infection and bowel baseline."
+    },
+    "explanation": "Treatment-related diarrhoea must be fully resolved before irinotecan; assess hydration, infection and bowel baseline.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "OTHER_TOXICITY_HOLD",
+    "when": {
+      "field": "other_nonhaem_toxicity_grade",
+      "operator": ">=",
+      "value": 2
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "irinotecan"
+      ],
+      "recommendation": "Allow treatment-related adverse events to recover to grade 0\u20131 before irinotecan."
+    },
+    "explanation": "Allow treatment-related adverse events to recover to grade 0\u20131 before irinotecan.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "RENAL_IRI",
+    "when": {
+      "any": [
+        {
+          "field": "renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "irinotecan"
+      ],
+      "recommendation": "NCCP gives no routine irinotecan renal reduction but cautions that evidence is limited. Review clinical suitability; do not borrow the <10 mL/min dose range from other regimens.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "NCCP gives no routine irinotecan renal reduction but cautions that evidence is limited. Review clinical suitability; do not borrow the <10 mL/min dose range from other regimens.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 3
+    }
+  },
+  {
+    "rule_id": "BILI_ABNORMAL_REVIEW",
+    "when": {
+      "all": [
+        {
+          "field": "bilirubin_uln_multiple",
+          "operator": ">",
+          "value": 1
+        },
+        {
+          "field": "bilirubin_uln_multiple",
+          "operator": "<=",
+          "value": 3
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "irinotecan"
+      ],
+      "recommendation": "The regimen does not quantify an irinotecan dose for this bilirubin band; obtain consultant/pharmacy review.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "The regimen does not quantify an irinotecan dose for this bilirubin band; obtain consultant/pharmacy review.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "DPD_COMPLETE",
+    "when": {
+      "field": "dpd_status",
+      "operator": "==",
+      "value": "complete"
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Complete DPD deficiency contraindicates fluorouracil."
+    },
+    "explanation": "Complete DPD deficiency contraindicates fluorouracil.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "DPD_UNKNOWN",
+    "when": {
+      "field": "dpd_status",
+      "operator": "==",
+      "value": "unknown"
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Confirm DPD testing before first fluorouracil treatment. Do not infer a normal result."
+    },
+    "explanation": "Confirm DPD testing before first fluorouracil treatment. Do not infer a normal result.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "DPD_PARTIAL",
+    "when": {
+      "field": "dpd_status",
+      "operator": "==",
+      "value": "partial"
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Consider reduced starting fluorouracil dose with careful monitoring; no fixed source percentage.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Consider reduced starting fluorouracil dose with careful monitoring; no fixed source percentage.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "FU_HEPATIC_CI",
+    "when": {
+      "any": [
+        {
+          "field": "fluorouracil_bilirubin_umol_l",
+          "operator": ">",
+          "value": 85
+        },
+        {
+          "field": "fluorouracil_ast_u_l",
+          "operator": ">",
+          "value": 180
+        }
+      ]
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Source contraindicates fluorouracil above bilirubin 85 \u00b5mol/L or AST 180 U/L."
+    },
+    "explanation": "Source contraindicates fluorouracil above bilirubin 85 \u00b5mol/L or AST 180 U/L.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 3
+    }
+  },
+  {
+    "rule_id": "FU_HEPATIC_EQUALITY",
+    "when": {
+      "any": [
+        {
+          "field": "fluorouracil_bilirubin_umol_l",
+          "operator": "==",
+          "value": 85
+        },
+        {
+          "field": "fluorouracil_ast_u_l",
+          "operator": "==",
+          "value": 180
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Strict source inequalities leave equality at bilirubin 85 or AST 180 unassigned; obtain clarification.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Strict source inequalities leave equality at bilirubin 85 or AST 180 unassigned; obtain clarification.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 3
+    }
+  },
+  {
+    "rule_id": "FU_HEPATIC_REDUCTION",
+    "when": {
+      "field": "hepatic_impairment",
+      "operator": "in",
+      "value": [
+        "moderate",
+        "severe"
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Source suggests initial fluorouracil reduction by one third for moderate, or one half for severe hepatic impairment. Confirm laboratory exclusions and clinical classification first.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Source suggests initial fluorouracil reduction by one third for moderate, or one half for severe hepatic impairment. Confirm laboratory exclusions and clinical classification first.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 3
+    }
+  },
+  {
+    "rule_id": "FU_CARDIAC",
+    "when": {
+      "field": "suspected_fluoropyrimidine_cardiotoxicity",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Urgently assess suspected fluorouracil cardiotoxicity; withhold fluorouracil. No automated rechallenge."
+    },
+    "explanation": "Urgently assess suspected fluorouracil cardiotoxicity; withhold fluorouracil. No automated rechallenge.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 7,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  },
+  {
+    "rule_id": "MUCOSITIS_HOLD",
+    "when": {
+      "field": "mucositis_grade",
+      "operator": ">=",
+      "value": 2
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Hold chemotherapy until stomatitis is grade \u22641."
+    },
+    "explanation": "Hold chemotherapy until stomatitis is grade \u22641.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 5
+    }
+  },
+  {
+    "rule_id": "SEVERE_RENAL_EXCLUSION",
+    "when": {
+      "field": "severe_renal_impairment",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "NCCP excludes severe renal impairment without defining a numeric threshold in this version; do not borrow a cutoff. Table 3 also mentions considering fluorouracil reduction in severe renal impairment without a percentage. This does not resolve the regimen-level exclusion: reconcile the source discrepancy with the consultant and oncology pharmacist before treatment."
+    },
+    "explanation": "NCCP excludes severe renal impairment without defining a numeric threshold in this version; do not borrow a cutoff. Table 3 also mentions considering fluorouracil reduction in severe renal impairment without a percentage. This does not resolve the regimen-level exclusion: reconcile the source discrepancy with the consultant and oncology pharmacist before treatment.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    },
+    "related_sources": [
+      {
+        "document": "NCCP 00328 v7",
+        "page": 4,
+        "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+        "table": 3
+      }
+    ]
+  },
+  {
+    "rule_id": "DIARRHOEA_TWO_WEEK_STOP",
+    "when": {
+      "all": [
+        {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        {
+          "field": "toxicity_delay_weeks",
+          "operator": ">=",
+          "value": 2
+        }
+      ]
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks."
+    },
+    "explanation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 5
+    }
+  },
+  {
+    "rule_id": "DIARRHOEA_RESTART_3",
+    "when": {
+      "all": [
+        {
+          "field": "diarrhoea_grade",
+          "operator": "==",
+          "value": 0
+        },
+        {
+          "field": "diarrhoea_highest_grade",
+          "operator": "==",
+          "value": 3
+        },
+        {
+          "field": "toxicity_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "irinotecan",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "After recovery, reduce the affected components by 1 dose level(s).",
+      "component_changes": {
+        "irinotecan": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_irinotecan_level"
+        },
+        "fluorouracil_bolus": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_bolus_level"
+        },
+        "fluorouracil_infusion": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_infusion_level"
+        }
+      }
+    },
+    "explanation": "After recovery, reduce the affected components by 1 dose level(s).",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 5
+    }
+  },
+  {
+    "rule_id": "DIARRHOEA_RESTART_4",
+    "when": {
+      "all": [
+        {
+          "field": "diarrhoea_grade",
+          "operator": "==",
+          "value": 0
+        },
+        {
+          "field": "diarrhoea_highest_grade",
+          "operator": "==",
+          "value": 4
+        },
+        {
+          "field": "toxicity_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "irinotecan",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "After recovery, reduce the affected components by 2 dose level(s).",
+      "component_changes": {
+        "irinotecan": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_irinotecan_level"
+        },
+        "fluorouracil_bolus": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_bolus_level"
+        },
+        "fluorouracil_infusion": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_infusion_level"
+        }
+      }
+    },
+    "explanation": "After recovery, reduce the affected components by 2 dose level(s).",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 5
+    }
+  },
+  {
+    "rule_id": "MUCOSITIS_TWO_WEEK_STOP",
+    "when": {
+      "all": [
+        {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        {
+          "field": "toxicity_delay_weeks",
+          "operator": ">=",
+          "value": 2
+        }
+      ]
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks."
+    },
+    "explanation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 5
+    }
+  },
+  {
+    "rule_id": "MUCOSITIS_RESTART_3",
+    "when": {
+      "all": [
+        {
+          "field": "mucositis_grade",
+          "operator": "<=",
+          "value": 1
+        },
+        {
+          "field": "mucositis_highest_grade",
+          "operator": "==",
+          "value": 3
+        },
+        {
+          "field": "toxicity_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "After recovery, reduce the affected components by 1 dose level(s).",
+      "component_changes": {
+        "fluorouracil_bolus": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_bolus_level"
+        },
+        "fluorouracil_infusion": {
+          "dose_level_change": -1,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_infusion_level"
+        }
+      }
+    },
+    "explanation": "After recovery, reduce the affected components by 1 dose level(s).",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 5
+    }
+  },
+  {
+    "rule_id": "MUCOSITIS_RESTART_4",
+    "when": {
+      "all": [
+        {
+          "field": "mucositis_grade",
+          "operator": "<=",
+          "value": 1
+        },
+        {
+          "field": "mucositis_highest_grade",
+          "operator": "==",
+          "value": 4
+        },
+        {
+          "field": "toxicity_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "After recovery, reduce the affected components by 2 dose level(s).",
+      "component_changes": {
+        "fluorouracil_bolus": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_bolus_level"
+        },
+        "fluorouracil_infusion": {
+          "dose_level_change": -2,
+          "relative_to_current_dose_level": true,
+          "current_dose_level_field": "current_fluorouracil_infusion_level"
+        }
+      }
+    },
+    "explanation": "After recovery, reduce the affected components by 2 dose level(s).",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 5,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+      "table": 5
+    }
+  },
+  {
+    "rule_id": "LATE_COUNT_RECOVERY_REVIEW",
+    "when": {
+      "all": [
+        {
+          "field": "anc_x10e9_l",
+          "operator": ">=",
+          "value": 1.5
+        },
+        {
+          "field": "platelets_x10e9_l",
+          "operator": ">=",
+          "value": 75
+        },
+        {
+          "field": "delay_weeks",
+          "operator": ">",
+          "value": 2
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "irinotecan",
+        "folinic_acid",
+        "fluorouracil_bolus",
+        "fluorouracil_infusion"
+      ],
+      "recommendation": "Counts recovered after the source 2-week restart window. Do not infer permission to restart; obtain consultant/pharmacy review of the delay, nadir and source stopping clauses.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    },
+    "explanation": "Recovery outside the specified source window requires individual review.",
+    "source": {
+      "document": "NCCP 00328 v7",
+      "page": 4,
+      "table": 2,
+      "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+    }
+  }
+]

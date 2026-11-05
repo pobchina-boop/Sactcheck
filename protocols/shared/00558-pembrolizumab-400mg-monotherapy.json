@@ -308,7 +308,20 @@
         "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
         "basis": "Audited product information supplement; NCCP differences remain explicit"
       }
-    ]
+    ],
+    "clinical_audit_release": "0.84.35",
+    "retrospective_audit_v08435": {
+      "source_retrieved": "2026-11-05",
+      "source_bytes_unchanged": true,
+      "scope": "Current NCCP source thresholds and colorectal eligibility; existing non-colorectal indication and immune-toxicity rules retained exactly.",
+      "findings": [
+        "No executable colorectal diagnosis/stage/line or validated MSI-H/dMMR checks in the prior 50-rule protocol. Six explicit indication-gated eligibility checks added."
+      ],
+      "clinical_use_authorised": false
+    },
+    "context_suite_releases": {
+      "colorectal": "0.84.35"
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment initiated by a Consultant Medical Oncologist or a Consultant Medical Haematologist experienced in haematological malignancies, as applicable to the indication.",
@@ -1570,6 +1583,139 @@
       "ui_section": "clinical",
       "input_role": "decision",
       "help": "Yes means the treating clinician has assessed immune-mediated toxicity and evaluated alternative causes; a raised laboratory result alone does not establish this. No or blank keeps an abnormal result in a clinical-review pathway. This does not require biopsy confirmation. EMA Keytruda IV SmPC §4.4; NCCP Table 1 applies to immune-related adverse reactions."
+    },
+    "crc_adult": {
+      "label": "Adult patient with colorectal cancer",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf"
+    },
+    "crc_metastatic": {
+      "label": "Metastatic colorectal cancer confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf"
+    },
+    "crc_first_line": {
+      "label": "First-line treatment for metastatic colorectal cancer",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf"
+    },
+    "crc_histology_confirmed": {
+      "label": "Histologically confirmed colorectal cancer",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf"
+    },
+    "crc_msi_mmr_validated": {
+      "label": "MSI/MMR result established using a validated test",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf"
+    },
+    "crc_msi_mmr_status": {
+      "label": "Colorectal MSI/MMR biomarker result",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558k"
+      },
+      "options": [
+        {
+          "value": "msi_h",
+          "label": "MSI-high"
+        },
+        {
+          "value": "dmmr",
+          "label": "Mismatch repair deficient (dMMR)"
+        },
+        {
+          "value": "mss_pmmr",
+          "label": "MSS / mismatch repair proficient"
+        },
+        {
+          "value": "unknown",
+          "label": "Unknown, indeterminate or not yet available"
+        }
+      ],
+      "help": "MSI-H OR dMMR qualifies. Do not require both; confirm validated testing separately.",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf"
     }
   },
   "required_inputs": [],
@@ -3217,6 +3363,189 @@
           "table": "Table 1: immune-related adverse reactions",
           "checked_date": "2026-10-29",
           "supplemental_url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf"
+        }
+      },
+      {
+        "rule_id": "CRC_ADULT",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00558k"
+          },
+          {
+            "field": "crc_adult",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "The NCCP colorectal indication is for adults. Confirm the appropriate protocol/access route before treatment."
+        },
+        "explanation": "The NCCP colorectal indication is for adults. Confirm the appropriate protocol/access route before treatment.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Indications / Eligibility",
+          "checked_date": "2026-11-05"
+        }
+      },
+      {
+        "rule_id": "CRC_METASTATIC",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00558k"
+          },
+          {
+            "field": "crc_metastatic",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "This NCCP colorectal indication is metastatic disease. Nonmetastatic, neoadjuvant or adjuvant use requires a separate treatment/access decision."
+        },
+        "explanation": "This NCCP colorectal indication is metastatic disease. Nonmetastatic, neoadjuvant or adjuvant use requires a separate treatment/access decision.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Indications / Eligibility",
+          "checked_date": "2026-11-05"
+        }
+      },
+      {
+        "rule_id": "CRC_FIRST_LINE",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00558k"
+          },
+          {
+            "field": "crc_first_line",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "This NCCP colorectal indication is first-line treatment. The broader EMA previously-treated indication does not establish eligibility or reimbursement under this NCCP regimen; obtain consultant/pharmacy review."
+        },
+        "explanation": "This NCCP colorectal indication is first-line treatment. The broader EMA previously-treated indication does not establish eligibility or reimbursement under this NCCP regimen; obtain consultant/pharmacy review.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Indications / Eligibility",
+          "checked_date": "2026-11-05"
+        }
+      },
+      {
+        "rule_id": "CRC_HISTOLOGY_CONFIRMED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00558k"
+          },
+          {
+            "field": "crc_histology_confirmed",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm histological colorectal diagnosis before treatment under this indication."
+        },
+        "explanation": "Confirm histological colorectal diagnosis before treatment under this indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Indications / Eligibility",
+          "checked_date": "2026-11-05"
+        }
+      },
+      {
+        "rule_id": "CRC_MSI_MMR_VALIDATED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00558k"
+          },
+          {
+            "field": "crc_msi_mmr_validated",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm MSI-H or dMMR using a validated test. PD-L1 expression is not a substitute for the colorectal biomarker requirement."
+        },
+        "explanation": "Confirm MSI-H or dMMR using a validated test. PD-L1 expression is not a substitute for the colorectal biomarker requirement.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Indications / Eligibility",
+          "checked_date": "2026-11-05"
+        }
+      },
+      {
+        "rule_id": "CRC_MSI_MMR_STATUS",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00558k"
+          },
+          {
+            "field": "crc_msi_mmr_status",
+            "operator": "in",
+            "value": [
+              "mss_pmmr",
+              "unknown"
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "This NCCP colorectal indication requires MSI-H or dMMR. MSS/pMMR or an unknown/indeterminate result does not establish eligibility; clarify the result and treatment plan before prescribing. A PD-L1 result cannot replace MSI/MMR testing."
+        },
+        "explanation": "This NCCP colorectal indication requires MSI-H or dMMR. MSS/pMMR or an unknown/indeterminate result does not establish eligibility; clarify the result and treatment plan before prescribing. A PD-L1 result cannot replace MSI/MMR testing.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Eligibility: metastatic colorectal cancer",
+          "checked_date": "2026-11-05"
         }
       }
     ]

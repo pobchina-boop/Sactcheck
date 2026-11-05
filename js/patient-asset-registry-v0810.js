@@ -13,8 +13,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.33';
-  const CONTENT_RELEASE='0.84.33';
+  const RELEASE='0.84.35';
+  const CONTENT_RELEASE='0.84.35';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
     '00734':{"title": "weekly carboplatin AUC 2 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -107,6 +107,10 @@
     '00691':{"title": "FOLFIRINOX followed by chemoradiotherapy · rectal cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00238':{"title": "Aflibercept + FOLFIRI", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00791':{"title": "Bevacizumab + fluorouracil / folinic acid", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00244':{"title": "Regorafenib (Stivarga) monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00551':{"title": "Nivolumab + ipilimumab · colorectal after chemotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Colorectal context only; confirm the exact NCCP indication and phase"},
+    '00890':{"title": "Fruquintinib (Fruzaqla) monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Colorectal context only; confirm the exact NCCP indication and phase"},
+    '00900':{"title": "Nivolumab + ipilimumab · first-line colorectal", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Colorectal context only; confirm the exact NCCP indication and phase"},
     '00790':{"title": "TRAIN-2 with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00789':{"title": "TCHP with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00785':{"title": "Phesgo maintenance", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -190,12 +194,16 @@
     '00857':{title:"Pembrolizumab + carboplatin/paclitaxel \u2192 AC",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true}
   });
   const CODES=Object.freeze(Object.keys(DEFINITIONS));
-  const CONTEXT_CODES=Object.freeze(['00203','00226','00232','00259','00215','00621']);
+  const COLORECTAL_CONTEXTS=Object.freeze({'00455':{lung:'',colorectal:'colorectal/'},'00558':{lung:'',colorectal:'colorectal/'},'00212':{breast:'',colorectal:'colorectal/'},'00214':{lung:'',colorectal:'colorectal/'},'00215':{breast:'',lung:'lung/',colorectal:'colorectal/'}});
+  const CONTEXT_CODES=Object.freeze(['00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
 
   function contextFor(value,explicit=''){
     if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
     const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
+    const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    const normalized=selected==='gastrointestinal'?'colorectal':selected;
+    if(COLORECTAL_CONTEXTS[code])return Object.hasOwn(COLORECTAL_CONTEXTS[code],normalized)?normalized:'';
     return ['lung','breast'].includes(selected)?selected:'';
   }
 
@@ -225,7 +233,7 @@
       const selected=contextFor(value,context);
       if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
       if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
-      return `patient/${def.code}/${selected==='lung'?'lung/':''}${CONTEXT_ASSETS[asset]}`;
+      return `patient/${def.code}/${COLORECTAL_CONTEXTS[def.code]?COLORECTAL_CONTEXTS[def.code][selected]:(selected==='lung'?'lung/':'')}${CONTEXT_ASSETS[asset]}`;
     }
     if(def.scopeGuard) return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
     if(asset==='supportive-care-selector') return def.phaseSupport?`patient/${def.code}/supportive-care.html`:null;

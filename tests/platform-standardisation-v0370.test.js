@@ -75,6 +75,23 @@ function trueGradeField(id, def) {
   return id.endsWith('_grade') || id.includes('current_grade') || id.includes('highest_grade') || def?.ctcae_version;
 }
 
+// v0.84.35 current NCCP PDFs do not name a CTCAE edition for these exact rows.
+// Keep the separate v5 UI reference; do not attribute its edition to NCCP.
+const retrospectiveV35Grading = {
+  '00732': { url: 'https://healthservice.hse.ie/documents/6602/732_v2_Cetuximab_14day.pdf', fields: ['acneiform_rash_grade', 'infusion_reaction_grade'] },
+  '00585': { url: 'https://healthservice.hse.ie/documents/6395/585_v5b_Cetuximab_14_days_FOLFIRI.pdf', fields: ['acneiform_rash_grade', 'infusion_reaction_grade', 'other_nonhaem_toxicity_grade', 'diarrhoea_grade', 'diarrhoea_highest_grade', 'mucositis_grade', 'mucositis_highest_grade'] },
+  '00733': { url: 'https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf', fields: ['acneiform_rash_grade', 'infusion_reaction_grade', 'other_nonhaem_toxicity_grade', 'mucositis_grade', 'mucositis_highest_grade', 'neuropathy_grade'] },
+  '00447': { url: 'https://healthservice.hse.ie/documents/6479/447_Panitumumab_plus_mFOLFOX-6.pdf', fields: ['neuropathy_grade', 'stomatitis_current_grade', 'infusion_reaction_grade'] },
+  '00448': { url: 'https://healthservice.hse.ie/documents/6480/448_Panitumumab_plus_FOLFIRI.pdf', fields: ['diarrhoea_current_grade', 'diarrhoea_highest_grade', 'stomatitis_current_grade', 'stomatitis_highest_grade', 'infusion_reaction_grade'] }
+};
+
+// Exact named-event grading inputs authored from the v0.84.35 NCCP source tables.
+const nivoFruqV35Grading = {
+  '00890': { version: '5.0', label: 'NCCP 00890 v2a: CTCAE v5.0', url: 'https://healthservice.hse.ie/documents/6648/Fruquintinib_890.pdf', fields: ['hypertension_grade', 'haemorrhage_grade', 'liver_toxicity_grade', 'ppes_grade', 'other_toxicity_grade'] },
+  '00551': { version: '4.0', label: 'NCCP 00551 v7a: CTCAE v4.0', url: 'https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf', fields: ['pneumonitis_grade', 'diarrhoea_colitis_grade', 'infusion_reaction_grade', 'hepatitis_grade', 'nephritis_grade', 'rash_grade', 'myocarditis_grade', 'diabetes_grade', 'thyroid_grade', 'hypophysitis_grade', 'adrenal_grade', 'other_immune_grade', 'overlap_syndrome_grade'] },
+  '00900': { version: '4.0', label: 'NCCP 00900 v1a: CTCAE v4.0', url: 'https://healthservice.hse.ie/documents/6653/900_v1a_Nivolumab_240mg_ipilimumab_1mgkg_.pdf', fields: ['pneumonitis_grade', 'diarrhoea_colitis_grade', 'infusion_reaction_grade', 'hepatitis_grade', 'nephritis_grade', 'rash_grade', 'myocarditis_grade', 'diabetes_grade', 'thyroid_grade', 'hypophysitis_grade', 'adrenal_grade', 'other_immune_grade'] }
+};
+
 const protocols = loadProtocols();
 assert.equal(protocols.length, 377, `Expected 377 canonical regimen protocols, found ${protocols.length}`);
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
@@ -173,6 +190,9 @@ for (const { file, data } of protocols) {
       const newSourceGrade = (code==='00783'&&field==='proteinuria_grade') || (['00212','00215','00568'].includes(code) && !def.ctcae_version) || (['00232','00259'].includes(code) && field.endsWith('_grade')) || (code==='00947' && field.endsWith('_event_peak_grade')) || (code === '00605' && field === 'nonhaem_toxicity_grade') || (['00430','00749'].includes(code) && ['nonhaem_toxicity_grade','pneumonitis_grade'].includes(field)) || (code === '00217' && ['cardiac_toxicity_grade','pulmonary_toxicity_grade'].includes(field)) || (code === '00350' && field === 'her2_hypersensitivity_grade') || (['00265','00269'].includes(code) && field === 'stomatitis_grade') || (code === '00423' && ['stomatitis_grade','neuropathy_grade','skin_reaction_grade'].includes(field));
       const lungNextSource=["00689","00908","00271","00280","00319","00222"].includes(code);
       const lungSource=["00455","00558","00569","00579","00576","00655","00713","00714","00317","00318"].includes(code)||lungNextSource;
+      const nivoFruqV35Source=nivoFruqV35Grading[code]?.fields.includes(field);
+      const antibodyV34Source=['00212','00214','00215','00207','00225','00328','00330','00331'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.34';
+      const oralV34Source=['00244','00382'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.34';
       const targetedV24Source=metadata.sactcheck_encoding_version==='0.84.24'&&['00353','00401','00562','00570','00243','00382','00831'].includes(code);
       const targetedV25Source=metadata.sactcheck_encoding_version==='0.84.25'&&['00823','00702','00221','00565','00340','00203','00226','00232','00259','00215'].includes(code);
       const lungV26Source=metadata.sactcheck_encoding_version==='0.84.26'&&['00219','00220','00544','00592','00593','00455','00558','00576','00655','00689'].includes(code);
@@ -180,7 +200,29 @@ for (const { file, data } of protocols) {
       const lungV29Source=metadata.sactcheck_encoding_version==='0.84.29'&&['00284','00311','00587','00388','00614','00319','00232','00259','00203','00222'].includes(code);
       const lungV28Source=metadata.sactcheck_encoding_version==='0.84.28'&&['00281','00310','00304','00339','00343','00317','00318','00271','00280','00621'].includes(code);
       const lungV27Source=metadata.sactcheck_encoding_version==='0.84.27'&&['00483','00484','00712','00792','00849','00713','00714','00568','00569','00579'].includes(code);
-      if(lungV30Source){assert([metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)].includes(def.grading_source_url));assert(def.grading_source_label&&def.source_grading_note);assert(!def.ctcae_version||def.ctcae_version==='3.0');}else if(lungV29Source){assert.equal(def.grading_source_url,metadata.source_url);assert(def.grading_source_label&&def.source_grading_note);assert([undefined,'5.0'].includes(def.ctcae_version));}else if(lungV28Source){if(['00339','00343'].includes(code)){assert.equal(def.ctcae_version,'5.0');assert.equal(def.ctcae_source_url,'https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf');}else{assert.equal(def.grading_source_url,metadata.source_url);assert(def.grading_source_label&&def.source_grading_note);assert([undefined,'4.0'].includes(def.ctcae_version));}}else if(lungV27Source){if(code==='00568'&&!def.grading_source_url){assert.equal(def.ctcae_version,'5.0');assert.equal(def.ctcae_source_url,'https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf');}else{assert([metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url),'https://www.ema.europa.eu/en/documents/product-information/opdivo-epar-product-information_en.pdf','https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v4.pdf'].includes(def.grading_source_url),`${code}/${field} source ${def.grading_source_url}`);assert(def.grading_source_label&&def.source_grading_note);assert([undefined,'4.0','5.0'].includes(def.ctcae_version));}}else if(lungV26Source){assert.equal(def.grading_source_url,metadata.source_url);assert.equal(def.ctcae_version,['00455','00558'].includes(code)?'4.0':['00576','00655'].includes(code)?'4.03':undefined);assert(def.grading_source_label&&def.source_grading_note);}else if(targetedV25Source){assert.equal(def.grading_source_url,metadata.source_url);assert.equal(def.ctcae_version,['00702','00565'].includes(code)?'4.0':undefined);assert(def.grading_source_label&&def.source_grading_note);assert(def.options.every(o=>o.description)||/not a complete grading table/.test(def.source_grading_note));}else if(targetedV24Source){
+      if(retrospectiveV35Grading[code]?.fields.includes(field)) {
+        assert.equal(metadata.clinical_audit_release, '0.84.35', `${code}/${field} requires its recorded source audit`);
+        assert.equal(def.ctcae_version, 'NCCP source grading; edition not specified', `${code}/${field} must not invent a source edition`);
+        assert.equal(def.ctcae_source_url, retrospectiveV35Grading[code].url);
+        assert.equal(metadata.source_url, retrospectiveV35Grading[code].url);
+        assert.equal(def.ui_reference_ctcae_version, '5.0');
+        assert.equal(def.ui_reference_ctcae_source_url, 'https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf');
+        assert.match(def.assessment_guidance, /NCCP does not specify CTCAE edition/);
+        assert.match(def.assessment_guidance, /orientation only, not a source-edition conversion/);
+      }else if(nivoFruqV35Source) {
+        const expected = nivoFruqV35Grading[code];
+        assert.equal(metadata.clinical_audit_release, '0.84.35');
+        assert.equal(def.ctcae_version, expected.version);
+        assert.equal(def.grading_system, `NCI CTCAE v${expected.version}`);
+        assert.equal(def.grading_source_label, expected.label);
+        assert.equal(def.grading_source_url, expected.url);
+        assert.equal(def.ctcae_source_url, expected.url);
+        assert(def.ctcae_category, `${code}/${field} requires its named toxicity category`);
+        assert.equal(def.source_grading_note, `${expected.label.split(':')[0]} explicitly specifies CTCAE v${expected.version}. Its treatment-modification rows are not a complete grading table. Select the clinician-confirmed named toxicity grade; do not convert a generic UI descriptor into a source-specific clinical grade.`);
+        assert.equal(metadata.source_url, expected.url);
+        assert.match(def.assessment_guidance, /clinician-confirmed source-specific grade/);
+        assert.match(def.assessment_guidance, /does not calculate a grade from an isolated laboratory result/);
+      }else if(antibodyV34Source){const vectibixSkin=code==='00225'&&field==='acneiform_rash_grade';assert.equal(def.grading_source_url,vectibixSkin?'https://www.ema.europa.eu/en/documents/product-information/vectibix-epar-product-information_en.pdf':metadata.source_url);assert.equal(def.ctcae_version,vectibixSkin?'5.0':undefined);assert(def.grading_source_label&&def.source_grading_note);assert(vectibixSkin||/edition|not a complete grading table/.test(def.source_grading_note));}else if(oralV34Source){assert.equal(def.grading_source_url,metadata.source_url);assert.equal(def.ctcae_version,code==='00244'&&field==='hypertension_grade'?'4.03':undefined);assert(def.grading_source_label&&def.source_grading_note);assert(def.options.every(o=>o.description)||/named toxicity/.test(def.source_grading_note));}else if(lungV30Source){assert([metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)].includes(def.grading_source_url));assert(def.grading_source_label&&def.source_grading_note);assert(!def.ctcae_version||def.ctcae_version==='3.0');}else if(lungV29Source){assert.equal(def.grading_source_url,metadata.source_url);assert(def.grading_source_label&&def.source_grading_note);assert([undefined,'5.0'].includes(def.ctcae_version));}else if(lungV28Source){if(['00339','00343'].includes(code)){assert.equal(def.ctcae_version,'5.0');assert.equal(def.ctcae_source_url,'https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf');}else{assert.equal(def.grading_source_url,metadata.source_url);assert(def.grading_source_label&&def.source_grading_note);assert([undefined,'4.0'].includes(def.ctcae_version));}}else if(lungV27Source){if(code==='00568'&&!def.grading_source_url){assert.equal(def.ctcae_version,'5.0');assert.equal(def.ctcae_source_url,'https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf');}else{assert([metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url),'https://www.ema.europa.eu/en/documents/product-information/opdivo-epar-product-information_en.pdf','https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v4.pdf'].includes(def.grading_source_url),`${code}/${field} source ${def.grading_source_url}`);assert(def.grading_source_label&&def.source_grading_note);assert([undefined,'4.0','5.0'].includes(def.ctcae_version));}}else if(lungV26Source){assert.equal(def.grading_source_url,metadata.source_url);assert.equal(def.ctcae_version,['00455','00558'].includes(code)?'4.0':['00576','00655'].includes(code)?'4.03':undefined);assert(def.grading_source_label&&def.source_grading_note);}else if(targetedV25Source){assert.equal(def.grading_source_url,metadata.source_url);assert.equal(def.ctcae_version,['00702','00565'].includes(code)?'4.0':undefined);assert(def.grading_source_label&&def.source_grading_note);assert(def.options.every(o=>o.description)||/not a complete grading table/.test(def.source_grading_note));}else if(targetedV24Source){
         const avastin=code==='00831'&&['haemorrhage_grade','venous_thromboembolism_grade'].includes(field);
         const hccImmune=code==='00831'&&!['hypertension_grade','infection_grade','other_nonimmune_toxicity_grade'].includes(field)&&!avastin;
         const source=code==='00353'?'https://evs.nci.nih.gov/ftp1/CTCAE/CTCAE_4.03/CTCAE_4.03_2010-06-14_QuickReference_5x7.pdf':avastin?'https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf':metadata.source_url;
@@ -191,10 +233,10 @@ for (const { file, data } of protocols) {
       if(palbociclibSource){assert.equal(def.grading_source_label,'NCCP 00414 / CTCAE v4.0');assert.match(def.grading_source_url,/cancer.gov.*ctcae-v403/);assert(def.options.every(x=>x.description));}
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
-      if(!pldSource && !newSourceGrade && !lungSource && !targetedV24Source && !targetedV25Source && !lungV26Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
+      if(!antibodyV34Source && !oralV34Source && !pldSource && !newSourceGrade && !lungSource && !targetedV24Source && !targetedV25Source && !lungV26Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
-      const sourceHfs = (['00555','00783','00691'].includes(code)&&['hand_foot_grade','hand_foot_worst_grade'].includes(field)) || (['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field)) || (code === '00217' && field === 'hand_foot_grade');
+      const sourceHfs = (code==='00890' && field==='ppes_grade') || (oralV34Source&&code==='00244'&&field==='hfsr_grade') || (['00555','00783','00691'].includes(code)&&['hand_foot_grade','hand_foot_worst_grade'].includes(field)) || (['00216','00586','00623'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field)) || (code === '00217' && field === 'hand_foot_grade');
       const sourceNausea = code === '00794' && field === 'nausea_grade';
       const expectedGrades = code==='00702'&&field==='hyperuricaemia_grade' ? [0,1,3,4] : code==='00947' && field.endsWith('_event_peak_grade') ? [2,3,4] : sourceNausea ? [0,1,2,3] : ['00322','00588'].includes(code) && field === 'febrile_neutropenia_grade' ? [0,3,4] : sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
       if (everolimusSource) {
@@ -209,9 +251,9 @@ for (const { file, data } of protocols) {
       const guide = ctcae.guide({ ...def, id: field });
       assert(guide && guide.grades.length >= expectedGrades.length, `${code}/${field} has no rendered CTCAE grade guide`);
       guide.grades.forEach(item => assert(item.description, `${code}/${field} Grade ${item.grade} has no explanation`));
-      if(lungSource||targetedV24Source||targetedV25Source)assert(guide.sourceSpecific, 'Source-specific grading must override generic descriptors');
+      if(antibodyV34Source||oralV34Source||lungSource||targetedV24Source||targetedV25Source)assert(guide.sourceSpecific, 'Source-specific grading must override generic descriptors');
       const fieldText = `${field} ${def.label || ''}`.toLowerCase();
-      if(!lungSource&&!targetedV24Source && !targetedV25Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source){
+      if(!antibodyV34Source&&!oralV34Source&&!lungSource&&!targetedV24Source && !targetedV25Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source){
       if (/non[-_ ]?ha?em|non[-_ ]?hemat|non[-_ ]?haemat/.test(fieldText)) {
         assert.equal(def.ctcae_category, 'other_nonhaematological', `${code}/${field} is incorrectly classified as haematological`);
       }

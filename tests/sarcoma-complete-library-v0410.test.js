@@ -69,7 +69,8 @@ for(const {data} of sarcoma){
  const code=String(data.metadata.nccp_regimen_code).padStart(5,'0');const m=data.metadata||{};
  assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} is not an active encoded prototype.`);
  assert(!/placeholder|draft/i.test(String(data.status||'')),`${code} remains a placeholder/draft.`);
- assert((["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
+ const oralV34=code==='00244'&&m.sactcheck_encoding_version==='0.84.34';
+ assert(oralV34 || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
  assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
  assert(/^https:\/\/(healthservice\.hse\.ie\/documents\/|www\.hse\.ie\/eng\/services\/list\/5\/cancer\/profinfo\/chemoprotocols\/)/.test(m.source_url||''),`${code} lacks an official HSE/NCCP PDF link.`);
  assert(m.sarcoma_subgroup,`${code} lacks Sarcoma subgroup.`);
@@ -106,11 +107,13 @@ for(const {data} of sarcoma){
   if(trueGradeField(field,definition)){
    ctcaeFields++;
    assert.strictEqual(definition.type,'select',`${code}/${field} CTCAE input must be select.`);
-   if(code==='00205'&&['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field)){assert.equal(definition.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
+   if(oralV34){assert.equal(definition.grading_source_url,m.source_url);assert.equal(definition.ctcae_version,field==='hypertension_grade'?'4.03':undefined);assert(definition.grading_source_label&&definition.source_grading_note);assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else if(code==='00205'&&['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field)){assert.equal(definition.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
    assert(definition.assessment_guidance,`${code}/${field} lacks assessment guidance.`);
    const grades=new Set((definition.options||[]).map(item=>Number(item.value)));
-   [0,1,2,3,4].forEach(g=>assert(grades.has(g),`${code}/${field} lacks Grade ${g}.`));
-   const guide=CTCAE.guide({...definition,id:field});assert(guide?.grades?.length>=5,`${code}/${field} lacks beside-control grading guide.`);
+   const expectedGrades=oralV34&&field==='hfsr_grade'?[0,1,2,3]:[0,1,2,3,4];
+   if(oralV34&&field==='hfsr_grade')assert(!grades.has(4),'NCCP HFSR table has no grade4 dose pathway');
+   expectedGrades.forEach(g=>assert(grades.has(g),`${code}/${field} lacks Grade ${g}.`));
+   const guide=CTCAE.guide({...definition,id:field});assert(guide?.grades?.length>=expectedGrades.length,`${code}/${field} lacks beside-control grading guide.`);
    guide.grades.slice(0,5).forEach(item=>assert(item.description,`${code}/${field}/Grade ${item.grade} lacks explanation.`));
   }
   if(/crcl|creatinine clearance|\begfr\b|renal function/.test(text)&&definition.type==='select'){

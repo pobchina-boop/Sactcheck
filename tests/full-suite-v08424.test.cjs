@@ -5,11 +5,11 @@ const idx=json('data/targeted-lung-v08424-source-index.json'),codes=idx.codes,KB
 const protocols=json('protocols/index.json').protocols;
 assert.equal(codes.length,7);assert.equal(idx.new_codes.length,5);assert.equal(idx.retrospective_codes.length,2);assert.equal(KB.regimen_profiles.length,7);
 for(const c of codes){
- const d=json(`data/patient-knowledge/${c}.json`),p=json(protocols.find(p=>p.path.includes('/'+c+'-')).path),k=KB.regimen_profiles.find(x=>x.protocol_id===p.protocol_id),plans=support[c];
- assert.equal(d.suite_release,'0.84.24');assert.equal(String(d.protocol_version),String(p.metadata.nccp_version));
+ const d=json(`data/patient-knowledge/${c}.json`),p=json(protocols.find(p=>p.path.includes('/'+c+'-')).path),k=(c==='00382'?json('data/regimen-knowledge-base-v08434-addendum.json'):KB).regimen_profiles.find(x=>x.protocol_id===p.protocol_id),plans=support[c];
+ assert.equal(d.suite_release,c==='00382'?'0.84.34':'0.84.24');assert.equal(String(d.protocol_version),String(p.metadata.nccp_version));
  for(const key of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[key],false,c+'/'+key);
  assert.equal(E.assess(p,{}).complete,false);assert.notEqual(E.assess(p,{}).actionType,'proceed');
- assert.equal(d.evidence.metrics.length,0);if(idx.new_codes.includes(c)){assert.equal(d.cycle_days,null);assert.equal(d.schedule_kind,'continuous_oral');assert(d.endocrine_timeline);assert(!/null-day|28-day cycle|21-day cycle/.test(read(`patient/${c}/index.html`)));}else assert.equal(d.cycle_display,'reference-chronology');assert(k.treatment_rationale.line);assert.equal(k.full_suite_release,'0.84.24');assert.deepEqual(k.monitoring_and_toxicity.longitudinal_schedule,d.monitoring_schedule);
+ assert.equal(d.evidence.metrics.length,0);if(idx.new_codes.includes(c)){assert.equal(d.cycle_days,null);assert.equal(d.schedule_kind,'continuous_oral');assert(d.endocrine_timeline);assert(!/null-day|28-day cycle|21-day cycle/.test(read(`patient/${c}/index.html`)));}else assert.equal(d.cycle_display,'reference-chronology');assert(k.treatment_rationale.line);assert.equal(k.full_suite_release,c==='00382'?'0.84.34':'0.84.24');assert.deepEqual(k.monitoring_and_toxicity.longitudinal_schedule,d.monitoring_schedule);
  assert(k.evidence_at_a_glance.sources.length);for(const e of k.evidence_at_a_glance.endpoints){assert(V.endpoints[e.endpoint],c+': unsupported endpoint '+e.endpoint);assert(e.metric&&e.interpretation&&e.sources.length)}assert(!/undefined|\[object Object\]/.test(V.render(k)));
  const j=J.definitions[c];assert.equal(j.has_patient_dates,false);for(const lane of j.lanes){assert.equal(lane.cells.length,j.stages.length);for(const id of lane.source_ids)assert(j.sources.some(x=>x.id===id))}
  assert(D.buildModel(p).phases.length,c+' lacks complete schedule');assert.equal(R.relativePath(c,'knowledge'),`patient/${c}/knowledge.html`);
@@ -19,7 +19,7 @@ for(const c of codes){
  assert(!json('data/breast-library-contexts-v0837.json').regimens[c],c+' must not enter breast indication selector');
 }
 const inventory=json('validation/targeted-lung-v08424/retrospective-inventory.json');assert.equal(inventory.authored_suites,129);assert.equal(inventory.reviewed_cumulative,129);assert.equal(inventory.remaining_review_queue,0);assert.equal(protocols.length,377);assert(read('index.html').includes('Feasibility evaluation build — not for routine clinical use'));
-assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,170);
+assert.equal(fs.readdirSync(path.join(root,'data/patient-knowledge')).filter(x=>x.endsWith('.json')).length,174);assert.equal(json('data/patient-knowledge/00244.json').suite_release,'0.84.34','Audited regorafenib is the additional patient suite');
 const hashes=json('validation/targeted-lung-v08424/retrospective-hashes.json');for(const [f,h] of Object.entries(hashes.files))assert.equal(digest(f),require('./helpers/retrospective-v08426.cjs').expectedHash(f,h.after),f);
 const base=json('validation/targeted-lung-v08424/baseline-hashes.json');for(const [f,h] of Object.entries(base.files)){if(!f.startsWith('tools/')&&!hashes.files[f])assert.equal(digest(f),require('./helpers/retrospective-v08426.cjs').expectedHash(f,h),'Outside-scope bundle changed '+f)}
 const pdf=json('validation/targeted-lung-v08424/pdf-validation.json');assert.equal(pdf.documents,49+codes.reduce((n,c)=>n+support[c].length,0));assert.equal(json('validation/targeted-lung-v08424/qr-validation.json').length,28);
@@ -33,7 +33,7 @@ for(const id of ['osimertinib','alectinib','brigatinib','lorlatinib','crizotinib
  assert(consent[id]&&consent[id].risks.length>=3,id+' needs medicine-specific consent risks');
  assert(consent[id].source_basis);assert(/pending|draft/i.test(consent[id].review_status));
 }
-assert.equal(R.codes.length,170);
+assert.equal(R.codes.length,174);assert(R.codes.includes('00244'),'Audited v34 regorafenib accounts for the added patient registry entry');
 assert(R.definitionFor('00831').contactCard);
 assert.deepEqual(fs.readFileSync(root+'/patient/00831/contact-card.pdf'),fs.readFileSync(root+'/patient/00831/sactcard.pdf'));
 for(const c of idx.new_codes){

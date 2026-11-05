@@ -1,0 +1,986 @@
+[
+  {
+    "rule_id": "RAS_EXCLUSION",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "ras_status",
+      "operator": "in",
+      "value": [
+        "mutant",
+        "unknown"
+      ]
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Do not give panitumumab without validated RAS wild-type status."
+    }
+  },
+  {
+    "rule_id": "ECOG_ELIGIBILITY",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "ecog",
+      "operator": ">",
+      "value": 2
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "ECOG exceeds the NCCP 0–2 eligibility range; review treatment suitability.",
+      "show_in_dose_actions": true
+    }
+  },
+  {
+    "rule_id": "HYPERSENSITIVITY",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "hypersensitivity",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Known hypersensitivity to a regimen medicine or excipient is an exclusion."
+    }
+  },
+  {
+    "rule_id": "ILD_CONFIRMED",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "interstitial_lung_disease",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "permanently_discontinue",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Do not administer panitumumab with confirmed interstitial lung disease / pulmonary fibrosis. Discontinue for confirmed treatment-emergent ILD."
+    }
+  },
+  {
+    "rule_id": "RESPIRATORY_HOLD",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "unexplained_respiratory_symptoms",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Withhold and investigate new or worsening respiratory symptoms before further treatment with the implicated medicines."
+    }
+  },
+  {
+    "rule_id": "SKIN_CURRENT_HOLD",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "acneiform_rash_grade",
+      "operator": ">=",
+      "value": 3
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Withhold panitumumab for 1–2 doses; assess severity, recurrence, complications and recovery before any restart."
+    }
+  },
+  {
+    "rule_id": "SKIN_FOURTH_EPISODE",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "skin_occurrence",
+      "operator": ">=",
+      "value": 4
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Discontinue panitumumab after the fourth grade ≥3 skin-toxicity episode."
+    }
+  },
+  {
+    "rule_id": "SKIN_FAILED_RECOVERY",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "any": [
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Discontinue panitumumab if the skin reaction has not recovered after the planned withholding period."
+    }
+  },
+  {
+    "rule_id": "SKIN_RECOVERED_1",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<",
+          "value": 3
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "==",
+          "value": 1
+        },
+        {
+          "field": "skin_doses_withheld",
+          "operator": "in",
+          "value": [
+            1,
+            2
+          ]
+        },
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": false
+        },
+        {
+          "field": "previous_panitumumab_dose_mg_kg",
+          "operator": ">=",
+          "value": 6
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 100% of original dose. Confirm suitability and previous individual modifications. Displayed source dose requires a documented previous dose at least this high; do not re-escalate a lower individual dose.",
+      "show_in_dose_actions": true
+    }
+  },
+  {
+    "rule_id": "SKIN_RECOVERED_2",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<",
+          "value": 3
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "==",
+          "value": 2
+        },
+        {
+          "field": "skin_doses_withheld",
+          "operator": "in",
+          "value": [
+            1,
+            2
+          ]
+        },
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": false
+        },
+        {
+          "field": "previous_panitumumab_dose_mg_kg",
+          "operator": ">=",
+          "value": 4.8
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 80% of original dose. Confirm suitability and previous individual modifications. Displayed source dose requires a documented previous dose at least this high; do not re-escalate a lower individual dose.",
+      "component_changes": {
+        "panitumumab": {
+          "dose_percent_of_original": 80
+        }
+      }
+    }
+  },
+  {
+    "rule_id": "SKIN_RECOVERED_3",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<",
+          "value": 3
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "==",
+          "value": 3
+        },
+        {
+          "field": "skin_doses_withheld",
+          "operator": "in",
+          "value": [
+            1,
+            2
+          ]
+        },
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": false
+        },
+        {
+          "field": "previous_panitumumab_dose_mg_kg",
+          "operator": ">=",
+          "value": 3.6
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "After recovery below grade 3 following 1–2 withheld doses: panitumumab 60% of original dose. Confirm suitability and previous individual modifications. Displayed source dose requires a documented previous dose at least this high; do not re-escalate a lower individual dose.",
+      "component_changes": {
+        "panitumumab": {
+          "dose_percent_of_original": 60
+        }
+      }
+    }
+  },
+  {
+    "rule_id": "SKIN_COMPLICATION",
+    "source": {
+      "document": "Vectibix SmPC (supplementary safety source)",
+      "page": "sections 4.2–4.6",
+      "url": "https://www.medicines.org.uk/emc/product/6178/smpc",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "severe_skin_complication",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Urgent assessment of severe infected, blistering or peeling skin; withhold panitumumab and consider discontinuation under the SmPC."
+    }
+  },
+  {
+    "rule_id": "INFUSION_MILD_MODERATE",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "infusion_reaction_grade",
+      "operator": "in",
+      "value": [
+        1,
+        2
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Reduce panitumumab infusion rate and retain the lower rate for subsequent infusions; treat the reaction according to severity and local policy.",
+      "show_in_dose_actions": true
+    }
+  },
+  {
+    "rule_id": "INFUSION_SEVERE",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "infusion_reaction_grade",
+      "operator": ">=",
+      "value": 3
+    },
+    "action": {
+      "type": "permanently_discontinue",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Permanently discontinue panitumumab for a severe or life-threatening infusion reaction; urgent treatment as appropriate."
+    }
+  },
+  {
+    "rule_id": "EYE_SYMPTOMS",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "ocular_symptoms",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Prompt ophthalmology assessment for possible keratitis; assess risk before continuing panitumumab.",
+      "show_in_dose_actions": true
+    }
+  },
+  {
+    "rule_id": "ULCERATIVE_KERATITIS",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "ulcerative_keratitis",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Interrupt panitumumab and obtain ophthalmology/consultant review; source permits interruption or discontinuation for confirmed ulcerative keratitis."
+    }
+  },
+  {
+    "rule_id": "ELECTROLYTES",
+    "source": {
+      "document": "Vectibix SmPC (supplementary safety source)",
+      "page": "sections 4.2–4.6",
+      "url": "https://www.medicines.org.uk/emc/product/6178/smpc",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "electrolyte_abnormality",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Correct magnesium, calcium and potassium as indicated. NCCP/SmPC do not specify a numerical panitumumab hold threshold; use clinical severity and local policy.",
+      "show_in_dose_actions": true
+    }
+  },
+  {
+    "rule_id": "ORGAN_FUNCTION",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "table": 1,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "any": [
+        {
+          "field": "renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "field": "hepatic_impairment_category",
+          "operator": "in",
+          "value": [
+            "mild",
+            "moderate",
+            "severe"
+          ]
+        },
+        {
+          "field": "severe_renal_impairment",
+          "operator": "==",
+          "value": true
+        }
+      ]
+    },
+    "action": {
+      "type": "proceed_with_caution",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "NCCP table 1 expects no renal or dialysis adjustment, no mild/moderate hepatic adjustment and no expected severe hepatic adjustment. This does not establish overall treatment suitability."
+    }
+  },
+  {
+    "rule_id": "PREGNANCY_LACTATION",
+    "source": {
+      "document": "Vectibix SmPC (supplementary safety source)",
+      "page": "sections 4.2–4.6",
+      "url": "https://www.medicines.org.uk/emc/product/6178/smpc",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "any": [
+        {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Urgent specialist benefit/risk discussion. Avoid breastfeeding during panitumumab and for 2 months after the last dose; pregnancy requires counselling. Do not treat this as routine clearance.",
+      "show_in_dose_actions": true
+    }
+  },
+  {
+    "rule_id": "MARROW_ELIGIBILITY",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "adequate_marrow_reserve",
+      "operator": "==",
+      "value": false
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "NCCP requires adequate marrow reserve confirmed. Review eligibility; the source gives no numerical exclusion threshold and no automatic dose reduction.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "ORGAN_ELIGIBILITY",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "adequate_renal_hepatic_function",
+      "operator": "==",
+      "value": false
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "NCCP requires adequate renal and hepatic function for treatment confirmed. Review eligibility; the source gives no numerical exclusion threshold and no automatic dose reduction.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "SKIN_INTOLERABLE",
+    "source": {
+      "document": "Vectibix EMA product information (supplementary)",
+      "page": "4.4",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/vectibix-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "intolerable_skin_toxicity",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Withhold panitumumab for intolerable skin toxicity and obtain specialist review; recovery, recurrence and prior dose must be assessed before restart."
+    }
+  },
+  {
+    "rule_id": "SKIN_DOSE_HISTORY_1",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "field": "previous_panitumumab_dose_mg_kg",
+              "operator": "missing"
+            },
+            {
+              "field": "previous_panitumumab_dose_mg_kg",
+              "operator": "<",
+              "value": 6
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Recovery and recurrence criteria meet the source restart row, but actual previous dose is missing or below that row. Do not re-escalate or calculate a replacement dose; consultant must reconcile all prior individual reductions.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "SKIN_DOSE_HISTORY_2",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "field": "previous_panitumumab_dose_mg_kg",
+              "operator": "missing"
+            },
+            {
+              "field": "previous_panitumumab_dose_mg_kg",
+              "operator": "<",
+              "value": 4.8
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Recovery and recurrence criteria meet the source restart row, but actual previous dose is missing or below that row. Do not re-escalate or calculate a replacement dose; consultant must reconcile all prior individual reductions.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "SKIN_DOSE_HISTORY_3",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "field": "previous_panitumumab_dose_mg_kg",
+              "operator": "missing"
+            },
+            {
+              "field": "previous_panitumumab_dose_mg_kg",
+              "operator": "<",
+              "value": 3.6
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Recovery and recurrence criteria meet the source restart row, but actual previous dose is missing or below that row. Do not re-escalate or calculate a replacement dose; consultant must reconcile all prior individual reductions.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "SKIN_RESTART_CONTEXT",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "skin_occurrence",
+          "operator": "in",
+          "value": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "any": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "missing"
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "missing"
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "missing"
+            },
+            {
+              "field": "skin_doses_withheld",
+              "operator": "==",
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "A previous severe skin episode is recorded. Enter current grade, actual withholding interval and recovery assessment before any restart; missing data cannot establish recovery.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "ADULT_ELIGIBILITY",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "adult_patient",
+      "operator": "==",
+      "value": false
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "NCCP00225c is an adult indication. Confirm age and consultant treatment plan.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "CRC_PRIOR_TREATMENT",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "colorectal_prior_therapy_criteria_met",
+      "operator": "==",
+      "value": false
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "NCCP00225c monotherapy requires failure of fluoropyrimidine, oxaliplatin and irinotecan containing chemotherapy. Confirm the exact history; RAS wild-type alone does not establish eligibility.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "PULMONARY_FIBROSIS_EXCLUSION",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "pulmonary_fibrosis",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Pulmonary fibrosis is an NCCP exclusion; do not administer panitumumab."
+    }
+  },
+  {
+    "rule_id": "DIARRHOEA_DEHYDRATION",
+    "source": {
+      "document": "NCCP 00225 v6",
+      "page": 4,
+      "url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "severe_diarrhoea_or_dehydration",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "panitumumab"
+      ],
+      "recommendation": "Urgently assess hydration, renal function and clinical severity. Panitumumab-associated severe diarrhoea/dehydration can cause acute renal failure; no numerical dose threshold is specified.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  }
+]

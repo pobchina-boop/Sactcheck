@@ -25,7 +25,8 @@
       "clinical_use_authorised": false,
       "software_tests_completed": true,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08434_independent_review_pending",
+      "source_reconciled": true
     },
     "catalogue_section": "targeted_her2_therapy",
     "catalogue_section_label": "Targeted & HER2 therapies",
@@ -33,7 +34,7 @@
       "oral_targeted_therapy"
     ],
     "cytotoxic": false,
-    "sactcheck_encoding_version": "0.45.1",
+    "sactcheck_encoding_version": "0.84.34",
     "catalog": {
       "enabled": true
     },
@@ -65,19 +66,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source reconciled · independent clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.34",
+      "audit_date": "2026-11-05",
+      "scope_note": "Current source-to-rule reconciliation and engine boundary cases in validation/colorectal-v08434/oral-source-audit. Retained source ambiguities and manually assessed domains are explicit. Independent clinical and pharmacy validation remains pending.",
+      "reconciled_release": "0.84.34",
+      "reconciled_date": "2026-11-05"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00244-v5"
+    "canonical_protocol_id": "nccp-00244-v5",
+    "source_checked_date": "2026-11-05",
+    "source_retrieval_method": "Current official HSE PDF retrieved with curl; dose tables visually checked; current EMA supplement archived",
+    "source_pdf_sha256": "ca453248987abddd882f6e81662489f287863a26507e186ca4bc380fdfd67f4a",
+    "source_text_snapshot_sha256": "f2af638051f74c8b88bee0a12c6bdfbed824db6661a9e9605e12a62dcbe92180",
+    "source_supplements": [
+      {
+        "label": "EMA product information, current retrieved copy",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+        "retrieved_date": "2026-11-05",
+        "basis": "Explicit supplement where NCCP refers to the SmPC; no inferred NCCP threshold"
+      }
+    ],
+    "clinical_audit_release": "0.84.34",
+    "full_suite_release": "0.84.34"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -103,15 +120,44 @@
   "treatment_phases": [
     {
       "phase_id": "main_cycle",
+      "label": "28-day oral cycle",
+      "active_drugs": [
+        "regorafenib"
+      ],
       "cycle_length_days": 28,
+      "duration": "Until disease progression or unacceptable toxicity",
       "administration": [
         {
-          "day": "1-21",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
           "drug": "regorafenib",
+          "route": "PO",
           "dose": {
             "value": 160,
-            "unit": "mg PO once daily"
-          }
+            "unit": "mg once daily"
+          },
+          "note": "Reference starting dose only; actual prescription may be lower. Days 22–28 are tablet-free. Take after a light meal containing <30% fat. Swallow whole; same-day missed dose only, never two doses on one day or replacement after vomiting."
         }
       ]
     }
@@ -135,7 +181,7 @@
   },
   "rule_engine": {
     "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
-    "missing_data_policy": "Do not infer missing clinical values.",
+    "missing_data_policy": "Do not infer missing values, recovery, recurrence, current dose, reduction history or clinical context. Entered independent stop/hold findings remain actionable. No automatic patient-specific dose is calculated from a reference dose.",
     "actions_ranked_most_to_least_restrictive": [
       "contraindicated",
       "discontinue",
@@ -146,6 +192,237 @@
     ],
     "rules": [
       {
+        "rule_id": "EXCLUDE_HYPERSENSITIVITY",
+        "field": "hypersensitivity",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Do not administer under this NCCP regimen; resolve the hypersensitivity to regorafenib or an excipient exclusion with the treating consultant.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Eligibility / exclusions"
+        },
+        "explanation": "Do not administer under this NCCP regimen; resolve the hypersensitivity to regorafenib or an excipient exclusion with the treating consultant."
+      },
+      {
+        "rule_id": "EXCLUDE_PREGNANCY",
+        "field": "pregnancy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Do not administer under this NCCP regimen; resolve the pregnant exclusion with the treating consultant.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Eligibility / exclusions"
+        },
+        "explanation": "Do not administer under this NCCP regimen; resolve the pregnant exclusion with the treating consultant."
+      },
+      {
+        "rule_id": "EXCLUDE_BREASTFEEDING",
+        "field": "breastfeeding",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Do not administer under this NCCP regimen; resolve the breastfeeding exclusion with the treating consultant.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Eligibility / exclusions"
+        },
+        "explanation": "Do not administer under this NCCP regimen; resolve the breastfeeding exclusion with the treating consultant."
+      },
+      {
+        "rule_id": "EXCLUDE_UNSTABLE_OR_RECENT_ANGINA",
+        "field": "unstable_or_recent_angina",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Do not administer under this NCCP regimen; resolve the unstable angina or new-onset angina within 3 months exclusion with the treating consultant.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Eligibility / exclusions"
+        },
+        "explanation": "Do not administer under this NCCP regimen; resolve the unstable angina or new-onset angina within 3 months exclusion with the treating consultant."
+      },
+      {
+        "rule_id": "EXCLUDE_RECENT_MYOCARDIAL_INFARCTION",
+        "field": "recent_myocardial_infarction",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Do not administer under this NCCP regimen; resolve the recent myocardial infarction (smpc studies excluded within 6 months) exclusion with the treating consultant.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Eligibility / exclusions"
+        },
+        "explanation": "Do not administer under this NCCP regimen; resolve the recent myocardial infarction (smpc studies excluded within 6 months) exclusion with the treating consultant."
+      },
+      {
+        "rule_id": "EXCLUDE_CARDIAC_FAILURE",
+        "field": "cardiac_failure",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Do not administer under this NCCP regimen; resolve the cardiac failure exclusion with the treating consultant.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Eligibility / exclusions"
+        },
+        "explanation": "Do not administer under this NCCP regimen; resolve the cardiac failure exclusion with the treating consultant."
+      },
+      {
+        "rule_id": "SAME_CLASS_CAUTION",
+        "field": "hypersensitivity_same_class",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Same-class hypersensitivity requires consultant assessment; distinguish this caution from regorafenib/excipient hypersensitivity.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Cautions"
+        },
+        "explanation": "Same-class hypersensitivity requires consultant assessment; distinguish this caution from regorafenib/excipient hypersensitivity."
+      },
+      {
+        "rule_id": "ECOG_REVIEW",
+        "field": "ecog",
+        "operator": ">",
+        "value": 1,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "NCCP eligibility is ECOG 0–1; ECOG >1 requires individual consultant review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Eligibility"
+        },
+        "explanation": "NCCP eligibility is ECOG 0–1; ECOG >1 requires individual consultant review."
+      },
+      {
+        "rule_id": "ORGAN_RESERVE_REVIEW",
+        "field": "inadequate_organ_reserve",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Adequate marrow, renal and hepatic function is required. NCCP does not give numeric entry thresholds; do not substitute another regimen's thresholds.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Eligibility"
+        },
+        "explanation": "Adequate marrow, renal and hepatic function is required. NCCP does not give numeric entry thresholds; do not substitute another regimen's thresholds."
+      },
+      {
+        "rule_id": "PRIOR_THERAPY_REVIEW",
+        "field": "prior_treatment_eligibility_unmet",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Confirm CRC prior treatment/suitability (fluoropyrimidine, anti-VEGF and anti-EGFR) or GIST progression/intolerance after imatinib and sunitinib before treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Indications"
+        },
+        "explanation": "Confirm CRC prior treatment/suitability (fluoropyrimidine, anti-VEGF and anti-EGFR) or GIST progression/intolerance after imatinib and sunitinib before treatment."
+      },
+      {
+        "rule_id": "SCOPE_REVIEW",
+        "field": "indication_id",
+        "operator": "==",
+        "value": "other",
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "This NCCP regimen covers colorectal cancer and GIST; another indication needs its own source and consultant plan.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Indications"
+        },
+        "explanation": "This NCCP regimen covers colorectal cancer and GIST; another indication needs its own source and consultant plan."
+      },
+      {
         "rule_id": "CHILD_PUGH_C",
         "field": "child_pugh",
         "operator": "==",
@@ -155,13 +432,411 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Regorafenib is not recommended."
+          "recommendation": "Severe hepatic impairment / Child-Pugh C: regorafenib is not recommended.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 1"
         },
-        "explanation": "Severe hepatic impairment is not recommended."
+        "explanation": "Severe hepatic impairment / Child-Pugh C: regorafenib is not recommended."
+      },
+      {
+        "rule_id": "CHILD_PUGH_AB",
+        "field": "child_pugh",
+        "operator": "in",
+        "value": [
+          "A",
+          "B"
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Child-Pugh A: no dose adjustment needed. For B, NCCP Table 1 expects no adjustment, but current EMA section 4.2 provides no dose recommendation because data are limited. Resolve this source difference with the consultant and monitor closely; no automatic dose or clearance.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 1; current EMA section 4.2 p4 differs for B"
+        },
+        "explanation": "Child-Pugh A: no dose adjustment needed. For B, NCCP Table 1 expects no adjustment, but current EMA section 4.2 provides no dose recommendation because data are limited. Resolve this source difference with the consultant and monitor closely; no automatic dose or clearance."
+      },
+      {
+        "rule_id": "DIALYSIS_REVIEW",
+        "field": "haemodialysis",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "NCCP Table 1 expects no dose adjustment with haemodialysis; agree an individual specialist plan. Do not borrow a renal dose reduction or issue automatic clearance.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 1"
+        },
+        "explanation": "NCCP Table 1 expects no dose adjustment with haemodialysis; agree an individual specialist plan. Do not borrow a renal dose reduction or issue automatic clearance."
+      },
+      {
+        "rule_id": "DOSE_OUTSIDE_RANGE",
+        "any": [
+          {
+            "field": "current_regorafenib_dose_mg",
+            "operator": "<",
+            "value": 80
+          },
+          {
+            "field": "current_regorafenib_dose_mg",
+            "operator": ">",
+            "value": 160
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Prescribed regorafenib dose is outside the NCCP 80–160 mg/day range; reconcile before administration.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Dose modifications"
+        },
+        "explanation": "Prescribed regorafenib dose is outside the NCCP 80–160 mg/day range; reconcile before administration."
+      },
+      {
+        "rule_id": "DOSE_HISTORY_REQUIRED",
+        "all": [
+          {
+            "field": "reduction_required_now",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "field": "current_regorafenib_dose_mg",
+                "operator": "missing"
+              },
+              {
+                "field": "prior_dose_reductions",
+                "operator": "missing"
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "A 40 mg decrement must be based on the actual current dose and prior reductions, not the 160 mg reference dose. Confirm both before prescribing.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Dose modifications"
+        },
+        "explanation": "A 40 mg decrement must be based on the actual current dose and prior reductions, not the 160 mg reference dose. Confirm both before prescribing."
+      },
+      {
+        "rule_id": "DOSE_FLOOR",
+        "all": [
+          {
+            "any": [
+              {
+                "field": "reduction_required_now",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "all": [
+                  {
+                    "field": "hfsr_grade",
+                    "operator": "==",
+                    "value": 2
+                  },
+                  {
+                    "field": "hfsr_occurrence",
+                    "operator": "==",
+                    "value": 1
+                  },
+                  {
+                    "field": "hfsr_no_improvement_7_days",
+                    "operator": "==",
+                    "value": false
+                  },
+                  {
+                    "field": "hfsr_reduction_already_applied",
+                    "operator": "==",
+                    "value": false
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "hfsr_grade",
+                    "operator": "==",
+                    "value": 2
+                  },
+                  {
+                    "any": [
+                      {
+                        "field": "hfsr_no_improvement_7_days",
+                        "operator": "==",
+                        "value": true
+                      },
+                      {
+                        "field": "hfsr_occurrence",
+                        "operator": ">=",
+                        "value": 2
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "field": "hfsr_grade",
+                "operator": "==",
+                "value": 3
+              },
+              {
+                "all": [
+                  {
+                    "field": "alt_ast_ratio_uln",
+                    "operator": ">",
+                    "value": 5
+                  },
+                  {
+                    "field": "alt_ast_ratio_uln",
+                    "operator": "<=",
+                    "value": 20
+                  },
+                  {
+                    "field": "liver_event_recurrence",
+                    "operator": "==",
+                    "value": false
+                  }
+                ]
+              },
+              {
+                "field": "hypertension_grade",
+                "operator": "==",
+                "value": 3
+              },
+              {
+                "all": [
+                  {
+                    "field": "other_toxicity_grade",
+                    "operator": "in",
+                    "value": [
+                      3,
+                      4
+                    ]
+                  },
+                  {
+                    "field": "other_toxicity_table5_exempt",
+                    "operator": "==",
+                    "value": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "current_regorafenib_dose_mg",
+            "operator": "<=",
+            "value": 80
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "A further 40 mg decrease would breach the minimum 80 mg/day. Do not prescribe below the source floor; seek consultant discontinuation/alternative-plan review. Previous reduction count alone cannot select a dose after any re-escalation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Dose modifications"
+        },
+        "explanation": "A further 40 mg decrease would breach the minimum 80 mg/day. Do not prescribe below the source floor; seek consultant discontinuation/alternative-plan review. Previous reduction count alone cannot select a dose after any re-escalation."
+      },
+      {
+        "rule_id": "DOSE_TABLET_STEP",
+        "all": [
+          {
+            "field": "current_regorafenib_dose_mg",
+            "operator": ">=",
+            "value": 80
+          },
+          {
+            "field": "current_regorafenib_dose_mg",
+            "operator": "<=",
+            "value": 160
+          },
+          {
+            "field": "current_regorafenib_dose_mg",
+            "operator": "not_in",
+            "value": [
+              80,
+              120,
+              160
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Regorafenib uses 40 mg tablet steps: reconcile a prescribed daily dose other than 80, 120 or 160 mg before administration.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Dose modifications"
+        },
+        "explanation": "Regorafenib uses 40 mg tablet steps: reconcile a prescribed daily dose other than 80, 120 or 160 mg before administration."
+      },
+      {
+        "rule_id": "RESTART_REVIEW",
+        "all": [
+          {
+            "field": "restart_requested",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "field": "consultant_restart_approved",
+                "operator": "==",
+                "value": false
+              },
+              {
+                "field": "consultant_restart_approved",
+                "operator": "missing"
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Do not restart automatically. The source-specific recovery, interruption duration, current dose and benefit/risk decision must be confirmed by the treating consultant.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Dose modifications and Tables 2–5"
+        },
+        "explanation": "Do not restart automatically. The source-specific recovery, interruption duration, current dose and benefit/risk decision must be confirmed by the treating consultant."
+      },
+      {
+        "rule_id": "REESCALATION_REVIEW",
+        "field": "dose_reescalation_requested",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Regorafenib re-escalation is discretionary and condition-specific, not automatic. Hypertension must be controlled for at least one full cycle; HFSR/other-toxicity pathways have their own conditions. Confirm the consultant plan.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Tables 4–5; Table 2 p3"
+        },
+        "explanation": "Regorafenib re-escalation is discretionary and condition-specific, not automatic. Hypertension must be controlled for at least one full cycle; HFSR/other-toxicity pathways have their own conditions. Confirm the consultant plan."
+      },
+      {
+        "rule_id": "HFSR_G1",
+        "field": "hfsr_grade",
+        "operator": "==",
+        "value": 1,
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Grade 1 HFSR: maintain the current dose for this domain and institute immediate supportive measures; other domains remain unassessed.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
+        },
+        "explanation": "Grade 1 HFSR: maintain the current dose for this domain and institute immediate supportive measures; other domains remain unassessed."
+      },
+      {
+        "rule_id": "HFSR_CONTEXT",
+        "all": [
+          {
+            "field": "hfsr_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "any": [
+              {
+                "field": "hfsr_occurrence",
+                "operator": "missing"
+              },
+              {
+                "field": "hfsr_no_improvement_7_days",
+                "operator": "missing"
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Grade 2 HFSR requires occurrence and 7-day response review. First occurrence uses a 40 mg reduction; persistent/recurrent disease requires interruption. Do not assume first occurrence or recovery.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
+        },
+        "explanation": "Grade 2 HFSR requires occurrence and 7-day response review. First occurrence uses a 40 mg reduction; persistent/recurrent disease requires interruption. Do not assume first occurrence or recovery."
       },
       {
         "rule_id": "HFSR_G2_FIRST",
@@ -173,11 +848,16 @@
           },
           {
             "field": "hfsr_occurrence",
-            "operator": "<=",
+            "operator": "==",
             "value": 1
           },
           {
             "field": "hfsr_no_improvement_7_days",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "hfsr_reduction_already_applied",
             "operator": "==",
             "value": false
           }
@@ -187,13 +867,50 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Decrease dose by 40 mg and institute supportive measures."
+          "recommendation": "First grade 2 HFSR: reduce the current dose by 40 mg and institute supportive measures; minimum 80 mg/day. If improvement fails despite reduction, interrupt for at least 7 days until grade 0–1. Do not apply a second reduction to the same episode automatically.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
         },
-        "explanation": "First grade 2 HFSR requires a 40 mg reduction."
+        "explanation": "First grade 2 HFSR: reduce the current dose by 40 mg and institute supportive measures; minimum 80 mg/day. If improvement fails despite reduction, interrupt for at least 7 days until grade 0–1. Do not apply a second reduction to the same episode automatically."
+      },
+      {
+        "rule_id": "HFSR_REDUCTION_CONTEXT",
+        "all": [
+          {
+            "field": "hfsr_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "hfsr_occurrence",
+            "operator": "==",
+            "value": 1
+          },
+          {
+            "field": "hfsr_reduction_already_applied",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Confirm whether the 40 mg reduction has already been applied for this episode before recommending another reduction; missing history is not a first untreated episode.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
+        },
+        "explanation": "Confirm whether the 40 mg reduction has already been applied for this episode before recommending another reduction; missing history is not a first untreated episode."
       },
       {
         "rule_id": "HFSR_G2_PERSIST",
@@ -212,8 +929,11 @@
               },
               {
                 "field": "hfsr_occurrence",
-                "operator": ">=",
-                "value": 2
+                "operator": "between",
+                "value": [
+                  2,
+                  3
+                ]
               }
             ]
           }
@@ -223,13 +943,16 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Interrupt until grade 0–1, then restart 40 mg lower."
+          "recommendation": "Interrupt until HFSR grade 0–1; when authorised, restart 40 mg below the actual prior dose (floor 80 mg). After failure of the initial reduction, interruption is at least 7 days. Confirm occurrence and reduction history.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
         },
-        "explanation": "Persistent/recurrent grade 2 HFSR."
+        "explanation": "Interrupt until HFSR grade 0–1; when authorised, restart 40 mg below the actual prior dose (floor 80 mg). After failure of the initial reduction, interruption is at least 7 days. Confirm occurrence and reduction history."
       },
       {
         "rule_id": "HFSR_G2_FOURTH",
@@ -250,13 +973,37 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Discontinue permanently."
+          "recommendation": "Fourth grade 2 HFSR occurrence: permanently discontinue regorafenib.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
         },
-        "explanation": "Fourth grade 2 HFSR occurrence."
+        "explanation": "Fourth grade 2 HFSR occurrence: permanently discontinue regorafenib."
+      },
+      {
+        "rule_id": "HFSR_G3_HOLD",
+        "field": "hfsr_grade",
+        "operator": "==",
+        "value": 3,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Grade 3 HFSR independently requires interruption for at least 7 days and until grade 0–1; do not wait for occurrence history to hold. Third occurrence requires permanent discontinuation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
+        },
+        "explanation": "Grade 3 HFSR independently requires interruption for at least 7 days and until grade 0–1; do not wait for occurrence history to hold. Third occurrence requires permanent discontinuation."
       },
       {
         "rule_id": "HFSR_G3",
@@ -268,8 +1015,11 @@
           },
           {
             "field": "hfsr_occurrence",
-            "operator": "<",
-            "value": 3
+            "operator": "between",
+            "value": [
+              1,
+              2
+            ]
           }
         ],
         "action": {
@@ -277,13 +1027,16 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Interrupt at least 7 days until grade 0–1, then restart 40 mg lower."
+          "recommendation": "First/second grade 3 HFSR: supportive care, interrupt for at least 7 days AND until grade 0–1; then consultant-authorised restart 40 mg lower, minimum 80 mg/day.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
         },
-        "explanation": "Grade 3 HFSR requires interruption and reduction."
+        "explanation": "First/second grade 3 HFSR: supportive care, interrupt for at least 7 days AND until grade 0–1; then consultant-authorised restart 40 mg lower, minimum 80 mg/day."
       },
       {
         "rule_id": "HFSR_G3_THIRD",
@@ -304,13 +1057,143 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Discontinue permanently."
+          "recommendation": "Third grade 3 HFSR occurrence: permanently discontinue.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
         },
-        "explanation": "Third grade 3 HFSR occurrence."
+        "explanation": "Third grade 3 HFSR occurrence: permanently discontinue."
+      },
+      {
+        "rule_id": "HFSR_RESTART_NOT_RECOVERED",
+        "all": [
+          {
+            "field": "restart_requested",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "hfsr_recovered_grade01",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "HFSR has not recovered to grade 0–1; do not restart.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
+        },
+        "explanation": "HFSR has not recovered to grade 0–1; do not restart."
+      },
+      {
+        "rule_id": "HFSR_MINIMUM_BREAK",
+        "all": [
+          {
+            "field": "restart_requested",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "hfsr_minimum_interruption_required",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "field": "treatment_delay_days",
+                "operator": "missing"
+              },
+              {
+                "field": "treatment_delay_days",
+                "operator": "<",
+                "value": 7
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "The source-required minimum seven-day HFSR interruption is not documented as completed. Recovery alone does not waive that minimum.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 2"
+        },
+        "explanation": "The source-required minimum seven-day HFSR interruption is not documented as completed. Recovery alone does not waive that minimum."
+      },
+      {
+        "rule_id": "LIVER_LOW_GRADE",
+        "field": "alt_ast_ratio_uln",
+        "operator": "between",
+        "value": [
+          0,
+          5
+        ],
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "ALT/AST ≤5 × ULN alone permits continuation in Table 3. If elevated, monitor liver function weekly until <3 × ULN or baseline. Check concurrent bilirubin and previous toxicity; this is not global clearance.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3"
+        },
+        "explanation": "ALT/AST ≤5 × ULN alone permits continuation in Table 3. If elevated, monitor liver function weekly until <3 × ULN or baseline. Check concurrent bilirubin and previous toxicity; this is not global clearance."
+      },
+      {
+        "rule_id": "LIVER_G3_HOLD",
+        "all": [
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": ">",
+            "value": 5
+          },
+          {
+            "field": "alt_ast_ratio_uln",
+            "operator": "<=",
+            "value": 20
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "ALT/AST >5 to ≤20 × ULN: interrupt independently of missing recurrence history; monitor weekly until <3 × ULN or baseline. Recurrence requires permanent discontinuation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3"
+        },
+        "explanation": "ALT/AST >5 to ≤20 × ULN: interrupt independently of missing recurrence history; monitor weekly until <3 × ULN or baseline. Recurrence requires permanent discontinuation."
       },
       {
         "rule_id": "LIVER_G3_FIRST",
@@ -336,13 +1219,16 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Interrupt; if benefit outweighs risk, restart 40 mg lower with weekly monitoring."
+          "recommendation": "First ALT/AST >5 to ≤20 × ULN: interrupt until <3 × ULN or baseline. Only if benefit outweighs risk may the consultant restart 40 mg lower (minimum 80 mg), with weekly liver tests for at least 4 weeks.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3"
         },
-        "explanation": "First grade 3 transaminase elevation."
+        "explanation": "First ALT/AST >5 to ≤20 × ULN: interrupt until <3 × ULN or baseline. Only if benefit outweighs risk may the consultant restart 40 mg lower (minimum 80 mg), with weekly liver tests for at least 4 weeks."
       },
       {
         "rule_id": "LIVER_G3_RECUR",
@@ -363,13 +1249,16 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Discontinue permanently."
+          "recommendation": "Recurrent ALT/AST >5 × ULN: permanently discontinue.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3"
         },
-        "explanation": "Recurrent grade 3 transaminase elevation."
+        "explanation": "Recurrent ALT/AST >5 × ULN: permanently discontinue."
       },
       {
         "rule_id": "LIVER_G4",
@@ -381,26 +1270,38 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Discontinue permanently."
+          "recommendation": "ALT/AST >20 × ULN at any occurrence: permanently discontinue.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3"
         },
-        "explanation": "Grade 4 transaminase elevation."
+        "explanation": "ALT/AST >20 × ULN at any occurrence: permanently discontinue."
       },
       {
         "rule_id": "LIVER_HY",
         "all": [
           {
-            "field": "alt_ast_ratio_uln",
-            "operator": ">",
-            "value": 3
+            "all": [
+              {
+                "field": "alt_ast_ratio_uln",
+                "operator": ">",
+                "value": 3
+              },
+              {
+                "field": "bilirubin_ratio_uln",
+                "operator": ">",
+                "value": 2
+              }
+            ]
           },
           {
-            "field": "bilirubin_ratio_uln",
-            "operator": ">",
-            "value": 2
+            "field": "gilberts_syndrome_confirmed",
+            "operator": "==",
+            "value": false
           }
         ],
         "action": {
@@ -408,20 +1309,254 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Discontinue permanently and monitor weekly."
+          "recommendation": "ALT/AST >3 × ULN with concurrent bilirubin >2 × ULN, without the confirmed Gilbert’s exception: permanently discontinue; weekly liver tests until resolution/baseline.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3"
         },
-        "explanation": "Transaminases >3×ULN with bilirubin >2×ULN."
+        "explanation": "ALT/AST >3 × ULN with concurrent bilirubin >2 × ULN, without the confirmed Gilbert’s exception: permanently discontinue; weekly liver tests until resolution/baseline."
+      },
+      {
+        "rule_id": "LIVER_HY_GILBERT_UNKNOWN",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "alt_ast_ratio_uln",
+                "operator": ">",
+                "value": 3
+              },
+              {
+                "field": "bilirubin_ratio_uln",
+                "operator": ">",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "field": "gilberts_syndrome_confirmed",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Do not administer: combined ALT/AST >3 and bilirubin >2 × ULN normally requires permanent discontinuation. Confirm whether the specific Gilbert’s exception applies; do not infer it from the bilirubin value.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3"
+        },
+        "explanation": "Do not administer: combined ALT/AST >3 and bilirubin >2 × ULN normally requires permanent discontinuation. Confirm whether the specific Gilbert’s exception applies; do not infer it from the bilirubin value."
+      },
+      {
+        "rule_id": "LIVER_GILBERT",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "alt_ast_ratio_uln",
+                "operator": ">",
+                "value": 3
+              },
+              {
+                "field": "bilirubin_ratio_uln",
+                "operator": ">",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "field": "gilberts_syndrome_confirmed",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Confirmed Gilbert’s syndrome: use the ALT/AST-specific Table 3 pathway rather than the combined-bilirubin automatic stop. Confirm causation and monitor; higher transaminase/recurrence stops still apply.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3 exception"
+        },
+        "explanation": "Confirmed Gilbert’s syndrome: use the ALT/AST-specific Table 3 pathway rather than the combined-bilirubin automatic stop. Confirm causation and monitor; higher transaminase/recurrence stops still apply."
+      },
+      {
+        "rule_id": "LIVER_RESTART_RECOVERY",
+        "all": [
+          {
+            "field": "restart_requested",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "liver_recovered_lt3_or_baseline",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "After liver injury, do not restart before transaminases are <3 × ULN or baseline.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3"
+        },
+        "explanation": "After liver injury, do not restart before transaminases are <3 × ULN or baseline."
+      },
+      {
+        "rule_id": "LIVER_RESTART_RISK",
+        "all": [
+          {
+            "field": "restart_requested",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "liver_recovered_lt3_or_baseline",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "field": "liver_benefit_risk_approved",
+                "operator": "==",
+                "value": false
+              },
+              {
+                "field": "liver_benefit_risk_approved",
+                "operator": "missing"
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Biochemical recovery alone does not authorise liver-event restart; consultant benefit/risk approval and a 40 mg reduction are required.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 3"
+        },
+        "explanation": "Biochemical recovery alone does not authorise liver-event restart; consultant benefit/risk approval and a 40 mg reduction are required."
+      },
+      {
+        "rule_id": "HTN_BASELINE_UNCONTROLLED",
+        "all": [
+          {
+            "field": "assessment_type",
+            "operator": "==",
+            "value": "baseline"
+          },
+          {
+            "field": "hypertension_controlled_before_start",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Control blood pressure before initiating regorafenib.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.4"
+        },
+        "explanation": "Control blood pressure before initiating regorafenib."
+      },
+      {
+        "rule_id": "HTN_G1",
+        "field": "hypertension_grade",
+        "operator": "==",
+        "value": 1,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Grade 1 hypertension: consider increasing the frequency of blood-pressure monitoring.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4"
+        },
+        "explanation": "Grade 1 hypertension: consider increasing the frequency of blood-pressure monitoring."
+      },
+      {
+        "rule_id": "HTN_G2_ASYMPTOMATIC",
+        "all": [
+          {
+            "field": "hypertension_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "hypertension_symptomatic",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Confirmed asymptomatic grade 2: initiate/adjust antihypertensive therapy; continuation may be appropriate. If DBP remains >100 mmHg despite new therapy, reduce one level. The source prints >200 mmHg in one diastolic-rise criterion; treat that text as unresolved and verify clinical grading, not a calculated threshold.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4; printed criterion discrepancy"
+        },
+        "explanation": "Confirmed asymptomatic grade 2: initiate/adjust antihypertensive therapy; continuation may be appropriate. If DBP remains >100 mmHg despite new therapy, reduce one level. The source prints >200 mmHg in one diastolic-rise criterion; treat that text as unresolved and verify clinical grading, not a calculated threshold."
       },
       {
         "rule_id": "HTN_G2_SYMPTOMATIC",
         "all": [
           {
             "field": "hypertension_grade",
-            "operator": ">=",
+            "operator": "==",
             "value": 2
           },
           {
@@ -435,77 +1570,729 @@
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Hold until symptoms resolve and diastolic BP ≤100 mmHg; treat hypertension."
+          "recommendation": "Symptomatic grade 2: hold until symptoms resolve AND diastolic BP ≤100 mmHg; treat hypertension. If DBP is not controlled with new therapy, reduce one 40 mg level.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4"
         },
-        "explanation": "Symptomatic hypertension requires hold."
+        "explanation": "Symptomatic grade 2: hold until symptoms resolve AND diastolic BP ≤100 mmHg; treat hypertension. If DBP is not controlled with new therapy, reduce one 40 mg level."
       },
       {
         "rule_id": "HTN_G3",
         "field": "hypertension_grade",
-        "operator": ">=",
+        "operator": "==",
         "value": 3,
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Grade 3: hold until symptoms resolve AND DBP ≤100 mmHg; intensify antihypertensives. Restart at one 40 mg level lower; if not controlled despite more intensive therapy another reduction may be required. Do not reduce below 80 mg.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4"
+        },
+        "explanation": "Grade 3: hold until symptoms resolve AND DBP ≤100 mmHg; intensify antihypertensives. Restart at one 40 mg level lower; if not controlled despite more intensive therapy another reduction may be required. Do not reduce below 80 mg."
+      },
+      {
+        "rule_id": "HTN_G4",
+        "any": [
+          {
+            "field": "hypertension_grade",
+            "operator": "==",
+            "value": 4
+          },
+          {
+            "field": "hypertensive_crisis",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Grade 4 hypertension / hypertensive crisis: discontinue regorafenib.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4; SmPC 4.4 confirms crisis"
+        },
+        "explanation": "Grade 4 hypertension / hypertensive crisis: discontinue regorafenib."
+      },
+      {
+        "rule_id": "HTN_BP_SEVERE",
+        "any": [
+          {
+            "field": "systolic_bp_mmhg",
+            "operator": ">=",
+            "value": 160
+          },
+          {
+            "field": "diastolic_bp_mmhg",
+            "operator": ">=",
+            "value": 100
+          }
+        ],
         "action": {
           "type": "withhold",
           "components": [
             "regorafenib"
           ],
-          "recommendation": "Hold and intensify antihypertensive treatment; dose reduction may be required."
+          "recommendation": "The supplied blood pressure meets the NCCP Table 4 grade 3 numeric range (SBP ≥160 or DBP ≥100). Hold and confirm symptoms, grade, antihypertensive treatment and restart plan. DBP exactly 100 is also in the recovery wording: it never authorises restart by itself.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4 boundary overlap"
         },
-        "explanation": "Grade 3 hypertension requires hold."
+        "explanation": "The supplied blood pressure meets the NCCP Table 4 grade 3 numeric range (SBP ≥160 or DBP ≥100). Hold and confirm symptoms, grade, antihypertensive treatment and restart plan. DBP exactly 100 is also in the recovery wording: it never authorises restart by itself."
       },
       {
-        "rule_id": "PROCEED",
+        "rule_id": "HTN_REDUCTION",
         "all": [
           {
-            "field": "child_pugh",
+            "field": "hypertension_grade",
             "operator": "in",
             "value": [
-              "none",
-              "A",
-              "B"
+              2,
+              3
             ]
           },
           {
-            "field": "hfsr_grade",
-            "operator": "<",
-            "value": 2
+            "field": "bp_controlled_on_new_therapy",
+            "operator": "==",
+            "value": false
           },
           {
-            "field": "alt_ast_ratio_uln",
-            "operator": "<=",
-            "value": 5
-          },
-          {
-            "field": "hypertension_grade",
-            "operator": "<",
-            "value": 2
-          },
-          {
-            "field": "other_toxicity_grade",
-            "operator": "<",
-            "value": 3
+            "field": "diastolic_bp_mmhg",
+            "operator": ">",
+            "value": 100
           }
         ],
         "action": {
-          "type": "proceed",
+          "type": "withhold_then_reduce",
           "components": [
-            "whole_regimen"
+            "regorafenib"
           ],
-          "recommendation": "No encoded modification triggered."
+          "recommendation": "Blood pressure remains uncontrolled despite additional antihypertensive therapy; hold and review a further 40 mg reduction, actual dose history and the 80 mg minimum.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4"
         },
-        "explanation": "Entered values do not trigger an encoded modification."
+        "explanation": "Blood pressure remains uncontrolled despite additional antihypertensive therapy; hold and review a further 40 mg reduction, actual dose history and the 80 mg minimum."
+      },
+      {
+        "rule_id": "HTN_PROLONGED_DELAY",
+        "all": [
+          {
+            "field": "interruption_due_to_hypertension",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "treatment_delay_days",
+            "operator": ">",
+            "value": 28
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Hypertension requiring a delay of more than 4 weeks: go off protocol therapy. A delay for another reason does not satisfy this criterion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4 footnote b"
+        },
+        "explanation": "Hypertension requiring a delay of more than 4 weeks: go off protocol therapy. A delay for another reason does not satisfy this criterion."
+      },
+      {
+        "rule_id": "HTN_MAX_REDUCTIONS",
+        "all": [
+          {
+            "field": "hypertension_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "reduction_required_now",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "current_regorafenib_dose_mg",
+            "operator": "<=",
+            "value": 80
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Hypertension requiring a further dose reduction below 80 mg: go off protocol therapy. Confirm actual dose and re-escalation history rather than treating a lifetime reduction count as the current dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4 footnote c"
+        },
+        "explanation": "Hypertension requiring a further dose reduction below 80 mg: go off protocol therapy. Confirm actual dose and re-escalation history rather than treating a lifetime reduction count as the current dose."
+      },
+      {
+        "rule_id": "HTN_RESTART_SYMPTOMS",
+        "all": [
+          {
+            "field": "restart_requested",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "hypertension_symptoms_resolved",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Hypertension symptoms have not resolved; DBP improvement alone does not permit restart.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 4"
+        },
+        "explanation": "Hypertension symptoms have not resolved; DBP improvement alone does not permit restart."
+      },
+      {
+        "rule_id": "OTHER_GRADE_CONTEXT",
+        "all": [
+          {
+            "field": "other_toxicity_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "other_toxicity_table5_exempt",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Grade 3–4 other toxicity needs urgent source-specific classification before the next dose. Table 5 excludes liver injury, HFSR, hypertension, alopecia, non-refractory nausea/vomiting or hypersensitivity, and asymptomatic laboratory abnormalities; those need their own pathway.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 5"
+        },
+        "explanation": "Grade 3–4 other toxicity needs urgent source-specific classification before the next dose. Table 5 excludes liver injury, HFSR, hypertension, alopecia, non-refractory nausea/vomiting or hypersensitivity, and asymptomatic laboratory abnormalities; those need their own pathway."
+      },
+      {
+        "rule_id": "OTHER_G3_4",
+        "all": [
+          {
+            "field": "other_toxicity_grade",
+            "operator": "in",
+            "value": [
+              3,
+              4
+            ]
+          },
+          {
+            "field": "other_toxicity_table5_exempt",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Table 5 grade 3–4 toxicity: delay until grade <2, then consultant-authorised 40 mg reduction from the actual dose (floor 80 mg). Grade 4 may merit permanent discontinuation at consultant discretion. No recovery after a 4-week delay requires permanent discontinuation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 5"
+        },
+        "explanation": "Table 5 grade 3–4 toxicity: delay until grade <2, then consultant-authorised 40 mg reduction from the actual dose (floor 80 mg). Grade 4 may merit permanent discontinuation at consultant discretion. No recovery after a 4-week delay requires permanent discontinuation."
+      },
+      {
+        "rule_id": "OTHER_FOUR_WEEK_STOP",
+        "all": [
+          {
+            "field": "interruption_due_to_other_grade34",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "other_toxicity_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "other_toxicity_table5_exempt",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "treatment_delay_days",
+            "operator": ">=",
+            "value": 28
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Qualifying other toxicity has not recovered to grade <2 after a 4-week delay: permanently discontinue. Confirm that this delay was for the prior Table 5 grade 3–4 event.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 5 footnote b"
+        },
+        "explanation": "Qualifying other toxicity has not recovered to grade <2 after a 4-week delay: permanently discontinue. Confirm that this delay was for the prior Table 5 grade 3–4 event."
+      },
+      {
+        "rule_id": "OTHER_RESTART_G2",
+        "all": [
+          {
+            "field": "restart_requested",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "interruption_due_to_other_grade34",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "other_toxicity_grade",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "other_toxicity_table5_exempt",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "For a prior Table 5 grade 3–4 event, grade 2 is not recovered: restart requires grade <2.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 5"
+        },
+        "explanation": "For a prior Table 5 grade 3–4 event, grade 2 is not recovered: restart requires grade <2."
+      },
+      {
+        "rule_id": "OTHER_RECURRENCE_REESCALATION",
+        "field": "other_toxicity_recurred_after_reescalation",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "If grade ≥3 other toxicity recurs after re-escalation, institute permanent dose reduction; do not repeat automatic re-escalation.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+          "document": "NCCP 00244 v5",
+          "section": "Table 5"
+        },
+        "explanation": "If grade ≥3 other toxicity recurs after re-escalation, institute permanent dose reduction; do not repeat automatic re-escalation."
+      },
+      {
+        "rule_id": "SAFETY_WORSENING_INFECTION",
+        "field": "worsening_infection",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Urgent clinical assessment; consider treatment interruption for worsening infection. Do not resume until the consultant has assessed recovery.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Urgent clinical assessment; consider treatment interruption for worsening infection. Do not resume until the consultant has assessed recovery."
+      },
+      {
+        "rule_id": "SAFETY_SEVERE_BLEEDING",
+        "field": "severe_bleeding",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Urgent assessment and hold; permanent discontinuation should be considered for severe bleeding requiring urgent medical intervention.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Urgent assessment and hold; permanent discontinuation should be considered for severe bleeding requiring urgent medical intervention."
+      },
+      {
+        "rule_id": "SAFETY_GI_PERFORATION_OR_FISTULA",
+        "field": "gi_perforation_or_fistula",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Discontinue regorafenib for gastrointestinal perforation or fistula and arrange urgent management.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Discontinue regorafenib for gastrointestinal perforation or fistula and arrange urgent management."
+      },
+      {
+        "rule_id": "SAFETY_CARDIAC_ISCHAEMIA_OR_INFARCTION",
+        "field": "cardiac_ischaemia_or_infarction",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Interrupt until cardiac ischaemia/infarction resolves. Restart needs individual consultant benefit/risk review; permanently discontinue if it does not resolve.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Interrupt until cardiac ischaemia/infarction resolves. Restart needs individual consultant benefit/risk review; permanently discontinue if it does not resolve."
+      },
+      {
+        "rule_id": "SAFETY_CARDIAC_EVENT_NONRESOLUTION",
+        "field": "cardiac_event_nonresolution",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Non-resolving cardiac ischaemia/infarction: permanently discontinue.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Non-resolving cardiac ischaemia/infarction: permanently discontinue."
+      },
+      {
+        "rule_id": "SAFETY_PRES_CONFIRMED",
+        "field": "pres_confirmed",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Discontinue for PRES, control hypertension and provide appropriate supportive management.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Discontinue for PRES, control hypertension and provide appropriate supportive management."
+      },
+      {
+        "rule_id": "SAFETY_HYPERAMMONAEMIC_ENCEPHALOPATHY",
+        "field": "hyperammonaemic_encephalopathy",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Urgent management and hold; permanent discontinuation should be considered for confirmed hyperammonaemic encephalopathy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Urgent management and hold; permanent discontinuation should be considered for confirmed hyperammonaemic encephalopathy."
+      },
+      {
+        "rule_id": "SAFETY_TMA_CONFIRMED",
+        "field": "tma_confirmed",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Discontinue regorafenib for TMA and institute prompt treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 7,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Discontinue regorafenib for TMA and institute prompt treatment."
+      },
+      {
+        "rule_id": "SAFETY_MAJOR_SURGERY_OR_UNHEALED_WOUND",
+        "field": "major_surgery_or_unhealed_wound",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Interrupt for major surgery; restart only after clinician-confirmed adequate wound healing. This source gives no fixed number of days to substitute.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 7,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Interrupt for major surgery; restart only after clinician-confirmed adequate wound healing. This source gives no fixed number of days to substitute."
+      },
+      {
+        "rule_id": "SAFETY_SIGNIFICANT_METABOLIC_ABNORMALITY",
+        "field": "significant_metabolic_abnormality",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Check electrolytes/thyroid/pancreatic markers as relevant, replace deficits and consider interruption, reduction or discontinuation according to persistence and clinical significance.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 7,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Check electrolytes/thyroid/pancreatic markers as relevant, replace deficits and consider interruption, reduction or discontinuation according to persistence and clinical significance."
+      },
+      {
+        "rule_id": "SAFETY_STRONG_CYP3A4_OR_UGT1A9_INTERACTION",
+        "field": "strong_cyp3a4_or_ugt1a9_interaction",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Avoid strong CYP3A4 inhibitors/inducers and strong UGT1A9 inhibitors; reconcile all prescriptions, OTC/herbal products and grapefruit with oncology pharmacy before administration.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 7,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Avoid strong CYP3A4 inhibitors/inducers and strong UGT1A9 inhibitors; reconcile all prescriptions, OTC/herbal products and grapefruit with oncology pharmacy before administration."
+      },
+      {
+        "rule_id": "SAFETY_SUBSTRATE_INTERACTION",
+        "field": "substrate_interaction",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Review substrate exposure and toxicity with oncology pharmacy (including irinotecan and rosuvastatin). Do not calculate a regorafenib dose from an interaction flag.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 8,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Review substrate exposure and toxicity with oncology pharmacy (including irinotecan and rosuvastatin). Do not calculate a regorafenib dose from an interaction flag."
+      },
+      {
+        "rule_id": "SAFETY_WARFARIN_OR_BLEEDING_RISK",
+        "field": "warfarin_or_bleeding_risk",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Monitor INR/coagulation and blood counts closely as appropriate; arrange an individual bleeding-risk and interaction plan.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Monitor INR/coagulation and blood counts closely as appropriate; arrange an individual bleeding-risk and interaction plan."
+      },
+      {
+        "rule_id": "SAFETY_ANEURYSM_OR_DISSECTION_RISK",
+        "field": "aneurysm_or_dissection_risk",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Before starting a VEGF-pathway inhibitor, assess aneurysm/dissection risk, including hypertension and a history of aneurysm. No numerical dose reduction is specified.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Before starting a VEGF-pathway inhibitor, assess aneurysm/dissection risk, including hypertension and a history of aneurysm. No numerical dose reduction is specified."
+      },
+      {
+        "rule_id": "SAFETY_UNEXPLAINED_MENTAL_STATUS_CHANGE",
+        "field": "unexplained_mental_status_change",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Arrange urgent assessment, including ammonia measurement and appropriate clinical management; consider hyperammonaemic encephalopathy, PRES and other causes. Do not infer a definitive diagnosis from this symptom flag.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 6,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Arrange urgent assessment, including ammonia measurement and appropriate clinical management; consider hyperammonaemic encephalopathy, PRES and other causes. Do not infer a definitive diagnosis from this symptom flag."
+      },
+      {
+        "rule_id": "SAFETY_ORAL_SCHEDULE_UNCERTAIN",
+        "field": "oral_schedule_uncertain",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "regorafenib"
+          ],
+          "recommendation": "Verify 160 mg reference schedule days 1–21 every 28 days and actual prescribed dose. Take after a light meal (<30% fat) at the same time; swallow whole. A missed dose can be taken that same day; no double dose or replacement after vomiting.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "page": 5,
+          "url": "https://www.ema.europa.eu/en/documents/product-information/stivarga-epar-product-information_en.pdf",
+          "document": "EMA Stivarga product information",
+          "section": "SmPC 4.2 / 4.4 / 4.5"
+        },
+        "explanation": "Verify 160 mg reference schedule days 1–21 every 28 days and actual prescribed dose. Take after a light meal (<30% fat) at the same time; swallow whole. A missed dose can be taken that same day; no double dose or replacement after vomiting."
       }
     ]
   },
@@ -556,44 +2343,34 @@
       "label": "Hand-foot skin reaction grade",
       "type": "select",
       "required": false,
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "ppe",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "demo_value": "",
       "assessment_guidance": "Assess painful erythema, swelling, hyperkeratosis, peeling or blistering of palms/soles and the effect on instrumental or self-care activities.",
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No palmar–plantar erythrodysesthesia."
+          "description": "Use the named toxicity-specific grading and NCCP table; grade 0 is explicitly absent, not unknown."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Minimal skin changes or dermatitis, such as erythema, oedema or hyperkeratosis, without pain."
+          "description": "Use the named toxicity-specific grading and NCCP table; grade 0 is explicitly absent, not unknown."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Painful skin changes, including peeling, blisters, bleeding, fissures, oedema or hyperkeratosis; limits instrumental activities of daily living."
+          "description": "Use the named toxicity-specific grading and NCCP table; grade 0 is explicitly absent, not unknown."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe painful skin changes; limits self-care activities of daily living."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Grade 4 is not defined under the CTCAE palmar–plantar erythrodysesthesia term; use another term for life-threatening complications."
+          "description": "Use the named toxicity-specific grading and NCCP table; grade 0 is explicitly absent, not unknown."
         }
       ],
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+      "grading_source_label": "NCCP 00244 v5 source table; grading edition not specified",
+      "source_grading_note": "Apply the named toxicity and NCCP source severity; no CTCAE v5 substitution. This is not a complete grading table."
     },
     "hfsr_occurrence": {
       "label": "HFSR occurrence number",
@@ -613,7 +2390,7 @@
       "input_role": "decision"
     },
     "alt_ast_ratio_uln": {
-      "label": "ALT or AST (highest ×ULN)",
+      "label": "Higher of ALT or AST (× its laboratory ULN); enter the worse result",
       "type": "number",
       "required": false,
       "min": 0,
@@ -643,44 +2420,40 @@
       "label": "Treatment-emergent hypertension grade",
       "type": "select",
       "required": false,
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "hypertension",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "demo_value": "",
       "assessment_guidance": "Use repeated, correctly measured blood pressure readings and record whether antihypertensive treatment or urgent intervention is required.",
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
           "description": "No treatment-emergent hypertension."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
           "description": "Pre-hypertension range or transient mild elevation; no antihypertensive treatment indicated."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
           "description": "Persistent or recurrent elevation requiring initiation or adjustment of one antihypertensive agent; generally 140–159/90–99 mmHg in adults."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
           "description": "Severe elevation requiring more than one drug or more intensive treatment; generally at least 160 systolic or 100 diastolic in adults."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
           "description": "Life-threatening consequences such as hypertensive crisis; urgent intervention required."
         }
       ],
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+      "grading_source_label": "NCCP 00244 v5 Table 4 (CTCAE 4.03)",
+      "source_grading_note": "Apply the named toxicity and source table; this is not a complete grading table. Table 4 cites CTCAE 4.03 and retains a disputed >200 mmHg diastolic-rise string; do not substitute a guessed criterion.",
+      "ctcae_version": "4.03"
     },
     "hypertension_symptomatic": {
       "label": "Hypertension symptomatic",
@@ -703,43 +2476,431 @@
       "label": "Other treatment-related toxicity grade",
       "type": "select",
       "required": false,
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "generic",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "demo_value": "",
       "assessment_guidance": "Identify the actual adverse event first, then apply that toxicity-specific CTCAE definition. The generic severity anchors are not a substitute for the named CTCAE criterion.",
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
+          "description": "Use the named toxicity-specific grading and NCCP table; grade 0 is explicitly absent, not unknown."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; clinical observation only and intervention generally not indicated."
+          "description": "Use the named toxicity-specific grading and NCCP table; grade 0 is explicitly absent, not unknown."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; minimal, local or non-invasive intervention may be indicated; may limit instrumental activities of daily living."
+          "description": "Use the named toxicity-specific grading and NCCP table; grade 0 is explicitly absent, not unknown."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant but not immediately life-threatening; hospital care may be indicated; limits self-care activities of daily living."
+          "description": "Use the named toxicity-specific grading and NCCP table; grade 0 is explicitly absent, not unknown."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Use the named toxicity-specific grading and NCCP table; grade 0 is explicitly absent, not unknown."
         }
       ],
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
+      "grading_source_label": "NCCP 00244 v5 source table; grading edition not specified",
+      "source_grading_note": "Apply the named toxicity and NCCP source severity; no CTCAE v5 substitution. This is not a complete grading table."
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity to regorafenib or an excipient",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "unstable_or_recent_angina": {
+      "label": "Unstable angina or new-onset angina within 3 months",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "recent_myocardial_infarction": {
+      "label": "Recent myocardial infarction (SmPC studies excluded within 6 months)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "cardiac_failure": {
+      "label": "Cardiac failure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "inadequate_organ_reserve": {
+      "label": "Clinical assessment: inadequate marrow, renal or liver reserve",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "prior_treatment_eligibility_unmet": {
+      "label": "Required prior treatment / suitability criteria not met",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "input_role": "decision"
+    },
+    "indication_id": {
+      "label": "Regimen indication",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "options": [
+        {
+          "value": "00244a",
+          "label": "Previously treated metastatic colorectal cancer"
+        },
+        {
+          "value": "00244b",
+          "label": "Unresectable/metastatic GIST after imatinib and sunitinib"
+        },
+        {
+          "value": "other",
+          "label": "Other indication: separate source review"
+        }
+      ],
+      "input_role": "decision"
+    },
+    "assessment_type": {
+      "label": "Assessment timing",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first dose"
+        },
+        {
+          "value": "on_treatment",
+          "label": "During treatment"
+        },
+        {
+          "value": "restart",
+          "label": "After interruption / next cycle"
+        }
+      ],
+      "input_role": "decision"
+    },
+    "current_regorafenib_dose_mg": {
+      "label": "Current prescribed regorafenib daily dose (mg)",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "min": 0,
+      "max": 200,
+      "step": 40,
+      "input_role": "decision"
+    },
+    "prior_dose_reductions": {
+      "label": "Number of prior 40 mg dose reductions",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "input_role": "decision"
+    },
+    "treatment_delay_days": {
+      "label": "Consecutive treatment interruption (days)",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "min": 0,
+      "max": 365,
+      "step": 1,
+      "input_role": "decision"
+    },
+    "reduction_required_now": {
+      "label": "A further 40 mg reduction is required after source-specific review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "restart_requested": {
+      "label": "Considering restart after toxicity interruption",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "dose_reescalation_requested": {
+      "label": "Considering dose re-escalation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "consultant_restart_approved": {
+      "label": "Consultant has confirmed recovery, benefit/risk and restart dose",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "hfsr_recovered_grade01": {
+      "label": "HFSR has recovered to grade 0–1",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "hfsr_reduction_already_applied": {
+      "label": "A 40 mg reduction has already been applied for this HFSR episode",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "hfsr_minimum_interruption_required": {
+      "label": "This HFSR episode requires a minimum 7-day interruption (grade 3, or failed initial grade 2 reduction)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "gilberts_syndrome_confirmed": {
+      "label": "Confirmed Gilbert’s syndrome (not an assumption from bilirubin alone)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "liver_recovered_lt3_or_baseline": {
+      "label": "After a liver event: transaminases recovered to <3 × ULN or baseline",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "liver_benefit_risk_approved": {
+      "label": "Consultant judges benefit outweighs hepatotoxicity risk for restart",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "systolic_bp_mmhg": {
+      "label": "Systolic blood pressure (mmHg)",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "min": 0,
+      "max": 350,
+      "step": "any",
+      "input_role": "decision"
+    },
+    "bp_controlled_on_new_therapy": {
+      "label": "Blood pressure controlled after new/intensified antihypertensive treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "hypertension_symptoms_resolved": {
+      "label": "Hypertension symptoms have resolved",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "hypertensive_crisis": {
+      "label": "Hypertensive crisis / life-threatening hypertension",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "hypertension_controlled_before_start": {
+      "label": "Blood pressure controlled before first dose",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "interruption_due_to_hypertension": {
+      "label": "The recorded consecutive treatment interruption is required because of hypertension",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "other_toxicity_table5_exempt": {
+      "label": "Table 5 exclusion: liver injury, HFSR, hypertension, alopecia, non-refractory nausea/vomiting or hypersensitivity, or asymptomatic laboratory abnormality",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "interruption_due_to_other_grade34": {
+      "label": "The recorded interruption was required for a qualifying Table 5 grade 3–4 toxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "other_toxicity_recurred_after_reescalation": {
+      "label": "Grade ≥3 other toxicity recurred after re-escalation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "worsening_infection": {
+      "label": "Worsening infection",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "severe_bleeding": {
+      "label": "Severe bleeding requiring urgent intervention",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "gi_perforation_or_fistula": {
+      "label": "Gastrointestinal perforation or fistula",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "cardiac_ischaemia_or_infarction": {
+      "label": "New cardiac ischaemia or infarction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "cardiac_event_nonresolution": {
+      "label": "Cardiac ischaemia/infarction has not resolved after clinical review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "pres_confirmed": {
+      "label": "Confirmed posterior reversible encephalopathy syndrome",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "hyperammonaemic_encephalopathy": {
+      "label": "Confirmed hyperammonaemic encephalopathy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "tma_confirmed": {
+      "label": "Confirmed thrombotic microangiopathy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "major_surgery_or_unhealed_wound": {
+      "label": "Major surgery planned/recent or wound not adequately healed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "significant_metabolic_abnormality": {
+      "label": "Persistent/recurrent significant electrolyte or metabolic abnormality",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "strong_cyp3a4_or_ugt1a9_interaction": {
+      "label": "Strong CYP3A4 inhibitor/inducer or strong UGT1A9 inhibitor present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "substrate_interaction": {
+      "label": "Relevant UGT1A1/UGT1A9 or BCRP substrate interaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "warfarin_or_bleeding_risk": {
+      "label": "Warfarin/other anticoagulant or increased bleeding risk",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "aneurysm_or_dissection_risk": {
+      "label": "Aneurysm history or artery-dissection risk requiring assessment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "unexplained_mental_status_change": {
+      "label": "Unexplained lethargy or altered mental status",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "oral_schedule_uncertain": {
+      "label": "Meal, dosing-day, missed/vomited dose or tablet plan uncertain",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
       "input_role": "decision"
     }
   },
@@ -750,9 +2911,17 @@
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "mapping_basis": "Oral SACT classification from NCCP V6 Table 8.",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT"
+    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
+    "notes": [
+      "NCCP p6: oral minimal-to-low emetogenic risk; no usual premedication. Use a local breakthrough plan.",
+      "Prevent/manage HFSR promptly with local skin/foot care.",
+      "Baseline: FBC, renal/liver, TFT, BP; lipase/amylase if indicated and ECG/QT if at risk. LFT every 2 weeks for 2 months then monthly; BP weekly for 6 weeks then each cycle. Regular FBC/renal; TFT/lipase/amylase as indicated; INR closely with warfarin.",
+      "NCCP p1 meal wording conflicts; current EMA confirms after a light meal <30% fat. Contraception during treatment and 8 weeks after per EMA 4.6."
+    ],
+    "phase_specific_plan": "patient/00244/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf"
   }
 }

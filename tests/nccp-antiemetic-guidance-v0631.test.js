@@ -14,6 +14,12 @@ const riskMap = readJson("data/emetogenic-risk-map.json");
 const index = readJson("protocols/index.json");
 const classificationBaseline = readJson("V0630_EMETOGENIC_CLASSIFICATION_SNAPSHOT.json");
 const clinicalCoreBaseline = readJson("V0630_CLINICAL_CORE_HASHES.json");
+// Fresh NCCP source evidence corrects the historical whole-combination minimal-risk mapping.
+// Nivolumab alone remains minimal; the ipilimumab-containing combination is low.
+const dualImmuneV35 = {
+  '00551':{path:'shared/00551-nivolumab-3-mg-kg-with-ipilimumab-1-mg-kg-therapy.json',version:'7a',url:'https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf',sha256:'6822cf3e3086fa9de1513ad982ff14b7238e5345e342a6c505cef5c5983c9c9b',page:11},
+  '00900':{path:'gastrointestinal/00900-nivolumab-240-mg-and-ipilimumab-1-mg-kg-therapy.json',version:'1a',url:'https://healthservice.hse.ie/documents/6653/900_v1a_Nivolumab_240mg_ipilimumab_1mgkg_.pdf',sha256:'a5f56d4f7f61e0b50128ba68cb8209a078184f657ac217704000cf986a9f96ac',page:9}
+};
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
 const familyPhases = {
  '00691':{induction:'high',chemoradiation:'oral_minimal_low'},
@@ -129,6 +135,21 @@ for (const record of index.protocols || []) {
   const sc = protocol.supportive_care || {};
   const md = protocol.metadata || {};
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
+  const immune35=dualImmuneV35[md.nccp_regimen_code];
+  if(immune35){
+    assert.equal(relative,immune35.path);
+    assert.equal(md.clinical_audit_release,'0.84.35');
+    assert.equal(md.nccp_version,immune35.version);
+    assert.equal(md.source_url,immune35.url);
+    const binary=fs.readFileSync(path.join(root,'validation/colorectal-v08435/nivo-fruq-source-audit',md.nccp_regimen_code+'.pdf'));
+    assert.equal(crypto.createHash('sha256').update(binary).digest('hex'),immune35.sha256);
+    assert.equal(md.source_sha256,immune35.sha256);
+    assert.equal(sc.script_id,'nccp-parenteral-low');
+    assert.match(sc.mapping_basis,/ipilimumab low.*maintenance nivolumab minimal/i);
+    const phases=readJson('validation/colorectal-v08435/support-kb/default-support-updates.json')[md.nccp_regimen_code];
+    assert.equal(phases.find(p=>p.id==='nivolumab_continuation').emetogenic_risk,'Minimal');
+    assert.match(phases.find(p=>p.id==='combination_cycles_1_4').emetogenic_risk,/Low combination/);
+  }
   if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
   else if (baseline) {
     const correctionByPath = {
@@ -156,7 +177,7 @@ for (const record of index.protocols || []) {
       "skin/00431-nivolumab-1-mg-kg-and-ipilimumab-3-mg-kg-therapy.json": "low",
       "lung/00340-ceritinib-monotherapy.json": "oral_moderate_high"
     };
-    const expectedRisk = pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
+    const expectedRisk = immune35 ? 'low' : pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
       ? correctionByPath[relative]
       : (baseline.emetogenic_risk ?? null);
     const auditedPhases = md.nccp_regimen_code==='00486'?{oxaliplatin_days:'moderate',fluorouracil:'low'}:familyPhases[md.nccp_regimen_code];

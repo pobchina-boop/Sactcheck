@@ -11,7 +11,7 @@ for(const code of ['00214','00372']){
  check(code+' source governance',()=>{assert.equal(p.metadata.full_suite_release,'0.84.30');assert.match(p.metadata.source_pdf_sha256,/^[a-f0-9]{64}$/);assert.equal(p.metadata.validation.clinical_use_authorised,false);assert.equal(p.clinical_governance.clinical_use_authorised,false);assert.equal(p.metadata.organ_function_reconciliation.release,'0.59.0');assert.equal(p.metadata.organ_function_reconciliation.reconciled_release,'0.84.30');});
  check(code+' empty cannot clear',()=>{let r=E.assess(p,{});assert.equal(r.complete,false);assert(!['proceed','proceed_with_caution'].includes(r.actionType));});
  check(code+' complete source dose phases',()=>{assert(model.phases.length);assert(model.phases.every(ph=>ph.complete));});
- check(code+' unique rules and supported source',()=>{const ids=p.rule_engine.rules.map(r=>r.rule_id);assert.equal(ids.length,new Set(ids).size);for(const r of p.rule_engine.rules){assert(r.source.url);assert(r.source.page);assert.equal(r.source.checked,'2026-11-02');}});
+ check(code+' unique rules and supported source',()=>{const ids=p.rule_engine.rules.map(r=>r.rule_id);assert.equal(ids.length,new Set(ids).size);for(const r of p.rule_engine.rules){assert(r.source.url);assert(r.source.page);assert.equal(r.source.checked,p.metadata.source_checked_date || '2026-11-02');}});
  check(code+' no fabricated CTCAE edition',()=>{for(const [k,v]of Object.entries(p.input_definitions)){if(k.endsWith('_grade')){assert(v.source_grading_note);assert(!v.ctcae_version);assert(v.grading_source_url);}}});
  if(code==='00214'){
   check('00214 correct official indication IDs',()=>assert.deepEqual(p.indications.map(i=>i.indication_id),['00214a','00214b']));

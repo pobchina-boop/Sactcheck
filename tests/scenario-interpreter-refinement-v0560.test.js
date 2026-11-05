@@ -33,8 +33,17 @@ const selected = candidates[0];
 const definitions = Object.entries(selected.input_definitions || {}).map(([id, definition]) => ({ id, ...definition }));
 scenario.prepare(selected, definitions, {});
 const parsed = scenario.parse('Bevacizumab, systolic blood pressure 190.');
-assert.ok(parsed.warnings.some(item => /recognised.*no structured numeric blood pressure field/i.test(item)), 'Missing numeric blood-pressure-field warning was not shown.');
-assert.ok(!parsed.extractions.some(item => /blood pressure|systolic|sbp/i.test(`${item.fieldId} ${item.label}`)), 'Numeric BP was incorrectly mapped to a non-numeric protocol criterion.');
+// v0.84.34 supplies a genuine numeric field; extraction must preserve its units and value.
+assert.ok(parsed.extractions.some(item => item.fieldId === 'systolic_bp_mmhg' && item.value === '190' && item.displayValue === '190 mmHg'));
+assert.ok(!parsed.warnings.some(item => /no structured numeric blood pressure field/i.test(item)));
+// Preserve the original negative test against a protocol without numeric BP inputs.
+const withoutNumericBP = JSON.parse(JSON.stringify(selected));
+delete withoutNumericBP.input_definitions.systolic_bp_mmhg;
+delete withoutNumericBP.input_definitions.diastolic_bp_mmhg;
+scenario.prepare(withoutNumericBP, Object.entries(withoutNumericBP.input_definitions).map(([id, definition]) => ({id, ...definition})), {});
+const unstructured = scenario.parse('Bevacizumab, systolic blood pressure 190.');
+assert.ok(unstructured.warnings.some(item => /recognised.*no structured numeric blood pressure field/i.test(item)), 'Missing numeric blood-pressure-field warning was not shown.');
+assert.ok(!unstructured.extractions.some(item => /blood pressure|systolic|sbp/i.test(`${item.fieldId} ${item.label}`)), 'Numeric BP was incorrectly mapped to a non-numeric protocol criterion.');
 
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const globalSource = fs.readFileSync(path.join(root, 'js', 'global-scenario-interpreter.js'), 'utf8');

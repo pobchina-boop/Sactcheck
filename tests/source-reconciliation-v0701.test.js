@@ -30,7 +30,7 @@ function patched(code){
   const ids=(protocol.rule_engine?.rules||[]).map(ruleId).filter(Boolean);
   assert.strictEqual(new Set(ids).size,ids.length,`${code}: hotfix must be idempotent`);
   if(code!=="00619"){
-    assert.strictEqual((protocol.metadata.encoding_maturity.reconciled_release||protocol.metadata.encoding_maturity.audit_release),code==="00525"?"0.84.21":code==="00892"?"0.84.21":code==="00382"?"0.84.24":"0.70.1");
+    assert.strictEqual((protocol.metadata.encoding_maturity.reconciled_release||protocol.metadata.encoding_maturity.audit_release),code==="00525"?"0.84.21":code==="00892"?"0.84.21":code==="00382"?"0.84.34":"0.70.1");
     assert.strictEqual(protocol.metadata.validation.consultant_reviewed,false);
     assert.strictEqual(protocol.metadata.validation.oncology_pharmacy_reviewed,false);
     assert.strictEqual(protocol.metadata.validation.clinical_use_authorised,false);
@@ -42,13 +42,13 @@ function patched(code){
 function assess(protocol,values){ return Engine.assess(protocol,values,{profileId:"default"}); }
 function has(result,id){ return (result.findings||[]).some(f=>f.ruleId===id); }
 
-// The v0.84.24 source audit supersedes the historical runtime rewrite.
-// Exact boundary cases execute in validation/targeted-lung-v08424/legacy/source-cases.cjs.
+// The v0.84.34 repeat source audit supersedes the historical runtime rewrite.
+// Current boundaries execute in validation/colorectal-v08434/oral-source-audit/source-cases.cjs; the v24 cases are retained.
 const lonsurf=patched("00382");
 assert.equal(String(lonsurf.metadata.nccp_version),"4");
-assert.equal(lonsurf.metadata.full_suite_release,"0.84.24");
+assert.equal(lonsurf.metadata.full_suite_release,"0.84.34");
 assert(lonsurf.input_definitions.assessment_context);
-assert.deepStrictEqual(lonsurf,read(FILES["00382"]),"The historical runtime repair must preserve the audited v24 protocol, including supplemental SmPC rules.");
+assert.deepStrictEqual(lonsurf,read(FILES["00382"]),"The historical runtime repair must preserve the audited v34 protocol, including supplemental SmPC rules.");
 
 // Newer audited JSON must survive the historical runtime repair byte-for-byte.
 for(const code of ["00525","00892"]){

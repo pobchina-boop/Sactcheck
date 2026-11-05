@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f
 const scope=json('validation/colorectal-v08433/scope.json'),idx=json('protocols/index.json').protocols,codes=[...scope.new_codes,...scope.retrospective_codes];
 const E=require('../js/assessment-engine'),D=require('../js/protocol-dose-schedule'),Registry=require('../js/patient-asset-registry-v0810'),Evidence=require('../js/treatment-evidence-v08413');
 const kb=json('data/regimen-knowledge-base-v08433-addendum.json').regimen_profiles,proto=c=>json(idx.find(x=>x.path.includes('/'+c+'-')).path);
-assert.equal(Registry.codes.length,170);assert.equal(codes.length,10);assert.equal(kb.length,10);
+assert.equal(Registry.codes.length,174);assert(Registry.codes.includes('00244'),'Audited v34 regorafenib accounts for the added patient registry entry');assert.equal(codes.length,10);assert.equal(kb.length,10);
 const expectedDays={'00555':14,'00783':14,'00691':14,'00238':14,'00791':14};
 // One visible absolute bilirubin result supplies both source-specific representations.
 // Reuse the established laboratory adapter; never change clinical rule units.
@@ -19,7 +19,7 @@ for(const c of ['00783','00691','00238','00449','00448']){
 }
 for(const c of codes){
  const p=proto(c),d=json('data/patient-knowledge/'+c+'.json'),k=kb.find(x=>x.protocol_id===p.protocol_id);
- assert.equal(p.metadata.source_checked_date,'2026-11-04');assert.match(p.metadata.source_pdf_sha256,/^[0-9a-f]{64}$/);
+ assert.equal(p.metadata.source_checked_date,c==='00448'?'2026-11-05':'2026-11-04');if(c==='00448')assert.equal(p.metadata.clinical_audit_release,'0.84.35');assert.match(p.metadata.source_pdf_sha256,/^[0-9a-f]{64}$/);
  for(const flag of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[flag],false);
  assert.equal(E.assess(p,{}).complete,false);assert(!['proceed','proceed_with_caution'].includes(E.assess(p,{}).actionType));
  assert(D.buildModel(p).phases.length);assert(k.treatment_rationale.line);assert(!/undefined|\[object Object\]/.test(Evidence.render(k)));
@@ -27,7 +27,7 @@ for(const c of codes){
  const guide=read(`patient/${c}/guide.html`),card=read(`patient/${c}/sactcard.html`),portal=read(`patient/${c}/index.html`),wiki=read(`patient/${c}/knowledge.html`);
  assert.equal((guide.match(/class="pt-page /g)||[]).length,3);assert.equal((portal.match(/data-patient-panel/g)||[]).length,5);
  assert.equal((guide.match(/data-hcc-target=/g)||[]).length,d.anatomy.length);assert(guide.includes('Full-body anatomical illustration'));assert(guide.includes('hcc-static-connectors'));
- for(const t of ['pt-document-identity','Your personal plan','4 November 2026']){assert(guide.includes(t));assert(wiki.includes(t));}
+ for(const t of ['pt-document-identity','Your personal plan',c==='00448'?'5 November 2026':'4 November 2026']){assert(guide.includes(t));assert(wiki.includes(t));}
  for(const t of ['FRONT / CONTACTS','BACK / TREATMENT RECORD','Do not cut the centre line','100%','oncowiki-qr.png','EXAMPLE ONLY','Add to Home Screen'])assert(card.includes(t),c+' card '+t);
  for(const name of ['guide','sactcard','knowledge','handbook','consent-form','passport','logistics','supportive-care','treatment-journey']){
   const file=`patient/${c}/${name}.pdf`;assert(fs.existsSync(path.join(root,file)),file);assert(fs.readFileSync(path.join(root,file)).equals(fs.readFileSync(path.join(root,`docs/patient/${c}/${name}.pdf`))),file+' download copy');

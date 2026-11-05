@@ -23,7 +23,7 @@ for(const c of idx.codes){
  for(const n of ['guide','consent-form','passport','sactcard','logistics','supportive-care','treatment-journey',...plans.map(x=>'support-'+x.id)])assert.deepEqual(fs.readFileSync(`${root}/patient/${c}/${n}.pdf`),fs.readFileSync(`${root}/docs/patient/${c}/${n}.pdf`));
  assert(!json('data/breast-library-contexts-v0837.json').regimens[c]);
 }
-assert.equal(protocols.length,377);assert.equal(R.codes.length,170);assert.equal(fs.readdirSync(root+'/data/patient-knowledge').filter(x=>x.endsWith('.json')).length,170);
+assert.equal(protocols.length,377);assert.equal(R.codes.length,174);assert(R.codes.includes('00244'),'Audited v34 regorafenib accounts for the added patient registry entry');assert.equal(fs.readdirSync(root+'/data/patient-knowledge').filter(x=>x.endsWith('.json')).length,174);assert.equal(json('data/patient-knowledge/00244.json').suite_release,'0.84.34','Audited regorafenib is the additional patient suite');
 const base=json('validation/lung-next-v08426/baseline-hashes.json'),changes=json('validation/lung-next-v08426/retrospective-hashes.json');
 for(const [f,h]of Object.entries(base.files)){if(!/^(patient|docs\/patient|data\/patient-knowledge|data\/patient-knowledge-contexts)\//.test(f))continue;assert.equal(digest(f),require('./helpers/retrospective-v08426.cjs').expectedHash(f,h),f);}
 assert.equal(json('validation/lung-next-v08426/retrospective-inventory.json').authored_context_suites,144);

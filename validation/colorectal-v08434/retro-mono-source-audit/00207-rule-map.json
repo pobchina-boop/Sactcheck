@@ -1,0 +1,1184 @@
+[
+  {
+    "rule_id": "ECOG_ELIGIBILITY",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "ecog",
+      "operator": ">",
+      "value": 3
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Outside the NCCP ECOG eligibility range; review suitability.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "HYPERSENSITIVITY",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "hypersensitivity",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Known hypersensitivity is an NCCP exclusion."
+    }
+  },
+  {
+    "rule_id": "PREGNANCY_LACTATION",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2–4.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "any": [
+        {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "INDICATION_CONTEXT",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "indication_id",
+          "operator": "missing"
+        },
+        {
+          "field": "ras_status",
+          "operator": "in",
+          "value": [
+            "wild_type",
+            "mutant",
+            "unknown"
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "00207 has two indications. Confirm colorectal versus head/neck with radiotherapy; RAS selection applies to colorectal cancer only. This does not suppress independently actionable toxicity findings.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "RAS_EXCLUSION",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "indication_id",
+          "operator": "==",
+          "value": "00207a"
+        },
+        {
+          "field": "ras_status",
+          "operator": "in",
+          "value": [
+            "mutant",
+            "unknown"
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "contraindicated",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Colorectal cetuximab requires validated extended RAS wild-type status. KRAS exon 2 alone is not sufficient."
+    }
+  },
+  {
+    "rule_id": "SKIN_HOLD",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "acneiform_rash_grade",
+      "operator": ">=",
+      "value": 3
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Hold cetuximab for severe skin toxicity; source allows a maximum two-week interruption and requires recovery to grade ≤2 before restart."
+    }
+  },
+  {
+    "rule_id": "SKIN_FOURTH",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "skin_occurrence",
+      "operator": ">=",
+      "value": 4
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Discontinue cetuximab after the fourth severe skin episode."
+    }
+  },
+  {
+    "rule_id": "SKIN_FAILED",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.4",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "supplementary_basis": "NCCP00207 p3 Table2 maximum two-week interruption",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "any": [
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "discontinue",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Discontinue / obtain urgent specialist confirmation when severe skin toxicity has not resolved within the permitted interruption; do not automatically restart."
+    }
+  },
+  {
+    "rule_id": "SKIN_RESTART_1",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "==",
+          "value": 1
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": ">",
+          "value": 0
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": false
+        },
+        {
+          "field": "previous_cetuximab_dose_mg_m2",
+          "operator": ">=",
+          "value": 250
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 250 mg/m². Confirm prior individual reductions; this is not a re-loading dose. Displayed source dose requires a documented previous dose at least this high; do not re-escalate a lower individual dose.",
+      "show_in_dose_actions": true,
+      "component_changes": {
+        "cetuximab": {
+          "dose_mg_m2": 250
+        }
+      }
+    }
+  },
+  {
+    "rule_id": "SKIN_RESTART_2",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "==",
+          "value": 2
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": ">",
+          "value": 0
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": false
+        },
+        {
+          "field": "previous_cetuximab_dose_mg_m2",
+          "operator": ">=",
+          "value": 200
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 200 mg/m². Confirm prior individual reductions; this is not a re-loading dose. Displayed source dose requires a documented previous dose at least this high; do not re-escalate a lower individual dose.",
+      "component_changes": {
+        "cetuximab": {
+          "dose_mg_m2": 200
+        }
+      }
+    }
+  },
+  {
+    "rule_id": "SKIN_RESTART_3",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "==",
+          "value": 3
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": ">",
+          "value": 0
+        },
+        {
+          "field": "skin_delay_weeks",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": false
+        },
+        {
+          "field": "previous_cetuximab_dose_mg_m2",
+          "operator": ">=",
+          "value": 150
+        }
+      ]
+    },
+    "action": {
+      "type": "dose_reduce",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "After the documented severe episode recovers within two weeks, source cetuximab restart dose is 150 mg/m². Confirm prior individual reductions; this is not a re-loading dose. Displayed source dose requires a documented previous dose at least this high; do not re-escalate a lower individual dose.",
+      "component_changes": {
+        "cetuximab": {
+          "dose_mg_m2": 150
+        }
+      }
+    }
+  },
+  {
+    "rule_id": "INFUSION_G1",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "infusion_reaction_grade",
+      "operator": "==",
+      "value": 1
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Slow cetuximab infusion and monitor closely; follow acute reaction policy.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "INFUSION_G2",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "infusion_reaction_grade",
+      "operator": "==",
+      "value": 2
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Slow cetuximab infusion and immediately treat symptoms; specialist assessment before continuation.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "INFUSION_G34",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "infusion_reaction_grade",
+      "operator": ">=",
+      "value": 3
+    },
+    "action": {
+      "type": "permanently_discontinue",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Stop cetuximab immediately, treat the reaction and contraindicate further cetuximab."
+    }
+  },
+  {
+    "rule_id": "FIRST_15_MINUTES",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2–4.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "reaction_first_15_minutes",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Interrupt the first infusion for a reaction within 15 minutes irrespective of grade. Assess benefit/risk and IgE-related risk before any resumption."
+    }
+  },
+  {
+    "rule_id": "ILD",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 2,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "interstitial_lung_disease",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "permanently_discontinue",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Discontinue cetuximab for confirmed interstitial lung disease."
+    }
+  },
+  {
+    "rule_id": "RESPIRATORY",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2–4.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "unexplained_respiratory_symptoms",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Interrupt implicated treatment and urgently investigate unexplained respiratory symptoms."
+    }
+  },
+  {
+    "rule_id": "EYE",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2–4.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "ocular_symptoms",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Prompt ophthalmology assessment for possible keratitis; assess continuation versus interruption.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "ELECTROLYTES",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.2–4.6",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "electrolyte_abnormality",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Correct magnesium, calcium and potassium as indicated. No numeric cetuximab hold threshold is specified; use clinical assessment.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "ORGAN_REVIEW",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "table": 1,
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "any": [
+        {
+          "field": "renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        {
+          "field": "hepatic_impairment_present",
+          "operator": "==",
+          "value": true
+        }
+      ]
+    },
+    "action": {
+      "type": "proceed_with_caution",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "NCCP expects no cetuximab renal, hepatic or dialysis adjustment. This does not establish overall treatment suitability."
+    }
+  },
+  {
+    "rule_id": "CRC_PRIOR_TREATMENT_V6",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "indication_id",
+          "operator": "==",
+          "value": "00207a"
+        },
+        {
+          "field": "colorectal_prior_therapy_criteria_met",
+          "operator": "==",
+          "value": false
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Outside the current NCCP 00207a monotherapy indication: the source specifies failure of oxaliplatin- and irinotecan-based therapy and intolerance to irinotecan. Confirm the exact clinical history and suitability with the consultant; do not infer eligibility from RAS status alone.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "HN_PLATINUM_ELIGIBILITY_V6",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "indication_id",
+          "operator": "in",
+          "value": [
+            "00207b",
+            "00207-head-neck"
+          ]
+        },
+        {
+          "field": "head_neck_platinum_ineligible",
+          "operator": "==",
+          "value": false
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Current NCCP 00207b with radiotherapy is for locally advanced squamous head/neck cancer in patients ineligible for platinum-based therapy. Confirm the treatment choice with the consultant; this is not an automatic substitute for platinum chemoradiation.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "INDICATION_CONTEXT_V6",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "indication_id",
+          "operator": "missing"
+        },
+        {
+          "any": [
+            {
+              "field": "colorectal_prior_therapy_criteria_met",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "head_neck_platinum_ineligible",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Confirm which NCCP indication is intended before interpreting indication-specific eligibility. Independently actionable toxicity findings remain assessable.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "MARROW_ELIGIBILITY",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "adequate_marrow_reserve",
+      "operator": "==",
+      "value": false
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "NCCP requires adequate marrow reserve confirmed. Review eligibility; the source gives no numerical exclusion threshold and no automatic dose reduction.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "ORGAN_ELIGIBILITY",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "adequate_renal_hepatic_function",
+      "operator": "==",
+      "value": false
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "NCCP requires adequate renal and hepatic function for treatment confirmed. Review eligibility; the source gives no numerical exclusion threshold and no automatic dose reduction.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "SKIN_INTOLERABLE",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.4",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "intolerable_skin_toxicity",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Withhold cetuximab for intolerable skin toxicity and obtain specialist review; recovery, recurrence and prior dose must be assessed before restart."
+    }
+  },
+  {
+    "rule_id": "SKIN_DOSE_HISTORY_1",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "field": "previous_cetuximab_dose_mg_m2",
+              "operator": "missing"
+            },
+            {
+              "field": "previous_cetuximab_dose_mg_m2",
+              "operator": "<",
+              "value": 250
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Recovery and recurrence criteria meet the source restart row, but actual previous dose is missing or below that row. Do not re-escalate or calculate a replacement dose; consultant must reconcile all prior individual reductions.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "SKIN_DOSE_HISTORY_2",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "field": "previous_cetuximab_dose_mg_m2",
+              "operator": "missing"
+            },
+            {
+              "field": "previous_cetuximab_dose_mg_m2",
+              "operator": "<",
+              "value": 200
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Recovery and recurrence criteria meet the source restart row, but actual previous dose is missing or below that row. Do not re-escalate or calculate a replacement dose; consultant must reconcile all prior individual reductions.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "SKIN_DOSE_HISTORY_3",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": ">",
+              "value": 0
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "field": "previous_cetuximab_dose_mg_m2",
+              "operator": "missing"
+            },
+            {
+              "field": "previous_cetuximab_dose_mg_m2",
+              "operator": "<",
+              "value": 150
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Recovery and recurrence criteria meet the source restart row, but actual previous dose is missing or below that row. Do not re-escalate or calculate a replacement dose; consultant must reconcile all prior individual reductions.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "SKIN_RESTART_CONTEXT",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "skin_occurrence",
+          "operator": "in",
+          "value": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "any": [
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "missing"
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "missing"
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "missing"
+            },
+            {
+              "field": "skin_delay_weeks",
+              "operator": "==",
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "A previous severe skin episode is recorded. Enter current grade, actual withholding interval and recovery assessment before any restart; missing data cannot establish recovery.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "SKIN_LATE_RECOVERY_REVIEW",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 3,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "skin_delay_weeks",
+          "operator": ">",
+          "value": 2
+        },
+        {
+          "field": "acneiform_rash_grade",
+          "operator": "<=",
+          "value": 2
+        },
+        {
+          "field": "skin_occurrence",
+          "operator": "in",
+          "value": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Recovery occurred after the NCCP maximum two-week interruption. Do not apply the routine restart table; consultant must establish timing and disposition.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "CRC_EGFR_ELIGIBILITY",
+    "source": {
+      "document": "NCCP 00207 v6",
+      "page": 1,
+      "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "all": [
+        {
+          "field": "indication_id",
+          "operator": "==",
+          "value": "00207a"
+        },
+        {
+          "field": "egfr_expression_confirmed",
+          "operator": "==",
+          "value": false
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "NCCP00207a requires EGFR-expressing RAS wild-type metastatic colorectal cancer with the stated prior-treatment conditions; confirm eligibility.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "ANAPHYLAXIS_RISK",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.4",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "alpha_gal_reaction_risk",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Review red-meat allergy, tick bites, previous antibody reactions and IgE results before infusion. Specialist benefit/risk assessment and anaphylaxis preparedness are required.",
+      "show_in_dose_actions": true,
+      "dose_calculation": "specialist_review"
+    }
+  },
+  {
+    "rule_id": "ULCERATIVE_KERATITIS",
+    "source": {
+      "document": "Erbitux EMA product information (supplementary)",
+      "page": "4.4",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "checked_date": "2026-11-05",
+      "checked": "2026-11-05"
+    },
+    "condition": {
+      "field": "ulcerative_keratitis",
+      "operator": "==",
+      "value": true
+    },
+    "action": {
+      "type": "withhold",
+      "components": [
+        "cetuximab"
+      ],
+      "recommendation": "Interrupt cetuximab and obtain ophthalmology/consultant review; the SmPC permits interruption or discontinuation."
+    }
+  }
+]

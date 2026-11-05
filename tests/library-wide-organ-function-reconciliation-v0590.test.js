@@ -8,6 +8,8 @@ const root = path.resolve(__dirname, '..');
 const pkg = require(path.join(root, 'package.json'));
 const index = require(path.join(root, 'protocols/index.json'));
 const register = require(path.join(root, 'V0590_ORGAN_FUNCTION_SOURCE_REGISTER.json'));
+const crypto = require('crypto');
+const migrations35=require('../validation/colorectal-v08435/organ-function-migrations.json').records;
 const migrations24=require('../validation/targeted-lung-v08424/organ-function-migrations.json').records;
 
 assert.ok(Number(pkg.version.split('.').slice(0, 2).join('.')) >= 0.59, 'Current package must retain the v0.59.0 organ-function release.');
@@ -30,6 +32,8 @@ for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
   const rec = m.organ_function_reconciliation;
+  const migration35=m.clinical_audit_release==='0.84.35'&&migrations35[item.nccp_code];
+  const migration34=m.sactcheck_encoding_version==='0.84.34'&&require('../validation/colorectal-v08434/organ-function-migrations.json').records[item.nccp_code];
   const migration33=rec?.reconciled_release==='0.84.33'&&require('../validation/colorectal-v08433/organ-function-migrations.json').records[item.nccp_code];
   const migration32=rec?.reconciled_release==='0.84.32'&&require('../validation/colorectal-v08432/organ-function-migrations.json').records[item.nccp_code];
   const migration30=m.sactcheck_encoding_version==='0.84.30'&&require('../validation/lung-completion-v08430/organ-function-migrations.json').records[item.nccp_code];
@@ -47,8 +51,8 @@ for (const item of register.records) {
   assert.strictEqual(rec.consultant_reviewed, false);
   assert.strictEqual(rec.oncology_pharmacy_reviewed, false);
   assert.strictEqual(rec.clinical_use_authorised, false);
-  assert.strictEqual(m.encoding_maturity.level, (migration30||migration29||v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
-  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration33?migration33.status:migration32?'source_reconciled_v08432_independent_review_pending':migration30?'source_reconciled_v08430_independent_review_pending':m.sactcheck_encoding_version==='0.84.29'?'source_reconciled_v08429_independent_review_pending':m.sactcheck_encoding_version==='0.84.28'?'source_reconciled_v08428_independent_review_pending':migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
+  assert.strictEqual(m.encoding_maturity.level, migration35 ? migration35.maturity : migration34 ? migration34.maturity : (migration30||migration29||v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration35?migration35.status:migration34?migration34.status:migration33?migration33.status:migration32?'source_reconciled_v08432_independent_review_pending':migration30?'source_reconciled_v08430_independent_review_pending':m.sactcheck_encoding_version==='0.84.29'?'source_reconciled_v08429_independent_review_pending':m.sactcheck_encoding_version==='0.84.28'?'source_reconciled_v08428_independent_review_pending':migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
   for (const [field, def] of Object.entries(p.input_definitions || {})) {
     if (/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label || ''}`)) {
       assert.strictEqual(def.required, false, `${item.nccp_code}/${field} must remain optional for independent partial assessment`);
@@ -56,7 +60,20 @@ for (const item of register.records) {
     }
   }
   const releaseRules = (p.rule_engine?.rules || []).filter(r => String(r.id || r.rule_id || '').startsWith('OF590_'));
-  if(migration33){assert.equal(rec.reconciled_release,'0.84.33');for(const id of migration33.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url===m.source_url&&r.source?.page),item.nccp_code+' source rule '+id);assert(fs.existsSync(path.join(root,'validation/colorectal-v08433',migration33.group,'source-cases.cjs')));assert.equal(releaseRules.length,0);}
+  if(migration35){
+    assert.equal(rec.resolution,migration35.resolution);
+    assert.equal(m.validation.audit_release,'0.84.35');
+    assert.equal(m.nccp_version,migration35.source_version);
+    assert.equal(m.source_url,migration35.source_url);
+    for(const [file,hash] of [[migration35.source_pdf,migration35.source_sha256],[migration35.baseline_path,migration35.baseline_sha256]])assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex'),hash,item.nccp_code+' retained migration evidence');
+    const old=JSON.parse(fs.readFileSync(path.join(root,migration35.baseline_path)));
+    assert.deepStrictEqual(old.rule_engine.rules.map(r=>r.rule_id||r.id).filter(id=>id.startsWith('OF590_')),migration35.replaced_legacy_rules);
+    assert.equal(releaseRules.length,0,'Current audit removes superseded legacy organ rules');
+    for(const id of migration35.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url===m.source_url&&r.source?.page),item.nccp_code+' current source rule '+id);
+    assert(fs.existsSync(path.join(root,'validation/colorectal-v08435',migration35.group,'source-cases.cjs')));
+  }
+  else if(migration34){assert.equal(rec.resolution,migration34.resolution);assert.equal(m.validation.audit_release,'0.84.34');assert.equal(releaseRules.length,0);for(const id of migration34.required_rules)assert(p.rule_engine.rules.some(r=>r.rule_id===id&&r.source?.url===m.source_url&&r.source?.page),item.nccp_code+' audited organ rule '+id);assert(fs.existsSync(path.join(root,'validation/colorectal-v08434',migration34.group,'source-cases.cjs')));}
+  else if(migration33){assert.equal(rec.reconciled_release,'0.84.33');for(const id of migration33.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url===m.source_url&&r.source?.page),item.nccp_code+' source rule '+id);assert(fs.existsSync(path.join(root,'validation/colorectal-v08433',migration33.group,'source-cases.cjs')));assert.equal(releaseRules.length,0);}
   else if(migration32){assert.equal(rec.reconciled_release,'0.84.32');for(const id of migration32.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url===m.source_url&&r.source?.page),item.nccp_code+' source rule '+id);assert(fs.existsSync(path.join(root,'tests/clinical-audit-v08432.test.cjs')));}
   else if(migration30){assert.equal(rec.reconciled_release,'0.84.30');assert.equal(rec.resolution,migration30.resolution);assert.equal(releaseRules.length,0,'Conflicting legacy organ rules must be removed');for(const id of migration30.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url===m.source_url&&r.source?.page));assert(fs.existsSync(path.join(root,'validation/lung-completion-v08430',migration30.group,'source-cases.cjs')));}
   else if(migration29){for(const id of migration29.required_rules)assert(p.rule_engine.rules.some(r=>(r.rule_id||r.id)===id&&r.source?.url===m.source_url&&r.source?.page));assert(fs.existsSync(path.join(root,'validation/lung-cytotoxic-v08429',migration29.group,'source-cases.cjs')));}
@@ -128,7 +145,7 @@ for (const p of allProtocols) {
     );
   }
 }
-assert.strictEqual(triggerableRuleCount, 207, 'Five fluorouracil/oxaliplatin legacy rules are superseded by v32 boundary and source cases. Six nintedanib/docetaxel legacy rules are superseded by v30 source cases. Six legacy gemcitabine/topotecan rules are superseded by source-specific v29 cases. Five obsolete NCCP00791 fluorouracil organ rules are replaced by v33 source cases. All 207 retained v0.59.0 rules remain executable; two ceritinib rules are replaced by four source-conflict review rules verified by v0.84.25 cases; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
+assert.strictEqual(triggerableRuleCount, 203, 'Five fluorouracil/oxaliplatin legacy rules are superseded by v32 boundary and source cases. Six nintedanib/docetaxel legacy rules are superseded by v30 source cases. Six legacy gemcitabine/topotecan rules are superseded by source-specific v29 cases. Five obsolete NCCP00791 fluorouracil organ rules are replaced by v33 source cases. Four fruquintinib legacy rules are replaced by v35 source and dose-history cases, with the exact removed IDs and original PDF/JSON hashes retained. All 203 retained v0.59.0 rules remain executable; two ceritinib rules are replaced by four source-conflict review rules verified by v0.84.25 cases; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
 
 // Sentinel source pathways and single-value partial assessments.
 let result = assess('00205', { pld_bilirubin_band: '51_86' });
@@ -176,6 +193,6 @@ const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_R
 assert.strictEqual(audit.summary.protocols_in_reconciliation_scope, 74);
 assert.strictEqual(audit.summary.remaining_partial_rule_encoding_records, 0);
 assert.strictEqual(audit.summary.records_with_audit_issues, 0);
-assert.strictEqual(audit.summary.total_v0590_rules, 207);
+assert.strictEqual(audit.summary.total_v0590_rules, 203);
 
 console.log('v0.59.0 library-wide organ-function reconciliation tests passed.');

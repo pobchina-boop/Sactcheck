@@ -8,7 +8,7 @@
     "source_reviewed_no_prescriptive_adjustment_records": 4,
     "remaining_partial_rule_encoding_records": 0,
     "records_with_audit_issues": 0,
-    "total_v0590_rules": 207,
+    "total_v0590_rules": 203,
     "note": "The v0.59.0 scope is the 74 records marked partial by v0.58.1. A source-reviewed no-prescriptive-adjustment resolution intentionally avoids introducing an unsupported cutoff. Independent Consultant and oncology-pharmacy validation remains pending."
   },
   "records": [
@@ -418,18 +418,24 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "source_reviewed_no_prescriptive_adjustment",
-      "superseded_by_release": "0.84.21",
-      "replacement_evidence": "validation/colorectal-v0836/source-map.json",
+      "superseded_by_release": "0.84.34",
+      "replacement_evidence": "validation/colorectal-v08434/retro-mono-source-audit/AUDIT.md",
       "source_url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
       "organ_inputs": [
         "breastfeeding",
         "renal_impairment",
         "haemodialysis",
-        "hepatic_impairment_present"
+        "hepatic_impairment_present",
+        "adequate_renal_hepatic_function",
+        "egfr_expression_confirmed",
+        "alpha_gal_reaction_risk"
       ],
       "organ_rules": [
         "PREGNANCY_LACTATION",
-        "ORGAN_REVIEW"
+        "ORGAN_REVIEW",
+        "ORGAN_ELIGIBILITY",
+        "CRC_EGFR_ELIGIBILITY",
+        "ANAPHYLAXIS_RISK"
       ],
       "issues": []
     },
@@ -506,7 +512,8 @@
         "first_line_metastatic",
         "high_risk_history",
         "egfr_antibody_with_chemo",
-        "haemodialysis"
+        "haemodialysis",
+        "diastolic_bp_mmhg"
       ],
       "organ_rules": [
         "BREASTFEEDING",
@@ -514,7 +521,8 @@
         "FIRST_LINE_SCOPE",
         "EGFR_ANTIBODY_INTERACTION",
         "ORGAN_FUNCTION_REVIEW",
-        "HAEMODIALYSIS_REVIEW"
+        "HAEMODIALYSIS_REVIEW",
+        "BP_NUMERIC_REVIEW"
       ],
       "issues": []
     },
@@ -556,6 +564,8 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "source_reviewed_no_prescriptive_adjustment",
+      "superseded_by_release": "0.84.34",
+      "replacement_evidence": "validation/colorectal-v08434/bev-source-audit/AUDIT.md",
       "source_url": "https://healthservice.hse.ie/documents/6554/214_Bevacizumab_7.5.pdf",
       "organ_inputs": [
         "gi_perforation",
@@ -604,7 +614,8 @@
         "bilirubin",
         "ast_uln",
         "alp_uln",
-        "egfr_activating_mutation"
+        "egfr_activating_mutation",
+        "diastolic_bp_mmhg"
       ],
       "organ_rules": [
         "BREASTFEEDING",
@@ -616,7 +627,8 @@
         "BILIRUBIN_INITIAL",
         "AST_INITIAL",
         "ALP_INITIAL",
-        "NSCLC_EGFR"
+        "NSCLC_EGFR",
+        "BP_NUMERIC_REVIEW"
       ],
       "issues": []
     },
@@ -853,19 +865,21 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "source_reviewed_no_prescriptive_adjustment",
-      "superseded_by_release": "0.83.5",
-      "replacement_evidence": "validation/colorectal-v0835/source-map.json",
+      "superseded_by_release": "0.84.34",
+      "replacement_evidence": "validation/colorectal-v08434/retro-mono-source-audit/AUDIT.md",
       "source_url": "https://healthservice.hse.ie/documents/6560/225_Panitumumab_6mgkg.pdf",
       "organ_inputs": [
         "breastfeeding",
         "renal_impairment",
         "severe_renal_impairment",
         "haemodialysis",
-        "hepatic_impairment_category"
+        "hepatic_impairment_category",
+        "adequate_renal_hepatic_function"
       ],
       "organ_rules": [
         "ORGAN_FUNCTION",
-        "PREGNANCY_LACTATION"
+        "PREGNANCY_LACTATION",
+        "ORGAN_ELIGIBILITY"
       ],
       "issues": []
     },
@@ -1269,7 +1283,7 @@
       "path": "protocols/gastrointestinal/00244-regorafenib.json",
       "title": "Regorafenib Monotherapy",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "resolution": "",
       "source_url": "https://healthservice.hse.ie/documents/6347/244_v5_Regorafenib_Monotherapy.pdf",
       "organ_inputs": [
@@ -1277,15 +1291,37 @@
         "alt_ast_ratio_uln",
         "bilirubin_ratio_uln",
         "liver_event_recurrence",
-        "diastolic_bp_mmhg"
+        "diastolic_bp_mmhg",
+        "breastfeeding",
+        "inadequate_organ_reserve",
+        "prior_treatment_eligibility_unmet",
+        "haemodialysis",
+        "gilberts_syndrome_confirmed",
+        "liver_recovered_lt3_or_baseline",
+        "liver_benefit_risk_approved",
+        "other_toxicity_table5_exempt",
+        "gi_perforation_or_fistula",
+        "unexplained_mental_status_change"
       ],
       "organ_rules": [
+        "EXCLUDE_BREASTFEEDING",
+        "PRIOR_THERAPY_REVIEW",
         "CHILD_PUGH_C",
+        "CHILD_PUGH_AB",
+        "DIALYSIS_REVIEW",
+        "DOSE_FLOOR",
+        "LIVER_LOW_GRADE",
+        "LIVER_G3_HOLD",
         "LIVER_G3_FIRST",
         "LIVER_G3_RECUR",
         "LIVER_G4",
         "LIVER_HY",
-        "PROCEED"
+        "LIVER_HY_GILBERT_UNKNOWN",
+        "LIVER_GILBERT",
+        "LIVER_RESTART_RECOVERY",
+        "LIVER_RESTART_RISK",
+        "HTN_BP_SEVERE",
+        "HTN_REDUCTION"
       ],
       "issues": []
     },
@@ -3124,8 +3160,8 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "structured_rules",
-      "superseded_by_release": "0.83.6",
-      "replacement_evidence": "validation/colorectal-v0836/source-map.json",
+      "superseded_by_release": "0.84.34",
+      "replacement_evidence": "validation/colorectal-v08434/retro-combo-source-audit/AUDIT.md",
       "source_url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
       "organ_inputs": [
         "breastfeeding",
@@ -3136,7 +3172,11 @@
         "renal_impairment",
         "bilirubin_uln_multiple",
         "fluorouracil_bilirubin_umol_l",
-        "fluorouracil_ast_u_l"
+        "fluorouracil_ast_u_l",
+        "previous_cetuximab_dose_mg_m2",
+        "adequate_renal_hepatic_function",
+        "alpha_gal_reaction_risk",
+        "renal_impairment_dpd_phenotype"
       ],
       "organ_rules": [
         "PREGNANCY_LACTATION",
@@ -3146,7 +3186,10 @@
         "FU_HEPATIC_CI",
         "FU_HEPATIC_EQUALITY",
         "FU_HEPATIC_REDUCTION",
-        "SEVERE_RENAL_EXCLUSION"
+        "SEVERE_RENAL_EXCLUSION",
+        "ELIGIBILITY_ADEQUATE_RENAL_HEPATIC_FUNCTION",
+        "ANAPHYLAXIS_RISK",
+        "DPD_RENAL_PHENOTYPE_REVIEW"
       ],
       "issues": []
     },
@@ -3189,8 +3232,8 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "structured_rules",
-      "superseded_by_release": "0.83.6",
-      "replacement_evidence": "validation/colorectal-v0836/source-map.json",
+      "superseded_by_release": "0.84.34",
+      "replacement_evidence": "validation/colorectal-v08434/retro-combo-source-audit/AUDIT.md",
       "source_url": "https://healthservice.hse.ie/documents/6785/330_v6_Cetuximab_7days_irinotecan_14_day.pdf",
       "organ_inputs": [
         "breastfeeding",
@@ -3199,13 +3242,19 @@
         "severe_renal_impairment",
         "hepatic_impairment",
         "renal_impairment",
-        "bilirubin_uln_multiple"
+        "bilirubin_uln_multiple",
+        "previous_irinotecan_dose_mg_m2",
+        "previous_cetuximab_dose_mg_m2",
+        "adequate_renal_hepatic_function",
+        "alpha_gal_reaction_risk"
       ],
       "organ_rules": [
         "PREGNANCY_LACTATION",
         "BILI_CI",
         "RENAL_IRI",
-        "BILI_ABNORMAL_REVIEW"
+        "BILI_ABNORMAL_REVIEW",
+        "ELIGIBILITY_ADEQUATE_RENAL_HEPATIC_FUNCTION",
+        "ANAPHYLAXIS_RISK"
       ],
       "issues": []
     },
@@ -3217,8 +3266,8 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "structured_rules",
-      "superseded_by_release": "0.83.6",
-      "replacement_evidence": "validation/colorectal-v0836/source-map.json",
+      "superseded_by_release": "0.84.34",
+      "replacement_evidence": "validation/colorectal-v08434/retro-combo-source-audit/AUDIT.md",
       "source_url": "https://healthservice.hse.ie/documents/6786/331_v7_Cetuximab_14days_irinotecan_14_day.pdf",
       "organ_inputs": [
         "breastfeeding",
@@ -3227,13 +3276,19 @@
         "severe_renal_impairment",
         "hepatic_impairment",
         "renal_impairment",
-        "bilirubin_uln_multiple"
+        "bilirubin_uln_multiple",
+        "previous_irinotecan_dose_mg_m2",
+        "previous_cetuximab_dose_mg_m2",
+        "adequate_renal_hepatic_function",
+        "alpha_gal_reaction_risk"
       ],
       "organ_rules": [
         "PREGNANCY_LACTATION",
         "BILI_CI",
         "RENAL_IRI",
-        "BILI_ABNORMAL_REVIEW"
+        "BILI_ABNORMAL_REVIEW",
+        "ELIGIBILITY_ADEQUATE_RENAL_HEPATIC_FUNCTION",
+        "ANAPHYLAXIS_RISK"
       ],
       "issues": []
     },
@@ -4022,14 +4077,21 @@
         "crcl_ml_min",
         "bilirubin_ratio_uln",
         "hepatic_impairment",
-        "lonsurf_crcl_ml_min"
+        "lonsurf_crcl_ml_min",
+        "unable_tolerate_severe_renal_minimum",
+        "prior_crc_therapy_eligibility_unmet"
       ],
       "organ_rules": [
         "PREG_LACT",
         "RENAL_15_29",
         "RENAL_LT15",
         "RENAL_ENHANCED_MONITORING",
-        "HEPATIC_MOD_SEV"
+        "HEPATIC_MOD_SEV",
+        "PRIOR_THERAPY_REVIEW",
+        "SEVERE_RENAL_MINIMUM_STOP",
+        "SEVERE_RENAL_REDUCTION_LIMIT",
+        "STANDARD_DOSE_FLOOR",
+        "RENAL_CONTEXT_CONFLICT"
       ],
       "issues": []
     },
@@ -4860,6 +4922,10 @@
       "in_v0590_scope": false,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "",
+      "superseded_by_release": "0.84.35",
+      "replacement_evidence": "validation/colorectal-v08435/retro-source-audit/AUDIT.md",
+      "source_sha256": "7d8720b3259284f2fd558bc81364ae30ffb519c8c9b2cca5b0c498cd395ce3c8",
+      "source_version": "7",
       "source_url": "https://healthservice.hse.ie/documents/6479/447_Panitumumab_plus_mFOLFOX-6.pdf",
       "organ_inputs": [
         "breastfeeding",
@@ -4869,7 +4935,8 @@
         "renal_impairment",
         "severe_renal_impairment",
         "bilirubin_umol_l",
-        "ast_u_l"
+        "ast_u_l",
+        "renal_impairment_dpd_phenotype"
       ],
       "organ_rules": [
         "RENAL_LT30",
@@ -4878,7 +4945,8 @@
         "FIVEFU_BOUNDARY",
         "FIVEFU_HEPATIC_REVIEW",
         "FIVEFU_SEVERE_RENAL",
-        "PREGNANCY_LACTATION"
+        "PREGNANCY_LACTATION",
+        "DPD_RENAL_PHENOTYPE_REVIEW"
       ],
       "issues": []
     },
@@ -4890,6 +4958,10 @@
       "in_v0590_scope": false,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "",
+      "superseded_by_release": "0.84.35",
+      "replacement_evidence": "validation/colorectal-v08435/retro-source-audit/AUDIT.md",
+      "source_sha256": "447e182826e1af7c770b79255a1b37f81f33375e18fac683024ae8fe199d3c89",
+      "source_version": "5",
       "source_url": "https://healthservice.hse.ie/documents/6480/448_Panitumumab_plus_FOLFIRI.pdf",
       "organ_inputs": [
         "breastfeeding",
@@ -4900,7 +4972,9 @@
         "ast_u_l",
         "renal_impairment",
         "severe_renal_impairment",
-        "hepatic_impairment_category"
+        "hepatic_impairment_category",
+        "renal_impairment_dpd_phenotype",
+        "gilbert_syndrome"
       ],
       "organ_rules": [
         "EXCLUSION_PREGNANCY_BREASTFEEDING",
@@ -4910,7 +4984,8 @@
         "FIVEFU_HEPATIC_CI",
         "FIVEFU_BOUNDARY",
         "FIVEFU_HEPATIC_REVIEW",
-        "FIVEFU_SEVERE_RENAL"
+        "FIVEFU_SEVERE_RENAL",
+        "DPD_RENAL_PHENOTYPE_REVIEW"
       ],
       "issues": []
     },
@@ -5062,7 +5137,9 @@
         "ast_alt_elevation_days",
         "hepatic_impairment",
         "pembro_immune_hepatitis_assessed",
-        "pembro_immune_nephritis_assessed"
+        "pembro_immune_nephritis_assessed",
+        "crc_metastatic",
+        "crc_first_line"
       ],
       "organ_rules": [
         "PREGNANCY_BREASTFEEDING_REVIEW",
@@ -5077,7 +5154,8 @@
         "CHRONIC_RENAL_NO_REDUCTION",
         "CHRONIC_HEPATIC_NO_REDUCTION",
         "LIVER_ATTRIBUTION_REVIEW",
-        "RENAL_ATTRIBUTION_REVIEW"
+        "RENAL_ATTRIBUTION_REVIEW",
+        "CRC_METASTATIC"
       ],
       "issues": []
     },
@@ -6366,20 +6444,41 @@
       "path": "protocols/shared/00551-nivolumab-3-mg-kg-with-ipilimumab-1-mg-kg-therapy.json",
       "title": "Nivolumab 3 mg/kg with Ipilimumab 1 mg/kg Therapy",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "",
-      "source_url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgk.pdf",
+      "source_url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
       "organ_inputs": [
         "breastfeeding",
-        "creatinine_ratio_baseline_or_uln",
         "alt_ast_uln_multiple",
-        "bilirubin_uln_multiple"
+        "bilirubin_uln_multiple",
+        "crc_histology_confirmed",
+        "symptomatic_cns_metastases",
+        "hepatitis_grade",
+        "nephritis_grade",
+        "adrenal_grade",
+        "overlap_syndrome_grade",
+        "renal_impairment_band",
+        "hepatic_impairment_band",
+        "baseline_alt_ast_uln",
+        "baseline_bilirubin_uln",
+        "days_since_last_combination",
+        "creatinine_ratio_baseline_or_uln",
+        "rcc_bp_poorly_controlled",
+        "adequate_baseline_organ_function"
       ],
       "organ_rules": [
         "PREGNANCY_OR_BREASTFEEDING",
-        "ICI_NEPHRITIS_RATIO",
-        "ICI_HEPATITIS_TRANSAMINASE",
-        "ICI_HEPATITIS_BILIRUBIN"
+        "SYMPTOMATIC_CNS_METASTASES",
+        "ADRENAL_GRADE_HOLD",
+        "ADRENAL_GRADE_CONTEXT",
+        "ADRENAL_GRADE_STOP",
+        "SEVERE_RENAL_REVIEW",
+        "HEPATIC_CAUTION",
+        "LAB_GRADE_REVIEW_ALT_AST_ULN_MULTIPLE",
+        "LAB_GRADE_REVIEW_BILIRUBIN_ULN_MULTIPLE",
+        "CRC_MAINTENANCE_EARLY",
+        "LAB_CONTEXT_CREATININE_RATIO_BASELINE_OR_ULN",
+        "OTHER_MAINTENANCE_EARLY"
       ],
       "issues": []
     },
@@ -6502,7 +6601,9 @@
         "ast_alt_elevation_days",
         "hepatic_impairment",
         "pembro_immune_hepatitis_assessed",
-        "pembro_immune_nephritis_assessed"
+        "pembro_immune_nephritis_assessed",
+        "crc_metastatic",
+        "crc_first_line"
       ],
       "organ_rules": [
         "PREGNANCY_BREASTFEEDING_REVIEW",
@@ -6517,7 +6618,8 @@
         "CHRONIC_RENAL_NO_REDUCTION",
         "CHRONIC_HEPATIC_NO_REDUCTION",
         "LIVER_ATTRIBUTION_REVIEW",
-        "RENAL_ATTRIBUTION_REVIEW"
+        "RENAL_ATTRIBUTION_REVIEW",
+        "CRC_METASTATIC"
       ],
       "issues": []
     },
@@ -7042,8 +7144,10 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "structured_rules",
-      "superseded_by_release": "0.83.6",
-      "replacement_evidence": "validation/colorectal-v0836/source-map.json",
+      "superseded_by_release": "0.84.35",
+      "replacement_evidence": "validation/colorectal-v08435/retro-source-audit/AUDIT.md",
+      "source_sha256": "b64ff00f9464bd007add2347c92c342d6004ecf2cd18f33fe6276edcea32ffa4",
+      "source_version": "5b",
       "source_url": "https://healthservice.hse.ie/documents/6395/585_v5b_Cetuximab_14_days_FOLFIRI.pdf",
       "organ_inputs": [
         "breastfeeding",
@@ -7054,7 +7158,12 @@
         "renal_impairment",
         "bilirubin_uln_multiple",
         "fluorouracil_bilirubin_umol_l",
-        "fluorouracil_ast_u_l"
+        "fluorouracil_ast_u_l",
+        "previous_cetuximab_dose_mg_m2",
+        "alpha_gal_reaction_risk",
+        "adequate_renal_hepatic_function",
+        "renal_impairment_dpd_phenotype",
+        "gilbert_syndrome"
       ],
       "organ_rules": [
         "PREGNANCY_LACTATION",
@@ -7065,7 +7174,10 @@
         "FU_HEPATIC_EQUALITY",
         "FU_HEPATIC_REDUCTION",
         "FU_RENAL_REVIEW",
-        "SEVERE_RENAL_EXCLUSION"
+        "SEVERE_RENAL_EXCLUSION",
+        "ANAPHYLAXIS_RISK",
+        "ELIGIBILITY_ADEQUATE_RENAL_HEPATIC_FUNCTION",
+        "DPD_RENAL_PHENOTYPE_REVIEW"
       ],
       "issues": []
     },
@@ -8857,18 +8969,25 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "source_reviewed_no_prescriptive_adjustment",
-      "superseded_by_release": "0.83.6",
-      "replacement_evidence": "validation/colorectal-v0836/source-map.json",
+      "superseded_by_release": "0.84.35",
+      "replacement_evidence": "validation/colorectal-v08435/retro-source-audit/AUDIT.md",
+      "source_sha256": "a9451d4ed81bc389ec99cba833c6044a8eaa09bc9b01278276ced4190fde9f06",
+      "source_version": "2",
       "source_url": "https://healthservice.hse.ie/documents/6602/732_v2_Cetuximab_14day.pdf",
       "organ_inputs": [
         "breastfeeding",
         "renal_impairment",
         "haemodialysis",
-        "hepatic_impairment_present"
+        "hepatic_impairment_present",
+        "previous_cetuximab_dose_mg_m2",
+        "alpha_gal_reaction_risk",
+        "adequate_renal_hepatic_function"
       ],
       "organ_rules": [
         "PREGNANCY_LACTATION",
-        "ORGAN_REVIEW"
+        "ORGAN_REVIEW",
+        "ANAPHYLAXIS_RISK",
+        "ELIGIBILITY_ADEQUATE_RENAL_HEPATIC_FUNCTION"
       ],
       "issues": []
     },
@@ -8880,8 +8999,10 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "structured_rules",
-      "superseded_by_release": "0.83.6",
-      "replacement_evidence": "validation/colorectal-v0836/source-map.json",
+      "superseded_by_release": "0.84.35",
+      "replacement_evidence": "validation/colorectal-v08435/retro-source-audit/AUDIT.md",
+      "source_sha256": "967c40b801faefa172f6fa649d88b1effcaa46e8a17331a9481745f7f38a7d0a",
+      "source_version": "2a",
       "source_url": "https://healthservice.hse.ie/documents/6603/733_v2a_Cetuximab_FOLFOX_6.pdf",
       "organ_inputs": [
         "breastfeeding",
@@ -8891,14 +9012,21 @@
         "hepatic_impairment",
         "renal_impairment",
         "fluorouracil_bilirubin_umol_l",
-        "fluorouracil_ast_u_l"
+        "fluorouracil_ast_u_l",
+        "previous_cetuximab_dose_mg_m2",
+        "alpha_gal_reaction_risk",
+        "adequate_renal_hepatic_function",
+        "renal_impairment_dpd_phenotype"
       ],
       "organ_rules": [
         "PREGNANCY_LACTATION",
         "FU_HEPATIC_CI",
         "FU_HEPATIC_EQUALITY",
         "FU_HEPATIC_REDUCTION",
-        "OX_RENAL_REDUCTION"
+        "OX_RENAL_REDUCTION",
+        "ANAPHYLAXIS_RISK",
+        "ELIGIBILITY_ADEQUATE_RENAL_HEPATIC_FUNCTION",
+        "DPD_RENAL_PHENOTYPE_REVIEW"
       ],
       "issues": []
     },
@@ -10893,25 +11021,38 @@
       "in_v0590_scope": true,
       "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "structured_rules",
-      "source_url": "https://healthservice.hse.ie/documents/6648/890_v2_Fruquintinib.pdf",
+      "superseded_by_release": "0.84.35",
+      "replacement_evidence": "validation/colorectal-v08435/nivo-fruq-source-audit/AUDIT.md",
+      "source_sha256": "368834499b720e2565adcd2c7bfc885f958b2748929f14b2fb52822ab33a2bf4",
+      "source_version": "2a",
+      "source_url": "https://healthservice.hse.ie/documents/6648/Fruquintinib_890.pdf",
       "organ_inputs": [
         "breastfeeding",
         "diastolic_bp_mmhg",
-        "gi_perforation_or_fistula",
         "alt_ast_uln_multiple",
         "bilirubin_uln_multiple",
         "targeted_renal_band",
-        "targeted_hepatic_band"
+        "targeted_hepatic_band",
+        "prior_standard_therapies",
+        "thromboembolism_within6months",
+        "stroke_tia_within12months",
+        "liver_toxicity_grade",
+        "gi_perforation",
+        "adequate_baseline_organ_function"
       ],
       "organ_rules": [
         "PREGNANCY_OR_BREASTFEEDING",
-        "UNCONTROLLED_HYPERTENSION",
-        "ORAL_TARGETED_LFT_REVIEW",
-        "ORAL_TARGETED_BILIRUBIN_REVIEW",
-        "OF590_00890_FRUQ_HEP_SEV",
-        "OF590_00890_FRUQ_STOP",
-        "OF590_00890_FRUQ_G4",
-        "OF590_00890_FRUQ_G2_3"
+        "BP_REVIEW_DIASTOLIC_BP_MMHG",
+        "LIVER_G2_3",
+        "LIVER_G4",
+        "LIVER_COMBINED_STOP",
+        "LIVER_COMBINED_CONTEXT",
+        "LIVER_GRADE_REVIEW_ALT_AST_ULN_MULTIPLE",
+        "LIVER_GRADE_REVIEW_BILIRUBIN_ULN_MULTIPLE",
+        "LIVER_AT3_STOP",
+        "HEPATIC_SEVERE",
+        "ORGAN_REVIEW",
+        "DIALYSIS_UNSPECIFIED"
       ],
       "issues": []
     },
@@ -11031,20 +11172,37 @@
       "path": "protocols/gastrointestinal/00900-nivolumab-240-mg-and-ipilimumab-1-mg-kg-therapy.json",
       "title": "Nivolumab 240 mg and Ipilimumab 1 mg/kg Therapy",
       "in_v0590_scope": false,
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_rule_encoding",
       "resolution": "",
       "source_url": "https://healthservice.hse.ie/documents/6653/900_v1a_Nivolumab_240mg_ipilimumab_1mgkg_.pdf",
       "organ_inputs": [
         "breastfeeding",
-        "creatinine_ratio_baseline_or_uln",
         "alt_ast_uln_multiple",
-        "bilirubin_uln_multiple"
+        "bilirubin_uln_multiple",
+        "crc_histology_confirmed",
+        "symptomatic_cns_metastases",
+        "hepatitis_grade",
+        "nephritis_grade",
+        "adrenal_grade",
+        "renal_impairment_band",
+        "hepatic_impairment_band",
+        "baseline_alt_ast_uln",
+        "baseline_bilirubin_uln",
+        "days_since_last_combination",
+        "creatinine_ratio_baseline_or_uln",
+        "adequate_baseline_organ_function"
       ],
       "organ_rules": [
         "PREGNANCY_OR_BREASTFEEDING",
-        "ICI_NEPHRITIS_RATIO",
-        "ICI_HEPATITIS_TRANSAMINASE",
-        "ICI_HEPATITIS_BILIRUBIN"
+        "SYMPTOMATIC_CNS_METASTASES",
+        "ADRENAL_GRADE_HOLD",
+        "ADRENAL_GRADE_CONTEXT",
+        "ADRENAL_GRADE_STOP",
+        "BASELINE_ORGAN_REVIEW",
+        "LAB_GRADE_REVIEW_ALT_AST_ULN_MULTIPLE",
+        "LAB_GRADE_REVIEW_BILIRUBIN_ULN_MULTIPLE",
+        "CRC_MAINTENANCE_EARLY",
+        "LAB_CONTEXT_CREATININE_RATIO_BASELINE_OR_ULN"
       ],
       "issues": []
     },

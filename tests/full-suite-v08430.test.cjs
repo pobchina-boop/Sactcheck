@@ -5,11 +5,11 @@ const scope=json('validation/lung-completion-v08430/scope.json'),idx=json('data/
 const Engine=require('../js/assessment-engine'),Registry=require('../js/patient-asset-registry-v0810'),Journey=require('../js/treatment-journey-v0837'),Dose=require('../js/protocol-dose-schedule'),Evidence=require('../js/treatment-evidence-v08413');
 const entries=json('protocols/index.json').protocols,protocol=c=>json(entries.find(x=>x.path.includes('/'+c+'-')).path);
 assert.deepEqual([...scope.new_codes].sort(),['00214','00279','00309','00372','00456','00561']);
-assert.equal(idx.codes.length,6);assert.equal(kb.regimen_profiles.length,6);assert.equal(Registry.codes.length,170);
+assert.equal(idx.codes.length,6);assert.equal(kb.regimen_profiles.length,6);assert.equal(Registry.codes.length,174);assert(Registry.codes.includes('00244'),'Audited v34 regorafenib accounts for the added patient registry entry');
 const routes=[];
 for(const c of idx.codes){
  const p=protocol(c),x=author[c],k=kb.regimen_profiles.find(x=>x.protocol_id===p.protocol_id);
- assert.equal(p.metadata.full_suite_release,'0.84.30');assert.equal(p.metadata.source_checked_date,'2026-11-02');
+ assert.equal(p.metadata.full_suite_release,'0.84.30');assert.equal(p.metadata.source_checked_date,c==='00214'?'2026-11-05':'2026-11-02');
  for(const flag of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[flag],false);
  assert.equal(Engine.assess(p,{}).complete,false);assert(!['proceed','proceed_with_caution'].includes(Engine.assess(p,{}).actionType));
  assert.equal(new Set(p.rule_engine.rules.map(x=>x.rule_id||x.id)).size,p.rule_engine.rules.length,c+' duplicate rules');
