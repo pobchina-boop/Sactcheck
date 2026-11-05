@@ -27,10 +27,10 @@
       "clinical_use_authorised": false,
       "software_tests_completed": true,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08433_independent_review_pending"
     },
     "regimen_reimbursement_code": "00238a",
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.84.33",
     "catalog": {
       "enabled": true
     },
@@ -69,24 +69,33 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source-reconciled rules; independent clinical/pharmacy validation pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.33",
+      "audit_date": "2026-11-04",
+      "scope_note": "Current official NCCP source reconciled in v0.84.33; independent consultant and oncology-pharmacy validation remain pending.",
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00238-v6"
+    "canonical_protocol_id": "nccp-00238-v6",
+    "full_suite_release": "0.84.33",
+    "clinical_audit_release": "0.84.33",
+    "source_checked_date": "2026-11-04",
+    "document_revision": "2026-11-04",
+    "source_pdf_sha256": "a66feb31328fdfdeb2ffb778745b0f413294899b1145de31438c1fdf428c9678",
+    "source_text_snapshot_sha256": "6e94b7db355e883f0eaec6549551429b55b71ef30b6b5f7a4c43638949cb453d",
+    "schedule_summary": "Day 1: aflibercept, then irinotecan, folinic acid and fluorouracil, followed by a 46-hour fluorouracil pump. Repeat every 14 days while beneficial and tolerable."
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "JSON assessment encoding derived from NCCP 00227 Version 9. Confirm the current official NCCP PDF and use independent clinical judgement. Clinical and oncology-pharmacy validation remain pending."
+    "disclaimer": "JSON assessment encoding derived from NCCP 00238 version 6. Confirm the current official NCCP PDF and use independent clinical judgement. Independent clinical and oncology-pharmacy validation remain pending."
   },
   "indications": [
     {
@@ -111,7 +120,8 @@
             "value": 4,
             "unit": "mg/kg"
           },
-          "route": "IV infusion"
+          "route": "IV infusion",
+          "notes": "Infuse over 60 minutes before FOLFIRI."
         },
         {
           "day": 1,
@@ -120,7 +130,8 @@
             "value": 180,
             "unit": "mg/m2 IV"
           },
-          "order": 2
+          "order": 2,
+          "notes": "Infuse over 90 minutes; may share Y-connector with folinic acid, not the same bag."
         },
         {
           "day": 1,
@@ -129,7 +140,8 @@
             "value": 400,
             "unit": "mg/m2 IV"
           },
-          "order": 2
+          "order": 2,
+          "notes": "Infuse over 2 hours before 5-FU; 200 mg/m² may be considered per source."
         },
         {
           "day": 1,
@@ -138,7 +150,8 @@
             "value": 400,
             "unit": "mg/m2 IV bolus"
           },
-          "order": 2
+          "order": 3,
+          "notes": "Day 1 bolus after folinic acid."
         },
         {
           "day": 1,
@@ -147,31 +160,12 @@
             "value": 2400,
             "unit": "mg/m2 continuous IV over 46 hours"
           },
-          "order": 2
+          "order": 4,
+          "notes": "Continuous 46-hour pump after bolus; arranged disconnection."
         }
       ]
     }
   ],
-  "dose_levels": {
-    "irinotecan": {
-      "0": 180,
-      "-1": 150,
-      "-2": 120,
-      "-3": "discontinue"
-    },
-    "fluorouracil_bolus": {
-      "0": 400,
-      "-1": 320,
-      "-2": 260,
-      "-3": "discontinue"
-    },
-    "fluorouracil_infusion": {
-      "0": 2400,
-      "-1": 1900,
-      "-2": 1500,
-      "-3": "discontinue"
-    }
-  },
   "required_inputs": [],
   "output_templates": {
     "contraindicated": "The entered data trigger a protocol exclusion or contraindication pathway.",
@@ -183,7 +177,7 @@
   },
   "rule_engine": {
     "conflict_policy": "Use the most restrictive overall action; combine component changes using the greatest reduction per component rather than summing reductions.",
-    "missing_data_policy": "Evaluate only supplied values; do not infer missing values. Eligibility/context fields remain optional unless a specific rule requires them.",
+    "missing_data_policy": "Do not infer missing clinical values, recovery, recurrence or current component doses. Independently actionable abnormal values trigger their pathway without requiring unrelated inputs.",
     "actions_ranked_most_to_least_restrictive": [
       "contraindicated",
       "discontinue",
@@ -194,978 +188,1786 @@
     ],
     "rules": [
       {
-        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "rule_id": "EXCLUDE_HYPERSENSITIVITY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "whole_regimen"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "NCCP exclusion: hypersensitivity. Do not administer; specialist assessment required."
         },
+        "explanation": "NCCP exclusion: hypersensitivity. Do not administer; specialist assessment required.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Hypersensitivity to irinotecan, fluorouracil or an excipient is an exclusion."
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
       },
       {
-        "rule_id": "EXCLUSION_PREGNANCY_BREASTFEEDING",
-        "any": [
-          {
-            "field": "pregnancy",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "breastfeeding",
-            "operator": "==",
-            "value": true
-          }
-        ],
+        "rule_id": "EXCLUDE_PREGNANCY",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "whole_regimen"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "NCCP exclusion: pregnancy. Do not administer; specialist assessment required."
         },
+        "explanation": "NCCP exclusion: pregnancy. Do not administer; specialist assessment required.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Pregnancy or breastfeeding is an exclusion."
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
       },
       {
-        "rule_id": "EXCLUSION_BOWEL_DISEASE_OBSTRUCTION",
-        "field": "bowel_obstruction_or_chronic_bowel_disease",
-        "operator": "==",
-        "value": true,
+        "rule_id": "EXCLUDE_BREASTFEEDING",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "whole_regimen"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "NCCP exclusion: breastfeeding. Do not administer; specialist assessment required."
         },
+        "explanation": "NCCP exclusion: breastfeeding. Do not administer; specialist assessment required.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "ECOG_REVIEW",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
         },
-        "explanation": "Chronic bowel disease and/or bowel obstruction is an exclusion."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "ECOG outside source eligibility 0–2; consultant review before treatment.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "ECOG outside source eligibility 0–2; consultant review before treatment.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
       },
       {
         "rule_id": "DPD_COMPLETE",
-        "field": "dpd_status",
-        "operator": "==",
-        "value": "complete",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "complete"
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "fluorouracil_bolus",
             "fluorouracil_infusion",
-            "whole_regimen"
+            "folinic_acid"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "Complete DPD deficiency: do not administer fluorouracil; folinic acid is not given without its associated fluorouracil."
         },
+        "explanation": "Complete DPD deficiency: do not administer fluorouracil; folinic acid is not given without its associated fluorouracil.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Known complete DPD deficiency contraindicates fluorouracil."
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
       },
       {
         "rule_id": "DPD_PARTIAL",
-        "field": "dpd_status",
-        "operator": "==",
-        "value": "partial",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "partial"
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Use an individualised reduced starting dose and consider cautious escalation if tolerated."
+          "recommendation": "Partial DPD deficiency: individualise a reduced starting fluorouracil dose. No universal percentage is specified; careful monitoring and consultant-directed titration are required.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Partial DPD deficiency: individualise a reduced starting fluorouracil dose. No universal percentage is specified; careful monitoring and consultant-directed titration are required.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose."
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
       },
       {
-        "rule_id": "DPD_UNKNOWN_BASELINE",
-        "all": [
-          {
-            "field": "assessment_type",
-            "operator": "==",
-            "value": "baseline"
-          },
-          {
-            "field": "dpd_status",
-            "operator": "==",
-            "value": "unknown"
-          }
-        ],
+        "rule_id": "DPD_UNKNOWN",
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "unknown"
+        },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Confirm DPD testing before first fluorouracil treatment. A missing result must not be assumed normal.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm DPD testing before first fluorouracil treatment. A missing result must not be assumed normal.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "DPD_BASELINE_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "dpd_status",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Before first fluorouracil treatment verify documented DPD testing; the omitted result has not been assessed.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Before first fluorouracil treatment verify documented DPD testing; the omitted result has not been assessed.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "EXCLUDE_BOWEL_OBSTRUCTION_OR_CHRONIC_BOWEL_DISEASE",
+        "when": {
+          "field": "bowel_obstruction_or_chronic_bowel_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
           "components": [
             "whole_regimen"
           ],
-          "recommendation": "Obtain or verify DPD testing before first fluorouracil treatment."
+          "recommendation": "Source exclusion: Chronic bowel disease and/or bowel obstruction. Do not administer pending consultant assessment."
         },
+        "explanation": "Source exclusion: Chronic bowel disease and/or bowel obstruction. Do not administer pending consultant assessment.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "DPD testing is required before first fluorouracil treatment unless previously tested."
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
       },
       {
-        "rule_id": "BASELINE_LOOSE_BM_CAUTION",
-        "field": "baseline_loose_bm_gt3",
-        "operator": "==",
-        "value": true,
+        "rule_id": "EXCLUDE_SEVERE_BONE_MARROW_FAILURE",
+        "when": {
+          "field": "severe_bone_marrow_failure",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Source exclusion: Severe bone marrow failure. Do not administer pending consultant assessment."
+        },
+        "explanation": "Source exclusion: Severe bone marrow failure. Do not administer pending consultant assessment.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "CAUTION_CARDIAC_RISK",
+        "when": {
+          "field": "cardiac_risk",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "recommendation": "Review baseline bowel function and suitability before treatment."
+          "recommendation": "Source caution: Recent MI or uncontrolled angina, hypertension, arrhythmia or heart failure. Confirm suitability and monitoring before treatment.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Source caution: Recent MI or uncontrolled angina, hypertension, arrhythmia or heart failure. Confirm suitability and monitoring before treatment.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 2,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Baseline greater than 3 loose bowel movements per day is listed as a caution."
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
       },
       {
-        "rule_id": "UGT1A1_28_CAUTION",
-        "field": "ugt1a1_homozygous_28",
-        "operator": "==",
-        "value": true,
+        "rule_id": "CAUTION_PREVIOUS_PELVIC_RADIOTHERAPY",
+        "when": {
+          "field": "previous_pelvic_radiotherapy",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "consultant_review",
           "components": [
-            "irinotecan"
+            "whole_regimen"
           ],
-          "recommendation": "Consider a reduced irinotecan starting dose."
+          "recommendation": "Source caution: Previous pelvic radiotherapy. Confirm suitability and monitoring before treatment.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Source caution: Previous pelvic radiotherapy. Confirm suitability and monitoring before treatment.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "CAUTION_BASELINE_LOOSE_BM_GT3",
+        "when": {
+          "field": "baseline_loose_bm_gt3",
+          "operator": "==",
+          "value": true
         },
-        "explanation": "For patients known to be homozygous UGT1A1*28, a reduced irinotecan starting dose may be considered."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Source caution: Baseline >3 loose bowel movements daily, without colostomy/ileostomy. Confirm suitability and monitoring before treatment.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Source caution: Baseline >3 loose bowel movements daily, without colostomy/ileostomy. Confirm suitability and monitoring before treatment.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
       },
       {
         "rule_id": "ANC_DAY1_HOLD",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": "<",
-            "value": 1.5
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 4
-          }
-        ],
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1.5
+        },
         "action": {
           "type": "withhold",
           "components": [
             "whole_regimen"
           ],
-          "recommendation": "Hold treatment and repeat FBC weekly."
+          "recommendation": "Delay aflibercept/FOLFIRI until ANC ≥1.5 ×10⁹/L and platelets ≥75 ×10⁹/L. No duration input is needed to recognise this hold. The source uses “or” for recovery; confirm both counts before prescribing."
         },
+        "explanation": "Delay aflibercept/FOLFIRI until ANC ≥1.5 ×10⁹/L and platelets ≥75 ×10⁹/L. No duration input is needed to recognise this hold. The source uses “or” for recovery; confirm both counts before prescribing.",
         "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "If ANC is below 1.5 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly."
-      },
-      {
-        "rule_id": "ANC_NO_RECOVERY_4W",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": "<",
-            "value": 1.5
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": ">=",
-            "value": 4
-          }
-        ],
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Discontinue treatment."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "If ANC remains below 1.5 ×10⁹/L after 4 weeks, discontinue treatment."
-      },
-      {
-        "rule_id": "PLATELETS_DAY1_HOLD",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": "<",
-            "value": 75
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Hold treatment and repeat FBC weekly."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "If platelets are below 75 ×10⁹/L on Day 1, hold treatment and repeat FBC weekly."
-      },
-      {
-        "rule_id": "PLATELETS_NO_RECOVERY_2W",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": "<",
-            "value": 75
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Discontinue treatment."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "If platelets remain below 75 ×10⁹/L after 2 weeks, discontinue treatment."
-      },
-      {
-        "rule_id": "ANC_DELAY_NADIR_G3",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "lowest_anc_during_delay_x10e9_l",
-            "operator": ">=",
-            "value": 0.5
-          },
-          {
-            "field": "lowest_anc_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 1
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "irinotecan",
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Lowest ANC 0.5–0.99 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level."
-      },
-      {
-        "rule_id": "ANC_DELAY_NADIR_G4",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "lowest_anc_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 0.5
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "irinotecan",
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Lowest ANC below 0.5 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels."
-      },
-      {
-        "rule_id": "PLATELETS_DELAY_NADIR_G3",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_platelets_during_delay_x10e9_l",
-            "operator": ">=",
-            "value": 10
-          },
-          {
-            "field": "lowest_platelets_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 50
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "irinotecan",
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Lowest platelets 10–49.9 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level."
-      },
-      {
-        "rule_id": "PLATELETS_DELAY_NADIR_G4",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_platelets_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 10
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "irinotecan",
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Lowest platelets below 10 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels."
-      },
-      {
-        "rule_id": "FEBRILE_G4_NEUTROPENIA",
-        "field": "grade4_neutropenia_with_grade2_fever",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "irinotecan",
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels; G-CSF may be considered."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Grade 4 neutropenia with fever grade ≥2: reduce irinotecan and fluorouracil two dose levels."
-      },
-      {
-        "rule_id": "IRINOTECAN_CRCL_LT10",
-        "all": [
-          {
-            "field": "crcl_ml_min",
-            "operator": "<",
-            "value": 10
-          },
-          {
-            "field": "haemodialysis",
-            "operator": "==",
-            "value": false
-          }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "irinotecan"
-          ],
-          "recommendation": "Start irinotecan at 50–66% of the original dose; increase if tolerated."
-        },
-        "source": {
+          "document": "NCCP 00238 v6",
           "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "For CrCl below 10 mL/min, start irinotecan at 50–66% of the original dose and increase if tolerated."
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
-        "rule_id": "IRINOTECAN_HAEMODIALYSIS",
-        "field": "haemodialysis",
-        "operator": "==",
-        "value": true,
+        "rule_id": "PLT_DAY1_HOLD",
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Delay aflibercept/FOLFIRI until platelets ≥75 ×10⁹/L and ANC ≥1.5 ×10⁹/L. NCCP 00238 gives no automatic two/four-week discontinuation or nadir dose-level algorithm."
+        },
+        "explanation": "Delay aflibercept/FOLFIRI until platelets ≥75 ×10⁹/L and ANC ≥1.5 ×10⁹/L. NCCP 00238 gives no automatic two/four-week discontinuation or nadir dose-level algorithm.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "FN_ACTIVE_HOLD",
+        "when": {
+          "field": "febrile_neutropenia_current",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Current febrile neutropenia/neutropenic sepsis needs urgent treatment and clinical recovery. Do not give a future reduced dose during an active episode."
+        },
+        "explanation": "Current febrile neutropenia/neutropenic sepsis needs urgent treatment and clinical recovery. Do not give a future reduced dose during an active episode.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "FN_OCCURRENCE_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "grade4_neutropenia_with_grade2_fever",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "febrile_neutropenia_occurrence",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "aflibercept"
+          ],
+          "recommendation": "Establish occurrence number and recovery. NCCP 00238 uses recurrence-specific percentages: not the standard FOLFIRI two-dose-level reduction.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Establish occurrence number and recovery. NCCP 00238 uses recurrence-specific percentages: not the standard FOLFIRI two-dose-level reduction.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "FN_FIRST",
+        "when": {
+          "field": "febrile_neutropenia_occurrence",
+          "operator": "==",
+          "value": 1
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "irinotecan"
           ],
-          "recommendation": "Start irinotecan at 50–66% of the original dose and individualise dialysis timing."
+          "recommendation": "First febrile neutropenia/neutropenic sepsis: after recovery reduce irinotecan by 15–20% in subsequent cycles. The consultant selects within the source range after reviewing the actual administered dose; no automatic midpoint or starting-dose calculation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "First febrile neutropenia/neutropenic sepsis: after recovery reduce irinotecan by 15–20% in subsequent cycles. The consultant selects within the source range after reviewing the actual administered dose; no automatic midpoint or starting-dose calculation.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "For haemodialysis, start irinotecan at 50–66% of the original dose and increase if tolerated."
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
-        "rule_id": "IRINOTECAN_BILI_GT3ULN",
-        "field": "bilirubin_ratio_uln",
-        "operator": ">",
-        "value": 3,
+        "rule_id": "FN_SECOND",
+        "when": {
+          "field": "febrile_neutropenia_occurrence",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Second occurrence: after recovery additionally reduce both 5-FU bolus and infusion by 20%; maintain the previously reduced irinotecan dose. Confirm actual component doses and whether each reduction has already been applied; do not compound or reverse earlier changes automatically.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Second occurrence: after recovery additionally reduce both 5-FU bolus and infusion by 20%; maintain the previously reduced irinotecan dose. Confirm actual component doses and whether each reduction has already been applied; do not compound or reverse earlier changes automatically.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "FN_THIRD_OR_LATER",
+        "when": {
+          "field": "febrile_neutropenia_occurrence",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "aflibercept",
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Third occurrence: aflibercept 2 mg/kg and G-CSF may be considered; this is a consultant choice, not an automatic dose. Reconcile previous irinotecan and fluorouracil reductions and current recovery. Later occurrences need individual review.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Third occurrence: aflibercept 2 mg/kg and G-CSF may be considered; this is a consultant choice, not an automatic dose. Reconcile previous irinotecan and fluorouracil reductions and current recovery. Later occurrences need individual review.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "FN_RECOVERY_UNCONFIRMED",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "febrile_neutropenia_occurrence",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "grade4_neutropenia_with_grade2_fever",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "neutropenic_sepsis_recovered",
+                  "operator": "missing"
+                },
+                {
+                  "field": "neutropenic_sepsis_recovered",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Confirm infection recovery and both current counts before any subsequent cycle; recurrence information alone does not establish readiness to restart.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm infection recovery and both current counts before any subsequent cycle; recurrence information alone does not establish readiness to restart.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "IRINOTECAN_RENAL_RANGE",
+        "when": {
+          "any": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "CrCl <10 mL/min or haemodialysis: Table 1 gives a starting range of 50–66% of original irinotecan, with escalation if tolerated. Page 2 also lists impaired renal function as an exclusion. Resolve this source conflict with consultant/pharmacy; no automatic dose or midpoint.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "CrCl <10 mL/min or haemodialysis: Table 1 gives a starting range of 50–66% of original irinotecan, with escalation if tolerated. Page 2 also lists impaired renal function as an exclusion. Resolve this source conflict with consultant/pharmacy; no automatic dose or midpoint.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "RENAL_EXCLUSION_CONFLICT",
+        "when": {
+          "field": "renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Page 2 lists impaired renal function as an exclusion, while Table 1 provides renal dosing including severe impairment. Resolve eligibility and dosing with consultant/pharmacy; do not infer treatment clearance from the dose table.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Page 2 lists impaired renal function as an exclusion, while Table 1 provides renal dosing including severe impairment. Resolve eligibility and dosing with consultant/pharmacy; do not infer treatment clearance from the dose table.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "IRINOTECAN_BILIRUBIN",
+        "when": {
+          "field": "bilirubin_ratio_uln",
+          "operator": ">",
+          "value": 3
+        },
         "action": {
           "type": "contraindicated",
           "components": [
-            "irinotecan",
-            "whole_regimen"
+            "irinotecan"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "Irinotecan is contraindicated when bilirubin >3 ×ULN. Review the entire combination before prescribing."
         },
+        "explanation": "Irinotecan is contraindicated when bilirubin >3 ×ULN. Review the entire combination before prescribing.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Irinotecan is contraindicated when bilirubin exceeds 3 × ULN."
+          "document": "NCCP 00238 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 1
+        }
       },
       {
-        "rule_id": "FIVEFU_HEPATIC_CONTRAINDICATED",
-        "any": [
-          {
-            "field": "bilirubin_umol_l",
-            "operator": ">",
-            "value": 85
-          },
-          {
-            "field": "ast_u_l",
-            "operator": ">",
-            "value": 180
-          }
-        ],
+        "rule_id": "FU_HEPATIC_ABSOLUTE",
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 85
+            },
+            {
+              "field": "ast_u_l",
+              "operator": ">",
+              "value": 180
+            }
+          ]
+        },
         "action": {
           "type": "contraindicated",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "5-FU is contraindicated in the source table when bilirubin >85 µmol/L or AST >180 U/L."
+        },
+        "explanation": "5-FU is contraindicated in the source table when bilirubin >85 µmol/L or AST >180 U/L.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_BOUNDARY",
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "==",
+              "value": 85
+            },
+            {
+              "field": "ast_u_l",
+              "operator": "==",
+              "value": 180
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Exact bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < / > source bands. Consultant/pharmacy review; no automatic full dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Exact bilirubin 85 µmol/L or AST 180 U/L is not assigned by the strict < / > source bands. Consultant/pharmacy review; no automatic full dose.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_MODERATE",
+        "when": {
+          "field": "hepatic_impairment_severity",
+          "operator": "==",
+          "value": "moderate"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Clinical decision: for moderate hepatic impairment the source describes reducing the initial fluorouracil dose by one third, then increasing if no toxicity. Reconcile absolute bilirubin/AST contraindications, whether this is initial treatment, and actual component dose history; no automatic recalculation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Clinical decision: for moderate hepatic impairment the source describes reducing the initial fluorouracil dose by one third, then increasing if no toxicity. Reconcile absolute bilirubin/AST contraindications, whether this is initial treatment, and actual component dose history; no automatic recalculation.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_SEVERE",
+        "when": {
+          "field": "hepatic_impairment_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Clinical decision: for severe hepatic impairment the source describes reducing the initial fluorouracil dose by one half, then increasing if no toxicity. Reconcile absolute bilirubin/AST contraindications, whether this is initial treatment, and actual component dose history; no automatic recalculation.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Clinical decision: for severe hepatic impairment the source describes reducing the initial fluorouracil dose by one half, then increasing if no toxicity. Reconcile absolute bilirubin/AST contraindications, whether this is initial treatment, and actual component dose history; no automatic recalculation.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "FU_HEPATIC_PARTIAL",
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": "<",
+                  "value": 85
+                },
+                {
+                  "field": "ast_u_l",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "ast_u_l",
+                  "operator": "<",
+                  "value": 180
+                },
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "The source full-dose hepatic band requires BOTH bilirubin <85 µmol/L AND AST <180 U/L. The omitted result remains unassessed; do not treat a single low value as full hepatic clearance.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "The source full-dose hepatic band requires BOTH bilirubin <85 µmol/L AND AST <180 U/L. The omitted result remains unassessed; do not treat a single low value as full hepatic clearance.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "UGT_CONTEXT",
+        "when": {
+          "field": "ugt1a1_homozygous_28",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "Documented UGT 1 A 1 poor-metaboliser context requires consultant/pharmacy assessment against current irinotecan product information. NCCP 00238 v 6 does not specify a genotype-based numeric dose; none is calculated here.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Documented UGT 1 A 1 poor-metaboliser context requires consultant/pharmacy assessment against current irinotecan product information. NCCP 00238 v 6 does not specify a genotype-based numeric dose; none is calculated here.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 1
+        }
+      },
+      {
+        "rule_id": "AF_INFUSION_MILD_MODERATE",
+        "when": {
+          "field": "infusion_reaction_severity",
+          "operator": "==",
+          "value": "mild_moderate"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Temporarily suspend aflibercept infusion until the reaction resolves. Corticosteroid/antihistamine treatment and subsequent pre-treatment may be considered clinically."
+        },
+        "explanation": "Temporarily suspend aflibercept infusion until the reaction resolves. Corticosteroid/antihistamine treatment and subsequent pre-treatment may be considered clinically.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_INFUSION_SEVERE",
+        "when": {
+          "field": "infusion_reaction_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "recommendation": "Severe hypersensitivity reaction: discontinue aflibercept/FOLFIRI."
+        },
+        "explanation": "Severe hypersensitivity reaction: discontinue aflibercept/FOLFIRI.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_PROTEIN_HOLD",
+        "when": {
+          "field": "proteinuria_g_24h",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Suspend aflibercept for proteinuria ≥2 g/24 hours; resume only after <2 g/24 hours. On the second occurrence, permanently reduce to 2 mg/kg after recovery; confirm occurrence and current dose."
+        },
+        "explanation": "Suspend aflibercept for proteinuria ≥2 g/24 hours; resume only after <2 g/24 hours. On the second occurrence, permanently reduce to 2 mg/kg after recovery; confirm occurrence and current dose.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_PROTEIN_REPEAT",
+        "when": {
+          "all": [
+            {
+              "field": "proteinuria_occurrence",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "proteinuria_g_24h",
+              "operator": "<",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "After the second proteinuria occurrence and documented recovery below 2 g/24 hours, the source requires permanent aflibercept reduction to 2 mg/kg. Confirm current dose and previous reductions; no re-escalation or automatic restart from an isolated result.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "After the second proteinuria occurrence and documented recovery below 2 g/24 hours, the source requires permanent aflibercept reduction to 2 mg/kg. Confirm current dose and previous reductions; no re-escalation or automatic restart from an isolated result.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_PROTEIN_RECOVERY_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "proteinuria_occurrence",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "proteinuria_g_24h",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "A prior proteinuria episode requires a current 24-hour result before restart; recurrence number does not establish recovery below 2 g/24 hours.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "A prior proteinuria episode requires a current 24-hour result before restart; recurrence number does not establish recovery below 2 g/24 hours.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_UPCR_COLLECTION",
+        "when": {
+          "field": "upcr",
+          "operator": ">",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "UPCR >1 requires 24-hour urine collection. The UPCR is not interchangeable with grams of protein per 24 hours; assess the quantitative result before dose decisions.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "UPCR >1 requires 24-hour urine collection. The UPCR is not interchangeable with grams of protein per 24 hours; assess the quantitative result before dose decisions.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "AF_HYPERTENSION_HOLD",
+        "when": {
+          "field": "hypertension_current",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Withhold aflibercept until hypertension is controlled. Recurrence of medically significant/severe hypertension requires permanent reduction to 2 mg/kg after control; persistent uncontrolled hypertension follows the stop pathway."
+        },
+        "explanation": "Withhold aflibercept until hypertension is controlled. Recurrence of medically significant/severe hypertension requires permanent reduction to 2 mg/kg after control; persistent uncontrolled hypertension follows the stop pathway.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_HYPERTENSION_REPEAT",
+        "when": {
+          "field": "recurrent_significant_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Recurrent medically significant/severe hypertension: suspend until controlled, then permanently reduce aflibercept to 2 mg/kg. Confirm control and current dose before prescribing; do not re-escalate.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Recurrent medically significant/severe hypertension: suspend until controlled, then permanently reduce aflibercept to 2 mg/kg. Confirm control and current dose before prescribing; do not re-escalate.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_HYPERTENSION_RECOVERY_MISSING",
+        "when": {
+          "all": [
+            {
+              "field": "recurrent_significant_hypertension",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "hypertension_controlled",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hypertension_controlled",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Recurrent significant hypertension: do not restart aflibercept before control is documented."
+        },
+        "explanation": "Recurrent significant hypertension: do not restart aflibercept before control is documented.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_STOP_UNCONTROLLED_HYPERTENSION",
+        "when": {
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Discontinue aflibercept: Persistent uncontrolled hypertension (source permanent-stop pathway). This component-specific rule does not itself discontinue the FOLFIRI components."
+        },
+        "explanation": "Discontinue aflibercept: Persistent uncontrolled hypertension (source permanent-stop pathway). This component-specific rule does not itself discontinue the FOLFIRI components.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_STOP_HYPERTENSIVE_CRISIS_OR_ENCEPHALOPATHY",
+        "when": {
+          "field": "hypertensive_crisis_or_encephalopathy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Discontinue aflibercept: Hypertensive crisis or hypertensive encephalopathy. This component-specific rule does not itself discontinue the FOLFIRI components."
+        },
+        "explanation": "Discontinue aflibercept: Hypertensive crisis or hypertensive encephalopathy. This component-specific rule does not itself discontinue the FOLFIRI components.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_STOP_ACTIVE_SEVERE_BLEEDING",
+        "when": {
+          "field": "active_severe_bleeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Discontinue aflibercept: Active severe bleeding. This component-specific rule does not itself discontinue the FOLFIRI components."
+        },
+        "explanation": "Discontinue aflibercept: Active severe bleeding. This component-specific rule does not itself discontinue the FOLFIRI components.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_STOP_GI_PERFORATION_OR_FISTULA",
+        "when": {
+          "field": "gi_perforation_or_fistula",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Discontinue aflibercept: Gastrointestinal perforation or fistula. This component-specific rule does not itself discontinue the FOLFIRI components."
+        },
+        "explanation": "Discontinue aflibercept: Gastrointestinal perforation or fistula. This component-specific rule does not itself discontinue the FOLFIRI components.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_STOP_ARTERIAL_THROMBOEMBOLIC_EVENT",
+        "when": {
+          "field": "arterial_thromboembolic_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Discontinue aflibercept: Arterial thromboembolic event. This component-specific rule does not itself discontinue the FOLFIRI components."
+        },
+        "explanation": "Discontinue aflibercept: Arterial thromboembolic event. This component-specific rule does not itself discontinue the FOLFIRI components.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_STOP_GRADE4_VENOUS_THROMBOEMBOLISM",
+        "when": {
+          "field": "grade4_venous_thromboembolism",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Discontinue aflibercept: Grade 4 venous thromboembolism including pulmonary embolism. This component-specific rule does not itself discontinue the FOLFIRI components."
+        },
+        "explanation": "Discontinue aflibercept: Grade 4 venous thromboembolism including pulmonary embolism. This component-specific rule does not itself discontinue the FOLFIRI components.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_STOP_NEPHROTIC_SYNDROME_OR_TMA",
+        "when": {
+          "field": "nephrotic_syndrome_or_tma",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Discontinue aflibercept: Nephrotic syndrome or thrombotic microangiopathy. This component-specific rule does not itself discontinue the FOLFIRI components."
+        },
+        "explanation": "Discontinue aflibercept: Nephrotic syndrome or thrombotic microangiopathy. This component-specific rule does not itself discontinue the FOLFIRI components.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_STOP_WOUND_HEALING_REQUIRES_INTERVENTION",
+        "when": {
+          "field": "wound_healing_requires_intervention",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Discontinue aflibercept: Compromised wound healing requiring medical intervention. This component-specific rule does not itself discontinue the FOLFIRI components."
+        },
+        "explanation": "Discontinue aflibercept: Compromised wound healing requiring medical intervention. This component-specific rule does not itself discontinue the FOLFIRI components.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_STOP_PRES",
+        "when": {
+          "field": "pres",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Discontinue aflibercept: Posterior reversible encephalopathy syndrome. This component-specific rule does not itself discontinue the FOLFIRI components."
+        },
+        "explanation": "Discontinue aflibercept: Posterior reversible encephalopathy syndrome. This component-specific rule does not itself discontinue the FOLFIRI components.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "AF_SURGERY_PREOP",
+        "when": {
+          "field": "elective_surgery_within_4_weeks",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Suspend aflibercept for at least 4 weeks before elective surgery. Confirm surgical timing and healing with the treating team."
+        },
+        "explanation": "Suspend aflibercept for at least 4 weeks before elective surgery. Confirm surgical timing and healing with the treating team.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "AF_SURGERY_HEALING_REVIEW",
+        "when": {
+          "field": "recent_major_surgery_or_unhealed_wound",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "aflibercept"
+          ],
+          "recommendation": "Recent major surgery/unhealed wound: suspend aflibercept pending surgical and oncology review. Wound healing requiring medical intervention follows the permanent-stop pathway."
+        },
+        "explanation": "Recent major surgery/unhealed wound: suspend aflibercept pending surgical and oncology review. Wound healing requiring medical intervention follows the permanent-stop pathway.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_CURRENT_REVIEW",
+        "when": {
+          "field": "diarrhoea_current_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Current clinically significant diarrhoea needs assessment, hydration and antidiarrhoeal treatment before further FOLFIRI. NCCP 00238 does not supply the standard FOLFIRI grade 2/two-week dose-level algorithm; assess severity and recovery explicitly.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Current clinically significant diarrhoea needs assessment, hydration and antidiarrhoeal treatment before further FOLFIRI. NCCP 00238 does not supply the standard FOLFIRI grade 2/two-week dose-level algorithm; assess severity and recovery explicitly.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_SEVERE_CURRENT",
+        "when": {
+          "field": "diarrhoea_current_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Active severe diarrhoea: withhold FOLFIRI pending urgent clinical assessment, hydration and recovery. Use this regimen’s occurrence-specific subsequent-cycle reduction pathway."
+        },
+        "explanation": "Active severe diarrhoea: withhold FOLFIRI pending urgent clinical assessment, hydration and recovery. Use this regimen’s occurrence-specific subsequent-cycle reduction pathway.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_OCCURRENCE_MISSING",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "severe_diarrhoea_confirmed",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Severe diarrhoea: establish occurrence, recovery and actual component doses. First occurrence reduces irinotecan 15–20%; second additionally reduces both fluorouracil doses 20%. Do not import dose levels or assume a midpoint.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Severe diarrhoea: establish occurrence, recovery and actual component doses. First occurrence reduces irinotecan 15–20%; second additionally reduces both fluorouracil doses 20%. Do not import dose levels or assume a midpoint.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_FIRST",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "severe_diarrhoea_confirmed",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan"
+          ],
+          "recommendation": "First severe diarrhoea: after clinical recovery reduce irinotecan by 15–20%. Select the reduction with the consultant against the documented administered dose; no numeric range midpoint is calculated.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "First severe diarrhoea: after clinical recovery reduce irinotecan by 15–20%. Select the reduction with the consultant against the documented administered dose; no numeric range midpoint is calculated.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_SECOND",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "severe_diarrhoea_confirmed",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Second severe diarrhoea: additionally reduce both 5-FU bolus and infusion by 20%, retaining the irinotecan reduction. Confirm recovery and whether each change has already been applied. Persistent severe diarrhoea despite BOTH reductions requires discontinuation of FOLFIRI.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Second severe diarrhoea: additionally reduce both 5-FU bolus and infusion by 20%, retaining the irinotecan reduction. Confirm recovery and whether each change has already been applied. Persistent severe diarrhoea despite BOTH reductions requires discontinuation of FOLFIRI.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_PERSISTENT_BOTH",
+        "when": {
+          "field": "diarrhoea_persists_despite_both_reductions",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "irinotecan",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Severe diarrhoea persisting despite BOTH irinotecan and fluorouracil reductions: discontinue FOLFIRI. This rule does not automatically discontinue aflibercept; the future overall plan requires consultant review."
+        },
+        "explanation": "Severe diarrhoea persisting despite BOTH irinotecan and fluorouracil reductions: discontinue FOLFIRI. This rule does not automatically discontinue aflibercept; the future overall plan requires consultant review.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_PPE_SEVERE",
+        "when": {
+          "any": [
+            {
+              "field": "severe_stomatitis_or_ppe_confirmed",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Severe stomatitis/PPE: reduce both fluorouracil bolus and infusion by 20% after clinical recovery. Confirm the source term “severe”, current component doses and whether the reduction is already applied; no borrowed dose levels.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Severe stomatitis/PPE: reduce both fluorouracil bolus and infusion by 20% after clinical recovery. Confirm the source term “severe”, current component doses and whether the reduction is already applied; no borrowed dose levels.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_CURRENT",
+        "when": {
+          "field": "stomatitis_current_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Current stomatitis requires clinical severity and recovery assessment. NCCP 00238 uses severe stomatitis/PPE with 20% 5-FU reductions, not a grade 4 two-level or timed-stop rule.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "explanation": "Current stomatitis requires clinical severity and recovery assessment. NCCP 00238 uses severe stomatitis/PPE with 20% 5-FU reductions, not a grade 4 two-level or timed-stop rule.",
+        "source": {
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_SEVERE_CURRENT",
+        "when": {
+          "field": "stomatitis_current_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
           "components": [
             "fluorouracil_bolus",
             "fluorouracil_infusion",
-            "whole_regimen"
+            "folinic_acid"
           ],
-          "whole_regimen": "discontinue"
+          "recommendation": "Active severe stomatitis: defer fluorouracil and associated folinic acid pending assessment and recovery; subsequently reconcile the source 20% reduction with current doses."
         },
+        "explanation": "Active severe stomatitis: defer fluorouracil and associated folinic acid pending assessment and recovery; subsequently reconcile the source 20% reduction with current doses.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Fluorouracil is contraindicated when bilirubin exceeds 85 µmol/L or AST exceeds 180 U/L."
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
-        "rule_id": "FIVEFU_MODERATE_HEPATIC",
-        "field": "hepatic_impairment_severity",
-        "operator": "==",
-        "value": "moderate",
+        "rule_id": "DOSE_HISTORY_MISSING",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "field": "febrile_neutropenia_occurrence",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "grade4_neutropenia_with_grade2_fever",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "severe_diarrhoea_confirmed",
+                      "operator": "==",
+                      "value": true
+                    },
+                    {
+                      "field": "diarrhoea_highest_grade",
+                      "operator": ">=",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "severe_stomatitis_or_ppe_confirmed",
+                      "operator": "==",
+                      "value": true
+                    },
+                    {
+                      "field": "stomatitis_highest_grade",
+                      "operator": ">=",
+                      "value": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "current_dose_history_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "current_dose_history_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce initial fluorouracil dose by one third; increase if no toxicity."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Moderate hepatic impairment: reduce initial fluorouracil dose by one third."
-      },
-      {
-        "rule_id": "FIVEFU_SEVERE_HEPATIC",
-        "field": "hepatic_impairment_severity",
-        "operator": "==",
-        "value": "severe",
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce initial fluorouracil dose by one half; increase if no toxicity."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe hepatic impairment: reduce initial fluorouracil dose by one half."
-      },
-      {
-        "rule_id": "DIARRHOEA_CURRENT_G2_HOLD",
-        "all": [
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Hold and reassess; proceed only once diarrhoea is below grade 2 and fully resolved as required."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Current diarrhoea grade ≥2: hold treatment for up to two weeks."
-      },
-      {
-        "rule_id": "DIARRHOEA_PERSISTENT_G2_STOP",
-        "all": [
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Discontinue treatment."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Diarrhoea remaining grade ≥2 after two weeks: discontinue treatment."
-      },
-      {
-        "rule_id": "DIARRHOEA_HIGHEST_G3",
-        "field": "diarrhoea_highest_grade",
-        "operator": "==",
-        "value": 3,
-        "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "irinotecan",
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level."
+          "recommendation": "Confirm the actual last administered component doses and previous reductions before any percentage-based modification. Do not reduce from an assumed protocol starting dose or apply the same reduction twice.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Confirm the actual last administered component doses and previous reductions before any percentage-based modification. Do not reduce from an assumed protocol starting dose or apply the same reduction twice.",
         "source": {
+          "document": "NCCP 00238 v6",
           "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Previous grade 3 diarrhoea: reduce irinotecan and fluorouracil one dose level."
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
-        "rule_id": "DIARRHOEA_HIGHEST_G4",
-        "field": "diarrhoea_highest_grade",
-        "operator": "==",
-        "value": 4,
+        "rule_id": "TOXICITY_RECOVERY_MISSING",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "field": "severe_diarrhoea_confirmed",
+                      "operator": "==",
+                      "value": true
+                    },
+                    {
+                      "field": "diarrhoea_highest_grade",
+                      "operator": ">=",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "severe_stomatitis_or_ppe_confirmed",
+                      "operator": "==",
+                      "value": true
+                    },
+                    {
+                      "field": "stomatitis_highest_grade",
+                      "operator": ">=",
+                      "value": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "toxicity_recovered",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_recovered",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "irinotecan",
             "fluorouracil_bolus",
-            "fluorouracil_infusion"
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels."
+          "recommendation": "Clinical recovery has not been confirmed. A historical maximum toxicity grade or occurrence number does not authorise a subsequent reduced dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Clinical recovery has not been confirmed. A historical maximum toxicity grade or occurrence number does not authorise a subsequent reduced dose.",
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Previous grade 4 diarrhoea: reduce irinotecan and fluorouracil two dose levels."
+          "document": "NCCP 00238 v6",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+          "table": 2
+        }
       },
       {
-        "rule_id": "STOMATITIS_CURRENT_G2_HOLD",
-        "all": [
-          {
-            "field": "stomatitis_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": "<",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Hold and reassess; proceed only once stomatitis is below grade 2."
+        "rule_id": "ACUTE_CHOLINERGIC",
+        "when": {
+          "field": "acute_cholinergic_syndrome",
+          "operator": "==",
+          "value": true
         },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Current stomatitis grade ≥2: hold treatment for up to two weeks."
-      },
-      {
-        "rule_id": "STOMATITIS_PERSISTENT_G2_STOP",
-        "all": [
-          {
-            "field": "stomatitis_current_grade",
-            "operator": ">=",
-            "value": 2
-          },
-          {
-            "field": "toxicity_delay_weeks",
-            "operator": ">=",
-            "value": 2
-          }
-        ],
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "Discontinue treatment."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Stomatitis remaining grade ≥2 after two weeks: discontinue treatment."
-      },
-      {
-        "rule_id": "STOMATITIS_HIGHEST_G3",
-        "field": "stomatitis_highest_grade",
-        "operator": "==",
-        "value": 3,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce both fluorouracil components by one dose level; maintain irinotecan."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Previous grade 3 stomatitis: maintain irinotecan and reduce fluorouracil one dose level."
-      },
-      {
-        "rule_id": "STOMATITIS_HIGHEST_G4",
-        "field": "stomatitis_highest_grade",
-        "operator": "==",
-        "value": 4,
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil_bolus",
-            "fluorouracil_infusion"
-          ],
-          "recommendation": "Reduce both fluorouracil components by two dose levels; maintain irinotecan."
-        },
-        "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Previous grade 4 stomatitis: maintain irinotecan and reduce fluorouracil two dose levels."
-      },
-      {
-        "rule_id": "ACUTE_CHOLINERGIC_SYNDROME",
-        "field": "acute_cholinergic_syndrome",
-        "operator": "==",
-        "value": true,
         "action": {
           "type": "consultant_review",
           "components": [
             "irinotecan"
           ],
-          "recommendation": "Administer atropine 250 micrograms SC unless contraindicated; consider prophylactic atropine with subsequent irinotecan."
+          "recommendation": "Acute irinotecan cholinergic syndrome: assess clinically and use atropine as indicated. Atropine is contraindicated with glaucoma; use caution with asthma. Severe prior syndrome may warrant subsequent prophylaxis.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
+        "explanation": "Acute irinotecan cholinergic syndrome: assess clinically and use atropine as indicated. Atropine is contraindicated with glaucoma; use caution with asthma. Severe prior syndrome may warrant subsequent prophylaxis.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Acute cholinergic syndrome requires atropine unless contraindicated; prophylaxis may be appropriate in later cycles."
-      },
-      {
-        "rule_id": "PROCEED_NO_ENCODED_MODIFICATION",
-        "all": [
-          {
-            "field": "hypersensitivity",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "pregnancy",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "breastfeeding",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "bowel_obstruction_or_chronic_bowel_disease",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "dpd_status",
-            "operator": "==",
-            "value": "documented_normal"
-          },
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "crcl_ml_min",
-            "operator": ">=",
-            "value": 10
-          },
-          {
-            "field": "haemodialysis",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "bilirubin_ratio_uln",
-            "operator": "<=",
-            "value": 3
-          },
-          {
-            "field": "bilirubin_umol_l",
-            "operator": "<=",
-            "value": 85
-          },
-          {
-            "field": "ast_u_l",
-            "operator": "<=",
-            "value": 180
-          },
-          {
-            "field": "hepatic_impairment_severity",
-            "operator": "==",
-            "value": "none"
-          },
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": "<",
-            "value": 2
-          },
-          {
-            "field": "stomatitis_current_grade",
-            "operator": "<",
-            "value": 2
-          },
-          {
-            "field": "baseline_loose_bm_gt3",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "ugt1a1_homozygous_28",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "grade4_neutropenia_with_grade2_fever",
-            "operator": "==",
-            "value": false
-          },
-          {
-            "field": "acute_cholinergic_syndrome",
-            "operator": "==",
-            "value": false
-          }
-        ],
-        "action": {
-          "type": "proceed",
-          "components": [
-            "whole_regimen"
-          ],
-          "recommendation": "No encoded dose-modification criterion was triggered by the entered data."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Entered values meet the encoded Day 1 parameters and do not trigger an encoded modification."
-      },
-      {
-        "rule_id": "ANTI_VEGF_UNCONTROLLED_HTN",
-        "field": "uncontrolled_hypertension",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "aflibercept"
-          ],
-          "recommendation": "Withhold the anti-VEGF component until hypertension is controlled."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold the anti-VEGF component until hypertension is controlled."
-      },
-      {
-        "rule_id": "ANTI_VEGF_PROTEINURIA_2G",
-        "field": "proteinuria_g_24h",
-        "operator": ">=",
-        "value": 2,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "aflibercept"
-          ],
-          "recommendation": "Withhold the anti-VEGF component and follow the protocol proteinuria pathway."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold the anti-VEGF component and follow the protocol proteinuria pathway."
-      },
-      {
-        "rule_id": "ANTI_VEGF_SEVERE_BLEEDING",
-        "field": "active_severe_bleeding",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "aflibercept"
-          ],
-          "recommendation": "Discontinue the anti-VEGF component for severe haemorrhage."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Discontinue the anti-VEGF component for severe haemorrhage."
-      },
-      {
-        "rule_id": "ANTI_VEGF_GI_PERFORATION",
-        "field": "gi_perforation_or_fistula",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "aflibercept"
-          ],
-          "recommendation": "Discontinue the anti-VEGF component for GI perforation or fistula."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Discontinue the anti-VEGF component for GI perforation or fistula."
-      },
-      {
-        "rule_id": "ANTI_VEGF_ATE",
-        "field": "arterial_thromboembolic_event",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "aflibercept"
-          ],
-          "recommendation": "Discontinue the anti-VEGF component for an arterial thromboembolic event."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Discontinue the anti-VEGF component for an arterial thromboembolic event."
-      },
-      {
-        "rule_id": "ANTI_VEGF_WOUND",
-        "field": "recent_major_surgery_or_unhealed_wound",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "aflibercept"
-          ],
-          "recommendation": "Withhold and obtain consultant review around surgery or impaired wound healing."
-        },
-        "source": {
-          "page": 3,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Withhold and obtain consultant review around surgery or impaired wound healing."
+          "document": "NCCP 00238 v6",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+        }
       }
     ]
   },
@@ -1278,7 +2080,8 @@
       "max": 4,
       "step": 1,
       "demo_value": 0,
-      "input_role": "decision"
+      "input_role": "context",
+      "assessment_guidance": "Context only: NCCP 00238 does not provide a timed discontinuation or nadir dose-level table. Do not import the standard FOLFIRI 00227 rules."
     },
     "crcl_ml_min": {
       "label": "Creatinine clearance category",
@@ -1317,13 +2120,11 @@
       "input_role": "decision"
     },
     "haemodialysis": {
-      "label": "Haemodialysis",
+      "label": "Haemodialysis (confirm independently of renal band)",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "visible": false,
-      "derived_from": "crcl_ml_min",
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "bilirubin_ratio_uln": {
       "label": "Bilirubin (×ULN)",
@@ -1333,7 +2134,8 @@
       "max": 20,
       "step": 0.1,
       "demo_value": 0.7,
-      "input_role": "decision"
+      "input_role": "decision",
+      "derived_actual_field": "bilirubin_umol_l"
     },
     "bilirubin_umol_l": {
       "label": "Bilirubin (µmol/L)",
@@ -1343,7 +2145,8 @@
       "max": 1000,
       "step": 1,
       "demo_value": 12,
-      "input_role": "decision"
+      "input_role": "decision",
+      "ui_derived_from": "bilirubin_ratio_uln"
     },
     "ast_u_l": {
       "label": "AST (U/L)",
@@ -1563,7 +2366,8 @@
       "max": 50,
       "step": 0.1,
       "demo_value": 2,
-      "input_role": "decision"
+      "input_role": "context",
+      "assessment_guidance": "Context only: NCCP 00238 does not provide a timed discontinuation or nadir dose-level table. Do not import the standard FOLFIRI 00227 rules."
     },
     "lowest_platelets_during_delay_x10e9_l": {
       "label": "Lowest platelets during delayed week(s) (×10⁹/L)",
@@ -1573,7 +2377,8 @@
       "max": 2000,
       "step": 1,
       "demo_value": 180,
-      "input_role": "decision"
+      "input_role": "context",
+      "assessment_guidance": "Context only: NCCP 00238 does not provide a timed discontinuation or nadir dose-level table. Do not import the standard FOLFIRI 00227 rules."
     },
     "grade4_neutropenia_with_grade2_fever": {
       "label": "Grade 4 neutropenia with fever grade ≥2",
@@ -1583,21 +2388,22 @@
       "input_role": "decision"
     },
     "baseline_loose_bm_gt3": {
-      "label": "Baseline greater than 3 loose bowel movements per day (without stoma)",
+      "label": "Baseline >3 loose bowel movements daily, without colostomy/ileostomy",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "ugt1a1_homozygous_28": {
-      "label": "Known homozygous UGT1A1*28 genotype",
+      "label": "Known homozygous UGT 1 A 1*28 genotype",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "Supplementary safety context only: NCCP 00238 v 6 does not give a UGT 1 A 1-specific numeric dose. Review current irinotecan product information."
     },
     "uncontrolled_hypertension": {
-      "label": "Uncontrolled hypertension",
+      "label": "Persistent uncontrolled hypertension (source permanent-stop pathway)",
       "type": "boolean",
       "required": false,
       "ui_section": "clinical",
@@ -1646,18 +2452,304 @@
       "ui_section": "clinical",
       "demo_value": false,
       "input_role": "decision"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ]
+    },
+    "renal_impairment": {
+      "label": "Clinically impaired renal function (source exclusion/table conflict)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cardiac_risk": {
+      "label": "Recent MI or uncontrolled angina, hypertension, arrhythmia or heart failure",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "previous_pelvic_radiotherapy": {
+      "label": "Previous pelvic radiotherapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_bone_marrow_failure": {
+      "label": "Severe bone marrow failure",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "febrile_neutropenia_current": {
+      "label": "Current febrile neutropenia or neutropenic sepsis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "febrile_neutropenia_occurrence": {
+      "label": "Febrile neutropenia / neutropenic sepsis occurrence number",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "demo_value": ""
+    },
+    "neutropenic_sepsis_recovered": {
+      "label": "Febrile neutropenia / neutropenic sepsis clinically recovered",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "diarrhoea_occurrence": {
+      "label": "Severe diarrhoea occurrence number",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "demo_value": ""
+    },
+    "severe_diarrhoea_confirmed": {
+      "label": "Severe diarrhoea confirmed by treating team (source term)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_stomatitis_or_ppe_confirmed": {
+      "label": "Severe stomatitis or palmar-plantar syndrome confirmed (source term)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "toxicity_recovered": {
+      "label": "Toxicity clinically recovered sufficiently for consultant-directed restart",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "diarrhoea_persists_despite_both_reductions": {
+      "label": "Severe diarrhoea persists despite both irinotecan and 5-FU reductions",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_dose_history_confirmed": {
+      "label": "Last administered component doses and previous reductions reconciled",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_irinotecan_mg_m2": {
+      "label": "Current irinotecan dose (mg/m²)",
+      "type": "number",
+      "required": false,
+      "input_role": "context",
+      "min": 0,
+      "max": 5000,
+      "step": 0.1,
+      "demo_value": ""
+    },
+    "current_fluorouracil_bolus_mg_m2": {
+      "label": "Current fluorouracil bolus dose (mg/m²)",
+      "type": "number",
+      "required": false,
+      "input_role": "context",
+      "min": 0,
+      "max": 5000,
+      "step": 0.1,
+      "demo_value": ""
+    },
+    "current_fluorouracil_infusion_mg_m2": {
+      "label": "Current fluorouracil infusion dose (mg/m²)",
+      "type": "number",
+      "required": false,
+      "input_role": "context",
+      "min": 0,
+      "max": 5000,
+      "step": 0.1,
+      "demo_value": ""
+    },
+    "current_aflibercept_mg_kg": {
+      "label": "Current aflibercept dose (mg/kg)",
+      "type": "number",
+      "required": false,
+      "input_role": "context",
+      "min": 0,
+      "max": 5000,
+      "step": 0.1,
+      "demo_value": ""
+    },
+    "proteinuria_occurrence": {
+      "label": "Proteinuria ≥2 g/24 hours occurrence number",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "demo_value": ""
+    },
+    "upcr": {
+      "label": "Urinary protein/creatinine ratio (UPCR)",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "demo_value": ""
+    },
+    "hypertension_current": {
+      "label": "Hypertension requiring control before aflibercept",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hypertension_controlled": {
+      "label": "Hypertension is now controlled",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recurrent_significant_hypertension": {
+      "label": "Recurrent medically significant or severe hypertension",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hypertensive_crisis_or_encephalopathy": {
+      "label": "Hypertensive crisis or hypertensive encephalopathy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "infusion_reaction_severity": {
+      "label": "Aflibercept infusion hypersensitivity reaction",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild_moderate",
+          "label": "Mild / moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": ""
+    },
+    "grade4_venous_thromboembolism": {
+      "label": "Grade 4 venous thromboembolism including pulmonary embolism",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "nephrotic_syndrome_or_tma": {
+      "label": "Nephrotic syndrome or thrombotic microangiopathy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "wound_healing_requires_intervention": {
+      "label": "Compromised wound healing requiring medical intervention",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pres": {
+      "label": "Posterior reversible encephalopathy syndrome",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "elective_surgery_within_4_weeks": {
+      "label": "Elective surgery planned within 4 weeks",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "supportive_care": {
-    "emetogenic_risk": "low",
-    "script_id": "nccp-parenteral-low",
+    "emetogenic_risk": "moderate",
+    "script_id": "nccp-parenteral-moderate",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Highest active parenteral component is low emetogenic risk in NCCP V6 Table 7.",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf",
+    "mapping_basis": "NCCP 00238 source-specific emetic risk; checked 2026-11-04",
     "mapping_confidence": "high",
-    "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
+    "validation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_review",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
+    "regimen_specific_notes": [
+      "Atropine 250 micrograms SC before irinotecan except contraindicated glaucoma; caution in asthma.",
+      "Delayed diarrhoea (>24 hours after irinotecan): loperamide 4 mg then 2 mg every 2 hours, continuing 12 hours after last liquid stool, maximum 48 hours at this schedule; use the treating team’s instructions.",
+      "Ice chips may be used during the 5-FU bolus to reduce stomatitis."
+    ],
+    "phase_specific_plan": "patient/00238/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6336/238_v6_Aflibercept_and_FOLFIRI.pdf"
+  },
+  "monitoring": [
+    "Baseline and each cycle: FBC, renal/liver profile and urine protein dipstick; BP monitoring.",
+    "DPD before first fluorouracil unless previously tested; renal impairment may affect uracil phenotyping.",
+    "UPCR >1: obtain 24-hour urine protein. ECG at baseline if compromised cardiac function.",
+    "INR on warfarin as clinically indicated. Disease imaging/other monitoring follows the consultant’s treatment plan."
+  ],
+  "treatment": {
+    "schedule_summary": "Day 1: aflibercept, then irinotecan, folinic acid and fluorouracil, followed by a 46-hour fluorouracil pump. Repeat every 14 days while beneficial and tolerable."
   }
 }

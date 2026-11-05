@@ -1,0 +1,216 @@
+{
+  "release": "0.84.33",
+  "checked_date": "2026-11-04",
+  "scope": "00555,00783,00691 current-source reconciliation only; independent consultant/pharmacy validation pending",
+  "sources": {
+    "00555": {
+      "url": "https://healthservice.hse.ie/documents/6386/555_FOLFOXIRI_therapy.pdf",
+      "pdf_sha256": "96ce8e8001aee097ea5ab7d8bd4d4375bea4959ed3b7d981132858f6b1eb0c1e",
+      "path": "validation/colorectal-v08433/triplet-source-audit/00555.pdf",
+      "existing_version": "6b",
+      "current_version": "7",
+      "checked_date": "2026-11-04",
+      "catalogue_url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/gastro-intestinal-sact-regimens/",
+      "text_sha256": "e26fd9de52e54a1468315663ac18676cfc5247bbb1973dabbc087fa05d366afe",
+      "pages": 9
+    },
+    "00783": {
+      "url": "https://healthservice.hse.ie/documents/6660/783_v2a_Bev_5_FOLFOXIRI_therapy.pdf",
+      "pdf_sha256": "0d45530b9786b2d33c0c70f404c6ec1d171a0bc0761f1066d5614dcb834d0eb2",
+      "path": "validation/colorectal-v08433/triplet-source-audit/00783.pdf",
+      "existing_version": "2a",
+      "current_version": "2a",
+      "checked_date": "2026-11-04",
+      "catalogue_url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/gastro-intestinal-sact-regimens/",
+      "text_sha256": "785ca910cd9f9e435598c437322ba4794e1d2d4a61a31e79f9b9c90c21955e5e",
+      "pages": 12
+    },
+    "00691": {
+      "url": "https://healthservice.hse.ie/documents/6531/691_v4_Folfirinox_Rectal_carcinoma.pdf",
+      "pdf_sha256": "73e2b6fc9839aecca4fd7f52582d551596011a47200a2993b5215ce91de15e5a",
+      "path": "validation/colorectal-v08433/triplet-source-audit/00691.pdf",
+      "existing_version": "4",
+      "current_version": "4",
+      "checked_date": "2026-11-04",
+      "catalogue_url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/gastro-intestinal-sact-regimens/",
+      "text_sha256": "a058de3152714990ac7e0c3385d3415541d8c173cb2584baaf7ab3a28112c284",
+      "pages": 9
+    }
+  },
+  "findings": {
+    "00555": [
+      {
+        "severity": "critical",
+        "domain": "Source version / renal exclusion",
+        "previous_gap": "Current catalogue replaces v6b with v7, reviewed19Aug2026. Old v6b URL404; old severe-renal exclusion is removed.",
+        "source_pages_tables": "v7 pp1–4",
+        "implemented_action": "Use v7 URL/hash; CrCl<30 oxaliplatin50% consideration, not whole-regimen contraindication.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Baseline versus on-treatment counts",
+        "previous_gap": "Old ANC Day1 threshold1.5 was incorrect; v7 baselineANC2, latercycleANC1.0, laterplatelets75, baselineplatelets100.",
+        "source_pages_tables": "p2 exclusions; p3 Tables1–3",
+        "implemented_action": "Separate baseline fields from cycle thresholds and recurrence history.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Event-specific recurrence matrices",
+        "previous_gap": "Four legacy rules missed differences between ANC delay, platelet delay and platelet nadir. Day1 platelet occurrence2 retains FU75%; plateletnadir occurrence2 usesFU50%.",
+        "source_pages_tables": "p3 Tables1–3; mergedcell visually checked",
+        "implemented_action": "Encode each event with occurrence context and component dose history.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Current renal/hepatic guidance",
+        "previous_gap": "Irinotecan CrCl>10 /<10 and oxaliplatin>30/<30 leave exact10/30 unassigned. FU severe hepatic not recommended; mild/moderate no-adjustment only without renal impairment.",
+        "source_pages_tables": "p4 Table4",
+        "implemented_action": "Explicit boundary/combined-organ review; no old85/180 absoluteFU thresholds imported.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Toxicity specificity",
+        "previous_gap": "Diarrhoea recurrences, mucositis/HFS, transient versus persistent neuropathy, current dose history absent or generic.",
+        "source_pages_tables": "p5 Table5",
+        "implemented_action": "Component actions and no automatic re-escalation. Third qualifying diarrhoea stops treatment; neuropathy stops oxaliplatin only.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Regimen emesis classification",
+        "previous_gap": "Existing supportive mapping inferred moderate from individual components despite regimenHIGH.",
+        "source_pages_tables": "p5 supportivecare",
+        "implemented_action": "HIGH overall emetic risk; retain atropine and delayed-diarrhoea plan.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "moderate",
+        "domain": "Eligibility age gap",
+        "previous_gap": "PDF states adults under70 and71–75; age70 unassigned.",
+        "source_pages_tables": "p2 eligibility",
+        "implemented_action": "Review age70/unspecified age; do not silently use trial eligibility text to patch NCCP.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      }
+    ],
+    "00783": [
+      {
+        "severity": "high",
+        "domain": "Wrong cycle ANC threshold",
+        "previous_gap": "Old ANC<1.0 hold should be<1.5; platelets75 latercycles,100baseline.",
+        "source_pages_tables": "p2 exclusions; p4 Tables1–3",
+        "implemented_action": "Separate baseline and cycle criteria; occurrence dose schema added.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Proteinuria blanket hold",
+        "previous_gap": "Old grade≥2 blanket hold conflicts with source: dipstick2+/3+ may receive scheduled dose with24hcollection beforeNEXTdose;4+hold;24hprotein>2to4hold,>4stop.",
+        "source_pages_tables": "p6 Table6",
+        "implemented_action": "Use quantitative and dipstick context, not a genericgrade2 rule. At2g no sourcehold; at4g hold, >4stop.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Bevacizumab-specific actions",
+        "previous_gap": "Generic whole-regimen risks replaced specific antiVEGF holds/stops.",
+        "source_pages_tables": "p7 Table7; pp8–9complications",
+        "implemented_action": "Separate hypertension persistence, TE/grade4fistula, anyarterialTE/grade4venousTE, bleeding≥3, perforation, PRES and wound/surgery.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Organ thresholds",
+        "previous_gap": "Irinotecan≥10 andoxaliplatin≥30 differ from00555v7strict> rows; FUbilirubin>85ORAST>180 independently contraindicates; exact85/180 unassigned.",
+        "source_pages_tables": "p5 Table4",
+        "implemented_action": "No sharedblindthresholds; clinical moderate/severeFUhepatic reductions remain consultantchoice.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Dose histories and partial inputs",
+        "previous_gap": "Legacy lacked phase/schedule doses and recurrence component history; partial input could miss meaningful source distinctions.",
+        "source_pages_tables": "pp1,4–6",
+        "implemented_action": "Current dose>=source target and explicit recovery required before quantified restart. Missing context remains review.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Support and monitoring",
+        "previous_gap": "Source overallHIGH, requires urine/BP monitoring and conditionalECHO/INR, not genericCBC alone.",
+        "source_pages_tables": "p3tests;p7support",
+        "implemented_action": "Full schedule plus mandatory/conditional monitoring mapped.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      }
+    ],
+    "00691": [
+      {
+        "severity": "critical",
+        "domain": "Missing second phase",
+        "previous_gap": "Legacy encoded only genericFOLFIRINOX although source includes6q14daycycles followed by5weeks capecitabine800BIDDays1–5q7withRT;825alternative consultantchoice.",
+        "source_pages_tables": "pp1–2",
+        "implemented_action": "Add explicit induction/chemoradiation selection; no cross-phase organ/toxicity rules.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Eligibility and count thresholds",
+        "previous_gap": "Legacy allowedECOG2 and cycleANC1/platelets75; sourceECOG0–1, ANC1.5/platelets100. Bowel/CNS are cautions, not exclusions.",
+        "source_pages_tables": "p2;p4",
+        "implemented_action": "Correct eligibility and distinguish existing generic errors.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "critical",
+        "domain": "Component discontinuations",
+        "previous_gap": "ThirdDay1ANC stopsirinotecan only; thirdDay1platelets stopsoxaliplatin only; thirdqualifyingdiarrhoea stopsirinotecan only. ThirdTable3severeFN/nadir stopswhole.",
+        "source_pages_tables": "p4Tables1–3;p6Table6",
+        "implemented_action": "Explicit component-specific stops, no whole-regimen propagation.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Incompatible dose ladders",
+        "previous_gap": "TransientG3neurooxaliplatin65; haematology60. PersistentG2 saysonelevel without unifiedladder. Table3secondFN5FU2000; otherrows sayreduceby25% currentdose.",
+        "source_pages_tables": "p4Table3;p6Tables5–6",
+        "implemented_action": "Represent source targets separately; do not calculate25%original or invent one genericdoselevel.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Absolute bilirubin",
+        "previous_gap": "Legacy missedirinotecan27–50µmol/L→50%ifmedicallyindicated;>50stop, independentfrom>3ULNexclusion.",
+        "source_pages_tables": "p6Table7",
+        "implemented_action": "Absolute input and source-specific hepatic rules; source ranges no calculateddefault.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Capecitabine renal/toxicity pathways",
+        "previous_gap": "MissingCrCl30–50→75%,<30/HDnotrecommended,50–51gap. Grade2/3first600BID,second400BID,thirdblank;grade4stopORholdchoice;angina/infarctionstop.",
+        "source_pages_tables": "p5Table4;p7Table8 visually checked",
+        "implemented_action": "Separate phase and current/episode grades; thirdblank not misread merged400. No re-escalation or replacingomitteddoses.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      },
+      {
+        "severity": "high",
+        "domain": "Phase support",
+        "previous_gap": "Source overallHIGH fortriplet butcapecitabinementionedminimal-to-low.",
+        "source_pages_tables": "p7support",
+        "implemented_action": "Phase-aware supportivecare; source tests beforeeachcycle,conditionalECG,consultant-led imaging schedule.",
+        "status": "implemented_source_reconciliation_pending_independent_review"
+      }
+    ]
+  },
+  "source_gaps_not_resolved_by_inference": [
+    "00555 age70 and renal exactly10/30",
+    "00783 and00691 5FU bilirubin exactly85/ASTexactly180",
+    "00691 cape CrCl between50 and51",
+    "00691 cape thirdgrade2/3 restartdose blank",
+    "00691 persistentgrade2oxali onelevel withoutunifiedladder",
+    "All source ranges/considerations require consultantchoice;25%current reductions require documentedcurrentdose"
+  ]
+}

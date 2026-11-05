@@ -667,6 +667,7 @@
   }
 
   function apply(protocol){
+    if(protocol?.metadata?.source_reconciliation_supersedes?.includes(RELEASE)) return protocol;
     const code=String(protocol?.metadata?.nccp_regimen_code||"").padStart(5,"0");
     if(code==="00101") return reconcile00101(protocol);
     if(code==="00256") return reconcile00256(protocol);
@@ -699,7 +700,7 @@
     for(const record of asArray(records)){
       const protocol=record?.protocol||record;
       const code=String(protocol?.metadata?.nccp_regimen_code||"").padStart(5,"0");
-      if(!["00101","00256","00783"].includes(code)) continue;
+      if(!["00101","00256","00783"].includes(code)||protocol?.metadata?.source_reconciliation_supersedes?.includes(RELEASE)) continue;
       apply(protocol);
       const validation=validatePatched(protocol);
       if(validation?.valid===false){
@@ -727,8 +728,9 @@
     payload.regimen_profiles=payload.regimen_profiles||[];
     payload.evidence_records=payload.evidence_records||[];
     for(const item of asArray(addendum.drug_profiles)) upsert(payload.drug_profiles,"id",item);
-    for(const item of asArray(addendum.regimen_profiles)) upsert(payload.regimen_profiles,"protocol_id",item);
-    for(const item of asArray(addendum.evidence_records)) upsert(payload.evidence_records,"evidence_id",item);
+    const protectedIds=new Set(payload.regimen_profiles.filter(item=>item.source_reconciliation_supersedes?.includes(RELEASE)).map(item=>item.protocol_id));
+    for(const item of asArray(addendum.regimen_profiles)) if(!protectedIds.has(item.protocol_id)) upsert(payload.regimen_profiles,"protocol_id",item);
+    for(const item of asArray(addendum.evidence_records)) if(!protectedIds.has(item.protocol_id)) upsert(payload.evidence_records,"evidence_id",item);
     payload.addenda=asArray(payload.addenda).filter(item=>item?.release!==RELEASE);
     payload.addenda.push({
       release:RELEASE,

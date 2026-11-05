@@ -28,13 +28,16 @@
       "clinical_use_authorised": false,
       "software_tests_completed": true,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
       "audit_fixes_source_checked_date": "2026-10-16",
       "audit_fixes_scope": "v0.83.2 live-audit findings; see docs/RELEASE_v0833_CLINICAL_FIXES.md. Independent clinical/pharmacy validation pending.",
-      "audit_fixes_release": "0.83.3"
+      "audit_fixes_release": "0.83.3",
+      "audit_release": "0.84.33",
+      "audit_date": "2026-11-04",
+      "software_validation_record": "validation/colorectal-v08433/retro-source-audit/AUDIT.md"
     },
     "regimen_reimbursement_code": "00446a",
-    "sactcheck_encoding_version": "0.84.21",
+    "sactcheck_encoding_version": "0.84.33",
     "catalog": {
       "enabled": true
     },
@@ -73,26 +76,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-mapped rules · independent clinical/pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative.",
-      "reconciled_release": "0.84.21",
-      "reconciled_date": "2026-10-25"
+      "audit_release": "0.84.33",
+      "audit_date": "2026-11-04",
+      "scope_note": "Official current NCCP binary PDF and dose/hold/recovery/monitoring rules re-audited. Source ambiguities remain explicit; independent consultant, oncology-pharmacy and patient/PPI review remain pending.",
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04"
     },
-    "catalogue_source_checked_date": "2026-07-29",
+    "catalogue_source_checked_date": "2026-11-04",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00446-v7b",
-    "full_suite_release": "0.84.21",
-    "source_checked_date": "2026-10-25",
+    "full_suite_release": "0.84.33",
+    "source_checked_date": "2026-11-04",
     "schedule_summary": "Day 1: bevacizumab, oxaliplatin, folinic acid and fluorouracil, then a 46-hour fluorouracil pump. A cycle lasts 14 days; your team confirms the next treatment.",
     "source_pdf_sha256": "a8e5aa1a541e6b2164e3177e90a133fe7a0d29478de6579b0ff0d54c217693af",
-    "source_page_count": 10
+    "source_page_count": 10,
+    "source_binary_retrieved": true,
+    "retrospective_service_audit": {
+      "release": "0.84.33",
+      "checked": "2026-11-04",
+      "scope": "Current binary source, clinical thresholds, recovery windows, component dose history and patient monitoring; see audit record.",
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -423,26 +435,6 @@
       },
       {
         "rule_id": "HAEM_RECOVERED_ANC_GRADE3",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_anc_delayed_weeks_x10e9_l",
-            "operator": "between",
-            "value": [
-              0.5,
-              0.99
-            ]
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -450,7 +442,9 @@
           ],
           "component_changes": {
             "oxaliplatin": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
             }
           }
         },
@@ -460,27 +454,41 @@
           "document": "NCCP 00446 v7b",
           "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf"
         },
-        "explanation": "After count recovery, an ANC nadir of 0.5–0.99 ×10⁹/L requires a one-level oxaliplatin reduction."
+        "explanation": "After count recovery, an ANC nadir of 0.5–0.99 ×10⁹/L requires a one-level oxaliplatin reduction.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                },
+                {
+                  "field": "lowest_anc_delayed_weeks_x10e9_l",
+                  "operator": "between",
+                  "value": [
+                    0.5,
+                    0.99
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "delay_weeks",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        }
       },
       {
         "rule_id": "HAEM_RECOVERED_ANC_GRADE4",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_anc_delayed_weeks_x10e9_l",
-            "operator": "<",
-            "value": 0.5
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -491,7 +499,9 @@
           ],
           "component_changes": {
             "oxaliplatin": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
             },
             "bolus_5fu": {
               "omit": true
@@ -500,7 +510,9 @@
               "omit": true
             },
             "infusional_5fu": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_infusional_5fu_level"
             }
           }
         },
@@ -510,30 +522,38 @@
           "document": "NCCP 00446 v7b",
           "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf"
         },
-        "explanation": "After count recovery, an ANC nadir below 0.5 ×10⁹/L requires oxaliplatin reduction, omission of bolus 5-FU/folinic acid and one-level infusional 5-FU reduction."
+        "explanation": "After count recovery, an ANC nadir below 0.5 ×10⁹/L requires oxaliplatin reduction, omission of bolus 5-FU/folinic acid and one-level infusional 5-FU reduction.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                },
+                {
+                  "field": "lowest_anc_delayed_weeks_x10e9_l",
+                  "operator": "<",
+                  "value": 0.5
+                }
+              ]
+            },
+            {
+              "field": "delay_weeks",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        }
       },
       {
         "rule_id": "HAEM_RECOVERED_PLATELETS_GRADE3",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_platelets_delayed_weeks_x10e9_l",
-            "operator": "between",
-            "value": [
-              10,
-              49.9
-            ]
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -541,7 +561,9 @@
           ],
           "component_changes": {
             "oxaliplatin": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
             }
           }
         },
@@ -551,27 +573,41 @@
           "document": "NCCP 00446 v7b",
           "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf"
         },
-        "explanation": "After platelet recovery, a nadir of 10–49.9 ×10⁹/L requires a one-level oxaliplatin reduction."
+        "explanation": "After platelet recovery, a nadir of 10–49.9 ×10⁹/L requires a one-level oxaliplatin reduction.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                },
+                {
+                  "field": "lowest_platelets_delayed_weeks_x10e9_l",
+                  "operator": "between",
+                  "value": [
+                    10,
+                    49.9
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "delay_weeks",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        }
       },
       {
         "rule_id": "HAEM_RECOVERED_PLATELETS_GRADE4",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_platelets_delayed_weeks_x10e9_l",
-            "operator": "<",
-            "value": 10
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -579,7 +615,9 @@
           ],
           "component_changes": {
             "oxaliplatin": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
             }
           }
         },
@@ -589,7 +627,35 @@
           "document": "NCCP 00446 v7b",
           "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf"
         },
-        "explanation": "After platelet recovery, a nadir below 10 ×10⁹/L requires a two-level oxaliplatin reduction."
+        "explanation": "After platelet recovery, a nadir below 10 ×10⁹/L requires a two-level oxaliplatin reduction.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                },
+                {
+                  "field": "lowest_platelets_delayed_weeks_x10e9_l",
+                  "operator": "<",
+                  "value": 10
+                }
+              ]
+            },
+            {
+              "field": "delay_weeks",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        }
       },
       {
         "rule_id": "NEUROPATHY_GRADE2",
@@ -603,7 +669,9 @@
           ],
           "component_changes": {
             "oxaliplatin": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
             }
           }
         },
@@ -639,7 +707,9 @@
           ],
           "component_changes": {
             "oxaliplatin": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
             }
           }
         },
@@ -816,18 +886,6 @@
       },
       {
         "rule_id": "DIARRHOEA_RECOVERED_GRADE3",
-        "all": [
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": "<",
-            "value": 2
-          },
-          {
-            "field": "diarrhoea_highest_grade",
-            "operator": "==",
-            "value": 3
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -836,10 +894,14 @@
           ],
           "component_changes": {
             "bolus_5fu": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_bolus_5fu_level"
             },
             "infusional_5fu": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_infusional_5fu_level"
             }
           }
         },
@@ -849,22 +911,33 @@
           "document": "NCCP 00446 v7b",
           "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf"
         },
-        "explanation": "After recovery from grade 3 diarrhoea, reduce bolus and infusional 5-FU by one dose level."
+        "explanation": "After recovery from grade 3 diarrhoea, reduce bolus and infusional 5-FU by one dose level.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_current_grade",
+                  "operator": "<",
+                  "value": 2
+                },
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_duration_weeks",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        }
       },
       {
         "rule_id": "DIARRHOEA_RECOVERED_GRADE4",
-        "all": [
-          {
-            "field": "diarrhoea_current_grade",
-            "operator": "<",
-            "value": 2
-          },
-          {
-            "field": "diarrhoea_highest_grade",
-            "operator": ">=",
-            "value": 4
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -874,13 +947,19 @@
           ],
           "component_changes": {
             "oxaliplatin": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_oxaliplatin_level"
             },
             "bolus_5fu": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_bolus_5fu_level"
             },
             "infusional_5fu": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_infusional_5fu_level"
             }
           }
         },
@@ -890,7 +969,30 @@
           "document": "NCCP 00446 v7b",
           "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf"
         },
-        "explanation": "After recovery from grade 4 diarrhoea, reduce oxaliplatin, bolus 5-FU and infusional 5-FU by one dose level."
+        "explanation": "After recovery from grade 4 diarrhoea, reduce oxaliplatin, bolus 5-FU and infusional 5-FU by one dose level.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_current_grade",
+                  "operator": "<",
+                  "value": 2
+                },
+                {
+                  "field": "diarrhoea_highest_grade",
+                  "operator": ">=",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_duration_weeks",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        }
       },
       {
         "rule_id": "STOMATITIS_HOLD",
@@ -1358,9 +1460,6 @@
       },
       {
         "rule_id": "FIVEFU_MODERATE_HEPATIC",
-        "field": "hepatic_impairment_category",
-        "operator": "==",
-        "value": "moderate",
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -1383,13 +1482,24 @@
           "document": "NCCP 00446 v7b",
           "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf"
         },
-        "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one third; increase if no toxicity. Any bilirubin/AST contraindication takes precedence."
+        "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one third; increase if no toxicity. Any bilirubin/AST contraindication takes precedence.",
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment_category",
+              "operator": "==",
+              "value": "moderate"
+            },
+            {
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            }
+          ]
+        }
       },
       {
         "rule_id": "FIVEFU_SEVERE_HEPATIC",
-        "field": "hepatic_impairment_category",
-        "operator": "==",
-        "value": "severe",
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -1412,7 +1522,21 @@
           "document": "NCCP 00446 v7b",
           "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf"
         },
-        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one half; increase if no toxicity. Any bilirubin/AST contraindication takes precedence."
+        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one half; increase if no toxicity. Any bilirubin/AST contraindication takes precedence.",
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment_category",
+              "operator": "==",
+              "value": "severe"
+            },
+            {
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            }
+          ]
+        }
       },
       {
         "rule_id": "BEVACIZUMAB_HEPATIC_REVIEW",
@@ -1463,6 +1587,255 @@
           "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf"
         },
         "explanation": "Hepatic-impairment information for oxaliplatin is limited. The source suggests a reduction is probably unnecessary; the dose remains a clinical decision."
+      },
+      {
+        "rule_id": "ANTI_VEGF_SEVERE_HYPERTENSION_STOP",
+        "when": {
+          "field": "grade4_or_persistent_grade3_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 4 hypertension or persisting grade 3 hypertension. The routine uncontrolled/symptomatic blood-pressure hold does not replace this stopping criterion."
+        },
+        "explanation": "Discontinue bevacizumab for grade 4 hypertension or persisting grade 3 hypertension. The routine uncontrolled/symptomatic blood-pressure hold does not replace this stopping criterion.",
+        "source": {
+          "document": "NCCP 00446 v7b",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf",
+          "checked_date": "2026-11-04",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "ANTI_VEGF_GRADE4_THROMBOEMBOLISM_STOP",
+        "when": {
+          "field": "grade4_thromboembolic_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for a grade 4 thromboembolic event, including life-threatening venous thromboembolism. The separate arterial-event pathway is not exhaustive."
+        },
+        "explanation": "Discontinue bevacizumab for a grade 4 thromboembolic event, including life-threatening venous thromboembolism. The separate arterial-event pathway is not exhaustive.",
+        "source": {
+          "document": "NCCP 00446 v7b",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf",
+          "checked_date": "2026-11-04",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "FIVEFU_HEPATIC_INITIAL_DOSE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment_category",
+              "operator": "in",
+              "value": [
+                "moderate",
+                "severe"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "recommendation": "The source hepatic fractions describe the initial fluorouracil dose. For subsequent treatment or unspecified assessment timing, reconcile the actual previous dose, toxicity and current hepatic results with the consultant/pharmacist; do not reset an already reduced dose to a percentage of the original dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source hepatic fractions describe the initial fluorouracil dose. For subsequent treatment or unspecified assessment timing, reconcile the actual previous dose, toxicity and current hepatic results with the consultant/pharmacist; do not reset an already reduced dose to a percentage of the original dose.",
+        "source": {
+          "document": "NCCP 00446 v7b",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf",
+          "checked_date": "2026-11-04",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "LATE_COUNT_RECOVERY_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "delay_weeks",
+              "operator": ">",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "recommendation": "Counts recovered outside the source four-week restart window. Review the stopping clauses, delay and nadir before considering chemotherapy restart; assess bevacizumab independently.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Counts recovered outside the source four-week restart window. Review the stopping clauses, delay and nadir before considering chemotherapy restart; assess bevacizumab independently.",
+        "source": {
+          "document": "NCCP 00446 v7b",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf",
+          "checked_date": "2026-11-04",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "COUNT_REDUCTION_CONTEXT_REVIEW",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "lowest_anc_delayed_weeks_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "lowest_platelets_delayed_weeks_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "delay_weeks",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "recommendation": "A low previous count may require a dose reduction, but current ANC/platelet recovery and the delay duration must be confirmed before a restart dose is selected. Do not assume omitted values are normal.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "A low previous count may require a dose reduction, but current ANC/platelet recovery and the delay duration must be confirmed before a restart dose is selected. Do not assume omitted values are normal.",
+        "source": {
+          "document": "NCCP 00446 v7b",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf",
+          "checked_date": "2026-11-04",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_REDUCTION_CONTEXT_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "diarrhoea_current_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "diarrhoea_duration_weeks",
+                  "operator": "missing"
+                },
+                {
+                  "all": [
+                    {
+                      "field": "diarrhoea_current_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "diarrhoea_duration_weeks",
+                      "operator": ">",
+                      "value": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "bolus_5fu",
+            "infusional_5fu"
+          ],
+          "recommendation": "Previous grade 3–4 diarrhoea requires confirmation of current recovery below grade 2 within the source four-week window before a restart reduction is selected. Unknown or later recovery needs consultant review; assess bevacizumab independently.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Previous grade 3–4 diarrhoea requires confirmation of current recovery below grade 2 within the source four-week window before a restart reduction is selected. Unknown or later recovery needs consultant review; assess bevacizumab independently.",
+        "source": {
+          "document": "NCCP 00446 v7b",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6478/446_v7b_Bevacizumab_5_plus_mFOLFOX-6.pdf",
+          "checked_date": "2026-11-04",
+          "table": 6
+        }
       }
     ]
   },
@@ -1517,7 +1890,7 @@
       "max": 0,
       "unit": "dose level",
       "always_show": true,
-      "input_role": "monitoring"
+      "input_role": "decision"
     },
     "current_bolus_5fu_level": {
       "label": "Current bolus 5-FU dose level",
@@ -1529,7 +1902,7 @@
       "max": 0,
       "unit": "dose level",
       "always_show": true,
-      "input_role": "monitoring"
+      "input_role": "decision"
     },
     "current_infusional_5fu_level": {
       "label": "Current infusional 5-FU dose level",
@@ -1541,7 +1914,7 @@
       "max": 0,
       "unit": "dose level",
       "always_show": true,
-      "input_role": "monitoring"
+      "input_role": "decision"
     },
     "hypersensitivity": {
       "label": "Known hypersensitivity to regimen component or excipient",
@@ -2111,6 +2484,20 @@
       "step": 1,
       "demo_value": 25,
       "input_role": "decision"
+    },
+    "grade4_or_persistent_grade3_hypertension": {
+      "label": "Grade 4 hypertension or persisting grade 3 hypertension (clinically assessed)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "grade4_thromboembolic_event": {
+      "label": "Grade 4 thromboembolic event, including life-threatening venous events",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "assessment_profiles": [

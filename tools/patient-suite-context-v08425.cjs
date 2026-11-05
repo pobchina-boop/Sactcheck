@@ -18,7 +18,7 @@ function readPath(p){const m=p.match(/^data\/patient-knowledge\/(\d{5})\.json$/)
 function output(file,html){
  const relative=path.isAbsolute(file)?path.relative(root,file):file;
  const patient=relative.match(/^patient\/(\d{5})\/(.+)$/);
- if(patient&&!html.includes('class="ps-body')&&['0.84.25','0.84.26','0.84.27','0.84.28','0.84.29','0.84.30','0.84.32'].includes(profile(patient[1]).suite_release)){
+ if(patient&&!html.includes('class="ps-body')&&['0.84.25','0.84.26','0.84.27','0.84.28','0.84.29','0.84.30','0.84.32','0.84.33'].includes(profile(patient[1]).suite_release)){
   html=html.replace('</head>','<link rel="stylesheet" href="../../assets/patient/lung-suite-v08425.css"></head>');
   html=html.replace('<body class="','<body class="suite-v08425 ').replace('<body>','<body class="suite-v08425">');
   if(['00823','00702','00221','00565','00340','00219','00220'].includes(patient[1]))html=html.replace('class="suite-v08425 ','class="suite-v08425 new-targeted-v08425 ');

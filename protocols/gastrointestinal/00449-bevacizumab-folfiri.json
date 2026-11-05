@@ -27,13 +27,16 @@
       "clinical_use_authorised": false,
       "software_tests_completed": true,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
       "audit_fixes_source_checked_date": "2026-10-16",
       "audit_fixes_scope": "v0.83.2 live-audit findings; see docs/RELEASE_v0833_CLINICAL_FIXES.md. Independent clinical/pharmacy validation pending.",
-      "audit_fixes_release": "0.83.3"
+      "audit_fixes_release": "0.83.3",
+      "audit_release": "0.84.33",
+      "audit_date": "2026-11-04",
+      "software_validation_record": "validation/colorectal-v08433/retro-source-audit/AUDIT.md"
     },
     "regimen_reimbursement_code": "00449a",
-    "sactcheck_encoding_version": "0.84.21",
+    "sactcheck_encoding_version": "0.84.33",
     "catalog": {
       "enabled": true
     },
@@ -72,26 +75,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
+      "level": "source_reconciled_rule_encoding",
+      "label": "Source-mapped rules · independent clinical/pharmacy review pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative.",
-      "reconciled_release": "0.84.21",
-      "reconciled_date": "2026-10-25"
+      "audit_release": "0.84.33",
+      "audit_date": "2026-11-04",
+      "scope_note": "Official current NCCP binary PDF and dose/hold/recovery/monitoring rules re-audited. Source ambiguities remain explicit; independent consultant, oncology-pharmacy and patient/PPI review remain pending.",
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04"
     },
-    "catalogue_source_checked_date": "2026-07-29",
+    "catalogue_source_checked_date": "2026-11-04",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00449-v6a",
-    "full_suite_release": "0.84.21",
-    "source_checked_date": "2026-10-25",
+    "full_suite_release": "0.84.33",
+    "source_checked_date": "2026-11-04",
     "schedule_summary": "Day 1: bevacizumab, irinotecan, folinic acid and fluorouracil, then a 46-hour fluorouracil pump. A cycle lasts 14 days; your team confirms the next treatment.",
     "source_pdf_sha256": "26bd65d7930afc118e1089823dc2221abe533cd21c347d6c8697baeca8f3f4ba",
-    "source_page_count": 10
+    "source_page_count": 10,
+    "source_binary_retrieved": true,
+    "retrospective_service_audit": {
+      "release": "0.84.33",
+      "checked": "2026-11-04",
+      "scope": "Current binary source, clinical thresholds, recovery windows, component dose history and patient monitoring; see audit record.",
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -488,23 +500,6 @@
       },
       {
         "rule_id": "ANC_DELAY_NADIR_G3",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "lowest_anc_during_delay_x10e9_l",
-            "operator": ">=",
-            "value": 0.5
-          },
-          {
-            "field": "lowest_anc_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 1
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -515,13 +510,19 @@
           "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level.",
           "component_changes": {
             "irinotecan": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
             },
             "fluorouracil_bolus": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
             },
             "fluorouracil_infusion": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
             }
           }
         },
@@ -531,22 +532,48 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Lowest ANC 0.5–0.99 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level."
+        "explanation": "Lowest ANC 0.5–0.99 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "lowest_anc_during_delay_x10e9_l",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "lowest_anc_during_delay_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "ANC_DELAY_NADIR_G4",
-        "all": [
-          {
-            "field": "anc_x10e9_l",
-            "operator": ">=",
-            "value": 1.5
-          },
-          {
-            "field": "lowest_anc_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 0.5
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -557,13 +584,19 @@
           "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels.",
           "component_changes": {
             "irinotecan": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
             },
             "fluorouracil_bolus": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
             },
             "fluorouracil_infusion": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
             }
           }
         },
@@ -573,27 +606,43 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Lowest ANC below 0.5 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels."
+        "explanation": "Lowest ANC below 0.5 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "lowest_anc_during_delay_x10e9_l",
+                  "operator": "<",
+                  "value": 0.5
+                }
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "PLATELETS_DELAY_NADIR_G3",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_platelets_during_delay_x10e9_l",
-            "operator": ">=",
-            "value": 10
-          },
-          {
-            "field": "lowest_platelets_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 50
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -604,13 +653,19 @@
           "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level.",
           "component_changes": {
             "irinotecan": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
             },
             "fluorouracil_bolus": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
             },
             "fluorouracil_infusion": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
             }
           }
         },
@@ -620,22 +675,48 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Lowest platelets 10–49.9 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level."
+        "explanation": "Lowest platelets 10–49.9 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil one dose level.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                },
+                {
+                  "field": "lowest_platelets_during_delay_x10e9_l",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "lowest_platelets_during_delay_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "PLATELETS_DELAY_NADIR_G4",
-        "all": [
-          {
-            "field": "platelets_x10e9_l",
-            "operator": ">=",
-            "value": 75
-          },
-          {
-            "field": "lowest_platelets_during_delay_x10e9_l",
-            "operator": "<",
-            "value": 10
-          }
-        ],
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -646,13 +727,19 @@
           "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels.",
           "component_changes": {
             "irinotecan": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
             },
             "fluorouracil_bolus": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
             },
             "fluorouracil_infusion": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
             }
           }
         },
@@ -662,13 +749,43 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Lowest platelets below 10 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels."
+        "explanation": "Lowest platelets below 10 ×10⁹/L during delayed week(s): reduce irinotecan and fluorouracil two dose levels.",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
+                },
+                {
+                  "field": "lowest_platelets_during_delay_x10e9_l",
+                  "operator": "<",
+                  "value": 10
+                }
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "FEBRILE_G4_NEUTROPENIA",
-        "field": "grade4_neutropenia_with_grade2_fever",
-        "operator": "==",
-        "value": true,
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -679,13 +796,19 @@
           "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels; G-CSF may be considered.",
           "component_changes": {
             "irinotecan": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
             },
             "fluorouracil_bolus": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
             },
             "fluorouracil_infusion": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
             }
           }
         },
@@ -695,7 +818,31 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Grade 4 neutropenia with fever grade ≥2: reduce irinotecan and fluorouracil two dose levels."
+        "explanation": "Grade 4 neutropenia with fever grade ≥2: reduce irinotecan and fluorouracil two dose levels.",
+        "when": {
+          "all": [
+            {
+              "field": "grade4_neutropenia_with_grade2_fever",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "IRINOTECAN_BILI_GT3ULN",
@@ -802,9 +949,6 @@
       },
       {
         "rule_id": "DIARRHOEA_HIGHEST_G3",
-        "field": "diarrhoea_highest_grade",
-        "operator": "==",
-        "value": 3,
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -815,13 +959,19 @@
           "recommendation": "Reduce irinotecan and both fluorouracil components by one dose level.",
           "component_changes": {
             "irinotecan": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
             },
             "fluorouracil_bolus": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
             },
             "fluorouracil_infusion": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
             }
           }
         },
@@ -831,13 +981,29 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Previous grade 3 diarrhoea: reduce irinotecan and fluorouracil one dose level."
+        "explanation": "Previous grade 3 diarrhoea: reduce irinotecan and fluorouracil one dose level.",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_current_grade",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "DIARRHOEA_HIGHEST_G4",
-        "field": "diarrhoea_highest_grade",
-        "operator": "==",
-        "value": 4,
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -848,13 +1014,19 @@
           "recommendation": "Reduce irinotecan and both fluorouracil components by two dose levels.",
           "component_changes": {
             "irinotecan": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_irinotecan_level"
             },
             "fluorouracil_bolus": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
             },
             "fluorouracil_infusion": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
             }
           }
         },
@@ -864,7 +1036,26 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Previous grade 4 diarrhoea: reduce irinotecan and fluorouracil two dose levels."
+        "explanation": "Previous grade 4 diarrhoea: reduce irinotecan and fluorouracil two dose levels.",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_current_grade",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "STOMATITIS_CURRENT_G2_HOLD",
@@ -923,9 +1114,6 @@
       },
       {
         "rule_id": "STOMATITIS_HIGHEST_G3",
-        "field": "stomatitis_highest_grade",
-        "operator": "==",
-        "value": 3,
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -935,10 +1123,14 @@
           "recommendation": "Reduce both fluorouracil components by one dose level; maintain irinotecan.",
           "component_changes": {
             "fluorouracil_bolus": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
             },
             "fluorouracil_infusion": {
-              "dose_level_change": -1
+              "dose_level_change": -1,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
             }
           }
         },
@@ -948,13 +1140,29 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Previous grade 3 stomatitis: maintain irinotecan and reduce fluorouracil one dose level."
+        "explanation": "Previous grade 3 stomatitis: maintain irinotecan and reduce fluorouracil one dose level.",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "stomatitis_current_grade",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "STOMATITIS_HIGHEST_G4",
-        "field": "stomatitis_highest_grade",
-        "operator": "==",
-        "value": 4,
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -964,10 +1172,14 @@
           "recommendation": "Reduce both fluorouracil components by two dose levels; maintain irinotecan.",
           "component_changes": {
             "fluorouracil_bolus": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_bolus_level"
             },
             "fluorouracil_infusion": {
-              "dose_level_change": -2
+              "dose_level_change": -2,
+              "relative_to_current_dose_level": true,
+              "current_dose_level_field": "current_fluorouracil_infusion_level"
             }
           }
         },
@@ -977,7 +1189,26 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Previous grade 4 stomatitis: maintain irinotecan and reduce fluorouracil two dose levels."
+        "explanation": "Previous grade 4 stomatitis: maintain irinotecan and reduce fluorouracil two dose levels.",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "stomatitis_current_grade",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        }
       },
       {
         "rule_id": "ACUTE_CHOLINERGIC_SYNDROME",
@@ -1368,9 +1599,6 @@
       },
       {
         "rule_id": "FIVEFU_MODERATE_HEPATIC",
-        "field": "hepatic_impairment_severity",
-        "operator": "==",
-        "value": "moderate",
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -1393,13 +1621,24 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one third; increase if no toxicity. Any bilirubin/AST contraindication takes precedence."
+        "explanation": "Moderate hepatic impairment: reduce the initial fluorouracil dose by one third; increase if no toxicity. Any bilirubin/AST contraindication takes precedence.",
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment_severity",
+              "operator": "==",
+              "value": "moderate"
+            },
+            {
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            }
+          ]
+        }
       },
       {
         "rule_id": "FIVEFU_SEVERE_HEPATIC",
-        "field": "hepatic_impairment_severity",
-        "operator": "==",
-        "value": "severe",
         "action": {
           "type": "dose_reduce",
           "components": [
@@ -1422,7 +1661,21 @@
           "document": "NCCP 00449 v6a",
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
-        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one half; increase if no toxicity. Any bilirubin/AST contraindication takes precedence."
+        "explanation": "Severe hepatic impairment: reduce the initial fluorouracil dose by one half; increase if no toxicity. Any bilirubin/AST contraindication takes precedence.",
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment_severity",
+              "operator": "==",
+              "value": "severe"
+            },
+            {
+              "field": "assessment_type",
+              "operator": "==",
+              "value": "baseline"
+            }
+          ]
+        }
       },
       {
         "rule_id": "BEVACIZUMAB_HEPATIC_REVIEW",
@@ -1447,6 +1700,276 @@
           "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf"
         },
         "explanation": "No hepatic-impairment studies are provided for bevacizumab in this source; review suitability without inventing a dose reduction."
+      },
+      {
+        "rule_id": "ANTI_VEGF_SEVERE_HYPERTENSION_STOP",
+        "when": {
+          "field": "grade4_or_persistent_grade3_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for grade 4 hypertension or persisting grade 3 hypertension. The routine uncontrolled/symptomatic blood-pressure hold does not replace this stopping criterion."
+        },
+        "explanation": "Discontinue bevacizumab for grade 4 hypertension or persisting grade 3 hypertension. The routine uncontrolled/symptomatic blood-pressure hold does not replace this stopping criterion.",
+        "source": {
+          "document": "NCCP 00449 v6a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "ANTI_VEGF_GRADE4_THROMBOEMBOLISM_STOP",
+        "when": {
+          "field": "grade4_thromboembolic_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "recommendation": "Discontinue bevacizumab for a grade 4 thromboembolic event, including life-threatening venous thromboembolism. The separate arterial-event pathway is not exhaustive."
+        },
+        "explanation": "Discontinue bevacizumab for a grade 4 thromboembolic event, including life-threatening venous thromboembolism. The separate arterial-event pathway is not exhaustive.",
+        "source": {
+          "document": "NCCP 00449 v6a",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 5
+        }
+      },
+      {
+        "rule_id": "FIVEFU_HEPATIC_INITIAL_DOSE_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment_severity",
+              "operator": "in",
+              "value": [
+                "moderate",
+                "severe"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_type",
+                  "operator": "!=",
+                  "value": "baseline"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "The source hepatic fractions describe the initial fluorouracil dose. For subsequent treatment or unspecified assessment timing, reconcile the actual previous dose, toxicity and current hepatic results with the consultant/pharmacist; do not reset an already reduced dose to a percentage of the original dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source hepatic fractions describe the initial fluorouracil dose. For subsequent treatment or unspecified assessment timing, reconcile the actual previous dose, toxicity and current hepatic results with the consultant/pharmacist; do not reset an already reduced dose to a percentage of the original dose.",
+        "source": {
+          "document": "NCCP 00449 v6a",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 3
+        }
+      },
+      {
+        "rule_id": "COUNT_REDUCTION_CONTEXT_REVIEW",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "lowest_anc_during_delay_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "lowest_platelets_during_delay_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "field": "grade4_neutropenia_with_grade2_fever",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Previous severe haematological toxicity may require a reduction, but confirm current recovery of both counts and the source two-week restart window before selecting a dose. Assess bevacizumab independently.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Previous severe haematological toxicity may require a reduction, but confirm current recovery of both counts and the source two-week restart window before selecting a dose. Assess bevacizumab independently.",
+        "source": {
+          "document": "NCCP 00449 v6a",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_REDUCTION_CONTEXT_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "diarrhoea_current_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "missing"
+                },
+                {
+                  "all": [
+                    {
+                      "field": "diarrhoea_current_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": ">",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Previous severe diarrhoea requires confirmed current recovery below grade 2 within two weeks before selecting a restart dose. Unknown or later recovery needs consultant review; assess bevacizumab independently.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Previous severe diarrhoea requires confirmed current recovery below grade 2 within two weeks before selecting a restart dose. Unknown or later recovery needs consultant review; assess bevacizumab independently.",
+        "source": {
+          "document": "NCCP 00449 v6a",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 6
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_REDUCTION_CONTEXT_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "stomatitis_current_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "missing"
+                },
+                {
+                  "all": [
+                    {
+                      "field": "stomatitis_current_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": ">",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Previous severe stomatitis requires confirmed current recovery below grade 2 within two weeks before selecting a restart dose. Unknown or later recovery needs consultant review; assess bevacizumab independently.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Previous severe stomatitis requires confirmed current recovery below grade 2 within two weeks before selecting a restart dose. Unknown or later recovery needs consultant review; assess bevacizumab independently.",
+        "source": {
+          "document": "NCCP 00449 v6a",
+          "page": 6,
+          "url": "https://healthservice.hse.ie/documents/6481/449_v6a_Bevacizumab5_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 6
+        }
       }
     ]
   },
@@ -1569,7 +2092,8 @@
       "max": 20,
       "step": 0.1,
       "demo_value": 0.7,
-      "input_role": "decision"
+      "input_role": "decision",
+      "derived_actual_field": "bilirubin_umol_l"
     },
     "bilirubin_umol_l": {
       "label": "Bilirubin (µmol/L)",
@@ -1579,7 +2103,8 @@
       "max": 1000,
       "step": 1,
       "demo_value": 12,
-      "input_role": "decision"
+      "input_role": "decision",
+      "ui_derived_from": "bilirubin_ratio_uln"
     },
     "ast_u_l": {
       "label": "AST (U/L)",
@@ -1948,6 +2473,86 @@
       "ui_section": "labs",
       "always_show": true,
       "assessment_guidance": "Use the clinically verified severity. NCCP does not provide a numeric cutoff or a percentage reduction for 5-FU in severe renal impairment in this regimen."
+    },
+    "grade4_or_persistent_grade3_hypertension": {
+      "label": "Grade 4 hypertension or persisting grade 3 hypertension (clinically assessed)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "grade4_thromboembolic_event": {
+      "label": "Grade 4 thromboembolic event, including life-threatening venous events",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_irinotecan_level": {
+      "label": "Current irinotecan dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "always_show": true
+    },
+    "current_fluorouracil_bolus_level": {
+      "label": "Current fluorouracil bolus dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "always_show": true
+    },
+    "current_fluorouracil_infusion_level": {
+      "label": "Current fluorouracil infusion dose level",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "options": [
+        {
+          "value": 0,
+          "label": "Level 0"
+        },
+        {
+          "value": -1,
+          "label": "Level -1"
+        },
+        {
+          "value": -2,
+          "label": "Level -2"
+        }
+      ],
+      "always_show": true
     }
   },
   "supportive_care": {

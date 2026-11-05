@@ -12,7 +12,7 @@
     "indication": "Adjuvant stage II or III colon cancer after complete resection; metastatic colorectal carcinoma.",
     "source_url": "https://healthservice.hse.ie/documents/6550/210_v9b_FOLFOX4.pdf",
     "source_document_pages": 7,
-    "sactcheck_encoding_version": "0.84.21",
+    "sactcheck_encoding_version": "0.84.33",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -48,8 +48,9 @@
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
-      "audit_release": "0.83.6",
-      "software_validation_record": "validation/colorectal-v0836/VALIDATION.md"
+      "audit_release": "0.84.33",
+      "software_validation_record": "validation/colorectal-v08433/retro-source-audit/AUDIT.md",
+      "audit_date": "2026-11-04"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -71,11 +72,11 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.83.6",
-      "audit_date": "2026-10-17",
-      "scope_note": "NCCP web-rendered tables checked; source ambiguities exposed. Binary PDF retrieval failed. Reconfirm latest source before clinical adoption.",
-      "reconciled_release": "0.84.21",
-      "reconciled_date": "2026-10-25"
+      "audit_release": "0.84.33",
+      "audit_date": "2026-11-04",
+      "scope_note": "Official current NCCP binary PDF and dose/hold/recovery/monitoring rules re-audited. Source ambiguities remain explicit; independent consultant, oncology-pharmacy and patient/PPI review remain pending.",
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04"
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -92,12 +93,14 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
+      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending.",
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04"
     },
-    "catalogue_source_checked_date": "2026-07-29",
+    "catalogue_source_checked_date": "2026-11-04",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00210-v9b",
-    "source_checked_date": "2026-10-25",
+    "source_checked_date": "2026-11-04",
     "regimen_card": {
       "schema_version": "1.0.0",
       "contexts": [
@@ -122,10 +125,19 @@
         "source": "https://healthservice.hse.ie/documents/6550/210_v9b_FOLFOX4.pdf"
       }
     },
-    "full_suite_release": "0.84.21",
+    "full_suite_release": "0.84.33",
     "schedule_summary": "Day 1: oxaliplatin and folinic acid, then fluorouracil bolus and a 22-hour infusion. Day 2: further fluorouracil bolus and a second 22-hour infusion; completion around Day 3. A repeating 14-day cycle. For adjuvant FOLFOX-4, NCCP describes 12 cycles; metastatic treatment continues while suitable.",
     "source_pdf_sha256": "7ae70ce10730b04b8cf3900473940163cd2044d479be1a0531ee1febc3ecd149",
-    "source_page_count": 7
+    "source_page_count": 7,
+    "source_binary_retrieved": true,
+    "retrospective_service_audit": {
+      "release": "0.84.33",
+      "checked": "2026-11-04",
+      "scope": "Current binary source, clinical thresholds, recovery windows, component dose history and patient monitoring; see audit record.",
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
@@ -767,6 +779,13 @@
       ],
       "demo_value": 0,
       "always_show": true
+    },
+    "unexplained_respiratory_symptoms": {
+      "label": "Unexplained non-productive cough, dyspnoea, crackles or pulmonary infiltrates",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -853,18 +872,9 @@
       {
         "rule_id": "PREGNANCY_LACTATION",
         "when": {
-          "any": [
-            {
-              "field": "pregnancy",
-              "operator": "==",
-              "value": true
-            },
-            {
-              "field": "breastfeeding",
-              "operator": "==",
-              "value": true
-            }
-          ]
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "consultant_review",
@@ -874,11 +884,11 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions.",
+          "recommendation": "Pregnancy requires specialist review; do not give routine treatment clearance. Follow medicine-specific pregnancy and contraception precautions.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions.",
+        "explanation": "Pregnancy requires specialist review; do not give routine treatment clearance. Follow medicine-specific pregnancy and contraception precautions.",
         "source": {
           "document": "NCCP 00210 v9b",
           "page": 2,
@@ -1846,6 +1856,54 @@
           "page": 3,
           "table": 2,
           "url": "https://healthservice.hse.ie/documents/6550/210_v9b_FOLFOX4.pdf"
+        }
+      },
+      {
+        "rule_id": "OXALIPLATIN_UNEXPLAINED_RESPIRATORY",
+        "when": {
+          "field": "unexplained_respiratory_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "oxaliplatin"
+          ],
+          "recommendation": "Stop oxaliplatin pending investigation; do not resume until interstitial lung disease or pulmonary fibrosis has been excluded. This is the source temporary discontinuation pending investigation, not an automatic permanent stop."
+        },
+        "explanation": "Stop oxaliplatin pending investigation; do not resume until interstitial lung disease or pulmonary fibrosis has been excluded. This is the source temporary discontinuation pending investigation, not an automatic permanent stop.",
+        "source": {
+          "document": "NCCP 00210 v9b",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6550/210_v9b_FOLFOX4.pdf",
+          "checked_date": "2026-11-04",
+          "table": 4
+        }
+      },
+      {
+        "rule_id": "BREASTFEEDING_EXCLUSION",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "oxaliplatin",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Breastfeeding is an explicit NCCP regimen exclusion; do not administer this regimen while breastfeeding."
+        },
+        "explanation": "Breastfeeding is an explicit NCCP regimen exclusion; do not administer this regimen while breastfeeding.",
+        "source": {
+          "document": "NCCP 00210 v9b",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6550/210_v9b_FOLFOX4.pdf",
+          "checked_date": "2026-11-04"
         }
       }
     ]

@@ -25,17 +25,17 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "software_tests_completed": false,
+      "software_tests_completed": true,
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
-      "audit_release": "0.84.21",
+      "audit_release": "0.84.33",
       "software_validation_evidence": "validation/colorectal-v0835/VALIDATION.md",
       "source_reconciled": true,
-      "audit_date": "2026-10-25",
-      "software_validation_record": "validation/breast-completion-v08421/source-schedule/AUDIT.md"
+      "audit_date": "2026-11-04",
+      "software_validation_record": "validation/colorectal-v08433/retro-source-audit/AUDIT.md"
     },
     "regimen_reimbursement_code": "00448a",
-    "sactcheck_encoding_version": "0.84.21",
+    "sactcheck_encoding_version": "0.84.33",
     "catalog": {
       "enabled": true
     },
@@ -79,24 +79,33 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.84.21",
-      "audit_date": "2026-10-25",
-      "scope_note": "Official binary NCCP PDF retrieved and checked; clinical, pharmacy and patient/PPI review remain pending.",
+      "audit_release": "0.84.33",
+      "audit_date": "2026-11-04",
+      "scope_note": "Official current NCCP binary PDF and dose/hold/recovery/monitoring rules re-audited. Source ambiguities remain explicit; independent consultant, oncology-pharmacy and patient/PPI review remain pending.",
       "source_document_checked": true,
-      "reconciled_release": "0.84.21",
-      "reconciled_date": "2026-10-25"
+      "reconciled_release": "0.84.33",
+      "reconciled_date": "2026-11-04"
     },
-    "catalogue_source_checked_date": "2026-07-29",
+    "catalogue_source_checked_date": "2026-11-04",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00448-v4b",
-    "source_checked_date": "2026-10-25",
+    "source_checked_date": "2026-11-04",
     "source_pdf_sha256": "447e182826e1af7c770b79255a1b37f81f33375e18fac683024ae8fe199d3c89",
     "current_source_id": "nccp-00448-v5",
     "source_version_change_date": "2026-08-27",
     "source_review_schedule": "As required",
     "source_last_reviewed": "2021-12-21",
-    "full_suite_release": "0.84.21",
-    "schedule_summary": "A 14-day cycle: panitumumab, irinotecan, folinic acid and fluorouracil start on Day 1, followed by a fluorouracil pump for about 46 hours. Arrange disconnection around Day 3. Continue according to benefit and tolerance."
+    "full_suite_release": "0.84.33",
+    "schedule_summary": "A 14-day cycle: panitumumab, irinotecan, folinic acid and fluorouracil start on Day 1, followed by a fluorouracil pump for about 46 hours. Arrange disconnection around Day 3. Continue according to benefit and tolerance.",
+    "source_binary_retrieved": true,
+    "retrospective_service_audit": {
+      "release": "0.84.33",
+      "checked": "2026-11-04",
+      "scope": "Current binary source, clinical thresholds, recovery windows, component dose history and patient monitoring; see audit record.",
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false,
+      "clinical_use_authorised": false
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -1464,34 +1473,43 @@
             {
               "all": [
                 {
-                  "field": "grade4_neutropenia_with_grade2_fever",
-                  "operator": "==",
-                  "value": true
-                },
-                {
-                  "any": [
+                  "all": [
                     {
-                      "field": "assessment_type",
-                      "operator": "missing"
+                      "field": "grade4_neutropenia_with_grade2_fever",
+                      "operator": "==",
+                      "value": true
                     },
                     {
-                      "field": "assessment_type",
-                      "operator": "!=",
-                      "value": "baseline"
+                      "any": [
+                        {
+                          "field": "assessment_type",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "assessment_type",
+                          "operator": "!=",
+                          "value": "baseline"
+                        }
+                      ]
                     }
                   ]
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 75
                 }
               ]
             },
             {
-              "field": "anc_x10e9_l",
-              "operator": ">=",
-              "value": 1.5
-            },
-            {
-              "field": "platelets_x10e9_l",
-              "operator": ">=",
-              "value": 75
+              "field": "toxicity_delay_weeks",
+              "operator": "<=",
+              "value": 2
             }
           ]
         },
@@ -2433,6 +2451,220 @@
           "page": "section 4.4",
           "url": "https://www.medicines.org.uk/emc/product/6178/smpc"
         }
+      },
+      {
+        "rule_id": "LATE_COUNT_RECOVERY_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            },
+            {
+              "field": "toxicity_delay_weeks",
+              "operator": ">",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Counts recovered after the source two-week restart window. Table 2 separately states an ANC stopping threshold after four weeks; this does not authorize automatic restart between weeks two and four. Reconcile prior nadir, current doses and the individual consultant plan.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Counts recovered after the source two-week restart window. Table 2 separately states an ANC stopping threshold after four weeks; this does not authorize automatic restart between weeks two and four. Reconcile prior nadir, current doses and the individual consultant plan.",
+        "source": {
+          "document": "NCCP 00448 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6480/448_Panitumumab_plus_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "FEBRILE_NEUTROPENIA_RECOVERY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "grade4_neutropenia_with_grade2_fever",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Prior grade 4 neutropenia with grade 2 or worse fever requires a subsequent-cycle reduction, but current recovery of both blood counts and the two-week restart interval must be confirmed before selecting a dose.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Prior grade 4 neutropenia with grade 2 or worse fever requires a subsequent-cycle reduction, but current recovery of both blood counts and the two-week restart interval must be confirmed before selecting a dose.",
+        "source": {
+          "document": "NCCP 00448 v5",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6480/448_Panitumumab_plus_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 2
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_RECOVERY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_highest_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "diarrhoea_current_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "missing"
+                },
+                {
+                  "all": [
+                    {
+                      "field": "diarrhoea_current_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": ">",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Previous severe diarrhoea requires documented recovery below grade 2 within two weeks before a restart dose is selected. Unknown or later recovery requires consultant review. Irinotecan additionally requires treatment-related diarrhoea to be fully resolved.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Previous severe diarrhoea requires documented recovery below grade 2 within two weeks before a restart dose is selected. Unknown or later recovery requires consultant review. Irinotecan additionally requires treatment-related diarrhoea to be fully resolved.",
+        "source": {
+          "document": "NCCP 00448 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6480/448_Panitumumab_plus_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 4,
+          "pages": [
+            3,
+            5
+          ]
+        }
+      },
+      {
+        "rule_id": "STOMATITIS_RECOVERY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_highest_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "stomatitis_current_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "toxicity_delay_weeks",
+                  "operator": "missing"
+                },
+                {
+                  "all": [
+                    {
+                      "field": "stomatitis_current_grade",
+                      "operator": "<",
+                      "value": 2
+                    },
+                    {
+                      "field": "toxicity_delay_weeks",
+                      "operator": ">",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "irinotecan",
+            "folinic_acid",
+            "fluorouracil_bolus",
+            "fluorouracil_infusion"
+          ],
+          "recommendation": "Previous severe stomatitis requires documented recovery below grade 2 within two weeks before a restart dose is selected. Unknown or later recovery requires consultant review. Irinotecan additionally requires treatment-related diarrhoea to be fully resolved.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Previous severe stomatitis requires documented recovery below grade 2 within two weeks before a restart dose is selected. Unknown or later recovery requires consultant review. Irinotecan additionally requires treatment-related diarrhoea to be fully resolved.",
+        "source": {
+          "document": "NCCP 00448 v5",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6480/448_Panitumumab_plus_FOLFIRI.pdf",
+          "checked_date": "2026-11-04",
+          "table": 4,
+          "pages": [
+            3,
+            5
+          ]
+        }
       }
     ]
   },
@@ -2573,7 +2805,8 @@
       "max": 20,
       "step": 0.1,
       "demo_value": 0.7,
-      "input_role": "decision"
+      "input_role": "decision",
+      "derived_actual_field": "bilirubin_umol_l"
     },
     "bilirubin_umol_l": {
       "label": "Bilirubin (µmol/L)",
@@ -2583,7 +2816,8 @@
       "max": 1000,
       "step": 1,
       "demo_value": 12,
-      "input_role": "decision"
+      "input_role": "decision",
+      "ui_derived_from": "bilirubin_ratio_uln"
     },
     "ast_u_l": {
       "label": "AST (U/L)",

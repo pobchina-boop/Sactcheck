@@ -9,7 +9,7 @@ for(const code of ['00225','00447','00448']){
  for(const name of ['index','knowledge','consent','consent-form','guide','passport','sactcard',log,'supportive-care']){
   const html=read(`patient/${code}/${name}.html`);assert(html.includes(code));assert.doesNotMatch(html,/Pembrolizumab|pemetrexed|carboplatin|KEYNOTE|blood pressure \/ kidneys|Keep BP and urine checks/i);
   for(const m of html.matchAll(/(?:src|href)="([^"#]+)"/g)){const u=m[1];if(/^(https?:|data:|mailto:|tel:)/.test(u))continue;assert(fs.existsSync(path.resolve(root,'patient',code,u.split(/[?#]/)[0])),`${code}/${name}: ${u}`);}
-  if(['index','knowledge'].includes(name)){assert(html.includes(require('../tools/cycle-chronology.cjs').render(d)));assert(!/<input|<select/.test(html));}
+  if(['index','knowledge'].includes(name)){assert(name==='index'&&d.patient_layout_release==='0.84.33'?html.includes('knowledge.html#cycle'):html.includes(require('../tools/cycle-chronology.cjs').render(d)));assert(!/<input|<select/.test(html));}
  }
  for(const name of ['guide','consent-form','passport','sactcard',log,'supportive-care']){const a=fs.readFileSync(path.join(root,`patient/${code}/${name}.pdf`));assert.equal(a.subarray(0,5).toString(),'%PDF-');assert.deepEqual(a,fs.readFileSync(path.join(root,`docs/patient/${code}/${name}.pdf`)));}
  assert.equal(registry.relativePath(p,'consent-draft'),`patient/${code}/consent-form.html`);assert.equal(registry.relativePath(p,'supportive-care'),`patient/${code}/supportive-care.pdf`);
