@@ -22,7 +22,7 @@ for(const c of codes){
  if(c==='00815'){const result=E.assess(p,{treatment_phase:'combination',trastuzumab_route:'sc',sc_trastuzumab_locally_approved:true,days_overdue_trastuzumab:9});const m=D.buildModificationModel(p,result);const h=m.rows.find(x=>x.componentId==='trastuzumab');assert(h,'SC missed-dose finding must reach the dose display');assert.equal(h.startingDose,'600 mg','SC route must not display the IV mg/kg starting dose');}
 
 }
-const hashes=json('validation/cmf-gem-v08418/retrospective-hashes.json');for(const [f,h]of Object.entries(hashes.files))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex'),h.after);
+const hashes=json('validation/cmf-gem-v08418/retrospective-hashes.json');for(const [f,h]of Object.entries(hashes.files))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex'),require('./helpers/retrospective-v08419.cjs').expectedHash(f,h.after));
 assert.equal(json('validation/cmf-gem-v08418/breast-coverage.json').authored,66);assert.equal(json('validation/cmf-gem-v08418/retrospective-inventory.json').authored_suites,94);assert(read('index.html').includes('Feasibility evaluation build — not for routine clinical use'));
 (async()=>{
  const riskContext={console,fetch:async()=>({ok:true,json:async()=>json('data/emetogenic-risk-map.json')})};vm.createContext(riskContext);vm.runInContext(read('js/emetogenic-risk.js'),riskContext);await riskContext.SACTCheckEmetogenicRisk.load();

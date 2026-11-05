@@ -1,0 +1,8 @@
+'use strict';
+// Reads current rendered legacy hero metadata; it does not change application styling.
+const fs=require('node:fs'),path=require('node:path');
+const root=path.resolve(__dirname,'../../..');
+const {chromium}=require(require.resolve('playwright',{paths:[root]}));
+(async()=>{const server=await require(path.join(root,'tools/local-site-server.cjs')).serve(path.join(root,'_site'));let browser;
+try{browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});const page=await browser.newPage({viewport:{width:390,height:900},reducedMotion:'reduce',serviceWorkers:'block'});await page.goto(server.url+'/patient/00212/');await page.evaluate(()=>document.fonts.ready);const result=await page.locator('.wiki-kicker').first().evaluate(n=>{const s=getComputedStyle(n),r=n.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(n);const text=range.getBoundingClientRect();return {route:'/patient/00212/',selector:'.wiki-hero .wiki-kicker',text:n.textContent,color:s.color,fontSize:s.fontSize,fontWeight:s.fontWeight,heroBackground:getComputedStyle(n.closest('.wiki-hero')).backgroundImage,box:{x:r.x,y:r.y,width:r.width,height:r.height},textBox:{x:text.x,y:text.y,width:text.width,height:text.height},purpose:'Additional current-baseline contrast finding only; no current clinical source audit'};});fs.writeFileSync(path.join(__dirname,'contrast-dom.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));}
+finally{if(browser)await browser.close();await server.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

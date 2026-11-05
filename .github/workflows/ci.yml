@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -40,6 +42,9 @@ jobs:
 
       - name: Run complete regression suite
         run: npm test
+
+      - name: Validate reviewed UI assets and regeneration
+        run: npm run test:patient-ui
 
       - name: Build deployable site from allowlisted files
         run: npm run build:pages
