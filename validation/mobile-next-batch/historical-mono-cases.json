@@ -1,0 +1,968 @@
+{
+  "status": "historical-source-software-comparison-only",
+  "source_currentness": "BLOCKED: live source access unavailable",
+  "cases": 61,
+  "passed": 61,
+  "rows": [
+    {
+      "code": "00207",
+      "label": "ECOG 3 permitted boundary",
+      "input": {
+        "ecog": 3
+      },
+      "expected_rule": "ECOG_ELIGIBILITY",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ECOG_NO_RESTRICTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "ECOG 4 outside source",
+      "input": {
+        "ecog": 4
+      },
+      "expected_rule": "ECOG_ELIGIBILITY",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ECOG_ELIGIBILITY"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Colorectal mutant RAS exclusion",
+      "input": {
+        "indication_id": "00207a",
+        "ras_status": "mutant"
+      },
+      "expected_rule": "RAS_EXCLUSION",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "RAS_EXCLUSION"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "HN RAS does not apply",
+      "input": {
+        "indication_id": "00207b",
+        "ras_status": "mutant"
+      },
+      "expected_rule": "RAS_EXCLUSION",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_INDICATION_ID_CONTEXT_REQUIRED",
+        "PARTIAL_RAS_STATUS_NO_RESTRICTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Current skin grade 2",
+      "input": {
+        "acneiform_rash_grade": 2
+      },
+      "expected_rule": "SKIN_HOLD",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Current skin grade 3",
+      "input": {
+        "acneiform_rash_grade": 3
+      },
+      "expected_rule": "SKIN_HOLD",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_HOLD"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Current skin grade 4",
+      "input": {
+        "acneiform_rash_grade": 4
+      },
+      "expected_rule": "SKIN_HOLD",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_HOLD"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Skin episode 1 recovered by two weeks",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 1,
+        "skin_delay_weeks": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RESTART_1",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_RESTART_1"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "No restart beyond two weeks",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 1,
+        "skin_delay_weeks": 2.01,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RESTART_1",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_NO_RESTRICTION",
+        "PARTIAL_SKIN_OCCURRENCE_NO_RESTRICTION",
+        "PARTIAL_SKIN_FAILED_RECOVERY_NO_RESTRICTION",
+        "PARTIAL_SKIN_DELAY_WEEKS_NO_RESTRICTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Missing recovery flag does not imply recovery",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 1,
+        "skin_delay_weeks": 2
+      },
+      "expected_rule": "SKIN_RESTART_1",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_OCCURRENCE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_DELAY_WEEKS_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Skin episode 2 recovered by two weeks",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 2,
+        "skin_delay_weeks": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RESTART_2",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_RESTART_2"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "No restart beyond two weeks",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 2,
+        "skin_delay_weeks": 2.01,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RESTART_2",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_NO_RESTRICTION",
+        "PARTIAL_SKIN_OCCURRENCE_NO_RESTRICTION",
+        "PARTIAL_SKIN_FAILED_RECOVERY_NO_RESTRICTION",
+        "PARTIAL_SKIN_DELAY_WEEKS_NO_RESTRICTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Missing recovery flag does not imply recovery",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 2,
+        "skin_delay_weeks": 2
+      },
+      "expected_rule": "SKIN_RESTART_2",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_OCCURRENCE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_DELAY_WEEKS_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Skin episode 3 recovered by two weeks",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 3,
+        "skin_delay_weeks": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RESTART_3",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_RESTART_3"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "No restart beyond two weeks",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 3,
+        "skin_delay_weeks": 2.01,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RESTART_3",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_NO_RESTRICTION",
+        "PARTIAL_SKIN_OCCURRENCE_NO_RESTRICTION",
+        "PARTIAL_SKIN_FAILED_RECOVERY_NO_RESTRICTION",
+        "PARTIAL_SKIN_DELAY_WEEKS_NO_RESTRICTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Missing recovery flag does not imply recovery",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 3,
+        "skin_delay_weeks": 2
+      },
+      "expected_rule": "SKIN_RESTART_3",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_OCCURRENCE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_DELAY_WEEKS_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Fourth severe episode",
+      "input": {
+        "skin_occurrence": 4
+      },
+      "expected_rule": "SKIN_FOURTH",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_FOURTH"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Persistent grade3 beyond two weeks",
+      "input": {
+        "acneiform_rash_grade": 3,
+        "skin_delay_weeks": 2.01
+      },
+      "expected_rule": "SKIN_FAILED",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_FAILED",
+        "SKIN_HOLD"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Infusion grade 1",
+      "input": {
+        "infusion_reaction_grade": 1
+      },
+      "expected_rule": "INFUSION_G1",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "INFUSION_G1"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Infusion grade 2",
+      "input": {
+        "infusion_reaction_grade": 2
+      },
+      "expected_rule": "INFUSION_G2",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "INFUSION_G2"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Infusion grade 3",
+      "input": {
+        "infusion_reaction_grade": 3
+      },
+      "expected_rule": "INFUSION_G34",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "INFUSION_G34"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Infusion grade 4",
+      "input": {
+        "infusion_reaction_grade": 4
+      },
+      "expected_rule": "INFUSION_G34",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "INFUSION_G34"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "Confirmed ILD",
+      "input": {
+        "interstitial_lung_disease": true
+      },
+      "expected_rule": "ILD",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ILD"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "No expected organ-specific dose adjustment renal_impairment",
+      "input": {
+        "renal_impairment": true
+      },
+      "expected_rule": "ORGAN_REVIEW",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ORGAN_REVIEW"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "No expected organ-specific dose adjustment haemodialysis",
+      "input": {
+        "haemodialysis": true
+      },
+      "expected_rule": "ORGAN_REVIEW",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ORGAN_REVIEW"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00207",
+      "label": "No expected organ-specific dose adjustment hepatic_impairment_present",
+      "input": {
+        "hepatic_impairment_present": true
+      },
+      "expected_rule": "ORGAN_REVIEW",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ORGAN_REVIEW"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "ECOG2 permitted boundary",
+      "input": {
+        "ecog": 2
+      },
+      "expected_rule": "ECOG_ELIGIBILITY",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ECOG_NO_RESTRICTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "ECOG3 outside source",
+      "input": {
+        "ecog": 3
+      },
+      "expected_rule": "ECOG_ELIGIBILITY",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ECOG_ELIGIBILITY"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "RAS wild_type",
+      "input": {
+        "ras_status": "wild_type"
+      },
+      "expected_rule": "RAS_EXCLUSION",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_RAS_STATUS_NO_RESTRICTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "RAS mutant",
+      "input": {
+        "ras_status": "mutant"
+      },
+      "expected_rule": "RAS_EXCLUSION",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "RAS_EXCLUSION"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "RAS unknown",
+      "input": {
+        "ras_status": "unknown"
+      },
+      "expected_rule": "RAS_EXCLUSION",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "RAS_EXCLUSION"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Current skin grade 2",
+      "input": {
+        "acneiform_rash_grade": 2
+      },
+      "expected_rule": "SKIN_CURRENT_HOLD",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Current skin grade 3",
+      "input": {
+        "acneiform_rash_grade": 3
+      },
+      "expected_rule": "SKIN_CURRENT_HOLD",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_CURRENT_HOLD"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Current skin grade 4",
+      "input": {
+        "acneiform_rash_grade": 4
+      },
+      "expected_rule": "SKIN_CURRENT_HOLD",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_CURRENT_HOLD"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Episode 1 recovered after 1 withheld doses",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 1,
+        "skin_doses_withheld": 1,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_1",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_RECOVERED_1"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No restart while grade3",
+      "input": {
+        "acneiform_rash_grade": 3,
+        "skin_occurrence": 1,
+        "skin_doses_withheld": 1,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_1",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "SKIN_CURRENT_HOLD",
+        "PARTIAL_SKIN_OCCURRENCE_NO_RESTRICTION",
+        "PARTIAL_SKIN_FAILED_RECOVERY_NO_RESTRICTION",
+        "PARTIAL_SKIN_DOSES_WITHHELD_NO_RESTRICTION"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Episode 1 recovered after 2 withheld doses",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 1,
+        "skin_doses_withheld": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_1",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_RECOVERED_1"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No restart while grade3",
+      "input": {
+        "acneiform_rash_grade": 3,
+        "skin_occurrence": 1,
+        "skin_doses_withheld": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_1",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "SKIN_CURRENT_HOLD",
+        "PARTIAL_SKIN_OCCURRENCE_NO_RESTRICTION",
+        "PARTIAL_SKIN_FAILED_RECOVERY_NO_RESTRICTION",
+        "PARTIAL_SKIN_DOSES_WITHHELD_NO_RESTRICTION"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Episode 2 recovered after 1 withheld doses",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 2,
+        "skin_doses_withheld": 1,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_2",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_RECOVERED_2"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No restart while grade3",
+      "input": {
+        "acneiform_rash_grade": 3,
+        "skin_occurrence": 2,
+        "skin_doses_withheld": 1,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_2",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "SKIN_CURRENT_HOLD",
+        "PARTIAL_SKIN_OCCURRENCE_NO_RESTRICTION",
+        "PARTIAL_SKIN_FAILED_RECOVERY_NO_RESTRICTION",
+        "PARTIAL_SKIN_DOSES_WITHHELD_NO_RESTRICTION"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Episode 2 recovered after 2 withheld doses",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 2,
+        "skin_doses_withheld": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_2",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_RECOVERED_2"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No restart while grade3",
+      "input": {
+        "acneiform_rash_grade": 3,
+        "skin_occurrence": 2,
+        "skin_doses_withheld": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_2",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "SKIN_CURRENT_HOLD",
+        "PARTIAL_SKIN_OCCURRENCE_NO_RESTRICTION",
+        "PARTIAL_SKIN_FAILED_RECOVERY_NO_RESTRICTION",
+        "PARTIAL_SKIN_DOSES_WITHHELD_NO_RESTRICTION"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Episode 3 recovered after 1 withheld doses",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 3,
+        "skin_doses_withheld": 1,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_3",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_RECOVERED_3"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No restart while grade3",
+      "input": {
+        "acneiform_rash_grade": 3,
+        "skin_occurrence": 3,
+        "skin_doses_withheld": 1,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_3",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "SKIN_CURRENT_HOLD",
+        "PARTIAL_SKIN_OCCURRENCE_NO_RESTRICTION",
+        "PARTIAL_SKIN_FAILED_RECOVERY_NO_RESTRICTION",
+        "PARTIAL_SKIN_DOSES_WITHHELD_NO_RESTRICTION"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Episode 3 recovered after 2 withheld doses",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 3,
+        "skin_doses_withheld": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_3",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_RECOVERED_3"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No restart while grade3",
+      "input": {
+        "acneiform_rash_grade": 3,
+        "skin_occurrence": 3,
+        "skin_doses_withheld": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_3",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "SKIN_CURRENT_HOLD",
+        "PARTIAL_SKIN_OCCURRENCE_NO_RESTRICTION",
+        "PARTIAL_SKIN_FAILED_RECOVERY_NO_RESTRICTION",
+        "PARTIAL_SKIN_DOSES_WITHHELD_NO_RESTRICTION"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Fourth episode",
+      "input": {
+        "skin_occurrence": 4
+      },
+      "expected_rule": "SKIN_FOURTH_EPISODE",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_FOURTH_EPISODE"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Failed recovery",
+      "input": {
+        "skin_failed_recovery": true
+      },
+      "expected_rule": "SKIN_FAILED_RECOVERY",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "SKIN_FAILED_RECOVERY"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Missing withheld-dose history suppresses restart",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 2,
+        "skin_failed_recovery": false
+      },
+      "expected_rule": "SKIN_RECOVERED_2",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_OCCURRENCE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_FAILED_RECOVERY_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Missing failed-recovery flag suppresses restart",
+      "input": {
+        "acneiform_rash_grade": 2,
+        "skin_occurrence": 2,
+        "skin_doses_withheld": 1
+      },
+      "expected_rule": "SKIN_RECOVERED_2",
+      "expected_present": false,
+      "actual_rule_ids": [
+        "PARTIAL_ACNEIFORM_RASH_GRADE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_OCCURRENCE_CONTEXT_REQUIRED",
+        "PARTIAL_SKIN_DOSES_WITHHELD_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Infusion grade 1",
+      "input": {
+        "infusion_reaction_grade": 1
+      },
+      "expected_rule": "INFUSION_MILD_MODERATE",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "INFUSION_MILD_MODERATE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Infusion grade 2",
+      "input": {
+        "infusion_reaction_grade": 2
+      },
+      "expected_rule": "INFUSION_MILD_MODERATE",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "INFUSION_MILD_MODERATE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Infusion grade 3",
+      "input": {
+        "infusion_reaction_grade": 3
+      },
+      "expected_rule": "INFUSION_SEVERE",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "INFUSION_SEVERE"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Infusion grade 4",
+      "input": {
+        "infusion_reaction_grade": 4
+      },
+      "expected_rule": "INFUSION_SEVERE",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "INFUSION_SEVERE"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Confirmed ILD",
+      "input": {
+        "interstitial_lung_disease": true
+      },
+      "expected_rule": "ILD_CONFIRMED",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ILD_CONFIRMED"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "Ulcerative keratitis interrupts pending review",
+      "input": {
+        "ulcerative_keratitis": true
+      },
+      "expected_rule": "ULCERATIVE_KERATITIS",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ULCERATIVE_KERATITIS"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No expected organ adjustment {\"renal_impairment\":true}",
+      "input": {
+        "renal_impairment": true
+      },
+      "expected_rule": "ORGAN_FUNCTION",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ORGAN_FUNCTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No expected organ adjustment {\"haemodialysis\":true}",
+      "input": {
+        "haemodialysis": true
+      },
+      "expected_rule": "ORGAN_FUNCTION",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ORGAN_FUNCTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No expected organ adjustment {\"hepatic_impairment_category\":\"mild\"}",
+      "input": {
+        "hepatic_impairment_category": "mild"
+      },
+      "expected_rule": "ORGAN_FUNCTION",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ORGAN_FUNCTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No expected organ adjustment {\"hepatic_impairment_category\":\"moderate\"}",
+      "input": {
+        "hepatic_impairment_category": "moderate"
+      },
+      "expected_rule": "ORGAN_FUNCTION",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ORGAN_FUNCTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00225",
+      "label": "No expected organ adjustment {\"hepatic_impairment_category\":\"severe\"}",
+      "input": {
+        "hepatic_impairment_category": "severe"
+      },
+      "expected_rule": "ORGAN_FUNCTION",
+      "expected_present": true,
+      "actual_rule_ids": [
+        "ORGAN_FUNCTION"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    }
+  ]
+}
