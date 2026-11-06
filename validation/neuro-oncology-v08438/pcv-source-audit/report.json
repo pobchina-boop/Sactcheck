@@ -1,0 +1,209 @@
+{
+  "release": "0.84.38",
+  "scope": [
+    "00379",
+    "00658"
+  ],
+  "sources": [
+    {
+      "code": "00379",
+      "url": "https://healthservice.hse.ie/documents/6971/379_V4_PCV.pdf",
+      "resolved_url": "https://assets.hse.ie/media/documents/379_V4_PCV.pdf",
+      "bytes": 858975,
+      "sha256": "df1d6991de8a5626ad0547ad06d40cc1eaa36f2ebe4ee962c7d5eb09c614c43b",
+      "document_version": "4",
+      "version_date": "2022-06-28",
+      "review_date": "2027-06-28",
+      "retrieved_date": "2026-11-05",
+      "pages": 6,
+      "catalogue_url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/neuro-oncology-sact-regimens/",
+      "source_pdf": "validation/neuro-oncology-v08438/pcv-source-audit/sources/00379.pdf"
+    },
+    {
+      "code": "00658",
+      "url": "https://healthservice.hse.ie/documents/6996/658_V2_PCV-8wk.pdf",
+      "resolved_url": "https://assets.hse.ie/media/documents/658_V2_PCV-8wk.pdf",
+      "bytes": 1060830,
+      "sha256": "70b4276a2691b45e55ab281636e2dbe0f32bdbb23c38e334c8548d5a154dc420",
+      "document_version": "2",
+      "version_date": "2022-06-23",
+      "review_date": "2027-06-28",
+      "retrieved_date": "2026-11-05",
+      "pages": 6,
+      "catalogue_url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/neuro-oncology-sact-regimens/",
+      "source_pdf": "validation/neuro-oncology-v08438/pcv-source-audit/sources/00658.pdf"
+    }
+  ],
+  "protocols": [
+    {
+      "code": "00379",
+      "path": "protocols/neuro-oncology/00379-procarbazine-lomustine-and-vincristine-pcv-therapy-42-day.json",
+      "before_sha256": "81b95380e44bbf0538fe4a4456f309d17278f6eea395d158998bdcf21f444735",
+      "after_sha256": "fe239edfe7704e69310638b700732ee8bcc80eb6c4df387d45fe7cd367a409bc",
+      "before_rules": 28,
+      "after_rules": 65,
+      "input_count": 52,
+      "of590_before": [],
+      "of590_after": []
+    },
+    {
+      "code": "00658",
+      "path": "protocols/neuro-oncology/00658-procarbazine-lomustine-and-vincristine-pcv-therapy-56-day.json",
+      "before_sha256": "1bdff4c3d324f8d55846bae3c824b099c5daa368baa6f54a41422cb4f492907b",
+      "after_sha256": "c0cda0fc68a30bb65aeb6c6bd31ed2df40294b4113619e05308c0f2ee6abeb7a",
+      "before_rules": 34,
+      "after_rules": 75,
+      "input_count": 58,
+      "of590_before": [],
+      "of590_after": []
+    }
+  ],
+  "source_specific_cases": {
+    "total": 1245,
+    "passed": 1245,
+    "failed": 0
+  },
+  "before_comparison": {
+    "total": 1105,
+    "passed": 564,
+    "failed": 541,
+    "note": "Source scenarios absent from old encoding, schema and provenance changes also fail; this is NOT a count of unique clinical errors."
+  },
+  "findings": [
+    {
+      "id": "PCV-01",
+      "area": "ECOG context",
+      "finding_and_change": "00379 allowed ECOG3 adjuvant because only >3 triggered; separate 0–2adjuvant/0–3palliative pathways now encoded.00658 remains0–2.",
+      "source": "NCCP00379/00658p1"
+    },
+    {
+      "id": "PCV-02",
+      "area": "Treatment-day count gaps",
+      "finding_and_change": "Old0.5–0.999ANC/50–99platelet bands left decimal gaps. Strict numerical<1/<100 intervals now cover fractionalresults.",
+      "source": "Bothp3Table1"
+    },
+    {
+      "id": "PCV-03",
+      "area": "Source count boundaries",
+      "finding_and_change": "ANC1.0/platelets100 overlap proceed and delay rows onD1/D8. Explicitreview at exactendpoints; no automaticclearance.",
+      "source": "Bothp3Table1"
+    },
+    {
+      "id": "PCV-04",
+      "area": "Day29 dominance",
+      "finding_and_change": "OldmoderateORrule could produceproceedfinding with othercountsevere, ormissingothercount/wellness. Proceedrequiresbothcounts+well; severeomissiondominates.",
+      "source": "Bothp3Table1"
+    },
+    {
+      "id": "PCV-05",
+      "area": "Nadir/dose history",
+      "finding_and_change": "Oldnumeric25%previousdose prose couldcalculate fromstartingdose orduplicate. Priordosefields/historyguard,already-appliedreconciliation,noautocalculateddose.",
+      "source": "Bothp3Table1"
+    },
+    {
+      "id": "PCV-06",
+      "area": "LomustineCrCl45",
+      "finding_and_change": "Source45in50%and75%bands hiddenby30–44dropdown. ExactCrClwithoverlapreview; numericentryprecedence;legacybandguard.",
+      "source": "00379p4/00658p3Table2"
+    },
+    {
+      "id": "PCV-07",
+      "area": "Notrecommended vscontraindicated",
+      "finding_and_change": "SourceNCCPrenalnotrecommended previouslylabelledcontraindicated; nowexplicitdonotadministerwithoutreview,notinventedformalcontra. Supplementaryproductsevererenalcontra flaggedseparately.",
+      "source": "Table2+currentlomustineSmPC4.3"
+    },
+    {
+      "id": "PCV-08",
+      "area": "Vincristinehepaticmissingbranch",
+      "finding_and_change": "MissingAST/ALT60–180ORbranchrestored; bilirubin>51+normalnotmisreadasall<=180. Uncoveredcombinationsandmissingdatareview.",
+      "source": "Table2"
+    },
+    {
+      "id": "PCV-09",
+      "area": "ProcarbazineAST/ALTambiguity",
+      "finding_and_change": "OldhighestAST/ALTinputcouldautomaticallycontraindicateonALT. SourceexplicitAST>180vsAST/ALTheadingrecorded;separateAST/ALT,ALTonlyreview;legacycombinedinputcannotdecide.",
+      "source": "Table2"
+    },
+    {
+      "id": "PCV-10",
+      "area": "Lomustinehepaticgap",
+      "finding_and_change": "Considerreductionnoliverpercentage missing; explicitspecialistreviewadded.",
+      "source": "Table2"
+    },
+    {
+      "id": "PCV-11",
+      "area": "Pulmonarydifferences",
+      "finding_and_change": "PCV42hadunsupportedDLCO60hold andomittedbaselineFVC/DLCO70caution. PCV56symptomsANDDLCO<60held,isolatedfindingsreview;baseline70cautionseparate.",
+      "source": "00379p4;00658p4Table3+p5"
+    },
+    {
+      "id": "PCV-12",
+      "area": "Vincristineneurotoxicity",
+      "finding_and_change": "PCV56grade3/4requiresHOLDnotautomaticomit;PCV42narrativedoesnotdictateagrade-basedomission. PainpersistentreductionhistoryguardinPCV56.",
+      "source": "00379p5;00658p4Table3"
+    },
+    {
+      "id": "PCV-13",
+      "area": "Generictoxicityoverreach",
+      "finding_and_change": "PCV56oldNVreductiondidnotrequiredespiteantiemetics; incorrectlyassignedoralcomponents despite sourceunspecified doses. Currentgrade/severity/recoveryreview andexplicitambiguity;noimporttoPCV42.",
+      "source": "00658p4Table3"
+    },
+    {
+      "id": "PCV-14",
+      "area": "Sourcegradinghonesty",
+      "finding_and_change": "LegacygenericCTCAEv5descriptorsonaggregatenausea/vomiting0–4 mislabelledgrade4. NamedsourcegradingnotautomaticCTCAEconversionnowexplicit.",
+      "source": "00658Table3;inputinterpretationsafeguard"
+    },
+    {
+      "id": "PCV-15",
+      "area": "Schedule/patient plan",
+      "finding_and_change": "Missingstructuredschedulefilled;PCV56sixcyclesvsPCV42nofixedcount. Sourceprocarbazine8–21vs8–22supportivetextconflictflagged;notextraDay22.",
+      "source": "Bothp1+supportivesection"
+    },
+    {
+      "id": "PCV-16",
+      "area": "Currentlomustineproductsource",
+      "finding_and_change": "SupplementalSmPCweeklyCBC>=6weeks,minimum6weekinterval,cumulative1000mg/m²,productcontraindications,WNCCPANCvsSmPCWBCandcontraceptionconflictsaddedwithoutrewritingNCCPcombinationthresholds.",
+      "source": "January2026SmPC4.2–4.6"
+    },
+    {
+      "id": "PCV-17",
+      "area": "Supportservicegaps",
+      "finding_and_change": "Pretreatmenttests,oralunlicensedsupply,interactions,constipationprophylaxis/extravasationtriageandpostRTstartwithin4weeksnowexplicit.",
+      "source": "NCCPpp1–5"
+    }
+  ],
+  "source_ambiguities": [
+    {
+      "code": "00379",
+      "ambiguities": [
+        "Table 1 Day 1/8 ANC 1.0 and platelets100 overlap proceed/delay rows; review exact endpoint.",
+        "Lomustine CrCl45 occurs in both50% and75% rows.",
+        "Procarbazine hepatic column AST/ALT but contraindication row specifically AST>180.",
+        "Vincristine normal-transaminase row is not equivalent to ≤180; certain high-transaminase/bilirubin combinations not assigned.",
+        "Procarbazine treatmentDays8–21 vs supportive-careDays8–22.",
+        "No source-specific Table3; do not import56-day toxicity reductions orDLCO60hold."
+      ]
+    },
+    {
+      "code": "00658",
+      "ambiguities": [
+        "Table 1 Day 1/8 ANC 1.0 and platelets100 overlap proceed/delay rows; review exact endpoint.",
+        "Lomustine CrCl45 occurs in both50% and75% rows.",
+        "Procarbazine hepatic column AST/ALT but contraindication row specifically AST>180.",
+        "Vincristine normal-transaminase row is not equivalent to ≤180; certain high-transaminase/bilirubin combinations not assigned.",
+        "Procarbazine treatmentDays8–21 vs supportive-careDays8–22.",
+        "Table3 generic25%/50% lacks affected-components, denominator and restart/recurrence detail.",
+        "Pulmonary hold wording uses symptoms AND DLCO<60; isolated abnormalities reviewed.",
+        "BaselinePFT absentfromp2listbutrecommendedp5."
+      ]
+    }
+  ],
+  "source_access": "Fresh official catalogue and both official PDF bytes verified; User-Agent Mozilla/5.0 with ordinary verified TLS. Earlier unadorned urllib requests403, no bypass. CurrentmedacSmPC independentlyopenedviaweb and freshPDFretained.",
+  "visual_source_review": [
+    "00658p3Table1/Table2 andp4Table3 renderedwithPoppler andinspected; exactBooleanoperators/boundarylabels confirmed."
+  ],
+  "independent_clinical_review": false,
+  "independent_oncology_pharmacy_review": false,
+  "clinical_use_authorised": false
+}

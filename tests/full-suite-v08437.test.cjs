@@ -4,8 +4,8 @@ const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f
 const scope=json('validation/neuroendocrine-v08437/scope.json'),presentation=json('data/patient-presentation-v08431.json'),index=json('protocols/index.json').protocols;
 const registry=require('../js/patient-asset-registry-v0810.js'),kb=json('data/regimen-knowledge-base-v08437-addendum.json');
 const groups={'00320':'everolimus','00327':'sunitinib','00505':'captem','00642':'prrt'};
-assert.deepEqual(scope.codes,['00320','00327','00505','00642']);assert.equal(registry.codes.length,178);
-assert.equal(json('package.json').version,'0.84.37');assert.equal(json('data/app-release.json').release,'0.84.37');
+assert.deepEqual(scope.codes,['00320','00327','00505','00642']);require('./helpers/neuro-suite-registration-v08438.cjs').registry(registry.codes);
+assert.equal(json('package.json').version,'0.84.38');assert.equal(json('data/app-release.json').release,'0.84.38');
 const proto=c=>json(index.find(x=>x.path.includes('/'+c+'-')).path);
 for(const route of scope.presentation_routes){
  const code=route.slice(0,5),d=json(presentation.routes[route]),p=proto(code),audit='validation/neuroendocrine-v08437/'+groups[code]+'-source-audit/';

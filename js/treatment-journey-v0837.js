@@ -36409,6 +36409,651 @@ const definitions={
         "url": "https://assets.hse.ie/media/documents/Neuroendocrine_PRRT_Patient_Information_Leaflet_long.docx"
       }
     ]
+  },
+  "00334": {
+    "code": "00334",
+    "title": "Temozolomide with radiotherapy, then adjuvant temozolomide: treatment and checks",
+    "release": "0.84.38",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adults with newly diagnosed glioblastoma under NCCP 00334.",
+    "summary": "Take temozolomide daily throughout six weeks of radiotherapy, including weekends as prescribed. After a four-week break, take temozolomide on Days 1–5 of each 28-day cycle for up to six adjuvant cycles.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits / recovery",
+      "Next-cycle / response review",
+      "After a pause or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, renal/liver profile, glucose, HBsAg and anti-HBc",
+          "FBC weekly during six-week RT; kidneys/liver before week 4",
+          "Continue arranged checks and recovery review before adjuvant treatment",
+          "Day 1 FBC/renal/LFT each cycle; Day 22 FBC under EMA guidance",
+          "LFT after cycles; follow delayed toxicity after the last dose"
+        ],
+        "source_ids": [
+          "00334"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "Neurology / medicines / function",
+        "kind": "monitoring",
+        "cells": [
+          "Record neurological symptoms, daily function and current medicines",
+          "Review seizures, headache, cognition, mood, walking and any steroid plan",
+          "Report changes early; do not wait for the next MRI",
+          "Review treatment tolerance, medication support and patient goals",
+          "Agree follow-up and rehabilitation or symptom support"
+        ],
+        "source_ids": [
+          "00334"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "MRI / diagnosis",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm integrated diagnosis, molecular results and baseline imaging",
+          "MRI timing according to the neuro-oncology plan",
+          "Keep the booking and result-review contact in your passport",
+          "Interpret scan with symptoms, treatment effects and clinical review",
+          "Agree the next imaging and clinical review"
+        ],
+        "source_ids": [
+          "00334"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Temozolomide with six weeks of radiotherapy",
+        "when": "Daily capsule phase",
+        "why": "This treatment combines daily temozolomide with radiotherapy, followed by a break and further temozolomide cycles, to help control newly diagnosed glioblastoma. Your team discusses the expected benefit and how it fits after surgery or biopsy.",
+        "clinical": "Daily capsules and scheduled radiotherapy run together. Confirm the exact final capsule day and separate PJP-prevention plan.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00334"
+        ]
+      },
+      {
+        "title": "Four-week break before adjuvant treatment",
+        "when": "Recovery and review",
+        "why": "This treatment combines daily temozolomide with radiotherapy, followed by a break and further temozolomide cycles, to help control newly diagnosed glioblastoma. Your team discusses the expected benefit and how it fits after surgery or biopsy.",
+        "clinical": "Radiotherapy has ended, but safety checks and prescribed support medicines continue. The team checks recovery before another prescription.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00334"
+        ]
+      },
+      {
+        "title": "Up to six adjuvant 28-day cycles",
+        "when": "Five capsule days per cycle",
+        "why": "This treatment combines daily temozolomide with radiotherapy, followed by a break and further temozolomide cycles, to help control newly diagnosed glioblastoma. Your team discusses the expected benefit and how it fits after surgery or biopsy.",
+        "clinical": "The first cycle has its own prescription; the team may change the dose only after reviewing tolerance and blood counts. Six cycles are the current NCCP plan.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00334"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+    ],
+    "sources": [
+      {
+        "id": "00334",
+        "title": "NCCP 00334 v4 · current Irish regimen",
+        "url": "https://healthservice.hse.ie/documents/6960/334_V4_Temozolomide_RT_and_Adjuvant_Therapy.pdf"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Brain Cancer Glioma, 2026 · patient education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/brain-gliomas-patient.pdf"
+      },
+      {
+        "id": "temodal",
+        "title": "EMA Temodal product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "stupp",
+        "title": "Stupp EORTC/NCIC trial: radiotherapy with concurrent and adjuvant temozolomide",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15758009/"
+      },
+      {
+        "id": "nci-cns",
+        "title": "NCI: adult central nervous system tumours · diagnosis and grade education",
+        "url": "https://www.cancer.gov/types/brain/patient/adult-brain-treatment-pdq"
+      },
+      {
+        "id": "nhs-dexamethasone",
+        "title": "NHS: dexamethasone · use and stopping safely",
+        "url": "https://www.nhs.uk/medicines/dexamethasone-tablets-and-liquid/how-and-when-to-take-dexamethasone-tablets-and-liquid/"
+      }
+    ]
+  },
+  "00342": {
+    "code": "00342",
+    "title": "Temozolomide for recurrent or progressive glioma: treatment and checks",
+    "release": "0.84.38",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adults with grade III or IV malignant glioma recurring or progressing after standard therapy under NCCP 00342.",
+    "summary": "Take temozolomide once daily on Days 1–5, then no temozolomide on Days 6–28. Repeat only when your team authorises the next 28-day cycle. The course is reviewed for benefit and toxicity rather than a fixed six-cycle finish.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits / recovery",
+      "Next-cycle / response review",
+      "After a pause or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, renal/liver profile, glucose, HBsAg and anti-HBc",
+          "NCCP: FBC, kidneys and liver on Day 1 before each cycle",
+          "EMA: Day 22 blood count, then weekly until recovery",
+          "Review results, symptoms and prescribed next dose",
+          "LFT after every cycle; follow delayed injury after final dose"
+        ],
+        "source_ids": [
+          "00342"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "Neurology / medicines / function",
+        "kind": "monitoring",
+        "cells": [
+          "Record neurological symptoms, daily function and current medicines",
+          "Review seizures, headache, cognition, mood, walking and any steroid plan",
+          "Report changes early; do not wait for the next MRI",
+          "Review treatment tolerance, medication support and patient goals",
+          "Agree follow-up and rehabilitation or symptom support"
+        ],
+        "source_ids": [
+          "00342"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "MRI / diagnosis",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm integrated diagnosis, molecular results and baseline imaging",
+          "MRI timing according to the neuro-oncology plan",
+          "Keep the booking and result-review contact in your passport",
+          "Interpret scan with symptoms, treatment effects and clinical review",
+          "Agree the next imaging and clinical review"
+        ],
+        "source_ids": [
+          "00342"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Repeated 28-day cycles with individual review",
+        "when": "Recurrent glioma",
+        "why": "Temozolomide is used to help control a high-grade glioma that has returned or progressed after previous treatment. The team considers previous medicines, current symptoms, scans and your priorities when deciding whether it is suitable.",
+        "clinical": "Take temozolomide once daily on Days 1–5, then no temozolomide on Days 6–28. Repeat only when your team authorises the next 28-day cycle. The course is reviewed for benefit and toxicity rather than a fixed six-cycle finish.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00342"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+    ],
+    "sources": [
+      {
+        "id": "00342",
+        "title": "NCCP 00342 v4 · current Irish regimen",
+        "url": "https://healthservice.hse.ie/documents/6961/342_V4_Temozolomide_Recurrent_Therapy_.pdf"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Brain Cancer Glioma, 2026 · patient education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/brain-gliomas-patient.pdf"
+      },
+      {
+        "id": "temodal",
+        "title": "EMA Temodal product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "nci-cns",
+        "title": "NCI: adult central nervous system tumours · diagnosis and grade education",
+        "url": "https://www.cancer.gov/types/brain/patient/adult-brain-treatment-pdq"
+      },
+      {
+        "id": "nhs-dexamethasone",
+        "title": "NHS: dexamethasone · use and stopping safely",
+        "url": "https://www.nhs.uk/medicines/dexamethasone-tablets-and-liquid/how-and-when-to-take-dexamethasone-tablets-and-liquid/"
+      }
+    ]
+  },
+  "00379": {
+    "code": "00379",
+    "title": "PCV chemotherapy · 42-day cycle: treatment and checks",
+    "release": "0.84.38",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "NCCP 00379: adjuvant treatment of grade II glioma after radiotherapy, or palliative treatment of recurrent high-grade glioma.",
+    "summary": "Lomustine once on Day 1; procarbazine daily on Days 8–21; vincristine into a vein on Days 8 and 29. The cycle lasts 42 days. The number of cycles is individual; treatment continues only while benefit and tolerance support it.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits / recovery",
+      "Next-cycle / response review",
+      "After a pause or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, renal/liver profile, glucose; baseline lung function",
+          "FBC, renal and liver tests before each treatment",
+          "Lomustine SmPC: blood count at least weekly for at least 6 weeks after each dose",
+          "Review the lowest counts and recovery before another cycle",
+          "Follow persistent blood, lung, kidney or liver effects"
+        ],
+        "source_ids": [
+          "00379"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "Lungs / bowel / peripheral nerves",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline lung function; record bowel and nerve symptoms",
+          "Review before treatment; repeat lung testing with prolonged therapy or symptoms",
+          "Call for cough, breathlessness, severe constipation or new weakness",
+          "Check whether each PCV component remains suitable",
+          "Continue review of unresolved effects"
+        ],
+        "source_ids": [
+          "00379"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "Neurology / medicines / function",
+        "kind": "monitoring",
+        "cells": [
+          "Record neurological symptoms, daily function and current medicines",
+          "Review seizures, headache, cognition, mood, walking and any steroid plan",
+          "Report changes early; do not wait for the next MRI",
+          "Review treatment tolerance, medication support and patient goals",
+          "Agree follow-up and rehabilitation or symptom support"
+        ],
+        "source_ids": [
+          "00379"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "MRI / diagnosis",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm integrated diagnosis, molecular results and baseline imaging",
+          "MRI timing according to the neuro-oncology plan",
+          "Keep the booking and result-review contact in your passport",
+          "Interpret scan with symptoms, treatment effects and clinical review",
+          "Agree the next imaging and clinical review"
+        ],
+        "source_ids": [
+          "00379"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "PCV · 42-day cycle",
+        "when": "Three medicines on different days",
+        "why": "PCV combines procarbazine, lomustine and vincristine. In this 42-day regimen it may follow radiotherapy for grade II glioma or be used to help control recurrent high-grade glioma. Ask which setting and treatment aim apply to you.",
+        "clinical": "Lomustine once on Day 1; procarbazine daily on Days 8–21; vincristine into a vein on Days 8 and 29. The cycle lasts 42 days. The number of cycles is individual; treatment continues only while benefit and tolerance support it.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00379"
+        ]
+      },
+      {
+        "title": "Recovery and the next-cycle decision",
+        "when": "Delayed blood-count effects",
+        "why": "PCV combines procarbazine, lomustine and vincristine. In this 42-day regimen it may follow radiotherapy for grade II glioma or be used to help control recurrent high-grade glioma. Ask which setting and treatment aim apply to you.",
+        "clinical": "The next cycle can be delayed or changed according to blood counts, organ tests, nerves, bowel symptoms and the treatment goal. A calendar or card stamp is not permission to restart.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00379"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+    ],
+    "sources": [
+      {
+        "id": "00379",
+        "title": "NCCP 00379 v4 · current Irish regimen",
+        "url": "https://healthservice.hse.ie/documents/6971/379_V4_PCV.pdf"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Brain Cancer Glioma, 2026 · patient education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/brain-gliomas-patient.pdf"
+      },
+      {
+        "id": "rtog9802",
+        "title": "PCV evidence depends on the treatment setting",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27050206/"
+      },
+      {
+        "id": "lomustine-smpc",
+        "title": "Lomustine medac current product information · January 2026",
+        "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf"
+      },
+      {
+        "id": "nci-cns",
+        "title": "NCI: adult central nervous system tumours · diagnosis and grade education",
+        "url": "https://www.cancer.gov/types/brain/patient/adult-brain-treatment-pdq"
+      },
+      {
+        "id": "nhs-dexamethasone",
+        "title": "NHS: dexamethasone · use and stopping safely",
+        "url": "https://www.nhs.uk/medicines/dexamethasone-tablets-and-liquid/how-and-when-to-take-dexamethasone-tablets-and-liquid/"
+      }
+    ]
+  },
+  "00461": {
+    "code": "00461",
+    "title": "Temozolomide with short-course radiotherapy, then adjuvant treatment: treatment and checks",
+    "release": "0.84.38",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adults older than 65 with newly diagnosed glioblastoma who are not suitable for the standard radiotherapy regimen with temozolomide, under NCCP 00461.",
+    "summary": "Take temozolomide daily for 21 days during short-course radiotherapy, including weekends as prescribed. After a four-week break, take temozolomide on Days 1–5 of each 28-day cycle for up to six adjuvant cycles.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits / recovery",
+      "Next-cycle / response review",
+      "After a pause or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, renal/liver profile, glucose, HBsAg and anti-HBc",
+          "FBC weekly during three-week RT",
+          "Continue FBC weekly for four weeks after RT; renal/LFT at 1 and 4 weeks after RT",
+          "Day 1 FBC/renal/LFT; cycle 1 can use four-week post-RT review. EMA Day 22 FBC",
+          "LFT after cycles; follow delayed toxicity after the last dose"
+        ],
+        "source_ids": [
+          "00461"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "Neurology / medicines / function",
+        "kind": "monitoring",
+        "cells": [
+          "Record neurological symptoms, daily function and current medicines",
+          "Review seizures, headache, cognition, mood, walking and any steroid plan",
+          "Report changes early; do not wait for the next MRI",
+          "Review treatment tolerance, medication support and patient goals",
+          "Agree follow-up and rehabilitation or symptom support"
+        ],
+        "source_ids": [
+          "00461"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "MRI / diagnosis",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm integrated diagnosis, molecular results and baseline imaging",
+          "MRI timing according to the neuro-oncology plan",
+          "Keep the booking and result-review contact in your passport",
+          "Interpret scan with symptoms, treatment effects and clinical review",
+          "Agree the next imaging and clinical review"
+        ],
+        "source_ids": [
+          "00461"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Temozolomide with three weeks of radiotherapy",
+        "when": "Daily capsule phase",
+        "why": "This plan combines temozolomide with a shorter course of radiotherapy, followed by a break and adjuvant temozolomide, to help control newly diagnosed glioblastoma. NCCP identifies this particular indication as unlicensed; your team explains the evidence, alternatives and local consent process.",
+        "clinical": "Daily capsules and scheduled radiotherapy run together. Confirm the exact final capsule day and separate PJP-prevention plan.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00461"
+        ]
+      },
+      {
+        "title": "Four-week break before adjuvant treatment",
+        "when": "Recovery and review",
+        "why": "This plan combines temozolomide with a shorter course of radiotherapy, followed by a break and adjuvant temozolomide, to help control newly diagnosed glioblastoma. NCCP identifies this particular indication as unlicensed; your team explains the evidence, alternatives and local consent process.",
+        "clinical": "Radiotherapy has ended, but safety checks and prescribed support medicines continue. The team checks recovery before another prescription.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00461"
+        ]
+      },
+      {
+        "title": "Up to six adjuvant 28-day cycles",
+        "when": "Five capsule days per cycle",
+        "why": "This plan combines temozolomide with a shorter course of radiotherapy, followed by a break and adjuvant temozolomide, to help control newly diagnosed glioblastoma. NCCP identifies this particular indication as unlicensed; your team explains the evidence, alternatives and local consent process.",
+        "clinical": "The first cycle has its own prescription; the team may change the dose only after reviewing tolerance and blood counts. Six cycles are the current NCCP plan.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00461"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+    ],
+    "sources": [
+      {
+        "id": "00461",
+        "title": "NCCP 00461 v3 · current Irish regimen",
+        "url": "https://healthservice.hse.ie/documents/6977/461_V3_Temozolomide_RT_and_Adjuvant_Therapy_greater_than65_years_.pdf"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Brain Cancer Glioma, 2026 · patient education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/brain-gliomas-patient.pdf"
+      },
+      {
+        "id": "temodal",
+        "title": "EMA Temodal product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "perry",
+        "title": "Perry trial: short-course radiotherapy with temozolomide in older adults",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28296618/"
+      },
+      {
+        "id": "nci-cns",
+        "title": "NCI: adult central nervous system tumours · diagnosis and grade education",
+        "url": "https://www.cancer.gov/types/brain/patient/adult-brain-treatment-pdq"
+      },
+      {
+        "id": "nhs-dexamethasone",
+        "title": "NHS: dexamethasone · use and stopping safely",
+        "url": "https://www.nhs.uk/medicines/dexamethasone-tablets-and-liquid/how-and-when-to-take-dexamethasone-tablets-and-liquid/"
+      }
+    ]
+  },
+  "00658": {
+    "code": "00658",
+    "title": "PCV chemotherapy · 56-day cycle: treatment and checks",
+    "release": "0.84.38",
+    "checked": "2026-11-05",
+    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "NCCP 00658: adjuvant treatment of grade II glioma after radiotherapy.",
+    "summary": "Lomustine once on Day 1; procarbazine daily on Days 8–21; vincristine into a vein on Days 8 and 29. The cycle lasts 56 days. Six cycles are planned, with review before treatment.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits / recovery",
+      "Next-cycle / response review",
+      "After a pause or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Blood count / kidneys / liver",
+        "kind": "monitoring",
+        "cells": [
+          "FBC, renal/liver profile, glucose; baseline lung function",
+          "FBC, renal and liver tests before each treatment",
+          "Lomustine SmPC: blood count at least weekly for at least 6 weeks after each dose",
+          "Review the lowest counts and recovery before another cycle",
+          "Follow persistent blood, lung, kidney or liver effects"
+        ],
+        "source_ids": [
+          "00658"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "Lungs / bowel / peripheral nerves",
+        "kind": "monitoring",
+        "cells": [
+          "Baseline lung function; record bowel and nerve symptoms",
+          "Review before treatment; repeat lung testing with prolonged therapy or symptoms",
+          "Call for cough, breathlessness, severe constipation or new weakness",
+          "Check whether each PCV component remains suitable",
+          "Continue review of unresolved effects"
+        ],
+        "source_ids": [
+          "00658"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "Neurology / medicines / function",
+        "kind": "monitoring",
+        "cells": [
+          "Record neurological symptoms, daily function and current medicines",
+          "Review seizures, headache, cognition, mood, walking and any steroid plan",
+          "Report changes early; do not wait for the next MRI",
+          "Review treatment tolerance, medication support and patient goals",
+          "Agree follow-up and rehabilitation or symptom support"
+        ],
+        "source_ids": [
+          "00658"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      },
+      {
+        "label": "MRI / diagnosis",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm integrated diagnosis, molecular results and baseline imaging",
+          "MRI timing according to the neuro-oncology plan",
+          "Keep the booking and result-review contact in your passport",
+          "Interpret scan with symptoms, treatment effects and clinical review",
+          "Agree the next imaging and clinical review"
+        ],
+        "source_ids": [
+          "00658"
+        ],
+        "note": "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "PCV · 56-day cycle",
+        "when": "Three medicines on different days",
+        "why": "This eight-week PCV regimen combines procarbazine, lomustine and vincristine after radiotherapy for grade II glioma. It aims to improve disease control. NCCP describes this indication as unlicensed; the treating team explains the evidence, alternatives and local consent process.",
+        "clinical": "Lomustine once on Day 1; procarbazine daily on Days 8–21; vincristine into a vein on Days 8 and 29. The cycle lasts 56 days. Six cycles are planned, with review before treatment.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00658"
+        ]
+      },
+      {
+        "title": "Recovery and the next-cycle decision",
+        "when": "Delayed blood-count effects",
+        "why": "This eight-week PCV regimen combines procarbazine, lomustine and vincristine after radiotherapy for grade II glioma. It aims to improve disease control. NCCP describes this indication as unlicensed; the treating team explains the evidence, alternatives and local consent process.",
+        "clinical": "The next cycle can be delayed or changed according to blood counts, organ tests, nerves, bowel symptoms and the treatment goal. A calendar or card stamp is not permission to restart.",
+        "action": "Confirm the current phase, prescription, blood tests and support medicines.",
+        "source_ids": [
+          "00658"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The team books and reviews each test. Mandatory medicine-safety checks are distinct from individually timed MRI and tumour-tissue tests. There is no universal blood tumour marker for these treatment cycles."
+    ],
+    "sources": [
+      {
+        "id": "00658",
+        "title": "NCCP 00658 v2 · current Irish regimen",
+        "url": "https://healthservice.hse.ie/documents/6996/658_V2_PCV-8wk.pdf"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Brain Cancer Glioma, 2026 · patient education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/brain-gliomas-patient.pdf"
+      },
+      {
+        "id": "rtog9802",
+        "title": "Radiotherapy followed by PCV in selected grade II glioma",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27050206/"
+      },
+      {
+        "id": "lomustine-smpc",
+        "title": "Lomustine medac current product information · January 2026",
+        "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf"
+      },
+      {
+        "id": "nci-cns",
+        "title": "NCI: adult central nervous system tumours · diagnosis and grade education",
+        "url": "https://www.cancer.gov/types/brain/patient/adult-brain-treatment-pdq"
+      },
+      {
+        "id": "nhs-dexamethasone",
+        "title": "NHS: dexamethasone · use and stopping safely",
+        "url": "https://www.nhs.uk/medicines/dexamethasone-tablets-and-liquid/how-and-when-to-take-dexamethasone-tablets-and-liquid/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

@@ -1,0 +1,191 @@
+{
+  "release": "0.84.38",
+  "audit_date": "2026-11-05",
+  "codes": [
+    "00334",
+    "00461"
+  ],
+  "sources": [
+    {
+      "code": "00334",
+      "url": "https://healthservice.hse.ie/documents/6960/334_V4_Temozolomide_RT_and_Adjuvant_Therapy.pdf",
+      "sha256": "d5b10b47bd08743f61e0984b9094391cf64f8c982f0b16b288afa529f9405fa3",
+      "retrieved": "2026-11-05",
+      "version": "4",
+      "last_reviewed_date": "2025-07-23",
+      "next_review_date": "2030-07-23",
+      "pages": 5
+    },
+    {
+      "code": "00461",
+      "url": "https://healthservice.hse.ie/documents/6977/461_V3_Temozolomide_RT_and_Adjuvant_Therapy_greater_than65_years_.pdf",
+      "sha256": "e084e07584d10bc32c94f8326479ff42cdd8d122578160d7c0d1ef79253df5d4",
+      "retrieved": "2026-11-05",
+      "version": "3",
+      "last_reviewed_date": "2025-06-13",
+      "next_review_date": "2030-06-13",
+      "pages": 6
+    },
+    {
+      "code": "EMA-TEMODAL",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf",
+      "sha256": "49a0026b6a071cadce495f46786dcd162d4d72e1fe7389385292e63aabdf9d0d",
+      "retrieved": "2026-11-05",
+      "pages": 79,
+      "review_scope": "Oral capsules SmPC sections4.1–4.6, pp3–9; all source formulations retained in PDF."
+    }
+  ],
+  "protocols": [
+    {
+      "code": "00334",
+      "path": "protocols/neuro-oncology/00334-temozolomide-with-radiotherapy-and-adjuvant-therapy.json",
+      "before_sha256": "43937e10cd2817742cec857c32df5c795d9b9c23ffcf75894d84d3cf551112cf",
+      "after_sha256": "49e6439105ecf08bbee232efacd0c54f04af2dd514da00cfb59e7b66b605f60b",
+      "source_sha256": "d5b10b47bd08743f61e0984b9094391cf64f8c982f0b16b288afa529f9405fa3",
+      "source_url": "https://healthservice.hse.ie/documents/6960/334_V4_Temozolomide_RT_and_Adjuvant_Therapy.pdf",
+      "source_version": "4",
+      "inputs": 41,
+      "rules": 51,
+      "removed_legacy_rule_ids": [
+        "TMZ_CHILD_PUGH"
+      ],
+      "retained_of590_rules": []
+    },
+    {
+      "code": "00461",
+      "path": "protocols/neuro-oncology/00461-temozolomide-with-radiotherapy-and-adjuvant-therapy-patients-greater-than-65-years.json",
+      "before_sha256": "b20d6de9fd303e75ac9a027556decb99f97230c22155513fdeb2555163c0e6e0",
+      "after_sha256": "18c72bceebe3b9b5dd21b4884d541cd9ba0d1d9d7a41d273d7587fb568a86043",
+      "source_sha256": "e084e07584d10bc32c94f8326479ff42cdd8d122578160d7c0d1ef79253df5d4",
+      "source_url": "https://healthservice.hse.ie/documents/6977/461_V3_Temozolomide_RT_and_Adjuvant_Therapy_greater_than65_years_.pdf",
+      "source_version": "3",
+      "inputs": 47,
+      "rules": 53,
+      "removed_legacy_rule_ids": [
+        "TMZ_CHILD_PUGH"
+      ],
+      "retained_of590_rules": []
+    }
+  ],
+  "tests": {
+    "command": "node validation/neuro-oncology-v08438/tmz-rt-source-audit/source-cases.cjs",
+    "total": 819,
+    "passed": 819,
+    "failed": 0,
+    "coverage": {
+      "00334": {
+        "rules": 51,
+        "unexercised_rules": []
+      },
+      "00461": {
+        "rules": 53,
+        "unexercised_rules": []
+      }
+    },
+    "source_case_report": "validation/neuro-oncology-v08438/tmz-rt-source-audit/source-case-results.json",
+    "before_comparison": {
+      "total": 819,
+      "passed": 665,
+      "failed": 154,
+      "interpretation": "Contract-case failures include missing new fields/schedules and UI grading; not a count of unique clinical defects."
+    }
+  },
+  "findings": [
+    {
+      "id": "timing_and_phase",
+      "change": "Baseline and treatment-emergent findings previously shared pathways or lacked a phase guard. Added separate timing, phase and unknown-context handling.",
+      "source": "00334/00461 NCCP pp2–4; EMA p7"
+    },
+    {
+      "id": "fractional_count_gaps",
+      "change": "Former closed bands ending at ANC1.499 or platelets99 missed fractional values below1.5/100. Replaced with exact inequalities.",
+      "source": "Both NCCP p3"
+    },
+    {
+      "id": "nadir_vs_current",
+      "change": "00334 used current counts as reduction triggers but omitted treatment-day recovery gates. Current counts now govern withholding; prior-cycle nadirs govern subsequent reduction review.",
+      "source": "00334 Table3 p3; EMA4.4 p7"
+    },
+    {
+      "id": "dose_history",
+      "change": "Reduction now requires documented prior dose, recovery, current counts, toxicity and stop history; no invented dose below100mg/m².",
+      "source": "00334 Table2–3 p3"
+    },
+    {
+      "id": "permanent_stop_persistence",
+      "change": "Confirmed prior stop criteria remain active after recovery; 00461 preceding-course Grade4 events do not disappear when current symptoms improve.",
+      "source": "Both NCCP pp3–4"
+    },
+    {
+      "id": "cycle2_only_escalation",
+      "change": "Cycle2 eligibility and the prohibition on late escalation were missing. Added review-only escalation with prior/current toxicity separated.",
+      "source": "Both NCCP p3"
+    },
+    {
+      "id": "hepatic_exclusion",
+      "change": "Significant hepatic dysfunction exclusion was not represented and could be obscured by no-adjustment wording. Added explicit exclusion and Child-PughC conflict review.",
+      "source": "Both NCCP pp2,4"
+    },
+    {
+      "id": "source_grade_semantics",
+      "change": "Older CTC/source grade pathways had been labelled CTCAEv5, including a fabricated nauseaGrade4 definition. Named source grading now carries explicit edition uncertainty; no automatic translation.",
+      "source": "Both NCCP p3–4"
+    },
+    {
+      "id": "older_cross_phase",
+      "change": "00461 Grade4 and three-week non-recovery rules were not phase guarded. Their current and historical events now belong to the correct adjuvant/concurrent pathway.",
+      "source": "00461 pp3–4"
+    },
+    {
+      "id": "off_label_consent",
+      "change": "00461 explicit Irish off-label consent/hospital-policy requirements were absent from decision inputs.",
+      "source": "00461 p6"
+    },
+    {
+      "id": "hbv_and_safety",
+      "change": "Added positive-serology management, baseline/scheduled-test completeness, delayed liver injury, interaction and opportunistic infection review.",
+      "source": "NCCP pp2,4–5; EMA4.4–4.5 pp6–8"
+    },
+    {
+      "id": "pjp_scope",
+      "change": "PJP finding previously targeted whole_regimen, which could imply stopping radiotherapy. It now targets temozolomide and separately reviews persistent lymphopenia.",
+      "source": "NCCP pp1–2,4; EMA p6"
+    },
+    {
+      "id": "schedule_structure",
+      "change": "Both assessments lacked structured source dose/phase schedule. Added distinct concurrent and adjuvant phases with six-cycle limits.",
+      "source": "Both NCCP p1"
+    }
+  ],
+  "unresolved_source_issues": [
+    {
+      "code": "00334",
+      "issues": [
+        "Significant hepatic dysfunction is excluded, although the organ-dose table expects no adjustment in Child-Pugh C. Resolve eligibility with the specialist; this is not treatment clearance.",
+        "The NCCP advises men to avoid fathering a child for six months after treatment; the current EMA SmPC says at least three months. The patient needs a confirmed local contraception plan.",
+        "The NCCP source does not specify a CTC grading edition. The UI identifies clinician-verified source grades and does not invent a CTCAE v5 nausea Grade 4 category."
+      ]
+    },
+    {
+      "code": "00461",
+      "issues": [
+        "Significant hepatic dysfunction is excluded, although the organ-dose table expects no adjustment in Child-Pugh C. Resolve eligibility with the specialist; this is not treatment clearance.",
+        "The NCCP advises men to avoid fathering a child for six months after treatment; the current EMA SmPC says at least three months. The patient needs a confirmed local contraception plan.",
+        "The NCCP source does not specify a CTC grading edition. The UI identifies clinician-verified source grades and does not invent a CTCAE v5 nausea Grade 4 category.",
+        "Page 1 and the v3 amendment on page 5 specify up to six adjuvant cycles; page 3 Table 3 still says cycles 2–12. The authored plan uses six, with explicit specialist review of any extension.",
+        "The adjuvant Tables 4 and 5 retain a concurrent-radiotherapy column heading. The surrounding section establishes the adjuvant context.",
+        "The Cycle-2 escalation paragraph permits preceding-cycle nausea/vomiting Grade 3, while the current-toxicity table delays for Grade 3. Previous and current grades are entered separately; escalation remains a prescriber review.",
+        "The severe-count stopping table does not explicitly distinguish nadir from next-cycle counts. A severe prior nadir is flagged for attribution review, and a confirmed prior permanent-stop criterion remains active after recovery.",
+        "This NCCP indication is explicitly outside its Irish licence. Informed consent and hospital-policy acknowledgement are required."
+      ]
+    }
+  ],
+  "visual_source_table_review": [
+    "00334 p3",
+    "00461 pp3–4"
+  ],
+  "clinical_use_authorised": false,
+  "independent_clinical_review": false,
+  "independent_pharmacy_review": false,
+  "browser_validation": "Owned by release coordinator; these tests exercise actual engine/dose/UI descriptor modules, not browser journeys."
+}

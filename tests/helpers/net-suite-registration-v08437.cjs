@@ -7,6 +7,6 @@ assert.equal(crypto.createHash('sha256').update(fs.readFileSync(before)).digest(
 const prior=require(before).codes;assert.equal(prior.length,174);
 const added=['00320','00327','00505','00642'];assert(added.every(c=>!prior.includes(c)));
 const expected=[...prior,...added].sort();
-function registry(codes){assert.deepEqual([...codes].sort(),expected,'All174 preceding suites plus exactly four audited NET suites');}
+function registry(codes){const next=require('./neuro-suite-registration-v08438.cjs');next.priorRegistry(expected);next.registry(codes);}
 function profiles(names){registry(names.map(n=>n.replace(/\.json$/,'')));}
 module.exports={registry,profiles};

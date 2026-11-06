@@ -55,9 +55,17 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.24 adds five targeted lung schedules and the missing Lonsurf phase.
 // v0.84.26 adds erlotinib, gefitinib and two atezolizumab schedules; the third is reconciled.
 // v0.84.37 adds four source-audited NET schedules; generic dose ladders remain absent.
-assert.strictEqual(usefulCoverage, 202);
-assert.strictEqual(scheduleCoverage, 202);
+assert.strictEqual(usefulCoverage, 207);
+assert.strictEqual(scheduleCoverage, 207);
 assert.strictEqual(doseLevelCoverage, 62);
+// Exactly five additional source-audited glioma schedules; dose-history decisions remain in assessment.
+for(const code of ['00334','00342','00379','00461','00658']) {
+ const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));
+ const protocol=require(path.join(root,entry.path));
+ assert.equal(protocol.metadata.clinical_audit_release,'0.84.38');
+ assert(DoseSchedule.buildModel(protocol).phases.length>0,code+' must expose authored phase components');
+ assert.equal(DoseSchedule.buildModel(protocol).doseLevels.length,0,code+' must not infer a generic dose ladder');
+}
 
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');

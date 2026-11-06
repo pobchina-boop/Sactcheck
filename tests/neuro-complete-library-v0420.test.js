@@ -5,6 +5,7 @@ const fs=require('fs');
 const path=require('path');
 const vm=require('vm');
 const root=path.resolve(__dirname,'..');
+const neuro38=require('./helpers/neuro-inputs-v08438.cjs');
 const expected=['00334','00342','00379','00461','00658','00742','00804','00805','00806','00813'].sort();
 function read(file){return JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));}
 function walk(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{const p=path.join(dir,e.name);return e.isDirectory()?walk(p):[p];});}
@@ -21,7 +22,7 @@ let inputs=0,rules=0,ctcae=0,renalBands=0;
 for(const {data,file} of neuro){
  const m=data.metadata,code=String(m.nccp_regimen_code).padStart(5,'0');
  assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} not active encoded prototype`);
- assert.strictEqual(m.sactcheck_encoding_version,'0.42.0');assert.strictEqual(m.partial_assessment_supported,true);assert.strictEqual(m.tumour_group,'Neuro-oncology');
+ const migrated=neuro38.validate(data);assert.strictEqual(m.sactcheck_encoding_version,migrated?'0.84.38':'0.42.0');assert.strictEqual(m.partial_assessment_supported,true);assert.strictEqual(m.tumour_group,'Neuro-oncology');
  assert(/^https:\/\/healthservice\.hse\.ie\/documents\//.test(m.source_url||''),`${code} missing official source`);
  assert(!/placeholder|draft/i.test(String(data.status)));assert(Array.isArray(data.required_inputs)&&data.required_inputs.length===0,`${code} has blocking required inputs`);
  assert(Array.isArray(m.common_trade_names)&&m.common_trade_names.length,`${code} lacks aliases`);
@@ -30,7 +31,8 @@ for(const {data,file} of neuro){
  assert(risk.protocols[code],`${code} missing supportive map`);assert(data.supportive_care?.emetogenic_risk);assert(data.supportive_care?.mapping_source_url);
  for(const [id,d] of Object.entries(defs)){
   assert.strictEqual(d.required,false,`${code}/${id} must be optional`);assert.notStrictEqual(d.demo_value,undefined,`${code}/${id} lacks demo`);
-  if(d.ctcae_version){ctcae++;assert(d.assessment_guidance,`${code}/${id} lacks assessment guide`);const options=d.options||[];for(let g=0;g<=4;g++){const o=options.find(x=>Number(x.value)===g);assert(o&&o.description,`${code}/${id} Grade ${g} lacks explanation`);}}
+  if(neuro38.grade(data,id,d)){ctcae++;}else if(d.ctcae_version){ctcae++;assert(d.assessment_guidance,`${code}/${id} lacks assessment guide`);const options=d.options||[];for(let g=0;g<=4;g++){const o=options.find(x=>Number(x.value)===g);assert(o&&o.description,`${code}/${id} Grade ${g} lacks explanation`);}}
+  if(neuro38.numericRenal(data,id,d))renalBands++;
   const text=`${id} ${d.label||''}`.toLowerCase();if(d.type==='select'&&/crcl|renal function|creatinine clearance/.test(text)){renalBands++;assert.strictEqual(d.renal_input?.mode,'protocol_specific_band',`${code}/${id} missing renal band mode`);assert.strictEqual(d.renal_input?.exact_value_required,false);}
  }
 }
@@ -40,9 +42,10 @@ const byCode=code=>neuro.find(x=>String(x.data.metadata.nccp_regimen_code).padSt
 const ruleBy=(p,id)=>(p.rule_engine?.rules||[]).find(r=>(r.id||r.rule_id)===id);
 assert.strictEqual(ruleBy(byCode('00806'),'ANC_LT1').when.value,1);assert(/80%/.test(ruleBy(byCode('00806'),'ANC_LT1').action.message));
 assert(/75%/.test(ruleBy(byCode('00806'),'CIS_50_59').action.message));assert(/50%/.test(ruleBy(byCode('00806'),'CIS_40_49').action.message));
-assert.strictEqual(ruleBy(byCode('00342'),'ANC_LT1').when.value,1);assert.strictEqual(ruleBy(byCode('00342'),'PLT_LT50').when.value,50);
-assert.strictEqual(ruleBy(byCode('00334'),'CONC_ANC_STOP').action.type,'permanently_discontinue');assert.strictEqual(ruleBy(byCode('00334'),'CONC_PLT_HOLD').action.type,'withhold');
-assert.strictEqual(ruleBy(byCode('00461'),'CONC_PLT_STOP').when.all[1].value,25);assert.strictEqual(ruleBy(byCode('00461'),'NO_RECOVERY_3W').action.type,'permanently_discontinue');
+// The retired conflated ANC/platelet rules are replaced by source-tested current-count/nadir pathways.
+assert(neuro38.validate(byCode('00342')));
+assert(neuro38.validate(byCode('00334'))); // Source cases exercise concurrent stop/hold/restart boundaries.
+assert(neuro38.validate(byCode('00461'))); // Distinct older-patient platelet/3-week stop cases are retained.
 assert(['discontinue','permanently_discontinue'].includes(ruleBy(byCode('00813'),'PROTEIN_OVER_4').action.type));
 for(const c of ['00742','00804']){assert(byCode(c).input_definitions.proteinuria_dipstick);assert(byCode(c).input_definitions.lomustine_renal_band);assert.strictEqual(byCode(c).supportive_care.emetogenic_risk,'phase_dependent');}
 for(const c of ['00379','00658']){assert(byCode(c).input_definitions.assessment_day);assert(ruleBy(byCode(c),'D29_SEVERE_COUNTS'));assert.strictEqual(byCode(c).supportive_care.emetogenic_risk,'phase_dependent');}
