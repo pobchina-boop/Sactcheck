@@ -54,7 +54,9 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "rule_level_source_reconciliation_status": "source_reconciled_v08426_independent_review_pending"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08440_independent_review_pending",
+      "audit_release": "0.84.40",
+      "official_catalogue_and_source_link_checked": true
     },
     "tumour_groups": [
       "Gastrointestinal",
@@ -262,7 +264,7 @@
         "basis": "Audited product information supplement; NCCP differences remain explicit"
       }
     ],
-    "clinical_audit_release": "0.84.35",
+    "clinical_audit_release": "0.84.40",
     "retrospective_audit_v08435": {
       "source_retrieved": "2026-11-05",
       "source_bytes_unchanged": true,
@@ -274,6 +276,33 @@
     },
     "context_suite_releases": {
       "colorectal": "0.84.35"
+    },
+    "review_date": "2026-12-22",
+    "retrospective_audit_v08440": {
+      "source_retrieved": "2026-11-06",
+      "source_pdf_sha256": "d0f0a2689dcc887a348442192feae9ab65777507936c33ead5693a1793b1e6d6",
+      "source_version": "16",
+      "source_bytes_unchanged": true,
+      "scope": "Bounded repeat audit of existing shared ICI assessment; does not establish new melanoma service completion. Current NCCP thresholds, recovery, recurrence and phase/schedule boundaries checked.",
+      "findings": [
+        "Structured restart assessment lacked recovery, required taper/management and consultant-confirmation gates. Added one explicit requested-restart hold; source endocrine exceptions and all existing numerical, recurrence and 12-week stop thresholds remain unchanged."
+      ],
+      "clinical_use_authorised": false,
+      "independent_clinical_approval": false,
+      "previous_audit_metadata": {
+        "clinical_audit_release": "0.84.35",
+        "validation": {
+          "source_document_checked": true,
+          "software_tests_completed": true,
+          "consultant_reviewed": false,
+          "oncology_pharmacy_reviewed": false,
+          "clinical_use_authorised": false,
+          "rule_level_source_reconciliation_status": "source_reconciled_v08426_independent_review_pending"
+        },
+        "source_pdf_sha256": "d0f0a2689dcc887a348442192feae9ab65777507936c33ead5693a1793b1e6d6",
+        "source_sha256": null,
+        "source_checked_date": "2026-10-29"
+      }
     }
   },
   "clinical_governance": {
@@ -1588,6 +1617,42 @@
       ],
       "help": "MSI-H OR dMMR qualifies. Do not require both; confirm validated testing separately.",
       "source_url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf"
+    },
+    "pembro_restart_requested": {
+      "label": "Assess restarting pembrolizumab after an immune-related treatment hold",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "help": ""
+    },
+    "pembro_source_recovery_complete": {
+      "label": "Source-specific recovery criteria met for the prior immune event",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "help": "Usually grade 0–1. Use the Table 1 endocrine exception when applicable: prior grade 3–4 endocrinopathy improved to grade 2 or lower and controlled with hormone replacement. This is not a global treatment clearance."
+    },
+    "pembro_steroid_management_complete": {
+      "label": "Required corticosteroid management/taper completed or not needed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "help": "Confirm against the specific toxicity and Table 1 endocrine exception. The existing 12-week failure/taper stop rules remain applicable; do not infer a new universal restart dose threshold."
+    },
+    "pembro_consultant_restart_approved": {
+      "label": "Consultant has confirmed the post-toxicity restart plan",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "help": ""
     }
   },
   "required_inputs": [],
@@ -3414,6 +3479,78 @@
           "page": 4,
           "table": "Eligibility: metastatic colorectal cancer",
           "checked_date": "2026-11-05"
+        }
+      },
+      {
+        "rule_id": "PEMBRO_RESTART_UNCONFIRMED",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "pembro_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "field": "pembro_source_recovery_complete",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "pembro_source_recovery_complete",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "pembro_steroid_management_complete",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "pembro_steroid_management_complete",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "pembro_consultant_restart_approved",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "pembro_consultant_restart_approved",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Do not restart while source-specific recovery, required steroid management/taper or consultant confirmation is incomplete or unassessed. Apply the specific endocrine continuation exception where appropriate. A permanent-stop criterion overrides any restart plan.",
+          "message": "Do not restart while source-specific recovery, required steroid management/taper or consultant confirmation is incomplete or unassessed. Apply the specific endocrine continuation exception where appropriate. A permanent-stop criterion overrides any restart plan."
+        },
+        "explanation": "Do not restart while source-specific recovery, required steroid management/taper or consultant confirmation is incomplete or unassessed. Apply the specific endocrine continuation exception where appropriate. A permanent-stop criterion overrides any restart plan.",
+        "source": {
+          "document": "NCCP 00455 v16",
+          "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
+          "page": "5–6",
+          "checked_date": "2026-11-06",
+          "table": "Table 1 and dose modifications"
         }
       }
     ]

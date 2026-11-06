@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.39';
-  const CONTENT_RELEASE='0.84.39';
+  const RELEASE='0.84.40';
+  const CONTENT_RELEASE='0.84.40';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00236':{"title": "Vismodegib for advanced basal cell skin cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00415':{"title": "Dabrafenib and trametinib for advanced BRAF-mutated melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00563':{"title": "Encorafenib and binimetinib for advanced BRAF-mutated melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00431':{"title": "Nivolumab and ipilimumab for advanced melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Melanoma patient information only"},
+    '00812':{"title": "Cemiplimab for advanced cutaneous squamous cell cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Cutaneous squamous cell carcinoma patient information only"},
     '00742':{"title": "Lomustine + bevacizumab 5 mg/kg", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00804':{"title": "Lomustine + bevacizumab 7.5 mg/kg", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00805':{"title": "Lomustine for recurrent malignant glioma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -210,13 +215,14 @@
   });
   const CODES=Object.freeze(Object.keys(DEFINITIONS));
   const COLORECTAL_CONTEXTS=Object.freeze({'00455':{lung:'',colorectal:'colorectal/'},'00558':{lung:'',colorectal:'colorectal/'},'00212':{breast:'',colorectal:'colorectal/'},'00214':{lung:'',colorectal:'colorectal/'},'00215':{breast:'',lung:'lung/',colorectal:'colorectal/'}});
-  const CONTEXT_CODES=Object.freeze(['00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const CONTEXT_CODES=Object.freeze(['00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
 
   function contextFor(value,explicit=''){
     if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
     const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    if(code==='00415')return ['advanced','adjuvant'].includes(selected)?selected:'';
     if(code==='00320')return selected==='neuroendocrine'?'neuroendocrine':'';
     const normalized=selected==='gastrointestinal'?'colorectal':selected;
     if(COLORECTAL_CONTEXTS[code])return Object.hasOwn(COLORECTAL_CONTEXTS[code],normalized)?normalized:'';
@@ -238,6 +244,7 @@
   }
   function bundleRoutes(value){
     const d=definitionFor(value);if(!d)return [];
+    if(d.code==='00415')return [d.code,d.code+'/adjuvant'];
     if(!d.contextOnly)return [d.code];
     if(!Array.isArray(d.patientContexts)||!d.patientContexts.length||d.patientContexts.some(s=>!(d.code==='00320'?/^neuroendocrine$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00388'?/^schedule_(7d|3d|21d)$/:/^backbone_[0-9]{5}$/).test(s)))throw new Error('Invalid patient context routes');
     return d.patientContexts.map(s=>d.code+'/'+s);
@@ -249,7 +256,7 @@
       const selected=contextFor(value,context);
       if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
       if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
-      return `patient/${def.code}/${def.code==='00320'?'neuroendocrine/':COLORECTAL_CONTEXTS[def.code]?COLORECTAL_CONTEXTS[def.code][selected]:(selected==='lung'?'lung/':'')}${CONTEXT_ASSETS[asset]}`;
+      return `patient/${def.code}/${def.code==='00415'?(selected==='adjuvant'?'adjuvant/':''):def.code==='00320'?'neuroendocrine/':COLORECTAL_CONTEXTS[def.code]?COLORECTAL_CONTEXTS[def.code][selected]:(selected==='lung'?'lung/':'')}${CONTEXT_ASSETS[asset]}`;
     }
     if(def.scopeGuard) return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
     if(asset==='supportive-care-selector') return def.phaseSupport?`patient/${def.code}/supportive-care.html`:null;

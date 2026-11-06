@@ -13,11 +13,11 @@
     ],
     "title": "Cemiplimab Therapy",
     "short_title": "Cemiplimab Therapy",
-    "indication": "Recurrent or metastatic cervical cancer progressing on or after platinum-based chemotherapy.",
+    "indication": "Adults with recurrent/metastatic cervical cancer after platinum progression, or metastatic/locally advanced cutaneous SCC not suitable for curative surgery or radiation (separate eligibility contexts).",
     "source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.45.1",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 8,
+    "sactcheck_encoding_version": "0.84.40",
+    "source_checked_date": "2026-11-06",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "cervical_immunotherapy",
@@ -47,11 +47,12 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.40"
     },
     "skin_subgroups": [
       "cutaneous_squamous_cell"
@@ -64,6 +65,15 @@
           "intent": "advanced_disease",
           "cycle_length_days": 21,
           "duration_type": "until_progression_or_toxicity",
+          "provenance": "official_nccp_source_reconciled"
+        },
+        {
+          "id": "00812-gyn",
+          "indication_id": "00812-gyn",
+          "intent": "advanced_disease",
+          "cycle_length_days": 21,
+          "duration_type": "until_progression_or_unacceptable_toxicity",
+          "duration_text": "Until disease progression or unacceptable toxicity; no preset total number of cycles.",
           "provenance": "official_nccp_source_reconciled"
         }
       ],
@@ -86,22 +96,36 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Current NCCP source reconciled; independent clinical and pharmacy approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.40",
+      "audit_date": "2026-11-06",
+      "scope_note": "Fresh full PDF retained and rule boundaries exercised. Software/source reconciliation is not independent clinical approval."
     },
-    "canonical_protocol_id": "nccp-00812-v3a"
+    "canonical_protocol_id": "nccp-00812-v3a",
+    "source_pdf_sha256": "850b4b9122fcef20727f7e102c3ff02207fed801213b0142542dc05c86c8131b",
+    "source_final_url": "https://assets.hse.ie/media/documents/812_V3a_Cemiplimab.pdf",
+    "source_document_date": "2024-10-01",
+    "clinical_audit_release": "0.84.40",
+    "clinical_source_audit": {
+      "release": "0.84.40",
+      "date": "2026-11-06",
+      "source_pdf_sha256": "850b4b9122fcef20727f7e102c3ff02207fed801213b0142542dc05c86c8131b",
+      "source_version": "3a",
+      "source_reconciled": true,
+      "independent_clinical_review": false,
+      "oncology_pharmacy_review": false,
+      "patient_ppi_review": false
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
-    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding includes NCCP 00812 Version 3a. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "dose_modification_note": "No dose reductions are recommended. Hold/stop decisions do not calculate a reduced immune-checkpoint dose. Restart requires organ-specific recovery and consultant review; no recovery flag overrides permanent-stop criteria.",
+    "disclaimer": "Decision-support encoding derived from NCCP 00812 version 3a. Independent clinical and oncology-pharmacy validation remains pending. The current official regimen and prescribing consultant remain authoritative."
   },
   "indications": [
     {
@@ -123,9 +147,22 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Cemiplimab 350 mg on day 1 every 21 days until disease progression or unacceptable toxicity.",
+    "schedule_summary": "Cemiplimab 350 mg IV over 30 minutes on day 1 every 21 days until disease progression or unacceptable toxicity.",
     "drugs": [
       "cemiplimab"
+    ],
+    "duration_type": "until_progression_or_unacceptable_toxicity",
+    "duration_text": "Until disease progression or unacceptable toxicity; no preset total number of cycles.",
+    "administration": [
+      {
+        "drug": "cemiplimab",
+        "dose": "350 mg",
+        "route": "IV",
+        "days": [
+          1
+        ],
+        "note": "Infuse over 30 minutes every 21 days."
+      }
     ]
   },
   "input_definitions": {
@@ -133,22 +170,22 @@
       "label": "Assessment phase",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
-          "value": "pre_treatment",
-          "label": "Pre-treatment"
+          "value": "baseline",
+          "label": "Before starting"
         },
         {
-          "value": "on_treatment",
-          "label": "On-treatment"
+          "value": "pre_cycle",
+          "label": "Before a subsequent cycle"
         },
         {
           "value": "toxicity_review",
-          "label": "Toxicity review"
+          "label": "Toxicity/restart review"
         }
       ],
-      "demo_value": "pre_treatment",
-      "input_role": "context"
+      "demo_value": "baseline"
     },
     "ecog": {
       "label": "ECOG performance status",
@@ -156,27 +193,27 @@
       "required": false,
       "options": [
         {
-          "value": "0",
+          "value": 0,
           "label": "0"
         },
         {
-          "value": "1",
+          "value": 1,
           "label": "1"
         },
         {
-          "value": "2",
+          "value": 2,
           "label": "2"
         },
         {
-          "value": "3",
+          "value": 3,
           "label": "3"
         },
         {
-          "value": "4",
+          "value": 4,
           "label": "4"
         }
       ],
-      "demo_value": "1",
+      "demo_value": 0,
       "input_role": "decision"
     },
     "anc": {
@@ -207,7 +244,7 @@
       "step": 0.1,
       "demo_value": 12,
       "unit": "g/dL",
-      "input_role": "monitoring"
+      "input_role": "context"
     },
     "alt_ast_uln_multiple": {
       "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
@@ -217,7 +254,8 @@
       "step": 0.01,
       "demo_value": 1,
       "unit": "×ULN",
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "Use the actual result divided by the same assay upper limit of normal. AST/ALT is the higher transaminase ratio; verify etiology and baseline. Never substitute a creatinine or baseline ratio."
     },
     "bilirubin_uln_multiple": {
       "label": "Bilirubin actual result (×ULN calculated automatically)",
@@ -227,50 +265,8 @@
       "step": 0.01,
       "demo_value": 1,
       "unit": "×ULN",
-      "input_role": "decision"
-    },
-    "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the named toxicity and grade it using the applicable CTCAE term rather than a generic impression.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "Use the actual result divided by the same assay upper limit of normal. AST/ALT is the higher transaminase ratio; verify etiology and baseline. Never substitute a creatinine or baseline ratio."
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia or neutropenic sepsis",
@@ -279,187 +275,118 @@
       "demo_value": false,
       "input_role": "context"
     },
-    "hypersensitivity_grade": {
-      "label": "Infusion or hypersensitivity reaction grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction; interruption not indicated."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Therapy/interruption indicated with prompt response."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged or recurrent reaction; hospitalisation indicated."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess timing, treatment required, recurrence and airway or haemodynamic compromise.",
-      "input_role": "decision"
-    },
     "pneumonitis_grade": {
-      "label": "Immune-mediated pneumonitis grade",
+      "label": "Pneumonitis (clinician-confirmed source grade)",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
+          "label": "Grade 0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "label": "Grade 1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "label": "Grade 2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
+          "label": "Grade 3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "label": "Grade 4"
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "generic",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess respiratory symptoms, oxygen requirement, imaging and exclude infection.",
-      "input_role": "decision"
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
     },
     "diarrhoea_colitis_grade": {
-      "label": "Immune-mediated diarrhoea/colitis grade",
+      "label": "Diarrhoea colitis (clinician-confirmed source grade)",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No increase over baseline."
+          "label": "Grade 0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Increase of <4 stools/day over baseline."
+          "label": "Grade 1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Increase of 4–6 stools/day; limits instrumental activities."
+          "label": "Grade 2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Increase of ≥7 stools/day, incontinence or hospitalisation; limits self-care."
+          "label": "Grade 3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
+          "label": "Grade 4"
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "diarrhoea_or_colitis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess stool frequency above baseline, blood, pain, hydration and systemic features.",
-      "input_role": "decision"
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
     },
     "rash_grade": {
-      "label": "Immune-mediated rash/dermatitis grade",
+      "label": "Rash (clinician-confirmed source grade)",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No rash."
+          "label": "Grade 0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Limited/mild rash with minimal symptoms."
+          "label": "Grade 1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate rash or symptoms limiting instrumental activities."
+          "label": "Grade 2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe/extensive rash or limiting self-care."
+          "label": "Grade 3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening cutaneous reaction."
+          "label": "Grade 4"
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "rash",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess morphology, body-surface area, mucosal involvement and function.",
-      "input_role": "context"
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
     },
     "creatinine_ratio_baseline_or_uln": {
-      "label": "Creatinine ratio versus baseline or ULN",
+      "label": "Creatinine ratio versus baseline or local ULN",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
       "unit": "× baseline/ULN",
-      "input_role": "decision"
+      "input_role": "context",
+      "assessment_guidance": "Laboratory context only: confirm immune toxicity grade, clinical symptoms, baseline and other causes. No isolated numeric threshold is presented as an NCCP dose rule."
     },
     "tsh_miu_l": {
       "label": "TSH (optional immunotherapy blood)",
@@ -469,30 +396,30 @@
       "step": 0.01,
       "demo_value": 1.5,
       "unit": "mIU/L",
-      "ui_section": "immunotherapy_bloods",
-      "input_role": "monitoring"
+      "input_role": "context",
+      "assessment_guidance": "Laboratory context only: confirm immune toxicity grade, clinical symptoms, baseline and other causes. No isolated numeric threshold is presented as an NCCP dose rule."
     },
     "free_t4_pmol_l": {
-      "label": "Free T4 (optional immunotherapy blood)",
+      "label": "Free T 4 (optional immunotherapy blood)",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.1,
-      "demo_value": 12,
+      "demo_value": 14,
       "unit": "pmol/L",
-      "ui_section": "immunotherapy_bloods",
-      "input_role": "monitoring"
+      "input_role": "context",
+      "assessment_guidance": "Laboratory context only: confirm immune toxicity grade, clinical symptoms, baseline and other causes. No isolated numeric threshold is presented as an NCCP dose rule."
     },
     "cortisol_nmol_l": {
-      "label": "Cortisol (optional; interpret by sample time/steroid exposure)",
+      "label": "Cortisol (optional; interpret by sample time and steroid exposure)",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 1,
-      "demo_value": 350,
+      "demo_value": 400,
       "unit": "nmol/L",
-      "ui_section": "immunotherapy_bloods",
-      "input_role": "monitoring"
+      "input_role": "context",
+      "assessment_guidance": "Laboratory context only: confirm immune toxicity grade, clinical symptoms, baseline and other causes. No isolated numeric threshold is presented as an NCCP dose rule."
     },
     "acth_result": {
       "label": "ACTH (optional; local units)",
@@ -503,7 +430,7 @@
       "demo_value": 5,
       "unit": "local units",
       "ui_section": "immunotherapy_bloods",
-      "input_role": "monitoring"
+      "input_role": "context"
     },
     "glucose_mmol_l": {
       "label": "Glucose (optional immunotherapy blood)",
@@ -511,21 +438,784 @@
       "required": false,
       "min": 0,
       "step": 0.1,
-      "demo_value": 5,
+      "demo_value": 5.5,
       "unit": "mmol/L",
-      "ui_section": "immunotherapy_bloods",
-      "input_role": "monitoring"
+      "input_role": "context",
+      "assessment_guidance": "Laboratory context only: confirm immune toxicity grade, clinical symptoms, baseline and other causes. No isolated numeric threshold is presented as an NCCP dose rule."
     },
     "ketones_mmol_l": {
-      "label": "Blood ketones (optional if indicated)",
+      "label": "Blood ketones (optional if hyperglycaemia/symptoms)",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.1,
       "demo_value": 0.1,
       "unit": "mmol/L",
-      "ui_section": "immunotherapy_bloods",
-      "input_role": "context"
+      "input_role": "context",
+      "assessment_guidance": "Laboratory context only: confirm immune toxicity grade, clinical symptoms, baseline and other causes. No isolated numeric threshold is presented as an NCCP dose rule."
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity to a component/excipient",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "age_years": {
+      "label": "Age (years)",
+      "type": "number",
+      "min": 0,
+      "step": "any",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 60
+    },
+    "adequate_baseline_organ_function": {
+      "label": "Adequate baseline haematological, renal and hepatic function confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "prednisolone_equivalent_mg_day": {
+      "label": "Systemic prednisolone-equivalent dose mg/day (exclude inhaled/topical)",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0,
+      "min": 0,
+      "step": "any"
+    },
+    "other_immunosuppression": {
+      "label": "Other systemic immunosuppressive medicines",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_pd1_pdl1": {
+      "label": "Prior anti-PD-1/PD-L 1 therapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "restart_requested": {
+      "label": "Restart after immune toxicity requested",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "source_recovery_complete": {
+      "label": "Applicable organ-specific recovery criteria met (including clinical-stability endocrine alternatives)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false,
+      "assessment_guidance": "Non-endocrine: sustained grade 0–1 after steroid taper ≤10 mg/day; hepatitis also permits baseline AST/ALT after completed taper. Endocrine: grade 0–1 or otherwise clinically stable as specified. Permanent-stop rules remain binding."
+    },
+    "consultant_restart_approved": {
+      "label": "Consultant has authorised the specific restart plan",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false,
+      "assessment_guidance": "Record consultant assessment; do not use this flag to override a source permanent-discontinuation criterion."
+    },
+    "renal_impairment_band": {
+      "label": "Baseline renal impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "normal"
+        },
+        {
+          "value": "mild",
+          "label": "mild"
+        },
+        {
+          "value": "moderate",
+          "label": "moderate"
+        },
+        {
+          "value": "severe",
+          "label": "severe"
+        },
+        {
+          "value": "haemodialysis",
+          "label": "haemodialysis"
+        }
+      ]
+    },
+    "hepatic_impairment_band": {
+      "label": "Baseline hepatic impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "normal"
+        },
+        {
+          "value": "mild",
+          "label": "mild"
+        },
+        {
+          "value": "moderate",
+          "label": "moderate"
+        },
+        {
+          "value": "severe",
+          "label": "severe"
+        }
+      ]
+    },
+    "nephritis_grade": {
+      "label": "Nephritis (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "myocarditis_grade": {
+      "label": "Myocarditis (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "diabetes_grade": {
+      "label": "Diabetes (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "thyroid_grade": {
+      "label": "Thyroid (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "hypophysitis_grade": {
+      "label": "Hypophysitis (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "adrenal_grade": {
+      "label": "Adrenal (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "other_immune_grade": {
+      "label": "Other immune (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "infusion_reaction_grade": {
+      "label": "Infusion reaction (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "indication_id": {
+      "label": "NCCP indication",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "00812-gyn",
+          "label": "Cervical cancer after platinum progression"
+        },
+        {
+          "value": "00812b",
+          "label": "Advanced cutaneous SCC not suitable for curative surgery/radiation"
+        }
+      ],
+      "demo_value": "00812-gyn"
+    },
+    "active_significant_infection": {
+      "label": "Active clinically significant infection requiring therapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "active_cns_metastases": {
+      "label": "Active CNS metastases",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cscc_measurable_lesion": {
+      "label": "At least one measurable CSCC lesion",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cscc_not_curative_surgery_radiation": {
+      "label": "CSCC not suitable for curative surgery or radiation",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cervical_progressed_after_platinum": {
+      "label": "Cervical cancer progressed on/after platinum chemotherapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "solid_organ_transplant": {
+      "label": "Previous solid organ transplant",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pneumonitis_recurrent_grade2": {
+      "label": "Recurrent grade 2 pneumonitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "colitis_recurrent_grade3": {
+      "label": "Recurrent grade 3 colitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "endocrine_clinically_stable": {
+      "label": "Endocrine toxicity is otherwise clinically stable after specialist assessment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "thyroiditis_grade": {
+      "label": "Thyroiditis (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "rash_duration_days": {
+      "label": "Duration of grade 2 skin reaction",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "min": 0,
+      "unit": "days",
+      "demo_value": 0
+    },
+    "sjs_ten_suspected": {
+      "label": "Suspected SJS/TEN",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "sjs_ten_confirmed": {
+      "label": "Confirmed SJS/TEN",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_idelalisib": {
+      "label": "Prior treatment with idelalisib",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "idelalisib_immune_grade": {
+      "label": "Immune toxicity after prior idelalisib (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "idelalisib_event_endocrine": {
+      "label": "The toxicity after idelalisib is an endocrinopathy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "idelalisib_grade2_recurrent": {
+      "label": "Grade 2 immune toxicity after idelalisib is recurrent",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "other_immune_endocrine": {
+      "label": "Other immune event is an endocrinopathy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "other_grade3_stop_type": {
+      "label": "Specialist confirms this grade 3 other immune reaction is a source permanent-stop type",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "neurological_grade": {
+      "label": "Immune neurological toxicity (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "pericarditis_grade": {
+      "label": "Immune pericarditis (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "hlh_confirmed": {
+      "label": "Confirmed haemophagocytic lymphohistiocytosis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "immune_recurrent_grade3": {
+      "label": "Recurrent grade 3 immune-mediated adverse reaction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "persistent_immune_grade": {
+      "label": "Persistent immune-mediated toxicity (clinician-confirmed source grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "ctcae_version": "current NCCP-required edition",
+      "grading_system": "NCI CTCAE",
+      "grading_source_label": "NCCP 00812 v3a: current NCI CTCAE version (edition not specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+      "assessment_guidance": "Clinician assigns the organ-specific grade using symptoms, baseline results and the required CTCAE edition. Do not infer a grade from a generic descriptor or an isolated creatinine ratio.",
+      "demo_value": 0
+    },
+    "persistent_immune_weeks": {
+      "label": "Duration of persistent immune toxicity",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "min": 0,
+      "unit": "weeks",
+      "demo_value": 0
+    },
+    "persistent_event_endocrine": {
+      "label": "Persistent event is an endocrinopathy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "steroid_taper_weeks": {
+      "label": "Weeks available for corticosteroid taper",
+      "type": "number",
+      "required": false,
+      "input_role": "decision",
+      "min": 0,
+      "unit": "weeks",
+      "demo_value": 0
+    },
+    "restart_endocrine_exception": {
+      "label": "Restart concerns a clinically stable endocrine exception confirmed by specialist",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -534,7 +1224,7 @@
     "coverage_gap": "Only entered values were assessed; omitted clinically relevant domains remain unassessed.",
     "consultant_review": "The entered value requires protocol-specific Consultant/pharmacy review.",
     "withhold": "Withhold treatment and reassess according to the official NCCP pathway.",
-    "dose_reduce": "Apply the encoded dose-reduction pathway and confirm against the official source.",
+    "dose_reduce": "Dose reductions are not recommended for this regimen; discuss any proposed modification with the prescribing consultant.",
     "contraindicated": "The entered value triggers an encoded contraindication/exclusion.",
     "permanently_discontinue": "The entered value triggers permanent discontinuation in the encoded pathway."
   },
@@ -552,241 +1242,2405 @@
       "delay_then_dose_reduce",
       "delay",
       "consultant_review",
+      "dose_reduce_two_levels",
+      "dose_reduce_one_level",
       "dose_reduce",
       "proceed_with_caution",
       "proceed"
     ],
     "rules": [
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "rule_id": "HYPERSENSITIVITY_EXCLUSION",
+        "priority": 20,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Known hypersensitivity to a component or excipient is an NCCP exclusion.",
+          "recommendation": "Known hypersensitivity to a component or excipient is an NCCP exclusion."
+        },
+        "explanation": "Known hypersensitivity to a component or excipient is an NCCP exclusion.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "ECOG_OUTSIDE_RANGE",
+        "priority": 10,
         "when": {
           "field": "ecog",
-          "operator": ">=",
-          "value": "3"
+          "operator": ">",
+          "value": 2
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cemiplimab"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "message": "ECOG exceeds the NCCP eligibility range 0–2; eligibility requires consultant review.",
+          "recommendation": "ECOG exceeds the NCCP eligibility range 0–2; eligibility requires consultant review."
         },
+        "explanation": "ECOG exceeds the NCCP eligibility range 0–2; eligibility requires consultant review.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 1,
+          "checked_date": "2026-11-06"
+        }
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "HSR_G3",
+        "rule_id": "ADULT_INDICATION",
         "priority": 10,
         "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "age_years",
+          "operator": "<",
+          "value": 18
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cemiplimab"
           ],
-          "message": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
+          "message": "This NCCP regimen describes adult indications. Do not extrapolate eligibility to children.",
+          "recommendation": "This NCCP regimen describes adult indications. Do not extrapolate eligibility to children."
         },
+        "explanation": "This NCCP regimen describes adult indications. Do not extrapolate eligibility to children.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 1,
+          "checked_date": "2026-11-06"
+        }
       },
       {
-        "id": "ICI_PNEUM_G2",
+        "rule_id": "BASELINE_FUNCTION_UNCONFIRMED",
         "priority": 10,
         "when": {
-          "field": "pneumonitis_grade",
-          "operator": ">=",
-          "value": 2
+          "field": "adequate_baseline_organ_function",
+          "operator": "==",
+          "value": false
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cemiplimab"
           ],
-          "message": "Grade 2 immune pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
+          "message": "Adequate baseline haematological, hepatic and renal function is unconfirmed. NCCP gives no universal numerical blood-count eligibility cut-off here.",
+          "recommendation": "Adequate baseline haematological, hepatic and renal function is unconfirmed. NCCP gives no universal numerical blood-count eligibility cut-off here."
         },
+        "explanation": "Adequate baseline haematological, hepatic and renal function is unconfirmed. NCCP gives no universal numerical blood-count eligibility cut-off here.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 2 immune pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 1,
+          "checked_date": "2026-11-06"
+        }
       },
       {
-        "id": "ICI_PNEUM_G3",
+        "rule_id": "PRIOR_PD1_PDL1",
         "priority": 10,
         "when": {
-          "field": "pneumonitis_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "prior_pd1_pdl1",
+          "operator": "==",
+          "value": true
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cemiplimab"
           ],
-          "message": "Grade 3–4 immune pneumonitis requires permanent discontinuation."
+          "message": "Check the current NCCP prior PD-1/PD-L 1 treatment guidance. Prior exposure is not automatically treated as an unconditional prohibition by this tool.",
+          "recommendation": "Check the current NCCP prior PD-1/PD-L 1 treatment guidance. Prior exposure is not automatically treated as an unconditional prohibition by this tool."
         },
+        "explanation": "Check the current NCCP prior PD-1/PD-L 1 treatment guidance. Prior exposure is not automatically treated as an unconditional prohibition by this tool.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 immune pneumonitis requires permanent discontinuation."
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
       },
       {
-        "id": "ICI_COLITIS_G2",
-        "priority": 9,
+        "rule_id": "RESTART_UNCONFIRMED",
+        "priority": 20,
         "when": {
-          "field": "diarrhoea_colitis_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "field": "source_recovery_complete",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "source_recovery_complete",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "consultant_restart_approved",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "consultant_restart_approved",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cemiplimab"
           ],
-          "message": "Grade 2 or worse immune diarrhoea/colitis requires withholding and immune-toxicity management."
+          "message": "Restart is not authorised until the source organ-specific recovery criteria and consultant decision are confirmed. Missing information is not normal and permanent-stop criteria still prevail.",
+          "recommendation": "Restart is not authorised until the source organ-specific recovery criteria and consultant decision are confirmed. Missing information is not normal and permanent-stop criteria still prevail."
         },
+        "explanation": "Restart is not authorised until the source organ-specific recovery criteria and consultant decision are confirmed. Missing information is not normal and permanent-stop criteria still prevail.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 2 or worse immune diarrhoea/colitis requires withholding and immune-toxicity management."
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": "3–6",
+          "checked_date": "2026-11-06"
+        }
       },
       {
-        "id": "ICI_HEP_G2",
-        "priority": 9,
-        "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ALT/AST >3 ×ULN requires immune-hepatitis assessment and withholding."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ALT/AST >3 ×ULN requires immune-hepatitis assessment and withholding."
-      },
-      {
-        "id": "ICI_HEP_G3",
+        "rule_id": "LAB_CONTEXT_TSH_MIU_L",
         "priority": 10,
         "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 5
+          "field": "tsh_miu_l",
+          "operator": "exists"
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cemiplimab"
           ],
-          "message": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis pathway."
+          "message": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+          "recommendation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade."
         },
+        "explanation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis pathway."
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
       },
       {
-        "id": "ICI_BILI",
-        "priority": 9,
+        "rule_id": "LAB_CONTEXT_FREE_T4_PMOL_L",
+        "priority": 10,
         "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1.5
+          "field": "free_t4_pmol_l",
+          "operator": "exists"
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cemiplimab"
           ],
-          "message": "Bilirubin >1.5 ×ULN requires immune-hepatitis assessment."
+          "message": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+          "recommendation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade."
         },
+        "explanation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Bilirubin >1.5 ×ULN requires immune-hepatitis assessment."
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
       },
       {
-        "id": "ICI_RENAL",
-        "priority": 9,
+        "rule_id": "LAB_CONTEXT_CORTISOL_NMOL_L",
+        "priority": 10,
+        "when": {
+          "field": "cortisol_nmol_l",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+          "recommendation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade."
+        },
+        "explanation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "LAB_CONTEXT_GLUCOSE_MMOL_L",
+        "priority": 10,
+        "when": {
+          "field": "glucose_mmol_l",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+          "recommendation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade."
+        },
+        "explanation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "LAB_CONTEXT_KETONES_MMOL_L",
+        "priority": 10,
+        "when": {
+          "field": "ketones_mmol_l",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+          "recommendation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade."
+        },
+        "explanation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "LAB_CONTEXT_CREATININE_RATIO_BASELINE_OR_ULN",
+        "priority": 10,
         "when": {
           "field": "creatinine_ratio_baseline_or_uln",
-          "operator": ">",
-          "value": 1.5
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+          "recommendation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade."
+        },
+        "explanation": "Interpret this laboratory value with symptoms, baseline, assay reference range and the named organ-specific toxicity grade. This isolated result does not authorise dosing or establish nephritis grade.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "BASELINE_RENAL_IMPAIRMENT_BAND",
+        "priority": 10,
+        "when": {
+          "field": "renal_impairment_band",
+          "operator": "in",
+          "value": [
+            "mild",
+            "moderate",
+            "severe",
+            "haemodialysis"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "NCCP baseline organ-impairment table does not call for a routine dose reduction (severe impairment/haemodialysis uses expected pharmacokinetics). Assess suitability and distinguish baseline impairment from new immune toxicity.",
+          "recommendation": "NCCP baseline organ-impairment table does not call for a routine dose reduction (severe impairment/haemodialysis uses expected pharmacokinetics). Assess suitability and distinguish baseline impairment from new immune toxicity."
+        },
+        "explanation": "NCCP baseline organ-impairment table does not call for a routine dose reduction (severe impairment/haemodialysis uses expected pharmacokinetics). Assess suitability and distinguish baseline impairment from new immune toxicity.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "BASELINE_HEPATIC_IMPAIRMENT_BAND",
+        "priority": 10,
+        "when": {
+          "field": "hepatic_impairment_band",
+          "operator": "in",
+          "value": [
+            "mild",
+            "moderate",
+            "severe"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "NCCP baseline organ-impairment table does not call for a routine dose reduction (severe impairment/haemodialysis uses expected pharmacokinetics). Assess suitability and distinguish baseline impairment from new immune toxicity.",
+          "recommendation": "NCCP baseline organ-impairment table does not call for a routine dose reduction (severe impairment/haemodialysis uses expected pharmacokinetics). Assess suitability and distinguish baseline impairment from new immune toxicity."
+        },
+        "explanation": "NCCP baseline organ-impairment table does not call for a routine dose reduction (severe impairment/haemodialysis uses expected pharmacokinetics). Assess suitability and distinguish baseline impairment from new immune toxicity.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "PREGNANCY_OR_BREASTFEEDING",
+        "priority": 20,
+        "when": {
+          "any": [
+            {
+              "field": "pregnancy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "breastfeeding",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Pregnancy and breastfeeding are NCCP 00812 exclusions.",
+          "recommendation": "Pregnancy and breastfeeding are NCCP 00812 exclusions."
+        },
+        "explanation": "Pregnancy and breastfeeding are NCCP 00812 exclusions.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "ACTIVE_SIGNIFICANT_INFECTION",
+        "priority": 20,
+        "when": {
+          "field": "active_significant_infection",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Active clinically significant infection requiring therapy is an NCCP exclusion.",
+          "recommendation": "Active clinically significant infection requiring therapy is an NCCP exclusion."
+        },
+        "explanation": "Active clinically significant infection requiring therapy is an NCCP exclusion.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "ACTIVE_CNS_METASTASES",
+        "priority": 20,
+        "when": {
+          "field": "active_cns_metastases",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Active CNS metastases is an NCCP exclusion.",
+          "recommendation": "Active CNS metastases is an NCCP exclusion."
+        },
+        "explanation": "Active CNS metastases is an NCCP exclusion.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "BASELINE_IMMUNOSUPPRESSION",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "prednisolone_equivalent_mg_day",
+                  "operator": ">",
+                  "value": 10
+                },
+                {
+                  "field": "other_immunosuppression",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "At baseline, systemic prednisolone-equivalent >10 mg/day or other immunosuppressants are NCCP exclusions; inhaled/topical steroids are excluded from that definition.",
+          "recommendation": "At baseline, systemic prednisolone-equivalent >10 mg/day or other immunosuppressants are NCCP exclusions; inhaled/topical steroids are excluded from that definition."
+        },
+        "explanation": "At baseline, systemic prednisolone-equivalent >10 mg/day or other immunosuppressants are NCCP exclusions; inhaled/topical steroids are excluded from that definition.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "IMMUNOSUPPRESSION_CONTEXT",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "prednisolone_equivalent_mg_day",
+                  "operator": ">",
+                  "value": 10
+                },
+                {
+                  "field": "other_immunosuppression",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "field": "assessment_phase",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Confirm baseline versus toxicity treatment. Systemic immunosuppression is a baseline exclusion; organ-specific recovery and taper rules govern restart after immune toxicity.",
+          "recommendation": "Confirm baseline versus toxicity treatment. Systemic immunosuppression is a baseline exclusion; organ-specific recovery and taper rules govern restart after immune toxicity."
+        },
+        "explanation": "Confirm baseline versus toxicity treatment. Systemic immunosuppression is a baseline exclusion; organ-specific recovery and taper rules govern restart after immune toxicity.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "CSCC_MEASURABLE_LESION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00812b"
+            },
+            {
+              "field": "cscc_measurable_lesion",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "CSCC-specific source eligibility is not met: At least one measurable CSCC lesion. Do not apply this criterion to cervical cancer.",
+          "recommendation": "CSCC-specific source eligibility is not met: At least one measurable CSCC lesion. Do not apply this criterion to cervical cancer."
+        },
+        "explanation": "CSCC-specific source eligibility is not met: At least one measurable CSCC lesion. Do not apply this criterion to cervical cancer.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 1,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "CSCC_NOT_CURATIVE_SURGERY_RADIATION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00812b"
+            },
+            {
+              "field": "cscc_not_curative_surgery_radiation",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "CSCC-specific source eligibility is not met: CSCC not suitable for curative surgery or radiation. Do not apply this criterion to cervical cancer.",
+          "recommendation": "CSCC-specific source eligibility is not met: CSCC not suitable for curative surgery or radiation. Do not apply this criterion to cervical cancer."
+        },
+        "explanation": "CSCC-specific source eligibility is not met: CSCC not suitable for curative surgery or radiation. Do not apply this criterion to cervical cancer.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 1,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "CERVICAL_PRIOR_PLATINUM",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00812-gyn"
+            },
+            {
+              "field": "cervical_progressed_after_platinum",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Cervical source indication requires progression on or after platinum-based chemotherapy. This requirement does not apply to CSCC.",
+          "recommendation": "Cervical source indication requires progression on or after platinum-based chemotherapy. This requirement does not apply to CSCC."
+        },
+        "explanation": "Cervical source indication requires progression on or after platinum-based chemotherapy. This requirement does not apply to CSCC.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 1,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "CSCC_TRANSPLANT_CAUTION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00812b"
+            },
+            {
+              "field": "solid_organ_transplant",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Solid organ transplant is a source CSCC caution requiring individual consultant/transplant-team discussion.",
+          "recommendation": "Solid organ transplant is a source CSCC caution requiring individual consultant/transplant-team discussion."
+        },
+        "explanation": "Solid organ transplant is a source CSCC caution requiring individual consultant/transplant-team discussion.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 1,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "PNEUMONITIS_GRADE_HOLD",
+        "priority": 20,
+        "when": {
+          "field": "pneumonitis_grade",
+          "operator": "in",
+          "value": [
+            2
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cemiplimab"
           ],
-          "message": "Creatinine >1.5 × baseline/ULN requires immune-nephritis assessment."
+          "message": "Withhold; resume only after sustained improvement to grade 0–1 and corticosteroid taper to ≤10 mg/day prednisolone-equivalent, with consultant review.",
+          "recommendation": "Withhold; resume only after sustained improvement to grade 0–1 and corticosteroid taper to ≤10 mg/day prednisolone-equivalent, with consultant review."
         },
+        "explanation": "Withhold; resume only after sustained improvement to grade 0–1 and corticosteroid taper to ≤10 mg/day prednisolone-equivalent, with consultant review.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "PNEUMONITIS_GRADE_STOP",
+        "priority": 30,
+        "when": {
+          "field": "pneumonitis_grade",
+          "operator": "in",
+          "value": [
+            3,
+            4
+          ]
         },
-        "explanation": "Creatinine >1.5 × baseline/ULN requires immune-nephritis assessment."
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "This organ-specific cemiplimab toxicity grade permanently discontinues treatment.",
+          "recommendation": "This organ-specific cemiplimab toxicity grade permanently discontinues treatment."
+        },
+        "explanation": "This organ-specific cemiplimab toxicity grade permanently discontinues treatment.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_COLITIS_GRADE_HOLD",
+        "priority": 20,
+        "when": {
+          "field": "diarrhoea_colitis_grade",
+          "operator": "in",
+          "value": [
+            2,
+            3
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Withhold; resume only after sustained improvement to grade 0–1 and corticosteroid taper to ≤10 mg/day prednisolone-equivalent, with consultant review.",
+          "recommendation": "Withhold; resume only after sustained improvement to grade 0–1 and corticosteroid taper to ≤10 mg/day prednisolone-equivalent, with consultant review."
+        },
+        "explanation": "Withhold; resume only after sustained improvement to grade 0–1 and corticosteroid taper to ≤10 mg/day prednisolone-equivalent, with consultant review.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "DIARRHOEA_COLITIS_GRADE_STOP",
+        "priority": 30,
+        "when": {
+          "field": "diarrhoea_colitis_grade",
+          "operator": "in",
+          "value": [
+            4
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "This organ-specific cemiplimab toxicity grade permanently discontinues treatment.",
+          "recommendation": "This organ-specific cemiplimab toxicity grade permanently discontinues treatment."
+        },
+        "explanation": "This organ-specific cemiplimab toxicity grade permanently discontinues treatment.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "NEPHRITIS_GRADE_HOLD",
+        "priority": 20,
+        "when": {
+          "field": "nephritis_grade",
+          "operator": "in",
+          "value": [
+            2
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Withhold; resume only after sustained improvement to grade 0–1 and corticosteroid taper to ≤10 mg/day prednisolone-equivalent, with consultant review.",
+          "recommendation": "Withhold; resume only after sustained improvement to grade 0–1 and corticosteroid taper to ≤10 mg/day prednisolone-equivalent, with consultant review."
+        },
+        "explanation": "Withhold; resume only after sustained improvement to grade 0–1 and corticosteroid taper to ≤10 mg/day prednisolone-equivalent, with consultant review.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": "4–5",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "NEPHRITIS_GRADE_STOP",
+        "priority": 30,
+        "when": {
+          "field": "nephritis_grade",
+          "operator": "in",
+          "value": [
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "This organ-specific cemiplimab toxicity grade permanently discontinues treatment.",
+          "recommendation": "This organ-specific cemiplimab toxicity grade permanently discontinues treatment."
+        },
+        "explanation": "This organ-specific cemiplimab toxicity grade permanently discontinues treatment.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": "4–5",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "PNEUMONITIS_RECURRENT_GRADE2",
+        "priority": 30,
+        "when": {
+          "field": "pneumonitis_recurrent_grade2",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Recurrent grade 2 pneumonitis permanently discontinues cemiplimab even though a first grade 2 episode is held.",
+          "recommendation": "Recurrent grade 2 pneumonitis permanently discontinues cemiplimab even though a first grade 2 episode is held."
+        },
+        "explanation": "Recurrent grade 2 pneumonitis permanently discontinues cemiplimab even though a first grade 2 episode is held.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "COLITIS_RECURRENT_GRADE3",
+        "priority": 30,
+        "when": {
+          "field": "colitis_recurrent_grade3",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Recurrent grade 3 colitis permanently discontinues; first grade 3 colitis is held.",
+          "recommendation": "Recurrent grade 3 colitis permanently discontinues; first grade 3 colitis is held."
+        },
+        "explanation": "Recurrent grade 3 colitis permanently discontinues; first grade 3 colitis is held.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "HEPATITIS_HOLD",
+        "priority": 20,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                },
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": "<=",
+                  "value": 5
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "AST/ALT >3–5×ULN or bilirubin >1.5–3×ULN: withhold. Resume only with sustained grade 0–1 after taper to ≤10 mg/day, or baseline AST/ALT after completed taper, under consultant review.",
+          "recommendation": "AST/ALT >3–5×ULN or bilirubin >1.5–3×ULN: withhold. Resume only with sustained grade 0–1 after taper to ≤10 mg/day, or baseline AST/ALT after completed taper, under consultant review."
+        },
+        "explanation": "AST/ALT >3–5×ULN or bilirubin >1.5–3×ULN: withhold. Resume only with sustained grade 0–1 after taper to ≤10 mg/day, or baseline AST/ALT after completed taper, under consultant review.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "HEPATITIS_STOP",
+        "priority": 30,
+        "when": {
+          "any": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "AST/ALT >5×ULN or total bilirubin >3×ULN permanently discontinues cemiplimab. Do not borrow HCC thresholds from a different regimen.",
+          "recommendation": "AST/ALT >5×ULN or total bilirubin >3×ULN permanently discontinues cemiplimab. Do not borrow HCC thresholds from a different regimen."
+        },
+        "explanation": "AST/ALT >5×ULN or total bilirubin >3×ULN permanently discontinues cemiplimab. Do not borrow HCC thresholds from a different regimen.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "THYROID_GRADE_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "thyroid_grade",
+              "operator": "in",
+              "value": [
+                3,
+                4
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "missing"
+                },
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+          "recommendation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy."
+        },
+        "explanation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "THYROID_GRADE_STABLE_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "thyroid_grade",
+              "operator": "in",
+              "value": [
+                3,
+                4
+              ]
+            },
+            {
+              "field": "endocrine_clinically_stable",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+          "recommendation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion."
+        },
+        "explanation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "THYROIDITIS_GRADE_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "thyroiditis_grade",
+              "operator": "in",
+              "value": [
+                3,
+                4
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "missing"
+                },
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+          "recommendation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy."
+        },
+        "explanation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "THYROIDITIS_GRADE_STABLE_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "thyroiditis_grade",
+              "operator": "in",
+              "value": [
+                3,
+                4
+              ]
+            },
+            {
+              "field": "endocrine_clinically_stable",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+          "recommendation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion."
+        },
+        "explanation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "HYPOPHYSITIS_GRADE_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "hypophysitis_grade",
+              "operator": "in",
+              "value": [
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "missing"
+                },
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+          "recommendation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy."
+        },
+        "explanation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "HYPOPHYSITIS_GRADE_STABLE_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "hypophysitis_grade",
+              "operator": "in",
+              "value": [
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "field": "endocrine_clinically_stable",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+          "recommendation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion."
+        },
+        "explanation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "ADRENAL_GRADE_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "adrenal_grade",
+              "operator": "in",
+              "value": [
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "missing"
+                },
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+          "recommendation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy."
+        },
+        "explanation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "ADRENAL_GRADE_STABLE_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "adrenal_grade",
+              "operator": "in",
+              "value": [
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "field": "endocrine_clinically_stable",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+          "recommendation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion."
+        },
+        "explanation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "DIABETES_GRADE_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "diabetes_grade",
+              "operator": "in",
+              "value": [
+                3,
+                4
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "missing"
+                },
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+          "recommendation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy."
+        },
+        "explanation": "Hold this endocrine toxicity; resume when grade 0–1 or otherwise clinically stable. Hypophysitis/adrenal recovery also allows sustained grade 0–1 after steroid taper to ≤10 mg/day. Hormone replacement may continue; no automatic permanent stop solely for grade 4 endocrinopathy.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "DIABETES_GRADE_STABLE_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "diabetes_grade",
+              "operator": "in",
+              "value": [
+                3,
+                4
+              ]
+            },
+            {
+              "field": "endocrine_clinically_stable",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+          "recommendation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion."
+        },
+        "explanation": "Source permits consideration of resumption when this endocrine toxicity is otherwise clinically stable. Confirm specialist assessment and prescribing decision; this flag does not override any separate permanent-stop criterion.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "RASH_HOLD",
+        "priority": 20,
+        "when": {
+          "any": [
+            {
+              "field": "rash_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "all": [
+                {
+                  "field": "rash_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "rash_duration_days",
+                  "operator": ">",
+                  "value": 7
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 3 skin reaction or grade 2 lasting longer than one week: withhold until sustained grade 0–1 after steroid taper to ≤10 mg/day.",
+          "recommendation": "Grade 3 skin reaction or grade 2 lasting longer than one week: withhold until sustained grade 0–1 after steroid taper to ≤10 mg/day."
+        },
+        "explanation": "Grade 3 skin reaction or grade 2 lasting longer than one week: withhold until sustained grade 0–1 after steroid taper to ≤10 mg/day.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "RASH_DURATION_MISSING",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "rash_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "rash_duration_days",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 2 skin reaction requires its duration: the NCCP hold threshold is longer than one week.",
+          "recommendation": "Grade 2 skin reaction requires its duration: the NCCP hold threshold is longer than one week."
+        },
+        "explanation": "Grade 2 skin reaction requires its duration: the NCCP hold threshold is longer than one week.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "RASH_STOP",
+        "priority": 30,
+        "when": {
+          "field": "rash_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 4 skin reaction permanently discontinues cemiplimab.",
+          "recommendation": "Grade 4 skin reaction permanently discontinues cemiplimab."
+        },
+        "explanation": "Grade 4 skin reaction permanently discontinues cemiplimab.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "SJS_TEN_SUSPECTED",
+        "priority": 20,
+        "when": {
+          "field": "sjs_ten_suspected",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Withhold for suspected SJS/TEN and arrange urgent specialist assessment. Confirmation permanently discontinues.",
+          "recommendation": "Withhold for suspected SJS/TEN and arrange urgent specialist assessment. Confirmation permanently discontinues."
+        },
+        "explanation": "Withhold for suspected SJS/TEN and arrange urgent specialist assessment. Confirmation permanently discontinues.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "SJS_TEN_CONFIRMED",
+        "priority": 30,
+        "when": {
+          "field": "sjs_ten_confirmed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Confirmed SJS/TEN permanently discontinues cemiplimab.",
+          "recommendation": "Confirmed SJS/TEN permanently discontinues cemiplimab."
+        },
+        "explanation": "Confirmed SJS/TEN permanently discontinues cemiplimab.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "IDELALISIB_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "prior_idelalisib",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "idelalisib_immune_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "After prior idelalisib, grade 2 immune toxicity is held; use prompt specialist management and sustained grade 0–1 with steroid taper ≤10 mg/day for recovery.",
+          "recommendation": "After prior idelalisib, grade 2 immune toxicity is held; use prompt specialist management and sustained grade 0–1 with steroid taper ≤10 mg/day for recovery."
+        },
+        "explanation": "After prior idelalisib, grade 2 immune toxicity is held; use prompt specialist management and sustained grade 0–1 with steroid taper ≤10 mg/day for recovery.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "IDELALISIB_STOP",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "prior_idelalisib",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "idelalisib_immune_grade",
+                      "operator": "in",
+                      "value": [
+                        3,
+                        4
+                      ]
+                    },
+                    {
+                      "field": "idelalisib_event_endocrine",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                },
+                {
+                  "field": "idelalisib_grade2_recurrent",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "After prior idelalisib, grade 3–4 non-endocrine immune toxicity or recurrent grade 2 permanently discontinues.",
+          "recommendation": "After prior idelalisib, grade 3–4 non-endocrine immune toxicity or recurrent grade 2 permanently discontinues."
+        },
+        "explanation": "After prior idelalisib, grade 3–4 non-endocrine immune toxicity or recurrent grade 2 permanently discontinues.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "IDELALISIB_CONTEXT",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_idelalisib",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "idelalisib_immune_grade",
+              "operator": "in",
+              "value": [
+                3,
+                4
+              ]
+            },
+            {
+              "field": "idelalisib_event_endocrine",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Clarify endocrine versus non-endocrine toxicity; this NCCP permanent-stop row explicitly excludes endocrinopathies.",
+          "recommendation": "Clarify endocrine versus non-endocrine toxicity; this NCCP permanent-stop row explicitly excludes endocrinopathies."
+        },
+        "explanation": "Clarify endocrine versus non-endocrine toxicity; this NCCP permanent-stop row explicitly excludes endocrinopathies.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 4,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "OTHER_HOLD",
+        "priority": 20,
+        "when": {
+          "field": "other_immune_grade",
+          "operator": "in",
+          "value": [
+            2,
+            3
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Other grade 2/3 immune toxicity: withhold and obtain organ-specific evaluation. Some grade 3 types require permanent discontinuation; no automatic restart from grade alone.",
+          "recommendation": "Other grade 2/3 immune toxicity: withhold and obtain organ-specific evaluation. Some grade 3 types require permanent discontinuation; no automatic restart from grade alone."
+        },
+        "explanation": "Other grade 2/3 immune toxicity: withhold and obtain organ-specific evaluation. Some grade 3 types require permanent discontinuation; no automatic restart from grade alone.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "OTHER_STOP",
+        "priority": 30,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "other_immune_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "other_immune_endocrine",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "other_immune_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "other_grade3_stop_type",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 4 non-endocrine or a confirmed grade 3 permanent-stop type requires permanent discontinuation.",
+          "recommendation": "Grade 4 non-endocrine or a confirmed grade 3 permanent-stop type requires permanent discontinuation."
+        },
+        "explanation": "Grade 4 non-endocrine or a confirmed grade 3 permanent-stop type requires permanent discontinuation.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "OTHER_TYPE_MISSING",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "other_immune_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "other_immune_endocrine",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "other_immune_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "other_grade3_stop_type",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Confirm the type of immune toxicity. Source actions depend on grade 3 reaction type and exclude endocrinopathies from the generic grade 4 row.",
+          "recommendation": "Confirm the type of immune toxicity. Source actions depend on grade 3 reaction type and exclude endocrinopathies from the generic grade 4 row."
+        },
+        "explanation": "Confirm the type of immune toxicity. Source actions depend on grade 3 reaction type and exclude endocrinopathies from the generic grade 4 row.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "NEUROLOGICAL_GRADE_STOP",
+        "priority": 30,
+        "when": {
+          "field": "neurological_grade",
+          "operator": "in",
+          "value": [
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 3–4 neurological, myocarditis or pericarditis toxicity permanently discontinues cemiplimab.",
+          "recommendation": "Grade 3–4 neurological, myocarditis or pericarditis toxicity permanently discontinues cemiplimab."
+        },
+        "explanation": "Grade 3–4 neurological, myocarditis or pericarditis toxicity permanently discontinues cemiplimab.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MYOCARDITIS_GRADE_STOP",
+        "priority": 30,
+        "when": {
+          "field": "myocarditis_grade",
+          "operator": "in",
+          "value": [
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 3–4 neurological, myocarditis or pericarditis toxicity permanently discontinues cemiplimab.",
+          "recommendation": "Grade 3–4 neurological, myocarditis or pericarditis toxicity permanently discontinues cemiplimab."
+        },
+        "explanation": "Grade 3–4 neurological, myocarditis or pericarditis toxicity permanently discontinues cemiplimab.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "PERICARDITIS_GRADE_STOP",
+        "priority": 30,
+        "when": {
+          "field": "pericarditis_grade",
+          "operator": "in",
+          "value": [
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 3–4 neurological, myocarditis or pericarditis toxicity permanently discontinues cemiplimab.",
+          "recommendation": "Grade 3–4 neurological, myocarditis or pericarditis toxicity permanently discontinues cemiplimab."
+        },
+        "explanation": "Grade 3–4 neurological, myocarditis or pericarditis toxicity permanently discontinues cemiplimab.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "HLH_CONFIRMED",
+        "priority": 30,
+        "when": {
+          "field": "hlh_confirmed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Confirmed haemophagocytic lymphohistiocytosis: permanently discontinue per NCCP.",
+          "recommendation": "Confirmed haemophagocytic lymphohistiocytosis: permanently discontinue per NCCP."
+        },
+        "explanation": "Confirmed haemophagocytic lymphohistiocytosis: permanently discontinue per NCCP.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "IMMUNE_RECURRENT_GRADE3",
+        "priority": 30,
+        "when": {
+          "field": "immune_recurrent_grade3",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Recurrent grade 3 immune-mediated adverse reaction: permanently discontinue per NCCP.",
+          "recommendation": "Recurrent grade 3 immune-mediated adverse reaction: permanently discontinue per NCCP."
+        },
+        "explanation": "Recurrent grade 3 immune-mediated adverse reaction: permanently discontinue per NCCP.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "PERSISTENT_12_WEEK_STOP",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "persistent_immune_grade",
+              "operator": "in",
+              "value": [
+                2,
+                3
+              ]
+            },
+            {
+              "field": "persistent_immune_weeks",
+              "operator": ">=",
+              "value": 12
+            },
+            {
+              "field": "persistent_event_endocrine",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Persistent grade 2/3 non-endocrine immune toxicity lasting 12 weeks or longer permanently discontinues.",
+          "recommendation": "Persistent grade 2/3 non-endocrine immune toxicity lasting 12 weeks or longer permanently discontinues."
+        },
+        "explanation": "Persistent grade 2/3 non-endocrine immune toxicity lasting 12 weeks or longer permanently discontinues.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "PERSISTENT_TYPE_MISSING",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "persistent_immune_grade",
+              "operator": "in",
+              "value": [
+                2,
+                3
+              ]
+            },
+            {
+              "field": "persistent_immune_weeks",
+              "operator": ">=",
+              "value": 12
+            },
+            {
+              "field": "persistent_event_endocrine",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Identify endocrine versus non-endocrine persistent toxicity: endocrinopathies are excluded from the generic 12-week toxicity row.",
+          "recommendation": "Identify endocrine versus non-endocrine persistent toxicity: endocrinopathies are excluded from the generic 12-week toxicity row."
+        },
+        "explanation": "Identify endocrine versus non-endocrine persistent toxicity: endocrinopathies are excluded from the generic 12-week toxicity row.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "STEROID_TAPER_12_WEEK_STOP",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "field": "steroid_taper_weeks",
+              "operator": ">=",
+              "value": 12
+            },
+            {
+              "field": "prednisolone_equivalent_mg_day",
+              "operator": ">",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Inability to reduce corticosteroid to ≤10 mg/day prednisolone-equivalent within 12 weeks permanently discontinues cemiplimab.",
+          "recommendation": "Inability to reduce corticosteroid to ≤10 mg/day prednisolone-equivalent within 12 weeks permanently discontinues cemiplimab."
+        },
+        "explanation": "Inability to reduce corticosteroid to ≤10 mg/day prednisolone-equivalent within 12 weeks permanently discontinues cemiplimab.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "INFUSION_MILD_MODERATE",
+        "priority": 20,
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": "in",
+          "value": [
+            1,
+            2
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Interrupt the infusion or slow its rate and manage symptoms under local policy; this action concerns the current infusion, not automatic permanent discontinuation.",
+          "recommendation": "Interrupt the infusion or slow its rate and manage symptoms under local policy; this action concerns the current infusion, not automatic permanent discontinuation."
+        },
+        "explanation": "Interrupt the infusion or slow its rate and manage symptoms under local policy; this action concerns the current infusion, not automatic permanent discontinuation.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "INFUSION_SEVERE",
+        "priority": 30,
+        "when": {
+          "field": "infusion_reaction_grade",
+          "operator": "in",
+          "value": [
+            3,
+            4
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 3/4 infusion reaction permanently discontinues cemiplimab.",
+          "recommendation": "Grade 3/4 infusion reaction permanently discontinues cemiplimab."
+        },
+        "explanation": "Grade 3/4 infusion reaction permanently discontinues cemiplimab.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 6,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "RESTART_STEROID_HOLD",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "prednisolone_equivalent_mg_day",
+              "operator": ">",
+              "value": 10
+            },
+            {
+              "any": [
+                {
+                  "field": "restart_endocrine_exception",
+                  "operator": "missing"
+                },
+                {
+                  "field": "restart_endocrine_exception",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "For non-endocrine immune toxicity, restart requires the specified recovery and steroid taper to ≤10 mg/day (or completed taper for the hepatitis baseline alternative). Endocrine clinical-stability alternatives require separate confirmation.",
+          "recommendation": "For non-endocrine immune toxicity, restart requires the specified recovery and steroid taper to ≤10 mg/day (or completed taper for the hepatitis baseline alternative). Endocrine clinical-stability alternatives require separate confirmation."
+        },
+        "explanation": "For non-endocrine immune toxicity, restart requires the specified recovery and steroid taper to ≤10 mg/day (or completed taper for the hepatitis baseline alternative). Endocrine clinical-stability alternatives require separate confirmation.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": "3–5",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "RESTART_ENDOCRINE_CONTEXT",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "restart_endocrine_exception",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "missing"
+                },
+                {
+                  "field": "endocrine_clinically_stable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "An endocrine exception requires confirmed clinical stability; do not assume stability from a requested exemption.",
+          "recommendation": "An endocrine exception requires confirmed clinical stability; do not assume stability from a requested exemption."
+        },
+        "explanation": "An endocrine exception requires confirmed clinical stability; do not assume stability from a requested exemption.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": "3–4",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "LAB_CONTEXT_ANC",
+        "priority": 10,
+        "when": {
+          "field": "anc",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+          "recommendation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction."
+        },
+        "explanation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "LAB_CONTEXT_PLATELETS",
+        "priority": 10,
+        "when": {
+          "field": "platelets",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+          "recommendation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction."
+        },
+        "explanation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "LAB_CONTEXT_HAEMOGLOBIN",
+        "priority": 10,
+        "when": {
+          "field": "haemoglobin",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+          "recommendation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction."
+        },
+        "explanation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "LAB_CONTEXT_ACTH_RESULT",
+        "priority": 10,
+        "when": {
+          "field": "acth_result",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+          "recommendation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction."
+        },
+        "explanation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "LAB_CONTEXT_FEBRILE_NEUTROPENIA",
+        "priority": 10,
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "exists"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+          "recommendation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction."
+        },
+        "explanation": "Review the entered blood-count/infection/endocrine context clinically. NCCP 00812 supplies no numeric chemotherapy-style dose threshold for this field; do not invent a dose reduction.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "OTHER_ENDOCRINE_CONTEXT",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "other_immune_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "other_immune_endocrine",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Select the named endocrine toxicity and assess clinical stability; the generic grade 4 permanent-stop row excludes endocrinopathies.",
+          "recommendation": "Select the named endocrine toxicity and assess clinical stability; the generic grade 4 permanent-stop row excludes endocrinopathies."
+        },
+        "explanation": "Select the named endocrine toxicity and assess clinical stability; the generic grade 4 permanent-stop row excludes endocrinopathies.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "NEUROLOGICAL_GRADE_GRADE2_HOLD",
+        "priority": 20,
+        "when": {
+          "field": "neurological_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 2 neurological/cardiac immune reaction: withhold and obtain urgent organ-specific specialist evaluation under the other immune-reaction pathway.",
+          "recommendation": "Grade 2 neurological/cardiac immune reaction: withhold and obtain urgent organ-specific specialist evaluation under the other immune-reaction pathway."
+        },
+        "explanation": "Grade 2 neurological/cardiac immune reaction: withhold and obtain urgent organ-specific specialist evaluation under the other immune-reaction pathway.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MYOCARDITIS_GRADE_GRADE2_HOLD",
+        "priority": 20,
+        "when": {
+          "field": "myocarditis_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 2 neurological/cardiac immune reaction: withhold and obtain urgent organ-specific specialist evaluation under the other immune-reaction pathway.",
+          "recommendation": "Grade 2 neurological/cardiac immune reaction: withhold and obtain urgent organ-specific specialist evaluation under the other immune-reaction pathway."
+        },
+        "explanation": "Grade 2 neurological/cardiac immune reaction: withhold and obtain urgent organ-specific specialist evaluation under the other immune-reaction pathway.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "PERICARDITIS_GRADE_GRADE2_HOLD",
+        "priority": 20,
+        "when": {
+          "field": "pericarditis_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Grade 2 neurological/cardiac immune reaction: withhold and obtain urgent organ-specific specialist evaluation under the other immune-reaction pathway.",
+          "recommendation": "Grade 2 neurological/cardiac immune reaction: withhold and obtain urgent organ-specific specialist evaluation under the other immune-reaction pathway."
+        },
+        "explanation": "Grade 2 neurological/cardiac immune reaction: withhold and obtain urgent organ-specific specialist evaluation under the other immune-reaction pathway.",
+        "source": {
+          "document": "NCCP 00812 version 3a",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 5,
+          "checked_date": "2026-11-06"
+        }
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Adults with an NCCP-listed indication; ECOG0–2; adequate haematological, hepatic and renal function.",
+    "Cervical: recurrent/metastatic disease progressing on or after platinum-based chemotherapy.",
+    "CSCC: metastatic/locally advanced disease not suitable for curative surgery or curative radiation; at least one measurable lesion. NCCP00812v3a does not include adjuvant CSCC."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the assessment"
+    "Known hypersensitivity to the drug(s) or excipients; follow the current NCCP source for all exclusions and cautions."
   ],
   "supportive_care": {
     "emetogenic_risk": "minimal",
     "script_id": "nccp-minimal-no-routine-prophylaxis",
-    "mapping_basis": "Highest emetogenic active component and current NCCP classification.",
+    "mapping_basis": "NCCP 00812v 3a p 6: cemiplimab minimal emetogenic potential; no routine premedication, local policy.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
+    "supportive_medications_label": "NCCP antiemetic guidance",
+    "immune_toxicity_note": "Immune-toxicity steroids, endocrine replacement and other management are organ-specific specialist treatment, not routine premedication."
   }
 }

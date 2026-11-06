@@ -140,9 +140,10 @@ test('v34 manifest proves before/after bytes and covers the complete affected as
  const v37=require('./helpers/retrospective-v08437.cjs'),netRecord=JSON.parse(fs.readFileSync(v37.RECORD,'utf8'));v37.createMigration(netRecord);
  const v38=require('./helpers/retrospective-v08438.cjs'),neuroRecord=JSON.parse(fs.readFileSync(v38.RECORD,'utf8'));v38.createMigration(neuroRecord);
  const v39=require('./helpers/retrospective-v08439.cjs'),neuro39Record=JSON.parse(fs.readFileSync(v39.RECORD,'utf8'));v39.createMigration(neuro39Record);
+ const v40=require('./helpers/retrospective-v08440.cjs'),skin40Record=JSON.parse(fs.readFileSync(v40.RECORD,'utf8'));v40.createMigration(skin40Record);
  const combined=[...new Set([...changed,...added])].sort();
- for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file)||v36.approvedPath(file)||v37.approvedPath(file)||v38.approvedPath(file)||v39.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
- assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files),...Object.keys(latestRecord.files),...Object.keys(netRecord.files),...Object.keys(neuroRecord.files),...Object.keys(neuro39Record.files)])].sort(),combined,'All explicit migrations must cover every changed patient/clinical asset');
+ for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file)||v36.approvedPath(file)||v37.approvedPath(file)||v38.approvedPath(file)||v39.approvedPath(file)||v40.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
+ assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files),...Object.keys(latestRecord.files),...Object.keys(netRecord.files),...Object.keys(neuroRecord.files),...Object.keys(neuro39Record.files),...Object.keys(skin40Record.files)])].sort(),combined,'All explicit migrations must cover every changed patient/clinical asset');
  const actual=combined.filter(f=>Object.hasOwn(migrationRecord.files,f));
  assert.deepEqual(Object.keys(migrationRecord.files).sort(),actual,'Every changed or new clinical/patient asset must be explicitly reviewed');
  for(const [file,entry] of Object.entries(migrationRecord.files)){
@@ -191,7 +192,7 @@ test('v37 additions prove the prepared v36 baseline and bounded NET scope',()=>{
    if(entry.before===null)assert.notEqual(old.status,0,file+' must be new');
    else {assert.equal(old.status,0);assert.equal(sha(old.stdout),entry.before,file+' unchanged since verified main');}
   }
-  assert.equal(sha(fs.readFileSync(path.join(root,file))),entry.after,file+' reviewed v37 bytes');
+  assert.equal(sha(fs.readFileSync(path.join(root,file))),require('./helpers/retrospective-v08438.cjs').expectedHash(file,entry.after),file+' reviewed v37 bytes');
  }
  for(const bad of ['patient/00320/guide.pdf','patient/00320/renal/guide.pdf','patient/00642/unreviewed.js','protocols/gastrointestinal/00209-folfox6.json','data/patient-knowledge/00216.json','patient/../../guide.pdf'])assert.throws(()=>m.createMigration({...record,files:{[bad]:{before,after}}}),/Unapproved/);
  const file='patient/00642/guide.pdf',migrate=m.createMigration({...record,files:{[file]:{before,after}}});
@@ -217,7 +218,18 @@ test('v38 additions prove exact remote v37 baseline, bounded neuro scope and cur
   assert(m.approvedPath(file));
   if(earlier.files[file])assert.equal(e.before,earlier.files[file].after,file+' prepared v38 bytes');
   else{const old=cp.spawnSync('git',['show',m.BASE_COMMIT+':'+file],{cwd:root,maxBuffer:64*1024*1024});if(e.before===null)assert.notEqual(old.status,0);else{assert.equal(old.status,0);assert.equal(sha(old.stdout),e.before);}}
-  assert.equal(sha(fs.readFileSync(path.join(root,file))),e.after,file+' final v39 bytes');
+  assert.equal(sha(fs.readFileSync(path.join(root,file))),require('./helpers/retrospective-v08440.cjs').expectedHash(file,e.after),file+' reviewed current bytes');
  }
  for(const bad of ['patient/00334/guide.pdf','patient/00555/guide.pdf','patient/00806/unreviewed.js','patient/../../guide.pdf'])assert.throws(()=>m.createMigration({...record,files:{[bad]:{before,after}}}),/Unapproved/);
+ });
+
+ test('v40 additions prove exact remote v39 baseline, bounded skin scope and reviewed current bytes',()=>{
+ const m=require('./helpers/retrospective-v08440.cjs'),record=JSON.parse(fs.readFileSync(m.RECORD,'utf8'));m.createMigration(record);
+ for(const[file,e]of Object.entries(record.files)){
+  assert(m.approvedPath(file));const old=cp.spawnSync('git',['show',m.BASE_COMMIT+':'+file],{cwd:root,maxBuffer:64*1024*1024});
+  if(e.before===null)assert.notEqual(old.status,0,file+' must be new');else{assert.equal(old.status,0);assert.equal(sha(old.stdout),e.before,file+' verified remote v39 baseline');}
+  assert.equal(sha(fs.readFileSync(path.join(root,file))),e.after,file+' reviewed v40 bytes');
+ }
+ for(const bad of ['patient/00334/guide.pdf','patient/00555/guide.pdf','patient/00415/renal/guide.pdf','patient/00236/unreviewed.js','patient/../../guide.pdf','protocols/skin/00415-unapproved.json'])assert.throws(()=>m.createMigration({...record,files:{[bad]:{before,after}}}),/Unapproved/);
+ const file='patient/00415/adjuvant/guide.pdf',migrate=m.createMigration({...record,files:{[file]:{before,after}}});assert.equal(migrate(file,before),after);assert.equal(migrate(file,after),after);assert.throws(()=>migrate(file,sha('Unreviewed source')),/Unexpected/);
  });

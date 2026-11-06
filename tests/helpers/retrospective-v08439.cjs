@@ -34,14 +34,14 @@ function createMigration(record){
 let migration;
 function expectedHash(file,original){
  if(!migration)migration=createMigration(JSON.parse(fs.readFileSync(RECORD,'utf8')));
- return migration(file,original);
+ return require('./retrospective-v08440.cjs').expectedHash(file,migration(file,original));
 }
 function expectedBuilderHash(file,original){
  if(!safeRelative(file)||!/^tools\/[a-zA-Z0-9_-]+\.(?:cjs|js|py)$/.test(file))throw Error('Unsafe v38 builder lookup '+file);
  const entries=JSON.parse(fs.readFileSync(path.join(__dirname,'../../validation/neuro-oncology-v08439/shared-builder-revisions.json'),'utf8'));
- const change=entries[file];if(!change)return original;
+ const change=entries[file];if(!change)return require('./retrospective-v08440.cjs').expectedBuilderHash(file,original);
  if(!change||!SHA.test(change.after)||(change.before!==null&&!SHA.test(change.before)))throw Error('Invalid v38 builder hashes '+file);
  if(original!==change.before)throw Error('Unexpected v38 original builder '+file);
- return change.after;
+ return require('./retrospective-v08440.cjs').expectedBuilderHash(file,change.after);
 }
 module.exports={expectedBuilderHash,expectedHash,createMigration,approvedPath,safeRelative,BASE_COMMIT,CODES,RECORD};

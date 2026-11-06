@@ -55,8 +55,9 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.24 adds five targeted lung schedules and the missing Lonsurf phase.
 // v0.84.26 adds erlotinib, gefitinib and two atezolizumab schedules; the third is reconciled.
 // v0.84.37 adds four source-audited NET schedules; generic dose ladders remain absent.
-assert.strictEqual(usefulCoverage, 212);
-assert.strictEqual(scheduleCoverage, 212);
+// v0.84.40 adds exactly five source-audited skin schedules.
+assert.strictEqual(usefulCoverage, 217);
+assert.strictEqual(scheduleCoverage, 217);
 assert.strictEqual(doseLevelCoverage, 62);
 // Exactly five additional source-audited glioma schedules; dose-history decisions remain in assessment.
 for(const code of ['00334','00342','00379','00461','00658']) {
@@ -67,6 +68,13 @@ for(const code of ['00334','00342','00379','00461','00658']) {
  assert.equal(DoseSchedule.buildModel(protocol).doseLevels.length,0,code+' must not infer a generic dose ladder');
 }
 
+for(const code of ['00236','00415','00563','00431','00812']) {
+ const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));
+ const protocol=require(path.join(root,entry.path));
+ require('./helpers/skin-inputs-v08440.cjs').validate(protocol);
+ assert(DoseSchedule.buildModel(protocol).phases.length>0,code+' source-authored skin schedule');
+ assert.equal(DoseSchedule.buildModel(protocol).doseLevels.length,0,code+' no generic dose ladder in place of component/history-specific rules');
+}
 const incomplete = require(path.join(root, 'protocols/gastrointestinal/00451-5-fluorouracil-4-day-mitomycin-and-radiotherapy.json'));
 assert.strictEqual(DoseSchedule.hasData(incomplete), false, 'Incomplete placeholder-only schedule should not display the button.');
 

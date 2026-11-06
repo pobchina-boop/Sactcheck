@@ -242,6 +242,6 @@ assert.equal(report.counts.solid_tumour_protocols, 362, 'Generated report Solid 
 assert.equal(report.counts.haematology_protocols, 15, 'Generated report Haematology count is wrong.');
 assert.equal(report.counts.primary_storage_groups['Cross-listed/shared'], 5, 'Shared-protocol storage count is wrong.');
 assert.equal(report.counts.tumour_site_coverage.Breast, 84, 'Breast site-coverage count is wrong.');
-assert.equal(report.counts.tumour_site_coverage.Gastrointestinal, 93, 'GI site-coverage count is wrong.');
+assert.equal(report.counts.tumour_site_coverage.Gastrointestinal, 94, 'GI site-coverage count is wrong.');
 
 console.log(`v0.51.0 Solid Tumour reconciliation passed: 362 protocols, ${inputCount} inputs, ${ruleCount} rules, ${singleValueProtocols} single-value protocol checks and ${numericBoundaryLeaves} numeric boundary leaves.`);

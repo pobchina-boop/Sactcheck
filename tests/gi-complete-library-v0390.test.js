@@ -4,6 +4,7 @@ const path = require('path');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
+const SKIN40Inputs = require('./helpers/skin-inputs-v08440.cjs');
 const NET37Inputs = require('./helpers/neuroendocrine-inputs-v08437.cjs');
 // v0.84.35 current NCCP PDFs do not name a CTCAE edition for these exact rows.
 // Keep the separate v5 UI reference; do not attribute its edition to NCCP.
@@ -32,7 +33,7 @@ const expectedCodes = [
   '00901','00644','00642','00727','00256','00844','00832','00816','00551','00900',
   '00483','00484','00843','00588','00621','00225','00448','00447','00889','00455',
   '00558','00739','00839','00428','00244','00427','00294','00924','00925','00502',
-  '00704','00926','00382'
+  '00704','00926','00382','00431' // NCCP 00431 v11 adds the HCC indication (source audit v0.84.40).
 ].sort();
 
 function walk(dir) {
@@ -85,9 +86,9 @@ const all = protocols();
 const gi = all.filter(({ data }) => tumourGroups(data).includes('Gastrointestinal'));
 const codes = gi.map(({ data }) => String(data.metadata.nccp_regimen_code).padStart(5, '0')).sort();
 assert.deepStrictEqual(codes, expectedCodes, 'The GI deck does not match the current official NCCP GI catalogue inventory.');
-assert.strictEqual(gi.length, 93, 'Expected 93 distinct active gastrointestinal regimen protocols.');
-assert.strictEqual(new Set(codes).size, 93, 'The GI deck contains duplicate NCCP codes.');
-assert.strictEqual(new Set(gi.map(({ data }) => data.protocol_id)).size, 93, 'The GI deck contains duplicate protocol IDs.');
+assert.strictEqual(gi.length, 94, 'Expected 94 distinct active gastrointestinal regimen protocols.');
+assert.strictEqual(new Set(codes).size, 94, 'The GI deck contains duplicate NCCP codes.');
+assert.strictEqual(new Set(gi.map(({ data }) => data.protocol_id)).size, 94, 'The GI deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root, 'protocols', 'index.json'), 'utf8'));
 assert.strictEqual(index.protocol_count, 377, 'Complete protocol index must contain 210 distinct protocols.');
@@ -113,6 +114,11 @@ for (const { file, data } of gi) {
   const code = String(data.metadata.nccp_regimen_code).padStart(5, '0');
   const metadata = data.metadata || {};
   NET37Inputs.validateProtocol(data);
+  const skin40 = SKIN40Inputs.validate(data);
+  if (code === '00431') {
+    assert(skin40); assert.equal(metadata.nccp_version, '11');
+    assert(/hepatocellular|HCC/i.test(JSON.stringify(data)));
+  }
   assert(!/placeholder|draft/i.test(String(data.status || '')), `${code} remains a placeholder or draft.`);
   assert.strictEqual(data.status, 'encoded_prototype_pending_clinical_and_pharmacy_validation', `${code} lacks active encoded-prototype status.`);
   const colorectalV34=['00212','00214','00215','00244','00382','00207','00225','00328','00330','00331'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.34';
@@ -131,7 +137,7 @@ for (const { file, data } of gi) {
   if(folfox4V36)require('./helpers/folfox4-grading-v08436.cjs').metadata(data);
   const capecitabineV36=code==='00216';
   if(capecitabineV36)require('./helpers/capecitabine-grading-v08436.cjs').metadata(data);
-  assert(net37 || folfox4V36 || capecitabineV36 || colorectalV35 || colorectalV34 || v08433 || (['00660','00421','00427','00428','00486','00209','00321','00227','00586','00623'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.32') || v08430 || v08429 || v08428 || (['00483','00484'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.27') || v08425 || v08424 || (['00455','00558'].includes(code) && ['0.84.22','0.84.26'].includes(metadata.sactcheck_encoding_version)) || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && metadata.sactcheck_encoding_version==='0.84.21') || (code==='00588' && metadata.sactcheck_encoding_version==='0.84.9') || ['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5','0.83.6','0.84.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
+  assert(skin40 || net37 || folfox4V36 || capecitabineV36 || colorectalV35 || colorectalV34 || v08433 || (['00660','00421','00427','00428','00486','00209','00321','00227','00586','00623'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.32') || v08430 || v08429 || v08428 || (['00483','00484'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.27') || v08425 || v08424 || (['00455','00558'].includes(code) && ['0.84.22','0.84.26'].includes(metadata.sactcheck_encoding_version)) || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && metadata.sactcheck_encoding_version==='0.84.21') || (code==='00588' && metadata.sactcheck_encoding_version==='0.84.9') || ['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5','0.83.6','0.84.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
   assert.strictEqual(metadata.partial_assessment_supported, true, `${code} does not declare single-entry support.`);
   assert(/^https:\/\/(?:healthservice\.hse\.ie\/documents\/|assets\.hse\.ie\/media\/documents\/)/.test(metadata.source_url || ''), `${code} does not link directly to an official HSE/NCCP source PDF.`);
   assert(metadata.gi_subgroup, `${code} lacks a GI subgroup.`);
@@ -160,7 +166,7 @@ for (const { file, data } of gi) {
   for (const [field, definition] of Object.entries(definitions)) {
     assert.notStrictEqual(definition.required, true, `${code}/${field} is still a blocking required field.`);
     const text = `${field} ${definition.label || ''}`.toLowerCase();
-    const sourceGrade = NET37Inputs.sourceGrade(data, field, definition);
+    const sourceGrade = SKIN40Inputs.grade(data, field, definition) || NET37Inputs.sourceGrade(data, field, definition);
     if (!sourceGrade && trueGradeField(field, definition)) {
       ctcaeFields += 1;
       assert.strictEqual(definition.type, 'select', `${code}/${field} CTCAE input must be a selector.`);
@@ -184,7 +190,7 @@ for (const { file, data } of gi) {
         assert.match(definition.assessment_guidance, /orientation only, not a source-edition conversion/);
       }else if(nivoFruqV35Source) {
         const expected = nivoFruqV35Grading[code];
-        assert.equal(metadata.clinical_audit_release, '0.84.35');
+        assert.equal(metadata.clinical_audit_release, skin40 ? '0.84.40' : '0.84.35');
         assert.equal(definition.ctcae_version, expected.version);
         assert.equal(definition.grading_system, `NCI CTCAE v${expected.version}`);
         assert.equal(definition.grading_source_label, expected.label);
@@ -287,4 +293,4 @@ assert(html.includes('v0.56.1 · What changed?'), 'v0.39.0 release badge is miss
 assert(html.includes('js/protocol-loader.js?v=0.56.1'), 'v0.39.0 cache key is missing.');
 assert(html.includes('js/drug-aliases.js?v=0.48.4'), 'v0.39.0 alias cache key is missing.');
 
-console.log(`v0.39.0 GI library tests passed: 93 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);
+console.log(`v0.39.0 GI library tests passed: 94 active protocols, ${inputCount} inputs, ${ruleCount} rules and ${auditedFields} independently assessed rule-linked fields.`);

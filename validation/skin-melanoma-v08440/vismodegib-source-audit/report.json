@@ -1,0 +1,260 @@
+{
+  "release": "0.84.40",
+  "protocol_code": "00236",
+  "checked": "2026-11-06",
+  "baseline_commit": "bffd2cda167d7943ce6431ff32d5a1525509f618",
+  "baseline_release": "0.84.39",
+  "status": "source_reconciled_software_verified_pending_independent_review",
+  "clinical_use_authorised": false,
+  "consultant_reviewed": false,
+  "oncology_pharmacy_reviewed": false,
+  "patient_PPI_reviewed": false,
+  "source_access": {
+    "status": "complete",
+    "initial_403_resolved": true,
+    "raw_pdf_bytes_captured": true,
+    "scope": "Both current official documents retained in full; standard browser User-Agent succeeded without TLS/proxy bypass."
+  },
+  "sources": [
+    {
+      "id": "nccp00236v3",
+      "url": "https://healthservice.hse.ie/documents/6725/236_v3_Vismodegib.pdf",
+      "version": "3",
+      "revision_date": "2025-04-29",
+      "pages": 4,
+      "path": "sources/00236-nccp.pdf",
+      "sha256": "3612dd57e919d4b5b117ef70ed9cd1ac3d56e9a199f9eba071f5c8bbaa1dd0c5",
+      "checked": "2026-11-06"
+    },
+    {
+      "id": "ema-erivedge",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/erivedge-epar-product-information_en.pdf",
+      "publication_updated": "2025-11-05",
+      "pages": 36,
+      "path": "sources/erivedge-ema-smPC.pdf",
+      "sha256": "7c5947771fc6ba6c7e20988015625540b8e7a6e41e1e343dfb62d42b9baa912f",
+      "checked": "2026-11-06"
+    }
+  ],
+  "protocol": {
+    "path": "protocols/skin/00236-vismodegib-monotherapy.json",
+    "before_sha256": "cace6b4f2d5d7d9c486ff81b4e0b8f48b52e6aa4a15c821226e4ab08b4680f50",
+    "after_sha256": "2365e462d7959014766b2189336ed9f05de47cc9c00863de56eb48e04fe606af",
+    "inputs_before": 10,
+    "inputs_after": 42,
+    "rules_before": 7,
+    "rules_after": 45
+  },
+  "validation": {
+    "current": {
+      "total": 293,
+      "passed": 293,
+      "failed": 0
+    },
+    "baseline_against_new_source_expectations": {
+      "total": 248,
+      "passed": 166,
+      "failed": 82,
+      "exit_code": 1
+    },
+    "rule_witnesses": 45,
+    "meaning": "293 total checks include 248 assessment/provenance/schema/schedule cases and 45 per-rule source/witness checks. Baseline failures are failed expectations, not a count of independent clinical defects.",
+    "runtime": "v24.22.1",
+    "execution": "SACT_TEST_ROOT=<checkout> node source-cases.cjs",
+    "real_modules": [
+      "js/assessment-engine.js",
+      "js/protocol-dose-schedule.js",
+      "js/protocol-validator.js"
+    ],
+    "stage_scope": "This bounded audit validates the staged clinical JSON. Full service, browser, generated PDF/QR and release regression are parent integration responsibilities."
+  },
+  "findings": [
+    {
+      "id": "V40-VIS-01",
+      "topic": "Indication and age scope",
+      "before": "The original metastatic indication omitted the adult and symptomatic qualifiers and the card exposed only one context.",
+      "after": "Both NCCP indications are explicit; age below 18 and ECOG 3-4 trigger review/withholding appropriate to their source. Invalid ECOG values do not trigger a valid clinical decision.",
+      "source": "NCCP p1; EMA p3"
+    },
+    {
+      "id": "V40-VIS-02",
+      "topic": "Unsupported generic grade rules",
+      "before": "The old generic Grade 3 non-haematological and hypersensitivity-grade paths imposed a hold/permanent stop not specified by this regimen.",
+      "after": "Remove the generic grade algorithms. Actual hypersensitivity remains a contraindication, unacceptable toxicity requires review, and confirmed vismodegib-associated SCAR has its own never-restart rule.",
+      "source": "NCCP pp1-2; EMA pp3,5"
+    },
+    {
+      "id": "V40-VIS-03",
+      "topic": "Pregnancy pathway precision",
+      "before": "A single generic PPP boolean did not distinguish all-patient registration from WCBP formal contraindication, testing and prescribing conditions.",
+      "after": "Separate reproductive contexts; initial prescribing/dispensing by day 7 counting the test day as day 1, monthly tests while treated, and WCBP supplies no longer than 28 days. Unknown/missing facts remain unassessed.",
+      "source": "NCCP pp2-3; EMA pp3-5"
+    },
+    {
+      "id": "V40-VIS-04",
+      "topic": "Post-treatment precautions",
+      "before": "The encoded assessment did not expose sex-specific contraception and donation durations.",
+      "after": "WCBP contraception, breastfeeding avoidance and blood donation restrictions continue 24 months after the final dose; male condom and semen donation precautions continue 2 months. Record the actual final-dose date.",
+      "source": "EMA pp4-5,7"
+    },
+    {
+      "id": "V40-VIS-05",
+      "topic": "Organ function evidence scope",
+      "before": "Current NCCP organ-function advice and its evidence uncertainty were not represented in the assessment.",
+      "after": "No recommended renal/hepatic reduction; distinguish CrCl 30-79 from below 30 and dialysis, where NCCP says no adjustment is expected and the EMA severe-renal evidence is limited. Hepatic impairment is separate from new suspected liver injury.",
+      "source": "NCCP p2 Table1; EMA p3"
+    },
+    {
+      "id": "V40-VIS-06",
+      "topic": "Interruption and restart",
+      "before": "No source-specific interruption/restart context or reduction guard was provided.",
+      "after": "No recommended reduced dose. Four weeks is the longest interruption described in the cited trials, not a mandatory stop after day 28 or automatic restart permission. Consultant review, tolerability and SCAR history govern restart assessment.",
+      "source": "NCCP pp1-2; EMA p5"
+    },
+    {
+      "id": "V40-VIS-07",
+      "topic": "Interaction and formulation checks",
+      "before": "St John's wort, strong CYP inducers, statin/transport interactions and specific hereditary excipient disorders were not represented.",
+      "after": "Contraindicate St John's wort; review strong inducers and transport substrates; distinguish rare hereditary excipient disorders from nonspecific lactose intolerance.",
+      "source": "EMA pp3,5-6"
+    },
+    {
+      "id": "V40-VIS-08",
+      "topic": "Muscle symptoms and source gaps",
+      "before": "No explicit route distinguished muscle/CK concerns from an unsupported numerical dose algorithm.",
+      "after": "Review symptoms, CK concerns, medicines and renal function when indicated. Neither reviewed source supplies a routine CK timetable, numerical CK hold/restart boundary or a specific rhabdomyolysis dose algorithm.",
+      "source": "EMA pp8-9; NCCP pp2-3"
+    },
+    {
+      "id": "V40-VIS-09",
+      "topic": "Schedule, monitoring and missed doses",
+      "before": "The assessment lacked structured continuous-treatment, mandatory-test and oral-administration metadata.",
+      "after": "150 mg once daily continuously; four-week review is not a break. Baseline and four-weekly FBC/renal/liver tests; PPP tests separately. Skip missed doses. Ask the team before replacing a vomited dose because these sources provide no replacement algorithm.",
+      "source": "NCCP pp1-2; EMA pp5,32-33"
+    },
+    {
+      "id": "V40-VIS-10",
+      "topic": "Dose rendering",
+      "before": "The existing dose renderer could display quantified zero for source contraindications/stops.",
+      "after": "All vismodegib rule actions explicitly block numerical dose output; assessment still communicates hold/stop/review severity. No invented reduction or automatic restart quantity is emitted.",
+      "source": "Source absence of reduction algorithm; actual assessment-engine and dose-viewer probes"
+    }
+  ],
+  "source_interpretations": [
+    {
+      "id": "RENAL_EVIDENCE_SCOPE",
+      "resolution": "NCCP expects no dose adjustment atCrCl<30 or haemodialysis. Current EMA SmPC notes very limited severe-renal data and requires careful adverse-reaction monitoring; dialysis remains NCCP expectation, not proven normal-exposure evidence.",
+      "sources": [
+        {
+          "document": "NCCP 00236 Vismodegib v 3, revised 29 April 2025",
+          "url": "https://healthservice.hse.ie/documents/6725/236_v3_Vismodegib.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "sha256": "3612dd57e919d4b5b117ef70ed9cd1ac3d56e9a199f9eba071f5c8bbaa1dd0c5",
+          "hash_kind": "pdf_bytes",
+          "retrieved": "2026-11-06"
+        },
+        {
+          "document": "EMA Erivedge product information, updated 5 November 2025",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erivedge-epar-product-information_en.pdf",
+          "page": 3,
+          "section": "Renal impairment",
+          "sha256": "7c5947771fc6ba6c7e20988015625540b8e7a6e41e1e343dfb62d42b9baa912f",
+          "hash_kind": "pdf_bytes",
+          "retrieved": "2026-11-06"
+        }
+      ]
+    },
+    {
+      "id": "HEPATIC_CATEGORY_BOUNDARIES",
+      "resolution": "NCCP says no hepatic dose adjustment. EMA NCI-ODWG category definitions use open TB boundaries at 3 and 10 xULN; no automatic severity or toxicity action is inferred from those definition gaps. Use clinician-assigned severity and assess suspected injury separately.",
+      "sources": [
+        {
+          "document": "NCCP 00236 Vismodegib v 3, revised 29 April 2025",
+          "url": "https://healthservice.hse.ie/documents/6725/236_v3_Vismodegib.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "sha256": "3612dd57e919d4b5b117ef70ed9cd1ac3d56e9a199f9eba071f5c8bbaa1dd0c5",
+          "hash_kind": "pdf_bytes",
+          "retrieved": "2026-11-06"
+        },
+        {
+          "document": "EMA Erivedge product information, updated 5 November 2025",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erivedge-epar-product-information_en.pdf",
+          "page": 3,
+          "section": "Hepatic impairment",
+          "sha256": "7c5947771fc6ba6c7e20988015625540b8e7a6e41e1e343dfb62d42b9baa912f",
+          "hash_kind": "pdf_bytes",
+          "retrieved": "2026-11-06"
+        }
+      ]
+    },
+    {
+      "id": "NO_GRADED_TOXICITY_ALGORITHM",
+      "resolution": "Neither NCCP nor reviewed EMA SmPC supplies a generic Grade 3 dose-hold/reduction or CPK dose-threshold algorithm. Removed unsupported generic grade rules. Clinical intolerance and suspected serious toxicity require assessment; confirmed SCAR is a separate never-restart rule.",
+      "sources": [
+        {
+          "document": "NCCP 00236 Vismodegib v 3, revised 29 April 2025",
+          "url": "https://healthservice.hse.ie/documents/6725/236_v3_Vismodegib.pdf",
+          "page": 2,
+          "section": "Dose modifications",
+          "sha256": "3612dd57e919d4b5b117ef70ed9cd1ac3d56e9a199f9eba071f5c8bbaa1dd0c5",
+          "hash_kind": "pdf_bytes",
+          "retrieved": "2026-11-06"
+        },
+        {
+          "document": "EMA Erivedge product information, updated 5 November 2025",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erivedge-epar-product-information_en.pdf",
+          "page": 5,
+          "section": "SCAR",
+          "sha256": "7c5947771fc6ba6c7e20988015625540b8e7a6e41e1e343dfb62d42b9baa912f",
+          "hash_kind": "pdf_bytes",
+          "retrieved": "2026-11-06"
+        },
+        {
+          "document": "EMA Erivedge product information, updated 5 November 2025",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erivedge-epar-product-information_en.pdf",
+          "page": 9,
+          "section": "ADRs",
+          "sha256": "7c5947771fc6ba6c7e20988015625540b8e7a6e41e1e343dfb62d42b9baa912f",
+          "hash_kind": "pdf_bytes",
+          "retrieved": "2026-11-06"
+        }
+      ]
+    }
+  ],
+  "safety_interpretations": [
+    {
+      "rule": "PREGNANCY_SUSPECTED",
+      "interpretation": "Safety hold pending the source-required pregnancy evaluation; not a numerical NCCP toxicity threshold"
+    },
+    {
+      "rule": "SUSPECTED_SCAR",
+      "interpretation": "Safety assessment while the diagnosis is unresolved"
+    },
+    {
+      "rule": "MUSCLE_CK_REVIEW",
+      "interpretation": "Symptom assessment guard; no unsupported numerical CPK algorithm"
+    },
+    {
+      "rule": "LIVER_INJURY_REVIEW",
+      "interpretation": "Safety assessment guard, not a numerical NCCP dose rule"
+    },
+    {
+      "rule": "VOMITED_DOSE_REVIEW",
+      "interpretation": "Source-gap review"
+    }
+  ],
+  "source_visual_review": [
+    "NCCP p2 Table1: rows/column associations visually confirmed",
+    "EMA p3: hepatic open category boundaries and severe renal caveat visually confirmed",
+    "EMA p5: testing, day-index, prescription, donation and SCAR restrictions visually confirmed"
+  ],
+  "limitations": [
+    "Independent consultant, oncology-pharmacy and patient/PPI approval are not granted by this software audit.",
+    "No numerical CK/rhabdomyolysis, generic toxicity-grade or vomited-dose replacement algorithm is supplied by the reviewed sources; these remain clinician assessment pathways.",
+    "NCCP no-adjustment expectation for severe renal impairment/dialysis is shown with its evidence limitation; it is not labelled strong trial evidence.",
+    "Initial source-access 403 records are retained for transparency; raw official PDF retrieval ultimately succeeded.",
+    "This agent did not modify the checkout or run parent-owned full-suite/browser/PDF/QR gates."
+  ]
+}

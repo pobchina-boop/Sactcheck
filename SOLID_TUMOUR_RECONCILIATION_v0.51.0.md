@@ -34,7 +34,7 @@ There are **362 unique Solid Tumour protocol files**. Five shared protocols are 
 | Tumour site | Protocol placements |
 |---|---:|
 | Breast | 84 |
-| Gastrointestinal | 93 |
+| Gastrointestinal | 94 |
 | Genitourinary | 67 |
 | Gynaecology | 48 |
 | Head and Neck | 30 |
@@ -111,9 +111,9 @@ All 362 indexed solid tumour protocols now use the platform policy that every en
 
 These are not automated release failures, because older NCCP documents do not use a uniform publication/review header and many encodings pre-date the structured metadata model. They remain an explicit manual source-review queue.
 
-- Missing stored publication date: **247** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545, 00659 … plus 227 more)
-- Missing stored review or last-reviewed date: **216** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00545, 00659, 00720, 00736, 00743, 00745 … plus 196 more)
-- Source document not explicitly marked as manually checked: **117** (00212, 00205, 00256, 00897, 00926, 00104, 00282, 00326, 00333, 00337, 00338, 00453, 00518, 00564, 00583, 00602, 00622, 00628, 00759, 00807 … plus 97 more)
+- Missing stored publication date: **246** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545, 00659 … plus 226 more)
+- Missing stored review or last-reviewed date: **211** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00545, 00659, 00720, 00736, 00743, 00745 … plus 191 more)
+- Source document not explicitly marked as manually checked: **114** (00212, 00205, 00256, 00897, 00926, 00104, 00282, 00326, 00333, 00337, 00338, 00453, 00518, 00564, 00583, 00602, 00622, 00628, 00759, 00807 … plus 94 more)
 
 ## Clinical boundary
 

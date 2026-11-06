@@ -50,8 +50,8 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_validation",
-      "audit_release": "0.84.35"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08440_independent_review_pending",
+      "audit_release": "0.84.40"
     },
     "tumour_groups": [
       "Gastrointestinal",
@@ -117,11 +117,42 @@
       "scope_note": "Current NCCP source reconciled in v0.84.35. Independent consultant and oncology-pharmacy validation remains pending; software checks do not authorise clinical use."
     },
     "canonical_protocol_id": "nccp-00551-v7",
-    "clinical_audit_release": "0.84.35",
+    "clinical_audit_release": "0.84.40",
     "context_suite_releases": {
       "colorectal": "0.84.35"
     },
-    "source_sha256": "6822cf3e3086fa9de1513ad982ff14b7238e5345e342a6c505cef5c5983c9c9b"
+    "source_sha256": "6822cf3e3086fa9de1513ad982ff14b7238e5345e342a6c505cef5c5983c9c9b",
+    "source_pdf_sha256": "6822cf3e3086fa9de1513ad982ff14b7238e5345e342a6c505cef5c5983c9c9b",
+    "review_date": "2027-02-11",
+    "retrospective_audit_v08440": {
+      "source_retrieved": "2026-11-06",
+      "source_pdf_sha256": "6822cf3e3086fa9de1513ad982ff14b7238e5345e342a6c505cef5c5983c9c9b",
+      "source_version": "7a",
+      "source_bytes_unchanged": true,
+      "scope": "Bounded repeat audit of existing shared ICI assessment; does not establish new melanoma service completion. Current NCCP thresholds, recovery, recurrence and phase/schedule boundaries checked.",
+      "findings": [
+        "Suspected SJS/TEN had no executable cessation/referral pathway before confirmation; added discontinue/referral, retaining confirmed permanent stop.",
+        "Maintenance switch interval text was not executable: added source 14/28-day early-dose guards and missing-timing review; first-maintenance and indication-specific formulation rules unchanged."
+      ],
+      "clinical_use_authorised": false,
+      "independent_clinical_approval": false,
+      "previous_audit_metadata": {
+        "clinical_audit_release": "0.84.35",
+        "validation": {
+          "source_document_checked": true,
+          "software_tests_completed": true,
+          "consultant_reviewed": false,
+          "oncology_pharmacy_reviewed": false,
+          "clinical_use_authorised": false,
+          "official_catalogue_and_source_link_checked": true,
+          "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_validation",
+          "audit_release": "0.84.35"
+        },
+        "source_pdf_sha256": null,
+        "source_sha256": "6822cf3e3086fa9de1513ad982ff14b7238e5345e342a6c505cef5c5983c9c9b",
+        "source_checked_date": "2026-11-05"
+      }
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
@@ -1219,6 +1250,49 @@
       "required": false,
       "input_role": "decision",
       "demo_value": true
+    },
+    "sjs_ten_suspected": {
+      "label": "Symptoms or signs suggest SJS/TEN, not yet confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "help": "Stop treatment and obtain urgent specialist assessment; confirmed SJS/TEN retains the permanent discontinuation rule."
+    },
+    "maintenance_schedule_switch": {
+      "label": "Switching established nivolumab maintenance interval",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "options": [
+        {
+          "value": "none",
+          "label": "No maintenance interval switch"
+        },
+        {
+          "value": "q14_to_q28",
+          "label": "Every 14 days to every 28 days"
+        },
+        {
+          "value": "q28_to_q14",
+          "label": "Every 28 days to every 14 days"
+        }
+      ],
+      "help": "Applies only to established nivolumab monotherapy maintenance. The first dose after combination treatment has separate 21/42-day rules; formulation and indication restrictions still apply."
+    },
+    "days_since_last_maintenance_dose": {
+      "label": "Days since last nivolumab maintenance dose",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "min": 0,
+      "step": 1,
+      "unit": "days",
+      "input_role": "decision",
+      "ui_section": "clinical"
     }
   },
   "required_inputs": [],
@@ -3580,6 +3654,139 @@
           "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
           "page": 4,
           "checked_date": "2026-11-05"
+        }
+      },
+      {
+        "rule_id": "SJS_TEN_SUSPECTED",
+        "priority": 20,
+        "when": {
+          "field": "sjs_ten_suspected",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "nivolumab",
+            "ipilimumab"
+          ],
+          "recommendation": "Symptoms or signs of SJS/TEN: discontinue treatment and refer urgently to a specialised unit for assessment and treatment. Do not await confirmation before stopping; confirmed SJS/TEN requires permanent discontinuation.",
+          "message": "Symptoms or signs of SJS/TEN: discontinue treatment and refer urgently to a specialised unit for assessment and treatment. Do not await confirmation before stopping; confirmed SJS/TEN requires permanent discontinuation."
+        },
+        "explanation": "Symptoms or signs of SJS/TEN: discontinue treatment and refer urgently to a specialised unit for assessment and treatment. Do not await confirmation before stopping; confirmed SJS/TEN requires permanent discontinuation.",
+        "source": {
+          "document": "NCCP 00551 v7a",
+          "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+          "page": 9,
+          "checked_date": "2026-11-06",
+          "table": "Table 3 skin adverse reactions"
+        }
+      },
+      {
+        "rule_id": "MAINTENANCE_SWITCH_Q14_TO_Q28",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "maintenance_schedule_switch",
+              "operator": "==",
+              "value": "q14_to_q28"
+            },
+            {
+              "field": "days_since_last_maintenance_dose",
+              "operator": "<",
+              "value": 14
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab",
+            "ipilimumab"
+          ],
+          "recommendation": "Withhold an early maintenance interval switch: the first new-schedule dose is due 14 days after the last maintenance dose on the previous schedule. Confirm indication and formulation; this does not authorise a schedule excluded for that indication.",
+          "message": "Withhold an early maintenance interval switch: the first new-schedule dose is due 14 days after the last maintenance dose on the previous schedule. Confirm indication and formulation; this does not authorise a schedule excluded for that indication."
+        },
+        "explanation": "Withhold an early maintenance interval switch: the first new-schedule dose is due 14 days after the last maintenance dose on the previous schedule. Confirm indication and formulation; this does not authorise a schedule excluded for that indication.",
+        "source": {
+          "document": "NCCP 00551 v7a",
+          "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06",
+          "table": "Switching monotherapy dosing schedule"
+        }
+      },
+      {
+        "rule_id": "MAINTENANCE_SWITCH_Q28_TO_Q14",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "maintenance_schedule_switch",
+              "operator": "==",
+              "value": "q28_to_q14"
+            },
+            {
+              "field": "days_since_last_maintenance_dose",
+              "operator": "<",
+              "value": 28
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab",
+            "ipilimumab"
+          ],
+          "recommendation": "Withhold an early maintenance interval switch: the first new-schedule dose is due 28 days after the last maintenance dose on the previous schedule. Confirm indication and formulation; this does not authorise a schedule excluded for that indication.",
+          "message": "Withhold an early maintenance interval switch: the first new-schedule dose is due 28 days after the last maintenance dose on the previous schedule. Confirm indication and formulation; this does not authorise a schedule excluded for that indication."
+        },
+        "explanation": "Withhold an early maintenance interval switch: the first new-schedule dose is due 28 days after the last maintenance dose on the previous schedule. Confirm indication and formulation; this does not authorise a schedule excluded for that indication.",
+        "source": {
+          "document": "NCCP 00551 v7a",
+          "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06",
+          "table": "Switching monotherapy dosing schedule"
+        }
+      },
+      {
+        "rule_id": "MAINTENANCE_SWITCH_CONTEXT",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "field": "maintenance_schedule_switch",
+              "operator": "in",
+              "value": [
+                "q14_to_q28",
+                "q28_to_q14"
+              ]
+            },
+            {
+              "field": "days_since_last_maintenance_dose",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab",
+            "ipilimumab"
+          ],
+          "recommendation": "Confirm the previous maintenance dose date before switching: 14 days after the last 14-day dose, or 28 days after the last 28-day dose. Missing timing cannot establish that the switch is due.",
+          "message": "Confirm the previous maintenance dose date before switching: 14 days after the last 14-day dose, or 28 days after the last 28-day dose. Missing timing cannot establish that the switch is due."
+        },
+        "explanation": "Confirm the previous maintenance dose date before switching: 14 days after the last 14-day dose, or 28 days after the last 28-day dose. Missing timing cannot establish that the switch is due.",
+        "source": {
+          "document": "NCCP 00551 v7a",
+          "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+          "page": 2,
+          "checked_date": "2026-11-06",
+          "table": "Switching monotherapy dosing schedule"
         }
       }
     ]

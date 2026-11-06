@@ -98,6 +98,7 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00415":"oral_moderate_high", "00563":"oral_moderate_high", // NCCP00415 v5, v40 source-audited oral risk.
     "00742":"oral_moderate_high", "00804":"oral_moderate_high", // v39: highest active component; bevacizumab-only phase remains minimal.
     "00505":"oral_moderate_high", // v37: NCCP00505 temozolomide Days10–14, exact source/hash checked above.
     "00642":"moderate", // v37: PRRT-specific amino-acid/5-HT3 plan, not a generic steroid script.
@@ -155,10 +156,12 @@ for (const record of index.protocols || []) {
     assert.equal(phases.find(p=>p.id==='day1').emetogenic_risk,'oral_moderate_high');assert.equal(phases.find(p=>p.id==='bevacizumab_only').emetogenic_risk,'minimal');
     assert.equal(phases.find(p=>p.id==='bevacizumab_only').medicines.length,0);
   }
+  if(['00415','00563'].includes(md.nccp_regimen_code)){assert(require('./helpers/skin-inputs-v08440.cjs').validate(protocol));assert.equal(sc.emetogenic_risk,'oral_moderate_high');}
   const immune35=dualImmuneV35[md.nccp_regimen_code];
   if(immune35){
     assert.equal(relative,immune35.path);
-    assert.equal(md.clinical_audit_release,'0.84.35');
+    assert.equal(md.clinical_audit_release,md.nccp_regimen_code==='00551'?'0.84.40':'0.84.35');
+    if(md.nccp_regimen_code==='00551')assert(require('./helpers/skin-inputs-v08440.cjs').validate(protocol));
     assert.equal(md.nccp_version,immune35.version);
     assert.equal(md.source_url,immune35.url);
     const binary=fs.readFileSync(path.join(root,'validation/colorectal-v08435/nivo-fruq-source-audit',md.nccp_regimen_code+'.pdf'));
@@ -173,6 +176,8 @@ for (const record of index.protocols || []) {
   if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
   else if (baseline) {
     const correctionByPath = {
+      "skin/00563-encorafenib-and-binimetinib-therapy.json":"oral_moderate_high",
+      "skin/00415-trametinib-and-dabrafenib-therapy.json":"oral_moderate_high",
       "neuro-oncology/00742-lomustine-and-bevacizumab-5-mg-kg-therapy.json":"oral_moderate_high",
       "neuro-oncology/00804-lomustine-and-bevacizumab-7-5-mg-kg-therapy.json":"oral_moderate_high",
       "gastrointestinal/00505-capecitabine-and-temozolomide-therapy.json":"oral_moderate_high",

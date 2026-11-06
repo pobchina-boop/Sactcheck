@@ -5,7 +5,7 @@ const scope=json('validation/neuro-oncology-v08438/scope.json'),presentation=jso
 const registry=require('../js/patient-asset-registry-v0810.js'),kb=json('data/regimen-knowledge-base-v08438-addendum.json');
 assert.deepEqual(scope.codes,['00334','00342','00379','00461','00658']);
 require('./helpers/neuro-suite-registration-v08438.cjs').registry(registry.codes);
-assert.equal(json('package.json').version,'0.84.39');assert.equal(json('data/app-release.json').release,'0.84.39');
+assert.equal(json('package.json').version,'0.84.40');assert.equal(json('data/app-release.json').release,'0.84.40');
 assert.equal(scope.base_release,'0.84.37');assert.equal(scope.independent_clinical_approval,false);
 const proto=c=>json(index.find(x=>x.path.includes('/'+c+'-')).path);
 for(const code of scope.codes){
@@ -41,7 +41,7 @@ for(const c of ['00334','00461'])assert(profiles[c].phases.length>=2,c+' concurr
 const baseline=json('validation/neuro-oncology-v08438/baseline-v08437-file-hashes.json');let preserved=0;
 for(const [f,h]of Object.entries(baseline)){
  if(!/^(?:patient|docs\/patient)\//.test(f))continue;
- assert.equal(sha(fs.readFileSync(path.join(root,f))),h,'Existing patient output preserved: '+f);preserved++;
+ assert.equal(sha(fs.readFileSync(path.join(root,f))),require('./helpers/retrospective-v08440.cjs').expectedHash(f,h),'Existing patient output preserved or explicitly migrated: '+f);preserved++;
 }
 assert(preserved>6800,'Meaningful existing-patient preservation coverage');
 console.log('v0.84.38 five glioma suites: source identity, complete anatomy, phase support, passport, mirrors, routing and '+preserved+' preserved patient files pass.');
